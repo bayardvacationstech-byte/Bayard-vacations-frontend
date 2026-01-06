@@ -1,0 +1,53 @@
+"use client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getRegionDocumentBySlug } from "@/utils/firebase";
+
+export function useRegion(regionSlug) {
+  const queryClient = useQueryClient();
+
+  const {
+    data: regionData,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["region", regionSlug],
+    queryFn: async () => {
+      // First check if we have regions in the global regions cache
+      const regionsQuery = queryClient
+        .getQueryCache()
+        .find({ queryKey: ["regions"] });
+      const cachedRegions = regionsQuery?.state.data;
+
+      if (cachedRegions && Array.isArray(cachedRegions)) {
+        // Look for the specific region in the cached regions
+        const cachedRegion = cachedRegions.find(
+          (region) => region.slug === regionSlug
+        );
+
+        if (cachedRegion) {
+          console.log(
+            `Found region "${regionSlug}" in regions cache - using cache`
+          );
+          return cachedRegion;
+        }
+      }
+
+      // If not found in cache, fetch from Firebase
+      console.log(
+        `Region "${regionSlug}" not found in cache, fetching from Firebase`
+      );
+      return getRegionDocumentBySlug(regionSlug);
+    },
+    enabled: !!regionSlug, // Only run when regionSlug is provided
+    staleTime: 10 * 60 * 1000, // 10 minutes - regions don't change often
+    gcTime: 30 * 60 * 1000, // 30 minutes
+  });
+
+  return {
+    regionData,
+    isLoading,
+    error,
+    refetch,
+  };
+}
