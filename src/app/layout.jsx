@@ -12,7 +12,7 @@ import localFont from "next/font/local";
 import LeadForm from "@/components/Forms/EnquiryForm/LeadForm";
 import { Toaster } from "@/components/ui/sonner";
 import FloatingLeadButton from "@/components/FloatingLeadButton";
-import SplashScreen from "@/components/SplashScreen";
+
 import Metrics from "@/components/Metrics";
 import ClientProviders from "@/components/ClientProviders";
 import { DEFAULT_URL } from "@/config";
@@ -123,16 +123,15 @@ export default async function RootLayout({ children }) {
         suppressHydrationWarning
       >
         <ClientProviders>
-          <SplashScreen />
           <DesktopNavbar />
           <MobileNavbar />
           {children}
-          <Footer />
           <LeadForm />
           <FloatingLeadButton />
           <WhatsAppIcon />
           <Toaster />
         </ClientProviders>
+        <Footer />
         <TailwindIndicator />
       </body>
     </html>

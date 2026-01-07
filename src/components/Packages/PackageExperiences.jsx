@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 
-const PackageExperiences = ({ packageData, setIsExploring }) => {
+const PackageExperiences = ({ packageData }) => {
   const experiences = [
     { id: "beaches", label: "Beaches" },
     { id: "activities", label: "Activities" },
@@ -17,14 +17,6 @@ const PackageExperiences = ({ packageData, setIsExploring }) => {
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
   const [hasAnimated, setHasAnimated] = useState(false);
   const [activeTab, setActiveTab] = useState("beaches");
-
-  const scrollToHero = () => {
-    setIsExploring(false);
-    const element = document.getElementById("hero-section");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   const scrollToItinerary = () => {
     const element = document.getElementById("itinerary-section");
@@ -45,27 +37,16 @@ const PackageExperiences = ({ packageData, setIsExploring }) => {
   const displayImages = packageData?.bannerImages?.slice(0, 3) || [];
 
   return (
-    <section ref={sectionRef} id="experiences-section" className="relative min-h-screen w-full bg-gradient-to-br from-orange-50 via-blue-50 to-white text-slate-900 flex items-center overflow-hidden py-12">
+    <section ref={sectionRef} id="experiences-section" className="relative w-full bg-white text-slate-900 flex items-center overflow-hidden py-24">
       {/* Blurred Background Decoration */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-green/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <Container className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full">
         {/* Left Side: Categories */}
         <div className="flex flex-col space-y-0 relative">
-          {/* Back Button */}
-          <motion.button
-            onClick={scrollToHero}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-2 text-slate-400 hover:text-brand-green transition-colors duration-300 font-medium tracking-widest uppercase text-xs mb-8 group w-fit"
-          >
-            <span className="inline-block transform transition-transform group-hover:-translate-x-1">←</span>
-            <span>Back</span>
-          </motion.button>
-
           {experiences.map((exp) => (
             <button
               key={exp.id}

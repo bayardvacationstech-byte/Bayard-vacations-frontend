@@ -189,6 +189,7 @@ const Footer = async () => {
             width={420}
             height={90}
             className="w-48 sm:w-64"
+            priority
           />
 
           <div className="text-right">

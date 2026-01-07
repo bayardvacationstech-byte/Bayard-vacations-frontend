@@ -55,12 +55,19 @@ export default function ItineraryMap({ itineraries, citiesList }) {
   const [airplaneRotation, setAirplaneRotation] = useState(0); // Track plane heading
   const [isAnimating, setIsAnimating] = useState(false);
   const [activeDay, setActiveDay] = useState(1); // Track active day for popup
+  const [shouldRenderMap, setShouldRenderMap] = useState(false); // Toggle to force remount
   const animatingRef = useRef(false); // Use ref to avoid stale closure
   const markerRefs = useRef({}); // Store marker refs for popup control
   const mapRef = useRef(null); // Map reference
 
   useEffect(() => {
     setIsClient(true);
+
+    // Force unmount then remount to ensure clean initialization
+    setShouldRenderMap(false);
+    const remountTimer = setTimeout(() => {
+      setShouldRenderMap(true);
+    }, 150);
 
     // Create custom marker icons for Leaflet
     if (typeof window !== "undefined") {
@@ -109,6 +116,20 @@ export default function ItineraryMap({ itineraries, citiesList }) {
       setCustomIcon(() => createNumberedIcon);
       setAirplaneIcon(() => createAirplaneIcon);
     }
+
+    // Cleanup function
+    return () => {
+      clearTimeout(remountTimer);
+      setShouldRenderMap(false);
+      if (mapRef.current) {
+        try {
+          mapRef.current.remove();
+          mapRef.current = null;
+        } catch (e) {
+          console.warn('Map cleanup warning:', e);
+        }
+      }
+    };
   }, []);
 
   // Function to animate airplane from one point to another
@@ -630,13 +651,26 @@ export default function ItineraryMap({ itineraries, citiesList }) {
     return [avgLat, avgLng];
   };
 
-  // Don't render on server
-  if (!isClient) {
+  // Don't render on server or before map is ready to render
+  if (!isClient || !shouldRenderMap) {
     return (
       <div className="w-full h-[400px] bg-slate-800/30 backdrop-blur-sm rounded-2xl animate-pulse flex items-center justify-center">
         <div className="text-slate-400">Loading map...</div>
       </div>
     );
+  }
+
+  // Check if there's already a Leaflet map container initialized
+  if (typeof window !== "undefined") {
+    const existingLeafletContainers = document.querySelectorAll('.leaflet-container');
+    if (existingLeafletContainers.length > 0) {
+      console.warn('Leaflet map already exists, skipping render to prevent initialization error');
+      return (
+        <div className="w-full h-[400px] bg-slate-800/30 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+          <div className="text-slate-400">Map unavailable - please refresh the page</div>
+        </div>
+      );
+    }
   }
 
   if (routePoints.length === 0) {
@@ -744,6 +778,8 @@ export default function ItineraryMap({ itineraries, citiesList }) {
       <MapContainer
         center={mapCenter}
         zoom={routePoints.length === 1 ? 12 : 5}
+        scrollWheelZoom={false}
+        preferCanvas={true}
         className="w-full h-full z-0"
         zoomControl={true}
       >

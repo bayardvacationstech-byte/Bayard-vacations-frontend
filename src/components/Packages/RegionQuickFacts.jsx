@@ -12,7 +12,10 @@ import {
   Zap, 
   Sparkles, 
   MapPin, 
-  ArrowRight 
+  ArrowRight,
+  FileCheck,
+  Building2,
+  Users
 } from "lucide-react";
 
 // Map coordinates for common destinations
@@ -62,70 +65,136 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
     if (lowerLabel.includes('time') || lowerLabel.includes('visit') || lowerLabel.includes('season')) {
       return { 
         icon: CalendarClock, 
-        color: "text-amber-500", 
-        bgColor: "bg-amber-100", 
-        glow: "hover:shadow-amber-500/50 hover:bg-amber-400 hover:text-white",
-        iconShadow: "shadow-[0_0_15px_-3px_rgba(245,158,11,0.5)]"
+        color: "text-white", 
+        bgColor: "bg-amber-400", 
+        glow: "shadow-amber-500/50 shadow-lg",
+        iconShadow: ""
       };
     }
     if (lowerLabel.includes('currency') || lowerLabel.includes('money')) {
       return { 
         icon: Wallet, 
-        color: "text-emerald-500", 
-        bgColor: "bg-emerald-100",
-        glow: "hover:shadow-emerald-500/50 hover:bg-emerald-400 hover:text-white",
-        iconShadow: "shadow-[0_0_15px_-3px_rgba(16,185,129,0.5)]"
+        color: "text-white", 
+        bgColor: "bg-emerald-400",
+        glow: "shadow-emerald-500/50 shadow-lg",
+        iconShadow: ""
       };
     }
     if (lowerLabel.includes('climate') || lowerLabel.includes('weather')) {
       return { 
         icon: ThermometerSun, 
-        color: "text-orange-500", 
-        bgColor: "bg-orange-100",
-        glow: "hover:shadow-orange-500/50 hover:bg-orange-400 hover:text-white",
-        iconShadow: "shadow-[0_0_15px_-3px_rgba(249,115,22,0.5)]"
+        color: "text-white", 
+        bgColor: "bg-orange-400",
+        glow: "shadow-orange-500/50 shadow-lg",
+        iconShadow: ""
       };
     }
     if (lowerLabel.includes('time zone')) {
       return { 
         icon: Clock4, 
-        color: "text-blue-500", 
-        bgColor: "bg-blue-100",
-        glow: "hover:shadow-blue-500/50 hover:bg-blue-400 hover:text-white",
-        iconShadow: "shadow-[0_0_15px_-3px_rgba(59,130,246,0.5)]"
+        color: "text-white", 
+        bgColor: "bg-blue-400",
+        glow: "shadow-blue-500/50 shadow-lg",
+        iconShadow: ""
       };
     }
     if (lowerLabel.includes('language')) {
       return { 
         icon: Globe, 
-        color: "text-indigo-500", 
-        bgColor: "bg-indigo-100",
-        glow: "hover:shadow-indigo-500/50 hover:bg-indigo-400 hover:text-white",
-        iconShadow: "shadow-[0_0_15px_-3px_rgba(99,102,241,0.5)]"
+        color: "text-white", 
+        bgColor: "bg-indigo-400",
+        glow: "shadow-indigo-500/50 shadow-lg",
+        iconShadow: ""
+      };
+    }
+    if (lowerLabel.includes('visa')) {
+      return { 
+        icon: FileCheck, 
+        color: "text-white", 
+        bgColor: "bg-teal-400",
+        glow: "shadow-teal-500/50 shadow-lg",
+        iconShadow: ""
+      };
+    }
+    if (lowerLabel.includes('capital')) {
+      return { 
+        icon: Building2, 
+        color: "text-white", 
+        bgColor: "bg-violet-400",
+        glow: "shadow-violet-500/50 shadow-lg",
+        iconShadow: ""
+      };
+    }
+    if (lowerLabel.includes('population')) {
+      return { 
+        icon: Users, 
+        color: "text-white", 
+        bgColor: "bg-pink-400",
+        glow: "shadow-pink-500/50 shadow-lg",
+        iconShadow: ""
       };
     }
     return { 
       icon: Sparkles, 
-      color: "text-amber-500", 
-      bgColor: "bg-amber-100",
-      glow: "hover:shadow-amber-500/50 hover:bg-amber-400 hover:text-white",
-      iconShadow: "shadow-[0_0_15px_-3px_rgba(245,158,11,0.5)]"
+      color: "text-white", 
+      bgColor: "bg-amber-400",
+      glow: "shadow-amber-500/50 shadow-lg",
+      iconShadow: ""
     };
   };
 
+  const defaultFacts = [
+    { label: "Best Time", value: "Sep to Apr" },
+    { label: "Currency", value: "Local" },
+    { label: "Climate", value: "Varied" },
+    { label: "Time Zone", value: "GMT+5:30" },
+    { label: "Language", value: "English" },
+    { label: "Visa", value: "On Arrival" },
+    { label: "Capital", value: "City" },
+    { label: "Population", value: "10M+" }
+  ];
+
   const facts = React.useMemo(() => {
+    let baseFacts = [];
+    
     if (mounted && regionData?.quickFacts && Array.isArray(regionData.quickFacts)) {
-      return regionData.quickFacts.map(fact => ({
+      // Filter out 'Insider Tips' as it has its own dedicated card section
+      baseFacts = regionData.quickFacts
+        .filter(fact => !fact.label.toLowerCase().includes('insider'))
+        .map(fact => ({
+          ...fact,
+          ...getIconConfig(fact.label)
+        }));
+    }
+    
+    // If we have fewer than 8 facts from API, add defaults to fill remaining slots
+    if (baseFacts.length < 8) {
+      const existingLabels = baseFacts.map(f => f.label.toLowerCase());
+      const additionalFacts = defaultFacts
+        .filter(df => {
+          const dfLower = df.label.toLowerCase();
+          // Check if any existing label contains or is contained by this default label
+          return !existingLabels.some(existing => 
+            existing.includes(dfLower) || dfLower.includes(existing.split(' ')[0])
+          );
+        })
+        .map(fact => ({
+          ...fact,
+          ...getIconConfig(fact.label)
+        }));
+      
+      baseFacts = [...baseFacts, ...additionalFacts].slice(0, 8);
+    }
+    
+    // If still no facts (not mounted yet), return empty to avoid hydration issues
+    if (baseFacts.length === 0) {
+      return defaultFacts.map(fact => ({
         ...fact,
         ...getIconConfig(fact.label)
       }));
     }
-    return [
-      { label: "Best Time", value: "Sep to Apr", ...getIconConfig("Best Time") },
-      { label: "Currency", value: "Local", ...getIconConfig("Currency") },
-      { label: "Climate", value: "Varied", ...getIconConfig("Climate") },
-      { label: "Time Zone", value: "GMT+5:30", ...getIconConfig("Time Zone") }
-    ];
+    
+    return baseFacts;
   }, [mounted, regionData]);
 
   const displayName = regionName?.split("-")
@@ -140,15 +209,14 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
     <div className="w-full py-4 relative overflow-hidden bg-white/40 rounded-[2.2rem] px-4 md:px-5 select-none border border-slate-100/60 my-4 backdrop-blur-md shadow-sm">
       
       <div className="max-w-[1280px] mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch lg:min-h-[240px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-5 items-stretch">
           
-          {/* Section 1: MAP (Row Leader) */}
-          <div className="lg:col-span-3 py-1 flex flex-col h-full">
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              className="relative w-full h-full aspect-square lg:aspect-auto rounded-[1.8rem] overflow-hidden border-2 border-white shadow-lg bg-slate-100 group flex-1"
+          {/* Section 1: MAP */}
+          <div className="md:col-span-1 lg:col-span-3 py-1 flex flex-col">
+            <div 
+              className="relative w-full h-full aspect-square lg:aspect-auto rounded-[1.8rem] overflow-hidden border-2 border-white shadow-xl bg-slate-100 group flex-1"
             >
-              <img src={mapUrl} alt={displayName} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <img src={mapUrl} alt={displayName} className="w-full h-full object-cover transition-transform duration-700 scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/10 to-transparent"></div>
               
               <div className="absolute inset-x-0 bottom-0 p-5 flex flex-col justify-end h-full">
@@ -161,65 +229,61 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
                     <span className="h-[1px] w-4 bg-amber-400"></span>
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Destination</span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-serif text-white leading-tight tracking-tighter drop-shadow-lg">
+                  <h2 className="text-2xl md:text-4xl font-serif text-white leading-tight tracking-tighter drop-shadow-lg">
                     {displayName}
                   </h2>
                   
                   <div className="mt-3 flex">
-                    <div className="bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 flex items-center gap-2 transition-all group-hover:bg-white/20">
+                    <div className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 flex items-center gap-2 transition-all">
                       <MapPin className="w-2.5 h-2.5 text-amber-400" />
                       <span className="text-[9px] font-black uppercase tracking-widest text-white">Interactive Map</span>
                     </div>
                   </div>
                 </motion.div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Section 2: FACTS (STRETCHED & SCALED TO FILL SPACE) */}
-          <div className="lg:col-span-5 flex flex-col py-1 h-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 h-full">
-              {facts.slice(0, 4).map((fact, idx) => (
+          {/* Section 2: FACTS (8 facts - responsive grid) */}
+          <div className="md:col-span-1 lg:col-span-6 flex flex-col py-1">
+            <div className="grid grid-cols-2 c-sm:grid-cols-2 c-md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 h-full">
+              {facts.slice(0, 8).map((fact, idx) => (
                 <motion.div 
                   key={idx}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
                   className={cn(
-                    "p-4 rounded-[1.8rem] bg-white shadow-md shadow-slate-100/50 border border-slate-50 flex items-center gap-5 group transition-all duration-300 h-full",
-                    "hover:translate-x-1"
+                    "p-3 rounded-[1.2rem] bg-gradient-to-br from-white to-slate-50 shadow-xl border-2 border-slate-200 flex flex-col items-center justify-center gap-2 group transition-all duration-300 h-full text-center -translate-y-1"
                   )}
                 >
-                  {/* Larger Glowing Icon Container */}
-                  <motion.div 
-                    whileHover={{ scale: 1.1, rotate: 5 }}
+                  {/* Glowing Icon Container */}
+                  <div 
                     className={cn(
-                      "w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 relative z-10 shrink-0",
+                      "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 relative z-10 shrink-0",
                       fact.bgColor,
-                      fact.iconShadow,
                       fact.glow
                     )}
                   >
-                    <fact.icon className="w-6 h-6 transition-transform" />
-                  </motion.div>
+                    <fact.icon className={cn("w-5 h-5 transition-transform", fact.color)} />
+                  </div>
                   
-                  <div className="space-y-1 min-w-0 flex-1">
-                    <p className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 leading-none mb-1">{fact.label}</p>
-                    <p className="text-lg font-bold text-slate-900 leading-tight truncate">{fact.value}</p>
+                  <div className="space-y-0.5 min-w-0">
+                    <p className="text-[9px] font-black uppercase tracking-[0.1em] text-slate-400 leading-none">{fact.label}</p>
+                    <p className="text-sm font-bold text-slate-900 leading-tight truncate">{fact.value}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Section 3: HIGHLIGHTS (STRETCHED & SCALED) */}
-          <div className="lg:col-span-4 flex flex-col gap-3 py-1 h-full">
-            <motion.div 
-              whileHover={{ y: -2 }}
-              className="flex-1 rounded-[1.8rem] bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 p-5 text-white relative shadow-lg shadow-orange-100/30 overflow-hidden group border border-white/10 flex flex-col justify-center"
-            >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
-              <Sparkles className="absolute -bottom-4 -left-4 w-24 h-24 text-white/10 -rotate-12 group-hover:rotate-0 transition-transform duration-700" />
+          {/* Section 3: HIGHLIGHTS */}
+          <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-3 py-1">
+          <div 
+            className="flex-1 rounded-[1.8rem] bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 p-5 text-white relative shadow-xl overflow-hidden group border border-white/10 flex flex-col justify-center -translate-y-1"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
+            <Sparkles className="absolute -bottom-4 -left-4 w-24 h-24 text-white/10 -rotate-12 transition-transform duration-700" />
               
               <div className="relative z-10 flex flex-col">
                 <div className="flex items-center gap-1.5 mb-2.5">
@@ -230,16 +294,15 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
                 <p className="text-lg md:text-xl font-serif font-bold italic leading-tight tracking-tight mb-4 drop-shadow-sm">
                   "{regionData?.overview?.substring(0, 95) || `Experience the captivating magic in ${displayName}.`}{regionData?.overview?.length > 95 ? '...' : ''}"
                 </p>
-                <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest opacity-80 transition-opacity">
                   Discover More <ArrowRight className="w-2.5 h-2.5" />
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              className="rounded-2xl bg-slate-900 border border-slate-800 p-4 h-[70px] flex items-center gap-4 shadow-xl overflow-hidden relative shrink-0"
-            >
+          <div 
+            className="rounded-2xl bg-slate-900 border border-slate-800 p-4 h-[70px] flex items-center gap-4 shadow-xl overflow-hidden relative shrink-0 -translate-y-1"
+          >
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-amber-500/5 to-transparent"></div>
               <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-amber-400/10 relative z-10">
                 <Zap className="w-4 h-4 text-slate-900 fill-slate-900" />
@@ -247,10 +310,10 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
               <div className="min-w-0 relative z-10">
                 <p className="text-[9px] font-black uppercase tracking-[0.1em] text-amber-400 mb-1">Insider Tip</p>
                 <p className="text-xs font-medium italic text-slate-200 leading-tight line-clamp-1 truncate">
-                  "{regionData?.insider_tip || regionData?.insiderTip || "Embrace local customs!"}"
+                  "{regionData?.quickFacts?.find(f => f.label.toLowerCase().includes('insider'))?.value || regionData?.insiderTip || "Embrace local customs!"}"
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
 
         </div>

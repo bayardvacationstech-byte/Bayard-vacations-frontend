@@ -40,7 +40,7 @@ export default function RegionTestimonials() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50 py-8 md:py-16">
+    <section className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50 py-6 md:py-10">
       <Container>
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">

@@ -10,13 +10,12 @@ const ItineraryFooter = ({ relatedPackages }) => {
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="bg-gradient-to-br from-brand-green/5 via-brand-blue/5 to-white pt-16 pb-12">
-        {/* Background effects */}
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-green/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl" />
-        </div>
+    <section className="relative overflow-hidden py-24 bg-white">
+      {/* Background effects */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl" />
+      </div>
         
         <Container className="relative z-10">
           <div className="mb-8 flex flex-col justify-between gap-4 c-lg:flex-row c-lg:items-center">
@@ -71,7 +70,6 @@ const ItineraryFooter = ({ relatedPackages }) => {
 
           <div className="mt-12 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
         </Container>
-      </div>
     </section>
   );
 };

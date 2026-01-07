@@ -16,67 +16,71 @@ import {
   ChevronRight
 } from "lucide-react";
 
-const RegionExperiences = ({ regionName = "this destination" }) => {
+const RegionExperiences = ({ regionName = "this destination", regionData }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Gallery images with titles and descriptions
-  const galleryImages = [
-    {
-      url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80&fit=crop",
-      title: "Local Cuisine",
-      category: "Food & Dining",
-      description: "Authentic street food and traditional restaurants"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1200&q=80&fit=crop",
-      title: "Ancient Temples",
-      category: "Cultural Sites",
-      description: "Historical monuments and religious landmarks"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=1200&q=80&fit=crop",
-      title: "Scenic Views",
-      category: "Photography",
-      description: "Breathtaking landscapes and photo spots"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&q=80&fit=crop",
-      title: "Local Markets",
-      category: "Shopping",
-      description: "Vibrant bazaars and artisan shops"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80&fit=crop",
-      title: "Festivals",
-      category: "Events",
-      description: "Cultural celebrations and traditional music"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=80&fit=crop",
-      title: "Local Life",
-      category: "Culture",
-      description: "Meet friendly locals and experience hospitality"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80&fit=crop",
-      title: "Natural Beauty",
-      category: "Nature",
-      description: "Stunning natural landscapes and wildlife"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80&fit=crop",
-      title: "Beach Life",
-      category: "Coastal",
-      description: "Pristine beaches and water activities"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1200&q=80&fit=crop",
-      title: "Adventure Sports",
-      category: "Activities",
-      description: "Thrilling outdoor adventures"
+  // Transform mustDoExperiences data into gallery format
+  const galleryImages = (() => {
+    if (regionData?.mustDoExperiences?.categories) {
+      const images = [];
+      regionData.mustDoExperiences.categories.forEach((categoryGroup) => {
+        categoryGroup.items?.forEach((item) => {
+          images.push({
+            url: item.image,
+            title: item.title,
+            category: categoryGroup.category,
+            description: item.description
+          });
+        });
+      });
+      
+      // If we have images from data, use them
+      if (images.length > 0) {
+        return images;
+      }
     }
-  ];
+    
+    // Fallback to default images if no data
+    return [
+      {
+        url: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80&fit=crop",
+        title: "Local Cuisine",
+        category: "Food & Dining",
+        description: "Authentic street food and traditional restaurants"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1200&q=80&fit=crop",
+        title: "Ancient Temples",
+        category: "Cultural Sites",
+        description: "Historical monuments and religious landmarks"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=1200&q=80&fit=crop",
+        title: "Scenic Views",
+        category: "Photography",
+        description: "Breathtaking landscapes and photo spots"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&q=80&fit=crop",
+        title: "Local Markets",
+        category: "Shopping",
+        description: "Vibrant bazaars and artisan shops"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80&fit=crop",
+        title: "Festivals",
+        category: "Events",
+        description: "Cultural celebrations and traditional music"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=80&fit=crop",
+        title: "Local Life",
+        category: "Culture",
+        description: "Meet friendly locals and experience hospitality"
+      }
+    ];
+  })();
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
@@ -91,6 +95,16 @@ const RegionExperiences = ({ regionName = "this destination" }) => {
     setIsLightboxOpen(true);
   };
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % galleryImages.length);
+  };
+
   return (
     <section className="bg-gradient-to-b from-white via-slate-50 to-white py-8 md:py-12">
       <Container>
@@ -99,7 +113,7 @@ const RegionExperiences = ({ regionName = "this destination" }) => {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
             <Sparkles className="w-4 h-4 text-brand-green" />
             <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
-              Culture & Experiences
+              Must-Do Experiences
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
@@ -107,90 +121,103 @@ const RegionExperiences = ({ regionName = "this destination" }) => {
             <span className="text-brand-green capitalize">{regionName}</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Explore local culture, cuisine, and unforgettable moments
+            Discover unique experiences that make {regionName} unforgettable
           </p>
         </div>
 
-        {/* Photo Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {galleryImages.slice(0, 5).map((image, index) => {
-            // First image is larger - spans 2 columns
-            const isHero = index === 0;
-            const gridClass = isHero ? "md:col-span-2 md:row-span-2" : "";
-            const heightClass = isHero ? "h-[280px] md:h-full" : "h-[200px]";
+        {/* Carousel Container */}
+        <div className="relative max-w-5xl mx-auto">
+          {/* Main Carousel */}
+          <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+            {/* Slides */}
+            <div className="relative h-[400px] md:h-[500px]">
+              {galleryImages.map((image, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-all duration-700 ${
+                    index === currentSlide 
+                      ? "opacity-100 scale-100" 
+                      : "opacity-0 scale-95 pointer-events-none"
+                  }`}
+                >
+                  {/* Image */}
+                  <img
+                    src={image.url}
+                    alt={image.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onClick={() => openLightbox(index)}
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-            return (
-              <div
-                key={index}
-                className={`group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${gridClass} ${heightClass}`}
-                onClick={() => openLightbox(index)}
-              >
-                {/* Image */}
-                <img
-                  src={image.url}
-                  alt={image.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-
-                {/* Content */}
-                <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-between">
-                  {/* Category Badge */}
-                  <div>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                      <span className="text-white text-xs font-semibold uppercase tracking-wide">
+                  {/* Content */}
+                  <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
+                    {/* Category Badge */}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-4 w-fit">
+                      <MapPin className="w-4 h-4 text-white" />
+                      <span className="text-white text-sm font-bold uppercase tracking-wider">
                         {image.category}
                       </span>
                     </div>
-                  </div>
 
-                  {/* Title */}
-                  <div className="transform transition-all duration-500 group-hover:-translate-y-1">
-                    <h3 className={`${isHero ? 'text-2xl md:text-3xl' : 'text-lg'} font-black text-white leading-tight drop-shadow-lg mb-1`}>
+                    {/* Title & Description */}
+                    <h3 className="text-3xl md:text-5xl font-black text-white leading-tight drop-shadow-2xl mb-3">
                       {image.title}
                     </h3>
-                    <p className="text-white/90 text-sm drop-shadow-md line-clamp-1">
+                    <p className="text-white/95 text-base md:text-lg leading-relaxed max-w-3xl drop-shadow-lg">
                       {image.description}
                     </p>
-                    
-                    {/* Camera Icon */}
-                    <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <Camera className="w-5 h-5 text-white" />
-                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          </div>
 
-          {/* "More" Card with Blurred Background */}
-          {galleryImages.length > 5 && (
-            <div
-              className="group relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 h-[200px]"
-              onClick={() => openLightbox(5)}
-            >
-              {/* Background Image - Blurred */}
-              <img
-                src={galleryImages[5].url}
-                alt="More photos"
-                className="absolute inset-0 w-full h-full object-cover blur-md scale-110"
-              />
-              
-              {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-              
-              {/* Content */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <Camera className="w-10 h-10 mx-auto mb-3 opacity-90" />
-                  <p className="text-3xl font-black">+{galleryImages.length - 5}</p>
-                  <p className="text-sm font-semibold uppercase tracking-wider mt-1">More Photos</p>
-                </div>
-              </div>
+          {/* Navigation Buttons */}
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white backdrop-blur-sm shadow-xl flex items-center justify-center transition-all hover:scale-110 group z-10"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-6 h-6 text-slate-900 group-hover:scale-110 transition-transform" />
+              </button>
+              <button
+                onClick={handleNextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white backdrop-blur-sm shadow-xl flex items-center justify-center transition-all hover:scale-110 group z-10"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-6 h-6 text-slate-900 group-hover:scale-110 transition-transform" />
+              </button>
+            </>
+          )}
+
+          {/* Dot Indicators */}
+          {galleryImages.length > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-6">
+              {galleryImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === currentSlide
+                      ? "w-8 h-3 bg-brand-green"
+                      : "w-3 h-3 bg-slate-300 hover:bg-slate-400"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           )}
+
+          {/* Counter */}
+          <div className="text-center mt-4">
+            <p className="text-sm font-medium text-slate-600">
+              {currentSlide + 1} / {galleryImages.length}
+            </p>
+          </div>
         </div>
 
         {/* Lightbox Modal */}

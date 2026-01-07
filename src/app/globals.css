@@ -406,12 +406,20 @@ html.no-scroll {
 }
 
 @keyframes floatSlow {
-  0%,
-  100% {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 }
 
@@ -469,14 +477,6 @@ html.no-scroll {
   }
 }
 
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-15px) rotate(2deg);
-  }
-}
 
 @keyframes highlightWord {
   0%,
@@ -522,6 +522,9 @@ html.no-scroll {
 }
 .animate-bounce {
   animation: bounce 1s ease-in-out infinite;
+}
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
 }
 .animate-slideInRight {
   animation: slideInRight 1s ease-out;

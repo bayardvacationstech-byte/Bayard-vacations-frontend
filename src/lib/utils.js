@@ -114,7 +114,7 @@ function cleanupAnswer(answer) {
 // Deprecation soon
 export const convertAndSortHotels = (hotelCharges, old = true) => {
   // Define the desired order
-  const desiredOrder = ["threestar", "fourstar", "fivestar"];
+  const desiredOrder = ["twostar", "threestar", "fourstar", "fivestar"];
 
   // Convert to array and filter out baseCategory
   const hotelArray = Object.entries(hotelCharges)

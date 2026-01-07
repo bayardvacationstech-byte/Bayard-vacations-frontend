@@ -1,191 +1,145 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { H1 } from "@/components/Typography";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/Container";
+import { MapPin } from "lucide-react";
 
-const PackageHero = ({ packageData, isExploring, setIsExploring }) => {
-  const sectionRef = React.useRef(null);
-  
-  const validBannerImages =
-    packageData?.bannerImages?.filter((image) => image && image?.url !== null) ||
-    [];
+const PackageHero = ({ packageData }) => {
+  const validBannerImages = useMemo(() => 
+    packageData?.bannerImages?.filter((image) => image && image?.url !== null) || [],
+    [packageData]
+  );
 
+  // Take the first image as the static main banner
   const mainImage = validBannerImages[0]?.url || "/placeholder.jpg";
-
-  // Showcase images (the overlapping cards at the bottom)
-  // We'll take up to 5 images for the gallery
-  const galleryImages = validBannerImages.slice(0, 5);
-
-  const prevScrollY = React.useRef(0);
-  const hasScrolledDown = React.useRef(false);
-
-  // Robust reset logic: Detect manual scroll-to-top
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const currentScroll = window.scrollY;
-      
-      // If we scroll down significantly, mark that we've left the hero
-      if (currentScroll > 300) {
-        hasScrolledDown.current = true;
-      }
-      
-      // If we are back at the top AND we previously scrolled down, reset the UI
-      if (currentScroll < 50 && isExploring && hasScrolledDown.current) {
-        setIsExploring(false);
-        hasScrolledDown.current = false;
-      }
-      
-      prevScrollY.current = currentScroll;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isExploring, setIsExploring]);
-
-  const scrollToNext = () => {
-    // Reset the flag immediately on click to ensure animation isn't cancelled
-    hasScrolledDown.current = false; 
-    setIsExploring(true);
-    
-    // Wait for the collapse animation before scrolling
-    setTimeout(() => {
-      const element = document.getElementById("experiences-section");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 800);
-  };
+  
+  // The rest of the images will scroll in the side stack
+  // We double the array to create a seamless infinite loop effect
+  const sideImages = useMemo(() => {
+    const images = validBannerImages.length > 1 ? validBannerImages.slice(1) : [validBannerImages[0]];
+    // If we have few images, repeat them to ensure the sidebar is always full
+    return [...images, ...images, ...images].filter(img => img?.url);
+  }, [validBannerImages]);
 
   const title = packageData?.packageTitle || "";
-  const titleLength = title.length;
-  
-  // Dynamic font sizing based on length to prevent layout breakage
-  // We use a base of 100px for short titles and scale down
+  const location = packageData?.region || "";
+
+  const scrollToNext = () => {
+    const element = document.getElementById("package-navigation");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: window.innerHeight - 80, behavior: "smooth" });
+    }
+  };
+
   const getDynamicFontSize = () => {
-    if (titleLength > 35) return "clamp(40px, 6vw, 65px)";
-    if (titleLength > 25) return "clamp(50px, 8vw, 85px)";
-    return "clamp(60px, 10vw, 100px)";
+    const length = title.length;
+    if (length > 35) return "clamp(30px, 4vw, 45px)";
+    if (length > 25) return "clamp(40px, 6vw, 60px)";
+    return "clamp(50px, 7vw, 85px)";
   };
 
   return (
-    <section id="hero-section" ref={sectionRef} className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center text-white">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={mainImage}
-          alt={title || "Hero Background"}
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
-      </div>
-
-      <Container className="relative z-20 flex flex-col items-center text-center -mt-32">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ 
-            opacity: isExploring ? 0 : 1, 
-            y: isExploring ? -30 : 0 
-          }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-6xl flex flex-col items-center"
+    <section className="relative h-[90vh] min-h-[650px] w-full overflow-hidden bg-slate-950">
+      {/* Refined Mosaic Grid: 8/4 Split */}
+      <div className="absolute inset-0 z-0 grid grid-cols-12 gap-1 p-1 md:p-2">
+        
+        {/* Main Large Image Container (Left 8/12) */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="relative col-span-12 md:col-span-8 h-full rounded-xl md:rounded-3xl overflow-hidden group"
         >
-          <motion.h1 
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="mb-6 drop-shadow-2xl text-center uppercase"
-            style={{ 
-              fontFamily: "'Denton Test', 'Klausen', serif",
-              fontWeight: 420,
-              fontSize: getDynamicFontSize(),
-              lineHeight: "100%",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {title}
-          </motion.h1>
-          <p 
-            className="max-w-xl mx-auto px-4 text-white/90 mb-10"
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontWeight: 400,
-              fontSize: "18px",
-              lineHeight: "150%",
-              letterSpacing: "2%",
-              textAlign: "center",
-            }}
-          >
-            A thoughtfully curated space where every image has purpose, presence,
-            and a place. Explore collections that speak in stillness, color, and story.
-          </p>
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              onClick={scrollToNext}
-              className="bg-white text-black hover:bg-white/90 rounded-none transition-all duration-300 shadow-2xl font-semibold tracking-widest uppercase flex items-center justify-center p-0"
-              style={{
-                width: "177px",
-                height: "62px",
-              }}
+          <Image
+            src={mainImage}
+            alt={title}
+            fill
+            priority
+            className="object-cover transition-transform duration-1000 group-hover:scale-105"
+          />
+          {/* Focused Visual Overlay for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+
+          {/* Overlaid Content ONLY on Main Image */}
+          <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-16">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="max-w-3xl"
             >
-              Explore Now
-            </Button>
-          </motion.div>
-        </motion.div>
-      </Container>
+              {/* Destination Tag */}
+              <div className="mb-4 md:mb-6 px-4 py-1.5 bg-brand-green/20 backdrop-blur-md border border-brand-green/30 rounded-full flex items-center gap-2 w-fit shadow-xl">
+                <MapPin size={14} className="text-brand-green" />
+                <span className="text-[10px] md:text-xs font-black tracking-[0.2em] uppercase text-white">{location}</span>
+              </div>
 
-      {/* Image Gallery at the bottom */}
-      <div className="absolute bottom-[-120px] left-1/2 -translate-x-1/2 w-full max-w-6xl flex justify-center items-end h-[400px] pointer-events-none z-10">
-        <div className="relative w-full h-full flex justify-center items-end">
-          {galleryImages.map((img, idx) => {
-            const total = galleryImages.length;
-            const mid = (total - 1) / 2;
-            const diff = idx - mid;
-            
-            // Fanned out like a poker hand
-            const fanRotation = diff * 15; 
-            const fanX = diff * 140;
-            const fanY = Math.abs(diff) * 35;
-
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 300, rotate: diff * 20 }}
-                animate={{ 
-                  opacity: 1, 
-                  y: isExploring ? 200 : fanY, 
-                  rotate: isExploring ? 0 : fanRotation, 
-                  x: isExploring ? 0 : fanX,
-                  scale: isExploring ? 0.7 : 1,
-                }}
-                transition={{ 
-                  duration: isExploring ? 0.8 : 1.5, 
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: isExploring ? (total - idx) * 0.05 : 0.6 + idx * 0.1
-                }}
-                className="absolute w-36 md:w-48 lg:w-56 h-[240px] md:h-[340px] lg:h-[420px] shadow-[0_40px_80px_rgba(0,0,0,0.8)] overflow-hidden bg-white/5 backdrop-blur-sm"
+              <h1 
+                className="mb-6 md:mb-8 drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] uppercase tracking-tight text-white"
                 style={{ 
-                  zIndex: isExploring ? 100 + idx : 10 + (idx === 2 ? 50 : idx),
-                  transformOrigin: "bottom center"
-                }} 
+                  fontFamily: "'Denton Test', serif",
+                  fontWeight: 400,
+                  fontSize: getDynamicFontSize(),
+                  lineHeight: "0.9",
+                }}
+              >
+                {title}
+              </h1>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <Button
+                  onClick={scrollToNext}
+                  className="bg-brand-green hover:bg-brand-green/90 text-white rounded-full px-10 py-7 text-sm md:text-base font-bold tracking-widest uppercase transition-all duration-300 shadow-2xl hover:scale-105"
+                >
+                  Explore Package
+                </Button>
+                
+                <p className="hidden md:block max-w-sm text-white/70 text-sm font-medium leading-relaxed drop-shadow-md border-l border-white/20 pl-6">
+                  Experience {location} like never before with our signature curated journey through heritage and nature.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Side Stack of Scrolling Images (Right 4/12) */}
+        <div className="hidden md:block col-span-4 relative h-full overflow-hidden rounded-3xl">
+          <motion.div 
+            className="flex flex-col gap-2 pointer-events-none"
+            animate={{ 
+              y: ["0%", "-50%"] 
+            }}
+            transition={{ 
+              duration: sideImages.length * 4,
+              ease: "linear", 
+              repeat: Infinity 
+            }}
+          >
+            {sideImages.map((img, idx) => (
+              <div 
+                key={`${img.url}-${idx}`} 
+                className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden shadow-inner"
               >
                 <Image
                   src={img.url}
-                  alt={`Hero Gallery ${idx}`}
+                  alt={`Gallery ${idx}`}
                   fill
+                  sizes="25vw"
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              </motion.div>
-            );
-          })}
+                <div className="absolute inset-0 bg-black/10" />
+              </div>
+            ))}
+          </motion.div>
+          
+          {/* Subtle vignette on scroller edges */}
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950 to-transparent z-10" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950 to-transparent z-10" />
         </div>
       </div>
     </section>

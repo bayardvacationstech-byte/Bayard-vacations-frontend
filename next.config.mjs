@@ -29,6 +29,47 @@ const nextConfig = {
     ],
   },
 
+  // ✅ Redirects to normalize category URLs (underscores to hyphens)
+  async redirects() {
+    return [
+      {
+        source: "/categories/solo_expedition",
+        destination: "/categories/solo-expedition",
+        permanent: true,
+      },
+      {
+        source: "/categories/romantic_getaways",
+        destination: "/categories/romantic-getaways",
+        permanent: true,
+      },
+      {
+        source: "/categories/family_funventure",
+        destination: "/categories/family-funventure",
+        permanent: true,
+      },
+      {
+        source: "/categories/religious_retreat",
+        destination: "/categories/religious-retreat",
+        permanent: true,
+      },
+      {
+        source: "/categories/exploration_bundle",
+        destination: "/categories/exploration-bundle",
+        permanent: true,
+      },
+      {
+        source: "/categories/relax_rejuvenate",
+        destination: "/categories/relax-rejuvenate",
+        permanent: true,
+      },
+      {
+        source: "/categories/elite_escape",
+        destination: "/categories/elite-escape",
+        permanent: true,
+      },
+    ];
+  },
+
   // ✅ Turbopack is enabled via CLI: `next dev --turbo`
   // Note: Turbopack is primarily for dev mode; production builds still use webpack
 };

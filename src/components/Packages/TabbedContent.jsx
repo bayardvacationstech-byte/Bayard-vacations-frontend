@@ -4,10 +4,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import PackageIncludeIcon from "@/components/PackageIncludeIcon";
 import { splitCityStr } from "@/lib/utils";
-import ItineraryMap from "./ItineraryMap";
 
 const TabbedContent = ({ packageData }) => {
-  const [activeSection, setActiveSection] = useState("overview");
   const [expandedDays, setExpandedDays] = useState([0]);
 
   const toggleDay = (index) => {
@@ -26,60 +24,17 @@ const TabbedContent = ({ packageData }) => {
     }
   };
 
-  const sections = [
-    { id: "overview", label: "Overview" },
-    { id: "itinerary", label: "Itinerary" },
-    { id: "stay", label: "Stay" },
-    { id: "inclusions", label: "Inclusions" },
-  ];
-
   const cities = splitCityStr(packageData?.citiesList);
-
-  // Scroll spy to detect active section
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-      
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: elementPosition - offset,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   // Overview Section Component
   const OverviewSection = () => (
-    <div className="space-y-8">
+    <div className="py-24">
             {/* Standard Header */}
             <div className="mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-green/10 rounded-full text-[10px] font-bold text-brand-green border border-brand-green/20 mb-4 uppercase tracking-widest">
                 <span className="text-xs">✨</span> Premium Experience
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-                Package <span className="text-brand-green">Overview</span>
-              </h2>
-              <p className="text-xl text-slate-600">Discover the heart of your journey</p>
+              <p className="text-xl font-bold text-slate-900">Discover the heart of your journey</p>
             </div>
 
             {/* Premium Bento Grid Layout */}
@@ -280,17 +235,14 @@ const TabbedContent = ({ packageData }) => {
 
   // Itinerary Section Component
   const ItinerarySection = () => (
-    <div className="space-y-10">
+    <div className="py-24">
       {/* Standard Header Block - Above Split Layout */}
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
         <div className="flex-1 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full text-[10px] font-bold text-orange-600 border border-orange-100 mb-4 uppercase tracking-widest">
             <span className="text-xs">🗺️</span> Journey Workflow
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-            Our Travel <span className="text-orange-500">Timeline</span>
-          </h2>
-          <p className="text-xl text-slate-600">
+          <p className="text-xl font-bold text-slate-900">
             A carefully curated day-by-day plan for your perfect adventure
           </p>
         </div>
@@ -316,18 +268,8 @@ const TabbedContent = ({ packageData }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column - Sticky Map */}
-        <div className="lg:col-span-5 sticky top-40 space-y-6">
-          <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-xl">
-            <ItineraryMap 
-              itineraries={packageData?.itineraries} 
-              citiesList={packageData?.citiesList}
-            />
-          </div>
-        </div>
-
-        {/* Right Column - Timeline List */}
-        <div className="lg:col-span-7 space-y-6">
+        {/* Left Column - Timeline List */}
+        <div className="lg:col-span-12 space-y-6">
 
         <div className="relative">
           {/* Timeline connector line */}
@@ -526,7 +468,7 @@ const TabbedContent = ({ packageData }) => {
 
   // Stay Section Component
   const StaySection = () => (
-    <div className="space-y-12">
+    <div className="py-24">
             {/* Standard Header with Enhanced Badge */}
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
               <div className="flex-1 max-w-3xl">
@@ -537,10 +479,7 @@ const TabbedContent = ({ packageData }) => {
                   </span>
                   Premium Stay Experience
                 </div>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-4 leading-[1.1] tracking-tight">
-                  Your <span className="text-brand-green italic font-serif">Luxury</span> Accommodation
-                </h2>
-                <p className="text-xl text-slate-500 font-light leading-relaxed">Handpicked retreats & boutiques for ultimate comfort</p>
+                <p className="text-xl font-bold text-slate-900 leading-relaxed">Handpicked retreats & boutiques for ultimate comfort</p>
               </div>
 
               {/* Luxury Category Badge */}
@@ -731,16 +670,13 @@ const TabbedContent = ({ packageData }) => {
 
   // Inclusions Section Component
   const InclusionsSection = () => (
-    <div className="space-y-10">
+    <div className="py-24">
             {/* Standard Header */}
             <div className="mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-4 uppercase tracking-widest">
                 <span className="text-xs">📋</span> Plan Details
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight border-none">
-                Package <span className="text-brand-green">Inclusions</span>
-              </h2>
-              <p className="text-xl text-slate-600">Everything you need to know for a seamless journey</p>
+              <p className="text-xl font-bold text-slate-900">Everything you need to know for a seamless journey</p>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -858,87 +794,27 @@ const TabbedContent = ({ packageData }) => {
   );
 
   return (
-    <section className="relative bg-gradient-to-br from-orange-50 via-blue-50 to-white">
-      {/* Animated Background */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <div className="space-y-0">
+      {/* Overview Section */}
+      <div id="overview" className="scroll-mt-40">
+        <OverviewSection />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="py-12 text-center">
-          <h2
-            className="text-4xl sm:text-5xl font-black text-slate-900 mb-4"
-          >
-            Package <span className="text-brand-green">Details</span>
-          </h2>
-          <div className="flex justify-center">
-            <div className="h-1.5 w-24 bg-brand-blue rounded-full"></div>
-          </div>
-        </div>
-
-        {/* Sticky Navigation */}
-        <div className="sticky top-20 z-40 mb-12">
-          <div className="flex justify-center">
-            <div className="relative inline-flex">
-              <div className="absolute -inset-2 bg-brand-blue/10 rounded-full blur-xl opacity-60"></div>
-              
-              <div className="relative flex items-center gap-2 p-1 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-full shadow-xl overflow-x-auto scrollbar-hide max-w-[calc(100vw-2rem)]">
-                {sections.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => scrollToSection(section.id)}
-                    className={`relative flex-shrink-0 px-4 py-1.5 transition-all duration-300 rounded-full whitespace-nowrap text-[10px] font-black uppercase tracking-widest ${
-                      activeSection === section.id
-                        ? "text-white"
-                        : "text-slate-500 hover:text-brand-blue"
-                    }`}
-                  >
-                    {activeSection === section.id && (
-                      <motion.div
-                        layoutId="activeSectionPill"
-                        className="absolute inset-0 bg-brand-blue rounded-full shadow-lg shadow-brand-blue/20"
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                      />
-                    )}
-                    
-                    <span className="relative z-10 flex items-center gap-2">
-                      <span>{section.label}</span>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Sections */}
-        <div className="space-y-16">
-          {/* Overview Section */}
-          <div id="overview" className="scroll-mt-32">
-            <OverviewSection />
-          </div>
-
-          {/* Itinerary Section */}
-          <div id="itinerary" className="scroll-mt-32">
-            <ItinerarySection />
-          </div>
-
-
-
-          {/* Stay Section */}
-          <div id="stay" className="scroll-mt-32">
-            <StaySection />
-          </div>
-
-          {/* Inclusions Section */}
-          <div id="inclusions" className="scroll-mt-32 pb-16">
-            <InclusionsSection />
-          </div>
-        </div>
+      {/* Itinerary Section */}
+      <div id="itinerary" className="scroll-mt-40">
+        <ItinerarySection />
       </div>
-    </section>
+
+      {/* Stay Section */}
+      <div id="stay" className="scroll-mt-40">
+        <StaySection />
+      </div>
+
+      {/* Inclusions Section */}
+      <div id="inclusions" className="scroll-mt-40 pb-16">
+        <InclusionsSection />
+      </div>
+    </div>
   );
 };
 

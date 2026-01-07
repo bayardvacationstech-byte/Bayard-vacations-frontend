@@ -12,7 +12,10 @@ import {
   ChevronLeft as ChevronLeftIcon,
   Navigation as NavigationIcon,
   Camera,
-  Star
+  Star,
+  ChevronUp,
+  Info,
+  X
 } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -22,91 +25,74 @@ import { cn } from "@/lib/utils";
 import "swiper/css";
 import "swiper/css/navigation";
 
-const RegionCities = ({ regionName = "this destination", cities = [] }) => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+const RegionCities = ({ regionName = "this destination", regionData = null }) => {
+  const [selectedCity, setSelectedCity] = useState("all");
 
-  // Default mock cities if none provided (Tailored for Azerbaijan/Premium destinations)
-  const defaultCities = [
+  // Extract cities from regionData.mustDoExperiences.categories
+  const cityCategories = regionData?.mustDoExperiences?.categories || [];
+  
+  // Transform the data into a usable format - Mix real API data with demo data
+  const apiCities = cityCategories.map((cityData, index) => {
+    const cityName = cityData.category?.trim() || `City ${index + 1}`;
+    const items = cityData.items || [];
+    const firstItem = items[0] || {};
+    
+    return {
+      id: cityName.toLowerCase().replace(/\s+/g, '-'),
+      name: cityName,
+      title: firstItem.title || cityName,
+      description: firstItem.description || "",
+      image: firstItem.image || firstItem.imageUrl || "https://images.unsplash.com/photo-1523438097201-512ae7d59c44?w=800&q=80",
+      icon: MapIcon
+    };
+  });
+
+  // Add demo cities for better presentation (will be replaced by real API data later)
+  const demoCities = [
     {
-      id: "baku",
-      name: "Baku",
-      type: "Metropolis",
-      tagline: "The City of Winds",
-      description: "Where shimmering futuristic skyscrapers meet the ancient whispers of the UNESCO-listed Old City.",
-      highlights: ["Flame Towers", "Old City (Icherisheher)", "Caspian Sea"],
-      image: "https://images.unsplash.com/photo-1523438097201-512ae7d59c44?w=800&q=80",
-      icon: Building2,
-      category: "Modern"
+      id: 'gabala',
+      name: 'Gabala',
+      title: 'Nature & Adventure in Gabala',
+      description: 'Experience the stunning mountain landscapes, adventure parks, and natural beauty of Gabala, Azerbaijan\'s premier mountain resort destination.',
+      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+      icon: MapIcon
     },
     {
-      id: "gabala",
-      name: "Gabala",
-      type: "Mountain Resort",
-      tagline: "The Switzerland of Azerbaijan",
-      description: "A breathtaking alpine escape surrounded by emerald forests and the majestic Caucasus Mountains.",
-      highlights: ["Tufandag Ropeway", "Nohur Lake", "Yeddi Gozel Waterfall"],
-      image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
-      icon: Mountain,
-      category: "Nature"
+      id: 'sheki',
+      name: 'Sheki',
+      title: 'Historic Silk Road City',
+      description: 'Discover the ancient Silk Road heritage, magnificent Khan\'s Palace, and traditional crafts in this charming historic mountain town.',
+      image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80',
+      icon: MapIcon
     },
     {
-      id: "sheki",
-      name: "Sheki",
-      type: "Silk Road Jewel",
-      tagline: "The Cultural Soul",
-      description: "Famous for its vibrant stained glass, royal palaces, and authentic local delicacies from the Silk Road era.",
-      highlights: ["Khan's Palace", "Caravanserai", "Sheki Halva"],
-      image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
-      icon: Castle,
-      category: "Historic"
-    },
-    {
-      id: "ganja",
-      name: "Ganja",
-      type: "Historic Hub",
-      tagline: "City of Gardens",
-      description: "An ancient center of poetry and culture, adorned with beautiful parks and distinctive red-brick architecture.",
-      highlights: ["Nizami Ganjavi Mausoleum", "Bottle House", "Shah Abbas Mosque"],
-      image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&q=80",
-      icon: MapIcon,
-      category: "Historic"
-    },
-    {
-      id: "quba",
-      name: "Quba",
-      type: "Nature Retreat",
-      tagline: "The Apple Capital",
-      description: "Famed for its scenic mountain passes, cascading waterfalls, and the unique cultural heritage of Red Village.",
-      highlights: ["Afurja Waterfall", "Red Village", "Gachresh Forest"],
-      image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
-      icon: Mountain,
-      category: "Nature"
-    },
-    {
-      id: "lankaran",
-      name: "Lankaran",
-      type: "Coastal Escapes",
-      tagline: "The Citric Coast",
-      description: "A subtropical paradise where the black sand beaches meet lush tea plantations and orange groves.",
-      highlights: ["Black Sand Beaches", "Hirkan National Park", "Old Prison & Lighthouse"],
-      image: "https://images.unsplash.com/photo-1493558103817-58593965b2d9?w=800&q=80",
-      icon: Waves,
-      category: "Coastal"
+      id: 'guba',
+      name: 'Guba',
+      title: 'Mountain Carpets & Culture',
+      description: 'Explore the famous carpet-weaving traditions, apple orchards, and scenic mountain villages of northern Azerbaijan.',
+      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
+      icon: MapIcon
     }
   ];
 
-  const allCities = cities.length > 0 ? cities : defaultCities;
+  // Combine API cities with demo cities
+  const allCities = [...apiCities, ...demoCities];
   
-  // Get unique categories for filtering
-  const categories = ["all", ...new Set(allCities.map(c => c.category))];
+  // Get unique city names for filtering
+  const cityNames = ["all", ...allCities.map(c => c.name)];
   
-  // Filter based on selected category
-  const displayCities = selectedCategory === "all" 
+  // Filter based on selected city
+  const displayCities = selectedCity === "all" 
     ? allCities 
-    : allCities.filter(c => c.category === selectedCategory);
+    : allCities.filter(c => c.name === selectedCity);
+  
+  // If no data, don't render the section
+  if (allCities.length === 0) {
+    return null;
+  }
 
   return (
-    <section className="bg-slate-50 py-12 md:py-20 relative overflow-hidden">
+    <section className="bg-slate-50 py-8 md:py-12 relative overflow-hidden">
       {/* Decorative Textural Elements */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
       
@@ -130,37 +116,40 @@ const RegionCities = ({ regionName = "this destination", cities = [] }) => {
               </p>
             </div>
             
-            {/* Navigation Buttons */}
-            <div className="flex gap-2 lg:flex-shrink-0">
-              <button className="cities-prev-btn p-3 rounded-full border-2 border-slate-200 hover:border-brand-green hover:bg-brand-green/10 transition-all">
-                <ChevronLeftIcon className="w-6 h-6 text-slate-700" />
-              </button>
-              <button className="cities-next-btn p-3 rounded-full border-2 border-slate-200 hover:border-brand-green hover:bg-brand-green/10 transition-all">
-                <ChevronRight className="w-6 h-6 text-slate-700" />
-              </button>
+            {/* Navigation Buttons are now absolute over the swiper */}
+            <div className="hidden lg:flex gap-2 lg:flex-shrink-0 invisible">
             </div>
           </div>
           
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
+          {/* City Filter Buttons - Horizontal Scroll on Mobile */}
+          <div className="flex flex-nowrap overflow-x-auto scrollbar-hide gap-2 pb-2 -mb-2">
+            {cityNames.map((cityName) => (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                  selectedCategory === category
+                key={cityName}
+                onClick={() => setSelectedCity(cityName)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+                  selectedCity === cityName
                     ? "bg-brand-green text-white shadow-md"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
-                {category === "all" ? "All Cities" : category}
+                {cityName === "all" ? "All Cities" : cityName}
               </button>
             ))}
           </div>
         </div>
 
         {/* Cities Carousel */}
-        <Swiper
+        <div className="relative group/nav mt-8">
+          {/* Overlay Navigation Buttons */}
+          <button className="cities-prev-btn absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-green hover:text-white hover:border-brand-green transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+            <ChevronLeftIcon className="w-5 md:w-6 h-5 md:h-6" />
+          </button>
+          <button className="cities-next-btn absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-green hover:text-white hover:border-brand-green transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+            <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
+          </button>
+
+          <Swiper
           modules={[Navigation, Autoplay]}
           spaceBetween={24}
           slidesPerView={1}
@@ -171,102 +160,168 @@ const RegionCities = ({ regionName = "this destination", cities = [] }) => {
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           breakpoints={{
             640: { slidesPerView: 2, spaceBetween: 20 },
+            768: { slidesPerView: 2, spaceBetween: 20 },
             1024: { slidesPerView: 3, spaceBetween: 24 },
-            1280: { slidesPerView: 4, spaceBetween: 24 },
+            1280: { slidesPerView: 3.5 },
           }}
-          className="pb-8"
+          className="pb-12"
         >
-          {displayCities.map((city) => {
-            const Icon = city.icon || MapIcon;
-            return (
-              <SwiperSlide key={city.id}>
-                <div className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-2xl h-[520px] bg-white">
-                  {/* Background Image - Full Card */}
-                  <div className="absolute inset-0">
-                    <img
-                      src={city.image}
-                      alt={city.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
-
-                  {/* Content */}
-                  <div className="absolute inset-0 p-6 flex flex-col justify-between">
-                    {/* Top Badges */}
-                    <div className="flex items-start justify-between gap-3">
-                      {/* Type Badge */}
-                      <div className="px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm flex items-center gap-1.5 shadow-md">
-                        <Icon className="w-3.5 h-3.5 text-slate-700" />
-                        <span className="text-xs font-bold text-slate-900 uppercase">{city.type}</span>
-                      </div>
-                    </div>
-
-                    {/* Bottom Content */}
-                    <div className="space-y-4">
-                      {/* City Name & Rating */}
-                      <div>
-                        <h3 className="text-4xl font-black text-white leading-tight drop-shadow-lg mb-2">
-                          {city.name}
-                        </h3>
-                        <p className="text-white/95 text-base italic leading-relaxed drop-shadow-md">
-                          "{city.tagline}"
-                        </p>
-                      </div>
-                      
-                      {/* Description */}
-                      <p className="text-white/90 text-sm leading-relaxed line-clamp-2 drop-shadow-md">
-                        {city.description}
-                      </p>
-
-                      {/* Must Visit Tags */}
-                      <div className="space-y-2">
-                        <h5 className="text-xs font-bold text-white/80 uppercase tracking-wider">Must Visit:</h5>
-                        <div className="flex flex-wrap gap-2">
-                          {city.highlights.slice(0, 3).map((h, i) => (
-                            <span key={i} className="text-xs font-semibold text-white/95 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full border border-white/30">
-                              {h}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Footer - Avatars & CTA */}
-                      <div className="flex items-center justify-between pt-3 border-t border-white/20">
-                        <div className="flex -space-x-2">
-                          {[1,2,3].map(i => (
-                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-slate-200 shadow-sm">
-                              <img src={`https://i.pravatar.cc/100?img=${i+10}`} alt="traveller" />
-                            </div>
-                          ))}
-                          <div className="w-8 h-8 rounded-full border-2 border-white bg-white/90 flex items-center justify-center">
-                            <span className="text-[9px] font-black text-slate-700">+1k</span>
-                          </div>
-                        </div>
-
-                        <button className="px-6 py-2.5 rounded-xl gradient-btn text-white font-bold text-sm uppercase tracking-wide transition-all duration-300 shadow-lg flex items-center gap-2">
-                          View Packages
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Explore Badge */}
-                  <div className="absolute bottom-6 left-6 flex items-center gap-1.5 text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Camera className="w-4 h-4" />
-                    <span className="text-xs font-bold uppercase tracking-wider">Explore</span>
-                  </div>
-                </div>
-              </SwiperSlide>
-            );
-          })}
+          {displayCities.map((city) => (
+            <SwiperSlide key={city.id}>
+              <CityCard city={city} />
+            </SwiperSlide>
+          ))}
         </Swiper>
+        </div>
       </Container>
     </section>
   );
 };
 
 export default RegionCities;
+
+// Sub-component for City Card to handle local state
+function CityCard({ city }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const Icon = city.icon || MapIcon;
+
+  return (
+    <div
+      className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl h-[420px]"
+    >
+      {/* Background Image - Full Card */}
+      <div className="absolute inset-0">
+        <img
+          src={city.image}
+          alt={city.name}
+          className="w-full h-full object-cover transition-transform duration-700 scale-105"
+        />
+      </div>
+
+      {/* Simple Gradient Overlay - Lighter */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70" />
+
+      {/* Content */}
+      <div className="absolute inset-0 p-6 flex flex-col justify-between">
+        {/* Top Badges */}
+        <div className="flex items-start justify-between gap-3">
+          {/* City Badge */}
+          <div className="px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm flex items-center gap-1.5 shadow-md">
+            <Icon className="w-3.5 h-3.5 text-slate-700" />
+            <span className="text-xs font-bold text-slate-900 uppercase">{city.name}</span>
+          </div>
+
+          {/* Popular/Featured Badge */}
+          <div className="px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase shadow-md flex items-center gap-1.5">
+            <Star className="w-3.5 h-3.5 fill-amber-500" />
+            <span>Popular</span>
+          </div>
+        </div>
+
+        {/* Bottom Content */}
+        <div className="space-y-3 relative">
+          {/* Mobile Arrow Handle Toggle - Gold Style */}
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsExpanded(!isExpanded);
+            }}
+            className="md:hidden absolute -top-14 right-2 w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg active:scale-95 transition-all z-30 ring-4 ring-white/10"
+          >
+            {isExpanded ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <ChevronUp className="w-6 h-6 animate-bounce-slow" />
+            )}
+          </button>
+
+          {/* Title */}
+          <h3 className="text-3xl font-black text-white leading-tight drop-shadow-lg">
+            {city.title || city.name}
+          </h3>
+          
+          {/* Description */}
+          {city.description && (
+            <p className="text-white/95 text-base leading-relaxed line-clamp-2 drop-shadow-md">
+              {city.description}
+            </p>
+          )}
+
+          {/* Meta Info */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5 text-white/95">
+              <NavigationIcon className="w-4 h-4" />
+              <span className="text-sm font-semibold">Explore City</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-white/95">
+              <Camera className="w-4 h-4" />
+              <span className="text-sm font-semibold">Photo Spots</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hover/Click Overlay - More Info */}
+      <div className={cn(
+        "absolute inset-0 bg-gradient-to-b from-brand-green/95 to-brand-green transition-all duration-500 z-40",
+        isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full md:group-hover:opacity-100 md:group-hover:translate-y-0"
+      )}>
+        <div className="h-full p-6 flex flex-col">
+          {/* Scrollable Content Area */}
+          <div className="flex-1 overflow-y-auto scrollbar-hide">
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4">
+              <h4 className="text-2xl font-black text-white leading-tight">
+                {city.title || city.name}
+              </h4>
+              <div className="flex items-center gap-2">
+                <Icon className="w-6 h-6 text-white/80 flex-shrink-0" />
+                {/* Mobile Close Button */}
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsExpanded(false);
+                  }}
+                  className="md:hidden p-1 rounded-full bg-white/20 text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Full Description */}
+            {city.description && (
+              <p className="text-white/95 text-sm leading-relaxed mb-4">
+                {city.description}
+              </p>
+            )}
+
+            {/* Highlights/Details */}
+            <div className="space-y-3">
+              <h5 className="text-sm font-bold text-white/90 uppercase tracking-wider">Top Attractions:</h5>
+              <ul className="space-y-2 text-white/90 text-sm">
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span>Historical landmarks & architecture</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span>Local artisan markets</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Footer - Meta & CTA */}
+          <div className="space-y-3 pt-4 border-t border-white/20">
+            <button className="w-full px-6 py-3 rounded-xl gradient-btn text-white font-bold uppercase tracking-wide transition-all duration-300">
+              View Packages
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

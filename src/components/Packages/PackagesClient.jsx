@@ -11,16 +11,31 @@ import WebsiteLoader from "@/components/ui/WebsiteLoader";
 import PremiumFaq from "./PremiumFaq";
 import PremiumBookNowForm from "@/components/Forms/BookNowForm/PremiumBookNowForm";
 import TabbedContent from "./TabbedContent";
-import { Phone, X, ChevronUp } from "lucide-react";
+import PackageNavigation from "./PackageNavigation";
+import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
+import { convertAndSortHotels } from "@/lib/utils";
+import useModal from "@/hooks/useModal";
+import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 const PackagesClient = () => {
   const params = useParams();
   const slug = params.slug;
   const [mounted, setMounted] = useState(false);
-  const [isExploring, setIsExploring] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [showFullForm, setShowFullForm] = useState(false);
+  const [activeSection, setActiveSection] = useState("overview");
+
+  const sections = [
+    { id: "overview", label: "Overview" },
+    { id: "itinerary", label: "Itinerary" },
+    { id: "stay", label: "Stay" },
+    { id: "inclusions", label: "Inclusions" },
+  ];
+
+  const { openModal } = useModal();
+  const pathname = usePathname();
 
   // Use the new hook to fetch package data
   const {
@@ -28,6 +43,19 @@ const PackagesClient = () => {
     isLoading: packageLoading,
     error: packageError,
   } = usePackage(slug);
+
+  // Hotel Selection State
+  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [hotelTiers, setHotelTiers] = useState([]);
+
+  useEffect(() => {
+    if (packageData?.hotelDetails) {
+      const { hotelDetails, baseCategory } = convertAndSortHotels(packageData.hotelDetails);
+      setHotelTiers(hotelDetails);
+      const initialHotel = hotelDetails.find(h => h.type === baseCategory) || hotelDetails[0];
+      setSelectedHotel(initialHotel);
+    }
+  }, [packageData]);
 
   // Fetch related packages from the same region
   const { packages: relatedPackages = [] } = usePackages(packageData?.region);
@@ -56,11 +84,36 @@ const PackagesClient = () => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setShowStickyBar(scrollY > 600);
+
+      // Scroll spy logic
+      const scrollPosition = window.scrollY + 200;
+      for (const section of sections) {
+        const element = document.getElementById(section.id);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }
     };
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 100;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: elementPosition - offset,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   // Show loader only after component has mounted to prevent hydration mismatch
   if (!mounted || packageLoading || !packageData) {
@@ -82,44 +135,165 @@ const PackagesClient = () => {
     return new Intl.NumberFormat('en-IN').format(price);
   };
 
+  const finalPrice = packageData && selectedHotel
+    ? (packageData.offer?.offerPrice || packageData.basePrice || packageData.price || 32500) + (selectedHotel.additionalCharge || 0)
+    : 32500;
+
+  const copyCurrentUrl = async () => {
+    const baseUrl = window.location.origin;
+    const fullUrl = `${baseUrl}${pathname}`;
+    try {
+      await navigator.clipboard.writeText(fullUrl);
+      toast.success("Link Copied to Clipboard");
+    } catch (err) {
+      console.error("Failed to copy URL:", err);
+    }
+  };
+
   return (
     <>
       {/* 1. Hero Section - First Impression */}
       <PackageHero 
         packageData={packageData} 
-        isExploring={isExploring} 
-        setIsExploring={setIsExploring} 
       />
+
+      {/* 2. Sticky Navigation - Centered & Full Width */}
+      <div id="package-navigation">
+        <PackageNavigation 
+          activeSection={activeSection} 
+          onScrollToSection={scrollToSection} 
+        />
+      </div>
       
-      {/* 2. Package Details Tabs - Core Information */}
-      <TabbedContent packageData={packageData} />
-      
-      {/* 3. Experiences Gallery - Visual Activities */}
-      <PackageExperiences 
-        packageData={packageData} 
-        setIsExploring={setIsExploring} 
-      />
-      
-      {/* 4. Hotel Details - Where You'll Stay */}
-      <PackageHotels packageData={packageData} />
+      {/* Two Column Layout: Main Content (80%) + Sticky Sidebar (20%) */}
+      <div className="relative flex gap-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* Main Content - 80% */}
+        <div className="w-[80%]">
+          {/* 3. Package Details Content */}
+          <TabbedContent packageData={packageData} />
+          
+          {/* 3. Experiences Gallery - Visual Activities */}
+          <PackageExperiences 
+            packageData={packageData} 
+          />
+          
+          {/* 4. Hotel Details - Where You'll Stay */}
+          <PackageHotels packageData={packageData} />
 
-      {/* 5. FAQ Section - Answer Questions */}
-      {packageData?.faq && (
-        <PremiumFaq content={packageData.faq} />
-      )}
+          {/* 5. FAQ Section - Answer Questions */}
+          {packageData?.faq && (
+            <PremiumFaq content={packageData.faq} />
+          )}
 
-      {/* Related Packages */}
-      {filteredRelatedPackages && (
-        <ItineraryFooter relatedPackages={filteredRelatedPackages} />
-      )}
+          {/* Related Packages */}
+          {filteredRelatedPackages && (
+            <ItineraryFooter relatedPackages={filteredRelatedPackages} />
+          )}
+        </div>
+
+        <div className="hidden lg:block w-[25%]" id="booking-sidebar">
+          <div className="sticky top-[100px] transition-all duration-500">
+            {/* Redesigned Blue Booking Card */}
+            <div className="bg-[#0046b8] rounded-2xl shadow-2xl overflow-hidden p-6 text-white border border-blue-400/20">
+              <h3 className="text-xl font-bold mb-6">Hotel Type</h3>
+
+              {/* Hotel Tiers Selection */}
+              <div className="grid grid-cols-3 gap-2 mb-8">
+                {hotelTiers.map((tier) => {
+                  const isActive = selectedHotel?.type === tier.type;
+                  
+                  const starRatingMap = {
+                    twostar: 2,
+                    threestar: 3,
+                    fourstar: 4,
+                    fivestar: 5,
+                  };
+
+                  const stars = starRatingMap[tier.type] || 5;
+                  
+                  return (
+                    <div key={tier.type} className="flex flex-col items-center gap-2">
+                      <button
+                        onClick={() => setSelectedHotel(tier)}
+                        className={`w-full flex flex-col items-center justify-center p-2 rounded-lg border-2 transition-all duration-300 ${
+                          isActive 
+                            ? "bg-[#4fb800] border-[#4fb800] shadow-lg scale-105" 
+                            : "bg-transparent border-white/30 hover:border-white/60"
+                        }`}
+                      >
+                        <div className="flex gap-0.5 items-center justify-center">
+                          {[...Array(stars)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              size={10} 
+                              className="fill-white text-white" 
+                            />
+                          ))}
+                        </div>
+                      </button>
+                      {tier.additionalCharge > 0 && !isActive && (
+                        <span className="text-[10px] text-white/70 font-medium">
+                          +{formatPrice(tier.additionalCharge)} INR
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Price Details */}
+              <div className="mb-8">
+                <div className="flex items-baseline gap-1 mb-1">
+                  <span className="text-4xl font-black">₹ {formatPrice(finalPrice)}</span>
+                </div>
+                <p className="text-white/70 text-sm font-medium">Price Per Person</p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-4">
+                <button
+                  onClick={openModal}
+                  className="w-full px-6 py-3.5 bg-transparent hover:bg-white/5 border-2 border-white text-white font-bold rounded-xl transition-all text-sm uppercase tracking-wider"
+                >
+                  Request a Call back
+                </button>
+                
+                <button
+                  onClick={() => {
+                    const hotelParam = selectedHotel?.type ? `?hotel=${selectedHotel.type}` : "";
+                    window.location.href = `/checkout/${packageData.packageSlug}${hotelParam}`;
+                  }}
+                  className="w-full px-6 py-4 bg-[#4fb800] hover:bg-[#5cd600] text-white font-black rounded-xl shadow-lg transition-all text-base uppercase tracking-widest"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
+
+            {/* Share Section */}
+            <div className="mt-6 flex flex-col items-center">
+              <button 
+                onClick={copyCurrentUrl}
+                className="flex items-center gap-3 text-slate-500 hover:text-brand-blue transition-colors text-sm font-medium group"
+              >
+                <span>Share or copy package link</span>
+                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-brand-blue/10">
+                  <Share2 className="w-4 h-4" />
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
 
 
-      {/* Compact Sticky Bottom Bar */}
+
+      {/* Compact Sticky Bottom Bar - Mobile Only */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ${
           showStickyBar ? 'translate-y-0' : 'translate-y-full'
         }`}
       >

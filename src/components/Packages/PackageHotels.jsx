@@ -107,7 +107,12 @@ const PackageHotels = ({ packageData }) => {
   if (isLoading) return null;
 
   return (
-    <section id="hotels-section" className="bg-gradient-to-br from-orange-50 via-blue-50 to-white text-slate-900 py-24 sm:py-32">
+    <section id="hotels-section" className="relative bg-white text-slate-900 py-24">
+      {/* Subtle Background Decoration */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
       <Container>
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-16 relative">
