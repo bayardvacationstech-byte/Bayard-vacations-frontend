@@ -812,9 +812,11 @@ export default function PackagesRegionClient() {
       </div>
 
       {/* FAQ Section */}
-      <div id="faq">
-        <PremiumFaq content={regionData?.faq} />
-      </div>
+      <PremiumFaq 
+        faqs={regionData?.faqs} 
+        content={regionData?.faq} 
+        regionName={placeName} 
+      />
 
       {/* Why Bayard Vacations */}
       <WhyBayardVacations />

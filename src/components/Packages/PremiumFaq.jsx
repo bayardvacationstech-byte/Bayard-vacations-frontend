@@ -14,22 +14,57 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
     setMounted(true);
   }, []);
 
+  const displayName = regionName?.split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ") || regionName || "this region";
+
+  // Default FAQs for fallback
+  const fallbackFaqs = [
+    {
+      question: `What is the best time to visit ${displayName}?`,
+      answer: `The best time to visit ${displayName} generally depends on your preferences, but most travelers find that spring (March to May) and autumn (September to November) offer the most pleasant weather for exploring cities and nature alike.`
+    },
+    {
+      question: "Do I need a visa to travel here?",
+      answer: "Visa requirements vary by nationality. Many travelers can obtain an e-visa or visa on arrival for this region. We recommend checking the official government portal or consulting with our visa experts at least 2-3 weeks before your departure."
+    },
+    {
+      question: "Can I customize the existing tour packages?",
+      answer: "Absolutely! At Bayard Vacations, we believe every traveler is unique. All our packages are 100% customizable. You can add extra days, upgrade your hotels, or include specific activities that interest you."
+    },
+    {
+      question: "What is included in the package price?",
+      answer: "Typically, our packages include premium accommodation, daily breakfast, private airport transfers, and guided sightseeing. Specific inclusions like flights or specialty meals will be clearly listed on each individual package page."
+    },
+    {
+      question: "How do I book a trip with Bayard Vacations?",
+      answer: "Booking is simple! You can click the 'Inquire Now' button on any package to speak with a travel expert, or use our interactive booking system to secure your spot with a small deposit."
+    },
+    {
+      question: "What is the cancellation policy?",
+      answer: "We offer flexible cancellation terms for your peace of mind. Cancellations made more than 30 days before departure usually receive a full refund, minus a small processing fee. Detailed terms are provided at the time of booking."
+    }
+  ];
+
   // Parse FAQs based on format (string HTML or array)
   let parsedFaqs = [];
   
-  // Handle content prop (from package page)
   if (content && typeof content === 'string') {
     parsedFaqs = parseFaqContent(content);
   }
-  // Handle faqs prop (from region page)
   else if (typeof faqs === 'string') {
     parsedFaqs = parseFaqContent(faqs);
   } else if (Array.isArray(faqs) && faqs.length > 0) {
     parsedFaqs = faqs;
   }
 
-  // If no faqs and not mounted, don't render
-  if (!mounted || parsedFaqs.length === 0) {
+  // Use fallback if no FAQs found
+  if (parsedFaqs.length === 0) {
+    parsedFaqs = fallbackFaqs;
+  }
+
+  // If not mounted, don't render to avoid hydration mismatch
+  if (!mounted) {
     return null;
   }
 
@@ -38,7 +73,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section className="relative py-12 md:py-14 bg-white overflow-hidden">
+    <section id="faq" className="relative py-12 md:py-14 bg-white overflow-hidden scroll-mt-20">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse" />
@@ -50,7 +85,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 border border-brand-green/20 rounded-full mb-6">
@@ -167,7 +202,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           className="mt-10"
         >
           <div className="relative overflow-hidden rounded-2xl">

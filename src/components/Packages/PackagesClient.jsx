@@ -32,6 +32,7 @@ const PackagesClient = () => {
     { id: "itinerary", label: "Itinerary" },
     { id: "stay", label: "Stay" },
     { id: "inclusions", label: "Inclusions" },
+    { id: "faq", label: "FAQ" },
   ];
 
   const { openModal } = useModal();
@@ -181,9 +182,10 @@ const PackagesClient = () => {
           <PackageHotels packageData={packageData} />
 
           {/* 5. FAQ Section - Answer Questions */}
-          {packageData?.faq && (
-            <PremiumFaq content={packageData.faq} />
-          )}
+          <PremiumFaq 
+            content={packageData?.faq} 
+            regionName={packageData?.region} 
+          />
 
           {/* Related Packages */}
           {filteredRelatedPackages && (
