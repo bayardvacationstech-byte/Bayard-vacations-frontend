@@ -10,7 +10,7 @@ const ItineraryFooter = ({ relatedPackages }) => {
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   return (
-    <section className="relative overflow-hidden py-24 bg-white">
+    <section className="relative overflow-hidden py-6 bg-white rounded-3xl border border-slate-100 shadow-sm mb-6">
       {/* Background effects */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl" />

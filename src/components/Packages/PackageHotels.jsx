@@ -100,14 +100,10 @@ const PackageHotels = ({ packageData }) => {
     fetchHotelDetails();
   }, [packageData]);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   if (isLoading) return null;
 
   return (
-    <section id="hotels-section" className="relative bg-white text-slate-900 py-24">
+    <section id="hotels-section" className="relative bg-white text-slate-900 py-6 rounded-3xl border border-slate-100 shadow-sm mb-6">
       {/* Subtle Background Decoration */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse"></div>
@@ -115,27 +111,20 @@ const PackageHotels = ({ packageData }) => {
       </div>
       <Container>
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start mb-16 relative">
+        <div className="mb-16 relative">
           <div className="max-w-3xl">
-            <h2 
-              className="text-4xl md:text-5xl font-black mb-8 uppercase tracking-tight text-slate-900"
-              style={{ fontFamily: "'Denton Test', serif" }}
-            >
-              Hotel names and <span className="text-brand-green">location</span> <br className="hidden sm:block" /> details
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-green/10 border border-brand-green/20 rounded-full text-[10px] font-bold text-brand-green mb-4 uppercase tracking-widest">
+              <span className="text-xs">🏨</span> Handpicked Stays
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+              Hotel Names & <span className="text-brand-green">Location</span> <br className="hidden sm:block" /> Details
             </h2>
-            <p className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-2xl font-light">
+            <p className="text-lg font-medium text-slate-600 max-w-2xl leading-relaxed">
               Stay at handpicked hotels listed in the itinerary, offering comfortable rooms, 
               modern amenities, and convenient locations close to key attractions for a 
               seamless travel experience.
             </p>
           </div>
-          
-          <Button
-            onClick={scrollToTop}
-            className="md:absolute top-0 right-0 gradient-btn text-white rounded-xl px-10 py-7 text-lg font-medium tracking-wider uppercase mt-8 md:mt-0 shadow-lg"
-          >
-            Go to top
-          </Button>
         </div>
 
         {/* Hotel Grid */}
@@ -162,13 +151,10 @@ const PackageHotels = ({ packageData }) => {
               {/* Info */}
               <div className="flex-1 flex flex-col justify-between py-1">
                 <div>
-                  <h3 
-                    className="text-2xl font-medium mb-3 text-slate-900 group-hover:text-brand-green transition-colors"
-                    style={{ fontFamily: "'Denton Test', serif" }}
-                  >
+                  <h3 className="text-2xl font-black mb-3 text-slate-900 group-hover:text-brand-green transition-colors tracking-tight">
                     {hotel.name}
                   </h3>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3 font-light">
+                  <p className="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3 font-medium">
                     {hotel.description || "Premium accommodation with exceptional service and world-class amenities."}
                   </p>
                 </div>

@@ -221,11 +221,11 @@ const PackageCardGradient = ({ item, className }) => {
             <Link 
               href={`/packages/${region.toLowerCase().replace(/\s+/g, '-')}/${slug}`}
               className={cn(
-                "rounded-full bg-white text-slate-950 font-black shadow-2xl transition-all hover:bg-brand-blue hover:text-white hover:scale-105 active:scale-95 flex items-center justify-center no-underline tracking-[0.2em]",
+                "rounded-full bg-brand-blue text-white font-black shadow-2xl transition-all hover:bg-brand-blue-hovered hover:scale-105 active:scale-95 flex items-center justify-center no-underline tracking-[0.2em]",
                 isMobile ? "px-6 py-3 text-[9px]" : "px-12 py-6 text-xs"
               )}
             >
-              EXPLORE
+              VIEW PACKAGE
             </Link>
           </div>
         </motion.div>

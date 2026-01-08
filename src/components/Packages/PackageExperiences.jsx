@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const PackageExperiences = ({ packageData }) => {
   const experiences = [
@@ -25,139 +26,130 @@ const PackageExperiences = ({ packageData }) => {
     }
   };
 
-  // Trigger animation when section comes into view
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    if (isInView && !hasAnimated) {
-      setHasAnimated(true);
-    }
-  }, [isInView, hasAnimated]);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Take some images from packageData to populate the experiences
   // In a real scenario, these might come from specific fields
   const displayImages = packageData?.bannerImages?.slice(0, 3) || [];
 
   return (
-    <section ref={sectionRef} id="experiences-section" className="relative w-full bg-white text-slate-900 flex items-center overflow-hidden py-24">
-      {/* Blurred Background Decoration */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <section ref={sectionRef} id="experiences-section" className="relative w-full bg-white text-slate-900 overflow-hidden py-12 rounded-3xl border border-slate-100 shadow-sm mb-6">
+      {/* Background Cinematic Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-20">
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand-green/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-brand-blue/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      <Container className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full">
-        {/* Left Side: Categories */}
-        <div className="flex flex-col space-y-0 relative">
-          {experiences.map((exp) => (
-            <button
-              key={exp.id}
-              onClick={() => setActiveTab(exp.id)}
-              className="group relative transition-all duration-500 text-left py-1"
-            >
-              <span 
-                className={`transition-colors duration-500 block ${
-                  activeTab === exp.id ? "text-brand-green opacity-100" : "text-slate-300 hover:text-slate-400"
-                }`}
-                style={{ 
-                  fontFamily: "Satoshi, sans-serif",
-                  fontSize: "clamp(50px, 5vw, 80px)",
-                  lineHeight: "1",
-                  fontWeight: 400
-                }}
-              >
-                {exp.label}
-              </span>
-              {activeTab === exp.id && (
-                <motion.div 
-                  layoutId="active-underline"
-                  className="h-1 bg-brand-blue w-full absolute bottom-2 left-0 rounded-full shadow-sm"
-                />
-              )}
-            </button>
-          ))}
+      <Container className="relative z-10">
+        {/* Section Header */}
+        <div className="mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 rounded-full text-[10px] font-bold text-purple-600 border border-purple-200 mb-4 uppercase tracking-widest">
+            <span className="text-xs">🎨</span> Visual Journey
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-2 tracking-tight leading-tight">Experiences & <span className="text-brand-green">Activities</span></h2>
+          <p className="text-lg font-medium text-slate-600">Discover the highlights of your adventure</p>
         </div>
 
-        {/* Right Side: Image Cards */}
-        <div className="relative h-[70vh] flex items-center justify-center">
-          <AnimatePresence>
-            {hasAnimated && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side: Categories (Vertical) */}
+          <div className="flex flex-col space-y-0 relative">
+            {experiences.map((exp) => (
+              <button
+                key={exp.id}
+                onClick={() => setActiveTab(exp.id)}
+                className="group relative transition-all duration-500 text-left py-1 outline-none"
+              >
+                <span 
+                  className={`transition-all duration-500 block ${
+                    activeTab === exp.id ? "text-brand-green opacity-100 scale-105 origin-left" : "text-slate-300 hover:text-slate-400"
+                  }`}
+                  style={{ 
+                    fontFamily: "Satoshi, sans-serif",
+                    fontSize: "clamp(40px, 6vw, 80px)",
+                    lineHeight: "1.1",
+                    fontWeight: activeTab === exp.id ? 900 : 400
+                  }}
+                >
+                  {exp.label}
+                </span>
+                {activeTab === exp.id && (
+                  <motion.div 
+                    layoutId="active-underline"
+                    className="h-1.5 bg-brand-blue w-full absolute bottom-2 left-0 rounded-full shadow-sm"
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Right Side: Image Card Stack */}
+          <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="absolute inset-0 flex items-center justify-center"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="relative w-full h-full flex items-center justify-center"
               >
-              {/* Stack of cards */}
-              {displayImages.map((img, idx) => {
-                // Pulled positions inward to prevent clipping in 100vh
-                const positions = [
-                  { x: 30, y: -150, r: -6 },     // Top
-                  { x: 220, y: 10, r: 8 },       // Middle Right
-                  { x: -50, y: 180, r: -4 }      // Bottom
-                ];
-                const pos = positions[idx] || { x: 0, y: 0, r: 0 };
+                {displayImages.map((_, i) => {
+                  // Pick different images based on category index to make it feel dynamic
+                  const catIdx = experiences.findIndex(e => e.id === activeTab);
+                  const imgIdx = (catIdx + i) % (packageData?.bannerImages?.length || 1);
+                  const image = packageData?.bannerImages?.[imgIdx] || displayImages[i];
 
-                return (
-                  <motion.div
-                    key={idx}
-                    variants={{
-                      hidden: { 
-                        opacity: 0, 
-                        y: -1000, 
-                        rotate: pos.r - 45,
-                        scale: 0.9
-                      },
-                      visible: { 
+                  const rotations = [-15, 0, 15];
+                  const xOffsets = isMobile ? [-40, 0, 40] : [-220, 0, 220];
+                  const zIndices = [10, 30, 20];
+                  const scales = [0.9, 1, 0.9];
+                  const yOffsets = isMobile ? [20, 0, 30] : [40, 0, 60];
+
+                  return (
+                    <motion.div
+                      key={`${activeTab}-${i}`}
+                      initial={{ opacity: 0, y: -800, rotate: rotations[i], x: xOffsets[i], scale: 0.8 }}
+                      animate={{ 
                         opacity: 1, 
-                        x: pos.x,
-                        y: pos.y, 
-                        rotate: pos.r,
-                        scale: 1
-                      },
-                      exit: { 
-                        opacity: 0, 
-                        y: 1000, 
-                        rotate: pos.r + 45,
-                        scale: 1.05
-                      }
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      ease: [0.16, 1, 0.3, 1],
-                      delay: idx * 0.15
-                    }}
-                    className="absolute w-[210px] h-[280px] lg:w-[235px] lg:h-[315px] overflow-hidden rounded-2xl shadow-[0_40px_80px_rgba(0,0,0,0.6)] border border-white/10"
-                    style={{
-                      zIndex: idx === 1 ? 30 : 10 + idx,
-                    }}
-                  >
-                    <Image
-                      src={img.url}
-                      alt={`Experience ${idx}`}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
-                    <div className="absolute bottom-6 left-0 right-0 text-center px-4">
-                      <p className="text-xl lg:text-2xl font-medium tracking-tight text-white/95">
-                        {idx === 0 ? "Benoa Beach" : idx === 1 ? "Broken Beach" : "Kelingking Cliff"}
-                      </p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* View Itinerary Button */}
-          <div className="absolute bottom-[-20px] right-0 z-20">
-            <Button
-              onClick={scrollToItinerary}
-              className="gradient-btn text-white px-10 py-6 text-sm rounded-xl transition-all duration-300 shadow-xl font-semibold tracking-widest uppercase"
-            >
-              View itinerary
-            </Button>
+                        rotate: rotations[i], 
+                        x: xOffsets[i], 
+                        scale: scales[i], 
+                        y: yOffsets[i] 
+                      }}
+                      exit={{ opacity: 0, y: 500, scale: 0.5, transition: { duration: 0.3 } }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 80, 
+                        damping: 15,
+                        delay: i * 0.1 
+                      }}
+                      className="absolute w-[220px] md:w-[280px] aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white group"
+                      style={{ zIndex: zIndices[i] }}
+                    >
+                      <Image
+                        src={image.url}
+                        alt={image.alt || activeTab}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <p className="text-white font-bold text-lg">{image.alt || activeTab}</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </Container>

@@ -43,105 +43,168 @@ const PackageHero = ({ packageData }) => {
   };
 
   return (
-    <section className="relative h-[90vh] min-h-[650px] w-full overflow-hidden bg-slate-950">
-      {/* Refined Mosaic Grid: 8/4 Split */}
-      <div className="absolute inset-0 z-0 grid grid-cols-12 gap-1 p-1 md:p-2">
-        
-        {/* Main Large Image Container (Left 8/12) */}
+    <section className="relative h-[95vh] min-h-[700px] w-full overflow-hidden bg-slate-950 flex items-center justify-center">
+      {/* 1. Dynamic Blurred Background (Slow Motion) */}
+      <motion.div 
+        initial={{ scale: 1.2, opacity: 0 }}
+        animate={{ scale: 1.1, opacity: 0.4 }}
+        transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
+        className="absolute inset-0 z-0 pointer-events-none"
+      >
+        <Image
+          src={mainImage}
+          alt=""
+          fill
+          className="object-cover blur-[80px] brightness-50"
+        />
+      </motion.div>
+
+      {/* 2. Layered Floating Decoration (Abstract blobs) */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <motion.div 
-          initial={{ opacity: 0, scale: 1.02 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative col-span-12 md:col-span-8 h-full rounded-xl md:rounded-3xl overflow-hidden group"
-        >
-          <Image
-            src={mainImage}
-            alt={title}
-            fill
-            priority
-            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-          />
-          {/* Focused Visual Overlay for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+          animate={{ x: [0, 50, 0], y: [0, -30, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-green/10 rounded-full blur-[120px]" 
+        />
+        <motion.div 
+          animate={{ x: [0, -40, 0], y: [0, 60, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-brand-blue/10 rounded-full blur-[140px]" 
+        />
+      </div>
 
-          {/* Overlaid Content ONLY on Main Image */}
-          <div className="absolute inset-0 z-10 flex flex-col justify-end p-8 md:p-16">
+      <Container className="relative z-10 w-full h-full flex items-center justify-center">
+        <div className="relative w-full max-w-6xl flex items-center justify-center">
+          
+          {/* 3. The Main Photo Canvas (The "Floating Frame") */}
+          <div className="relative z-20">
+            {/* Main Canvas */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="max-w-3xl"
+              initial={{ y: 80, opacity: 0, rotate: -2 }}
+              animate={{ y: 0, opacity: 1, rotate: 0 }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-[280px] sm:w-[350px] md:w-[420px] aspect-[4/5] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.7)] border-[10px] md:border-[15px] border-white/5 backdrop-blur-sm group"
             >
-              {/* Destination Tag */}
-              <div className="mb-4 md:mb-6 px-4 py-1.5 bg-brand-green/20 backdrop-blur-md border border-brand-green/30 rounded-full flex items-center gap-2 w-fit shadow-xl">
-                <MapPin size={14} className="text-brand-green" />
-                <span className="text-[10px] md:text-xs font-black tracking-[0.2em] uppercase text-white">{location}</span>
-              </div>
+              <Image
+                src={mainImage}
+                alt={title}
+                fill
+                priority
+                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            </motion.div>
 
-              <h1 
-                className="mb-6 md:mb-8 drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] uppercase tracking-tight text-white"
-                style={{ 
-                  fontFamily: "'Denton Test', serif",
-                  fontWeight: 400,
-                  fontSize: getDynamicFontSize(),
-                  lineHeight: "0.9",
-                }}
-              >
-                {title}
-              </h1>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <Button
-                  onClick={scrollToNext}
-                  className="bg-brand-green hover:bg-brand-green/90 text-white rounded-full px-10 py-7 text-sm md:text-base font-bold tracking-widest uppercase transition-all duration-300 shadow-2xl hover:scale-105"
-                >
-                  Explore Package
-                </Button>
-                
-                <p className="hidden md:block max-w-sm text-white/70 text-sm font-medium leading-relaxed drop-shadow-md border-l border-white/20 pl-6">
-                  Experience {location} like never before with our signature curated journey through heritage and nature.
-                </p>
-              </div>
+            {/* Sub Canvas (Secondary smaller image for depth) */}
+            <motion.div
+              initial={{ x: -100, y: 100, opacity: 0, rotate: -15 }}
+              animate={{ x: -50, y: -40, opacity: 1, rotate: -8 }}
+              transition={{ delay: 0.4, duration: 1.5, ease: "easeOut" }}
+              className="absolute -bottom-10 -left-20 w-32 md:w-48 aspect-square rounded-3xl overflow-hidden border-8 border-white/10 shadow-2xl z-30 hidden sm:block"
+            >
+              <Image
+                src={sideImages[0]?.url || mainImage}
+                alt=""
+                fill
+                className="object-cover"
+              />
             </motion.div>
           </div>
-        </motion.div>
 
-        {/* Side Stack of Scrolling Images (Right 4/12) */}
-        <div className="hidden md:block col-span-4 relative h-full overflow-hidden rounded-3xl">
-          <motion.div 
-            className="flex flex-col gap-2 pointer-events-none"
-            animate={{ 
-              y: ["0%", "-50%"] 
-            }}
-            transition={{ 
-              duration: sideImages.length * 4,
-              ease: "linear", 
-              repeat: Infinity 
-            }}
-          >
-            {sideImages.map((img, idx) => (
-              <div 
-                key={`${img.url}-${idx}`} 
-                className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden shadow-inner"
+          {/* 4. Artistic Typography (Overlapping) */}
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-center pointer-events-none">
+            <motion.div
+              className="text-center w-full px-4"
+            >
+              <h1 
+                className="text-white drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+                style={{ 
+                  fontFamily: "'Denton Test', serif",
+                  fontSize: "clamp(55px, 14vw, 170px)",
+                  lineHeight: "0.8",
+                  fontWeight: 900,
+                  letterSpacing: "-0.05em"
+                }}
               >
-                <Image
-                  src={img.url}
-                  alt={`Gallery ${idx}`}
-                  fill
-                  sizes="25vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-black/10" />
-              </div>
-            ))}
+                {title.split(' ').map((word, i) => (
+                  <motion.span 
+                    key={i} 
+                    initial={{ opacity: 0, y: 40, rotateX: -90 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{ delay: 0.8 + (i * 0.15), duration: 1, ease: "easeOut" }}
+                    className="block last:italic last:text-brand-green last:font-light last:mt-2"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </h1>
+            </motion.div>
+          </div>
+
+          {/* 5. Floating Glass Stat Cards */}
+          {/* Card A: Location */}
+          <motion.div
+            animate={{ y: [0, -15, 0], x: [0, 5, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -left-4 md:left-[-15%] top-[10%] z-50 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] flex items-center gap-4 group hover:bg-white/20 transition-colors"
+          >
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-green/80 backdrop-blur-md rounded-xl flex items-center justify-center shadow-lg border border-white/20">
+              <MapPin className="text-white w-5 h-5 md:w-6 md:h-6" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-brand-green">Experience</p>
+              <p className="text-white font-bold text-sm md:text-lg">{location}</p>
+            </div>
           </motion.div>
-          
-          {/* Subtle vignette on scroller edges */}
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950 to-transparent z-10" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950 to-transparent z-10" />
+
+          {/* Card B: Duration */}
+          <motion.div
+            animate={{ y: [0, 20, 0], rotate: [0, 2, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            className="absolute -right-4 md:right-[-10%] top-[40%] z-50 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col items-center group hover:bg-white/20 transition-colors"
+          >
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Stay</p>
+            <p className="text-white font-black text-3xl md:text-5xl leading-none">
+              {packageData?.nights || "5"}
+              <span className="text-lg md:text-xl font-light text-white/50 ml-1">N</span>
+            </p>
+          </motion.div>
+
+          {/* Card C: Price/Budget */}
+          <motion.div
+            animate={{ y: [0, -12, 0], x: [0, -8, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute left-[5%] md:left-[-5%] bottom-[10%] z-50 bg-brand-blue/20 backdrop-blur-2xl border border-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] flex flex-col items-start group hover:bg-brand-blue/30 transition-colors"
+          >
+            <p className="text-[10px] font-black uppercase tracking-widest text-brand-blue/80 mb-1">Starting From</p>
+            <p className="text-white font-black text-2xl md:text-4xl tracking-tight">
+               <span className="text-base md:text-lg font-light mr-1">₹</span>
+               {packageData?.price?.toLocaleString() || "45,000"}
+            </p>
+          </motion.div>
+
+          {/* 6. Scroll Prompt */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2 }}
+            className="absolute bottom-[-10%] md:bottom-[-20%] left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-4"
+          >
+            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-2">Scroll To Discover</div>
+            <button 
+              onClick={scrollToNext}
+              className="w-10 h-16 md:w-12 md:h-20 border-2 border-white/20 rounded-full flex justify-center p-2 group hover:border-brand-green transition-colors"
+            >
+              <motion.div 
+                animate={{ y: [0, 20, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-1 h-3 md:h-4 bg-brand-green rounded-full shadow-[0_0_15px_rgba(34,197,94,0.6)]"
+              />
+            </button>
+          </motion.div>
+
         </div>
-      </div>
+      </Container>
     </section>
   );
 };

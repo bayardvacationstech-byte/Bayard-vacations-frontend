@@ -10,7 +10,10 @@ import { usePackages, usePackage } from "@/hooks/packages";
 import WebsiteLoader from "@/components/ui/WebsiteLoader";
 import PremiumFaq from "./PremiumFaq";
 import PremiumBookNowForm from "@/components/Forms/BookNowForm/PremiumBookNowForm";
-import TabbedContent from "./TabbedContent";
+import OverviewSection from "./Sections/OverviewSection";
+import ItinerarySection from "./Sections/ItinerarySection";
+import StaySection from "./Sections/StaySection";
+import InclusionsSection from "./Sections/InclusionsSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
@@ -18,6 +21,7 @@ import { convertAndSortHotels } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
+import Container from "@/components/ui/Container";
 
 const PackagesClient = () => {
   const params = useParams();
@@ -51,12 +55,25 @@ const PackagesClient = () => {
 
   useEffect(() => {
     if (packageData?.hotelDetails) {
-      const { hotelDetails, baseCategory } = convertAndSortHotels(packageData.hotelDetails);
-      setHotelTiers(hotelDetails);
-      const initialHotel = hotelDetails.find(h => h.type === baseCategory) || hotelDetails[0];
-      setSelectedHotel(initialHotel);
+      if (typeof packageData.hotelDetails === 'string') {
+        // Handle legacy/string hotel details
+        const standardTier = { type: 'standard', additionalCharge: 0, rating: 'Standard' };
+        setHotelTiers([standardTier]);
+        setSelectedHotel(standardTier);
+      } else if (Array.isArray(packageData.hotelDetails)) {
+         // If hotelDetails is an array, we treat it as a single "Standard" tier
+         const standardTier = { type: 'standard', additionalCharge: 0, rating: 'Standard' };
+         setHotelTiers([standardTier]);
+         setSelectedHotel(standardTier);
+      } else {
+        // Handle proper object structure { twostar: ..., threestar: ... }
+        const { hotelDetails, baseCategory } = convertAndSortHotels(packageData.hotelDetails);
+        setHotelTiers(hotelDetails);
+        const initialHotel = hotelDetails.find(h => h.type === baseCategory) || hotelDetails[0];
+        setSelectedHotel(initialHotel);
+      }
     }
-  }, [packageData]);
+  }, [packageData?.id, packageData?.hotelDetails]);
 
   // Fetch related packages from the same region
   const { packages: relatedPackages = [] } = usePackages(packageData?.region);
@@ -80,29 +97,85 @@ const PackagesClient = () => {
     }
   }, []);
 
-  // Show sticky bar after scrolling past hero
+  // Optimize scroll handling with requestAnimationFrame and caching
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setShowStickyBar(scrollY > 600);
+    let ticking = false;
+    const sectionElements = {};
 
-      // Scroll spy logic
-      const scrollPosition = window.scrollY + 200;
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id);
-            break;
+    // Cache section elements once
+    sections.forEach(section => {
+      sectionElements[section.id] = document.getElementById(section.id);
+    });
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          
+          // 1. Handle Sticky Bar Visibility (Throttled)
+          if (Math.abs(scrollY - (window.lastScrollY || 0)) > 10) { // Only update if significant scroll
+             setShowStickyBar(scrollY > 600);
+             window.lastScrollY = scrollY;
           }
-        }
+
+          // 2. Scroll Spy Logic
+          // Offset for sticky header (approx 100px) + some buffer
+          const scrollPosition = scrollY + 150; 
+          
+          let currentActive = activeSection;
+          
+          // Iterate through sections to find the current one
+          for (const section of sections) {
+             const element = sectionElements[section.id] || document.getElementById(section.id); // Fallback if cache missed
+             if (element) {
+               // element.offsetTop is less expensive than getBoundingClientRect in a loop
+               const { offsetTop, offsetHeight } = element;
+               
+               if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                 currentActive = section.id;
+                 break;
+               }
+             }
+          }
+          
+          // Only update state if it changed
+          if (currentActive !== activeSection) {
+            setActiveSection(currentActive);
+          }
+
+          ticking = false;
+        });
+
+        ticking = true;
       }
     };
     
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Update cache on resize
+    const handleResize = () => {
+       sections.forEach(section => {
+          sectionElements[section.id] = document.getElementById(section.id);
+       });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+    
+    // Initial calculation
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [activeSection]); // Add activeSection dependency to access latest value in checking, or use functional update if needed. Actually simpler to remove dependency and use ref for activeSection if keen on perf, but React 18 handles this okay. 
+  // Better approach: remove activeSection dependency and use a local var or functional update isn't needed here because we are reading DOM. 
+  // Wait, if I include activeSection in deps, the effect re-runs on every section change, removing/adding listeners. That's inefficient.
+  // I will use a ref to track current active section to compare against inside the loop, OR just trust React's state setter which bails out if value is same.
+  // React setState IS safe to call with same value (no re-render), but the calculation logic relies on closure `activeSection`. 
+  // To fix closure staleness without re-binding:
+  // I will rely on the `currentActive` calculated from DOM. I don't need to read `activeSection` state inside the loop to determine the *correct* one, only to decide whether to *set* it.
+  // Actually, I can just call setActiveSection(newSection) and React will optimize.
+  // So I will REMOVE activeSection from dependency array to prevent listener churn.
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -158,20 +231,25 @@ const PackagesClient = () => {
         packageData={packageData} 
       />
 
-      {/* 2. Sticky Navigation - Centered & Full Width */}
-      <div id="package-navigation">
+      {/* Main Content Wrapper with Gradient */}
+      <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white relative pb-12">
+        {/* 2. Sticky Navigation - Centered & Full Width */}
         <PackageNavigation 
-          activeSection={activeSection} 
-          onScrollToSection={scrollToSection} 
+            activeSection={activeSection} 
+            onScrollToSection={scrollToSection} 
         />
-      </div>
-      
-      {/* Two Column Layout: Main Content (80%) + Sticky Sidebar (20%) */}
-      <div className="relative flex gap-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        
+        {/* Two Column Layout: Main Content (80%) + Sticky Sidebar (20%) */}
+        <Container className="relative flex gap-12 pt-2">
         {/* Main Content - 80% */}
         <div className="w-[80%]">
           {/* 3. Package Details Content */}
-          <TabbedContent packageData={packageData} />
+             <div className="mt-4 px-4 md:px-0">
+                <OverviewSection packageData={packageData} />
+                <ItinerarySection packageData={packageData} />
+                <StaySection packageData={packageData} />
+                <InclusionsSection packageData={packageData} />
+             </div>
           
           {/* 3. Experiences Gallery - Visual Activities */}
           <PackageExperiences 
@@ -181,20 +259,23 @@ const PackagesClient = () => {
           {/* 4. Hotel Details - Where You'll Stay */}
           <PackageHotels packageData={packageData} />
 
+          {/* Related Packages */}
+          {filteredRelatedPackages && (
+            <ItineraryFooter relatedPackages={filteredRelatedPackages} />
+          )}
+
           {/* 5. FAQ Section - Answer Questions */}
           <PremiumFaq 
             content={packageData?.faq} 
             regionName={packageData?.region} 
           />
 
-          {/* Related Packages */}
-          {filteredRelatedPackages && (
-            <ItineraryFooter relatedPackages={filteredRelatedPackages} />
-          )}
+          {/* 6. Why Choose Bayard Vacations - Final Section */}
+          <WhyBayardVacations />
         </div>
 
         <div className="hidden lg:block w-[25%]" id="booking-sidebar">
-          <div className="sticky top-[100px] transition-all duration-500">
+          <div className="sticky top-[100px]">
             {/* Redesigned Blue Booking Card */}
             <div className="bg-[#0046b8] rounded-2xl shadow-2xl overflow-hidden p-6 text-white border border-blue-400/20">
               <h3 className="text-xl font-bold mb-6">Hotel Type</h3>
@@ -286,6 +367,7 @@ const PackagesClient = () => {
             </div>
           </div>
         </div>
+      </Container>
       </div>
 
 

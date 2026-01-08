@@ -313,42 +313,42 @@ const Hero = () => {
         </div> */}
 
         {/* Quick Stats - Dark Glass Overlay */}
-        <div className="bg-white/20 backdrop-blur-md text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
-          <div className="grid grid-cols-4 items-center justify-items-center gap-2 md:gap-0 py-3 sm:py-5 px-2 sm:px-4 max-w-7xl mx-auto relative md:divide-x divide-white/10">
+        <div className="bg-[#0146b3]  text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+          <div className="grid grid-cols-4 items-center justify-items-center gap-2 md:gap-0 py-4 sm:py-6 px-2 sm:px-4 max-w-7xl mx-auto relative md:divide-x divide-white/20">
             
             {/* Review Badge - Google Colors */}
-            <div className="col-span-4 md:col-span-1 w-full flex items-center justify-center gap-2 pb-2 md:pb-0 border-b md:border-b-0 border-white/10">
+            <div className="col-span-4 md:col-span-1 w-full flex items-center justify-center gap-2 pb-3 md:pb-0 border-b md:border-b-0 border-white/20">
               <Image
                 src={ReviewCompanies}
                 alt="Google Reviews"
-                className="h-5 sm:h-7 w-auto"
+                className="h-6 sm:h-8 w-auto"
               />
-              <div className="flex items-center gap-1 text-xs sm:text-sm font-medium">
-                <span className="text-lg sm:text-2xl font-bold text-white">4.9</span>
-                <Star className="size-4 sm:size-5 fill-[#FBBC05] stroke-[#FBBC05]" />
+              <div className="flex items-center gap-1.5 text-sm sm:text-base font-black">
+                <span className="text-xl sm:text-3xl font-black text-white">4.9</span>
+                <Star className="size-5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
             </div>
 
             {/* Stat 1 */}
             <div className="col-span-1 w-full flex flex-col items-center justify-center text-center">
-              <span className="text-lg sm:text-2xl font-bold text-white">5k+</span>
-              <span className="text-[10px] sm:text-xs text-white/70 mt-0.5">Travelers</span>
+              <span className="text-xl sm:text-3xl font-black text-white">5k+</span>
+              <span className="text-[11px] sm:text-sm font-bold text-white uppercase tracking-wider mt-1">Travelers</span>
             </div>
 
             {/* Stat 2 */}
             <div className="col-span-1 w-full flex flex-col items-center justify-center text-center">
-              <span className="text-lg sm:text-2xl font-bold text-white">100+</span>
-              <span className="text-[10px] sm:text-xs text-white/70 mt-0.5">Places</span>
+              <span className="text-xl sm:text-3xl font-black text-white">100+</span>
+              <span className="text-[11px] sm:text-sm font-bold text-white uppercase tracking-wider mt-1">Places</span>
             </div>
 
             {/* Stat 3 Support */}
-            <div className="col-span-2 md:col-span-1 w-full flex items-center justify-center gap-1.5 sm:gap-2">
-              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            <div className="col-span-2 md:col-span-1 w-full flex items-center justify-center gap-2 sm:gap-3">
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
+                <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div className="leading-tight">
-                <span className="block text-xs sm:text-base font-bold text-white">24/7 Support</span>
-                <span className="text-[9px] sm:text-xs text-white/50">Always here</span>
+                <span className="block text-sm sm:text-xl font-black text-white uppercase tracking-tight">24/7 Support</span>
+                <span className="text-[10px] sm:text-sm font-medium text-white/80">Premium Assistance</span>
               </div>
             </div>
 

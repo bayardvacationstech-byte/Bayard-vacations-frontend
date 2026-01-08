@@ -585,22 +585,22 @@ const PackageCard = ({ item, className, isGroup = false }) => {
             {/* CTA BUTTONS */}
             <div className="flex flex-1 items-center gap-2">
               {isGroup ? (
-                <div className="flex-1 rounded-lg bg-gradient-to-r from-brand-blue to-blue-600 px-3 py-2 text-center text-[12px] font-black text-white hover:from-blue-600 hover:to-brand-blue cursor-pointer transition-all shadow-lg">
-                  View
+                <div className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-3 py-2 text-center text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
+                  View Package
                 </div>
               ) : (
                 <Link
                   href={href}
-                  className="flex-1 rounded-lg bg-gradient-to-r from-brand-blue to-blue-600 px-3 py-2 text-center text-[12px] font-black text-white hover:from-blue-600 hover:to-brand-blue transition-all shadow-lg"
+                  className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-3 py-2 text-center text-[11px] font-black text-white transition-all shadow-lg"
                 >
-                  View
+                  View Package
                 </Link>
               )}
 
               {!isGroup && (
                 <button
                   onClick={handleContactExpert}
-                  className="flex-shrink-0 rounded-lg border-2 border-white/40 bg-white/15 backdrop-blur-sm px-3 py-2 text-[12px] font-black text-white hover:bg-white/25 hover:border-white/60 transition-all"
+                  className="flex-shrink-0 rounded-lg bg-brand-green hover:bg-brand-green/90 px-3 py-2 text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
                 >
                   Contact
                 </button>

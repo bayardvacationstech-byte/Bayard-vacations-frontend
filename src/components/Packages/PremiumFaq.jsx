@@ -73,7 +73,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section id="faq" className="relative py-12 md:py-14 bg-white overflow-hidden scroll-mt-20">
+    <section id="faq" className="relative py-6 bg-white overflow-hidden scroll-mt-20 rounded-3xl border border-slate-100 shadow-sm mb-6">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse" />
@@ -88,12 +88,12 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 border border-brand-green/20 rounded-full mb-6">
-            <MessageCircle className="w-4 h-4 text-brand-green" />
-            <span className="text-brand-green text-sm font-bold uppercase tracking-wider">Got Questions?</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-green/10 border border-brand-green/20 rounded-full mb-6 uppercase tracking-widest text-[10px]">
+            <MessageCircle className="w-3.5 h-3.5 text-brand-green" />
+            <span className="text-brand-green font-bold">Got Questions?</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
             Frequently Asked{" "}
             <span className="text-brand-green">
               Questions

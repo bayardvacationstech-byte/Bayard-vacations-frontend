@@ -11,7 +11,7 @@ const PackageNavigation = ({ activeSection, onScrollToSection }) => {
   ];
 
   return (
-    <div className="sticky top-20 z-40  py-3">
+    <div className="sticky top-20 z-40  py-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <div className="relative inline-flex">

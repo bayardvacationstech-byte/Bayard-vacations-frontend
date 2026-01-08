@@ -259,11 +259,11 @@ const DesktopNavbar = () => {
               <Link href="/" onMouseOver={() => setActiveDropdown(null)}>
                 <Image
                   priority
-                  width={150}
-                  height={30}
+                  width={220}
+                  height={44}
                   alt="Bayard Vacations Logo"
                   src={isHeaderFixed ? "/img/logo.svg" : "/media/logo.svg"}
-                  style={{ width: "auto" }}
+                  className="w-48 sm:w-56 transition-all duration-300"
                 />
               </Link>
               <ul className="mx-auto flex gap-8">
@@ -271,7 +271,7 @@ const DesktopNavbar = () => {
                   <li key={item.id} onMouseOver={() => handleMouseOver(item)}>
                     <Link
                       href={item?.href || "/"}
-                      className="relative flex items-center gap-1 rounded-full text-sm ease-out after:absolute after:bottom-0 after:left-0 after:inline-block  after:h-px after:w-full after:translate-y-1 after:scale-x-0 after:bg-[#59DF02] after:transition-all after:duration-300 after:content-[''] hover:after:scale-x-100"
+                      className="relative flex items-center gap-1 rounded-full text-[16px] font-semibold ease-out after:absolute after:bottom-0 after:left-0 after:inline-block  after:h-px after:w-full after:translate-y-1 after:scale-x-0 after:bg-[#59DF02] after:transition-all after:duration-300 after:content-[''] hover:after:scale-x-100"
                     >
                       <span>{item.title}</span>
                       {item.hasDropdown && <ChevronDown className="size-4" />}

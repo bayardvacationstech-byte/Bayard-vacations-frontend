@@ -565,9 +565,9 @@ export default function MobileNavbar() {
                 <Image
                   src="/img/logo.svg"
                   alt="Logo"
-                  width={140}
-                  height={28}
-                  className="w-[120px]"
+                  width={200}
+                  height={40}
+                  className="w-[150px] sm:w-[170px]"
                 />
               </Link>
 
@@ -635,7 +635,7 @@ export default function MobileNavbar() {
         {navbarData.map((item) => (
           <li
             key={item.id}
-            className="flex items-center justify-between py-5 text-lg border-b border-white/20"
+            className="flex items-center justify-between py-5 text-xl font-bold border-b border-white/20"
           >
             {item.hasDropdown ? (
               <button
