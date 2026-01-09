@@ -1,4 +1,5 @@
 import { db } from "@/firebase/firebaseConfig";
+import { minimizePackageData, minimizeRegionData, minimizeReviewData } from "@/utils/dataMinimizers";
 import {
   collection,
   doc,
@@ -38,33 +39,34 @@ const sanitizeDocRef = (item) => {
   return item;
 };
 
-// Helper to recursively sanitize nested objects/arrays
-const sanitizeRecursively = (item) => {
-  if (!item) return item;
+// Helper to recursively sanitize nested objects/arrays with depth safeguard
+const sanitizeRecursively = (item, depth = 0) => {
+  if (!item || typeof item !== "object" || depth > 8) return item;
   
   if (item instanceof Timestamp) {
     return item.toDate();
   }
   
   if (Array.isArray(item)) {
-    return item.map(sanitizeRecursively);
+    return item.map(i => sanitizeRecursively(i, depth + 1));
   }
   
-  if (typeof item === "object") {
-    // DO NOT recurse into Firestore internal objects (duck typing)
-    if (item._key || item.firestore || item.converter) {
-      return sanitizeDocRef(item);
-    }
+  // Safeguard: Check if it's a Firestore internal object
+  if (item._key || item.firestore || item.converter || typeof item.withConverter === 'function') {
+    return sanitizeDocRef(item);
+  }
 
-    // Only recurse into plain objects
-    const newItem = {};
-    Object.keys(item).forEach((key) => {
-      newItem[key] = sanitizeRecursively(item[key]);
-    });
-    return newItem;
+  // Only recurse into plain objects
+  if (Object.prototype.toString.call(item) !== '[object Object]') {
+    return item;
   }
+
+  const newItem = {};
+  Object.keys(item).forEach((key) => {
+    newItem[key] = sanitizeRecursively(item[key], depth + 1);
+  });
   
-  return item;
+  return newItem;
 };
 
 // Helper function to sanitize document data
@@ -137,6 +139,67 @@ const getReferencedData = async (docRef) => {
     console.error("Error fetching referenced document:", error);
     return null;
   }
+};
+
+// Helper function to resolve only necessary references for a card (e.g. images)
+const resolveCardReferences = async (packageData) => {
+  if (!packageData.cardImages || !packageData.cardImages.length) return packageData;
+  
+  const cardImagesData = await Promise.all(
+    packageData.cardImages.map(getReferencedData)
+  );
+  packageData.cardImages = cardImagesData.filter(Boolean);
+  return packageData;
+};
+
+// Highly optimized batch resolver for card images
+export const batchResolveCardReferences = async (packages) => {
+  if (!packages || !packages.length) return packages;
+
+  // 1. Collect all unique references
+  const refMap = new Map(); // key: collection/id, value: ref object
+  
+  packages.forEach(pkg => {
+    if (pkg.cardImages) {
+      pkg.cardImages.forEach(ref => {
+        if (ref && (ref.id && ref.collection)) {
+          refMap.set(`${ref.collection}/${ref.id}`, ref);
+        } else if (ref && ref._key) {
+          // Direct firestore ref
+          const segments = ref._key.path.segments;
+          const id = segments[segments.length - 1];
+          const col = segments[segments.length - 2];
+          refMap.set(`${col}/${id}`, ref);
+        }
+      });
+    }
+  });
+
+  if (refMap.size === 0) return packages;
+
+  // 2. Fetch all unique references in parallel
+  const uniqueRefs = Array.from(refMap.values());
+  const resolvedData = await Promise.all(uniqueRefs.map(getReferencedData));
+  
+  // 3. Create a lookup map for resolved data
+  const dataLookup = new Map();
+  uniqueRefs.forEach((ref, i) => {
+    if (resolvedData[i]) {
+      const key = ref.id ? `${ref.collection}/${ref.id}` : `${ref._key.path.segments[ref._key.path.segments.length-2]}/${ref._key.path.segments[ref._key.path.segments.length-1]}`;
+      dataLookup.set(key, resolvedData[i]);
+    }
+  });
+
+  // 4. Map resolved data back to packages
+  return packages.map(pkg => {
+    if (pkg.cardImages) {
+      pkg.cardImages = pkg.cardImages.map(ref => {
+        const key = ref.id ? `${ref.collection}/${ref.id}` : (ref._key ? `${ref._key.path.segments[ref._key.path.segments.length-2]}/${ref._key.path.segments[ref._key.path.segments.length-1]}` : null);
+        return dataLookup.get(key) || null;
+      }).filter(Boolean);
+    }
+    return pkg;
+  });
 };
 
 // Helper function to resolve all references for a package
@@ -537,13 +600,39 @@ export const getCuratedPackages = async (
     const packages = await Promise.all(
       querySnapshot.docs.map(async (doc) => {
         const packageData = sanitizeDocumentData(doc);
-        return await resolveAllPackageReferences(packageData);
+        // Optimize for Homepage: only resolve card images
+        const resolved = isHomePage 
+          ? await resolveCardReferences(packageData) 
+          : await resolveAllPackageReferences(packageData);
+          
+        return isHomePage ? minimizePackageData(resolved) : resolved;
       })
     );
     return packages.sort((a, b) => a.basePrice - b.basePrice);
   } catch (error) {
     console.error("Error fetching packages:", error);
     throw error;
+  }
+};
+
+export const getAllPublishedPackages = async (packageType) => {
+  try {
+    const packagesRef = collection(db, COLLECTIONS.PACKAGES);
+    const q = query(
+      packagesRef,
+      where("domestic", "==", packageType === "domestic"),
+      where("status", "==", PACKAGE_STATUS.PUBLISHED)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const initialPackages = querySnapshot.docs.map(doc => sanitizeDocumentData(doc));
+    
+    // Use optimized batch resolver
+    const packages = await batchResolveCardReferences(initialPackages);
+    return packages.sort((a, b) => a.basePrice - b.basePrice);
+  } catch (error) {
+    console.error(`Error fetching all published ${packageType} packages:`, error);
+    return [];
   }
 };
 
@@ -618,7 +707,9 @@ export const getPackagesByTheme = async (
     const packages = await Promise.all(
       querySnapshot.docs.map(async (doc) => {
         const packageData = sanitizeDocumentData(doc);
-        return await resolveAllPackageReferences(packageData);
+        // Use simpler resolution for themes as they are mostly used in cards
+        const resolved = await resolveCardReferences(packageData);
+        return minimizePackageData(resolved); 
       })
     );
     return packages.sort((a, b) => a.basePrice - b.basePrice);

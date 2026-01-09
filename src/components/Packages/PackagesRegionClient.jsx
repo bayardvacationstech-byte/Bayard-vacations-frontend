@@ -99,9 +99,12 @@ export default function PackagesRegionClient() {
   const { region: regionName } = useParams();
   const searchParams = useSearchParams();
   const isGroupPackage = searchParams.get("group") === "true";
-  const { packages: allPackages, isLoading, error } = usePackages(regionName);
-  const { regionData } = useRegion(regionName);
+  const { packages: allPackages, isLoading: packagesLoading, error: packagesError } = usePackages(regionName);
+  const { regionData, isLoading: regionLoading, error: regionError } = useRegion(regionName);
   const placeName = regionName?.split("-").join(" ") || "this destination";
+
+  const isLoading = packagesLoading || regionLoading;
+  const error = packagesError || regionError;
 
   useEffect(() => {
     setIsMounted(true);
@@ -308,6 +311,17 @@ export default function PackagesRegionClient() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-lg text-red-600">
           Error loading packages: {error.message}
+        </div>
+      </div>
+    );
+  }
+
+  if (!isMounted) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-brand-blue border-t-transparent rounded-full animate-spin"></div>
+          <div className="text-white font-bold tracking-widest uppercase">Preparing Journey...</div>
         </div>
       </div>
     );
@@ -585,7 +599,7 @@ export default function PackagesRegionClient() {
             {/* Package Cards Grid */}
             {!isMounted || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
               // Loading State - Show skeleton cards
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-12">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <div key={i} className="rounded-2xl border-2 border-slate-200 bg-white p-6 animate-pulse">
                     <div className="aspect-[4/3] bg-slate-200 rounded-xl mb-4"></div>
@@ -595,7 +609,7 @@ export default function PackagesRegionClient() {
                 ))}
               </div>
             ) : paginatedArray.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-12">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
                 {paginatedArray.map((item) => (
                   <PackageCard key={item.id} item={item} />
                 ))}
@@ -700,8 +714,7 @@ export default function PackagesRegionClient() {
               autoplay={{ delay: 5000 }}
               breakpoints={{
                 640: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-                1280: { slidesPerView: 4 },
+                1024: { slidesPerView: 4 },
               }}
               className="pb-8"
             >

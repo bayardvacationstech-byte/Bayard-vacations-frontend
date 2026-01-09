@@ -407,26 +407,26 @@ const PackagesClient = () => {
         </div>
 
         {/* Compact Bottom Bar */}
-        <div className="bg-white border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div className="bg-gradient-to-r from-brand-blue via-[#0046b8] to-brand-blue border-t border-white/20 shadow-[0_-10px_40px_rgba(0,70,184,0.3)] backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-4 py-3">
             <div className="flex items-center justify-between gap-4">
               {/* Price Info */}
               <div className="flex items-center gap-4">
                 <div>
-                  <p className="text-slate-500 text-xs font-medium">Starting from</p>
+                  <p className="text-white/60 text-xs font-medium">Starting from</p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-brand-green text-sm font-bold">₹</span>
-                    <span className="text-slate-900 font-bold text-2xl">
+                    <span className="text-brand-accent text-sm font-bold">₹</span>
+                    <span className="text-white font-bold text-2xl drop-shadow-sm">
                       {formatPrice(packageData?.price || packageData?.startingPrice || 32500)}
                     </span>
-                    <span className="text-slate-400 text-xs">/person</span>
+                    <span className="text-white/40 text-xs">/person</span>
                   </div>
                 </div>
                 
                 {/* Hotel Category Badge */}
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-brand-green/5 to-brand-blue/5 border border-brand-green/20 rounded-full">
-                  <span className="text-brand-green text-xs">⭐⭐⭐⭐</span>
-                  <span className="text-slate-700 text-xs font-semibold">
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-inner">
+                  <span className="text-brand-accent text-xs">⭐⭐⭐⭐</span>
+                  <span className="text-white text-xs font-semibold">
                     {packageData?.hotelCategory || "Deluxe"} Hotels
                   </span>
                 </div>
@@ -437,7 +437,7 @@ const PackagesClient = () => {
                 {/* View Details / Expand */}
                 <button
                   onClick={() => setShowFullForm(!showFullForm)}
-                  className="hidden md:flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-xl transition-all text-sm font-semibold"
+                  className="hidden md:flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl transition-all text-sm font-semibold backdrop-blur-md"
                 >
                   <ChevronUp className={`w-4 h-4 transition-transform ${showFullForm ? 'rotate-180' : ''}`} />
                   View Options
@@ -446,7 +446,7 @@ const PackagesClient = () => {
                 {/* Call Button */}
                 <a 
                   href="tel:+919876543210"
-                  className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-xl transition-all"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl transition-all backdrop-blur-md"
                 >
                   <Phone className="w-4 h-4" />
                   <span className="hidden sm:inline text-sm font-semibold">Call Us</span>

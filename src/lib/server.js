@@ -13,42 +13,32 @@ import {
   getPackagesByTheme,
   getAllDocuments,
   sanitizeDocumentData,
+  getCuratedPackages,
 } from "@/utils/firebase";
 import { doc, getDoc, getDocs, limit } from "firebase/firestore";
-import axios from "axios";
 import { db } from "@/firebase/firebaseConfig";
+import { minimizePackageData, minimizeRegionData, minimizeReviewData } from "@/utils/dataMinimizers";
 
-// Helper function to recursively serialize all dates in an object
-const serializeDates = (obj) => {
-  if (obj === null || obj === undefined) return obj;
-  
-  // Handle Firestore Timestamp
-  if (obj && typeof obj.toDate === 'function') {
-    return obj.toDate().toISOString();
-  }
-  
-  // Handle Date objects
-  if (obj instanceof Date) {
-    return obj.toISOString();
-  }
-  
-  // Handle arrays
+// Safe serialization with depth and circularity safeguards
+const serializeData = (obj, depth = 0, seen = new WeakSet()) => {
+  if (obj === null || obj === undefined || depth > 8) return obj;
+  if (typeof obj !== 'object') return obj;
+  if (seen.has(obj)) return "[Circular]";
+  if (typeof obj.toDate === 'function') return obj.toDate().toISOString();
+  if (obj instanceof Date) return obj.toISOString();
+  seen.add(obj);
+
   if (Array.isArray(obj)) {
-    return obj.map(serializeDates);
+    return obj.map(item => serializeData(item, depth + 1, seen));
   }
-  
-  // Handle plain objects
-  if (typeof obj === 'object') {
-    const result = {};
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        result[key] = serializeDates(obj[key]);
-      }
+
+  const result = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      result[key] = serializeData(obj[key], depth + 1, seen);
     }
-    return result;
   }
-  
-  return obj;
+  return result;
 };
 
 export const fetchReviews = unstableCache(
@@ -59,65 +49,62 @@ export const fetchReviews = unstableCache(
 
       if (cacheDoc.exists()) {
         const cachedData = cacheDoc.data();
-        const now = Date.now();
-
-        // If cache is still valid, return cached data
-        if (now - cachedData.lastFetched < REVIEWS_CACHE_DURATION) {
-          return cachedData.reviews;
-        }
+        const reviews = (cachedData.reviews || []).slice(0, 10).map(minimizeReviewData);
+        return serializeData(reviews);
       }
 
-      // Cache expired or doesn't exist, fetch from Google Places API
-      const response = await axios.get(`${DEFAULT_URL}/api/reviews`);
-
-      if (response.status === 200) {
-        return response.data.reviews;
-      } else {
-        return null;
-      }
+      // Fallback for development to avoid deadlocks
+      return [];
     } catch (err) {
-      console.error("Error fetching reviews:", err);
-      return null;
+      console.error("Error in fetchReviews:", err);
+      return [];
     }
   },
   ["reviews"],
   {
-    // 1 day in seconds
     revalidate: 60 * 60 * 24,
   }
 );
 
-export const fetchRegions = async () => {
-  try {
-    const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
-    const regions = await getDocs(regionsQuery).then((res) =>
-      res.docs.map(sanitizeDocumentData)
-    );
+export const fetchRegions = unstableCache(
+  async () => {
+    try {
+      const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
+      const regions = await getDocs(regionsQuery).then((res) =>
+        res.docs.map(sanitizeDocumentData)
+      );
 
-    return {
-      domesticRegions: regions
-        .filter((region) => region.isDomestic)
-        // Filter out excluded domestic regions
-        .filter((region) => !EXCLUDED_DOMESTIC_REGIONS.includes(region.slug))
-        // Only show regions where visible is true or undefined
-        .filter((region) => region.visible !== false)
-        .sort((a, b) => a.slug.localeCompare(b.slug)),
-      internationalRegions: regions
-        .filter((region) => !region.isDomestic)
-        // Filter out excluded regions
-        .filter((region) => !EXCLUDED_INTERNATIONAL_REGIONS.includes(region.slug))
-        // Only show regions where visible is true or undefined
-        .filter((region) => region.visible !== false)
-        .sort((a, b) => a.slug.localeCompare(b.slug)),
-    };
-  } catch (error) {
-    console.error("Error fetching regions:", error);
-    return {
-      domesticRegions: [],
-      internationalRegions: [],
-    };
+      const domestic = regions
+          .filter((region) => region.isDomestic)
+          .filter((region) => !EXCLUDED_DOMESTIC_REGIONS.includes(region.slug))
+          .filter((region) => region.visible !== false)
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+          .map(minimizeRegionData);
+
+      const international = regions
+          .filter((region) => !region.isDomestic)
+          .filter((region) => !EXCLUDED_INTERNATIONAL_REGIONS.includes(region.slug))
+          .filter((region) => region.visible !== false)
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+          .map(minimizeRegionData);
+
+      return serializeData({
+        domesticRegions: domestic,
+        internationalRegions: international,
+      });
+    } catch (error) {
+      console.error("Error fetching regions:", error);
+      return {
+        domesticRegions: [],
+        internationalRegions: [],
+      };
+    }
+  },
+  ["regions"],
+  {
+    revalidate: 60 * 60 * 24, // 1 day
   }
-};
+);
 
 export const getGroupDeparturePackages = async () => {
   try {
@@ -187,62 +174,17 @@ export const getGroupDeparturePackages = async () => {
         return 0;
       });
 
-    return groupDeparturePackages.map(serializeDates);
+    return serializeData(groupDeparturePackages.map(minimizePackageData));
   } catch (error) {
     console.error("Error fetching group departure packages:", error);
     return [];
   }
 };
 
-export const getAllPackagesByTheme = async () => {
+const getAllPackagesByTheme = async () => {
   try {
     const conditions = [limit(5)];
-    const eliteEscapePackages = await getPackagesByTheme(
-      "elite-escape",
-      [],
-      conditions
-    );
-    const soloExpeditionPackages = await getPackagesByTheme(
-      "solo-expedition",
-      [],
-      conditions
-    );
-    const familyFunventurePackages = await getPackagesByTheme(
-      "family-funventure",
-      [],
-      conditions
-    );
-    const groupAdventuresPackages = await getPackagesByTheme(
-      "group-adventures",
-      [],
-      conditions
-    );
-    const religiousRetreatPackages = await getPackagesByTheme(
-      "religious-retreat",
-      [],
-      conditions
-    );
-    const romanticGetawaysPackages = await getPackagesByTheme(
-      "romantic-getaways",
-      [],
-      conditions
-    );
-    const explorationBundlePackages = await getPackagesByTheme(
-      "exploration-bundle",
-      [],
-      conditions
-    );
-    const educationalPackages = await getPackagesByTheme(
-      "educational",
-      [],
-      conditions
-    );
-    const relaxRejuvenatePackages = await getPackagesByTheme(
-      "relax-rejuvenate",
-      [],
-      conditions
-    );
-    return {
+    const [
       eliteEscapePackages,
       soloExpeditionPackages,
       familyFunventurePackages,
@@ -252,9 +194,80 @@ export const getAllPackagesByTheme = async () => {
       explorationBundlePackages,
       educationalPackages,
       relaxRejuvenatePackages,
+    ] = await Promise.all([
+      getPackagesByTheme("elite-escape", [], conditions),
+      getPackagesByTheme("solo-expedition", [], conditions),
+      getPackagesByTheme("family-funventure", [], conditions),
+      getPackagesByTheme("group-adventures", [], conditions),
+      getPackagesByTheme("religious-retreat", [], conditions),
+      getPackagesByTheme("romantic-getaways", [], conditions),
+      getPackagesByTheme("exploration-bundle", [], conditions),
+      getPackagesByTheme("educational", [], conditions),
+      getPackagesByTheme("relax-rejuvenate", [], conditions),
+    ]);
+
+    return {
+      eliteEscapePackages: eliteEscapePackages.map(minimizePackageData),
+      soloExpeditionPackages: soloExpeditionPackages.map(minimizePackageData),
+      familyFunventurePackages: familyFunventurePackages.map(minimizePackageData),
+      groupAdventuresPackages: groupAdventuresPackages.map(minimizePackageData),
+      religiousRetreatPackages: religiousRetreatPackages.map(minimizePackageData),
+      romanticGetawaysPackages: romanticGetawaysPackages.map(minimizePackageData),
+      explorationBundlePackages: explorationBundlePackages.map(minimizePackageData),
+      educationalPackages: educationalPackages.map(minimizePackageData),
+      relaxRejuvenatePackages: relaxRejuvenatePackages.map(minimizePackageData),
     };
   } catch (error) {
-    console.error("Error fetching all packages by theme:", error);
+    console.error("Error in getAllPackagesByTheme:", error);
+    return {};
+  }
+};
+
+export const getRegionsForHome = unstableCache(
+  async () => {
+    try {
+      const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
+      const querySnapshot = await getDocs(regionsQuery);
+      const regions = querySnapshot.docs
+        .map(sanitizeDocumentData)
+        .map(minimizeRegionData);
+
+      return serializeData(regions);
+    } catch (error) {
+      console.error("Error in getRegionsForHome:", error);
+      return [];
+    }
+  },
+  ["regions-home"],
+  { revalidate: 60 * 60 * 24 }
+);
+
+export const getCuratedPackagesForHome = async (packageType) => {
+  try {
+    const packages = await getCuratedPackages(packageType, [], true);
+    return serializeData(packages.map(minimizePackageData));
+  } catch (error) {
+    console.error(`Error in getCuratedPackagesForHome (${packageType}):`, error);
     return [];
   }
 };
+
+export const getGroupDeparturePackagesForHome = async () => {
+  try {
+    const packages = await getGroupDeparturePackages();
+    return serializeData(packages); 
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getThemePackagesForHome = async () => {
+  try {
+    const data = await getAllPackagesByTheme();
+    return serializeData(data);
+  } catch (error) {
+    return {};
+  }
+};
+
+

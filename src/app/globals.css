@@ -22,7 +22,7 @@
 @tailwind utilities;
 
 .section-padding {
-  @apply py-6 c-md:py-8;
+  @apply py-4 c-md:py-6;
 }
 
 .section-header-margin {
@@ -604,9 +604,9 @@ html.no-scroll {
   content: "";
   position: absolute;
   inset: 0;
-  padding: 1.5px; /* border thickness */
+  padding: 4px; /* Even thicker border thickness */
   border-radius: inherit;
-  background: linear-gradient(120deg, #0146b3, #003488, #4a8dd9);
+  background: linear-gradient(120deg, #0146b3, #003488, #59DF02, #4a8dd9);
   background-size: 300% 300%;
   animation: gradientMove 6s ease infinite;
   -webkit-mask:

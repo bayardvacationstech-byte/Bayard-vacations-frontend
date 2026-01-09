@@ -589,7 +589,8 @@ const Holidays = ({
           <Skeletons.Text.XL />
           <Skeletons.Button.MD />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Skeletons.Card.LG />
           <Skeletons.Card.LG />
           <Skeletons.Card.LG />
           <Skeletons.Card.LG />
@@ -601,10 +602,10 @@ const Holidays = ({
   return (
     <Container className="sm:px-5">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-8">
         <div className="flex-1">
-          <h2 className="section-title-light mb-2">Curated Holiday Packages</h2>
-          <p className="section-subtitle-light">Handpicked experiences for your perfect getaway.</p>
+          <h2 className="section-title-light mb-0 md:mb-2">Signature Collections</h2>
+          <p className="section-subtitle-light hidden md:block">Hand-picked hotspots our travelers are loving right now</p>
         </div>
 
         {/* Tab Switcher - Same as ExploreDestinations */}
@@ -612,10 +613,10 @@ const Holidays = ({
           <button
             onClick={() => setActiveTab("international")}
             className={cn(
-              "px-7 py-2.5 rounded-full text-base font-semibold transition-all duration-300",
+              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
               activeTab === "international" 
-                ? "bg-white text-brand-blue shadow-md" 
-                : "text-gray-500 hover:text-gray-700"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             International
@@ -623,10 +624,10 @@ const Holidays = ({
           <button
             onClick={() => setActiveTab("domestic")}
             className={cn(
-              "px-7 py-2.5 rounded-full text-base font-semibold transition-all duration-300",
+              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
               activeTab === "domestic" 
-                ? "bg-white text-brand-blue shadow-md" 
-                : "text-gray-500 hover:text-gray-700"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             Domestic
@@ -653,11 +654,11 @@ const Holidays = ({
             variant={filterType === "visafree" ? "default" : "outline"}
             onClick={() => setFilterType("visafree")}
             className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "visafree" && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
+              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+              filterType === "visafree" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
-            Visa Free
+            Visa-Free Escapes
           </Button>
         )}
 
@@ -667,11 +668,11 @@ const Holidays = ({
             variant={filterType === "trending" ? "default" : "outline"}
             onClick={() => setFilterType("trending")}
             className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "trending" && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
+              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+              filterType === "trending" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
-            Trending
+            Hot Right Now
           </Button>
         )}
 
@@ -681,27 +682,15 @@ const Holidays = ({
             variant={filterType === "curated" ? "default" : "outline"}
             onClick={() => setFilterType("curated")}
             className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "curated" && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
+              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+              filterType === "curated" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
-            Curated
+            Signature Picks
           </Button>
         )}
 
-        {hasBestsellerPackages && (
-          <Button
-            key="bestseller"
-            variant={filterType === "bestseller" ? "default" : "outline"}
-            onClick={() => setFilterType("bestseller")}
-            className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "bestseller" && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
-            )}
-          >
-            Bestseller
-          </Button>
-        )}
+        {/* Bestseller filter hidden as per user request */}
 
         {hasValuePackages && (
           <Button
@@ -709,11 +698,11 @@ const Holidays = ({
             variant={filterType === "value" ? "default" : "outline"}
             onClick={() => setFilterType("value")}
             className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "value" && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
+              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+              filterType === "value" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
-            Value
+            Smart Value Trips
           </Button>
         )}
 
@@ -723,11 +712,11 @@ const Holidays = ({
             variant={filterType === "underrated" ? "default" : "outline"}
             onClick={() => setFilterType("underrated")}
             className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "underrated" && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
+              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+              filterType === "underrated" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
-            Underrated
+            Hidden Gems
           </Button>
         )}
       </div>
@@ -736,10 +725,10 @@ const Holidays = ({
       <div className="relative">
         <button
           onClick={() => swiper?.slidePrev()}
-          disabled={packages.length < 3}
+          disabled={packages.length < 4}
           className={cn(
             "hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white shadow items-center justify-center",
-            packages.length < 3 && "opacity-40 cursor-not-allowed"
+            packages.length < 4 && "opacity-40 cursor-not-allowed"
           )}
         >
           <MoveLeft />
@@ -748,12 +737,12 @@ const Holidays = ({
         <Swiper
           onSwiper={setSwiper}
           modules={[Navigation]}
-          loop={packages.length > 3}
+          loop={packages.length > 4}
           slidesPerView={1.2}
           spaceBetween={16}
           breakpoints={{
             640: { slidesPerView: 2, spaceBetween: 16 },
-            1024: { slidesPerView: 3, spaceBetween: 20 },
+            1024: { slidesPerView: 4, spaceBetween: 20 },
           }}
         >
           {packages.map((item, index) => (
@@ -766,10 +755,10 @@ const Holidays = ({
 
         <button
           onClick={() => swiper?.slideNext()}
-          disabled={packages.length < 3}
+          disabled={packages.length < 4}
           className={cn(
             "hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white shadow items-center justify-center",
-            packages.length < 3 && "opacity-40 cursor-not-allowed"
+            packages.length < 4 && "opacity-40 cursor-not-allowed"
           )}
         >
           <MoveRight />

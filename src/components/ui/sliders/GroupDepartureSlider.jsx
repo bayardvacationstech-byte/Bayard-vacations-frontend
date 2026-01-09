@@ -20,8 +20,8 @@ const GroupDepartureSlider = ({ groupDeparturePackages }) => {
     <div className="relative w-full overflow-hidden">
       <Swiper
         modules={[Navigation, Autoplay, Pagination]}
-        spaceBetween={32}
-        slidesPerView={1}
+        spaceBetween={16}
+        slidesPerView={1.2}
         loop={groupDeparturePackages.length > 1}
         speed={1000}
         autoplay={{
@@ -39,14 +39,15 @@ const GroupDepartureSlider = ({ groupDeparturePackages }) => {
           prevEl: ".swiper-prev-group",
         }}
         breakpoints={{
-          640: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
+          640: { slidesPerView: 2, spaceBetween: 24 },
+          1024: { slidesPerView: 3, spaceBetween: 32 },
+          1280: { slidesPerView: 4, spaceBetween: 32 },
         }}
-        className="pb-16 h-[540px]"
+        className="pb-6 md:pb-16 h-[440px] md:h-[540px]"
       >
         {groupDeparturePackages.map((item, idx) => (
           <SwiperSlide key={item.id || idx} className="h-full">
-             <div className="h-[480px] w-full px-1">
+             <div className="h-[400px] md:h-[480px] w-full px-1">
                 <PackageCardGradient item={item} />
              </div>
           </SwiperSlide>
@@ -54,7 +55,7 @@ const GroupDepartureSlider = ({ groupDeparturePackages }) => {
       </Swiper>
 
       {/* Pagination Container */}
-      <div className="custom-pagination-gd flex items-center justify-center mt-4 h-6"></div>
+      <div className="custom-pagination-gd flex items-center justify-center mt-2 md:mt-4 h-6"></div>
     </div>
   );
 };

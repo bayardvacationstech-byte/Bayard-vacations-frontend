@@ -10,6 +10,12 @@ import {
 import { cn } from "@/lib/utils";
 
 const RegionStats = ({ regionData }) => {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Color palette for stats
   const colors = [
     "text-blue-400",
@@ -29,6 +35,10 @@ const RegionStats = ({ regionData }) => {
     { label: "Rating", value: "4.9", color: "text-purple-400" },
     { label: "Travelers", value: "10k+", color: "text-rose-400" }
   ];
+
+  if (!mounted) {
+    return <div className="w-full h-8 sm:h-20" />; // Balanced placeholder to avoid layout shift
+  }
 
   // Add colors to stats if not already present
   const statsWithColors = stats.map((stat, index) => ({

@@ -3,8 +3,10 @@ import React, { useState, useRef } from "react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, MapPin, Heart, ArrowRight } from "lucide-react";
+import { Mail, MapPin, Heart, ArrowRight, Phone, User } from "lucide-react";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { storePotentialLead } from "@/utils/firebase";
+import { toast } from "sonner";
 
 const DESTINATION_CARDS = [
   {
@@ -172,13 +174,54 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
 }
 
 export default function Newsletter() {
-  const [email, setEmail] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const [cards, setCards] = useState(DESTINATION_CARDS);
   const [exitDirection, setExitDirection] = useState("left");
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "phone" && !/^\d*$/.test(value)) return;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setEmail("");
+    
+    if (!formData.name.trim() || !formData.phone.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    
+    if (formData.phone.length !== 10) {
+      toast.error("Please enter a valid 10-digit phone number");
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const response = await storePotentialLead({
+        ...formData,
+        description: "Newsletter section lead",
+      });
+
+      if (response) {
+        toast.success("Request received!", {
+          description: "We'll call you back shortly to plan your trip.",
+        });
+        setFormData({ name: "", email: "", phone: "" });
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSwipe = (direction) => {
@@ -195,7 +238,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="relative py-16 sm:py-20 bg-gradient-to-br from-brand-blue/5 via-slate-50 to-white overflow-hidden">
+    <section className="relative bg-gradient-to-br from-brand-blue/5 via-slate-50 to-white overflow-hidden py-12 sm:py-16 lg:py-20">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-72 h-72 bg-brand-blue/10 rounded-full blur-3xl"></div>
@@ -203,10 +246,10 @@ export default function Newsletter() {
       </div>
 
       <Container className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           
           {/* Left - Swipable Cards */}
-          <div className="order-2 lg:order-1 flex flex-col items-center">
+          <div className="order-1 lg:order-1 flex flex-col items-center">
             <div className="relative w-72 h-96 sm:w-80 sm:h-[450px]">
               <AnimatePresence mode="popLayout">
                 {cards.slice(0, 3).map((card, index) => (
@@ -254,40 +297,69 @@ export default function Newsletter() {
           </div>
 
           {/* Right - Newsletter Form */}
-          <div className="order-1 lg:order-2 text-center lg:text-left">
+          <div className="order-2 lg:order-2 text-center lg:text-left">
             {/* Badge */}
             <div className="section-badge-light mb-6">
               <Mail className="size-4" />
-              <span>Travel Updates</span>
+              <span>Get in Touch</span>
             </div>
 
             {/* Heading */}
             <h2 className="section-title-light mb-4">
-              Don't know where to go?<br />
-              <span className="text-brand-blue">Let us inspire you</span>
+              <span className="text-brand-blue">Let Us Inspire You</span>
             </h2>
 
             {/* Description */}
-            <p className="section-subtitle-light mb-8 max-w-md mx-auto lg:mx-0">
-              Join 15,000+ travelers. Get exclusive offers, expert tips, and hidden gems delivered weekly.
+            <p className="section-subtitle-light mb-8 max-w-md mx-auto lg:mx-0 hidden md:block">
+              Share your contact details and our travel experts will help you plan your dream vacation.
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0 mb-4">
-              <Input 
-                type="email" 
-                placeholder="Your email address" 
-                className="flex-1 bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full px-6 h-12 shadow-sm"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-md mx-auto lg:mx-0 mb-4">
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Input 
+                  name="name"
+                  type="text" 
+                  placeholder="Your Name" 
+                  className="w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Input 
+                  name="email"
+                  type="email" 
+                  placeholder="Email Address" 
+                  className="w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="relative">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Input 
+                  name="phone"
+                  type="tel" 
+                  placeholder="Phone Number" 
+                  className="w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  maxLength={10}
+                  required
+                />
+              </div>
               <Button 
                 type="submit" 
                 size="lg" 
-                className="gradient-btn rounded-full text-white px-8 h-12 font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                disabled={isSubmitting}
+                className="gradient-btn w-full rounded-full text-white h-12 font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
-                Subscribe
+                {isSubmitting ? "Sending..." : "Request Call Back"}
               </Button>
             </form>
 

@@ -239,7 +239,7 @@ const Header = () => {
                     : isDropdownOpen.content.map((item, i) => (
                         <Link
                           className="text-white opacity-100 transition-opacity"
-                          href={`/categories/${item.slug}`}
+                          href={`/themes/${item.slug.split("?")[0]}`}
                           key={i}
                         >
                           <div className="flex items-center gap-4">

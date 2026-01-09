@@ -1,7 +1,9 @@
 import {
   fetchReviews,
-  getAllPackagesByTheme,
-  getGroupDeparturePackages,
+  getRegionsForHome,
+  getCuratedPackagesForHome,
+  getGroupDeparturePackagesForHome,
+  getThemePackagesForHome,
 } from "@/lib/server";
 import Hero from "@/components/Landing/Hero";
 import BrandIntro from "@/components/Landing/BrandIntro";
@@ -15,25 +17,28 @@ import GroupDeparture from "@/components/Landing/GroupDeparture";
 import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
 import StartJourney from "@/components/Landing/StartJourney";
 import Newsletter from "@/components/Landing/Newsletter";
-import { getRegions, getCuratedPackages } from "@/utils/firebase";
-import {
-  EXCLUDED_INTERNATIONAL_REGIONS,
-  EXCLUDED_DOMESTIC_REGIONS,
-} from "@/config";
+import TravelStyle from "@/components/Landing/TravelStyle";
+import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
+
 
 const HomePage = async () => {
-  const reviews = await fetchReviews();
-  const groupDeparturePackages = await getGroupDeparturePackages();
+  const [
+    reviews,
+    groupDeparturePackages,
+    regionData,
+    internationalPackages,
+    domesticPackages,
+    themePackages
+  ] = await Promise.all([
+    fetchReviews(),
+    getGroupDeparturePackagesForHome(),
+    getRegionsForHome(),
+    getCuratedPackagesForHome("international"),
+    getCuratedPackagesForHome("domestic"),
+    getThemePackagesForHome(),
+  ]);
 
-  const regions = await getRegions();
-
-  const internationalPackages = (
-    await getCuratedPackages("international", [], true)
-  ).filter((item) => !EXCLUDED_INTERNATIONAL_REGIONS.includes(item.region));
-
-  const domesticPackages = (
-    await getCuratedPackages("domestic", [], true)
-  ).filter((item) => !EXCLUDED_DOMESTIC_REGIONS.includes(item.region));
+  const regions = regionData || [];
 
   const {
     eliteEscapePackages,
@@ -45,7 +50,7 @@ const HomePage = async () => {
     explorationBundlePackages,
     educationalPackages,
     romanticGetawaysPackages,
-  } = await getAllPackagesByTheme();
+  } = themePackages || {};
 
   return (
     <>
@@ -58,7 +63,7 @@ const HomePage = async () => {
         <ThemePackages />
       </section> */}
 
-      <section className="bg-white py-12 md:py-16 blue-section">
+      <section className="bg-white section-padding blue-section">
         <ExploreDestinations initialRegions={regions} />
       </section>
 
@@ -69,7 +74,19 @@ const HomePage = async () => {
         />
       </section>
 
-      <section className="bg-gradient-to-b from-slate-50 to-white section-padding blue-section">
+      <section className="bg-white section-padding">
+        <TravelStyle
+          initialInternationalPackages={internationalPackages}
+          initialDomesticPackages={domesticPackages}
+        />
+      </section>
+
+      {/* Advertisement Banner */}
+      <section className="section-padding px-4 sm:px-6 lg:px-8">
+        <AdvertisementBanner />
+      </section>
+
+      <section className="bg-gradient-to-b from-slate-50 to-white blue-section">
         <ThemeHighlights
           initialEliteEscapePackages={eliteEscapePackages}
           initialSoloExpeditionPackages={soloExpeditionPackages}
@@ -83,30 +100,32 @@ const HomePage = async () => {
         />
       </section>
 
-      {/* Moved Destination Spotlight - Now Light and Airy */}
-      <section className="bg-gradient-to-b from-[#003488] to-[#0146b3] text-white overflow-hidden relative">
-        <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] opacity-5"></div>
-        <DestinationSpotlight />
+      {/* Moved Destination Spotlight */}
+      <section className="bg-white overflow-hidden relative py-4 md:py-6 pb-2 md:pb-3 px-4 sm:px-6 lg:px-8">
+        <DestinationSpotlight initialRegions={regions} />
       </section>
 
-      <section className="bg-white relative overflow-hidden">
+      <section className="bg-white relative overflow-hidden section-padding">
         <GroupDeparture groupDeparturePackages={groupDeparturePackages} />
       </section>
       <section className="bg-gradient-to-br from-[#0146b3] to-[#020617] section-padding text-white relative overflow-hidden">
         <WhyBayard />
       </section>
-
-      <section className="blue-section">
-        <StartJourney />
+         <section>
+        <Newsletter />
       </section>
+
+      {/* <section>
+        <StartJourney />
+      </section> */}
 
       <section className="relative overflow-hidden">
         <Testimonials reviews={reviews} />
       </section>
 
-      <section className="blue-section">
-        <Newsletter />
-      </section>
+
+
+   
     </>
   );
 };
