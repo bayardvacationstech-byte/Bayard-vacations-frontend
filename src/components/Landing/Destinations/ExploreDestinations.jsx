@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export default function ExploreDestinations({ initialRegions }) {
   const [activeTab, setActiveTab] = useState("international");
-  const { internationalRegions, domesticRegions, regionIsLoading } = useRegionsData(initialRegions);
+  const { internationalRegions, domesticRegions, regionIsLoading, error } = useRegionsData(initialRegions);
 
   // Get first 8 international regions
   const displayInternationalRegions = useMemo(() => {
@@ -92,7 +92,9 @@ export default function ExploreDestinations({ initialRegions }) {
                     ))
                   ) : (
                     <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
-                      {regionIsLoading ? "Loading Regions..." : "No international regions available."}
+                      {regionIsLoading ? "Loading International Destinations..." : 
+                       error ? "Error loading destinations. Please refresh the page." :
+                       "No international regions available."}
                     </div>
                   )
                 ) : (
@@ -102,7 +104,9 @@ export default function ExploreDestinations({ initialRegions }) {
                     ))
                   ) : (
                     <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
-                      {regionIsLoading ? "Loading Regions..." : "No domestic regions available."}
+                      {regionIsLoading ? "Loading Domestic Destinations..." : 
+                       error ? "Error loading destinations. Please refresh the page." :
+                       "No domestic regions available."}
                     </div>
                   )
                 )}

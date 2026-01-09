@@ -132,10 +132,10 @@ export default function ThemeHighlights({
                 setIsAutoPlay(false);
               }}
               className={cn(
-                "rounded-full border text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all duration-300 whitespace-nowrap",
+                "rounded-full border text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all duration-300 whitespace-nowrap",
                 currentThemeIndex === index
-                  ? "gradient-btn shadow-lg text-white border-transparent"
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                  ? "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+                  : "border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
               )}
             >
               {theme.themeText}

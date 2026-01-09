@@ -353,36 +353,36 @@ const Hero = () => {
         <div className="sm:hidden absolute bottom-[85px] left-0 right-0 px-4 z-40 flex gap-3 w-full max-w-md mx-auto">
           <Link 
             href="/explore"
-            className="flex-1 flex items-center justify-center gap-2 bg-brand-blue/90 backdrop-blur-md px-4 py-3 rounded-2xl text-white hover:bg-brand-blue transition-all shadow-lg border border-white/20"
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 backdrop-blur-md px-5 py-3.5 rounded-2xl text-white hover:from-blue-500 hover:to-blue-600 transition-all shadow-[0_8px_30px_rgba(37,99,235,0.4)] hover:shadow-[0_8px_40px_rgba(37,99,235,0.6)] hover:scale-[1.02]"
           >
-            <Compass className="size-4" />
+            <Compass className="size-5" />
             <span className="text-sm font-black">Explore</span>
           </Link>
 
           <Link 
             href="/contact"
-            className="flex-1 flex items-center justify-center gap-2 bg-brand-green/90 backdrop-blur-md px-4 py-3 rounded-2xl text-white hover:bg-brand-green transition-all shadow-lg border border-white/20"
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-md px-5 py-3.5 rounded-2xl text-white hover:from-green-500 hover:to-green-600 transition-all shadow-[0_8px_30px_rgba(34,197,94,0.4)] hover:shadow-[0_8px_40px_rgba(34,197,94,0.6)] hover:scale-[1.02]"
           >
-            <Headphones className="size-4" />
+            <Headphones className="size-5" />
             <span className="text-sm font-black">Contact</span>
           </Link>
         </div>
 
-        {/* Quick Stats - Brand Blue Overlay - Compact on mobile */}
+        {/* Quick Stats - Enhanced Design */}
         <div 
           style={{ background: 'linear-gradient(to bottom, #001233 0%, #0046b8 100%)' }}
           className="text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
         >
-          <div className="flex flex-row items-center justify-between py-3 sm:py-8 px-4 sm:px-12 max-w-7xl mx-auto gap-4 sm:gap-0 overflow-x-auto no-scrollbar mask-fade-sides">
+          <div className="flex flex-row items-center justify-between py-3 sm:py-8 px-2 sm:px-12 max-w-7xl mx-auto gap-1.5 sm:gap-6 overflow-x-auto no-scrollbar mask-fade-sides">
             
             {/* Review Badge */}
-            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
+            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0 bg-white/5 px-2 sm:px-4 py-1.5 sm:py-3 rounded-xl sm:rounded-2xl border border-white/10">
               <Image
                 src={ReviewCompanies}
                 alt="Google"
                 className="h-6 sm:h-12 w-auto"
               />
-              <div className="flex items-center gap-1 sm:gap-1.5 font-black">
+              <div className="flex items-center gap-0.5 sm:gap-1.5 font-black">
                 <span className="text-base sm:text-3xl font-black text-white leading-none">4.9</span>
                 <Star className="size-3.5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
@@ -391,34 +391,34 @@ const Hero = () => {
             {/* Travelers */}
             <div className="flex flex-col items-center justify-center text-center shrink-0">
               <span className="text-base sm:text-3xl font-black text-white leading-none">15k+</span>
-              <span className="text-[9px] sm:text-sm font-bold text-white tracking-wider mt-0.5 sm:mt-1">Travelers</span>
+              <span className="text-[9px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Travelers</span>
             </div>
 
             {/* Itineraries */}
             <div className="flex flex-col items-center justify-center text-center shrink-0">
               <span className="text-base sm:text-3xl font-black text-white leading-none">1000+</span>
-              <span className="text-[9px] sm:text-sm font-bold text-white tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
+              <span className="text-[9px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
             </div>
 
-            {/* AI Assistant - Simplified on mobile */}
+            {/* AI Assistant */}
             <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
               <div className="h-7 w-7 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
                 <Sparkles className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div className="leading-tight">
-                <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
-                <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white tracking-wider mt-1">Instant Ideas</span>
+                <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">AI ASSISTANT</span>
+                <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white/90 tracking-wider mt-1">Instant Ideas</span>
               </div>
             </div>
 
-            {/* 24/7 Support - Simplified on mobile */}
+            {/* 24/7 Support */}
             <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
               <div className="h-7 w-7 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
                 <Phone className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div className="leading-tight">
                 <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">24/7</span>
-                <span className="hidden sm:block text-[9px] sm:text-xs font-bold text-white/80 uppercase tracking-tighter mt-0.5 whitespace-nowrap">Assistance</span>
+                <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white/90 uppercase tracking-tighter mt-1 whitespace-nowrap">Assistance</span>
               </div>
             </div>
 

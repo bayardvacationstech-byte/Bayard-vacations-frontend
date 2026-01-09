@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles, TrendingUp, Users, Bot, Map } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const DESTINATIONS = [
@@ -25,18 +25,12 @@ const DESTINATIONS = [
 
 const FEATURES = [
   {
-    icon: Bot,
+    image: "/img/ai-bot-banner.png",
     title: "AI Bot Support",
-    description: "24/7 instant assistance for all your travel queries.",
-    color: "text-white",
-    bg: "bg-brand-blue"
   },
   {
-    icon: Map,
+    image: "/img/itinerary-banner.png",
     title: "Customized Itineraries",
-    description: "Tailor-made plans designed specifically for you.",
-    color: "text-white",
-    bg: "bg-brand-gold"
   }
 ];
 
@@ -249,62 +243,37 @@ export default function AdvertisementBanner() {
           </div>
         </div>
 
-        {/* RIGHT SIDE - Stats/Info */}
-        <div className="w-full lg:w-[20%] relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center overflow-hidden py-12 lg:py-0 shrink-0">
+        {/* RIGHT SIDE - Feature Banners */}
+        <div 
+          className="w-full lg:w-[20%] relative flex items-center justify-center overflow-hidden py-8 lg:py-0 shrink-0 min-h-[400px] lg:min-h-0 rounded-3xl lg:rounded-none px-4 lg:px-0" 
+          style={{
+            borderTopRightRadius: 'var(--lg-border-radius, 12px)',
+            borderBottomRightRadius: 'var(--lg-border-radius, 80px)'
+          }}
+        >
           
-
-
-          {/* Floating Circle */}
-          <motion.div
-            className="absolute top-10 right-10 w-24 h-24 bg-brand-gold/20 rounded-full blur-2xl"
-            animate={{ 
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ 
-              duration: 5, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-
           {/* Content */}
-          <div className="relative z-10 px-4 text-center">
+          <div className="relative z-10 w-full h-full flex items-center justify-center">
             
-            {/* Stats */}
-            <div className="space-y-6">
-              
-              <div className="h-[200px] flex items-center justify-center relative">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeFeatureIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center p-6 rounded-2xl bg-gradient-to-b from-white/10 to-transparent border border-white/10 shadow-lg"
-                  >
-                    <div className={`w-16 h-16 rounded-full ${FEATURES[activeFeatureIndex].bg} flex items-center justify-center mb-4 shadow-lg`}>
-                      {React.createElement(FEATURES[activeFeatureIndex].icon, {
-                        className: `w-8 h-8 ${FEATURES[activeFeatureIndex].color}`
-                      })}
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{FEATURES[activeFeatureIndex].title}</h3>
-                    <p className="text-sm text-white/70 max-w-[200px] leading-relaxed">
-                      {FEATURES[activeFeatureIndex].description}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Tagline */}
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <p className="text-white/80 text-sm font-semibold">
-                  Your Journey,
-                  <br />
-                  <span className="text-brand-gold">Our Priority</span>
-                </p>
-              </div>
+            {/* Feature Banner Display */}
+            <div className="w-full h-full min-h-[350px] flex items-center justify-center relative rounded-3xl lg:rounded-none overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeFeatureIndex}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 rounded-3xl lg:rounded-none overflow-hidden"
+                >
+                  <Image
+                    src={FEATURES[activeFeatureIndex].image}
+                    alt={FEATURES[activeFeatureIndex].title}
+                    fill
+                    className="object-contain lg:object-cover"
+                  />
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>

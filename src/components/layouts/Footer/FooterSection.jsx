@@ -13,10 +13,9 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
   useEffect(() => {
     const checkOverflow = () => {
       if (contentRef.current) {
-        // We want to show "View More" if the height exceeds roughly 2 lines.
-        // Assuming line-height is around 24px (1.5rem), 2 lines is 48px.
-        // We'll use a slightly more robust check.
-        const threshold = 50; // Match 2 lines of 1.5rem (24px * 2 = 48px)
+        // Show "View More" if the height exceeds roughly 3 lines.
+        // Assuming line-height is around 24px (1.5rem), 3 lines is 72px.
+        const threshold = 75; // Match 3 lines of 1.5rem (24px * 3 = 72px)
         setShouldShowButton(contentRef.current.scrollHeight > threshold);
       }
     };
@@ -33,7 +32,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
       <div className="relative">
         <div
           style={{
-            maxHeight: isExpanded ? "2000px" : "3.1rem", // Slightly increased for comfortable 2-line fit
+            maxHeight: isExpanded ? "2000px" : "4.6rem", // Increased for comfortable 3-line fit
             overflow: "hidden",
             transition: "max-height 0.4s ease-in-out",
           }}
@@ -63,7 +62,8 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
         {shouldShowButton && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-3 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-brand-green hover:text-white transition-colors group"
+            className="mt-3 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent hover:from-yellow-300 hover:to-yellow-500 transition-all group"
+            style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}
           >
             {isExpanded ? (
               <>

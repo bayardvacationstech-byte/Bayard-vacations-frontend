@@ -12,15 +12,21 @@ export function useRegionsData(initialRegions = []) {
 
   // Filter domestic regions
   const domesticRegions = useMemo(() => {
-
-    console.log("Regions 123", regions)
-    if (!regions || regions.length === 0) return [];
+    console.log("Regions data:", regions?.length || 0, "regions available");
     
-    return regions
+    if (!regions || regions.length === 0) {
+      console.warn("No regions data available in useRegionsData");
+      return [];
+    }
+    
+    const filtered = regions
       .filter((item) => item.isDomestic)
       .filter((item) => !EXCLUDED_DOMESTIC_REGIONS.includes(item.slug))
       .filter((item) => item.visible !== false) // Show if visible is true or undefined
       .sort((a, b) => a.name.localeCompare(b.name));
+    
+    console.log("Domestic regions filtered:", filtered.length);
+    return filtered;
   }, [regions]);
 
   // Group international regions by continent
@@ -29,15 +35,19 @@ export function useRegionsData(initialRegions = []) {
     const acc = JSON.parse(JSON.stringify(CONTINENTS));
 
     if (!regions || regions.length === 0) {
+      console.warn("No regions data for international regions grouping");
       return acc;
     }
 
-    return regions
+    const intlRegions = regions
       .filter((item) => !item.isDomestic)
       .filter((item) => !EXCLUDED_INTERNATIONAL_REGIONS.includes(item.slug))
       .filter((item) => item.visible !== false)
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .reduce((prev, region) => {
+      .sort((a, b) => a.name.localeCompare(b.name));
+    
+    console.log("International regions filtered:", intlRegions.length);
+    
+    const grouped = intlRegions.reduce((prev, region) => {
         // Find the corresponding continent
         const continentIndex = prev.findIndex(
           (continent) =>
@@ -47,12 +57,16 @@ export function useRegionsData(initialRegions = []) {
         if (continentIndex !== -1) {
           prev[continentIndex].regions.push(region);
         } else {
-          // Optional: handle regions with unknown/missing continent
-          // console.warn(`Region ${region.name} has unknown continent: ${region.continent}`);
+          console.warn(`Region ${region.name} has unknown continent: ${region.continent}`);
         }
 
         return prev;
       }, acc);
+    
+    const totalGrouped = grouped.reduce((sum, continent) => sum + continent.regions.length, 0);
+    console.log("International regions grouped by continent:", totalGrouped);
+    
+    return grouped;
   }, [regions]);
 
   return {
