@@ -258,7 +258,7 @@ const Footer = async () => {
           <FooterSection 
             title="Themes" 
             links={categoryData} 
-            basePath="categories" 
+            basePath="themes" 
           />
         </div>
 
@@ -341,7 +341,7 @@ const Footer = async () => {
             ))}
           </ul>
 
-          <p className="opacity-60 text-xs xl:text-sm">
+          <p className="opacity-60 text-xs xl:text-sm" suppressHydrationWarning>
             © {new Date().getFullYear()} Bayard Vacations. All rights reserved.
           </p>
         </div>

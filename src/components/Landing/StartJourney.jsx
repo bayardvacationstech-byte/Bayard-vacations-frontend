@@ -8,7 +8,7 @@ import { ArrowRight, Map } from "lucide-react";
 
 export default function StartJourney() {
   return (
-    <section className="relative py-16 sm:py-24 overflow-hidden">
+    <section className="relative overflow-hidden py-12 sm:py-16 lg:py-20">
       {/* Background - Consistent with other light sections */}
       <div className="absolute inset-0 bg-gradient-to-b from-white to-slate-50 z-0" />
       
@@ -33,7 +33,7 @@ export default function StartJourney() {
             
             <div className="flex gap-4">
               <Button asChild size="lg" className="gradient-btn rounded-full px-8 py-6 hover:scale-105 transition-transform shadow-xl">
-                <Link href="/packages">
+                <Link href="/explore">
                   Explore Packages <ArrowRight className="ml-2 size-4" />
                 </Link>
               </Button>

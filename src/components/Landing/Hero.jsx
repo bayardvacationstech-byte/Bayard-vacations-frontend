@@ -1,5 +1,5 @@
 "use client";
-import { Search, Star, MoveRight, Phone } from "lucide-react";
+import { Search, Star, MoveRight, Phone, Sparkles, Compass, Headphones } from "lucide-react";
 import React from "react";
 import { AnimatedInput } from "../ui/AnimatedInput";
 import { Card, CardContent } from "../ui/card";
@@ -64,9 +64,9 @@ const Hero = () => {
 
   return (
     <>
-      <div className="relative flex flex-col justify-center min-h-[100dvh] w-full bg-brand-deep">
+      <div className="relative flex flex-col justify-center min-h-[90vh] sm:min-h-[100dvh] w-full bg-brand-deep">
         <video
-          className="absolute inset-0 z-10 h-full w-full object-cover"
+          className="absolute inset-0 z-0 h-full w-full object-cover"
           autoPlay
           loop
           muted
@@ -82,34 +82,36 @@ const Hero = () => {
           />
         </video>
         <div
-          className="absolute inset-0 z-10 top-0 left-0 h-full w-full bg-gradient-to-b from-black/60 via-black/20 to-black/80 z-10"
+          className="absolute inset-0 z-10 top-0 left-0 h-full w-full bg-black/60"
         />
 
-        <div className="max-w-4xl mx-auto flex flex-col gap-8 relative z-10 pb-40 sm:pb-0">
+        <div className="max-w-4xl mx-auto flex flex-col gap-8 sm:gap-16 relative z-20 pb-32 sm:pb-0">
           {/* <div className="text-center font-bold text-xl sm:text-3xl text-white px-10 pt-10 font-nord">
             DISCOVER. EXPLORE. EXPERIENCE.
           </div> */}
 
-          <div className="text-center px-6">
-            <h2
+          <div className="text-center px-4 sm:px-6">
+            <h1
               className="
       mt-2
+      
       text-2xl sm:text-4xl lg:text-5xl
       font-extrabold
       tracking-tight
       text-white
-      drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]
+      drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]
       font-nord
+      max-w-6xl mx-auto
+      leading-[1.1]
     "
             >
-              Bayard Vacations
-            </h2>
-
-            <p className="mt-3 text-sm sm:text-lg lg:text-xl font-semibold tracking-wide text-white/90">
-              Where every journey feels{" "}
-              <span className="text-brand-green">personal</span>,{" "}
-              <span className="text-brand-green">meaningful</span>, and{" "}
-              <span className="text-brand-green">unforgettable</span>
+              Every journey deserves to feel <span className="from-yellow-400 to-yellow-500">personal</span>.   
+            </h1>
+            <p 
+              style={{ color: '#fbfbfbff' }}
+              className="mt-6 text-[10px] sm:text-lg font-medium tracking-wide drop-shadow-sm max-w-fit mx-auto leading-relaxed bg-white/10 backdrop-blur-md px-4 py-1 rounded-xl border border-white/20 shadow-lg"
+            >
+               Thoughtfully designed itineraries, trusted support, and seamless experiences
             </p>
           </div>
 
@@ -125,14 +127,15 @@ const Hero = () => {
             <div
               className="
     hidden sm:flex items-center
-    px-4 py-3
-    rounded-[1.8rem]
-    bg-black/10
-    backdrop-blur-sm
+    px-6 py-4
+    rounded-[2.2rem]
+    bg-black/35
+    backdrop-blur-md
     text-white
-    shadow-lg shadow-black/20
+    shadow-2xl shadow-black/60
     w-full
     gradient-border
+    ring-2 ring-white/30
   "
             >
               <Search className="size-8 mr-2 shrink-0" />
@@ -284,6 +287,8 @@ const Hero = () => {
               </Card>
             )}
           </div>
+
+
         </div>
       {/* MODERN OVERLAY FOOTER (Marquee + Stats) */}
       <div className="absolute bottom-0 w-full z-30 border-t border-white/10">
@@ -312,43 +317,108 @@ const Hero = () => {
           </div>
         </div> */}
 
-        {/* Quick Stats - Dark Glass Overlay */}
-        <div className="bg-[#0146b3]  text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
-          <div className="grid grid-cols-4 items-center justify-items-center gap-2 md:gap-0 py-4 sm:py-6 px-2 sm:px-4 max-w-7xl mx-auto relative md:divide-x divide-white/20">
+
+        {/* Banner Action Buttons - Hidden on mobile */}
+        <div className="hidden sm:flex absolute bottom-32 sm:bottom-44 left-0 right-0 px-6 sm:px-12 z-30 pointer-events-none justify-between items-end">
+          {/* Left Side: Explore */}
+          <Link 
+            href="/explore"
+            className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-blue/20 hover:-translate-y-1"
+          >
+            <div className="bg-brand-blue/80 p-1.5 sm:p-2 rounded-full">
+              <Compass className="size-4 sm:size-5 group-hover:rotate-45 transition-transform duration-500" />
+            </div>
+            <div className="flex flex-col items-start leading-none">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/70 mb-1">Adventure Awaits</span>
+              <span className="text-xs sm:text-lg font-black">Discover Journeys</span>
+            </div>
+          </Link>
+
+          {/* Right Side: Contact */}
+          <Link 
+            href="/contact"
+            className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-green/20 hover:-translate-y-1"
+          >
+            <div className="flex flex-col items-end leading-none">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/70 mb-1">Questions?</span>
+              <span className="text-xs sm:text-lg font-black">Consult Expert</span>
+            </div>
+            <div className="bg-brand-green/80 p-1.5 sm:p-2 rounded-full">
+              <Headphones className="size-4 sm:size-5 group-hover:scale-110 transition-transform duration-300" />
+            </div>
+          </Link>
+        </div>
+
+        {/* Mobile Action Buttons - Absolute Bottom */}
+        <div className="sm:hidden absolute bottom-[85px] left-0 right-0 px-4 z-40 flex gap-3 w-full max-w-md mx-auto">
+          <Link 
+            href="/explore"
+            className="flex-1 flex items-center justify-center gap-2 bg-brand-blue/90 backdrop-blur-md px-4 py-3 rounded-2xl text-white hover:bg-brand-blue transition-all shadow-lg border border-white/20"
+          >
+            <Compass className="size-4" />
+            <span className="text-sm font-black">Explore</span>
+          </Link>
+
+          <Link 
+            href="/contact"
+            className="flex-1 flex items-center justify-center gap-2 bg-brand-green/90 backdrop-blur-md px-4 py-3 rounded-2xl text-white hover:bg-brand-green transition-all shadow-lg border border-white/20"
+          >
+            <Headphones className="size-4" />
+            <span className="text-sm font-black">Contact</span>
+          </Link>
+        </div>
+
+        {/* Quick Stats - Brand Blue Overlay - Compact on mobile */}
+        <div 
+          style={{ background: 'linear-gradient(to bottom, #001233 0%, #0046b8 100%)' }}
+          className="text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
+        >
+          <div className="flex flex-row items-center justify-between py-3 sm:py-8 px-4 sm:px-12 max-w-7xl mx-auto gap-4 sm:gap-0 overflow-x-auto no-scrollbar mask-fade-sides">
             
-            {/* Review Badge - Google Colors */}
-            <div className="col-span-4 md:col-span-1 w-full flex items-center justify-center gap-2 pb-3 md:pb-0 border-b md:border-b-0 border-white/20">
+            {/* Review Badge */}
+            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
               <Image
                 src={ReviewCompanies}
-                alt="Google Reviews"
-                className="h-6 sm:h-8 w-auto"
+                alt="Google"
+                className="h-6 sm:h-12 w-auto"
               />
-              <div className="flex items-center gap-1.5 text-sm sm:text-base font-black">
-                <span className="text-xl sm:text-3xl font-black text-white">4.9</span>
-                <Star className="size-5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
+              <div className="flex items-center gap-1 sm:gap-1.5 font-black">
+                <span className="text-base sm:text-3xl font-black text-white leading-none">4.9</span>
+                <Star className="size-3.5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
             </div>
 
-            {/* Stat 1 */}
-            <div className="col-span-1 w-full flex flex-col items-center justify-center text-center">
-              <span className="text-xl sm:text-3xl font-black text-white">5k+</span>
-              <span className="text-[11px] sm:text-sm font-bold text-white uppercase tracking-wider mt-1">Travelers</span>
+            {/* Travelers */}
+            <div className="flex flex-col items-center justify-center text-center shrink-0">
+              <span className="text-base sm:text-3xl font-black text-white leading-none">15k+</span>
+              <span className="text-[9px] sm:text-sm font-bold text-white tracking-wider mt-0.5 sm:mt-1">Travelers</span>
             </div>
 
-            {/* Stat 2 */}
-            <div className="col-span-1 w-full flex flex-col items-center justify-center text-center">
-              <span className="text-xl sm:text-3xl font-black text-white">100+</span>
-              <span className="text-[11px] sm:text-sm font-bold text-white uppercase tracking-wider mt-1">Places</span>
+            {/* Itineraries */}
+            <div className="flex flex-col items-center justify-center text-center shrink-0">
+              <span className="text-base sm:text-3xl font-black text-white leading-none">1000+</span>
+              <span className="text-[9px] sm:text-sm font-bold text-white tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
             </div>
 
-            {/* Stat 3 Support */}
-            <div className="col-span-2 md:col-span-1 w-full flex items-center justify-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
-                <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            {/* AI Assistant - Simplified on mobile */}
+            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
+              <div className="h-7 w-7 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
+                <Sparkles className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div className="leading-tight">
-                <span className="block text-sm sm:text-xl font-black text-white uppercase tracking-tight">24/7 Support</span>
-                <span className="text-[10px] sm:text-sm font-medium text-white/80">Premium Assistance</span>
+                <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
+                <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white tracking-wider mt-1">Instant Ideas</span>
+              </div>
+            </div>
+
+            {/* 24/7 Support - Simplified on mobile */}
+            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
+              <div className="h-7 w-7 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
+                <Phone className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white" />
+              </div>
+              <div className="leading-tight">
+                <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">24/7</span>
+                <span className="hidden sm:block text-[9px] sm:text-xs font-bold text-white/80 uppercase tracking-tighter mt-0.5 whitespace-nowrap">Assistance</span>
               </div>
             </div>
 

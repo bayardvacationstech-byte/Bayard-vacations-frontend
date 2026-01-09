@@ -17,42 +17,30 @@ import Link from "next/link";
 
 export default function ExploreDestinations({ initialRegions }) {
   const [activeTab, setActiveTab] = useState("international");
-  const [intlFilter, setIntlFilter] = useState("asia");
-  const [domFilter, setDomFilter] = useState(ZONES[0]?.feKey);
   const { internationalRegions, domesticRegions, regionIsLoading } = useRegionsData(initialRegions);
 
-  // International Logic
-  const selectedContinent = useMemo(() => 
-    internationalRegions &&
-    internationalRegions.find((continent) => continent.feKey === intlFilter),
-    [internationalRegions, intlFilter]
-  );
+  // Get first 8 international regions
+  const displayInternationalRegions = useMemo(() => {
+    if (!internationalRegions) return [];
+    // Flatten all regions from all continents and take first 8
+    const allIntl = internationalRegions.reduce((acc, continent) => {
+      return [...acc, ...(continent.regions || [])];
+    }, []);
+    return allIntl.slice(0, 8);
+  }, [internationalRegions]);
 
-  // Domestic Logic
-  const selectedZone = useMemo(() =>
-    domesticRegions &&
-    domesticRegions?.filter((region) => region.zone === domFilter),
-    [domesticRegions, domFilter]
-  );
-
-  useEffect(() => {
-    if (domesticRegions) {
-      const regionWithZone = domesticRegions.filter((region) => region.zone);
-      if (regionWithZone.length > 0) {
-        setDomFilter(regionWithZone[0].zone);
-      }
-    }
+  // Get first 8 domestic regions
+  const displayDomesticRegions = useMemo(() => {
+    if (!domesticRegions) return [];
+    return domesticRegions.slice(0, 8);
   }, [domesticRegions]);
-
-  const handleIntlFilterChange = (type) => setIntlFilter(type);
-  const handleDomFilterChange = (type) => setDomFilter(type);
 
   return (
     <Container className="sm:px-5">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-8">
         <div>
-          <h2 className="section-title-light mb-2">Explore Destinations</h2>
-          <p className="section-subtitle-light">Discover your next adventure across the globe or close to home.</p>
+          <h2 className="section-title-light mb-0 md:mb-2">Trending Destinations</h2>
+          <p className="section-subtitle-light hidden md:block">Hand-picked hotspots our travelers are loving right now</p>
         </div>
 
         {/* Tab Switcher */}
@@ -60,10 +48,10 @@ export default function ExploreDestinations({ initialRegions }) {
           <button
             onClick={() => setActiveTab("international")}
             className={cn(
-              "px-7 py-2.5 rounded-full text-base font-semibold transition-all duration-300",
+              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
               activeTab === "international" 
-                ? "bg-white text-brand-blue shadow-md" 
-                : "text-gray-500 hover:text-gray-700"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             International
@@ -71,10 +59,10 @@ export default function ExploreDestinations({ initialRegions }) {
           <button
             onClick={() => setActiveTab("domestic")}
             className={cn(
-              "px-7 py-2.5 rounded-full text-base font-semibold transition-all duration-300",
+              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
               activeTab === "domestic" 
-                ? "bg-white text-brand-blue shadow-md" 
-                : "text-gray-500 hover:text-gray-700"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             Domestic
@@ -82,7 +70,7 @@ export default function ExploreDestinations({ initialRegions }) {
         </div>
       </div>
 
-      <div className="relative overflow-hidden min-h-[450px]">
+      <div className="relative overflow-hidden min-h-[350px] md:min-h-[450px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -91,48 +79,15 @@ export default function ExploreDestinations({ initialRegions }) {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            {/* Filters for the active tab */}
-            <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-              {activeTab === "international" ? (
-                CONTINENTS.map((continent, index) => (
-                  <Button
-                    key={index}
-                    variant={intlFilter === continent.feKey ? "default" : "outline"}
-                    onClick={() => handleIntlFilterChange(continent.feKey)}
-                    className={cn(
-                      "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-                      intlFilter === continent.feKey && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
-                    )}
-                  >
-                    {continent.displayName}
-                  </Button>
-                ))
-              ) : (
-                ZONES.map((zone, index) => (
-                  <Button
-                    key={index}
-                    variant={domFilter === zone.feKey ? "default" : "outline"}
-                    onClick={() => handleDomFilterChange(zone.feKey)}
-                    className={cn(
-                      "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-                      domFilter === zone.feKey && "gradient-btn shadow-lg text-white border-transparent hover:opacity-90"
-                    )}
-                  >
-                    {zone.displayName}
-                  </Button>
-                ))
-              )}
-            </div>
-
             {/* Carousel Content */}
             <Carousel
               opts={{ align: "start" }}
               className="mt-4"
             >
               <CarouselContent className="gap-4 ml-0">
-                {activeTab === "international" ? (
-                  selectedContinent && selectedContinent.regions.length > 0 ? (
-                    selectedContinent.regions.map((region, index) => (
+                {activeTab === "international" ? (    
+                  displayInternationalRegions.length > 0 ? (
+                    displayInternationalRegions.map((region, index) => (
                       <DestinationCard key={index} regionSlug={region.slug} inCarousel={true} />
                     ))
                   ) : (
@@ -141,8 +96,8 @@ export default function ExploreDestinations({ initialRegions }) {
                     </div>
                   )
                 ) : (
-                  selectedZone?.length > 0 ? (
-                    selectedZone.map((region, index) => (
+                  displayDomesticRegions.length > 0 ? (
+                    displayDomesticRegions.map((region, index) => (
                       <DestinationCard key={index} regionSlug={region.slug} inCarousel={true} />
                     ))
                   ) : (
@@ -159,8 +114,8 @@ export default function ExploreDestinations({ initialRegions }) {
         </AnimatePresence>
       </div>
 
-      <div className="mt-12 flex justify-center">
-        <Link href="/destinations">
+      <div className="mt-4 md:mt-6 flex justify-center">
+        <Link href="/explore">
           <Button className="gradient-btn rounded-full px-10 py-6 text-base font-semibold text-white shadow-xl hover:scale-105 transition-transform">
             Explore Packages
           </Button>

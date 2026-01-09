@@ -24,7 +24,7 @@ const ANIMATED_TEXTS = [
   "Vacations Without Limits. Just Pack and Go.",
 ];
 
-const GlobalGetaway = () => {
+const GlobalGetaway = ({ initialPackages = [], hideHeader = false }) => {
   const [swiper, setSwiper] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [filterType, setFilterType] = useState("curated");
@@ -32,7 +32,7 @@ const GlobalGetaway = () => {
 
   // Get curated international packages
   const { packages: curatedPackages, isLoading: curatedLoading } =
-    useCuratedPackages("international");
+    useCuratedPackages("international", initialPackages);
 
   // Filter packages based on selected filter type
   const packages = useMemo(() => {
@@ -119,64 +119,66 @@ const GlobalGetaway = () => {
 
   return (
     <Container className="px-0 sm:px-5">
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center gap-4 px-8 sm:px-0">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
-          <h2 className="text-2xl font-semibold">International Holidays</h2>
-          <AnimatedText items={ANIMATED_TEXTS} />
-        </div>
-        <div className="sm:ml-auto flex gap-2">
-          <Button
-            variant={filterType === "curated" ? "default" : "outline"}
-            onClick={() => handleFilterChange("curated")}
-            className={cn(
-              "rounded-full border border-[#595959] text-[#5D5D5D]",
-              filterType === "curated" &&
-                "border-brand-blue bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20"
+      {!hideHeader && (
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center gap-4 px-8 sm:px-0">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+            <h2 className="text-2xl font-semibold">International Holidays</h2>
+            <AnimatedText items={ANIMATED_TEXTS} />
+          </div>
+          <div className="sm:ml-auto flex gap-2">
+            <Button
+              variant={filterType === "curated" ? "default" : "outline"}
+              onClick={() => handleFilterChange("curated")}
+              className={cn(
+                "rounded-full border border-[#595959] text-[#5D5D5D]",
+                filterType === "curated" &&
+                  "border-brand-blue bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20"
+              )}
+            >
+              Curated
+            </Button>
+            {hasTrendingPackages && (
+              <Button
+                variant={filterType === "trending" ? "default" : "outline"}
+                onClick={() => handleFilterChange("trending")}
+                className={cn(
+                  "rounded-full border border-[#595959] text-[#5D5D5D]",
+                  filterType === "trending" &&
+                    "border-brand-blue bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20"
+                )}
+              >
+                Trending
+              </Button>
             )}
-          >
-            Curated
-          </Button>
-          {hasTrendingPackages && (
-            <Button
-              variant={filterType === "trending" ? "default" : "outline"}
-              onClick={() => handleFilterChange("trending")}
-              className={cn(
-                "rounded-full border border-[#595959] text-[#5D5D5D]",
-                filterType === "trending" &&
-                  "border-brand-blue bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20"
-              )}
-            >
-              Trending
-            </Button>
-          )}
-          {hasBestsellerPackages && (
-            <Button
-              variant={filterType === "bestseller" ? "default" : "outline"}
-              onClick={() => handleFilterChange("bestseller")}
-              className={cn(
-                "rounded-full border border-[#595959] text-[#5D5D5D]",
-                filterType === "bestseller" &&
-                  "border-brand-blue bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20"
-              )}
-            >
-              Bestseller
-            </Button>
-          )}
-          {hasDiscountedPackages && (
-            <Button
-              variant={filterType === "discount" ? "default" : "outline"}
-              onClick={() => handleFilterChange("discount")}
-              className={cn(
-                "rounded-full border border-[#595959] text-[#5D5D5D]",
-                filterType === "discount" &&
-                  "border-brand-blue bg-brand-blue/10 text-brand-blue"
-              )}
-            >
-              Discount
-            </Button>
-          )}
+            {hasBestsellerPackages && (
+              <Button
+                variant={filterType === "bestseller" ? "default" : "outline"}
+                onClick={() => handleFilterChange("bestseller")}
+                className={cn(
+                  "rounded-full border border-[#595959] text-[#5D5D5D]",
+                  filterType === "bestseller" &&
+                    "border-brand-blue bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20"
+                )}
+              >
+                Bestseller
+              </Button>
+            )}
+            {hasDiscountedPackages && (
+              <Button
+                variant={filterType === "discount" ? "default" : "outline"}
+                onClick={() => handleFilterChange("discount")}
+                className={cn(
+                  "rounded-full border border-[#595959] text-[#5D5D5D]",
+                  filterType === "discount" &&
+                    "border-brand-blue bg-brand-blue/10 text-brand-blue"
+                )}
+              >
+                Discount
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="relative flex items-center">
         {packages.length > 0 ? (
@@ -204,26 +206,9 @@ const GlobalGetaway = () => {
               onSwiper={(swiper) => setSwiper(swiper)}
               slidesPerView={"auto"}
               breakpoints={{
-                "@0.50": {
-                  slidesPerView: 1.2,
-                  spaceBetween: 8,
-                },
-                "@0.836": {
-                  slidesPerView: 2,
-                  spaceBetween: 8,
-                },
-                "@1.00": {
-                  slidesPerView: 2.2,
-                  spaceBetween: 8,
-                },
-                "@1.336": {
-                  slidesPerView: 3,
-                  spaceBetween: 8,
-                },
-                "@1.50": {
-                  slidesPerView: 4,
-                  spaceBetween: 8,
-                },
+                320: { slidesPerView: 1.2, spaceBetween: 16 },
+                640: { slidesPerView: 2, spaceBetween: 16 },
+                1024: { slidesPerView: 4, spaceBetween: 20 },
               }}
               className="section-slider"
             >

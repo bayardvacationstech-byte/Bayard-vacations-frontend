@@ -527,6 +527,7 @@ export default function MobileNavbar() {
 
   /* ================= HEADER STATE ================= */
   const isHeroPage = isHome || 
+                     pathname === "/explore" ||
                      pathname === "/about" || 
                      pathname === "/faq" || 
                      pathname?.startsWith("/blogs") ||
@@ -567,7 +568,7 @@ export default function MobileNavbar() {
                   alt="Logo"
                   width={200}
                   height={40}
-                  className="w-[150px] sm:w-[170px]"
+                  className="w-[140px] sm:w-[160px]"
                 />
               </Link>
 
@@ -678,7 +679,7 @@ export default function MobileNavbar() {
       {/* ================= DROPDOWN ================= */}
       <ul
         className={cn(
-          "fixed inset-0 z-[45] bg-white text-brand-blue transition-transform duration-300 pt-24 px-6",
+          "fixed inset-0 z-[45] bg-white text-brand-blue transition-transform duration-300 pt-24 px-6 overflow-y-auto",
           isDropdownActive ? "translate-x-0" : "translate-x-full"
         )}
       >

@@ -109,14 +109,15 @@ export default function ThemeHighlights({
     <section className="bg-white overflow-hidden section-padding">
       <Container>
         {/* Header */}
-        <div className="mb-8">
-          <div className="section-badge-light mb-6">
+        <div className="mb-4 md:mb-8">
+          <div className="section-badge-light mb-4 md:mb-6">
             Featured Collections
           </div>
-          <h2 className="section-title-light mb-4">
-            Explore Curated Themes
+          <h2 className="section-title-light mb-2 md:mb-4">
+            <span className="md:hidden">Curated Themes</span>
+            <span className="hidden md:inline">Explore Curated Themes</span>
           </h2>
-          <p className="section-subtitle-light">
+          <p className="section-subtitle-light hidden md:block">
             Discover handpicked experiences that define luxury and adventure
           </p>
         </div>
@@ -193,7 +194,7 @@ export default function ThemeHighlights({
                     </p>
                     
                     <Link
-                        href={`/categories/${currentTheme?.themeSlug}`}
+                        href={`/themes/${currentTheme?.themeSlug}`}
                         className="gradient-btn inline-block px-8 py-3 sm:px-10 sm:py-4 font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl text-sm sm:text-base"
                     >
                         Explore Packages
@@ -303,7 +304,7 @@ export default function ThemeHighlights({
 
              <div className="mt-8 flex justify-end">
                  <Link 
-                    href="/categories"
+                    href="/themes"
                     className="group inline-flex items-center gap-2 text-slate-500 hover:text-brand-blue font-semibold transition-colors text-sm sm:text-base"
                  >
                     View All Categories <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

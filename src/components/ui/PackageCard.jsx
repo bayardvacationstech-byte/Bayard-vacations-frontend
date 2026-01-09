@@ -442,7 +442,7 @@ const PackageCard = ({ item, className, isGroup = false }) => {
       <div
         className="
           relative w-full overflow-hidden
-          aspect-[4/5] sm:aspect-[3/4]
+          aspect-[3/4] sm:aspect-[3/4]
           rounded-2xl sm:rounded-3xl
         "
       >
@@ -519,7 +519,7 @@ const PackageCard = ({ item, className, isGroup = false }) => {
         <BadgeSection item={item} />
       </div>
 
-      {/* GLASS INFO PANEL - Enhanced with Better Visibility */}
+      {/* GLASS INFO PANEL - Optimized for Mobile */}
       <div
         className="
           absolute inset-x-0 bottom-0 z-30
@@ -531,43 +531,43 @@ const PackageCard = ({ item, className, isGroup = false }) => {
         {/* Accent Color Bar */}
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-blue via-brand-accent to-brand-blue"></div>
         
-        <div className="relative px-4 pb-4 pt-6">
+        <div className="relative px-2 sm:px-4 pb-2 sm:pb-4 pt-4 sm:pt-6">
           {/* REGION + DURATION */}
-          <div className="mb-3 flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-brand-blue/90 to-brand-blue/70 backdrop-blur-sm">
-              <span className="text-[11px] font-black uppercase tracking-wider text-white drop-shadow-lg">
+          <div className="mb-2 flex items-center justify-between gap-1">
+            <div className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-gradient-to-r from-brand-blue/90 to-brand-blue/70 backdrop-blur-sm">
+              <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white drop-shadow-lg">
                 {item.region}
               </span>
             </div>
-            <span className="rounded-full bg-white/20 backdrop-blur-sm px-3 py-1 text-[11px] font-bold text-white border border-white/30">
+            <span className="rounded-full bg-white/20 backdrop-blur-sm px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[11px] font-bold text-white border border-white/30">
               {item.days}D/{item.nights}N
             </span>
           </div>
 
-          {/* TITLE - With Better Contrast */}
-          <h3 className="mb-3 line-clamp-1 text-base font-black leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          {/* TITLE - More compact on mobile */}
+          <h3 className="mb-2 sm:mb-3 line-clamp-2 text-xs sm:text-base font-black leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             {item.packageTitle}
           </h3>
 
           {/* PRICE + CTA ROW */}
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             {/* PRICE OR CONTACT MESSAGE */}
             {(item.offerPrice === 0 || !item.offerPrice) && (item.basePrice === 0 || !item.basePrice) ? (
-              <div className="flex-shrink-0 flex-1">
-                <div className="inline-block px-3 py-1.5 rounded-lg bg-white shadow-lg">
-                  <p className="text-[11px] sm:text-sm font-bold leading-tight text-brand-blue">
-                    Contact an Expert for Prices
+              <div className="w-full sm:flex-shrink-0 sm:flex-1">
+                <div className="inline-block px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white shadow-lg">
+                  <p className="text-[9px] sm:text-sm font-bold leading-tight text-brand-blue">
+                    Contact an Expert
                   </p>
                 </div>
               </div>
             ) : (
-              <>
+              <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex-shrink-0">
-                  <p className="text-xl font-black leading-none text-brand-accent drop-shadow-lg">
+                  <p className="text-base sm:text-xl font-black leading-none text-brand-accent drop-shadow-lg">
                     ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                   </p>
                   {item.offerPrice > 0 && (
-                    <p className="mt-1 text-[11px] text-white/60 line-through">
+                    <p className="mt-0.5 text-[9px] sm:text-[11px] text-white/60 line-through">
                       ₹{formatPrice(item.basePrice)}
                     </p>
                   )}
@@ -575,34 +575,34 @@ const PackageCard = ({ item, className, isGroup = false }) => {
 
                 {/* DISCOUNT BADGE */}
                 {item.offerPrice > 0 && item.basePrice > 0 && (
-                  <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-brand-accent to-yellow-400 px-2.5 py-1 text-[11px] font-black text-black shadow-lg">
+                  <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-brand-accent to-yellow-400 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-black text-black shadow-lg">
                     {Math.round(((item.basePrice - item.offerPrice) / item.basePrice) * 100)}% OFF
                   </span>
                 )}
-              </>
+              </div>
             )}
 
-            {/* CTA BUTTONS */}
-            <div className="flex flex-1 items-center gap-2">
+            {/* CTA BUTTONS - Stack on very small screens */}
+            <div className="flex w-full sm:w-auto sm:flex-1 items-center gap-1.5 sm:gap-2">
               {isGroup ? (
-                <div className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-3 py-2 text-center text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
-                  View Package
+                <div className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-2 sm:px-3 py-1.5 sm:py-2 text-center text-[9px] sm:text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
+                  View
                 </div>
               ) : (
                 <Link
                   href={href}
-                  className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-3 py-2 text-center text-[11px] font-black text-white transition-all shadow-lg"
+                  className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-2 sm:px-3 py-1.5 sm:py-2 text-center text-[9px] sm:text-[11px] font-black text-white transition-all shadow-lg"
                 >
-                  View Package
+                  View
                 </Link>
               )}
 
               {!isGroup && (
                 <button
                   onClick={handleContactExpert}
-                  className="flex-shrink-0 rounded-lg bg-brand-green hover:bg-brand-green/90 px-3 py-2 text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
+                  className="flex-shrink-0 rounded-lg bg-brand-green hover:bg-brand-green/90 px-2 sm:px-3 py-1.5 sm:py-2 text-[9px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
                 >
-                  Contact
+                  Call
                 </button>
               )}
             </div>

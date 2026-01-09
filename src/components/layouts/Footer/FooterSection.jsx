@@ -47,7 +47,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
             {links.map((link, i) => (
               <div key={link.id || link.slug || i} className="flex items-center gap-2">
                 <Link
-                  href={`/${basePath}/${link.slug}`}
+                  href={`/${basePath}/${link.slug.split("?")[0]}`}
                   className="hover:text-brand-green hover:translate-x-1 transition-all duration-300 whitespace-nowrap"
                 >
                   {link.name || link.title}

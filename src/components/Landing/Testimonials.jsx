@@ -66,7 +66,7 @@ export default function Testimonials({ reviews }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden py-20 sm:py-32 bg-gradient-to-b from-[#0a1628] to-[#1e3a8a] group"
+      className="relative overflow-hidden bg-gradient-to-b from-[#0a1628] to-[#1e3a8a] group py-12 sm:py-16 lg:py-20"
     >
       
       {/* Base Layer - Always Visible (Dim) */}
@@ -132,14 +132,16 @@ export default function Testimonials({ reviews }) {
 
           {/* Headline - High Contrast White */}
           <h2 className="section-title-dark max-w-4xl animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100 fill-mode-backwards">
-            Loved by <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-cyan-300 to-white">
-              Travelers Worldwide
+            <span className="md:hidden">Testimonials</span>
+            <span className="hidden md:inline">Loved by{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-cyan-300 to-white">
+                Travelers Worldwide
+              </span>
             </span>
           </h2>
           
           {/* Subtitle - Light Slate */}
-          <p className="section-subtitle-dark max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 fill-mode-backwards">
+          <p className="section-subtitle-dark max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 fill-mode-backwards hidden md:block">
              Discover why thousands of explorers trust Bayard Vacations to craft their perfect getaways. Real stories, real memories.
           </p>
         </div>

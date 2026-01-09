@@ -39,6 +39,7 @@ const DesktopNavbar = () => {
 
   // Pages that have a large dark hero banner should start transparent
   const isHeroPage = isHomePage || 
+                     pathname === "/explore" ||
                      pathname === "/about" || 
                      pathname === "/faq" || 
                      pathname?.startsWith("/blogs") ||
@@ -263,7 +264,7 @@ const DesktopNavbar = () => {
                   height={44}
                   alt="Bayard Vacations Logo"
                   src={isHeaderFixed ? "/img/logo.svg" : "/media/logo.svg"}
-                  className="w-48 sm:w-56 transition-all duration-300"
+                  className="w-44 sm:w-52 transition-all duration-300"
                 />
               </Link>
               <ul className="mx-auto flex gap-8">
