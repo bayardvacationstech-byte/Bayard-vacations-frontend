@@ -173,8 +173,47 @@ import { fetchRegions } from "@/lib/server";
 import Container from "@/components/ui/Container";
 import FooterSection from "./FooterSection";
 
+import SwipeableContactCard from "./SwipeableContactCard";
+
 const Footer = async () => {
   const { domesticRegions, internationalRegions } = await fetchRegions();
+
+  // Contact card data
+  const contactCards = [
+    {
+      href: "tel:+918069668484",
+      iconType: "phone",
+      title: "Call Us",
+      description: "+91 80696 68484",
+      subtext: "Available 24/7",
+      color: "text-brand-green",
+      bgColor: "bg-brand-green",
+      actionLabel: "Call",
+      external: false
+    },
+    {
+      href: "https://wa.me/918069668484",
+      iconType: "whatsapp",
+      title: "WhatsApp",
+      description: "Chat with us",
+      subtext: "Quick response",
+      color: "text-[#25D366]",
+      bgColor: "bg-[#25D366]",
+      actionLabel: "Chat",
+      external: true
+    },
+    {
+      href: "mailto:info@bayardvacations.com",
+      iconType: "email",
+      title: "Email Us",
+      description: "info@bayardvacations.com",
+      subtext: "24hr response",
+      color: "text-blue-400",
+      bgColor: "bg-blue-500",
+      actionLabel: "Email",
+      external: false
+    }
+  ];
 
   return (
     <footer className="relative bg-gradient-to-b from-brand-blue to-[#020617] text-white">
@@ -262,63 +301,33 @@ const Footer = async () => {
           />
         </div>
 
-        {/* Contact Info - Simple Row */}
+        {/* Contact Info - Swipeable Cards */}
         <div className="mt-10 pt-8 border-t border-white/10">
-          <h5 className="font-semibold mb-6 text-brand-green">Contact Information</h5>
-          <div className="grid gap-6 md:grid-cols-4 text-sm">
-            {/* Address */}
-            <div>
-              <h6 className="font-semibold mb-2 flex items-center gap-2">
-                <svg className="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Office
-              </h6>
-              <p className="text-white/70 leading-relaxed">
-                123 Travel Hub, MG Road<br />
-                Bangalore, Karnataka 560001
-              </p>
-            </div>
-
-            {/* Phone */}
-            <div>
-              <h6 className="font-semibold mb-2 flex items-center gap-2">
-                <svg className="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Phone
-              </h6>
-              <p className="text-white/70">
-                <a href="tel:+918069668484" className="hover:text-white transition">+91 80696 68484</a>
-              </p>
-            </div>
-
-            {/* Email */}
-            <div>
-              <h6 className="font-semibold mb-2 flex items-center gap-2">
-                <svg className="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Email
-              </h6>
-              <p className="text-white/70">
-                <a href="mailto:info@bayardvacations.com" className="hover:text-white transition">info@bayardvacations.com</a>
-              </p>
-            </div>
-
-            {/* Hours */}
-            <div>
-              <h6 className="font-semibold mb-2 flex items-center gap-2">
-                <svg className="w-4 h-4 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Hours
-              </h6>
-              <p className="text-white/70 leading-relaxed">
-                Mon-Sat: 9AM - 7PM<br />
-                Sun: 10AM - 5PM
-              </p>
+          <div className="flex items-center justify-between mb-6">
+            <h5 className="font-bold text-xl text-white">Get In Touch</h5>
+            <p className="text-xs text-white/40 md:hidden">← Swipe cards</p>
+          </div>
+          
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {contactCards.map((card, index) => (
+              <SwipeableContactCard key={index} {...card} />
+            ))}
+            
+            {/* Office - Non-swipeable info card */}
+            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-5">
+              <div className="flex items-start gap-3">
+                <div className="bg-purple-500/20 p-2.5 rounded-lg">
+                  <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h6 className="font-semibold text-white text-sm mb-1">Visit Us</h6>
+                  <p className="text-white/80 text-sm font-medium leading-snug">123 Travel Hub, MG Road<br/>Bangalore, KA</p>
+                  <p className="text-white/50 text-xs mt-0.5">Mon-Sat: 9AM-7PM</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

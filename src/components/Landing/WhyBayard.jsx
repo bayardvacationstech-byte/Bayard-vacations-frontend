@@ -71,17 +71,17 @@ export default function WhyBayard() {
     <Container className="relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         {/* LEFT CONTENT */}
-        <div className="flex flex-col items-start gap-6 max-w-2xl">
-          <div className="section-badge-dark mb-6">
-            <span className="text-xs font-bold tracking-[0.2em] uppercase bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+        <div className="flex flex-col items-start gap-4 md:gap-6 max-w-2xl">
+          <div className="section-badge-dark mb-2 md:mb-6">
+            <span className="text-xs font-bold tracking-[0.2em] uppercase bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
               Why Choose Us
             </span>
           </div>
           
-          <h2 className="section-title-dark leading-[1.1] mb-6">
-            <span className="md:hidden">Why <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Bayard</span></span>
+          <h2 className="section-title-dark leading-[1.1] mb-4 md:mb-6">
+            <span className="md:hidden">Why <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>Bayard</span></span>
             <span className="hidden md:inline">Experience the{" "}
-              <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Bayard Difference</span>
+              <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>Bayard Difference</span>
             </span>
           </h2>
           
@@ -89,7 +89,7 @@ export default function WhyBayard() {
             Your travel dreams are unique, and We offer customized itineraries, reliable support, and exceptional experiences designed around your needs.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-8 mt-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-2 md:mt-4 w-full sm:w-auto">
              <div className="flex items-center gap-4 bg-white/5 p-3 rounded-2xl border border-white/10 pr-6">
                 <Image src={PeopleReviews} alt="Reviews" className="h-10 w-auto" />
                 <div className="flex flex-col">

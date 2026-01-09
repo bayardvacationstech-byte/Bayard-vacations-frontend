@@ -76,7 +76,10 @@ const TravelStyle = ({
     <Container className="sm:px-5">
       {/* HEADER */}
       <div className="mb-4 md:mb-8">
-        <h2 className="section-title-light mb-0 md:mb-2">Your Travel Style</h2>
+        <h2 className="section-title-light mb-0 md:mb-2">
+          <span className="md:hidden">Your Travel Style</span>
+          <span className="hidden md:inline">Trips Tailored to Your Travel Style</span>
+        </h2>
         <p className="section-subtitle-light hidden md:block">Discover experiences that match your personality.</p>
       </div>
 
