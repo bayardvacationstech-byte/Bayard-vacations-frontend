@@ -107,7 +107,7 @@ export const InfiniteMovingCards = ({
                       <Image
                         width={36}
                         height={36}
-                        alt={item.author_name}
+                        alt={item.author_name || "Traveler"}
                         src={item.profile_photo_url}
                         className="rounded-full object-cover size-9 border border-white/30"
                       />
