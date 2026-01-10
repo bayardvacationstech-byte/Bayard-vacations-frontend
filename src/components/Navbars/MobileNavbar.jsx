@@ -566,9 +566,9 @@ export default function MobileNavbar() {
                 <Image
                   src="/img/logo.svg"
                   alt="Logo"
-                  width={200}
-                  height={40}
-                  className="w-[140px] sm:w-[160px]"
+                  width={160}
+                  height={32}
+                  className="w-[110px] sm:w-[130px]"
                 />
               </Link>
 

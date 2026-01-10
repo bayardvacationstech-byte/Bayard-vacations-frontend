@@ -260,11 +260,11 @@ const DesktopNavbar = () => {
               <Link href="/" onMouseOver={() => setActiveDropdown(null)}>
                 <Image
                   priority
-                  width={220}
-                  height={44}
+                  width={180}
+                  height={36}
                   alt="Bayard Vacations Logo"
                   src={isHeaderFixed ? "/img/logo.svg" : "/media/logo.svg"}
-                  className="w-44 sm:w-52 transition-all duration-300"
+                  className="w-36 sm:w-40 transition-all duration-300"
                 />
               </Link>
               <ul className="mx-auto flex gap-8">
