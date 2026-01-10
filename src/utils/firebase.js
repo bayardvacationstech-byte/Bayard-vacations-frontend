@@ -786,9 +786,13 @@ export const getRegions = async () => {
   try {
     const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
     const querySnapshot = await getDocs(regionsQuery);
-    return querySnapshot.docs.map(sanitizeDocumentData);
+    const regions = querySnapshot.docs.map(sanitizeDocumentData);
+    
+    console.log('[Firebase] Fetched', regions.length, 'regions');
+    
+    return regions;
   } catch (error) {
-    console.error("Error fetching regions:", error);
+    console.error("[Firebase] Error fetching regions:", error);
     throw error;
   }
 };
