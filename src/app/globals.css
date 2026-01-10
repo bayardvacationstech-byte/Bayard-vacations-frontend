@@ -145,6 +145,11 @@ body {
   overflow-y: scroll !important; /* Prevent scrollbar from hiding when dropdowns open */
 }
 
+/* Disable smooth scrolling initially to prevent auto-scroll on page load */
+html {
+  scroll-behavior: auto !important;
+}
+
 /* Splash screen - prevent scroll */
 body.no-scroll,
 html.no-scroll {

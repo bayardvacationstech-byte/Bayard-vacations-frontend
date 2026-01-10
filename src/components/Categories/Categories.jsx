@@ -16,7 +16,7 @@ const categories = [
     subTitle: "All things love",
     image: "/img/category-img/romantic-getaways.png",
     icon: "/media/icons/romantic_icon.png",
-    href: "/categories/romantic-getaways",
+    href: "/themes/romantic-getaways",
   },
   {
     id: "2",
@@ -38,7 +38,7 @@ const categories = [
     subTitle: "All things Leisure",
     image: "/img/category-img/relax-and-rejuvanate.png",
     icon: "/media/icons/relax_icon.png",
-    href: "/categories/relax-rejuvenate",
+    href: "/themes/relax-rejuvenate",
   },
   {
     id: "4",
@@ -49,7 +49,7 @@ const categories = [
     subTitle: "All things Spiritual",
     image: "/img/category-img/religious-retreat.png",
     icon: "/media/icons/religious_icon.png",
-    href: "/categories/religious-retreat",
+    href: "/themes/religious-retreat",
   },
 ];
 

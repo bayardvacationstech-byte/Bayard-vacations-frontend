@@ -2,8 +2,9 @@
 
 import React, { useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 
 const RegionWhyChoose = ({ regionName = "this destination", data }) => {
@@ -42,34 +43,53 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
     <section className="py-12 md:py-14 bg-white overflow-hidden">
       <Container>
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-6"
-          >
-            <Sparkles className="w-4 h-4 text-brand-green" />
-            <span className="text-sm font-black text-brand-green uppercase tracking-[0.2em]">Why Visit?</span>
-          </motion.div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
-          >
-            Why Choose <span className="text-brand-green capitalize">{regionName}</span>?
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-xl text-slate-500 max-w-2xl mx-auto font-medium"
-          >
-            Explore the beauty, culture, and unforgettable signature experiences that await you
-          </motion.p>
+        <div className="mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            {/* Left: Title Section */}
+            <div className="flex-1">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-6"
+              >
+                <Sparkles className="w-4 h-4 text-brand-green" />
+                <span className="text-sm font-black text-brand-green uppercase tracking-[0.2em]">Why Visit?</span>
+              </motion.div>
+              
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
+              >
+                Why Choose <span className="text-brand-green capitalize">{regionName}</span>?
+              </motion.h2>
+              
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-xl text-slate-500 max-w-2xl font-medium"
+              >
+                Explore the beauty, culture, and unforgettable signature experiences that await you
+              </motion.p>
+            </div>
+            
+            {/* Right: Button */}
+            <Link href={`/why-choose/${regionName?.toLowerCase()}`}>
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
+              >
+                Explore More
+                <ChevronRight className="w-4 h-4" />
+              </motion.button>
+            </Link>
+          </div>
         </div>
 
         {/* Sophisticated Mosaic Grid */}

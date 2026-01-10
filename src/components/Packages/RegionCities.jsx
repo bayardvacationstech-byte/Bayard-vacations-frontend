@@ -8,17 +8,19 @@ import {
   Mountain, 
   Castle, 
   Waves,
-  ChevronRight,
   ChevronLeft as ChevronLeftIcon,
   Navigation as NavigationIcon,
   Camera,
   Star,
   ChevronUp,
   Info,
-  X
+  X,
+  ChevronRight
 } from "lucide-react";
+import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // Swiper styles
@@ -99,8 +101,8 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
       <Container>
         {/* Section Header */}
         <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6">
-            <div className="flex-1 max-w-3xl">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+            <div className="flex-1">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
                 <NavigationIcon className="w-4 h-4 text-brand-green" />
                 <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
@@ -116,9 +118,19 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
               </p>
             </div>
             
-            {/* Navigation Buttons are now absolute over the swiper */}
-            <div className="hidden lg:flex gap-2 lg:flex-shrink-0 invisible">
-            </div>
+            {/* Explore More Button */}
+            <Link href="/packages">
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
+              >
+                Explore More
+                <ChevronRight className="w-4 h-4" />
+              </motion.button>
+            </Link>
           </div>
           
           {/* City Filter Buttons - Horizontal Scroll on Mobile */}
@@ -161,8 +173,8 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
           breakpoints={{
             640: { slidesPerView: 2, spaceBetween: 20 },
             768: { slidesPerView: 2, spaceBetween: 20 },
-            1024: { slidesPerView: 3, spaceBetween: 24 },
-            1280: { slidesPerView: 3.5 },
+            1024: { slidesPerView: 4, spaceBetween: 24 },
+            1280: { slidesPerView: 4, spaceBetween: 24 },
           }}
           className="pb-12"
         >

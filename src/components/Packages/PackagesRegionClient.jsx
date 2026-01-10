@@ -66,7 +66,7 @@ const allThemes = [
 
 const navSections = [
   { id: "packages", label: "Packages" },
-  { id: "recommended", label: "Curated" },
+  { id: "recommended", label: "Signature" },
   { id: "why-choose", label: "Why Choose" },
   { id: "activities", label: "Activities" },
   { id: "experiences", label: "Experiences" },
@@ -686,7 +686,7 @@ export default function PackagesRegionClient() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
-                  Curated Collections
+                  Signature Collections
                 </h2>
                 <p className="text-xl text-slate-600 font-medium max-w-2xl">
                   Handpicked signatures and top-rated escapes in <span className="text-brand-green font-bold capitalize">{placeName}</span>
@@ -802,11 +802,11 @@ export default function PackagesRegionClient() {
               }}
               autoplay={{ delay: 7000 }}
               pagination={{ clickable: true }}
-              breakpoints={{
-                640: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
-                1280: { slidesPerView: 4 },
-              }}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  1024: { slidesPerView: 4 },
+                  1280: { slidesPerView: 4 },
+                }}
               className="pb-12"
             >
               {featuredBlogs.slice(0, 6).map((blog) => (
@@ -825,11 +825,72 @@ export default function PackagesRegionClient() {
       </div>
 
       {/* FAQ Section */}
-      <PremiumFaq 
-        faqs={regionData?.faqs} 
-        content={regionData?.faq} 
-        regionName={placeName} 
-      />
+      <div id="faq">
+        <PremiumFaq 
+          faqs={regionData?.faqs} 
+          content={regionData?.faq} 
+          regionName={placeName} 
+        />
+      </div>
+
+      {/* Related Packages Section */}
+      {packagesWithOffers.length > 0 && (
+        <section className="bg-gradient-to-b from-slate-50 to-white py-12 md:py-16" id="related-packages">
+          <Container>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
+              <div>
+                <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+                  You Might Also Like
+                </h2>
+                <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl">
+                  Discover more incredible destinations and experiences tailored for you
+                </p>
+              </div>
+              
+              <Link 
+                href="/packages" 
+                className="inline-flex items-center gap-2 text-brand-blue font-bold px-5 py-2.5 rounded-full bg-brand-blue/5 hover:bg-brand-blue/10 transition-all group w-fit whitespace-nowrap self-end md:self-auto"
+              >
+                View All Packages
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+            
+            <div className="relative group/nav">
+              {/* Overlay Navigation Buttons */}
+              <button className="swiper-button-prev-related absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+                <ChevronLeft className="w-5 md:w-6 h-5 md:h-6" />
+              </button>
+              <button className="swiper-button-next-related absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+                <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
+              </button>
+              
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={24}
+                slidesPerView={1}
+                navigation={{
+                  prevEl: ".swiper-button-prev-related",
+                  nextEl: ".swiper-button-next-related",
+                }}
+                autoplay={{ delay: 4000 }}
+                breakpoints={{
+                  640: { slidesPerView: 2 },
+                  1024: { slidesPerView: 4 },
+                }}
+                className="pb-8"
+              >
+                {/* Show all available packages */}
+                {packagesWithOffers.slice(0, 12).map((item) => (
+                  <SwiperSlide key={`related-${item.id}`}>
+                    <PackageCard item={item} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Why Bayard Vacations */}
       <WhyBayardVacations />

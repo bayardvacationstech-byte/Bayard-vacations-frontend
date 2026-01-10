@@ -280,7 +280,7 @@ const DesktopNavbar = () => {
                   </li>
                 ))}
               </ul>
-              {!isHomePage && (
+              {(!isHomePage || (isHomePage && isScrolled)) && (
                 <Button
                   className={cn(
                     "rounded-full text-white hover:text-brand-blue",
@@ -363,7 +363,7 @@ const DesktopNavbar = () => {
             >
               <div
                 className={cn(
-                  "w-full h-16 bg-blue-200 transition-all duration-300 ease-in-out transform rounded flex items-center px-8",
+                  "w-full h-16 bg-white/80 backdrop-blur-xl transition-all duration-300 ease-in-out transform rounded-full flex items-center px-8 shadow-lg border border-white/30",
                   {
                     "opacity-0 scale-95": !isSearchActive,
                     "opacity-100 scale-100": isSearchActive,
@@ -398,7 +398,7 @@ const DesktopNavbar = () => {
       {/* Search panel content start */}
       <div
         className={cn(
-          "bg-blue-50 fixed top-[20px] left-1/2 -translate-x-1/2 z-[99] rounded overflow-hidden transition-all duration-300 ease-in-out origin-bottom",
+          "bg-white/90 backdrop-blur-2xl fixed top-[20px] left-1/2 -translate-x-1/2 z-[99] rounded-2xl overflow-hidden transition-all duration-300 ease-in-out origin-bottom shadow-2xl border border-white/20",
           {
             "h-0 opacity-0": !isSearchActive,
             "h-[50vh] opacity-100": isSearchActive,
