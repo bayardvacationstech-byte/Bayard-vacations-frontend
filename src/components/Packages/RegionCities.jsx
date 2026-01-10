@@ -328,7 +328,7 @@ function CityCard({ city }) {
 
           {/* Footer - Meta & CTA */}
           <div className="space-y-3 pt-4 border-t border-white/20">
-            <button className="w-full px-6 py-3 rounded-xl gradient-btn text-white font-bold uppercase tracking-wide transition-all duration-300">
+            <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95">
               View Packages
             </button>
           </div>

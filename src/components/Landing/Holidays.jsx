@@ -635,6 +635,81 @@ const Holidays = ({
         </div>
       </div>
 
+      {/* FILTERS - Static and Persistent */}
+      <div className="mb-4 flex gap-2 overflow-x-auto pb-4 scrollbar-hide relative z-50">
+        <Button
+          key="visafree"
+          variant={filterType === "visafree" ? "default" : "outline"}
+          onClick={() => setFilterType("visafree")}
+          className={cn(
+            "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+            filterType === "visafree" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+          )}
+        >
+          Visa-Free Escapes
+        </Button>
+
+        <Button
+          key="trending"
+          variant={filterType === "trending" ? "default" : "outline"}
+          onClick={() => setFilterType("trending")}
+          className={cn(
+            "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+            filterType === "trending" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+          )}
+        >
+          Hot Right Now
+        </Button>
+
+        <Button
+          key="curated"
+          variant={filterType === "curated" ? "default" : "outline"}
+          onClick={() => setFilterType("curated")}
+          className={cn(
+            "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+            filterType === "curated" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+          )}
+        >
+          Signature Picks
+        </Button>
+
+        <Button
+          key="bestseller"
+          variant={filterType === "bestseller" ? "default" : "outline"}
+          onClick={() => setFilterType("bestseller")}
+          className={cn(
+            "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+            filterType === "bestseller" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+          )}
+        >
+          Bestsellers
+        </Button>
+
+        <Button
+          key="value"
+          variant={filterType === "value" ? "default" : "outline"}
+          onClick={() => setFilterType("value")}
+          className={cn(
+            "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+            filterType === "value" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+          )}
+        >
+          Smart Value Trips
+        </Button>
+
+        <Button
+          key="underrated"
+          variant={filterType === "underrated" ? "default" : "outline"}
+          onClick={() => setFilterType("underrated")}
+          className={cn(
+            "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
+            filterType === "underrated" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+          )}
+        >
+          Hidden Gems
+        </Button>
+      </div>
+
       <div className="relative overflow-hidden min-h-[400px]">
         <AnimatePresence mode="wait">
           <motion.div
@@ -644,82 +719,6 @@ const Holidays = ({
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-
-
-      {/* FILTERS */}
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-        {hasVisaFreePackages && (
-          <Button
-            key="visafree"
-            variant={filterType === "visafree" ? "default" : "outline"}
-            onClick={() => setFilterType("visafree")}
-            className={cn(
-              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "visafree" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
-            )}
-          >
-            Visa-Free Escapes
-          </Button>
-        )}
-
-        {hasTrendingPackages && (
-          <Button
-            key="trending"
-            variant={filterType === "trending" ? "default" : "outline"}
-            onClick={() => setFilterType("trending")}
-            className={cn(
-              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "trending" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
-            )}
-          >
-            Hot Right Now
-          </Button>
-        )}
-
-        {hasCuratedPackages && (
-          <Button
-            key="curated"
-            variant={filterType === "curated" ? "default" : "outline"}
-            onClick={() => setFilterType("curated")}
-            className={cn(
-              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "curated" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
-            )}
-          >
-            Signature Picks
-          </Button>
-        )}
-
-        {/* Bestseller filter hidden as per user request */}
-
-        {hasValuePackages && (
-          <Button
-            key="value"
-            variant={filterType === "value" ? "default" : "outline"}
-            onClick={() => setFilterType("value")}
-            className={cn(
-              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "value" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
-            )}
-          >
-            Smart Value Trips
-          </Button>
-        )}
-
-        {hasUnderratedPackages && (
-          <Button
-            key="underrated"
-            variant={filterType === "underrated" ? "default" : "outline"}
-            onClick={() => setFilterType("underrated")}
-            className={cn(
-              "rounded-full border border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10 text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all",
-              filterType === "underrated" && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
-            )}
-          >
-            Hidden Gems
-          </Button>
-        )}
-      </div>
 
       {/* SLIDER */}
       <div className="relative">

@@ -195,7 +195,7 @@ export default function ThemeHighlights({
                     
                     <Link
                         href={`/themes/${currentTheme?.themeSlug}`}
-                        className="gradient-btn inline-block px-8 py-3 sm:px-10 sm:py-4 font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl text-sm sm:text-base"
+                        className="bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-xl text-slate-900 inline-block px-8 py-3 sm:px-10 sm:py-4 font-black rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                     >
                         Explore Packages
                     </Link>

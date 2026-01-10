@@ -296,8 +296,10 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
                 <p className="text-lg md:text-xl font-serif font-bold italic leading-tight tracking-tight mb-4 drop-shadow-sm">
                   "{regionData?.overview?.substring(0, 95) || `Experience the captivating magic in ${displayName}.`}{regionData?.overview?.length > 95 ? '...' : ''}"
                 </p>
-                <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">
-                  Discover More <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-1 transition-transform" />
+                <div className="mt-auto">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white text-orange-600 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg transform group-hover:scale-105 transition-all duration-300">
+                    Explore Details <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </div>
             </Link>
@@ -312,11 +314,15 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
               </div>
               <div className="min-w-0 relative z-10 flex-1">
                 <p className="text-[9px] font-black uppercase tracking-[0.1em] text-amber-400 mb-1">Factsheet</p>
-                <p className="text-xs font-medium italic text-slate-200 leading-tight line-clamp-1 truncate">
+                <p className="text-xs font-medium italic text-slate-200 leading-tight line-clamp-1">
                   "Complete guide to {displayName} - All you need to know"
                 </p>
               </div>
-              <ArrowRight className="w-4 h-4 text-amber-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all z-10" />
+              <div className="flex-shrink-0">
+                <div className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg group-hover:scale-105 transition-all">
+                  Read
+                </div>
+              </div>
             </Link>
           </div>
 
