@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   History, 
@@ -21,7 +22,8 @@ import {
   CreditCard,
   ArrowRightLeft,
   Smartphone,
-  Compass
+  Compass,
+  ChevronRight
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
@@ -45,18 +47,31 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
       <Container>
         {/* Header Section - Matched to Reference */}
         <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
-            <Compass className="w-4 h-4 text-brand-green" />
-            <span className="text-sm font-bold text-brand-green uppercase tracking-wider">KNOWLEDGE HUB</span>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
+            {/* Left: Title Section */}
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
+                <Compass className="w-4 h-4 text-brand-green" />
+                <span className="text-sm font-bold text-brand-green uppercase tracking-wider">KNOWLEDGE HUB</span>
+              </div>
+              
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+                Things to Know in <span className="text-brand-green capitalize">{regionName}</span>
+              </h2>
+              
+              <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl">
+                Essential travel information and insider tips for your journey
+              </p>
+            </div>
+            
+            {/* Right: Explore Button */}
+            <Link href={`/factsheet/${regionName?.toLowerCase()}`}>
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap">
+                Explore More
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </Link>
           </div>
-          
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-            Things to Know in <span className="text-brand-green capitalize">{regionName}</span>
-          </h2>
-          
-          <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl mb-8 md:mb-12">
-            Adventure awaits! Discover essential insights and professional travel guidance for your journey.
-          </p>
 
           {/* Floating Pill Tabs - Horizontal Scroll on Mobile */}
           <div className="flex flex-nowrap overflow-x-auto scrollbar-hide gap-2 md:gap-3 mb-12 pb-2 -mb-2">

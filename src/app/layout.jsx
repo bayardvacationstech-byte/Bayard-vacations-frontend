@@ -12,6 +12,7 @@ import localFont from "next/font/local";
 import LeadForm from "@/components/Forms/EnquiryForm/LeadForm";
 import { Toaster } from "@/components/ui/sonner";
 import FloatingLeadButton from "@/components/FloatingLeadButton";
+import ScrollReset from "@/components/ScrollReset";
 
 import Metrics from "@/components/Metrics";
 import ClientProviders from "@/components/ClientProviders";
@@ -123,6 +124,7 @@ export default async function RootLayout({ children }) {
         suppressHydrationWarning
       >
         <ClientProviders>
+          <ScrollReset />
           <DesktopNavbar />
           <MobileNavbar />
           {children}

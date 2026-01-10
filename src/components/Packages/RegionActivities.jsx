@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { 
   Waves, 
@@ -175,8 +176,8 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
     ? [...transformedApiActivities, ...defaultActivities.slice(0, 3)] // Add 3 dummy activities
     : defaultActivities; // Use all dummy if no API data
   
-  // Get unique categories
-  const categories = ["all", ...new Set(allActivities.map(a => a.category))];
+  // Get unique categories (excluding "all" since we'll use an Explore button instead)
+  const categories = [...new Set(allActivities.map(a => a.category))];
   
   // Filter activities based on selected category
   const displayActivities = selectedCategory === "all" 
@@ -199,6 +200,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
         {/* Header */}
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6">
+            {/* Left: Title Section */}
             <div className="flex-1 max-w-3xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
                 <Compass className="w-4 h-4 text-brand-green" />
@@ -215,14 +217,27 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
               </p>
             </div>
             
-            {/* Navigation Buttons are now absolute over the swiper */}
-            <div className="hidden lg:flex gap-2 lg:flex-shrink-0 invisible">
-              {/* Spacer to maintain layout height if needed, or remove if layout is fine */}
-            </div>
+            {/* Right: Explore Button */}
+            <Link href={`/activities/${regionName?.toLowerCase()}`}>
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap">
+                Explore More
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </Link>
           </div>
           
           {/* Category Filter Pills - Horizontal Scroll on Mobile */}
           <div className="flex flex-nowrap overflow-x-auto scrollbar-hide gap-2 pb-2 -mb-2">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+                selectedCategory === "all"
+                  ? "bg-brand-green text-white shadow-md"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              All Activities
+            </button>
             {categories.map((category) => (
               <button
                 key={category}
@@ -233,7 +248,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                 }`}
               >
-                {category === "all" ? "All Activities" : category}
+                {category}
               </button>
             ))}
           </div>
@@ -270,7 +285,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
         >
           {displayActivities.map((activity) => (
             <SwiperSlide key={activity.id}>
-              <ActivityCard activity={activity} />
+              <ActivityCard activity={activity} regionName={regionName} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -281,8 +296,14 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
 }
 
 // Sub-component for Activity Card to handle local state
-function ActivityCard({ activity }) {
+function ActivityCard({ activity, regionName }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Generate activity slug from title
+  const activitySlug = activity.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
   const Icon = activity.icon || Compass;
 
   const getDifficultyColor = (difficulty) => {
@@ -299,8 +320,9 @@ function ActivityCard({ activity }) {
   };
 
   return (
-    <div
-      className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl h-[420px]"
+    <Link 
+      href={`/activities/${regionName?.toLowerCase()}/${activitySlug}`}
+      className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl h-[420px] block"
     >
       {/* Background Image - Full Card */}
       <div className="absolute inset-0">
@@ -451,7 +473,7 @@ function ActivityCard({ activity }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

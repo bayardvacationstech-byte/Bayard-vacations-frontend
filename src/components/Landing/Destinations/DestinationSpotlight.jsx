@@ -56,16 +56,26 @@ export default function DestinationSpotlight({ initialRegions = [] }) {
   const active = displays[activeBanner] || displays[0];
 
   const scrollToItem = (index) => {
-    if (carouselRef.current) {
-      const item = carouselRef.current.children[index];
-      if (item) {
-        item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
-    }
+    // DISABLED: This was causing auto-scroll on page load
+    // if (carouselRef.current) {
+    //   const item = carouselRef.current.children[index];
+    //   if (item) {
+    //     item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    //   }
+    // }
   };
 
+  // Track initial mount to prevent auto-scroll on page load
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
-    scrollToItem(activeBanner);
+    // DISABLED: Completely disabled to prevent page auto-scroll
+    // Skip scrolling on initial mount
+    // if (isInitialMount.current) {
+    //   isInitialMount.current = false;
+    //   return;
+    // }
+    // scrollToItem(activeBanner);
   }, [activeBanner]);
 
 

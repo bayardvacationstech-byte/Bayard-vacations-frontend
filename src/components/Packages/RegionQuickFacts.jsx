@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { 
@@ -279,11 +280,12 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
 
           {/* Section 3: HIGHLIGHTS */}
           <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-3 py-1">
-          <div 
-            className="flex-1 rounded-[1.8rem] bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 p-5 text-white relative shadow-xl overflow-hidden group border border-white/10 flex flex-col justify-center -translate-y-1"
+          <Link 
+            href={`/why-choose/${regionName?.toLowerCase()}`}
+            className="flex-1 rounded-[1.8rem] bg-gradient-to-br from-amber-400 via-orange-500 to-amber-600 p-5 text-white relative shadow-xl overflow-hidden group border border-white/10 flex flex-col justify-center -translate-y-1 cursor-pointer hover:scale-[1.02] hover:shadow-2xl transition-all duration-300"
           >
             <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
-            <Sparkles className="absolute -bottom-4 -left-4 w-24 h-24 text-white/10 -rotate-12 transition-transform duration-700" />
+            <Sparkles className="absolute -bottom-4 -left-4 w-24 h-24 text-white/10 -rotate-12 transition-transform duration-700 group-hover:rotate-0" />
               
               <div className="relative z-10 flex flex-col">
                 <div className="flex items-center gap-1.5 mb-2.5">
@@ -294,26 +296,28 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
                 <p className="text-lg md:text-xl font-serif font-bold italic leading-tight tracking-tight mb-4 drop-shadow-sm">
                   "{regionData?.overview?.substring(0, 95) || `Experience the captivating magic in ${displayName}.`}{regionData?.overview?.length > 95 ? '...' : ''}"
                 </p>
-                <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest opacity-80 transition-opacity">
-                  Discover More <ArrowRight className="w-2.5 h-2.5" />
+                <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest opacity-80 group-hover:opacity-100 transition-opacity">
+                  Discover More <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
-            </div>
+            </Link>
 
-          <div 
-            className="rounded-2xl bg-slate-900 border border-slate-800 p-4 h-[70px] flex items-center gap-4 shadow-xl overflow-hidden relative shrink-0 -translate-y-1"
+          <Link
+            href={`/factsheet/${regionName?.toLowerCase()}`}
+            className="rounded-2xl bg-slate-900 border border-slate-800 p-4 h-[70px] flex items-center gap-4 shadow-xl overflow-hidden relative shrink-0 -translate-y-1 cursor-pointer hover:scale-[1.02] hover:bg-slate-800 transition-all duration-300 group"
           >
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-amber-500/5 to-transparent"></div>
-              <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-amber-400/10 relative z-10">
+              <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-amber-400/10 relative z-10 group-hover:scale-110 transition-transform">
                 <Zap className="w-4 h-4 text-slate-900 fill-slate-900" />
               </div>
-              <div className="min-w-0 relative z-10">
-                <p className="text-[9px] font-black uppercase tracking-[0.1em] text-amber-400 mb-1">Insider Tip</p>
+              <div className="min-w-0 relative z-10 flex-1">
+                <p className="text-[9px] font-black uppercase tracking-[0.1em] text-amber-400 mb-1">Factsheet</p>
                 <p className="text-xs font-medium italic text-slate-200 leading-tight line-clamp-1 truncate">
-                  "{regionData?.quickFacts?.find(f => f.label.toLowerCase().includes('insider'))?.value || regionData?.insiderTip || "Embrace local customs!"}"
+                  "Complete guide to {displayName} - All you need to know"
                 </p>
               </div>
-            </div>
+              <ArrowRight className="w-4 h-4 text-amber-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all z-10" />
+            </Link>
           </div>
 
         </div>

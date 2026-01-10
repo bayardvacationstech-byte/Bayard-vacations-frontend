@@ -85,7 +85,7 @@ const ExplorePackagesContent = ({ setActiveDropdown, handleMenuActive, isHeaderF
           return (
             <Link
               key={theme.slug}
-              href={`/explore?theme=${theme.slug}`}
+              href={`/themes/${theme.slug}`}
               onClick={handleClose}
               className="group flex items-center gap-6 p-4 rounded-2xl transition-all duration-300 hover:bg-white/10"
             >
