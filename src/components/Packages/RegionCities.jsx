@@ -94,7 +94,7 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
   }
 
   return (
-    <section className="bg-slate-50 py-8 md:py-12 relative overflow-hidden">
+    <section className="bg-slate-50 py-6 md:py-8 relative overflow-hidden">
       {/* Decorative Textural Elements */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
       
@@ -125,7 +125,7 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap"
               >
                 Explore More
                 <ChevronRight className="w-4 h-4" />
@@ -141,8 +141,8 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                 onClick={() => setSelectedCity(cityName)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                   selectedCity === cityName
-                    ? "bg-brand-green text-white shadow-md"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-yellow-400 text-slate-900 shadow-sm"
+                    : "bg-white text-blue-600 hover:bg-slate-50 border border-slate-200"
                 }`}
               >
                 {cityName === "all" ? "All Cities" : cityName}
@@ -154,17 +154,17 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
         {/* Cities Carousel */}
         <div className="relative group/nav mt-8">
           {/* Overlay Navigation Buttons */}
-          <button className="cities-prev-btn absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-green hover:text-white hover:border-brand-green transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+          <button className="cities-prev-btn absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
             <ChevronLeftIcon className="w-5 md:w-6 h-5 md:h-6" />
           </button>
-          <button className="cities-next-btn absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-green hover:text-white hover:border-brand-green transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+          <button className="cities-next-btn absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
             <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
           </button>
 
           <Swiper
           modules={[Navigation, Autoplay]}
-          spaceBetween={24}
-          slidesPerView={1}
+          spaceBetween={12}
+          slidesPerView={1.15}
           navigation={{
             prevEl: ".cities-prev-btn",
             nextEl: ".cities-next-btn",

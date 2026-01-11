@@ -23,10 +23,10 @@ export default function FloatingIcon() {
     <Link
       href="https://wa.me/+916363117421"
       target="_blank"
-      className="fixed bottom-24 right-4 z-50   "
+      className="fixed bottom-6 right-4 z-50 group"
     >
-      <div className="relative rounded-full float-base float-delay-1  p-4 shadow-lg hover:scale-105 transition-transform">
-        <Image src={WhatsAppIcon} alt="WhatsApp" width={28} height={28} />
+      <div className="relative rounded-full bg-[#25D366] p-4 shadow-[0_10px_25px_-5px_rgba(37,211,102,0.4)] hover:scale-110 transition-all duration-300 animate-floatSlow">
+        <Image src={WhatsAppIcon} alt="WhatsApp" width={28} height={28} className="drop-shadow-sm" />
       </div>
     </Link>
   );

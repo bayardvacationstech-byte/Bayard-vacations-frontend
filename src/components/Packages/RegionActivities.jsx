@@ -195,7 +195,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
   };
 
   return (
-    <section className="bg-white py-6 md:py-8">
+    <section className="bg-white py-4 md:py-6">
       <Container>
         {/* Header */}
         <div className="mb-8">
@@ -219,7 +219,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
             
             {/* Right: Explore Button */}
             <Link href={`/activities/${regionName?.toLowerCase()}`}>
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap">
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap">
                 Explore More
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -232,8 +232,8 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
               onClick={() => setSelectedCategory("all")}
               className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === "all"
-                  ? "bg-brand-green text-white shadow-md"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-yellow-400 text-slate-900 shadow-sm"
+                  : "bg-white text-blue-600 hover:bg-slate-50 border border-slate-200"
               }`}
             >
               All Activities
@@ -244,8 +244,8 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
                   selectedCategory === category
-                    ? "bg-brand-green text-white shadow-md"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-yellow-400 text-slate-900 shadow-sm"
+                    : "bg-white text-blue-600 hover:bg-slate-50 border border-slate-200"
                 }`}
               >
                 {category}
@@ -257,17 +257,17 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
         {/* Activities Carousel */}
         <div className="relative group/nav mt-8">
           {/* Overlay Navigation Buttons */}
-          <button className="activities-prev-btn absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-green hover:text-white hover:border-brand-green transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+          <button className="activities-prev-btn absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
             <ChevronLeftIcon className="w-5 md:w-6 h-5 md:h-6" />
           </button>
-          <button className="activities-next-btn absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-green hover:text-white hover:border-brand-green transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+          <button className="activities-next-btn absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
             <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
           </button>
 
           <Swiper
           modules={[Navigation, Autoplay]}
-          spaceBetween={24}
-          slidesPerView={1}
+          spaceBetween={12}
+          slidesPerView={1.15}
           navigation={{
             prevEl: ".activities-prev-btn",
             nextEl: ".activities-next-btn",
