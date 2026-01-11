@@ -26,6 +26,7 @@ const nextConfig = {
       { protocol: "https", hostname: "swiperjs.com" },
       { protocol: "https", hostname: "technovans.com" },
       { protocol: "https", hostname: "images.pexels.com" },
+      { protocol: "https", hostname: "i.pravatar.cc" },
     ],
   },
 

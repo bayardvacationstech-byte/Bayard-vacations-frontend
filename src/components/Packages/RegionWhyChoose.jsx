@@ -40,10 +40,10 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
   ];
 
   return (
-    <section className="py-12 md:py-14 bg-white overflow-hidden">
+    <section className="pt-4 pb-12 md:py-14 bg-white overflow-hidden">
       <Container>
         {/* Section Header */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             {/* Left: Title Section */}
             <div className="flex-1">
@@ -83,7 +83,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green hover:bg-green-700 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap"
               >
                 Explore More
                 <ChevronRight className="w-4 h-4" />

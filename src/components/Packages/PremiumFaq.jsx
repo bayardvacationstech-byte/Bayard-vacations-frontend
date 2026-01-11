@@ -6,6 +6,90 @@ import { parseFaqContent } from "@/lib/utils";
 import FaqRenderer from "@/components/FaqRenderer";
 import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
 
+// Sub-component for individual FAQ items to maintain clean two-column logic
+const FaqItem = ({ item, index, openIndex, toggleItem }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: index * 0.05 }}
+    className="group"
+  >
+    <div className={`relative overflow-hidden rounded-2xl transition-all duration-300 ${
+      openIndex === index 
+        ? 'bg-gradient-to-br from-brand-green/5 to-brand-blue/5 border border-brand-green/30' 
+        : 'bg-white border border-slate-200 hover:border-slate-300 shadow-sm'
+    }`}>
+      {/* Question Button */}
+      <button
+        onClick={() => toggleItem(index)}
+        className="w-full px-4 md:px-6 py-5 flex items-center justify-between gap-4 text-left"
+      >
+        <div className="flex items-center gap-4">
+          <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+            openIndex === index 
+              ? 'bg-brand-blue shadow-lg shadow-brand-blue/20' 
+              : 'bg-slate-100 group-hover:bg-slate-200'
+          }`}>
+            <span className={`font-bold text-sm ${openIndex === index ? 'text-white' : 'text-slate-600'}`}>
+              {String(index + 1).padStart(2, '0')}
+            </span>
+          </div>
+          <h3 className={`font-semibold text-base md:text-lg transition-colors duration-300 ${
+            openIndex === index ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'
+          }`}>
+            {item.question}
+          </h3>
+        </div>
+        
+        <motion.div
+          animate={{ rotate: openIndex === index ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
+          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            openIndex === index 
+              ? 'bg-brand-green/20 text-brand-green' 
+              : 'bg-slate-100 text-slate-400 group-hover:text-slate-600'
+          }`}
+        >
+          <ChevronDown className="w-5 h-5" />
+        </motion.div>
+      </button>
+
+      {/* Answer Content */}
+      <AnimatePresence>
+        {openIndex === index && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 md:px-6 pb-6">
+              {/* Gradient divider */}
+              <div className="h-px bg-gradient-to-r from-brand-blue/40 via-brand-blue/10 to-transparent mb-4" />
+              
+              {/* Answer text */}
+              <div className="pl-14 prose prose-slate max-w-none">
+                <div className="text-slate-600 text-sm md:text-base leading-relaxed">
+                  <FaqRenderer
+                    content={item.answer}
+                    onError={() => (
+                      <p className="text-rose-500 font-medium">
+                        Error displaying answer content
+                      </p>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  </motion.div>
+);
+
 const PremiumFaq = ({ faqs, regionName, content }) => {
   const [openIndex, setOpenIndex] = useState(null);
   const [mounted, setMounted] = useState(false);
@@ -80,7 +164,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -111,91 +195,39 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           </div>
         </motion.div>
 
-        {/* FAQ Items */}
-        <div className="space-y-4">
-          {parsedFaqs.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
-              className="group"
-            >
-              <div className={`relative overflow-hidden rounded-2xl transition-all duration-300 ${
-                openIndex === index 
-                  ? 'bg-gradient-to-br from-brand-green/5 to-brand-blue/5 border border-brand-green/30' 
-                  : 'bg-white border border-slate-200 hover:border-slate-300 shadow-sm'
-              }`}>
-                {/* Question Button */}
-                <button
-                  onClick={() => toggleItem(index)}
-                  className="w-full px-4 md:px-6 py-5 flex items-center justify-between gap-4 text-left"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                      openIndex === index 
-                        ? 'bg-brand-blue shadow-lg shadow-brand-blue/20' 
-                        : 'bg-slate-100 group-hover:bg-slate-200'
-                    }`}>
-                      <span className={`font-bold text-sm ${openIndex === index ? 'text-white' : 'text-slate-600'}`}>
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-                    <h3 className={`font-semibold text-base md:text-lg transition-colors duration-300 ${
-                      openIndex === index ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'
-                    }`}>
-                      {item.question}
-                    </h3>
-                  </div>
-                  
-                  <motion.div
-                    animate={{ rotate: openIndex === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      openIndex === index 
-                        ? 'bg-brand-green/20 text-brand-green' 
-                        : 'bg-slate-100 text-slate-400 group-hover:text-slate-600'
-                    }`}
-                  >
-                    <ChevronDown className="w-5 h-5" />
-                  </motion.div>
-                </button>
+        {/* FAQ Items - 2 Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 md:gap-y-4 items-start">
+          {/* First Column */}
+          <div className="space-y-4">
+            {parsedFaqs.filter((_, i) => i % 2 === 0).map((item, index) => {
+              const actualIndex = index * 2;
+              return (
+                <FaqItem 
+                  key={actualIndex}
+                  item={item}
+                  index={actualIndex}
+                  openIndex={openIndex}
+                  toggleItem={toggleItem}
+                />
+              );
+            })}
+          </div>
 
-                {/* Answer Content */}
-                <AnimatePresence>
-                  {openIndex === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-4 md:px-6 pb-6">
-                        {/* Gradient divider */}
-                        <div className="h-px bg-gradient-to-r from-brand-blue/40 via-brand-blue/10 to-transparent mb-4" />
-                        
-                        {/* Answer text */}
-                        <div className="pl-14 prose prose-slate max-w-none">
-                          <div className="text-slate-600 text-sm md:text-base leading-relaxed">
-                            <FaqRenderer
-                              content={item.answer}
-                              onError={() => (
-                                <p className="text-rose-500 font-medium">
-                                  Error displaying answer content
-                                </p>
-                              )}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          ))}
+          {/* Second Column */}
+          <div className="space-y-4">
+            {parsedFaqs.filter((_, i) => i % 2 !== 0).map((item, index) => {
+              const actualIndex = index * 2 + 1;
+              return (
+                <FaqItem 
+                  key={actualIndex}
+                  item={item}
+                  index={actualIndex}
+                  openIndex={openIndex}
+                  toggleItem={toggleItem}
+                />
+              );
+            })}
+          </div>
         </div>
 
         {/* Help Card */}

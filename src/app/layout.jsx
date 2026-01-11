@@ -129,7 +129,6 @@ export default async function RootLayout({ children }) {
           <MobileNavbar />
           {children}
           <LeadForm />
-          <FloatingLeadButton />
           <WhatsAppIcon />
           <Toaster />
         </ClientProviders>

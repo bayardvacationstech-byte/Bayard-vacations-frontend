@@ -583,14 +583,16 @@ export default function PackagesRegionClient() {
         </div>
 
         <Container>
-          {/* Mobile Filter Button */}
-          <div className="c-md:hidden flex justify-center mb-6">
+          {/* Mobile Filter Button - Sticky FAB Style */}
+          <div className="c-md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[280px] px-4 pointer-events-none">
             <Button
               onClick={handleOpenFilterMenu}
-              className="w-full max-w-sm flex items-center justify-center gap-2 h-11 text-sm font-black bg-brand-blue hover:bg-brand-blue-hovered text-white rounded-xl shadow-lg border-b-4 border-black/20 active:translate-y-0.5 active:border-b-0 transition-all"
+              className="w-full pointer-events-auto flex items-center justify-center gap-3 h-14 text-sm font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 group"
             >
-              <SlidersVertical className="w-4 h-4" />
-              Tune Your Search
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:rotate-180 transition-transform duration-500">
+                <SlidersVertical className="w-4 h-4 text-white" />
+              </div>
+              <span className="uppercase tracking-widest">Tune Search</span>
             </Button>
           </div>
 
@@ -681,7 +683,7 @@ export default function PackagesRegionClient() {
 
         {/* Recommended Packages Carousel */}
       {packagesWithOffers.length > 0 && (
-        <section className="bg-white py-8 border-t border-slate-100" id="recommended">
+        <section className="bg-white pt-8 pb-2 md:py-8 border-t border-slate-100" id="recommended">
           <Container>
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -705,19 +707,19 @@ export default function PackagesRegionClient() {
               
               <Swiper
                 modules={[Navigation, Autoplay]}
-                spaceBetween={24}
-                slidesPerView={1}
+                spaceBetween={16}
+                slidesPerView={1.2}
                 navigation={{
                   prevEl: ".swiper-button-prev-pkg",
                   nextEl: ".swiper-button-next-pkg",
                 }}
-              autoplay={{ delay: 5000 }}
-              breakpoints={{
-                640: { slidesPerView: 2 },
-                1024: { slidesPerView: 4 },
-              }}
-              className="pb-8"
-            >
+                autoplay={{ delay: 5000 }}
+                breakpoints={{
+                  640: { slidesPerView: 2, spaceBetween: 24 },
+                  1024: { slidesPerView: 4, spaceBetween: 24 },
+                }}
+                className="pb-8"
+              >
               {packagesWithOffers.slice(0, 6).map((item) => (
                 <SwiperSlide key={`rec-${item.id}`}>
                   <PackageCard item={item} />
@@ -776,7 +778,7 @@ export default function PackagesRegionClient() {
             
             <Link 
               href="/blogs" 
-              className="inline-flex items-center gap-2 text-brand-green font-bold px-5 py-2.5 rounded-full bg-brand-green/5 hover:bg-brand-green/10 transition-all group w-fit whitespace-nowrap self-end md:self-auto"
+              className="inline-flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 transition-all group w-fit whitespace-nowrap self-end md:self-auto"
             >
               View All Blogs
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -794,8 +796,8 @@ export default function PackagesRegionClient() {
 
             <Swiper
               modules={[Pagination, Autoplay, Navigation]}
-              spaceBetween={24}
-              slidesPerView={1}
+              spaceBetween={16}
+              slidesPerView={1.2}
               navigation={{
                 prevEl: ".swiper-button-prev-blog",
                 nextEl: ".swiper-button-next-blog",
@@ -803,9 +805,9 @@ export default function PackagesRegionClient() {
               autoplay={{ delay: 7000 }}
               pagination={{ clickable: true }}
                 breakpoints={{
-                  640: { slidesPerView: 2 },
-                  1024: { slidesPerView: 4 },
-                  1280: { slidesPerView: 4 },
+                  640: { slidesPerView: 2, spaceBetween: 24 },
+                  1024: { slidesPerView: 4, spaceBetween: 24 },
+                  1280: { slidesPerView: 4, spaceBetween: 24 },
                 }}
               className="pb-12"
             >
@@ -849,7 +851,7 @@ export default function PackagesRegionClient() {
               
               <Link 
                 href="/packages" 
-                className="inline-flex items-center gap-2 text-brand-blue font-bold px-5 py-2.5 rounded-full bg-brand-blue/5 hover:bg-brand-blue/10 transition-all group w-fit whitespace-nowrap self-end md:self-auto"
+                className="inline-flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 transition-all group w-fit whitespace-nowrap self-end md:self-auto"
               >
                 View All Packages
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -867,16 +869,16 @@ export default function PackagesRegionClient() {
               
               <Swiper
                 modules={[Navigation, Autoplay]}
-                spaceBetween={24}
-                slidesPerView={1}
+                spaceBetween={16}
+                slidesPerView={1.2}
                 navigation={{
                   prevEl: ".swiper-button-prev-related",
                   nextEl: ".swiper-button-next-related",
                 }}
                 autoplay={{ delay: 4000 }}
                 breakpoints={{
-                  640: { slidesPerView: 2 },
-                  1024: { slidesPerView: 4 },
+                  640: { slidesPerView: 2, spaceBetween: 24 },
+                  1024: { slidesPerView: 4, spaceBetween: 24 },
                 }}
                 className="pb-8"
               >
