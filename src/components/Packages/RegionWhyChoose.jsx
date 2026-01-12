@@ -40,10 +40,10 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
   ];
 
   return (
-    <section className="pt-4 pb-12 md:py-14 bg-white overflow-hidden">
+    <section className="pt-2 pb-12 md:pb-14 md:pt-6 bg-white overflow-hidden">
       <Container>
         {/* Section Header */}
-        <div className="mb-8 md:mb-12">
+        <div className="mb-6 md:mb-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             {/* Left: Title Section */}
             <div className="flex-1">
@@ -61,16 +61,18 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
+                className="text-3xl sm:text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
               >
-                Why Choose <span className="text-brand-green capitalize">{regionName}</span>?
+                <span className="hidden sm:inline">Why Choose </span>
+                <span className="inline sm:hidden">Why </span>
+                <span className="text-brand-green capitalize">{regionName}</span>?
               </motion.h2>
               
               <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-xl text-slate-500 max-w-2xl font-medium"
+                className="hidden sm:block text-xl text-slate-500 max-w-2xl font-medium truncate md:whitespace-normal"
               >
                 Explore the beauty, culture, and unforgettable signature experiences that await you
               </motion.p>

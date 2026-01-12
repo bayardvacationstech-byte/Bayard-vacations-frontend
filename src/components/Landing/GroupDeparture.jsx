@@ -9,14 +9,14 @@ export default function GroupDeparture({ groupDeparturePackages }) {
     <section className="bg-white relative">
       <Container>
         {/* Simple Header */}
-        <div className="mb-6 c-lg:mb-8 text-center c-lg:text-left">
+        <div className="mb-4 md:mb-6 c-lg:mb-8 text-center c-lg:text-left">
           <div className="flex flex-col c-lg:flex-row c-lg:items-center justify-between gap-4 c-lg:gap-6">
             <div className="flex-1">
-              <h2 className="section-title-light mb-0 c-lg:mb-4">
+              <h2 className="section-title-light mb-1 md:mb-2 c-lg:mb-4">
                 <span className="c-lg:hidden">Group Departures</span>
                 <span className="hidden c-lg:inline">Curated Group Departures</span>
               </h2>
-              <p className="section-subtitle-light max-w-2xl hidden c-lg:block">
+              <p className="section-subtitle-light hidden sm:block max-w-2xl text-xs sm:text-sm md:text-base">
                 Hand-crafted itineraries designed for explorers who believe that the best stories are written together.
               </p>
             </div>

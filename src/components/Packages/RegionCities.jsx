@@ -109,11 +109,12 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                   Cities to Explore
                 </span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-                Iconic Cities in{" "}
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+                <span className="hidden sm:inline">Iconic Cities in </span>
+                <span className="inline sm:hidden">Cities in </span>
                 <span className="text-brand-green capitalize">{regionName}</span>
               </h2>
-              <p className="text-xl text-slate-600">
+              <p className="hidden sm:block text-xl text-slate-600 truncate md:whitespace-normal">
                 Adventure awaits! Discover exciting cities and unforgettable experiences
               </p>
             </div>
@@ -197,8 +198,20 @@ function CityCard({ city }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const Icon = city.icon || MapIcon;
 
+  const handleCardClick = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleViewPackages = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("View Packages clicked for:", city.name);
+    // Add navigation or action here
+  };
+
   return (
     <div
+      onClick={handleCardClick}
       className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl h-[420px]"
     >
       {/* Background Image - Full Card */}
@@ -328,7 +341,10 @@ function CityCard({ city }) {
 
           {/* Footer - Meta & CTA */}
           <div className="space-y-3 pt-4 border-t border-white/20">
-            <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95">
+            <button 
+              onClick={handleViewPackages}
+              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95"
+            >
               View Packages
             </button>
           </div>

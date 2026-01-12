@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   History, 
@@ -25,7 +26,12 @@ import {
   Compass,
   ChevronRight,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Languages,
+  FileText,
+  MessageCircle,
+  Banknote,
+  Plane
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
@@ -57,11 +63,13 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                 <span className="text-sm font-bold text-brand-green uppercase tracking-wider">KNOWLEDGE HUB</span>
               </div>
               
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-                Things to Know in <span className="text-brand-green capitalize">{regionName}</span>
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+                <span className="hidden sm:inline">Things to Know in </span>
+                <span className="inline sm:hidden">Tips for </span>
+                <span className="text-brand-green capitalize">{regionName}</span>
               </h2>
               
-              <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl">
+              <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl truncate md:whitespace-normal">
                 Essential travel information and insider tips for your journey
               </p>
             </div>
@@ -76,7 +84,7 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
           </div>
 
           {/* Floating Pill Tabs - Horizontal Scroll on Mobile */}
-          <div className="flex flex-nowrap overflow-x-auto scrollbar-hide gap-2 md:gap-3 mb-12 pb-2 -mb-2">
+          <div className="flex flex-nowrap overflow-x-auto scrollbar-hide gap-2 mb-12 pb-2 -mb-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -154,67 +162,70 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                 >
                   <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Time Zone & Climate</h3>
                   
-                  <div className="bg-blue-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-blue-100">
-                    <div className="flex items-center gap-4 mb-3 md:mb-4">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-blue-600 flex items-center justify-center">
-                        <Clock className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                      </div>
-                      <h4 className="text-xl md:text-2xl font-black text-slate-900">Azerbaijan Standard Time</h4>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                      <div>
-                        <h5 className="text-2xl md:text-4xl font-black text-slate-900 mb-2">UTC+4 <span className="text-base md:text-lg text-slate-500 font-bold ml-1">(AZT)</span></h5>
-                        <p className="text-sm md:text-base text-slate-600 font-medium italic">No Daylight Saving Time observed (year-round UTC+4)</p>
-                      </div>
-                      <div className="flex flex-col justify-center">
-                        <p className="text-sm md:text-base text-emerald-700 font-bold bg-emerald-50 p-3 rounded-xl border border-emerald-200">⏰ 30 minutes behind IST — When it's 12:00 PM in India, it's 11:30 AM in Azerbaijan</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-amber-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-amber-100 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    <div>
-                      <div className="flex items-center gap-4 mb-3 md:mb-4">
-                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-amber-500 flex items-center justify-center">
-                          <Sun className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                  <div className="space-y-12 w-full">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+                      {/* Time Zone Left Column */}
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Clock className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Time Zone</h4>
                         </div>
-                        <h4 className="text-xl md:text-2xl font-black text-slate-900">Climate</h4>
-                      </div>
-                      <div className="space-y-2 md:space-y-3">
-                        <p className="font-bold text-slate-800 text-sm md:text-base">Climate Type</p>
-                        <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">Nine of the world's eleven climate zones are found here, ranging from subtropical to continental.</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col justify-center">
-                       <p className="font-bold text-slate-800 mb-2 text-sm md:text-base">Best Time to Visit</p>
-                       <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">
-                        <span className="font-black text-slate-900 underline decoration-amber-500/30">Spring</span> and <span className="font-black text-slate-900 underline decoration-amber-500/30">Autumn</span> offer the most pleasant sightseeing conditions.
-                       </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {[
-                      { season: "🌸 Spring", months: "April–June", temp: "15–25°C", highlight: "BEST SEASON! Mild weather, blooming flowers, Novruz Festival (March 21), perfect for sightseeing.", color: "border-emerald-200 bg-emerald-50/50" },
-                      { season: "☀️ Summer", months: "July–August", temp: "25–32°C", highlight: "Hot and humid, especially coastal Baku. Great for Caspian Sea beaches, Baku Jazz Festival. Can be crowded.", color: "border-amber-200 bg-amber-50/50" },
-                      { season: "🍂 Autumn", months: "Sept–Oct", temp: "15–22°C", highlight: "IDEAL TRAVEL TIME! Pleasant temperatures, golden landscapes, Pomegranate & Apple Festivals, fewer crowds.", color: "border-orange-200 bg-orange-50/50" },
-                      { season: "❄️ Winter", months: "Nov–March", temp: "5–10°C", highlight: "Cool, occasional rain. Budget-friendly, quiet streets, cozy cafes. Off-season but still charming.", color: "border-blue-200 bg-blue-50/50" },
-                    ].map((s) => (
-                      <div key={s.season} className={`p-4 md:p-6 rounded-2xl md:rounded-3xl border-2 ${s.color}`}>
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4 mb-2">
-                          <h5 className="text-base md:text-lg font-black text-slate-900">{s.season}</h5>
-                          <div className="flex items-center gap-2 md:gap-4">
-                            <span className="text-xs md:text-sm font-black text-slate-600">{s.months}</span>
-                            <span className="text-xs md:text-sm font-bold text-slate-500">{s.temp}</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                          <div className="space-y-1">
+                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Standard Time</p>
+                            <p className="text-3xl font-black text-slate-900">UTC+4 <span className="text-base text-slate-400 font-bold ml-1">(AZT)</span></p>
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Time Difference</p>
+                            <p className="text-lg font-black text-slate-700">30 minutes behind IST</p>
+                            <p className="text-sm text-slate-500 font-medium italic">India 12:00 PM → Azerbaijan 11:30 AM</p>
                           </div>
                         </div>
-                        <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">{s.highlight}</p>
+
+                        <div className="mt-12 pt-8 border-t border-slate-900/5">
+                          <p className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] mb-4">🎯 Best Months to Visit</p>
+                          <p className="text-3xl font-black text-slate-900 leading-tight">
+                            April, May, June, September & October
+                          </p>
+                          <p className="text-base text-slate-500 font-medium mt-2 leading-relaxed">Comfortable temperatures and vibrant scenery across all 9 climate zones.</p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 p-6 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-2xl md:rounded-3xl text-white">
-                    <h5 className="text-base md:text-lg font-black mb-2">🎯 Best Months to Visit</h5>
-                    <p className="text-sm md:text-base font-medium">April, May, June, September, October — Comfortable weather, vibrant festivals, perfect for photography</p>
+
+                      {/* Climate Right Column */}
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Sun className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Climate & Seasons</h4>
+                        </div>
+                        <div className="space-y-6">
+                          <p className="text-base text-slate-700 font-medium leading-relaxed">
+                            Azerbaijan features nine of the world's eleven climate zones, ranging from <span className="text-slate-900 font-black underline decoration-brand-green/30">subtropical</span> at the coast to <span className="text-slate-900 font-black underline decoration-brand-green/30">continental</span> in the Caucasus mountains.
+                          </p>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 mt-4">
+                            {[
+                              { season: "Spring", emoji: "🌸", months: "Apr – Jun", temp: "15–25°C", highlight: "BEST SEASON for sightseeing. Mild weather and blooming landscape." },
+                              { season: "Summer", emoji: "☀️", months: "Jul – Aug", temp: "25–32°C", highlight: "Warm sea breezes. Ideal for Caspian beaches and outdoor festivals." },
+                              { season: "Autumn", emoji: "🍂", months: "Sep – Oct", temp: "15–22°C", highlight: "IDEAL TRAVEL TIME. Golden landscapes and pleasant harvest festivals." },
+                              { season: "Winter", emoji: "❄️", months: "Nov – Mar", temp: "5–10°C", highlight: "Cool and calm. Budget-friendly streets and cozy off-season charm." },
+                            ].map((s) => (
+                              <div key={s.season} className="space-y-2">
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                                  <h5 className="text-base font-black text-slate-900 flex items-center gap-2">
+                                    <span className="text-lg">{s.emoji}</span> {s.season}
+                                  </h5>
+                                  <span className="text-sm font-black text-slate-900">{s.temp}</span>
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{s.months}</p>
+                                  <p className="text-[13px] text-slate-600 font-medium leading-relaxed">{s.highlight}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -225,51 +236,69 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
+                  className="space-y-12 w-full"
                 >
                   <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Language Guide</h3>
                   
-                  <div className="bg-purple-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-purple-100">
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-6 md:items-center">
-                      <div>
-                        <h4 className="text-lg md:text-xl font-black text-purple-900 mb-2">Official Language</h4>
-                        <p className="text-base md:text-lg font-black text-slate-900 mb-1 italic">Azerbaijani (Azəri)</p>
-                        <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">Latin script since 1991. Highly related to Turkish.</p>
+                  <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+                    {/* Left Column: Context */}
+                    <div className="space-y-10">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Languages className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Official Language</h4>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-2xl font-black text-slate-900 italic">Azerbaijani (Azəri)</p>
+                          <p className="text-base text-slate-600 font-medium leading-relaxed max-w-md">
+                            Official state language written in Latin script since 1991. It is a Turkic language, making it highly related to Turkish.
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {['Latin Script', 'Since 1991', 'Turkic Root'].map(tag => (
+                            <span key={tag} className="px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-2 md:justify-end">
-                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-purple-700 border border-purple-200">Latin script</span>
-                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-purple-700 border border-purple-200">Since 1991</span>
-                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-purple-700 border border-purple-200">Similar to Turkish</span>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-white p-4 md:p-5 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight">Common Languages</h4>
-                      <ul className="space-y-2 md:space-y-3">
-                        <LanguageItem label="Russian" desc="Widely understood in cities" />
-                        <LanguageItem label="English" desc="Growing in tourism sector" />
-                        <LanguageItem label="Turkish" desc="Linguistically very similar" />
-                      </ul>
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Globe className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Common Languages</h4>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4">
+                           <LanguageItem label="Russian" desc="Widely understood in Baku and by older generations." />
+                           <LanguageItem label="English" desc="Growing fast in tourism, hotels, and among the youth." />
+                           <LanguageItem label="Turkish" desc="Linguistically very similar; Turkish media is popular." />
+                        </div>
+                      </div>
+
+                      <div className="mt-8 p-6 bg-slate-50 border-l-4 border-brand-green/30 italic">
+                        <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                          <span className="font-black text-slate-900 not-italic mr-2">💡 Pro Tip:</span>
+                          While many in Baku speak English, learning "Salam" (Hello) and "Sağ olun" (Thank you) is greatly appreciated by locals.
+                        </p>
+                      </div>
                     </div>
-                    <div className="bg-white p-4 md:p-5 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight">Essential Phrases</h4>
-                      <div className="grid grid-cols-2 gap-y-3 md:gap-y-4">
+
+                    {/* Right Column: Phrases */}
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                        <MessageCircle className="w-5 h-5 text-slate-900" />
+                        <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Essential Phrases</h4>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                         <PhraseItem label="Hello" phrase="Salam" />
                         <PhraseItem label="Thank you" phrase="Təşəkkür edirəm" />
                         <PhraseItem label="Goodbye" phrase="Sağ olun" />
-                        <PhraseItem label="Yes/No" phrase="Hə/Yox" />
+                        <PhraseItem label="Yes / No" phrase="Hə / Yox" />
                         <PhraseItem label="Please" phrase="Xahiş edirəm" />
                         <PhraseItem label="Excuse me" phrase="Bağışlayın" />
+                        <PhraseItem label="How much?" phrase="Nə qədərdir?" />
+                        <PhraseItem label="Where is...?" phrase="...haradadır?" />
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50/50 p-4 md:p-5 rounded-[2.5rem] border border-blue-100">
-                    <div className="grid md:grid-cols-[auto_1fr] gap-3 md:gap-4 md:items-center">
-                      <h4 className="text-base md:text-lg font-black text-blue-900">💡 Helpful Tip</h4>
-                      <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">While many people in Baku speak English, learning a few basic Azerbaijani phrases will be greatly appreciated by locals and can enhance your travel experience, especially outside the capital city.</p>
                     </div>
                   </div>
                 </motion.div>
@@ -281,172 +310,79 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
+                  className="space-y-12 w-full"
                 >
                   <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Currency & Money</h3>
                   
-                  <div className="bg-emerald-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-emerald-100">
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600">
-                        <Wallet className="w-5 h-5 md:w-6 md:h-6" />
-                      </div>
-                      <h4 className="text-lg md:text-xl font-black text-emerald-900">Official Currency</h4>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-6 md:items-center">
-                      <div>
-                        <p className="text-xl md:text-2xl font-black text-slate-900">Azerbaijani Manat (AZN)</p>
-                        <p className="text-base md:text-lg font-black text-brand-green">₼1 = 100 Qəpik</p>
-                      </div>
-                      <div className="flex flex-wrap gap-2 md:justify-end">
-                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-emerald-700 border border-emerald-200">Symbol: ₼</span>
-                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-emerald-700 border border-emerald-200">Code: AZN</span>
-                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-emerald-700 border border-emerald-200">Subunit: Qəpik</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-                    <div className="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6 tracking-tight">Denominations</h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="p-3 bg-slate-50 rounded-2xl">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Notes</p>
-                          <p className="text-sm font-black text-slate-900 italic">₼1, 5, 10, 20, 50, 100, 200</p>
+                  <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+                    {/* Left Column: Currency Info */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Wallet className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Official Currency</h4>
                         </div>
-                        <div className="p-3 bg-slate-50 rounded-2xl">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Coins</p>
-                          <p className="text-sm font-black text-slate-900 italic">1, 3, 5, 10, 20, 50 qəpik</p>
-                        </div>
-                      </div>
-                      <p className="text-xs text-slate-500 font-medium mt-2 italic">100 qəpik = ₼1</p>
-                    </div>
-                    <div className="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 md:mb-6 tracking-tight">Exchange Rates</h4>
-                      <div className="grid grid-cols-3 gap-3">
-                        <ExchangeItem label="1 USD" value="≈₼1.70" color="blue" />
-                        <ExchangeItem label="1 EUR" value="≈₼1.85" color="emerald" />
-                        <ExchangeItem label="₼1" value="≈₹50" color="purple" />
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                  <div className="bg-slate-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-200">
-                    <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 tracking-tight">Payment Methods</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">ATM</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                          <div className="space-y-1">
+                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Currency Name</p>
+                            <p className="text-2xl font-black text-slate-900">Azerbaijani Manat <span className="text-base text-slate-400 font-bold ml-1">(AZN)</span></p>
+                            <p className="text-xl font-black text-brand-green">₼1 = 100 Qəpik</p>
+                          </div>
+                          <div className="space-y-4">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Exchange Rates</p>
+                            <div className="space-y-3">
+                              <ExchangeItem label="1 USD" value="≈₼1.70" color="slate" />
+                              <ExchangeItem label="1 EUR" value="≈₼1.85" color="slate" />
+                              <ExchangeItem label="₼1" value="≈₹50.00" color="emerald" />
                             </div>
-                            <h5 className="font-black text-blue-900 text-sm">ATMs</h5>
                           </div>
-                          <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-1 rounded-full">24/7</span>
-                        </div>
-                        <p className="text-xs text-slate-600 font-medium mb-3">Widely available. Most accept Visa/Mastercard.</p>
-                        <div className="space-y-1.5 text-[10px]">
-                          <p className="flex justify-between border-t border-blue-100 pt-1.5"><span className="text-slate-500">Limit/transaction:</span><span className="font-bold text-slate-700">₼500-1000</span></p>
-                          <p className="flex justify-between border-t border-blue-100 pt-1.5"><span className="text-slate-500">Fee:</span><span className="font-bold text-slate-700">Check your bank</span></p>
-                          <p className="flex justify-between border-t border-blue-100 pt-1.5"><span className="text-slate-500">Best for:</span><span className="font-bold text-slate-700">Cash needs</span></p>
                         </div>
                       </div>
-                      <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">💳</span>
-                            </div>
-                            <h5 className="font-black text-purple-900 text-sm">Cards</h5>
+
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <CreditCard className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Denominations</h4>
+                        </div>
+                        <div className="grid grid-cols-2 gap-8">
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Banknotes (₼)</p>
+                            <p className="text-sm font-black text-slate-700 leading-relaxed italic">1, 5, 10, 20, 50, 100, 200</p>
                           </div>
-                          <span className="text-[10px] font-bold text-purple-700 bg-purple-100 px-2 py-1 rounded-full">V/MC</span>
-                        </div>
-                        <p className="text-xs text-slate-600 font-medium mb-3">Visa/MC widely accepted in cities.</p>
-                        <div className="space-y-1.5 text-[10px]">
-                          <p className="flex justify-between border-t border-purple-100 pt-1.5"><span className="text-slate-500">Accepted:</span><span className="font-bold text-slate-700">Hotels, restaurants</span></p>
-                          <p className="flex justify-between border-t border-purple-100 pt-1.5"><span className="text-slate-500">Cash needed:</span><span className="font-bold text-slate-700">Markets, taxis</span></p>
-                          <p className="flex justify-between border-t border-purple-100 pt-1.5"><span className="text-slate-500">Notify:</span><span className="font-bold text-slate-700">Bank before trip</span></p>
-                        </div>
-                      </div>
-                      <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">💱</span>
-                            </div>
-                            <h5 className="font-black text-amber-900 text-sm">Exchange</h5>
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Coins (qəpik)</p>
+                            <p className="text-sm font-black text-slate-700 leading-relaxed italic">1, 3, 5, 10, 20, 50</p>
                           </div>
-                          <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">Airport</span>
-                        </div>
-                        <p className="text-xs text-slate-600 font-medium mb-3">Available at airport and banks.</p>
-                        <div className="space-y-1.5 text-[10px]">
-                          <p className="flex justify-between border-t border-amber-100 pt-1.5"><span className="text-slate-500">Best rates:</span><span className="font-bold text-slate-700">Banks, offices</span></p>
-                          <p className="flex justify-between border-t border-amber-100 pt-1.5"><span className="text-slate-500">Avoid:</span><span className="font-bold text-slate-700">Hotels</span></p>
-                          <p className="flex justify-between border-t border-amber-100 pt-1.5"><span className="text-slate-500">Bring:</span><span className="font-bold text-slate-700">USD or EUR</span></p>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-
-                  <div className="bg-yellow-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-yellow-200">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-10 h-10 rounded-xl bg-yellow-400 flex items-center justify-center">
-                        <Lightbulb className="w-5 h-5 text-white" />
+                    {/* Right Column: Payment Methods */}
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                        <Banknote className="w-5 h-5 text-slate-900" />
+                        <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Payment Methods</h4>
                       </div>
-                      <h4 className="text-lg md:text-xl font-black text-yellow-900">Money Tips</h4>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-x-6 gap-y-2">
-                      <TipItem text="ATMs widely available in Baku; withdraw manat for better rates" />
-                      <TipItem text="Credit cards accepted in hotels, restaurants, malls; carry cash for markets" />
-                      <TipItem text="Bargaining common in bazaars (Teze Bazaar, Yasamal) but not restaurants" />
-                      <TipItem text="Typical daily budget: ₹3,500–5,000 (budget) / ₹7,000–12,000 (luxury)" />
-                      <TipItem text="Notify your bank before traveling to avoid card blocks" />
-                      <TipItem text="Tipping 10–15% appreciated at restaurants but not mandatory" />
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-200">
-                    <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 tracking-tight">Travel Essentials</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
-                            <span className="text-white text-base">🔌</span>
-                          </div>
-                          <h5 className="font-black text-blue-900 text-sm">Electricity</h5>
-                        </div>
-                        <div className="space-y-1.5 text-xs md:text-sm">
-                          <p className="flex justify-between border-t border-blue-100 pt-1.5"><span className="text-slate-500">Voltage:</span><span className="font-bold text-slate-700">230V, 50Hz</span></p>
-                          <p className="flex justify-between border-t border-blue-100 pt-1.5"><span className="text-slate-500">Plug Type:</span><span className="font-bold text-slate-700">European 2-pin (C/F)</span></p>
-                          <p className="flex justify-between border-t border-blue-100 pt-1.5"><span className="text-slate-500">Adapter:</span><span className="font-bold text-slate-700">Required from India</span></p>
-                        </div>
-                      </div>
-                      <div className="bg-rose-50 p-4 rounded-2xl border border-rose-100">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-8 h-8 rounded-lg bg-rose-500 flex items-center justify-center">
-                            <span className="text-white text-base">🚨</span>
-                          </div>
-                          <h5 className="font-black text-rose-900 text-sm">Emergency</h5>
-                        </div>
-                        <div className="space-y-1.5 text-xs md:text-sm">
-                          <p className="flex justify-between border-t border-rose-100 pt-1.5"><span className="text-slate-500">Police:</span><span className="font-bold text-slate-700">102</span></p>
-                          <p className="flex justify-between border-t border-rose-100 pt-1.5"><span className="text-slate-500">Ambulance:</span><span className="font-bold text-slate-700">103</span></p>
-                          <p className="flex justify-between border-t border-rose-100 pt-1.5"><span className="text-slate-500">Fire:</span><span className="font-bold text-slate-700">101</span></p>
-                        </div>
-                      </div>
-                      <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center">
-                            <span className="text-white text-base">📱</span>
-                          </div>
-                          <h5 className="font-black text-emerald-900 text-sm">Mobile & SIM</h5>
-                        </div>
-                        <div className="space-y-1.5 text-xs md:text-sm">
-                          <p className="flex justify-between border-t border-emerald-100 pt-1.5"><span className="text-slate-500">Networks:</span><span className="font-bold text-slate-700">Azercell, Bakcell</span></p>
-                          <p className="flex justify-between border-t border-emerald-100 pt-1.5"><span className="text-slate-500">SIM Cost:</span><span className="font-bold text-slate-700">₼10-20 (~₹500)</span></p>
-                          <p className="flex justify-between border-t border-emerald-100 pt-1.5"><span className="text-slate-500">Coverage:</span><span className="font-bold text-slate-700">Good 4G nationwide</span></p>
+                      <div className="space-y-8">
+                        <div className="grid grid-cols-1 gap-6">
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">ATMs & Withdrawal</h5>
+                             <p className="text-[13px] text-slate-600 font-medium leading-relaxed">
+                               Widely available in Baku. Most ATMs accept international cards (Visa/Mastercard). Local banks charge minimal fees.
+                             </p>
+                           </div>
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">Credit & Debit Cards</h5>
+                             <p className="text-[13px] text-slate-600 font-medium leading-relaxed">
+                               Accepted in almost all hotels, restaurants, and malls. However, <span className="text-slate-900 font-bold">cash is essential</span> for local bazaars, taxis, and smaller shops.
+                             </p>
+                           </div>
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">Tipping Culture</h5>
+                             <p className="text-[13px] text-slate-600 font-medium leading-relaxed">
+                               A 10% service charge is usually included. Additional small tips (₼2-5) for exceptional service or guides are appreciated.
+                             </p>
+                           </div>
                         </div>
                       </div>
                     </div>
@@ -460,118 +396,110 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
+                  className="space-y-12 w-full"
                 >
                   <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Transportation</h3>
                   
-                  <div className="bg-blue-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-blue-100">
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white border border-blue-100 flex items-center justify-center">
-                        <Train className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
-                      </div>
-                      <h4 className="text-lg md:text-2xl font-black text-slate-900">Getting Around</h4>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                      <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">
-                        Diverse options for getting around, especially in and around Baku. Public transport is affordable and ride-sharing apps are widely available.
-                      </p>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between bg-white p-2 md:p-3 rounded-xl border border-blue-100">
-                          <span className="text-xs md:text-sm font-bold text-slate-900">✈️ Airport to City</span>
-                          <span className="text-xs md:text-sm text-blue-600 font-black">₼1.30 / ₼15-25</span>
+                  <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+                    {/* Left Column: Airport & Local */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Plane className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Arrival: GYD Airport</h4>
                         </div>
-                        <div className="flex items-center justify-between bg-white p-2 md:p-3 rounded-xl border border-blue-100">
-                          <span className="text-xs md:text-sm font-bold text-slate-900">🚇 Metro Ride</span>
-                          <span className="text-xs md:text-sm text-blue-600 font-black">₼0.30</span>
-                        </div>
-                        <div className="flex items-center justify-between bg-white p-2 md:p-3 rounded-xl border border-blue-100">
-                          <span className="text-xs md:text-sm font-bold text-slate-900">🚕 Taxi (Short)</span>
-                          <span className="text-xs md:text-sm text-blue-600 font-black">₼3-10</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className="bg-white p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                    <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 tracking-tight">Transport Options</h4>
-                    <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-                      <div>
-                        <h5 className="text-sm md:text-base font-black text-slate-700 mb-3 uppercase tracking-wide">Within Baku</h5>
-                        <div className="space-y-3">
-                          <TransportItem icon={Train} label="Metro" desc="Affordable & fast" extra="₼0.30/ride" color="orange" />
-                          <TransportItem icon={Bus} label="Buses" desc="Extensive network" extra="Use BakıKart" color="blue" />
-                          <TransportItem icon={Smartphone} label="Apps" desc="Bolt & Uber" extra="Most convenient" color="yellow" />
+                        <div className="space-y-4">
+                          <p className="text-base text-slate-600 font-medium leading-relaxed">
+                            Heydar Aliyev Int'l Airport (GYD) is your main gateway, located 20km from Baku city center.
+                          </p>
+                          <div className="grid grid-cols-1 gap-3">
+                             <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                               <span className="text-sm font-black text-slate-900">Official Taxi</span>
+                               <span className="text-sm font-black text-brand-green">₼20–25 (~30 min)</span>
+                             </div>
+                             <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                               <span className="text-sm font-black text-slate-900">Bolt / Uber App</span>
+                               <span className="text-sm font-black text-brand-green">₼15–20 (~30 min)</span>
+                             </div>
+                             <div className="flex justify-between items-center py-2 border-b border-slate-100">
+                               <span className="text-sm font-black text-slate-900">Airport Bus (H1)</span>
+                               <span className="text-sm font-black text-brand-green">₼1.30 (60–80 min)</span>
+                             </div>
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <h5 className="text-sm md:text-base font-black text-slate-700 mb-3 uppercase tracking-wide">Inter-City</h5>
-                        <div className="space-y-3">
-                          <TransportItem icon={Train} label="Trains" desc="To Ganja & Sheki" extra="Modern, fast" color="emerald" />
-                          <TransportItem icon={Bus} label="Minibuses" desc="Local Marshrutkas" extra="Budget option" color="amber" />
-                          <TransportItem icon={Car} label="Car Rental" desc="Int'l license needed" extra="From ₼50/day" color="purple" />
+
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Train className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Public Transport</h4>
+                        </div>
+                        <div className="space-y-4">
+                          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h5 className="text-lg font-black text-slate-900">BakıKart</h5>
+                              <span className="px-2 py-0.5 bg-brand-green text-white text-[10px] font-black rounded uppercase">Essential</span>
+                            </div>
+                            <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                              One card for all Metro and Red Bus lines. Top-up at any metro station or kiosk.
+                            </p>
+                            <div className="grid grid-cols-2 gap-4 pt-2">
+                               <div className="space-y-1">
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Card Cost</p>
+                                 <p className="text-sm font-black text-slate-900">₼2.00</p>
+                               </div>
+                               <div className="space-y-1">
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Single Ride</p>
+                                 <p className="text-sm font-black text-slate-900">₼0.30–0.40</p>
+                               </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                    <div className="bg-blue-50/50 p-4 md:p-6 rounded-[2.5rem] border border-blue-100">
-                      <h4 className="font-black text-blue-900 tracking-tight mb-2">Heydar Aliyev Airport (GYD)</h4>
-                      <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed mb-3">Modern international airport located 20km from Baku city center.</p>
-                      <ul className="space-y-2 text-xs md:text-sm">
-                        <li className="flex justify-between border-b border-blue-100/50 pb-1.5">
-                          <span className="font-black text-slate-900">To City:</span>
-                          <span className="text-slate-500">Airport bus (116) - ₼1.30, 1 hour</span>
-                        </li>
-                        <li className="flex justify-between border-b border-blue-100/50 pb-1.5">
-                          <span className="font-black text-slate-900">Taxi:</span>
-                          <span className="text-slate-500">Official taxi ~₼20-25, 30 min</span>
-                        </li>
-                        <li className="flex justify-between border-b border-blue-100/50 pb-1.5">
-                          <span className="font-black text-slate-900">Bolt/Uber:</span>
-                          <span className="text-slate-500">~₼15-20, 30 min</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="bg-emerald-50/50 p-4 md:p-6 rounded-[2.5rem] border border-emerald-100">
-                      <h4 className="font-black text-emerald-900 tracking-tight mb-2">BakıKart</h4>
-                      <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed mb-3">Smart card for public transport (metro and buses).</p>
-                      <ul className="space-y-2 text-xs md:text-sm">
-                        <li className="flex justify-between border-b border-emerald-100/50 pb-1.5">
-                          <span className="font-black text-slate-900">Where to buy:</span>
-                          <span className="text-slate-500">Metro stations, kiosks</span>
-                        </li>
-                        <li className="flex justify-between border-b border-emerald-100/50 pb-1.5">
-                          <span className="font-black text-slate-900">Cost:</span>
-                          <span className="text-slate-500">₼2 card + credit amount</span>
-                        </li>
-                        <li className="flex justify-between border-b border-emerald-100/50 pb-1.5">
-                          <span className="font-black text-slate-900">Refillable:</span>
-                          <span className="text-slate-500">At metro stations and kiosks</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                    {/* Right Column: Apps & Intercity */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Smartphone className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Ride-Sharing Apps</h4>
+                        </div>
+                        <div className="space-y-4">
+                          <p className="text-base text-slate-600 font-medium leading-relaxed">
+                            Bolt and Uber (Azerbaijan version) are the most reliable and affordable ways to move around Baku.
+                          </p>
+                          <div className="flex flex-wrap gap-4">
+                            <span className="text-sm font-black text-slate-900 bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl">Low-cost city rides (₼3–10)</span>
+                            <span className="text-sm font-black text-slate-900 bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl">English app interface</span>
+                          </div>
+                        </div>
+                      </div>
 
-                  <div className="bg-rose-50/50 p-10 rounded-[2.5rem] border border-rose-100 flex flex-col md:flex-row gap-8 items-start md:items-center">
-                    <div className="flex items-center gap-4 min-w-max">
-                       <Car className="w-8 h-8 text-rose-500" />
-                       <h4 className="text-xl font-black text-rose-900 tracking-tight">Driving Tips</h4>
-                    </div>
-                    <div className="grid md:grid-cols-2 flex-grow gap-x-12 gap-y-2">
-                      <p className="text-base text-slate-700 font-medium leading-relaxed flex items-center gap-2">
-                        <span className="text-rose-500">•</span> Drive on the right side of the road
-                      </p>
-                      <p className="text-base text-slate-700 font-medium leading-relaxed flex items-center gap-2">
-                        <span className="text-rose-500">•</span> Speed limits: 60 km/h city, 90 km/h highway
-                      </p>
-                      <p className="text-base text-slate-700 font-medium leading-relaxed flex items-center gap-2">
-                        <span className="text-rose-500">•</span> International driving license recommended
-                      </p>
-                      <p className="text-base text-slate-700 font-medium leading-relaxed flex items-center gap-2">
-                        <span className="text-rose-500">•</span> Traffic can be chaotic in Baku
-                      </p>
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Car className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Intercity Travel</h4>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900">Fast Trains</h5>
+                             <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Modern Stadler trains to Ganja, Sheki, and Qabala.</p>
+                           </div>
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900">Minibusses (Marshrutka)</h5>
+                             <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Affordable regional travel from Baku Int'l Bus Station.</p>
+                           </div>
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900">Private Drivers</h5>
+                             <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Best for customized tours and reaching remote villages.</p>
+                           </div>
+                           <div className="space-y-1">
+                             <h5 className="text-sm font-black text-slate-900">Car Rental</h5>
+                             <p className="text-[11px] text-slate-500 font-medium leading-relaxed">International license required. Driving is on the right.</p>
+                           </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -583,67 +511,85 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
+                  className="space-y-12 w-full"
                 >
                   <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Visa & Entry Requirements</h3>
                   
-                  <div className="bg-rose-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-rose-100 relative">
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-rose-100 flex items-center justify-center text-rose-500">
-                        <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
-                      </div>
-                      <h4 className="text-lg md:text-xl font-black text-rose-900">E-Visa System</h4>
-                    </div>
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-6 md:items-center">
-                      <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">Most convenient option for Indian citizens. Apply online, typically approved within 3 business days. Cost: USD 15-20.</p>
-                      <div className="flex flex-col gap-2">
-                        <p className="text-xs md:text-sm text-slate-500 font-medium">Portal: <span className="p-1 px-2 bg-slate-100 rounded-lg text-slate-700 font-mono">evisa.gov.az</span></p>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-rose-700 border border-rose-200">3 days approval</span>
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-rose-700 border border-rose-200">30 days valid</span>
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-rose-700 border border-rose-200">USD 15-20</span>
+                  <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+                    {/* Left Column: E-Visa */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <ShieldCheck className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">ASAN E-Visa System</h4>
+                        </div>
+                        <div className="space-y-4">
+                          <p className="text-base text-slate-700 font-medium leading-relaxed">
+                            The official way for Indian citizens to obtain a visa. Apply through the official <span className="text-slate-900 font-black">ASAN VISA</span> portal.
+                          </p>
+                          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
+                            <div className="grid grid-cols-2 gap-6">
+                               <div className="space-y-1">
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Processing Time</p>
+                                 <p className="text-sm font-black text-slate-900">3 Business Days</p>
+                               </div>
+                               <div className="space-y-1">
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Visa Fee</p>
+                                 <p className="text-sm font-black text-slate-900">USD $26.00</p>
+                               </div>
+                               <div className="space-y-1">
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Validity</p>
+                                 <p className="text-sm font-black text-slate-900">30 Days (Single Entry)</p>
+                               </div>
+                               <div className="space-y-1">
+                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Passport Requirement</p>
+                                 <p className="text-sm font-black text-slate-900">Valid for 6+ Months</p>
+                               </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-white p-4 md:p-5 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight">Visa Types (For Indians)</h4>
-                      <div className="space-y-3 md:space-y-4">
-                        <VisaItem type="E-Visa (Recommended)" validity="USD 15-20, 30 days, 3 working days" />
-                        <VisaItem type="Visa on Arrival" validity="USD 35-40, 30 days, at GYD Airport" />
-                      </div>
-                    </div>
-                    <div className="bg-white p-4 md:p-5 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight">Required Documents</h4>
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 gap-x-4">
-                        {["Valid passport (6 months)", "Passport photo (4x6 cm)", "Completed online form", "Email address", "Return flight ticket", "Hotel booking confirmation"].map(doc => (
-                          <li key={doc} className="flex items-center gap-2 text-sm md:text-base text-slate-600 font-medium">
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" /> {doc}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-200">
-                    <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 tracking-tight">Visa-Free Entry & Important Notes</h4>
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                      <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
-                        <h5 className="font-black text-emerald-900 text-sm mb-2">Visa-Free Countries (90 days)</h5>
-                        <div className="flex flex-wrap gap-1.5">
-                          {["Turkey", "Russia", "Ukraine", "Belarus", "Georgia", "Kazakhstan", "Kyrgyzstan", "Moldova", "Tajikistan", "Uzbekistan"].map(c => (
-                            <span key={c} className="px-2 py-1 bg-white rounded-lg border border-emerald-100 text-[10px] md:text-xs font-bold text-slate-600">{c}</span>
-                          ))}
+                    {/* Right Column: Entry & Registration */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <CheckCircle2 className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Mandatory Registration</h4>
+                        </div>
+                        <div className="space-y-4">
+                          <div className="flex gap-4">
+                             <div className="min-w-max">
+                               <span className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-black">!</span>
+                             </div>
+                             <div className="space-y-2">
+                               <h5 className="text-lg font-black text-slate-900 italic leading-tight">Registration is mandatory for stays over 15 days.</h5>
+                               <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                                 Your hotel usually handles this automatically. For private stays, register with Migration Service within 15 days.
+                               </p>
+                             </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                        <h5 className="font-black text-blue-900 text-sm mb-2">Important Notes</h5>
-                        <ul className="space-y-1.5 text-xs md:text-sm">
-                          <NoteItem text="Print your E-Visa for border control" />
-                          <NoteItem text="Registration required if staying >15 days" />
-                          <NoteItem text="Check current policies before departure" />
+
+                      <div className="space-y-6 pt-10 border-t border-slate-900/5">
+                        <div className="flex items-center gap-2 mb-4">
+                           <FileText className="w-4 h-4 text-slate-900" />
+                           <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Arrival Checklist</h5>
+                        </div>
+                        <ul className="space-y-2">
+                           {[
+                             "E-Visa copy (digital/printed)",
+                             "Passport (6+ months validity)",
+                             "Hotel booking confirmation",
+                             "Return flight ticket"
+                           ].map(item => (
+                             <li key={item} className="flex items-center gap-3 text-sm text-slate-600 font-medium">
+                               <div className="w-1 h-1 rounded-full bg-brand-green"></div>
+                               {item}
+                             </li>
+                           ))}
                         </ul>
                       </div>
                     </div>
@@ -657,102 +603,83 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
+                  className="space-y-12 w-full"
                 >
                   <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Culture & Customs</h3>
 
-                  <div className="bg-rose-50/50 p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-rose-100">
-                    <h4 className="text-lg md:text-xl font-black text-rose-900 mb-3 md:mb-4 tracking-tight">Cultural Overview</h4>
-                    <p className="text-sm md:text-lg text-slate-600 font-medium leading-relaxed">A blend of Eastern and Western influences, shaped by its position at the crossroads of civilizations. Predominantly Muslim but secular.</p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 md:p-6">
-                    <div className="bg-white p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6 md:space-y-8">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Social Etiquette</h4>
-                      <div className="space-y-4 md:space-y-6">
-                         <CultureEtiquette icon="🤝" label="Greetings" desc="Handshakes are common. Remove shoes when entering homes." />
-                         <CultureEtiquette icon="🎁" label="Hospitality" desc="Azerbaijanis are extremely hospitable. Accept tea when offered." />
-                         <CultureEtiquette icon="👗" label="Dress Code" desc="Modest in religious sites. Casual elsewhere in Baku." />
-                         <CultureEtiquette icon="🍞" label="Bread Respect" desc="Bread (lavash) is sacred—never waste or place upside down." />
-                      </div>
-                    </div>
-                    <div className="bg-white p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6 md:space-y-8">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Important Customs</h4>
-                      <div className="space-y-4 md:space-y-6">
-                        <CultureEtiquette icon="📸" label="Photography" desc="Ask before photographing people, especially women and in conservative areas." />
-                        <CultureEtiquette icon="🙏" label="Respect Elders" desc="Show respect to elderly—offer your seat, greet politely." />
-                        <CultureEtiquette icon="🚫" label="Avoid Politics" desc="Don't discuss Armenia or Nagorno-Karabakh conflict—extremely sensitive topic." />
-                        <CultureEtiquette icon="👣" label="Foot Etiquette" desc="Don't point feet at people while seated—considered disrespectful." />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Comprehensive Do's and Don'ts Section */}
-                  <div className="bg-gradient-to-br from-emerald-50/50 to-rose-50/50 p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-slate-200">
-                    <h4 className="text-lg md:text-xl font-black text-slate-900 mb-6 md:mb-8 tracking-tight text-center">Essential Do's and Don'ts</h4>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-4 md:p-6">
-                      {/* DO'S */}
-                      <div className="bg-white p-6 md:p-4 md:p-6 rounded-2xl md:rounded-3xl border border-emerald-100 shadow-sm">
-                        <div className="flex items-center gap-3 mb-4 md:mb-6">
-                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-emerald-500 flex items-center justify-center">
-                            <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                          </div>
-                          <h5 className="text-base md:text-lg font-black text-emerald-900 uppercase tracking-tight">DO's</h5>
+                  <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+                    {/* Left Column: Overview & Etiquette */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Compass className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Social Etiquette</h4>
                         </div>
-                        <ul className="space-y-3 md:space-y-4">
-                          <DoItem text="Carry your passport at all times—police may check ID" />
-                          <DoItem text="Take off shoes when entering homes and some guesthouses" />
-                          <DoItem text="Accept tea and food graciously—hospitality is deeply valued" />
-                          <DoItem text="Dress modestly outside Baku, especially in villages" />
-                          <DoItem text="Women: cover shoulders, knees; carry scarf for mosques" />
-                          <DoItem text="Respect women and elders—offer your seat in transport" />
-                          <DoItem text="Ask before photographing people" />
-                          <DoItem text="Learn basic Azerbaijani phrases—locals appreciate it" />
-                          <DoItem text="Use metered taxis or ride apps (Bolt, Uber)" />
-                          <DoItem text="Cross roads carefully—pedestrian crossings not always respected" />
-                          <DoItem text="Bring small gifts if invited to homes (sweets, chocolates)" />
-                          <DoItem text="Tip 10–15% at restaurants (appreciated but not mandatory)" />
+                        <div className="space-y-8">
+                          <p className="text-base text-slate-600 font-medium leading-relaxed">
+                            Azerbaijan is a blend of Eastern and Western influences. While progressive in Baku, traditional values remain strong in rural areas.
+                          </p>
+                          <div className="grid grid-cols-1 gap-6">
+                             <CultureEtiquette label="Greetings" desc="Handshakes are common. In rural areas, men should wait for women to offer their hand first." />
+                             <CultureEtiquette label="Hospitality" desc="Tea is the cornerstone of social life. Refusing it may be seen as impolite—at least take a few sips." />
+                             <CultureEtiquette label="Dress Code" desc="Baku is modern. However, when visiting mosques or rural areas, modest clothing (covering shoulders and knees) is essential." />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <Heart className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Local Traditions</h4>
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-8">
+                           <div className="space-y-2">
+                             <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">Tea Culture</h5>
+                             <p className="text-[13px] text-slate-600 font-medium leading-relaxed italic">Served in pear-shaped "Armudu" glasses with jam.</p>
+                           </div>
+                           <div className="space-y-2">
+                             <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">Bread Respect</h5>
+                             <p className="text-[13px] text-slate-600 font-medium leading-relaxed italic">Bread is sacred. Never place it upside down or throw it away.</p>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Do's and Don'ts */}
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <CheckCircle2 className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Essential Dos</h4>
+                        </div>
+                        <ul className="space-y-4">
+                           <DoItem text="Remove shoes when entering a local home" />
+                           <DoItem text="Ask for permission before photographing people" />
+                           <DoItem text="Offer your seat to elders or women in public transport" />
+                           <DoItem text="Negotiate prices at bazaars and with taxi drivers (non-app)" />
                         </ul>
                       </div>
 
-                      {/* DON'TS */}
-                      <div className="bg-white p-6 md:p-4 md:p-6 rounded-2xl md:rounded-3xl border border-rose-100 shadow-sm">
-                        <div className="flex items-center gap-3 mb-4 md:mb-6">
-                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-rose-500 flex items-center justify-center">
-                            <XCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                          </div>
-                          <h5 className="text-base md:text-lg font-black text-rose-900 uppercase tracking-tight">DON'TS</h5>
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
+                          <XCircle className="w-5 h-5 text-slate-900" />
+                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Essential Don'ts</h4>
                         </div>
-                        <ul className="space-y-3 md:space-y-4">
-                          <DontItem text="Don't litter—Azerbaijan is clean, locals take pride in it" />
-                          <DontItem text="Don't be rude to women—gender respect is cultural norm" />
-                          <DontItem text="Don't discuss Armenia or Nagorno-Karabakh conflict" />
-                          <DontItem text="Don't wear shoes inside homes/guesthouses" />
-                          <DontItem text="Don't photograph military installations or government buildings" />
-                          <DontItem text="Don't wear 'I ❤️ Armenia' or display Armenian symbols" />
-                          <DontItem text="Don't refuse hospitality aggressively—explain politely if needed" />
-                          <DontItem text="Don't take taxis from airport arrivals without negotiating" />
-                          <DontItem text="Don't drink excessively in public—culturally frowned upon" />
-                          <DontItem text="Don't point your feet at people when seated" />
-                          <DontItem text="Don't assume everyone speaks English outside Baku" />
-                          <DontItem text="Don't engage in loud political arguments in public" />
-                          <DontItem text="Don't waste bread (lavash)—it's sacred in culture" />
-                          <DontItem text="Don't enter mosques during prayer times unless Muslim" />
-                          <DontItem text="Don't overstay visa—can lead to fines and entry bans" />
+                        <ul className="space-y-4">
+                           <DontItem text="Don't discuss politics or sensitive regional conflicts" />
+                           <DontItem text="Don't be overly loud or affectionate in public" />
+                           <DontItem text="Don't visit religious sites during prayer in shorts/skirts" />
+                           <DontItem text="Don't point your feet at people while sitting" />
                         </ul>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
-                    <CultureFeature icon={<Smartphone className="w-5 h-5 md:w-8 md:h-8" />} title="Music & Dance" desc="UNESCO-listed Mugham music." color="purple" />
-                    <CultureFeature icon="🎨" title="Carpets" desc="Ancient carpet-weaving tradition." color="blue" />
-                    <CultureFeature icon="🕌" title="Religion" desc="Predominantly Muslim, very tolerant." color="emerald" />
-                  </div>
-
-                  <div className="bg-yellow-50/50 p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] border border-yellow-100">
-                    <h4 className="text-lg md:text-xl font-black text-yellow-900 mb-3 md:mb-4 tracking-tight">Novruz Bayram</h4>
-                    <p className="text-sm md:text-base text-slate-700 font-medium leading-relaxed">The most important holiday, celebrated on March 20-21. Experience Azerbaijan's culture at its most vibrant!</p>
+                  <div className="mt-8 p-8 bg-yellow-50 border border-yellow-100 rounded-2xl">
+                    <h4 className="text-lg font-black text-yellow-900 mb-2">💡 Cultural Note on Baku</h4>
+                    <p className="text-sm text-yellow-800 font-medium leading-relaxed">
+                      Baku is one of the most secular and progressive capitals in the Turkic world. You will see a mix of high-fashion and traditional influences, reflecting its unique position at the "Paris of the East."
+                    </p>
                   </div>
                 </motion.div>
               )}
@@ -765,96 +692,97 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                   exit={{ opacity: 0, y: -10 }}
                   className="space-y-8"
                 >
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6 tracking-tight">Food & Cuisine</h3>
+                  <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
+                    {/* Local Food Column */}
+                    <div>
+                      <div className="flex items-center gap-3 mb-6">
+                        <UtensilsCrossed className="w-5 h-5 md:w-6 md:h-6 text-amber-500" />
+                        <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Local Delicacies</h4>
+                      </div>
+                      <div className="grid grid-cols-2 c-md:grid-cols-3 gap-3 md:gap-4">
+                        <FoodItem name="Plov" desc="National saffron rice." image="/img/food/plov.png" />
+                        <FoodItem name="Dolma" desc="Stuffed grape leaves." image="/img/food/dolma.png" />
+                        <FoodItem name="Kebab" desc="Grilled succulent meats." image="/img/food/kebab.png" />
+                        <FoodItem name="Qutab" desc="Crispy filled flatbread." image="/img/food/qutab.png" />
+                        <FoodItem name="Lavangi" desc="Fish stuffed with walnuts." image="/img/food/lavangi.png" />
+                        <FoodItem name="Pakhlava" desc="Sweet layered baklava." image="/img/food/pakhlava.png" />
+                      </div>
+                    </div>
 
-                  <div className="bg-amber-50/50 p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-amber-100">
-                     <div className="flex items-center gap-4 mb-3">
-                        <UtensilsCrossed className="w-6 h-6 md:w-8 md:h-8 text-amber-500" />
-                        <h4 className="text-lg md:text-xl font-black text-amber-900">Local Cuisine</h4>
-                     </div>
-                     <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                        <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">A rich blend of Turkish, Persian, and Russian influences. Lamb, rice, and fresh herbs are staples.</p>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-amber-700 border border-amber-200">Grilled Meats</span>
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-amber-700 border border-amber-200">Saffron Rice</span>
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-amber-700 border border-amber-200">Fresh Herbs</span>
-                          <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-amber-700 border border-amber-200">Pomegranates</span>
-                        </div>
-                     </div>
+                    {/* Popular Beverages Column */}
+                    <div>
+                      <div className="flex items-center gap-3 mb-6">
+                        <span className="text-xl md:text-2xl">☕</span>
+                        <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Popular Beverages</h4>
+                      </div>
+                      <div className="grid grid-cols-2 c-md:grid-cols-3 gap-3 md:gap-4">
+                        <FoodItem name="Black Tea (Çay)" desc="National drink" image="/img/food/tea.png" />
+                        <FoodItem name="Ayran" desc="Yogurt drink" image="/img/food/ayran.png" />
+                        <FoodItem name="Pomegranate Juice" desc="Fresh & tangy" image="/img/food/pomegranate_juice.png" />
+                        <FoodItem name="Sherbet" desc="Sweet rose drink" image="/img/food/sherbet.png" />
+                        <FoodItem name="Feijoa Compote" desc="Seasonal fruit drink" image="/img/food/feijoa.png" />
+                        <FoodItem name="Mineral Water" desc="Badamli & Sirab" image="/img/food/mineral_water.png" />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-                    <FoodItem name="Plov" desc="National saffron rice with lamb." icon="🍲" />
-                    <FoodItem name="Dolma" desc="Stuffed grape leaves." icon="🫔" />
-                    <FoodItem name="Kebab" desc="Grilled succulent meats." icon="🍢" />
-                    <FoodItem name="Piti" desc="Lamb and chickpea stew." icon="🥘" />
-                    <FoodItem name="Qutab" desc="Crispy filled flatbread." icon="🥟" />
-                    <FoodItem name="Lavangi" desc="Fish stuffed with walnuts." icon="🐟" />
-                    <FoodItem name="Dovga" desc="Creamy yogurt herb soup." icon="🍵" />
-                    <FoodItem name="Shekerbura" desc="Sweet nut-filled pastry." icon="🥐" />
-                    <FoodItem name="Pakhlava" desc="Sweet layered baklava." icon="🍰" />
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                     <div className="bg-emerald-50/50 p-6 md:p-4 md:p-6 rounded-[2.5rem] border border-emerald-100 space-y-3">
-                        <div className="flex items-center gap-3 mb-2">
-                           <span className="text-2xl text-emerald-500">🍵</span>
-                           <h4 className="text-xl font-black text-emerald-900 tracking-tight">Tea Culture</h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mt-8">
+                     {/* Tea Culture */}
+                     <div className="bg-emerald-50/50 p-6 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-emerald-100 space-y-4 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-3 mb-4">
+                             <span className="text-2xl text-emerald-500">🍵</span>
+                             <h4 className="text-xl font-black text-emerald-900 tracking-tight">Tea Culture</h4>
+                          </div>
+                          <p className="text-sm text-slate-700 font-medium leading-relaxed">Tea (çay) is deeply embedded in Azerbaijani culture. It's traditionally served strong and black in "armudu" glasses, accompanied by jam or sweets.</p>
                         </div>
-                        <p className="text-sm text-slate-700 font-medium leading-relaxed">Tea (çay) is deeply embedded in Azerbaijani culture and is served in pear-shaped glasses called "armudu." It's traditionally served strong and black, accompanied by jam, sugar cubes, or sweets.</p>
-                        <p className="text-[10px] text-emerald-600 font-black italic bg-white/50 p-3 rounded-xl border border-emerald-100">Tea houses (çayxana) are social hubs where locals gather to drink tea, play backgammon, and socialize. A visit to a traditional tea house is essential!</p>
+                        <p className="text-[10px] text-emerald-600 font-black italic bg-white/50 p-3 rounded-xl border border-emerald-100">Tea houses (çayxana) are social hubs where locals gather to socialize and play backgammon.</p>
                      </div>
-                     <div className="bg-rose-50/50 p-6 md:p-4 md:p-6 rounded-[2.5rem] border border-rose-100 space-y-3">
-                        <div className="flex items-center gap-3 mb-2">
+
+                     {/* Dining Etiquette */}
+                     <div className="bg-rose-50/50 p-6 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-rose-100 space-y-4">
+                        <div className="flex items-center gap-3 mb-4">
                            <span className="text-2xl text-rose-500">🍽️</span>
                            <h4 className="text-xl font-black text-rose-900 tracking-tight">Dining Etiquette</h4>
                         </div>
                         <ul className="space-y-3">
                           {[
-                            "Meals are social events; take your time, enjoy conversations",
-                            "Bread (lavash) is sacred—never waste or place upside down",
-                            "Guests receive the best portions; graciously accept",
-                            "Tipping: 10–15% appreciated but not mandatory",
-                            "Most restaurants open 12 PM–11 PM; some close between lunch/dinner"
+                            "Meals are social events; take your time",
+                            "Bread (lavash) is sacred—never waste it",
+                            "Guests receive the best portions",
+                            "Tipping: 10–15% is appreciated",
+                            "Most restaurants open 12 PM–11 PM"
                           ].map(rule => (
-                            <li key={rule} className="flex gap-2 text-base text-slate-700 font-medium">
+                            <li key={rule} className="flex gap-2 text-sm text-slate-700 font-medium">
                               <span className="text-rose-500">•</span> {rule}
                             </li>
                           ))}
                         </ul>
                      </div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                    <div className="bg-white p-6 md:p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <h4 className="text-lg md:text-xl font-black text-slate-900 mb-4 tracking-tight">Popular Beverages</h4>
-                      <div className="grid grid-cols-2 gap-3 md:gap-4">
-                        <BeverageItem name="Black Tea (Çay)" desc="National drink" icon="☕" />
-                        <BeverageItem name="Ayran" desc="Yogurt drink" icon="🧃" />
-                        <BeverageItem name="Pomegranate Juice" desc="Fresh & tangy" icon="🧃" />
-                        <BeverageItem name="Sherbet" desc="Sweet rose drink" icon="🍹" />
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white p-6 md:p-4 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
-                      <div className="flex items-center gap-2 mb-4">
-                         <span className="text-xl md:text-2xl">🍽️</span>
-                         <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Where to Eat</h4>
-                      </div>
-                      <div className="space-y-3">
-                          <div>
-                            <h5 className="font-black text-slate-900 text-xs md:text-sm mb-1">Restaurants</h5>
-                            <p className="text-xs md:text-sm text-slate-600 font-medium">Modern/Traditional. ₼15-40.</p>
-                         </div>
-                         <div>
-                            <h5 className="font-black text-slate-900 text-xs md:text-sm mb-1">Cafes</h5>
-                            <p className="text-xs md:text-sm text-slate-600 font-medium">Perfect for tea. Budget-friendly.</p>
-                         </div>
-                         <div>
-                            <h5 className="font-black text-slate-900 text-xs md:text-sm mb-1">Street Food</h5>
-                            <p className="text-xs md:text-sm text-slate-600 font-medium">Qutab & snacks. Safe & local.</p>
-                         </div>
-                      </div>
-                    </div>
+
+                     {/* Where to Eat */}
+                     <div className="bg-white p-6 md:p-6 rounded-3xl md:rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-6">
+                             <span className="text-xl md:text-2xl">🍽️</span>
+                             <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Where to Eat</h4>
+                          </div>
+                          <div className="space-y-4">
+                              <div>
+                                <h5 className="font-black text-slate-900 text-xs md:text-sm mb-1 uppercase tracking-tighter">Restaurants</h5>
+                                <p className="text-xs text-slate-600 font-medium">Modern/Traditional. ₼15-40.</p>
+                              </div>
+                              <div>
+                                <h5 className="font-black text-slate-900 text-xs md:text-sm mb-1 uppercase tracking-tighter">Cafes</h5>
+                                <p className="text-xs text-slate-600 font-medium">Perfect for tea. Budget-friendly.</p>
+                              </div>
+                              <div>
+                                <h5 className="font-black text-slate-900 text-xs md:text-sm mb-1 uppercase tracking-tighter">Street Food</h5>
+                                <p className="text-xs text-slate-600 font-medium">Qutab & snacks. Safe & local.</p>
+                              </div>
+                          </div>
+                        </div>
+                     </div>
                   </div>
                 </motion.div>
               )}
@@ -978,11 +906,24 @@ const CultureFeature = ({ icon, title, desc, color }) => {
   );
 };
 
-const FoodItem = ({ name, desc, icon }) => (
-  <div className="p-4 md:p-4 md:p-6 bg-white border border-slate-100 rounded-2xl md:rounded-[2rem] shadow-sm text-center group hover:shadow-md transition-all duration-300">
-    <span className="text-2xl md:text-4xl block mb-2 md:mb-4 group-hover:scale-110 transition-transform">{icon}</span>
-    <h5 className="font-black text-slate-900 text-[10px] md:text-sm mb-1 uppercase tracking-tighter">{name}</h5>
-    <p className="text-[9px] md:text-xs text-slate-500 font-medium leading-tight md:leading-relaxed">{desc}</p>
+const FoodItem = ({ name, desc, image }) => (
+  <div className="relative aspect-square rounded-2xl md:rounded-[2rem] overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/10">
+    <Image 
+      src={image} 
+      alt={name} 
+      fill 
+      sizes="(max-width: 768px) 33vw, 20vw"
+      className="object-cover group-hover:scale-110 transition-transform duration-700" 
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-100 transition-opacity duration-300" />
+    <div className="absolute inset-x-0 bottom-0 p-3 md:p-4 transform transition-transform duration-300 group-hover:-translate-y-1">
+      <h5 className="font-black text-white text-[11px] md:text-xs mb-0.5 uppercase tracking-tight leading-tight drop-shadow-md">
+        {name}
+      </h5>
+      <p className="text-[10px] md:text-[11px] text-white/90 font-medium leading-tight line-clamp-2 drop-shadow-sm">
+        {desc}
+      </p>
+    </div>
   </div>
 );
 

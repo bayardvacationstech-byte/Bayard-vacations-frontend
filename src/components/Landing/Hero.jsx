@@ -94,22 +94,22 @@ const Hero = () => {
             <h1
               className="
       mt-2
-      
-      text-2xl sm:text-4xl lg:text-5xl
+      text-xl sm:text-3xl md:text-4xl lg:text-5xl
       font-extrabold
       tracking-tight
       text-white
       drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]
       font-nord
       max-w-6xl mx-auto
-      leading-[1.1]
+      leading-tight sm:leading-[1.1]
+      px-2
     "
             >
               Every journey deserves to feel <span className="from-yellow-400 to-yellow-500">personal</span>.   
             </h1>
             <p 
               style={{ color: '#fbfbfbff' }}
-              className="mt-6 text-[10px] sm:text-lg font-medium tracking-wide drop-shadow-sm max-w-fit mx-auto leading-relaxed bg-white/10 backdrop-blur-md px-4 py-1 rounded-xl border border-white/20 shadow-lg"
+              className="hidden sm:block mt-3 sm:mt-6 text-[9px] sm:text-base md:text-lg font-medium tracking-wide drop-shadow-sm max-w-fit mx-auto leading-relaxed bg-white/10 backdrop-blur-md px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl border border-white/20 shadow-lg"
             >
                Thoughtfully designed itineraries, trusted support, and seamless experiences
             </p>
@@ -117,7 +117,7 @@ const Hero = () => {
 
           {/* Search Bar */}
           {/* ================= SEARCH BAR ================= */}
-          <div className="relative w-3/4 mx-auto z-20">
+          <div className="relative w-4/5 sm:w-3/4 mx-auto z-20 px-2 sm:px-0">
             {/* -------- MOBILE SEARCH -------- */}
             <div className="sm:hidden">
               <MobileSearch />
@@ -349,8 +349,8 @@ const Hero = () => {
           </Link>
         </div>
 
-        {/* Mobile Action Buttons - Absolute Bottom */}
-        <div className="sm:hidden absolute bottom-[85px] left-0 right-0 px-4 z-40 flex gap-3 w-full max-w-md mx-auto">
+        {/* Mobile Action Buttons - Below Stats */}
+        <div className="sm:hidden relative z-40 flex gap-3 w-full px-4 mt-8 pb-6">
           <Link 
             href="/explore"
             className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 backdrop-blur-md px-5 py-3.5 rounded-2xl text-white hover:from-blue-500 hover:to-blue-600 transition-all shadow-[0_8px_30px_rgba(37,99,235,0.4)] hover:shadow-[0_8px_40px_rgba(37,99,235,0.6)] hover:scale-[1.02]"
@@ -373,51 +373,56 @@ const Hero = () => {
           style={{ background: 'linear-gradient(to bottom, #001233 0%, #0046b8 100%)' }}
           className="text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
         >
-          <div className="flex flex-row items-center justify-between py-3 sm:py-8 px-2 sm:px-12 max-w-7xl mx-auto gap-1.5 sm:gap-6 overflow-x-auto no-scrollbar mask-fade-sides">
+          <div className="grid grid-cols-3 sm:flex sm:flex-row sm:items-center sm:justify-between py-4 sm:py-8 px-3 sm:px-12 max-w-7xl mx-auto gap-3 gap-y-4 sm:gap-6">
             
             {/* Review Badge */}
-            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0 bg-white/5 px-2 sm:px-4 py-1.5 sm:py-3 rounded-xl sm:rounded-2xl border border-white/10">
+            <a 
+              href="https://www.google.com/search?sca_esv=bfc79b9b44160e7b&sxsrf=ANbL-n6D9k58mEqPkUW7KDcYQUSUWWZaFw:1768213761642&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOdIhnvGyPmjx2iWMPrXQmOMDb7y8i0hQYnbD65r7JPZU7-dfoSXAN8GKo3S4xUILSWr5tzKc1Yf8_4j7sf887yPWbseRs4slYUwZZga9TnZ773fENw%3D%3D&q=Bayard+Vacations+Reviews&sa=X&ved=2ahUKEwjX75jJ5YWSAxXKa2wGHdDwF7YQQ0bkNegQIPhAE&biw=1792&bih=913&dpr=2&aic=0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-row items-center justify-center gap-1 sm:gap-3 shrink-0 bg-white/5 px-2 sm:px-4 py-1 sm:py-3 rounded-lg sm:rounded-2xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group/badge col-span-1 sm:col-auto"
+            >
               <Image
                 src={ReviewCompanies}
                 alt="Google"
-                className="h-6 sm:h-12 w-auto"
+                className="h-5 sm:h-12 w-auto group-hover/badge:scale-105 transition-transform duration-300"
               />
-              <div className="flex items-center gap-0.5 sm:gap-1.5 font-black">
-                <span className="text-base sm:text-3xl font-black text-white leading-none">4.9</span>
-                <Star className="size-3.5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
+              <div className="flex items-center gap-0.5 sm:gap-1.5 font-black group-hover/badge:translate-x-0.5 transition-transform duration-300">
+                <span className="text-sm sm:text-3xl font-black text-white leading-none">4.9</span>
+                <Star className="size-2.5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
-            </div>
+            </a>
 
             {/* Travelers */}
-            <div className="flex flex-col items-center justify-center text-center shrink-0">
-              <span className="text-base sm:text-3xl font-black text-white leading-none">15k+</span>
-              <span className="text-[9px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Travelers</span>
+            <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
+              <span className="text-sm sm:text-3xl font-black text-white leading-none">15k+</span>
+              <span className="text-[8px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Travelers</span>
             </div>
 
             {/* Itineraries */}
-            <div className="flex flex-col items-center justify-center text-center shrink-0">
-              <span className="text-base sm:text-3xl font-black text-white leading-none">1000+</span>
-              <span className="text-[9px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
+            <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
+              <span className="text-sm sm:text-3xl font-black text-white leading-none">1000+</span>
+              <span className="text-[8px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
             </div>
 
             {/* AI Assistant */}
-            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
-              <div className="h-7 w-7 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
-                <Sparkles className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-3 shrink-0 col-span-1 sm:col-auto">
+              <div className="h-6 w-6 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
+                <Sparkles className="w-3 h-3 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div className="leading-tight">
-                <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">AI ASSISTANT</span>
+              <div className="leading-tight text-center sm:text-left">
+                <span className="block text-[8px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
                 <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white/90 tracking-wider mt-1">Instant Ideas</span>
               </div>
             </div>
 
             {/* 24/7 Support */}
-            <div className="flex flex-row items-center justify-center gap-1.5 sm:gap-3 shrink-0">
-              <div className="h-7 w-7 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10">
-                <Phone className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-3 shrink-0 col-span-1 sm:col-auto">
+              <div className="h-6 w-6 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
+                <Phone className="w-3 h-3 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div className="leading-tight">
-                <span className="block text-[9px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">24/7</span>
+              <div className="leading-tight text-center sm:text-left">
+                <span className="block text-[8px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
                 <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white/90 uppercase tracking-tighter mt-1 whitespace-nowrap">Assistance</span>
               </div>
             </div>

@@ -60,7 +60,7 @@ const CommonCarousel = ({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div className="flex-1">
           {title && <h2 className="section-title-light mb-2">{title}</h2>}
-          {subtitle && <p className="section-subtitle-light">{subtitle}</p>}
+          {subtitle && <p className="section-subtitle-light hidden sm:block">{subtitle}</p>}
         </div>
 
         {viewAllLink && (
