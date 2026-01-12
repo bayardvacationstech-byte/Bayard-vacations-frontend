@@ -208,11 +208,12 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                   Things To Do
                 </span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-                Top Activities in{" "}
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+                <span className="hidden sm:inline">Top Activities in </span>
+                <span className="inline sm:hidden">Activities in </span>
                 <span className="text-brand-green capitalize">{regionName}</span>
               </h2>
-              <p className="text-xl text-slate-600">
+              <p className="hidden sm:block text-xl text-slate-600 truncate md:whitespace-normal">
                 Adventure awaits! Discover exciting activities and unforgettable experiences
               </p>
             </div>

@@ -116,11 +116,12 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
               Must-Do Experiences
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
-            Experience{" "}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+            <span className="hidden sm:inline">Experience </span>
+            <span className="inline sm:hidden">Highlights of </span>
             <span className="text-brand-green capitalize">{regionName}</span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto truncate md:whitespace-normal">
             Discover unique experiences that make {regionName} unforgettable
           </p>
         </div>
@@ -240,7 +241,7 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
             {/* Image Counter */}
             <div className="absolute top-4 left-4 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md z-10">
               <p className="text-white font-bold text-sm">
-                {currentImageIndex + 1} / {galleryImages.length}
+                {currentLightboxImageIndex + 1} / {galleryImages.length}
               </p>
             </div>
 

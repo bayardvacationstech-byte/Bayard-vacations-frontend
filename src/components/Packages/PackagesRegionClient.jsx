@@ -46,6 +46,7 @@ import WhyBayardVacations from "@/components/Packages/WhyBayardVacations";
 import { featuredBlogs } from "@/data/testBlogData";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination as SwiperPagination, Autoplay } from "swiper/modules";
+import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
 
 // Swiper styles
 import "swiper/css";
@@ -387,7 +388,7 @@ export default function PackagesRegionClient() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="w-full mt-8"
+              className="w-full mt-20"
             >
               <RegionStats regionData={regionData} />
             </motion.div>
@@ -419,7 +420,7 @@ export default function PackagesRegionClient() {
         )}
       </section>
 
-      <section className="relative z-30 py-4 md:py-6 bg-gradient-to-br from-orange-50 via-blue-50 to-white">
+      <section className="relative z-30 py-2 md:py-6 bg-gradient-to-br from-orange-50 via-blue-50 to-white">
         <Container>
           {/* Debug: Log region data to console */}
           {regionData && console.log('Region Data:', regionData)}
@@ -432,13 +433,13 @@ export default function PackagesRegionClient() {
       </section>
 
       {/* Filters and Content Section Wrapper */}
-      <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white pt-4 md:pt-6 relative">
+      <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white pt-2 md:pt-6 relative">
         {/* Sticky Glassy Filter Card / Nav - Responsive */}
         <div className={cn(
           "sticky top-20 c-md:top-24 z-50 mb-4 w-full max-w-4xl mx-auto px-4 transition-all duration-300",
           !showSectionNav && "hidden c-md:block" // Hide on mobile if not showing nav
         )}>
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-white/20 overflow-hidden">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 overflow-hidden">
               <AnimatePresence mode="popLayout">
                 {isMounted && (
                   !showSectionNav ? (
@@ -587,17 +588,15 @@ export default function PackagesRegionClient() {
           <div className="c-md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[280px] px-4 pointer-events-none">
             <Button
               onClick={handleOpenFilterMenu}
-              className="w-full pointer-events-auto flex items-center justify-center gap-3 h-14 text-sm font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 group"
+              className="w-4/5 pointer-events-auto flex items-center justify-center gap-2 h-12 text-xs font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 mx-auto"
             >
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:rotate-180 transition-transform duration-500">
-                <SlidersVertical className="w-4 h-4 text-white" />
-              </div>
-              <span className="uppercase tracking-widest">Tune Search</span>
+              <SlidersVertical className="w-4 h-4 text-white" />
+              <span className="uppercase tracking-wide">Filters</span>
             </Button>
           </div>
 
           {/* Main Content: Package Grid and Pagination - Full Width */}
-          <div className="w-full pb-4" id="packages" ref={packagesRef}>
+          <div className="w-full pb-2" id="packages" ref={packagesRef}>
             {/* Package Cards Grid */}
             {!isMounted || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
               // Loading State - Show skeleton cards
@@ -611,7 +610,7 @@ export default function PackagesRegionClient() {
                 ))}
               </div>
             ) : paginatedArray.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-4 md:mb-12">
                 {paginatedArray.map((item) => (
                   <PackageCard key={item.id} item={item} />
                 ))}
@@ -635,7 +634,7 @@ export default function PackagesRegionClient() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-12">
+              <div className="flex justify-center mt-4 md:mt-12">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
@@ -683,14 +682,14 @@ export default function PackagesRegionClient() {
 
         {/* Recommended Packages Carousel */}
       {packagesWithOffers.length > 0 && (
-        <section className="bg-white pt-8 pb-2 md:py-8 border-t border-slate-100" id="recommended">
+        <section className="bg-white pt-3 pb-0 md:pt-8 md:pb-2 border-t border-slate-100" id="recommended">
           <Container>
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-3 md:mb-8">
               <div>
-                <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight">
                   Signature Collections
                 </h2>
-                <p className="text-xl text-slate-600 font-medium max-w-2xl">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
                   Handpicked signatures and top-rated escapes in <span className="text-brand-green font-bold capitalize">{placeName}</span>
                 </p>
               </div>
@@ -718,7 +717,7 @@ export default function PackagesRegionClient() {
                   640: { slidesPerView: 2, spaceBetween: 24 },
                   1024: { slidesPerView: 4, spaceBetween: 24 },
                 }}
-                className="pb-8"
+                className="pb-4"
               >
               {packagesWithOffers.slice(0, 6).map((item) => (
                 <SwiperSlide key={`rec-${item.id}`}>
@@ -730,6 +729,13 @@ export default function PackagesRegionClient() {
           </Container>
         </section>
     )}
+
+    {/* Advertisement Banner Section */}
+    <section className="bg-white py-4 md:py-8 px-4 md:px-6">
+      <Container>
+        <AdvertisementBanner />
+      </Container>
+    </section>
 
     {/* Why Choose Section */}
     <div id="why-choose">
@@ -763,14 +769,14 @@ export default function PackagesRegionClient() {
     </div>
 
     {/* Related Blogs Carousel */}
-      <section className="bg-slate-50 py-4" id="blogs">
+      <section className="bg-slate-50 py-2 md:py-4" id="blogs">
         <Container>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-3 md:mb-12">
             <div>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
                 Travel Stories &amp; Tips
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
                 Get inspired for your next adventure to{" "}
                 <span className="text-brand-green font-bold capitalize">{placeName}</span>
               </p>
@@ -837,14 +843,14 @@ export default function PackagesRegionClient() {
 
       {/* Related Packages Section */}
       {packagesWithOffers.length > 0 && (
-        <section className="bg-gradient-to-b from-slate-50 to-white py-12 md:py-16" id="related-packages">
+        <section className="bg-gradient-to-b from-slate-50 to-white py-4 md:py-16" id="related-packages">
           <Container>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-3 md:mb-12">
               <div>
-                <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
                   You Might Also Like
                 </h2>
-                <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl">
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
                   Discover more incredible destinations and experiences tailored for you
                 </p>
               </div>

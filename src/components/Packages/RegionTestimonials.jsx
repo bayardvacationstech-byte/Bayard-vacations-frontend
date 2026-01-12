@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin } from "lucide-react";
 import Container from "../ui/Container";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function RegionTestimonials() {
   const [reviews, setReviews] = useState([]);
@@ -51,7 +52,11 @@ export default function RegionTestimonials() {
       author_name: "Sarah Mitchell",
       text: "Our trip to Azerbaijan was absolutely flawless. The itinerary was perfectly balanced between culture and adventure.",
       relative_time_description: "2m ago",
-      rating: 5
+      rating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1523438097204-5447bcad5ce7?q=80&w=400&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1565024108848-6a3628e83348?q=80&w=400&auto=format&fit=crop"
+      ]
     },
     {
       author_name: "James Wilson",
@@ -63,7 +68,12 @@ export default function RegionTestimonials() {
       author_name: "Elena Rodriguez",
       text: "The 'Land of Fire' took our breath away. Walking through the Old City of Baku felt like stepping back in time!",
       relative_time_description: "12m ago",
-      rating: 5
+      rating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?q=80&w=400&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1518134454641-523c6c19208a?q=80&w=400&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1527018601619-a508a2fe0261?q=80&w=400&auto=format&fit=crop"
+      ]
     },
     {
       author_name: "David Chen",
@@ -75,7 +85,10 @@ export default function RegionTestimonials() {
       author_name: "Aisha Khan",
       text: "A truly immersive cultural experience. The culinary tour in Sheki was a highlight—the Piti and Halva were unforgettable.",
       relative_time_description: "25m ago",
-      rating: 5
+      rating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400&auto=format&fit=crop"
+      ]
     },
     {
       author_name: "Robert Taylor",
@@ -93,7 +106,10 @@ export default function RegionTestimonials() {
       author_name: "Linda Thompson",
       text: "Incredible views in Shusha. The history is so rich and the locals are the most hospitable people I've met.",
       relative_time_description: "2h ago",
-      rating: 5
+      rating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400&auto=format&fit=crop"
+      ]
     }
   ];
 
@@ -151,7 +167,7 @@ export default function RegionTestimonials() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-36 pb-12 md:py-16 lg:h-[90vh] lg:min-h-[700px] overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-8 pb-8 md:pt-16 md:pb-24 lg:min-h-[750px] overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
         <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-brand-light-cyan/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -159,11 +175,11 @@ export default function RegionTestimonials() {
 
       <Container className="relative z-10 h-full flex flex-col lg:justify-center">
         {/* Section Header */}
-        <div className="mb-8 md:mb-12 text-center lg:text-left">
-          <h2 className="text-white text-3xl md:text-5xl font-black tracking-tight leading-tight">
+        <div className="mb-4 md:mb-12 text-center lg:text-left">
+          <h2 className="text-white text-2xl sm:text-3xl md:text-5xl font-black tracking-tight leading-tight">
             Guest <span className="text-blue-400">Stories</span>
           </h2>
-          <p className="text-white/60 text-sm md:text-base font-medium mt-2">Real experiences shared by our globetrotters</p>
+          <p className="text-white/60 text-sm md:text-base font-medium mt-2 truncate md:whitespace-normal">Real experiences shared by our globetrotters</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start w-full">
@@ -343,6 +359,23 @@ export default function RegionTestimonials() {
                         <Star key={i} className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
                       ))}
                     </div>
+
+                    {/* Optional Review Images */}
+                    {review.images && review.images.length > 0 && (
+                      <div className="flex gap-2 mt-2 overflow-x-auto pb-1 no-scrollbar group-even:flex-row-reverse group-even:justify-start">
+                        {review.images.map((img, i) => (
+                          <div key={i} className="relative w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden shrink-0 border border-white/20 shadow-sm">
+                            <Image
+                              src={img}
+                              alt={`Review image ${i + 1}`}
+                              fill
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -351,12 +384,29 @@ export default function RegionTestimonials() {
             </div>
             
             {/* Participation Banner */}
-            <div className="relative lg:absolute lg:bottom-6 lg:left-1/2 lg:-translate-x-1/2 z-30 w-[95%] lg:w-[90%] mx-auto mt-6 lg:mt-0">
-              <div className="bg-blue-600 rounded-full px-5 py-3 md:px-8 md:py-4 flex items-center justify-between shadow-2xl shadow-blue-600/20">
-                <span className="text-white text-[9px] md:text-[11px] font-black uppercase tracking-widest leading-none">What our guests say</span>
-                <button className="bg-white text-blue-600 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full hover:bg-white/90 transition-colors whitespace-nowrap">
+            <div className="w-full mt-6 md:mt-10 lg:mt-12 relative z-30">
+              {/* Desktop Banner with Text */}
+              <div className="hidden md:flex bg-blue-600/90 backdrop-blur-md rounded-full px-10 py-6 items-center justify-between gap-4 shadow-2xl shadow-blue-900/40 border border-white/10 max-w-4xl mx-auto">
+                <div className="text-center md:text-left">
+                  <span className="text-white text-[11px] font-black uppercase tracking-[0.3em] block mb-1">Authentic Experiences</span>
+                  <p className="text-white/80 text-sm font-medium leading-snug">Join 5,000+ happy travelers who explored Azerbaijan with us.</p>
+                </div>
+                <Link 
+                  href="/reviews"
+                  className="bg-white text-blue-600 text-xs font-black uppercase tracking-widest px-8 py-3.5 rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
+                >
                   Read All Reviews
-                </button>
+                </Link>
+              </div>
+
+              {/* Mobile Button Only */}
+              <div className="md:hidden px-4">
+                <Link 
+                  href="/reviews"
+                  className="w-full block bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-wide px-6 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-center"
+                >
+                  Read All Reviews
+                </Link>
               </div>
             </div>
           </div>

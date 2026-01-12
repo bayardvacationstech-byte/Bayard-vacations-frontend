@@ -27,7 +27,7 @@ export default function StartJourney() {
               <span className="text-brand-blue">go next?</span>
             </h2>
             
-            <p className="section-subtitle-light mb-8 max-w-lg">
+            <p className="section-subtitle-light hidden sm:block mb-8 max-w-lg">
              Your journey starts with trust and ends with unforgettable experiences. Let us plan your perfect trip while you enjoy every moment.
             </p>
             

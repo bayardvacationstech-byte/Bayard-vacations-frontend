@@ -604,8 +604,8 @@ const Holidays = ({
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-8">
         <div className="flex-1">
-          <h2 className="section-title-light mb-0 md:mb-2">Signature Collections</h2>
-          <p className="section-subtitle-light hidden md:block">Hand-picked hotspots our travelers are loving right now</p>
+          <h2 className="section-title-light mb-1 md:mb-2">Signature Collections</h2>
+          <p className="section-subtitle-light hidden sm:block text-xs sm:text-sm md:text-base">Hand-picked hotspots our travelers are loving right now</p>
         </div>
 
         {/* Tab Switcher - Same as ExploreDestinations */}

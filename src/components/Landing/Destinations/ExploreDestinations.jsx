@@ -38,9 +38,9 @@ export default function ExploreDestinations({ initialRegions }) {
   return (
     <Container className="sm:px-5">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-8">
-        <div>
-          <h2 className="section-title-light mb-0 md:mb-2">Trending Destinations</h2>
-          <p className="section-subtitle-light hidden md:block">Hand-picked hotspots our travelers are loving right now</p>
+        <div className="w-full md:w-auto">
+          <h2 className="section-title-light mb-1 md:mb-2">Trending Destinations</h2>
+          <p className="section-subtitle-light hidden sm:block text-xs sm:text-sm md:text-base">Hand-picked hotspots our travelers are loving right now</p>
         </div>
 
         {/* Tab Switcher */}
