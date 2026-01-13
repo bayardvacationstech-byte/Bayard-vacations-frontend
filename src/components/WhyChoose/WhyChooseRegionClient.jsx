@@ -23,6 +23,7 @@ import {
   Mountain,
   ChevronUp,
   ChevronRight,
+  Info,
   X
 } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -30,6 +31,7 @@ import { Button } from "@/components/ui/button";
 import ActivityCard from "@/components/ui/ActivityCard";
 import GalleryCarousel from "@/components/ui/GalleryCarousel";
 import WhyBayardVacations from "@/components/Packages/WhyBayardVacations";
+import { cn } from "@/lib/utils";
 
 export default function WhyChooseRegionClient({ regionSlug }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -47,63 +49,139 @@ export default function WhyChooseRegionClient({ regionSlug }) {
       whyVisit: "Venture into a land where East truly meets West. Azerbaijan captivates with its unique blend of Persian, Turkish, and Soviet influences, all set against a backdrop of diverse landscapes ranging from semi-deserts to the snow-capped Caucasus Mountains.",
       highlights: [
         { 
-          title: "Land of Fire", 
-          description: "Witness the eternal natural flames of Yanar Dag and the ancient Ateshgah Fire Temple.", 
+          slug: "ancient-wonders",
+          title: "Ancient Wonders", 
+          description: "Step back in time through millennia of history, from prehistoric rock art to medieval palaces.", 
           icon: Sparkles,
+          detailedContent: "Azerbaijan is a treasure trove of ancient history. From the 40,000-year-old petroglyphs in Gobustan to the Maiden Tower in Baku, the country offers a unique portal into the civilizations that shaped the Caucasus. Experience the intersection of Zoroastrianism, Islam, and early Christianity in one land.",
+          keyFacts: [
+            "Gobustan Reserve features over 6,000 rock engravings dating back to the Upper Paleolithic.",
+            "Icherisheher (Old City) is the first location in Azerbaijan to be classified as a UNESCO World Heritage Site.",
+            "The Ateshgah Fire Temple was a pilgrimage site for centuries for fire-worshippers."
+          ],
           gallery: [
-            { url: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=1200", caption: "Yanar Dag - The Burning Mountain with eternal flames" },
-            { url: "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1200", caption: "Ateshgah Fire Temple - Ancient Zoroastrian worship site" },
-            { url: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200", caption: "Natural gas flames burning continuously for centuries" }
+            { url: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=1200", caption: "Ancient stone structures and historical ruins" },
+            { url: "https://images.unsplash.com/photo-1534349762230-e0cadf78f505?w=1200", caption: "Icherisheher - The medieval heart of Baku" },
+            { url: "https://images.unsplash.com/photo-1543833078-4389945037be?w=1200", caption: "Maiden Tower - A mysterious symbol of history" }
           ]
         },
         { 
-          title: "Mud Volcanoes", 
-          description: "Explore the surreal landscape of Gobustan, home to nearly half of the world's mud volcanoes.", 
+          slug: "mountain-peaks",
+          title: "Mountain Peaks", 
+          description: "Conquer the majestic Great Caucasus Mountains and discover hidden alpine villages.", 
+          icon: Mountain,
+          detailedContent: "The Great Caucasus range defines the northern border of Azerbaijan, offering some of Europe's most dramatic and pristine mountain scenery. Whether it's the snow-capped peaks of Shahdag or the isolated village of Khinalug, the mountains are a paradise for hikers and winter sports enthusiasts.",
+          keyFacts: [
+            "Mount Bazarduzu is the highest peak in Azerbaijan, rising to 4,466 meters.",
+            "Khinalug is one of the highest continuously inhabited villages in Europe.",
+            "Shahdag and Tufandag resorts offer world-class skiing and winter adventure."
+          ],
+          gallery: [
+            { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200", caption: "The breathtaking majesty of the Caucasus Mountains" },
+            { url: "https://images.unsplash.com/photo-1520113232658-f913d8283f1d?w=1200", caption: "Mountain vistas and alpine resorts" },
+            { url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200", caption: "Remote mountain trails and peaks" }
+          ]
+        },
+        { 
+          slug: "cultural-heritage",
+          title: "Cultural Heritage", 
+          description: "Experience a unique blend of Eastern traditions and Western influences in dance, music, and art.", 
           icon: Globe,
+          detailedContent: "Azerbaijan's culture is a vibrant tapestry woven from Persian, Turkic, Russian, and Soviet influences. From the soulful melodies of Mugham music to the intricate patterns of Azerbaijani carpets, the nation's heritage is preserved and celebrated with immense pride.",
+          keyFacts: [
+            "Mugham is recognized by UNESCO as a Masterpiece of the Oral and Intangible Heritage of Humanity.",
+            "Azerbaijani carpet weaving is an ancient art passed down through generations.",
+            "The country was the first in the Islamic world to establish a democratic republic and an opera house."
+          ],
           gallery: [
-            { url: "https://images.unsplash.com/photo-1542382156909-9ae37b3f56fd?w=1200", caption: "Gobustan mud volcanoes - A surreal landscape" },
-            { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200", caption: "Bubbling mud pools in the volcanic fields" },
-            { url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200", caption: "Ancient geological formations" }
+            { url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200", caption: "Traditional architecture and decorative arts" },
+            { url: "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1200", caption: "Historical cultural sites and monuments" },
+            { url: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1200", caption: "Intricate frescoes and stained glass heritage" }
           ]
         },
         { 
-          title: "Baku Skyline", 
-          description: "Marvel at the iconic Flame Towers, a symbol of Azerbaijan's modern energy and architectural prowess.", 
-          icon: Camera,
+          slug: "scenic-beauty",
+          title: "Scenic Beauty", 
+          description: "From semi-deserts to lush forests and emerald lakes, explore Azerbaijan's diverse landscapes.", 
+          icon: Trees,
+          detailedContent: "With 9 out of 11 climate zones existing within its borders, Azerbaijan offers an incredible variety of natural scenery. Explore the 'Iron Trees' of Hirkan National Park, the emerald waters of Lake Noyur, or the surreal mud volcanoes of Gobustan.",
+          keyFacts: [
+            "Hirean National Park is home to the rare Persian Leopard and ancient Iron Trees.",
+            "Goygol Lake is considered the most beautiful lake in Azerbaijan, formed by an earthquake in 1139.",
+            "The country contains nearly half of the world's mud volcanoes."
+          ],
           gallery: [
-            { url: "https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=1200", caption: "Flame Towers illuminated at night" },
-            { url: "https://images.unsplash.com/photo-1523438097201-512ae7d59c44?w=1200", caption: "Baku Boulevard along the Caspian Sea" },
-            { url: "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=1200", caption: "Modern Baku skyline at sunset" }
+            { url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200", caption: "Pristine lakes and lush landscapes" },
+            { url: "https://images.unsplash.com/photo-1542382156909-9ae37b3f56fd?w=1200", caption: "Dramatic natural formations" },
+            { url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200", caption: "Serene forests and natural parks" }
           ]
         },
         { 
-          title: "Caspian Riviera", 
-          description: "Enjoy the luxury and breeze of the Baku Boulevard, stretching along the world's largest inland sea.", 
+          slug: "paradise-beach",
+          title: "Paradise Beach", 
+          description: "Relax on the sunny shores of the Caspian Sea, the world's largest inland body of water.", 
           icon: MapPin,
+          detailedContent: "The Absheron Peninsula is dotted with resorts and beach clubs that come alive during the summer. Whether you're looking for luxury beach retreats or quiet shores to watch the sunset over the Caspian Sea, Azerbaijan's coast offers a unique 'sea and sun' experience.",
+          keyFacts: [
+            "The Caspian Sea is technically the world's largest lake, but feels like an ocean.",
+            "Baku Boulevard is one of the longest seaside promenades globally.",
+            "Sea breeze from the Caspian keeps Baku relatively mild even in the height of summer."
+          ],
           gallery: [
-            { url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200", caption: "Baku Boulevard - Seaside promenade" },
-            { url: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200", caption: "Caspian Sea coastline" },
-            { url: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=1200", caption: "Luxury hotels along the waterfront" }
+            { url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200", caption: "Golden sands and blue waters of the Caspian" },
+            { url: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200", caption: "Seaside resorts and coastline views" },
+            { url: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=1200", caption: "Luxury waterfront experiences" }
           ]
         },
         { 
-          title: "Ancient Silk Road", 
-          description: "Walk through the cobblestone streets of Sheki and visit the exquisite Khan's Summer Palace.", 
-          icon: Star,
+          slug: "adventure-awaits",
+          title: "Adventure Awaits", 
+          description: "Push your limits with off-road expeditions, paragliding, or hiking in the wild.", 
+          icon: Zap,
+          detailedContent: "For those seeking an adrenaline rush, Azerbaijan is an emerging adventure hub. From 4x4 off-roading across semi-deserts to paragliding over the Caucasus foothills, there's always a new way to experience the wild beauty of the Land of Fire.",
+          keyFacts: [
+            "Gabala is a center for adventure sports including quad biking and paragliding.",
+            "The Tufandag Mountain Resort offers high-altitude cable car rides and hiking.",
+            "Caspian Sea offers opportunities for windsurfing and sailing."
+          ],
           gallery: [
-            { url: "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=1200", caption: "Sheki Khan's Palace with ornate stained glass" },
-            { url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200", caption: "Traditional architecture in Sheki" },
-            { url: "https://images.unsplash.com/photo-1534349762230-e0cadf78f505?w=1200", caption: "Silk Road caravanserai" }
+            { url: "https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1200", caption: "High-adrenaline mountain adventures" },
+            { url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200", caption: "Off-road explorations and trekking" },
+            { url: "https://images.unsplash.com/photo-1533619239233-628ce623a728?w=1200", caption: "Discovering the wild frontiers" }
           ]
         },
         { 
-          title: "UNESCO Heritage", 
-          description: "Discover Icherisheher, Baku's medieval Old City, a labyrinth of history and legends.", 
+          slug: "local-traditions",
+          title: "Local Traditions", 
+          description: "Immerse yourself in authentic village life and century-old customs of hospitality.", 
           icon: Heart,
+          detailedContent: "In Azerbaijan, hospitality is not just a custom—it's a way of life. Visit rural villages to experience the traditional tea culture, learn about the 'Novruz' spring festival, and witness how modern Azerbaijanis hold onto their deep-rooted values while embracing the future.",
+          keyFacts: [
+            "Tea (chay) is the national drink and served at every social gathering.",
+            "Novruz is the most important holiday, celebrating the spring equinox and new life.",
+            "Azerbaijani hospitality means 'the guest is the light of the house'."
+          ],
           gallery: [
-            { url: "https://images.unsplash.com/photo-1534349762230-e0cadf78f505?w=1200", caption: "Icherisheher - The Old City of Baku" },
-            { url: "https://images.unsplash.com/photo-1543833078-4389945037be?w=1200", caption: "Maiden Tower - Symbol of Baku" },
-            { url: "https://images.unsplash.com/photo-1590073844006-fb7a1c440c6d?w=1200", caption: "Shirvanshah's Palace Complex" }
+            { url: "https://images.unsplash.com/photo-1514222134-b57cbb8ce073?w=1200", caption: "Traditional tea culture and village life" },
+            { url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200", caption: "Folk crafts and local customs" },
+            { url: "https://images.unsplash.com/photo-1534349762230-e0cadf78f505?w=1200", caption: "Heritage in every corner" }
+          ]
+        },
+        { 
+          slug: "hidden-gems",
+          title: "Hidden Gems", 
+          description: "Discover off-the-beaten-path locations that reveal the true soul of Azerbaijan.", 
+          icon: MapPin,
+          detailedContent: "Beyond the capital city lie secrets waiting to be discovered. Visit the Candy Cane Mountains with their striped colorful peaks, explore the salt tunnels of Duzdag, or go to the village of Lahij, famous for its copper artisans.",
+          keyFacts: [
+            "The Candy Cane Mountains get their name from their unique oxidative iron and clay layers.",
+            "Duzdag Salt Mountain contains tunnels used for respiratory health therapy.",
+            "Lahij is a uniquely preserved historical-architectural reserve build around copper craft."
+          ],
+          gallery: [
+            { url: "https://images.unsplash.com/photo-1533619239233-628ce623a728?w=1200", caption: "The surreal Candy Cane Mountains" },
+            { url: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=1200", caption: "Enigmatic landscapes off the beaten path" },
+            { url: "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=1200", caption: "Untouched majesty in remote regions" }
           ]
         }
       ],
@@ -412,9 +490,9 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
         {/* Key Highlights */}
         {regionData.highlights && (
-          <section className="mb-10 md:mb-12">
+          <section className="mb-20 md:mb-32">
             <Container>
-              <div className="text-center mb-8">
+              <div className="text-center mb-12">
                 <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tight">
                   Key Highlights
                 </h2>
@@ -423,67 +501,182 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {regionData.highlights.map((highlight, index) => (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    onClick={() => {
-                      setSelectedGallery({ title: highlight.title, images: highlight.gallery || [] });
-                      setGalleryOpen(true);
-                    }}
-                    className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500"
+                    className="group flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-100/50 hover:shadow-2xl hover:border-brand-gold/20 transition-all duration-500"
                   >
-                    {/* Background Image */}
-                    <div className="absolute inset-0">
+                    {/* Image Header */}
+                    <div className="relative h-64 overflow-hidden">
                       <Image
                         src={highlight.gallery?.[0]?.url || "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=800"}
                         alt={highlight.title}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="object-cover group-hover:scale-110 transition-transform duration-1000"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative h-full p-6 flex flex-col">
-                      {/* Icon & Photo Count */}
-                      <div className="flex items-start justify-between mb-auto">
-                        <div className="w-14 h-14 bg-brand-gold rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                          {highlight.icon && <highlight.icon className="w-7 h-7 text-white" />}
-                        </div>
-                        <div className="px-3 py-1.5 rounded-full bg-brand-blue text-white text-xs font-black uppercase tracking-wider shadow-lg flex items-center gap-1.5">
-                          <Camera className="w-3.5 h-3.5" />
-                          <span>{highlight.gallery?.length || 0} Photos</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute top-6 left-6">
+                        <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 text-white group-hover:bg-brand-gold group-hover:border-brand-gold transition-colors">
+                          {highlight.icon && <highlight.icon className="w-7 h-7" />}
                         </div>
                       </div>
+                    </div>
 
-                      {/* Text Content */}
-                      <div className="mt-auto">
-                        <h3 className="text-2xl font-black text-white mb-2 tracking-tight">
-                          {highlight.title}
-                        </h3>
-                        <p className="text-white/90 font-medium leading-relaxed mb-4 line-clamp-2">
-                          {highlight.description}
-                        </p>
-                        
-                        {/* View Gallery CTA */}
-                        <div className="flex items-center gap-2 text-white font-bold text-sm group-hover:gap-3 transition-all">
+                    {/* Content Section */}
+                    <div className="p-10 flex flex-col flex-1">
+                      <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
+                        {highlight.title}
+                      </h3>
+                      <p className="text-slate-600 font-medium leading-relaxed mb-8 flex-1">
+                        {highlight.description}
+                      </p>
+                      
+                      <div className="flex items-center justify-between mt-auto">
+                        <button 
+                          onClick={() => {
+                            setSelectedGallery({ title: highlight.title, images: highlight.gallery || [] });
+                            setGalleryOpen(true);
+                          }}
+                          className="flex items-center gap-2 text-brand-blue font-bold text-sm hover:gap-3 transition-all"
+                        >
+                          <Camera className="w-4 h-4" />
                           <span>View Gallery</span>
-                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </div>
+                        </button>
+                        
+                        <Link 
+                          href={`#${highlight.slug || highlight.title.toLowerCase().replace(/ /g, "-")}`}
+                          className="px-6 py-2.5 bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-900 font-black rounded-xl text-xs uppercase tracking-widest transition-all"
+                        >
+                          Explore Details
+                        </Link>
                       </div>
                     </div>
-
-                    {/* Hover Overlay Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </motion.div>
                 ))}
               </div>
             </Container>
+          </section>
+        )}
+
+        {/* Detailed Highlight Sections */}
+        {regionData.highlights && (
+          <section className="mb-20 md:mb-32 space-y-20 md:space-y-32">
+            {regionData.highlights.map((highlight, index) => (
+              <div 
+                key={index} 
+                id={highlight.slug || highlight.title.toLowerCase().replace(/ /g, "-")}
+                className="scroll-mt-32"
+              >
+                <Container>
+                  <div className={cn(
+                    "flex flex-col lg:items-center gap-12 md:gap-20",
+                    index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                  )}>
+                    {/* Text content */}
+                    <div className="flex-1 space-y-8">
+                      <motion.div
+                        initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                      >
+                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-gold/10 text-brand-gold rounded-full text-xs font-black uppercase tracking-widest mb-6 border border-brand-gold/20">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            Highlight No. 0{index + 1}
+                         </div>
+                         <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+                            {highlight.title}
+                         </h2>
+                         <p className="text-xl md:text-2xl font-bold text-slate-500 mb-8 leading-relaxed">
+                            {highlight.description}
+                         </p>
+                         
+                         <div className="h-1 w-20 bg-brand-gold rounded-full mb-8" />
+                         
+                         <p className="text-lg text-slate-600 leading-relaxed mb-10">
+                            {highlight.detailedContent || "Explore the profound beauty and cultural depth of this region through its most iconic landmarks and natural wonders. Each site tells a unique story of heritage, resilience, and architectural marvel."}
+                         </p>
+
+                         {highlight.keyFacts && (
+                           <div className="space-y-6">
+                              <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
+                                <Info className="w-4 h-4 text-brand-blue" />
+                                Key Facts & Information
+                              </h4>
+                              <div className="grid grid-cols-1 gap-4">
+                                {highlight.keyFacts.map((fact, idx) => (
+                                  <div key={idx} className="flex gap-4 p-5 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue font-bold text-sm">
+                                      {idx + 1}
+                                    </div>
+                                    <p className="text-slate-600 font-medium">{fact}</p>
+                                  </div>
+                                ))}
+                              </div>
+                           </div>
+                         )}
+                      </motion.div>
+                    </div>
+
+                    {/* Image/Visual content */}
+                    <div className="flex-1">
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="relative"
+                      >
+                        {/* Main Image */}
+                        <div className="relative h-[400px] md:h-[600px] rounded-[3rem] overflow-hidden shadow-2xl z-10 group">
+                          <Image
+                            src={highlight.gallery?.[1]?.url || highlight.gallery?.[0]?.url || "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=1200"}
+                            alt={highlight.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                          <div className="absolute bottom-10 left-10 right-10 p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                            <p className="text-white font-bold leading-relaxed italic">
+                              "{highlight.gallery?.[1]?.caption || highlight.gallery?.[0]?.caption || highlight.description}"
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Decorative elements */}
+                        <div className={cn(
+                          "absolute -top-10 -right-10 w-40 h-40 bg-brand-gold/10 rounded-full blur-3xl",
+                          index % 2 !== 0 && "right-auto -left-10"
+                        )} />
+                        <div className={cn(
+                          "absolute -bottom-10 -left-10 w-60 h-60 bg-brand-blue/10 rounded-full blur-3xl",
+                          index % 2 !== 0 && "left-auto -right-10"
+                        )} />
+                        
+                        {/* Floating stats or badges */}
+                        <div className={cn(
+                          "absolute top-20 -right-8 z-20 bg-white p-6 rounded-3xl shadow-2xl border border-slate-100 hidden md:block",
+                          index % 2 !== 0 && "right-auto -left-8"
+                        )}>
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-white">
+                              <Star className="w-6 h-6" />
+                            </div>
+                            <div>
+                               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Rating</p>
+                               <p className="text-xl font-black text-slate-900">4.9/5.0</p>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </div>
+                </Container>
+              </div>
+            ))}
           </section>
         )}
         {/* Top Attractions */}
