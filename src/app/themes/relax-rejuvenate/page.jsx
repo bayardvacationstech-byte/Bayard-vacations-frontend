@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import RelaxRejuvenateClient from "@/components/Themes/RelaxRejuvenateClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "relax-rejuvenate");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Relax and Rejuvenate | Bayard Vacations",
+  description: "All things leisure. Discover wellness retreats and spa destinations designed to restore your mind, body, and soul.",
+};
 
 export default function RelaxRejuvenatePage() {
-  const theme = categoryData.find(c => c.slug === "relax-rejuvenate");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+  return <RelaxRejuvenateClient />;
 }

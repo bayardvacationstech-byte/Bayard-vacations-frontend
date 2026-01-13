@@ -2,160 +2,174 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import Container from "@/components/ui/Container";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { X, Calendar, MapPin, ChevronRight, ChevronLeft, Play, LayoutGrid } from "lucide-react";
 
 const PackageExperiences = ({ packageData }) => {
-  const experiences = [
-    { id: "beaches", label: "Beaches" },
-    { id: "activities", label: "Activities" },
-    { id: "temples", label: "Temples" },
-    { id: "village", label: "Village" },
-    { id: "meals", label: "Meals" },
-  ];
-
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const [activeTab, setActiveTab] = useState("beaches");
+  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+  const [showJourney, setShowJourney] = useState(false);
 
-  const scrollToItinerary = () => {
-    const element = document.getElementById("itinerary-section");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const [isMobile, setIsMobile] = useState(false);
-
+  // Disable body scroll when modal is open
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Take some images from packageData to populate the experiences
-  // In a real scenario, these might come from specific fields
-  const displayImages = packageData?.bannerImages?.slice(0, 3) || [];
+    if (showJourney) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showJourney]);
 
   return (
-    <section ref={sectionRef} id="experiences-section" className="relative w-full bg-white text-slate-900 overflow-hidden py-12 rounded-3xl border border-slate-100 shadow-sm mb-6">
-      {/* Background Cinematic Effects */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-20">
-        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand-green/10 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-brand-blue/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
-
-      <Container className="relative z-10">
-        {/* Section Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 rounded-full text-[10px] font-bold text-purple-600 border border-purple-200 mb-4 uppercase tracking-widest">
-            <span className="text-xs">🎨</span> Visual Journey
-          </div>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-2 tracking-tight leading-tight">Experiences & <span className="text-brand-green">Activities</span></h2>
-          <p className="text-lg font-medium text-slate-600">Discover the highlights of your adventure</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Side: Categories (Vertical) */}
-          <div className="flex flex-col space-y-0 relative">
-            {experiences.map((exp) => (
-              <button
-                key={exp.id}
-                onClick={() => setActiveTab(exp.id)}
-                className="group relative transition-all duration-500 text-left py-1 outline-none"
-              >
-                <span 
-                  className={`transition-all duration-500 block ${
-                    activeTab === exp.id ? "text-brand-green opacity-100 scale-105 origin-left" : "text-slate-300 hover:text-slate-400"
-                  }`}
-                  style={{ 
-                    fontFamily: "Satoshi, sans-serif",
-                    fontSize: "clamp(40px, 6vw, 80px)",
-                    lineHeight: "1.1",
-                    fontWeight: activeTab === exp.id ? 900 : 400
-                  }}
-                >
-                  {exp.label}
-                </span>
-                {activeTab === exp.id && (
-                  <motion.div 
-                    layoutId="active-underline"
-                    className="h-1.5 bg-brand-blue w-full absolute bottom-2 left-0 rounded-full shadow-sm"
-                    initial={{ scaleX: 0, originX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.5 }}
-                  />
-                )}
-              </button>
-            ))}
+    <section ref={sectionRef} id="experiences-section" className="bg-white py-4 md:py-6 overflow-hidden scroll-mt-24 mb-4">
+      <Container>
+        {/* Simple & Clean Header - Focused version */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-slate-50/50 p-8 md:p-12 rounded-[2.5rem] border border-slate-100 shadow-sm">
+          <div className="max-w-2xl">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-4 tracking-tight">
+                The <span className="text-brand-blue">Visual Journal</span>
+              </h2>
+              <p className="text-base md:text-lg text-slate-500 leading-relaxed font-medium">
+                Deep dive into the stunning visuals and daily experiences that await you. Discover the heart of this journey through our curated visual chapters.
+              </p>
+            </motion.div>
           </div>
 
-          {/* Right Side: Image Card Stack */}
-          <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="relative w-full h-full flex items-center justify-center"
-              >
-                {displayImages.map((_, i) => {
-                  // Pick different images based on category index to make it feel dynamic
-                  const catIdx = experiences.findIndex(e => e.id === activeTab);
-                  const imgIdx = (catIdx + i) % (packageData?.bannerImages?.length || 1);
-                  const image = packageData?.bannerImages?.[imgIdx] || displayImages[i];
-
-                  const rotations = [-15, 0, 15];
-                  const xOffsets = isMobile ? [-40, 0, 40] : [-220, 0, 220];
-                  const zIndices = [10, 30, 20];
-                  const scales = [0.9, 1, 0.9];
-                  const yOffsets = isMobile ? [20, 0, 30] : [40, 0, 60];
-
-                  return (
-                    <motion.div
-                      key={`${activeTab}-${i}`}
-                      initial={{ opacity: 0, y: -800, rotate: rotations[i], x: xOffsets[i], scale: 0.8 }}
-                      animate={{ 
-                        opacity: 1, 
-                        rotate: rotations[i], 
-                        x: xOffsets[i], 
-                        scale: scales[i], 
-                        y: yOffsets[i] 
-                      }}
-                      exit={{ opacity: 0, y: 500, scale: 0.5, transition: { duration: 0.3 } }}
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 80, 
-                        damping: 15,
-                        delay: i * 0.1 
-                      }}
-                      className="absolute w-[220px] md:w-[280px] aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border-[6px] border-white group"
-                      style={{ zIndex: zIndices[i] }}
-                    >
-                      <Image
-                        src={image.url}
-                        alt={image.alt || activeTab}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                        <p className="text-white font-bold text-lg">{image.alt || activeTab}</p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <button
+              onClick={() => setShowJourney(true)}
+              className="flex items-center gap-4 px-8 py-5 bg-brand-blue text-white rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-blue/30 hover:bg-slate-900 transition-all active:scale-95 group whitespace-nowrap"
+            >
+              <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
+              Experience the Journey
+            </button>
+          </motion.div>
         </div>
       </Container>
+
+
+      {/* Visual Journey Modal */}
+      <AnimatePresence>
+        {showJourney && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-white/80 backdrop-blur-3xl flex items-center justify-center p-0 md:p-10"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full h-full max-w-[1600px] bg-white md:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col border border-slate-100"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 md:p-8 border-b border-slate-50">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-blue flex items-center justify-center text-white shadow-lg shadow-brand-blue/20">
+                    <Calendar className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black text-slate-900 tracking-tight">Visual Journey</h3>
+                    <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{packageData?.itineraries?.length} Chapters of Adventure</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowJourney(false)}
+                  className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all active:scale-95"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Modal Content - Horizontal Scrollable Journey */}
+              <div className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide py-10 px-8">
+                <div className="flex gap-8 min-w-max h-full">
+                  {packageData?.itineraries?.map((day, idx) => {
+                    const dayImages = day.imageRefs || [];
+                    const mainImage = dayImages[0]?.url || "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800";
+                    
+                    return (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="group w-[300px] md:w-[450px] h-full flex flex-col gap-6"
+                      >
+                        {/* Day Card */}
+                        <div className="relative flex-1 rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-100">
+                          <Image
+                            src={mainImage}
+                            alt={day.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80" />
+                          
+                          {/* Day Overlay */}
+                          <div className="absolute top-6 left-6">
+                            <div className="px-5 py-2 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
+                              <span className="text-white font-black text-xl tracking-tighter uppercase leading-none">Day {(idx + 1).toString().padStart(2, '0')}</span>
+                            </div>
+                          </div>
+
+                          <div className="absolute bottom-8 left-8 right-8">
+                            <h4 className="text-white text-3xl font-black tracking-tight leading-none mb-3 drop-shadow-lg">
+                              {day.title}
+                            </h4>
+                            <div className="flex items-center gap-2 text-white/70">
+                              <MapPin className="w-4 h-4" />
+                              <span className="text-xs font-bold uppercase tracking-wider">Experience Featured</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Summary Block */}
+                        <div className="px-4">
+                           <p className="text-slate-600 text-sm leading-relaxed font-medium line-clamp-3">
+                             {day.description}
+                           </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Modal Footer - Progress & Navigation */}
+              <div className="p-8 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:flex flex-col">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Current Expedition</span>
+                    <span className="text-slate-900 font-bold">{packageData?.title || "Signature Tour"}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                   <p className="text-slate-400 text-sm font-bold">Scroll to Explore →</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
 
 export default PackageExperiences;
+
+
 

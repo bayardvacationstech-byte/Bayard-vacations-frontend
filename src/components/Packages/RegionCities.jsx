@@ -22,6 +22,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import ActivityCard from "@/components/ui/ActivityCard";
 
 // Swiper styles
 import "swiper/css";
@@ -181,7 +182,25 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
         >
           {displayCities.map((city) => (
             <SwiperSlide key={city.id}>
-              <CityCard city={city} />
+              <ActivityCard 
+                data={{
+                  name: city.name,
+                  badge: city.name,
+                  title: city.title || city.name,
+                  description: city.description,
+                  image: city.image,
+                  icon: city.icon,
+                  isPopular: true,
+                  highlightsTitle: "Top Attractions:",
+                  highlights: [
+                    "Historical landmarks & architecture",
+                    "Local artisan markets"
+                  ]
+                }}
+                hoverGradient="from-brand-green/95 to-brand-green"
+                ctaLabel="View Packages"
+                onCtaClick={() => console.log("View packages for:", city.name)}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -192,164 +211,3 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
 };
 
 export default RegionCities;
-
-// Sub-component for City Card to handle local state
-function CityCard({ city }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const Icon = city.icon || MapIcon;
-
-  const handleCardClick = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const handleViewPackages = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("View Packages clicked for:", city.name);
-    // Add navigation or action here
-  };
-
-  return (
-    <div
-      onClick={handleCardClick}
-      className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl h-[420px]"
-    >
-      {/* Background Image - Full Card */}
-      <div className="absolute inset-0">
-        <img
-          src={city.image}
-          alt={city.name}
-          className="w-full h-full object-cover transition-transform duration-700 scale-105"
-        />
-      </div>
-
-      {/* Simple Gradient Overlay - Lighter */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70" />
-
-      {/* Content */}
-      <div className="absolute inset-0 p-6 flex flex-col justify-between">
-        {/* Top Badges */}
-        <div className="flex items-start justify-between gap-3">
-          {/* City Badge */}
-          <div className="px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm flex items-center gap-1.5 shadow-md">
-            <Icon className="w-3.5 h-3.5 text-slate-700" />
-            <span className="text-xs font-bold text-slate-900 uppercase">{city.name}</span>
-          </div>
-
-          {/* Popular/Featured Badge */}
-          <div className="px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase shadow-md flex items-center gap-1.5">
-            <Star className="w-3.5 h-3.5 fill-amber-500" />
-            <span>Popular</span>
-          </div>
-        </div>
-
-        {/* Bottom Content */}
-        <div className="space-y-3 relative">
-          {/* Mobile Arrow Handle Toggle - Gold Style */}
-          <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsExpanded(!isExpanded);
-            }}
-            className="md:hidden absolute -top-14 right-2 w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg active:scale-95 transition-all z-30 ring-4 ring-white/10"
-          >
-            {isExpanded ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <ChevronUp className="w-6 h-6 animate-bounce-slow" />
-            )}
-          </button>
-
-          {/* Title */}
-          <h3 className="text-3xl font-black text-white leading-tight drop-shadow-lg">
-            {city.title || city.name}
-          </h3>
-          
-          {/* Description */}
-          {city.description && (
-            <p className="text-white/95 text-base leading-relaxed line-clamp-2 drop-shadow-md">
-              {city.description}
-            </p>
-          )}
-
-          {/* Meta Info */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5 text-white/95">
-              <NavigationIcon className="w-4 h-4" />
-              <span className="text-sm font-semibold">Explore City</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-white/95">
-              <Camera className="w-4 h-4" />
-              <span className="text-sm font-semibold">Photo Spots</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Hover/Click Overlay - More Info */}
-      <div className={cn(
-        "absolute inset-0 bg-gradient-to-b from-brand-green/95 to-brand-green transition-all duration-500 z-40",
-        isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full md:group-hover:opacity-100 md:group-hover:translate-y-0"
-      )}>
-        <div className="h-full p-6 flex flex-col">
-          {/* Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
-            {/* Header */}
-            <div className="flex items-start justify-between mb-4">
-              <h4 className="text-2xl font-black text-white leading-tight">
-                {city.title || city.name}
-              </h4>
-              <div className="flex items-center gap-2">
-                <Icon className="w-6 h-6 text-white/80 flex-shrink-0" />
-                {/* Mobile Close Button */}
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsExpanded(false);
-                  }}
-                  className="md:hidden p-1 rounded-full bg-white/20 text-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-            
-            {/* Full Description */}
-            {city.description && (
-              <p className="text-white/95 text-sm leading-relaxed mb-4">
-                {city.description}
-              </p>
-            )}
-
-            {/* Highlights/Details */}
-            <div className="space-y-3">
-              <h5 className="text-sm font-bold text-white/90 uppercase tracking-wider">Top Attractions:</h5>
-              <ul className="space-y-2 text-white/90 text-sm">
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Historical landmarks & architecture</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Local artisan markets</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Footer - Meta & CTA */}
-          <div className="space-y-3 pt-4 border-t border-white/20">
-            <button 
-              onClick={handleViewPackages}
-              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95"
-            >
-              View Packages
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}

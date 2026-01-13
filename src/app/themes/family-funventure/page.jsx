@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import FamilyFunventureClient from "@/components/Themes/FamilyFunventureClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "family-funventure");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Family Funventure | Bayard Vacations",
+  description: "All things togetherness. Discover family-friendly adventures perfect for creating unforgettable memories with your loved ones.",
+};
 
 export default function FamilyFunventurePage() {
-  const theme = categoryData.find(c => c.slug === "family-funventure");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+  return <FamilyFunventureClient />;
 }

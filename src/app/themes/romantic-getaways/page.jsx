@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import RomanticGetawaysClient from "@/components/Themes/RomanticGetawaysClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "romantic-getaways");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Romantic Getaways | Bayard Vacations",
+  description: "Discover handpicked romantic destinations perfect for couples. From beach resorts to mountain retreats, create unforgettable memories together.",
+};
 
 export default function RomanticGetawaysPage() {
-  const theme = categoryData.find(c => c.slug === "romantic-getaways");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+  return <RomanticGetawaysClient />;
 }

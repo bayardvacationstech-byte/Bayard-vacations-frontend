@@ -27,13 +27,14 @@ const PackageCard = ({ item, className, isGroup = false }) => {
   const { isCardExpanded } = useExpandedCard();
   const cardRef = useRef(null);
 
-  const Slot = isGroup ? Link : "article";
+  const Slot = Link;
   const href = isGroup
     ? `/packages/${item.region}/${item.packageSlug}?group=true`
     : `/packages/${item.region}/${item.packageSlug}`;
 
   const handleContactExpert = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setRegion(item.region);
     openModal();
   };
@@ -135,12 +136,13 @@ const PackageCard = ({ item, className, isGroup = false }) => {
           bg-gradient-to-t from-black/95 via-black/80 to-transparent
           backdrop-blur-lg
           border-t-2 border-brand-blue/30
+          rounded-t-2xl sm:rounded-t-3xl
         "
       >
         {/* Accent Color Bar */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-blue via-brand-accent to-brand-blue"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-blue via-yellow-400 to-brand-blue"></div>
         
-        <div className="relative px-2 sm:px-4 pb-2 sm:pb-4 pt-4 sm:pt-6">
+        <div className="relative px-4 sm:px-6 pb-2 sm:pb-4 pt-4 sm:pt-6">
           {/* REGION + DURATION */}
           <div className="mb-2 flex items-center justify-between gap-1">
             <div className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-gradient-to-r from-brand-blue/90 to-brand-blue/70 backdrop-blur-sm">
@@ -163,7 +165,7 @@ const PackageCard = ({ item, className, isGroup = false }) => {
             {/* PRICE OR CONTACT MESSAGE */}
             {(item.offerPrice === 0 || !item.offerPrice) && (item.basePrice === 0 || !item.basePrice) ? (
               <div className="w-full sm:flex-shrink-0 sm:flex-1">
-                <div className="inline-block px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white shadow-lg">
+                <div className="inline-block px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-white shadow-lg">
                   <p className="text-[9px] sm:text-sm font-bold leading-tight text-brand-blue">
                     Contact an Expert
                   </p>
@@ -192,24 +194,15 @@ const PackageCard = ({ item, className, isGroup = false }) => {
             )}
 
             {/* CTA BUTTONS - Stack on very small screens */}
-            <div className="flex w-full sm:w-auto sm:flex-1 items-center gap-1.5 sm:gap-2">
-              {isGroup ? (
-                <div className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-2 sm:px-3 py-1.5 sm:py-2 text-center text-[9px] sm:text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
-                  View
-                </div>
-              ) : (
-                <Link
-                  href={href}
-                  className="flex-1 rounded-lg bg-brand-blue hover:bg-brand-blue-hovered px-2 sm:px-3 py-1.5 sm:py-2 text-center text-[9px] sm:text-[11px] font-black text-white transition-all shadow-lg"
-                >
-                  View
-                </Link>
-              )}
+            <div className="flex w-full sm:w-auto sm:flex-1 items-center gap-3 sm:gap-4">
+              <div className="flex-1 rounded-xl bg-brand-blue hover:bg-brand-blue-hovered px-2 sm:px-3 py-1.5 sm:py-2 text-center text-[9px] sm:text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
+                View
+              </div>
 
               {!isGroup && (
                 <button
                   onClick={handleContactExpert}
-                  className="flex-shrink-0 rounded-lg bg-brand-green hover:bg-brand-green/90 px-2 sm:px-3 py-1.5 sm:py-2 text-[9px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
+                  className="flex-shrink-0 rounded-xl bg-brand-green hover:bg-brand-green/90 px-2 sm:px-3 py-1.5 sm:py-2 text-[9px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
                 >
                   Call
                 </button>

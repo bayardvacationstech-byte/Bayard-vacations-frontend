@@ -26,6 +26,7 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { cn } from "@/lib/utils";
+import ActivityCard from "@/components/ui/ActivityCard";
 
 // Swiper styles
 import "swiper/css";
@@ -286,195 +287,32 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
         >
           {displayActivities.map((activity) => (
             <SwiperSlide key={activity.id}>
-              <ActivityCard activity={activity} regionName={regionName} />
+              <ActivityCard 
+                data={{
+                  name: activity.title,
+                  badge: activity.category,
+                  title: activity.title,
+                  description: activity.description,
+                  image: activity.image,
+                  icon: activity.icon,
+                  isPopular: activity.difficulty === "Easy",
+                  highlightsTitle: "What's Included:",
+                  highlights: [
+                    "Professional guide & equipment",
+                    "Safety briefing & insurance",
+                    "Transport & refreshments"
+                  ]
+                }}
+                hoverGradient="from-brand-green/95 to-emerald-900"
+                ctaLabel="Book Now"
+                onCtaClick={() => console.log("Book activity:", activity.title)}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
     </Container>
   </section>
-  );
-}
-
-// Sub-component for Activity Card to handle local state
-function ActivityCard({ activity, regionName }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  
-  // Generate activity slug from title
-  const activitySlug = activity.title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-  const Icon = activity.icon || Compass;
-
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty?.toLowerCase()) {
-      case "easy":
-        return "bg-green-100 text-green-700";
-      case "moderate":
-        return "bg-blue-100 text-blue-700";
-      case "challenging":
-        return "bg-orange-100 text-orange-700";
-      default:
-        return "bg-slate-100 text-slate-700";
-    }
-  };
-
-  return (
-    <Link 
-      href={`/activities/${regionName?.toLowerCase()}/${activitySlug}`}
-      className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-2xl h-[420px] block"
-    >
-      {/* Background Image - Full Card */}
-      <div className="absolute inset-0">
-        <img
-          src={activity.image}
-          alt={activity.title}
-          className="w-full h-full object-cover transition-transform duration-700 scale-105"
-        />
-      </div>
-
-      {/* Simple Gradient Overlay - Lighter */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70" />
-
-      {/* Content */}
-      <div className="absolute inset-0 p-6 flex flex-col justify-between">
-        {/* Top Badges */}
-        <div className="flex items-start justify-between gap-3">
-          {/* Category Badge */}
-          <div className="px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm flex items-center gap-1.5 shadow-md">
-            <Icon className="w-3.5 h-3.5 text-slate-700" />
-            <span className="text-xs font-bold text-slate-900 uppercase">{activity.category}</span>
-          </div>
-
-          {/* Difficulty Badge */}
-          {activity.difficulty && (
-            <div className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase shadow-md ${getDifficultyColor(activity.difficulty)}`}>
-              {activity.difficulty}
-            </div>
-          )}
-        </div>
-
-        {/* Bottom Content */}
-        <div className="space-y-3 relative">
-          {/* Mobile Arrow Handle Toggle - Gold Style */}
-          <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsExpanded(!isExpanded);
-            }}
-            className="md:hidden absolute -top-14 right-2 w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg active:scale-95 transition-all z-30 ring-4 ring-white/10"
-          >
-            {isExpanded ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <ChevronUp className="w-6 h-6 animate-bounce-slow" />
-            )}
-          </button>
-
-          {/* Title */}
-          <h3 className="text-3xl font-black text-white leading-tight drop-shadow-lg">
-            {activity.title}
-          </h3>
-          
-          {/* Description */}
-          <p className="text-white/95 text-base leading-relaxed line-clamp-2 drop-shadow-md">
-            {activity.description}
-          </p>
-
-          {/* Meta Info */}
-          <div className="flex items-center gap-4">
-            {activity.duration && (
-              <div className="flex items-center gap-1.5 text-white/95">
-                <Clock className="w-4 h-4" />
-                <span className="text-sm font-semibold">{activity.duration}</span>
-              </div>
-            )}
-            {activity.priceRange && (
-              <div className="flex items-center gap-1.5 text-white/95">
-                <DollarSign className="w-4 h-4" />
-                <span className="text-sm font-semibold">{activity.priceRange}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Hover/Click Overlay - More Info */}
-      <div className={cn(
-        "absolute inset-0 bg-gradient-to-b from-brand-green/95 to-brand-green transition-all duration-500 z-40",
-        isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full md:group-hover:opacity-100 md:group-hover:translate-y-0"
-      )}>
-        <div className="h-full p-6 flex flex-col">
-          {/* Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
-            {/* Header */}
-            <div className="flex items-start justify-between mb-4">
-              <h4 className="text-2xl font-black text-white leading-tight">
-                {activity.title}
-              </h4>
-              <div className="flex items-center gap-2">
-                <Icon className="w-6 h-6 text-white/80 flex-shrink-0" />
-                {/* Mobile Close Button */}
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsExpanded(false);
-                  }}
-                  className="md:hidden p-1 rounded-full bg-white/20 text-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-            
-            {/* Full Description */}
-            <p className="text-white/95 text-sm leading-relaxed mb-4">
-              {activity.description}
-            </p>
-
-            {/* Highlights/Details */}
-            <div className="space-y-3">
-              <h5 className="text-sm font-bold text-white/90 uppercase tracking-wider">What's Included:</h5>
-              <ul className="space-y-2 text-white/90 text-sm">
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Professional guide & equipment</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Safety briefing & insurance</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Transport & refreshments</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Footer - Meta & CTA */}
-          <div className="space-y-3 pt-4 border-t border-white/20">
-            <div className="flex items-center justify-between text-white">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span className="text-sm font-semibold">{activity.duration}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4" />
-                <span className="text-sm font-semibold">{activity.priceRange}</span>
-              </div>
-            </div>
-            
-            <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95">
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </Link>
   );
 }
 

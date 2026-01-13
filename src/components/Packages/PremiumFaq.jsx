@@ -17,8 +17,8 @@ const FaqItem = ({ item, index, openIndex, toggleItem }) => (
   >
     <div className={`relative overflow-hidden rounded-2xl transition-all duration-300 ${
       openIndex === index 
-        ? 'bg-gradient-to-br from-brand-green/5 to-brand-blue/5 border border-brand-green/30' 
-        : 'bg-white border border-slate-200 hover:border-slate-300 shadow-sm'
+        ? 'bg-gradient-to-br from-brand-blue/5 to-white border border-brand-blue/20 shadow-md' 
+        : 'bg-white border border-slate-100 hover:border-slate-200 shadow-sm'
     }`}>
       {/* Question Button */}
       <button
@@ -29,14 +29,14 @@ const FaqItem = ({ item, index, openIndex, toggleItem }) => (
           <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
             openIndex === index 
               ? 'bg-brand-blue shadow-lg shadow-brand-blue/20' 
-              : 'bg-slate-100 group-hover:bg-slate-200'
+              : 'bg-slate-50 group-hover:bg-slate-100'
           }`}>
-            <span className={`font-bold text-sm ${openIndex === index ? 'text-white' : 'text-slate-600'}`}>
+            <span className={`font-bold text-sm ${openIndex === index ? 'text-white' : 'text-slate-500'}`}>
               {String(index + 1).padStart(2, '0')}
             </span>
           </div>
-          <h3 className={`font-semibold text-base md:text-lg transition-colors duration-300 ${
-            openIndex === index ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'
+          <h3 className={`font-bold text-sm md:text-base transition-colors duration-300 ${
+            openIndex === index ? 'text-slate-900' : 'text-slate-700 group-hover:text-brand-blue'
           }`}>
             {item.question}
           </h3>
@@ -47,8 +47,8 @@ const FaqItem = ({ item, index, openIndex, toggleItem }) => (
           transition={{ duration: 0.3 }}
           className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
             openIndex === index 
-              ? 'bg-brand-green/20 text-brand-green' 
-              : 'bg-slate-100 text-slate-400 group-hover:text-slate-600'
+              ? 'bg-brand-blue/10 text-brand-blue' 
+              : 'bg-slate-50 text-slate-400 group-hover:text-slate-600'
           }`}
         >
           <ChevronDown className="w-5 h-5" />
@@ -66,16 +66,16 @@ const FaqItem = ({ item, index, openIndex, toggleItem }) => (
             className="overflow-hidden"
           >
             <div className="px-4 md:px-6 pb-6">
-              {/* Gradient divider */}
-              <div className="h-px bg-gradient-to-r from-brand-blue/40 via-brand-blue/10 to-transparent mb-4" />
+              {/* Divider */}
+              <div className="h-px bg-slate-100 mb-4 ml-14" />
               
               {/* Answer text */}
               <div className="pl-14 prose prose-slate max-w-none">
-                <div className="text-slate-600 text-sm md:text-base leading-relaxed">
+                <div className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
                   <FaqRenderer
                     content={item.answer}
                     onError={() => (
-                      <p className="text-rose-500 font-medium">
+                      <p className="text-rose-500 font-medium text-xs">
                         Error displaying answer content
                       </p>
                     )}
@@ -157,10 +157,10 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section id="faq" className="relative py-6 bg-white overflow-hidden scroll-mt-20 rounded-3xl border border-slate-100 shadow-sm mb-6">
+    <section id="faq" className="relative py-12 md:py-16 bg-white overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-6">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
@@ -170,27 +170,24 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-8"
+          className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-green/10 border border-brand-green/20 rounded-full mb-6 uppercase tracking-widest text-[10px]">
-            <MessageCircle className="w-3.5 h-3.5 text-brand-green" />
-            <span className="text-brand-green font-bold">Got Questions?</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full mb-6 uppercase tracking-widest text-[10px]">
+            <MessageCircle className="w-3.5 h-3.5 text-brand-blue" />
+            <span className="text-brand-blue font-bold">Got Questions?</span>
           </div>
           
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
-            Frequently Asked{" "}
-            <span className="text-brand-green">
-              Questions
-            </span>
+          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight leading-tight px-4">
+            Frequently Asked <span className="text-brand-blue">Questions</span>
           </h2>
-          <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto">
+          <p className="text-slate-500 text-xs md:text-base max-w-2xl mx-auto font-medium px-6">
             {regionName 
-              ? `Common questions about traveling to ${regionName}` 
-              : "Find answers to common questions about your travel experience"
+              ? `Everything you need to know about traveling to ${displayName}` 
+              : "Find answers to common questions about your upcoming travel experience"
             }
           </p>
           
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-6">
             <div className="h-1.5 w-24 bg-brand-blue rounded-full" />
           </div>
         </motion.div>
@@ -235,26 +232,26 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mt-10"
+          className="mt-12"
         >
-          <div className="relative overflow-hidden rounded-2xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-rose-500/10" />
-            <div className="relative bg-transparent border border-brand-green/20 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-              <div className="flex-shrink-0 w-14 h-14 bg-brand-blue rounded-2xl flex items-center justify-center shadow-lg shadow-brand-blue/20">
-                <HelpCircle className="w-7 h-7 text-white" />
+          <div className="relative overflow-hidden rounded-3xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-blue/5 via-white to-brand-blue/5" />
+            <div className="relative bg-transparent border border-brand-blue/10 rounded-3xl p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+              <div className="flex-shrink-0 w-16 h-16 bg-brand-blue rounded-2xl flex items-center justify-center shadow-lg shadow-brand-blue/30">
+                <HelpCircle className="w-8 h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h4 className="text-slate-900 font-bold text-lg mb-1">Still have questions?</h4>
-                <p className="text-slate-500 text-sm">
-                  Our travel experts are here to help you plan your perfect trip. 
-                  Reach out anytime for personalized assistance.
+                <h4 className="text-slate-900 font-black text-xl mb-2">Still have questions?</h4>
+                <p className="text-slate-500 text-base font-medium">
+                  Our travel experts are ready to help you craft the perfect itinerary. 
+                  Reach out for personalized recommendations and support.
                 </p>
               </div>
               <a 
                 href="tel:+919876543210"
-                className="flex-shrink-0 px-6 py-3 gradient-btn text-white font-bold rounded-xl transition-all duration-300 shadow-lg uppercase tracking-wider text-xs"
+                className="flex-shrink-0 px-8 py-4 gradient-btn text-white font-bold rounded-2xl transition-all duration-300 shadow-xl uppercase tracking-widest text-xs active:scale-95"
               >
-                Contact Us
+                Connect Now
               </a>
             </div>
           </div>

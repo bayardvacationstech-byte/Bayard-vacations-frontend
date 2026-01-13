@@ -104,18 +104,6 @@ const ExplorePackagesContent = ({ setActiveDropdown, handleMenuActive, isHeaderF
           );
         })}
       </div>
-      
-      {/* Footer link for all packages */}
-      <div className="mt-12 pt-8 border-t border-white/10 flex justify-center pb-12">
-        <Link 
-          href="/explore" 
-          onClick={handleClose}
-          className="inline-flex items-center gap-2 px-8 py-3 bg-white text-brand-blue font-bold rounded-full hover:bg-brand-gold hover:text-white transition-all duration-300 shadow-xl"
-        >
-          <Sparkles className="w-4 h-4" />
-          <span>View All Luxury Packages</span>
-        </Link>
-      </div>
     </div>
   );
 };

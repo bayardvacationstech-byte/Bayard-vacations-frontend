@@ -2,11 +2,9 @@
 import React, { useState, useRef } from "react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Mail, MapPin, Heart, ArrowRight, Phone, User } from "lucide-react";
+import { Mail, MapPin, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
-import { storePotentialLead } from "@/utils/firebase";
-import { toast } from "sonner";
+import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
 
 const DESTINATION_CARDS = [
   {
@@ -174,55 +172,8 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
 }
 
 export default function Newsletter() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
   const [cards, setCards] = useState(DESTINATION_CARDS);
   const [exitDirection, setExitDirection] = useState("left");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "phone" && !/^\d*$/.test(value)) return;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-    
-    if (formData.phone.length !== 10) {
-      toast.error("Please enter a valid 10-digit phone number");
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    try {
-      const response = await storePotentialLead({
-        ...formData,
-        description: "Newsletter section lead",
-      });
-
-      if (response) {
-        toast.success("Request received!", {
-          description: "We'll call you back shortly to plan your trip.",
-        });
-        setFormData({ name: "", email: "", phone: "" });
-      }
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleSwipe = (direction) => {
     setExitDirection(direction);
@@ -315,53 +266,14 @@ export default function Newsletter() {
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-md mx-auto lg:mx-0 mb-4">
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                <Input 
-                  name="name"
-                  type="text" 
-                  placeholder="Your Name" 
-                  className="w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                <Input 
-                  name="email"
-                  type="email" 
-                  placeholder="Email Address" 
-                  className="w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                <Input 
-                  name="phone"
-                  type="tel" 
-                  placeholder="Phone Number" 
-                  className="w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  maxLength={10}
-                  required
-                />
-              </div>
-              <Button 
-                type="submit" 
-                size="lg" 
-                disabled={isSubmitting}
-                className="gradient-btn w-full rounded-full text-white h-12 font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                {isSubmitting ? "Sending..." : "Request Call Back"}
-              </Button>
-            </form>
+            <div className="max-w-md mx-auto lg:mx-0 mb-4">
+              <EnquiryFormFields 
+                formType="potential"
+                variant="newsletter"
+                hideFields={["destination"]}
+                onSuccess={() => {}}
+              />
+            </div>
 
             {/* Trust Text */}
             <p className="text-sm text-slate-500 flex items-center gap-1.5 justify-center lg:justify-start">

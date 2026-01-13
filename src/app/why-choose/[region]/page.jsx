@@ -1,7 +1,7 @@
 import WhyChooseRegionClient from "@/components/WhyChoose/WhyChooseRegionClient";
 
 export async function generateMetadata({ params }) {
-  const { region } = params;
+  const { region } = await params;
   const regionName = region
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -13,8 +13,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function WhyChooseRegionPage({ params }) {
-  const { region } = params;
+export default async function WhyChooseRegionPage({ params }) {
+  const { region } = await params;
 
   return <WhyChooseRegionClient regionSlug={region} />;
 }
