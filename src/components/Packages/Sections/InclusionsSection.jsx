@@ -1,15 +1,23 @@
 import React from "react";
+import { 
+  Info, 
+  CheckCircle2, 
+  Lightbulb, 
+  ShieldAlert,
+  ListChecks,
+  AlertCircle
+} from "lucide-react";
 
 const InclusionsSection = ({ packageData }) => {
   return (
-    <div id="inclusions" className="bg-white rounded-3xl py-6 md:py-6 md:px-6 scroll-mt-48 mb-6 border border-slate-100 shadow-sm">
+    <div id="inclusions" className="bg-white rounded-3xl py-4 md:py-6 px-4 md:px-6 scroll-mt-48 mb-4 border border-slate-100 shadow-sm">
       {/* Standard Header */}
-      <div className="mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-4 uppercase tracking-widest">
+      <div className="mb-8 md:mb-10">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[9px] md:text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-3 md:mb-4 uppercase tracking-widest">
           <span className="text-xs">📋</span> Plan Details
         </div>
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
-        <p className="text-lg font-medium text-slate-600">Everything you need to know for a seamless journey</p>
+        <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
+        <p className="text-sm md:text-lg font-medium text-slate-600">Everything you need to know for a seamless journey</p>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -106,18 +114,98 @@ const InclusionsSection = ({ packageData }) => {
         )}
       </div>
       
-      {/* Pro Tip Card */}
-      <div className="relative mt-8">
-        <div className="absolute inset-0 bg-brand-blue/5 rounded-2xl blur-xl" />
-        <div className="relative bg-white border border-slate-200 rounded-2xl p-5 flex items-start gap-4 shadow-sm">
-          <div className="flex-shrink-0 w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center">
-            <span className="text-lg">💡</span>
+      {/* 4. Additional Info Grid (Notes & Points) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        {/* Important Notes Card */}
+        <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-brand-blue/10 rounded-xl flex items-center justify-center">
+              <Info className="w-5 h-5 text-brand-blue" />
+            </div>
+            <h4 className="text-lg font-black text-slate-900 tracking-tight">Important <span className="text-brand-blue">Notes</span></h4>
           </div>
-          <div>
-            <h6 className="text-brand-blue font-semibold mb-1">Pro Tip</h6>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              Book early to secure the best rates and availability. Contact our travel experts for any customization requests or special requirements.
+          <ul className="space-y-3">
+            {(packageData?.notes || [
+              "Standard check-in time is 14:00 hrs and check-out is 12:00 hrs.",
+              "Early check-in or late check-out is subject to availability.",
+              "Valid photo ID (Voter ID / Aadhaar / Passport) is mandatory for all travelers.",
+              "The itinerary can be shuffled depending on local weather conditions."
+            ]).map((note, idx) => (
+              <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note">
+                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-brand-blue transition-colors flex-shrink-0" />
+                <span>{note}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Points to Remember/Carry Card */}
+        <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-green/20 hover:shadow-md transition-all duration-300">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center">
+              <ListChecks className="w-5 h-5 text-brand-green" />
+            </div>
+            <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-green">Remember</span></h4>
+          </div>
+          <ul className="space-y-3">
+            {[
+              "Comfortable walking shoes are highly recommended.",
+              "Carry light woolens even in summer for chilly evenings in mountain areas.",
+              "Respect local customs and dress codes at religious sites.",
+              "Keep digital copies of all travel documents on your phone."
+            ].map((point, idx) => (
+              <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/point">
+                <CheckCircle2 className="w-4 h-4 text-brand-green/50 mt-0.5 group-hover/point:text-brand-green transition-colors flex-shrink-0" />
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* 5. Pro Tip & Cancellation Policy Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        {/* Refined Pro Tip Card - Spans 1 column */}
+        <div className="lg:col-span-1 bg-gradient-to-br from-brand-blue/5 to-transparent border border-brand-blue/10 rounded-3xl p-6 relative overflow-hidden group">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-brand-blue/5 rounded-full blur-2xl group-hover:bg-brand-blue/10 transition-all duration-500" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 bg-white shadow-sm border border-brand-blue/10 rounded-lg flex items-center justify-center">
+                <Lightbulb className="w-4 h-4 text-brand-blue" />
+              </div>
+              <h6 className="text-brand-blue font-bold tracking-tight">Pro Tip</h6>
+            </div>
+            <p className="text-slate-600 text-sm leading-relaxed font-medium">
+              Book at least 45 days in advance to secure the best rates and premium room views. Contact our experts for special surprises!
             </p>
+          </div>
+        </div>
+
+        {/* Cancellation Policy - Spans 2 columns */}
+        <div className="lg:col-span-2 bg-rose-50/50 border border-rose-100 rounded-3xl p-6 group hover:shadow-md transition-all duration-300 shadow-sm shadow-rose-100/30">
+          <div className="flex items-center gap-3 mb-4">
+             <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
+               <ShieldAlert className="w-5 h-5 text-rose-500" />
+             </div>
+             <h4 className="text-lg font-black text-slate-900 tracking-tight">Cancellation <span className="text-rose-500">Policy</span></h4>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
+               <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">30+ Days</span>
+               <p className="text-[12px] text-slate-600 font-medium">Full refund minus minimal transaction fee.</p>
+            </div>
+            <div className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
+               <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">15-30 Days</span>
+               <p className="text-[12px] text-slate-600 font-medium">50% refund of the total package cost.</p>
+            </div>
+            <div className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
+               <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">&lt; 15 Days</span>
+               <p className="text-[12px] text-slate-600 font-medium">No refund possible due to vendor commitments.</p>
+            </div>
+            <div className="flex gap-3 p-3 bg-rose-500 rounded-2xl border border-rose-100 shadow-sm shadow-rose-200/50">
+               <AlertCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
+               <p className="text-[11px] text-white font-bold leading-tight italic">Cancellation rules may vary by region. Please read full terms at checkout.</p>
+            </div>
           </div>
         </div>
       </div>

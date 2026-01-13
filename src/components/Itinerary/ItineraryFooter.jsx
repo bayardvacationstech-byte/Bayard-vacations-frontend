@@ -15,9 +15,9 @@ const ItineraryFooter = ({ relatedPackages }) => {
   if (!relatedPackages || relatedPackages.length === 0) return null;
 
   return (
-    <section className="bg-white py-12 border-t border-slate-100" id="related-packages">
-      <div className="flex items-center justify-between mb-8 px-4 md:px-0">
-        <div>
+    <section className="bg-white py-8 border border-slate-100 shadow-sm rounded-3xl mb-8" id="related-packages">
+      <Container>
+        <div className="mb-8">
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
             More <span className="text-brand-green">Adventures</span>
           </h2>
@@ -25,40 +25,40 @@ const ItineraryFooter = ({ relatedPackages }) => {
             Explore other handpicked signatures and top-rated escapes in this region.
           </p>
         </div>
-      </div>
 
-      <div className="relative group/nav px-4 md:px-0">
-        {/* Overlay Navigation Buttons */}
-        <button className="swiper-button-prev-pkg absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
-          <ChevronLeft className="w-5 md:w-6 h-5 md:h-6" />
-        </button>
-        <button className="swiper-button-next-pkg absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
-          <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
-        </button>
+        <div className="relative group/nav">
+          {/* Overlay Navigation Buttons */}
+          <button className="swiper-button-prev-pkg absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+            <ChevronLeft className="w-5 md:w-6 h-5 md:h-6" />
+          </button>
+          <button className="swiper-button-next-pkg absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 md:w-12 h-10 md:h-12 rounded-full bg-white/90 md:bg-white/95 shadow-lg md:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-300 md:opacity-0 group-hover/nav:opacity-100">
+            <ChevronRight className="w-5 md:w-6 h-5 md:h-6" />
+          </button>
 
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          spaceBetween={24}
-          slidesPerView={1}
-          navigation={{
-            prevEl: ".swiper-button-prev-pkg",
-            nextEl: ".swiper-button-next-pkg",
-          }}
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 2 },
-            1280: { slidesPerView: 3 },
-          }}
-          className="pb-12"
-        >
-          {relatedPackages.map((item) => (
-            <SwiperSlide key={item.id} className="h-full">
-              <PackageCard item={item} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            spaceBetween={24}
+            slidesPerView={1}
+            navigation={{
+              prevEl: ".swiper-button-prev-pkg",
+              nextEl: ".swiper-button-next-pkg",
+            }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            breakpoints={{
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1440: { slidesPerView: 4 },
+            }}
+            className="pb-12"
+          >
+            {relatedPackages.map((item) => (
+              <SwiperSlide key={item.id} className="h-full">
+                <PackageCard item={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </Container>
     </section>
   );
 };

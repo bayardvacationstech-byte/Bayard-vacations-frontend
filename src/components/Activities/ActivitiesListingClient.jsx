@@ -21,16 +21,19 @@ import {
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Search, MapPin, Package } from "lucide-react";
+import ActivityCard from "@/components/ui/ActivityCard";
 
 export default function ActivitiesListingClient({ regionSlug }) {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   
   const regionName = regionSlug
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-  // Dummy activities data
+  // Enriched activities data with destination and package mappings
   const activities = [
     {
       id: 1,
@@ -41,7 +44,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "2-3 hours",
       priceRange: "$50-$100",
       image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
-      icon: Waves
+      icon: Waves,
+      destinations: ["Baku", "Absheron"],
+      packages: ["Caspian Adventure", "Baku Coastal Escape"]
     },
     {
       id: 2,
@@ -52,7 +57,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "Half day - Full day",
       priceRange: "$75-$150",
       image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
-      icon: Mountain
+      icon: Mountain,
+      destinations: ["Guba", "Gabala", "Sheki"],
+      packages: ["Caucasian Peaks", "Nature Lovers Paradise"]
     },
     {
       id: 3,
@@ -63,7 +70,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "4-6 hours",
       priceRange: "$80-$120",
       image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
-      icon: TreePine
+      icon: TreePine,
+      destinations: ["Gabala", "Goygol"],
+      packages: ["Wild Azerbaijan", "Green Escape"]
     },
     {
       id: 4,
@@ -74,7 +83,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "3-4 hours",
       priceRange: "$40-$80",
       image: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=800&q=80",
-      icon: Bike
+      icon: Bike,
+      destinations: ["Baku Boulevard", "Sheki Village"],
+      packages: ["Active Baku", "Silk Road by Bike"]
     },
     {
       id: 5,
@@ -85,7 +96,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "2-3 hours",
       priceRange: "$30-$60",
       image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80",
-      icon: Compass
+      icon: Compass,
+      destinations: ["Old City Baku", "Sheki Old Town"],
+      packages: ["Historic Azerbaijan", "Cultural Heritage Tour"]
     },
     {
       id: 6,
@@ -96,7 +109,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "2-4 hours",
       priceRange: "$60-$120",
       image: "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6d?w=800&q=80",
-      icon: Sailboat
+      icon: Sailboat,
+      destinations: ["Baku Bay", "Lankaran Coastal"],
+      packages: ["Sunset Sail", "Maritime Experience"]
     },
     {
       id: 7,
@@ -107,7 +122,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "Overnight",
       priceRange: "$90-$180",
       image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80",
-      icon: Tent
+      icon: Tent,
+      destinations: ["Shahdag", "Xinaliq"],
+      packages: ["Starry Night Expedition", "Mountain Camp"]
     },
     {
       id: 8,
@@ -118,7 +135,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "3-4 hours",
       priceRange: "$50-$90",
       image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80",
-      icon: Utensils
+      icon: Utensils,
+      destinations: ["Baku", "Ganja"],
+      packages: ["Culinary Journey", "Tastes of Azerbaijan"]
     },
     {
       id: 9,
@@ -129,28 +148,34 @@ export default function ActivitiesListingClient({ regionSlug }) {
       duration: "2-3 hours",
       priceRange: "$35-$75",
       image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80",
-      icon: Palette
+      icon: Palette,
+      destinations: ["Baku Old City", "Lahij"],
+      packages: ["Artisan Azerbaijan", "Craft & Culture"]
     }
   ];
 
   const categories = ["all", ...new Set(activities.map(a => a.category))];
   
-  const filteredActivities = selectedCategory === "all" 
-    ? activities 
-    : activities.filter(a => a.category === selectedCategory);
+  const filteredActivities = activities.filter(activity => {
+    const matchesCategory = selectedCategory === "all" || activity.category === selectedCategory;
+    const matchesSearch = activity.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         activity.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         activity.destinations.some(d => d.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-brand-green to-green-900 text-white py-16 md:py-24">
         <Container>
-          <Link href={`/packages/${regionSlug}`}>
+          <Link href={regionSlug ? `/packages/${regionSlug}` : "/packages"}>
             <Button 
               variant="ghost" 
               className="text-white hover:bg-white/20 backdrop-blur-sm gap-2 mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to {regionName} Packages
+              Back to {regionName || "All"} Packages
             </Button>
           </Link>
 
@@ -162,17 +187,16 @@ export default function ActivitiesListingClient({ regionSlug }) {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 mb-6">
               <Compass className="w-4 h-4 text-amber-400" />
               <span className="text-sm font-bold uppercase tracking-wider">
-                Things To Do
+                Experience More
               </span>
             </div>
             
             <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6">
-              All Activities in<br />
-              <span className="text-amber-400">{regionName}</span>
+              {regionName ? `Activities in ${regionName}` : "All Activities"}
             </h1>
 
             <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-3xl">
-              Discover exciting activities and unforgettable experiences in {regionName}.
+              Explore curated experiences, from high-adrenaline adventures to soul-stirring cultural tours across the region.
             </p>
           </motion.div>
         </Container>
@@ -180,82 +204,77 @@ export default function ActivitiesListingClient({ regionSlug }) {
 
       {/* Main Content */}
       <Container className="py-12 md:py-20">
-        {/* Category Filters */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all",
-                selectedCategory === category
-                  ? "bg-brand-green text-white shadow-md"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              )}
-            >
-              {category === "all" ? "All Activities" : category}
-            </button>
-          ))}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all",
+                  selectedCategory === category
+                    ? "bg-brand-green text-white shadow-md"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                )}
+              >
+                {category === "all" ? "All Activities" : category}
+              </button>
+            ))}
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative w-full md:w-80">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <input 
+              type="text"
+              placeholder="Search activities or places..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-2xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-green/20 transition-all text-slate-700"
+            />
+          </div>
         </div>
 
         {/* Activities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredActivities.map((activity, index) => {
-            const Icon = activity.icon;
-            return (
-              <motion.div
-                key={activity.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Link
-                  href={`/activities/${regionSlug}/${activity.slug}`}
-                  className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 shadow-xl hover:shadow-2xl h-[420px] flex flex-col bg-white"
-                >
-                  {/* Image */}
-                  <div className="relative h-60 overflow-hidden">
-                    <img
-                      src={activity.image}
-                      alt={activity.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-sm flex items-center gap-1.5 shadow-md">
-                      <Icon className="w-3.5 h-3.5 text-slate-700" />
-                      <span className="text-xs font-bold text-slate-900 uppercase">{activity.category}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 p-6 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-2xl font-black text-slate-900 leading-tight mb-3 group-hover:text-brand-green transition-colors">
-                        {activity.title}
-                      </h3>
-                      <p className="text-slate-600 text-sm leading-relaxed line-clamp-2">
-                        {activity.description}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                      <div className="flex items-center gap-2 text-slate-600">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm font-semibold">{activity.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-brand-green">
-                        <DollarSign className="w-4 h-4" />
-                        <span className="text-sm font-bold">{activity.priceRange}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredActivities.map((activity, index) => (
+            <motion.div
+              key={activity.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <ActivityCard 
+                data={{
+                  name: activity.title,
+                  badge: activity.category,
+                  title: activity.title,
+                  description: activity.description,
+                  image: activity.image,
+                  icon: activity.icon,
+                  isPopular: true,
+                  highlightsTitle: "Recommended Locations:",
+                  highlights: activity.destinations,
+                  relatedPackages: activity.packages // Passing new contextual data
+                }}
+                hoverGradient="from-brand-green/95 to-emerald-900"
+                ctaLabel="Learn More"
+                onCtaClick={() => window.location.href = `/activities/${regionSlug || "azerbaijan"}/${activity.slug}`}
+              />
+            </motion.div>
+          ))}
         </div>
+
+        {filteredActivities.length === 0 && (
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 mb-6">
+              <Search className="w-8 h-8 text-slate-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-2">No activities found</h3>
+            <p className="text-slate-500">Try adjusting your search or category filters.</p>
+          </div>
+        )}
       </Container>
     </div>
   );

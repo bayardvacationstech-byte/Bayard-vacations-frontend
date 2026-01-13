@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import SoloExpeditionClient from "@/components/Themes/SoloExpeditionClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "solo-expedition");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Solo Expedition | Bayard Vacations",
+  description: "All things you. Discover solo-friendly adventures designed for independent travelers seeking freedom and self-discovery.",
+};
 
 export default function SoloExpeditionPage() {
-  const theme = categoryData.find(c => c.slug === "solo-expedition");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+  return <SoloExpeditionClient />;
 }

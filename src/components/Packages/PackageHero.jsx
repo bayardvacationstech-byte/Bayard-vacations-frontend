@@ -1,34 +1,54 @@
 "use client";
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import Container from "@/components/ui/Container";
-import { MapPin, ChevronRight } from "lucide-react";
+import { MapPin, ChevronRight, Star } from "lucide-react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
 
 const PackageHero = ({ packageData }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
+  const swiperRef = useRef(null);
 
-  const validBannerImages = useMemo(() => 
-    packageData?.bannerImages?.filter((image) => image && image?.url !== null) || [],
-    [packageData]
-  );
+  const dummyBannerImages = [
+    { url: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&q=80&w=2000" },
+    { url: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&q=80&w=2000" },
+    { url: "https://images.unsplash.com/photo-1512100356956-c1227c331f01?auto=format&fit=crop&q=80&w=2000" }
+  ];
+
+  const validBannerImages = useMemo(() => {
+    const rawImages = packageData?.bannerImages || [];
+    const filtered = rawImages
+      .map(img => {
+        // Handle cases where img itself is a string/URL
+        if (typeof img === 'string') return { url: img };
+        // Handle cases where img is an object with url or urlRef
+        const url = img?.url || img?.urlRef;
+        if (typeof url === 'string') return { url };
+        // Fallback for direct string value inside object if any
+        if (img && typeof img === 'object' && Object.keys(img).length === 0) return null;
+        return img?.url ? img : null;
+      })
+      .filter(Boolean);
+    
+    return filtered.length > 0 ? filtered : dummyBannerImages;
+  }, [packageData]);
 
   const title = packageData?.packageTitle || "";
   const location = packageData?.region || "";
 
-  // Auto-advance images every 6 seconds
-  useEffect(() => {
-    if (validBannerImages.length <= 1) return;
-    
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % validBannerImages.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [validBannerImages.length]);
-
-  const currentImage = validBannerImages[currentImageIndex]?.url || "/placeholder.jpg";
+  const handleThumbnailClick = (index) => {
+    if (swiperRef.current) {
+      setCurrentImageIndex(index);
+      swiperRef.current.slideToLoop(index);
+    }
+  };
 
   const scrollToNext = () => {
     const element = document.getElementById("package-navigation");
@@ -41,230 +61,229 @@ const PackageHero = ({ packageData }) => {
 
   return (
     <section className="relative w-full bg-slate-950 overflow-hidden">
-      <div className="relative w-full h-[90vh] flex items-stretch bg-slate-900">
+      <div className="relative w-full min-h-screen lg:min-h-0 lg:h-[90vh] flex flex-col lg:flex-row items-stretch bg-slate-900">
         
-        {/* Left Side - Featured Large Image */}
-        <div className="hidden lg:flex w-3/5 relative overflow-hidden group">
-          <motion.div
-            key={currentImageIndex}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="w-full h-full relative"
+        {/* Background Layer (Shared Swiper for Mobile and Desktop Backdrop) */}
+        <div className="absolute inset-x-0 top-0 bottom-[40vh] lg:bottom-0 z-0 lg:w-3/5">
+          <Swiper
+            modules={[Autoplay, EffectFade]}
+            effect="fade"
+            loop={validBannerImages.length > 1}
+            autoplay={{
+              delay: 8000,
+              disableOnInteraction: false,
+            }}
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            onSlideChange={(swiper) => setCurrentImageIndex(swiper.realIndex)}
+            className="w-full h-full"
           >
-            <Image
-              src={currentImage}
-              alt={title}
-              fill
-              priority
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-black/20 to-transparent opacity-40" />
-          </motion.div>
-
-          {/* Image Navigation Dots on Image */}
-          {validBannerImages.length > 1 && (
-            <div className="absolute bottom-8 left-8 z-20 flex gap-2">
-              {validBannerImages.map((_, index) => (
-                <motion.button
-                  key={index}
-                  onClick={() => setCurrentImageIndex(index)}
-                  whileHover={{ scale: 1.3 }}
-                  className={`rounded-full transition-all duration-300 ${
-                    index === currentImageIndex
-                      ? "w-10 h-3 bg-brand-green"
-                      : "w-3 h-3 bg-white/30 hover:bg-white/60"
-                  }`}
-                  aria-label={`Go to image ${index + 1}`}
+            {validBannerImages.map((image, index) => (
+              <SwiperSlide key={index} className="w-full h-full relative">
+                <Image
+                  src={image.url}
+                  alt={title}
+                  fill
+                  priority={index === 0}
+                  className="object-cover"
                 />
-              ))}
-            </div>
-          )}
+                {/* Desktop Content Blending Overlay */}
+                <div className="hidden lg:block absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-slate-950 to-transparent opacity-90" />
+                
+                {/* Mobile Cinematic Overlays - Adjusted for better visibility */}
+                <div className="lg:hidden absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent z-10" />
+                <div className="lg:hidden absolute inset-0 bg-black/10 z-0" />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
 
-        {/* Right Side - Content & Image Grid */}
-        <div className="w-full lg:w-2/5 flex flex-col justify-between p-6 md:p-10 pt-32 md:pt-24 relative z-10">
+        {/* Desktop Navigation Dots (Bottom Left) */}
+        {validBannerImages.length > 1 && (
+          <div className="absolute bottom-8 left-12 z-20 hidden lg:flex gap-2">
+            {validBannerImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                className={`h-1.5 transition-all duration-300 rounded-full ${
+                  index === currentImageIndex
+                    ? "w-8 bg-brand-blue"
+                    : "w-2 bg-white/40 hover:bg-white/60"
+                }`}
+                aria-label={`Go to image ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Right Side / Content Panel */}
+        <div className="relative w-full lg:w-2/5 ml-auto flex flex-col p-6 md:p-12 pt-28 lg:pt-32 pb-16 lg:pb-12 z-10 lg:bg-[#030712] border-l border-white/5">
           
-          {/* Top Section - Title & Info */}
-          <div className="space-y-6">
-            {/* Title */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-            >
-              <h1 
-                className="text-white font-bold text-4xl md:text-5xl leading-tight"
-                style={{ fontFamily: "'Denton Test', serif" }}
-              >
-                {title}
-              </h1>
-            </motion.div>
-
-            {/* Location */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex items-center gap-3"
-            >
-              <div className="w-10 h-10 bg-brand-green/20 rounded-lg flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-brand-green" />
+          {/* Mobile Stories Bars (Top) */}
+          <div className="lg:hidden absolute top-16 left-6 right-6 flex gap-1.5 z-30">
+            {validBannerImages.map((_, index) => (
+              <div key={index} className="h-[2px] flex-1 bg-white/20 rounded-full overflow-hidden">
+                {index === currentImageIndex && (
+                  <motion.div 
+                    layoutId="progress-bar-mobile"
+                    className="h-full bg-white shadow-[0_0_8px_white]"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 8, ease: "linear" }}
+                  />
+                )}
+                {index < currentImageIndex && <div className="h-full w-full bg-white/60" />}
               </div>
-              <div>
-                <p className="text-white/60 text-xs uppercase tracking-wider font-semibold">Destination</p>
-                <p className="text-white font-bold text-lg">{location}</p>
-              </div>
-            </motion.div>
-
-            {/* Info Cards Grid */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="grid grid-cols-3 gap-3"
-            >
-              {/* Duration */}
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3">
-                <p className="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">Duration</p>
-                <p className="text-white text-xl font-black">{packageData?.nights || "5"}<span className="text-xs text-white/50 ml-1">N</span></p>
-              </div>
-
-              {/* Days */}
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3">
-                <p className="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">Days</p>
-                <p className="text-white text-xl font-black">{(packageData?.nights || 5) + 1}<span className="text-xs text-white/50 ml-1">D</span></p>
-              </div>
-
-              {/* Price */}
-              <div className="bg-brand-blue/20 backdrop-blur-sm border border-brand-blue/30 rounded-xl p-3">
-                <p className="text-brand-blue/70 text-xs font-bold uppercase tracking-wider mb-1">From</p>
-                <p className="text-white text-lg font-black">₹<span className="text-sm">{Math.floor((packageData?.price || 45000) / 1000)}K</span></p>
-              </div>
-            </motion.div>
+            ))}
           </div>
 
-          {/* Highlights Section */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-4"
-          >
-            <p className="text-white/50 text-xs uppercase tracking-wider font-semibold">Package Highlights</p>
-            <div className="space-y-2">
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-brand-green rounded-full mt-2 flex-shrink-0" />
-                <p className="text-white/70 text-sm">Mountain trekking & scenic lake exploration</p>
+          {/* Content Wrapper */}
+          <div className="w-full space-y-4 lg:space-y-12 mb-6 md:mb-0">
+            {/* Header Content */}
+            <div className="space-y-6">
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.1 }}
+                className="text-white font-bold text-4xl md:text-5xl lg:text-5xl leading-[1.2] tracking-tight"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                {title}
+              </motion.h1>
+
+              {/* Destination Chip */}
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex items-center gap-4 py-2"
+              >
+                <div className="w-12 h-12 bg-[#0a1a3a] rounded-xl flex items-center justify-center border border-white/5">
+                  <MapPin className="w-5 h-5 text-brand-blue" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[#3b82f6] font-black text-[10px] uppercase tracking-[0.2em] mb-0.5">Destination</span>
+                  <span className="text-white font-bold text-xl uppercase tracking-wider">{location}</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Info Grid */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="grid grid-cols-3 gap-3 md:gap-4"
+            >
+              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-4 md:p-6 rounded-3xl flex flex-col justify-center min-h-[90px] md:min-h-[100px]">
+                <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-2 md:mb-3">Duration</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{packageData?.nights || "3"}</span>
+                  <span className="text-white/40 text-[10px] md:text-xs font-black uppercase ml-1">N</span>
+                </div>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-brand-green rounded-full mt-2 flex-shrink-0" />
-                <p className="text-white/70 text-sm">Traditional local culture & heritage tours</p>
+
+              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-4 md:p-6 rounded-3xl flex flex-col justify-center min-h-[90px] md:min-h-[100px]">
+                <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-2 md:mb-3">Days</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{(packageData?.nights || 3) + 1}</span>
+                  <span className="text-white/40 text-[10px] md:text-xs font-black uppercase ml-1">D</span>
+                </div>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-brand-green rounded-full mt-2 flex-shrink-0" />
-                <p className="text-white/70 text-sm">Accommodation & daily meals included</p>
+
+              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-4 md:p-6 rounded-3xl flex flex-col justify-center min-h-[90px] md:min-h-[100px]">
+                <p className="text-[#3b82f6] text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-2 md:mb-3">From</p>
+                <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">₹{Math.floor((packageData?.price || 45000) / 1000)}K</span>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="w-2 h-2 bg-brand-green rounded-full mt-2 flex-shrink-0" />
-                <p className="text-white/70 text-sm">Expert guide & 24/7 customer support</p>
+            </motion.div>
+
+            {/* Split Content: Highlights & Grid */}
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 lg:items-start pt-4">
+              {/* Left: Highlights */}
+              <div className="flex-1 space-y-10">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Package Highlights</p>
+                  <div className="space-y-4">
+                    {[
+                      "Mountain trekking & scenic lake exploration",
+                      "Traditional local culture & heritage tours",
+                      "Accommodation & daily meals included",
+                      "Expert guide & 24/7 customer support"
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-4">
+                        <div className="w-1.5 h-1.5 rounded-full bg-brand-blue shadow-[0_0_8px_rgba(0,102,255,0.8)]" />
+                        <p className="text-white/70 text-sm font-medium leading-none">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Mobile Thumbnail Row (Visible only on Mobile) */}
+              <div className="lg:hidden flex gap-3 overflow-x-auto py-2 px-1 scrollbar-none snap-x shrink-0">
+                {validBannerImages.map((image, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => handleThumbnailClick(index)}
+                    whileTap={{ scale: 0.95 }}
+                    className={`relative w-16 h-16 shrink-0 rounded-2xl overflow-hidden border-2 transition-all duration-300 snap-center ${
+                      index === currentImageIndex
+                        ? "border-brand-blue ring-4 ring-brand-blue/10 scale-105"
+                        : "border-white/5 opacity-40"
+                    }`}
+                  >
+                    <Image
+                      src={image.url}
+                      alt={`Gallery ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Desktop Thumbnail Grid (Synced - Visible only on Desktop) */}
+              <div className="hidden lg:grid grid-cols-2 gap-3 shrink-0">
+                {validBannerImages.slice(0, 4).map((image, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => handleThumbnailClick(index)}
+                    whileHover={{ scale: 1.05 }}
+                    className={`relative w-24 h-24 lg:w-32 lg:h-32 rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden border-2 transition-all duration-500 ${
+                      index === currentImageIndex
+                        ? "border-brand-blue ring-4 ring-brand-blue/10 scale-105"
+                        : "border-white/5 opacity-40 hover:opacity-100"
+                    }`}
+                  >
+                    <Image
+                      src={image.url}
+                      alt={`Gallery ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </motion.button>
+                ))}
               </div>
             </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="lg:hidden grid grid-cols-3 gap-3 mb-8"
-          >
-            {validBannerImages.slice(0, 3).map((image, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                whileHover={{ scale: 1.05 }}
-                className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${
-                  index === currentImageIndex
-                    ? "border-brand-green ring-2 ring-brand-green"
-                    : "border-white/20 hover:border-white/40"
-                }`}
-              >
-                <Image
-                  src={image?.url || "/placeholder.jpg"}
-                  alt={`Image ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </motion.button>
-            ))}
-          </motion.div>
+          </div>
 
-          {/* Bottom - CTA & Scroll */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="flex flex-col items-start gap-4"
+          {/* Mobile-only Scroll Indicator */}
+          <button 
+            className="lg:hidden text-white/40 text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 pt-12 pb-4 mt-auto"
+            onClick={scrollToNext}
           >
-            <button
-              onClick={scrollToNext}
-              className="group bg-brand-green hover:bg-brand-green/80 text-slate-950 font-bold px-8 py-3 rounded-full flex items-center gap-2 transition-all duration-300 transform hover:translate-x-1"
-            >
-              Explore Package
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            {/* Scroll Indicator */}
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
+            Scroll To Journey
+            <motion.div 
+              animate={{ y: [0, 5, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="text-white/50 text-xs font-semibold uppercase tracking-wider flex items-center gap-2"
             >
-              Scroll to see more
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
+              ↓
             </motion.div>
-          </motion.div>
+          </button>
         </div>
-
-        {/* Desktop Image Grid - Right side overlay */}
-        {validBannerImages.length > 1 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="hidden lg:grid absolute bottom-10 right-10 grid-cols-2 gap-3 z-20 max-w-xs"
-          >
-            {validBannerImages.slice(1, 5).map((image, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setCurrentImageIndex(index + 1)}
-                onHoverStart={() => setHoveredImageIndex(index)}
-                onHoverEnd={() => setHoveredImageIndex(null)}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className={`relative rounded-lg overflow-hidden border-2 backdrop-blur-sm transition-all ${
-                  index + 1 === currentImageIndex
-                    ? "border-brand-green ring-2 ring-brand-green w-32 h-32"
-                    : "border-white/20 hover:border-white/40 w-28 h-28"
-                }`}
-              >
-                <Image
-                  src={image?.url || "/placeholder.jpg"}
-                  alt={`Gallery ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-                {hoveredImageIndex === index && (
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <ChevronRight className="w-6 h-6 text-white" />
-                  </div>
-                )}
-              </motion.button>
-            ))}
-          </motion.div>
-        )}
       </div>
     </section>
   );

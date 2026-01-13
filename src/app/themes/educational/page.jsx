@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import EducationalToursClient from "@/components/Themes/EducationalToursClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "educational");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Educational Tours | Bayard Vacations",
+  description: "Discover enriching educational tours for students and academicgroups. From historical sites to science centers, learning comes alive!",
+};
 
-export default function EducationalPage() {
-  const theme = categoryData.find(c => c.slug === "educational");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+export default function EducationalToursPage() {
+  return <EducationalToursClient />;
 }

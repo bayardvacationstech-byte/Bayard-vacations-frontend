@@ -122,13 +122,14 @@ const getReferencedData = async (docRef) => {
       const segments = docRef._key.path.segments;
       documentId = segments.pop();
       collectionName = segments.pop();
+    } else if (typeof docRef === "string" && (docRef.startsWith("http") || docRef.startsWith("/"))) {
+      // handle direct URL strings by wrapping them in an object
+      return { url: docRef };
     } else {
       // If we don't recognize it as a reference and it's not a known data object,
       // return it as is if it's an object, otherwise null
       return typeof docRef === "object" ? docRef : null;
     }
-
-    // sanitize the document data
     const docSnap = await getDoc(doc(db, collectionName, documentId));
 
     if (docSnap.exists()) {

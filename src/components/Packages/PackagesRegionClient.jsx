@@ -597,6 +597,19 @@ export default function PackagesRegionClient() {
 
           {/* Main Content: Package Grid and Pagination - Full Width */}
           <div className="w-full pb-2" id="packages" ref={packagesRef}>
+            {/* Section Heading */}
+            <div className="pt-10 md:pt-16 mb-8 md:mb-12">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col gap-2"
+              >
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight capitalize">
+                  {placeName} <span className="text-brand-blue">Packages</span>
+                </h2>
+              </motion.div>
+            </div>
             {/* Package Cards Grid */}
             {!isMounted || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
               // Loading State - Show skeleton cards

@@ -42,7 +42,7 @@ const Faq = ({ content }) => {
             "
           >
             {/* Accent Bar - Appears on Hover */}
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-brand-blue via-brand-accent to-brand-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-brand-blue via-yellow-400 to-brand-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
             {/* Question */}
             <AccordionTrigger className="

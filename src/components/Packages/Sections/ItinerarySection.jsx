@@ -23,30 +23,20 @@ const ItinerarySection = ({ packageData }) => {
   };
 
   return (
-    <div id="itinerary" className="bg-white rounded-3xl py-6 md:py-6 md:px-6 scroll-mt-48 mb-6 border border-slate-100 shadow-sm">
+    <div id="itinerary" className="bg-white rounded-3xl py-4 md:py-6 px-3 md:px-6 scroll-mt-48 mb-4 border border-slate-100 shadow-sm">
       {/* Standard Header Block - Above Split Layout */}
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
         <div className="flex-1 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full text-[10px] font-bold text-orange-600 border border-orange-100 mb-4 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full text-[9px] md:text-[10px] font-bold text-orange-600 border border-orange-100 mb-2 md:mb-4 uppercase tracking-widest">
             <span className="text-xs">🗺️</span> Journey Workflow
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">Your <span className="text-brand-green">Daily Itinerary</span></h2>
-          <p className="text-lg font-medium text-slate-600">
-            A carefully curated day-by-day plan for your perfect adventure
+          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">Your <span className="text-brand-green">Daily Itinerary</span></h2>
+          <p className="text-sm md:text-lg font-medium text-slate-600">
+            A carefully curated day-by-plan for your perfect adventure
           </p>
         </div>
         
-        {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 mt-4 lg:mt-0 lg:flex-shrink-0">
-          <button
-            onClick={() => window.print()}
-            className="group relative px-6 py-3 bg-white text-black font-black text-[11px] uppercase tracking-widest transition-all shadow-md shadow-brand-green/20 hover:shadow-brand-green/20 hover:-translate-y-0.5 active:scale-95 rounded-2xl flex items-center gap-2 overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-            <span className="text-sm">📥</span> 
-            <span>Download Itinerary</span>
-          </button>
-
           <button
             onClick={toggleAllDays}
             className="px-6 py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-2xl text-brand-blue font-black text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
@@ -62,20 +52,20 @@ const ItinerarySection = ({ packageData }) => {
 
         <div className="relative">
           {/* Timeline connector line */}
-          <div className="absolute left-6 md:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-blue/20 via-brand-blue/40 to-brand-blue/20 opacity-30" />
+          <div className="hidden md:block absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-blue/20 via-brand-blue/40 to-brand-blue/20 opacity-30" />
           
           {packageData?.itineraries?.map((day, index) => (
             <div
               key={index}
-              className="relative pl-16 md:pl-20 pb-8 last:pb-0"
+              className="relative pl-0 md:pl-20 pb-8 last:pb-0"
             >
-              {/* Timeline Node */}
-              <div className="absolute left-0 top-0">
+              {/* Timeline Node - Desktop Only */}
+              <div className="hidden md:block absolute left-0 top-0">
                 <div className="relative">
                   {/* Day badge */}
-                  <div className="relative w-12 h-12 md:w-16 md:h-16 gradient-btn rounded-2xl flex flex-col items-center justify-center shadow-md border border-white/20">
-                    <span className="text-[10px] md:text-xs font-bold text-white/70 uppercase tracking-wider">Day</span>
-                    <span className="text-lg md:text-2xl font-black text-white leading-none">{(index + 1).toString().padStart(2, "0")}</span>
+                  <div className="relative w-16 h-16 gradient-btn rounded-2xl flex flex-col items-center justify-center shadow-md border border-white/20">
+                    <span className="text-xs font-bold text-white/70 uppercase tracking-widest">Day</span>
+                    <span className="text-2xl font-black text-white leading-none">{(index + 1).toString().padStart(2, "0")}</span>
                   </div>
                 </div>
               </div>
@@ -86,25 +76,32 @@ const ItinerarySection = ({ packageData }) => {
                   {/* Clickable Card Header */}
                   <button 
                     onClick={() => toggleDay(index)}
-                    className="w-full text-left relative p-5 md:p-6 flex items-center justify-between gap-4 transition-colors hover:bg-white/5"
+                    className="w-full text-left relative p-3.5 md:p-6 flex items-center justify-between gap-3 md:gap-4 transition-colors hover:bg-white/5"
                   >
                     <div className="flex-1 min-w-0">
-                      {/* Location badge */}
-                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-green/5 rounded-full text-xs font-medium text-brand-green border border-brand-green/20 mb-2">
-                        <span className="w-1.5 h-1.5 bg-brand-green rounded-full" />
-                        {cities[index % cities.length] || "Destination"}
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        {/* Mobile Day Indicator */}
+                        <div className="md:hidden flex items-center gap-1.5 px-2 py-0.5 bg-brand-blue rounded-md text-[10px] font-black text-white uppercase tracking-tighter">
+                          Day {(index + 1).toString().padStart(2, "0")}
+                        </div>
+                        
+                        {/* Location badge */}
+                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-brand-green/5 rounded-full text-[10px] md:text-xs font-bold text-brand-green border border-brand-green/20">
+                          <span className="w-1 h-1 bg-brand-green rounded-full" />
+                          {cities[index % cities.length] || "Destination"}
+                        </div>
                       </div>
                       
                       {/* Title */}
-                      <h5 className={`text-lg md:text-xl font-bold transition-colors leading-tight truncate ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
+                      <h5 className={`text-base md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
                         {day.title}
                       </h5>
                     </div>
                     
                     {/* Expand/Collapse Icon */}
-                    <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${expandedDays.includes(index) ? 'bg-brand-green rotate-180' : 'bg-slate-100'}`}>
+                    <div className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all duration-300 ${expandedDays.includes(index) ? 'bg-brand-green rotate-180' : 'bg-slate-100'}`}>
                       <svg 
-                        className={`w-5 h-5 transition-colors ${expandedDays.includes(index) ? 'text-white' : 'text-slate-400'}`}
+                        className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${expandedDays.includes(index) ? 'text-white' : 'text-slate-400'}`}
                         fill="none" 
                         viewBox="0 0 24 24" 
                         stroke="currentColor"
@@ -120,7 +117,7 @@ const ItinerarySection = ({ packageData }) => {
                       {/* Decorative line */}
                       <div className="mx-6 h-px bg-slate-100" />
                         
-                        <div className="px-5 md:px-6 py-5 md:py-6">
+                        <div className="px-4 md:px-6 py-4 md:py-6">
                           {/* Description with enhanced formatting */}
                           <div className="space-y-3 mb-6">
                             {day.description?.split("\n").map((line, lineIndex) => {
@@ -236,8 +233,8 @@ const ItinerarySection = ({ packageData }) => {
           ))}
           
           {/* Journey End Marker */}
-          <div className="relative pl-16 md:pl-20 pt-4">
-            <div className="absolute left-0 top-4">
+          <div className="relative pl-0 md:pl-20 pt-4">
+            <div className="hidden md:block absolute left-0 top-4">
               <div className="relative w-12 h-12 md:w-16 md:h-16 bg-emerald-50 rounded-2xl flex items-center justify-center shadow-sm border border-emerald-100">
                 <span className="text-2xl">🏁</span>
               </div>

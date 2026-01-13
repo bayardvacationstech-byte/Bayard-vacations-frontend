@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import EliteEscapeClient from "@/components/Themes/EliteEscapeClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "elite-escape");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Elite Escape | Bayard Vacations",
+  description: "All things luxury. Discover premium destinations and exclusive experiences for those who demand the very best in travel.",
+};
 
 export default function EliteEscapePage() {
-  const theme = categoryData.find(c => c.slug === "elite-escape");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+  return <EliteEscapeClient />;
 }

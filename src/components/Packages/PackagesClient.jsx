@@ -12,16 +12,16 @@ import PremiumFaq from "./PremiumFaq";
 import PremiumBookNowForm from "@/components/Forms/BookNowForm/PremiumBookNowForm";
 import OverviewSection from "./Sections/OverviewSection";
 import ItinerarySection from "./Sections/ItinerarySection";
-import StaySection from "./Sections/StaySection";
 import InclusionsSection from "./Sections/InclusionsSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
-import { convertAndSortHotels } from "@/lib/utils";
+import { cn, convertAndSortHotels } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
-import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import Container from "@/components/ui/Container";
+import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
+import { toast } from "sonner";
 
 const PackagesClient = () => {
   const params = useParams();
@@ -34,7 +34,8 @@ const PackagesClient = () => {
   const sections = [
     { id: "overview", label: "Overview" },
     { id: "itinerary", label: "Itinerary" },
-    { id: "stay", label: "Stay" },
+    { id: "hotels-section", label: "Stay" },
+    { id: "experiences-section", label: "Experiences" },
     { id: "inclusions", label: "Inclusions" },
     { id: "faq", label: "FAQ" },
   ];
@@ -237,120 +238,144 @@ const PackagesClient = () => {
         <PackageNavigation 
             activeSection={activeSection} 
             onScrollToSection={scrollToSection} 
+            sections={sections}
         />
         
-        {/* Two Column Layout: Main Content (80%) + Sticky Sidebar (20%) */}
-        <Container className="relative flex gap-12 pt-2">
-        {/* Main Content - 80% */}
-        <div className="w-[80%]">
+        {/* Two Column Layout: Main Content (Full on Mobile, 80% on Desktop) + Sticky Sidebar (Hidden on Mobile) */}
+        <Container className="relative flex flex-col lg:flex-row gap-8 lg:gap-8 pt-0">
+        {/* Main Content - Full width on Mobile, 80% on Desktop */}
+        <div className="w-full lg:w-[80%]">
           {/* 3. Package Details Content */}
-             <div className="mt-4 px-4 md:px-0">
-                <OverviewSection packageData={packageData} />
-                <ItinerarySection packageData={packageData} />
-                <StaySection packageData={packageData} />
-                <InclusionsSection packageData={packageData} />
-             </div>
-          
-          {/* 3. Experiences Gallery - Visual Activities */}
-          <PackageExperiences 
-            packageData={packageData} 
-          />
-          
-          {/* 4. Hotel Details - Where You'll Stay */}
-          <PackageHotels packageData={packageData} />
+              <div className="mt-0 px-0">
+              <div className="space-y-8 md:space-y-12">
+                <div id="overview" className="scroll-mt-36">
+                  <OverviewSection packageData={packageData} />
+                </div>
+                
+                <div id="itinerary" className="scroll-mt-36">
+                  <ItinerarySection packageData={packageData} />
+                </div>
 
-          {/* Related Packages */}
-          {filteredRelatedPackages && (
-            <ItineraryFooter relatedPackages={filteredRelatedPackages} />
-          )}
+                <div id="stay" className="scroll-mt-36">
+                  <PackageHotels packageData={packageData} />
+                </div>
 
-          {/* 5. FAQ Section - Answer Questions */}
-          <PremiumFaq 
-            content={packageData?.faq} 
-            regionName={packageData?.region} 
-          />
+                <div id="experiences" className="scroll-mt-36">
+                  <PackageExperiences packageData={packageData} />
+                </div>
 
-          {/* 6. Why Choose Bayard Vacations - Final Section */}
-          <WhyBayardVacations />
+                <div id="inclusions" className="scroll-mt-36">
+                  <InclusionsSection packageData={packageData} />
+                </div>
+                
+                <div id="faq" className="scroll-mt-36">
+                  <PremiumFaq faqData={packageData?.faq} />
+                </div>
+              </div>
+              </div>
         </div>
 
-        <div className="hidden lg:block w-[25%]" id="booking-sidebar">
-          <div className="sticky top-[100px]">
-            {/* Redesigned Blue Booking Card */}
-            <div className="bg-[#0046b8] rounded-2xl shadow-2xl overflow-hidden p-6 text-white border border-blue-400/20">
-              <h3 className="text-xl font-bold mb-6">Hotel Type</h3>
+        <div className="hidden lg:block w-[20%]" id="booking-sidebar">
+          <div className="sticky top-[100px] space-y-3">
+            {/* Pricing Card */}
+            {/* Primary Booking Card */}
+            <div className="gradient-btn rounded-3xl shadow-xl overflow-hidden p-4 border border-white/20">
+              <h3 className="text-lg font-bold text-white mb-4">Select Hotel Type</h3>
 
-              {/* Hotel Tiers Selection */}
-              <div className="grid grid-cols-3 gap-2 mb-8">
+              {/* Hotel Tiers Selection - Horizontal Grid */}
+              <div className="grid grid-cols-3 gap-2 mb-4">
                 {hotelTiers.map((tier) => {
                   const isActive = selectedHotel?.type === tier.type;
                   
-                  const starRatingMap = {
+                  const starRatingNames = {
+                    twostar: "2 Star",
+                    threestar: "3 Star",
+                    fourstar: "4 Star",
+                    fivestar: "5 Star",
+                  };
+
+                  const starRatingCount = {
                     twostar: 2,
                     threestar: 3,
                     fourstar: 4,
                     fivestar: 5,
                   };
 
-                  const stars = starRatingMap[tier.type] || 5;
+                  const label = starRatingNames[tier.type] || "Hotel";
+                  const stars = starRatingCount[tier.type] || 5;
                   
                   return (
-                    <div key={tier.type} className="flex flex-col items-center gap-2">
-                      <button
-                        onClick={() => setSelectedHotel(tier)}
-                        className={`w-full flex flex-col items-center justify-center p-2 rounded-lg border-2 transition-all duration-300 ${
-                          isActive 
-                            ? "bg-[#4fb800] border-[#4fb800] shadow-lg scale-105" 
-                            : "bg-transparent border-white/30 hover:border-white/60"
-                        }`}
-                      >
-                        <div className="flex gap-0.5 items-center justify-center">
-                          {[...Array(stars)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              size={10} 
-                              className="fill-white text-white" 
-                            />
-                          ))}
-                        </div>
-                      </button>
-                      {tier.additionalCharge > 0 && !isActive && (
-                        <span className="text-[10px] text-white/70 font-medium">
-                          +{formatPrice(tier.additionalCharge)} INR
-                        </span>
-                      )}
-                    </div>
+                    <button
+                      key={tier.type}
+                      onClick={() => setSelectedHotel(tier)}
+                      className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all duration-300 ${
+                        isActive 
+                          ? "bg-yellow-400/10 border-yellow-400 shadow-sm scale-105" 
+                          : "bg-white/5 border-white/10 hover:border-white/30"
+                      }`}
+                    >
+                      <span className={`text-[10px] font-black uppercase tracking-wider mb-1 ${isActive ? "text-yellow-400" : "text-white/60"}`}>
+                        {label}
+                      </span>
+                      <div className="flex gap-0.5 items-center justify-center">
+                        {[...Array(stars)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            size={10} 
+                            className={cn(
+                              "fill-current",
+                              isActive ? "text-yellow-400" : "text-white/30"
+                            )} 
+                          />
+                        ))}
+                      </div>
+                    </button>
                   );
                 })}
               </div>
 
               {/* Price Details */}
-              <div className="mb-8">
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-black">₹ {formatPrice(finalPrice)}</span>
+              <div className="mb-6 p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
+                <div className="flex items-center justify-between mb-0.5">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-black text-white">₹ {formatPrice(finalPrice)}</span>
+                  </div>
+                  {packageData?.offer?.discountPercentage && (
+                    <span className="px-2 py-1 bg-yellow-400 text-slate-900 font-black rounded-lg text-[9px] uppercase tracking-wider">
+                      {packageData.offer.discountPercentage}% Off
+                    </span>
+                  )}
                 </div>
-                <p className="text-white/70 text-sm font-medium">Price Per Person</p>
+                <p className="text-white/60 text-[10px] font-semibold">Per Person (Incl. all taxes)</p>
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-4">
-                <button
-                  onClick={openModal}
-                  className="w-full px-6 py-3.5 bg-transparent hover:bg-white/5 border-2 border-white text-white font-bold rounded-xl transition-all text-sm uppercase tracking-wider"
-                >
-                  Request a Call back
-                </button>
-                
+              <div className="space-y-2">
                 <button
                   onClick={() => {
                     const hotelParam = selectedHotel?.type ? `?hotel=${selectedHotel.type}` : "";
                     window.location.href = `/checkout/${packageData.packageSlug}${hotelParam}`;
                   }}
-                  className="w-full px-6 py-4 bg-[#4fb800] hover:bg-[#5cd600] text-white font-black rounded-xl shadow-lg transition-all text-base uppercase tracking-widest"
+                  className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 px-5 py-3 rounded-2xl shadow-lg transition-all text-sm font-black uppercase tracking-widest active:scale-95 hover:opacity-90"
                 >
                   Book Now
                 </button>
               </div>
+            </div>
+
+            <div className="gradient-btn rounded-3xl shadow-xl overflow-hidden p-4 border border-white/20">
+              <h3 className="text-lg font-bold text-white mb-4">Quick Enquiry</h3>
+              
+              <EnquiryFormFields 
+                variant="inline" 
+                formType="potential"
+                hideFields={["destination", "message"]}
+                initialData={{ destination: packageData?.region }}
+                onSuccess={() => {}}
+                buttonText="Send Enquiry"
+                whiteLabels={true}
+                brandYellow={true}
+              />
             </div>
 
             {/* Share Section */}
@@ -367,6 +392,26 @@ const PackagesClient = () => {
             </div>
           </div>
         </div>
+      </Container>
+
+      <Container className="pt-0 pb-12">
+           {/* Related Packages */}
+           {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
+             <div className="mb-8">
+               <ItineraryFooter relatedPackages={filteredRelatedPackages} />
+             </div>
+           )}
+
+           {/* 5. FAQ Section - Answer Questions */}
+           <div id="faq" className="mb-16">
+             <PremiumFaq 
+               content={packageData?.faq} 
+               regionName={packageData?.region} 
+             />
+           </div>
+
+           {/* 6. Why Choose Bayard Vacations - Final Section */}
+           <WhyBayardVacations />
       </Container>
       </div>
 

@@ -1,18 +1,10 @@
-import categoryData from "@/data/categoryData";
-import ThemePageClient from "@/components/Themes/ThemePageClient";
-import { notFound } from "next/navigation";
+import ReligiousRetreatClient from "@/components/Themes/ReligiousRetreatClient";
 
-export async function generateMetadata() {
-  const theme = categoryData.find(c => c.slug === "religious-retreat");
-  if (!theme) return {};
-  return {
-    title: `${theme.title} | Bayard Vacations`,
-    description: `Explore our specialized ${theme.title.toLowerCase()} packages. ${theme.subtitle}`,
-  };
-}
+export const metadata = {
+  title: "Religious Retreat | Bayard Vacations",
+  description: "All things spiritual. Discover sacred destinations and pilgrimages for spiritual growth, inner peace, and divine connection.",
+};
 
 export default function ReligiousRetreatPage() {
-  const theme = categoryData.find(c => c.slug === "religious-retreat");
-  if (!theme) notFound();
-  return <ThemePageClient theme={theme} />;
+  return <ReligiousRetreatClient />;
 }
