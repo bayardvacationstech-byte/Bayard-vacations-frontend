@@ -320,7 +320,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </span>
               </div>
               
-              <h1 className="text-5xl md:text-8xl font-black text-white leading-tight tracking-tighter">
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white leading-tight tracking-tighter">
                 Why Choose<br />
                 <span className="text-amber-400">{regionName}?</span>
               </h1>
@@ -330,7 +330,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-lg md:text-2xl text-white/90 max-w-4xl font-medium leading-relaxed drop-shadow-lg"
+              className="text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl font-medium leading-relaxed drop-shadow-lg"
             >
               {regionData?.overview}
             </motion.p>
@@ -339,9 +339,9 @@ export default function WhyChooseRegionClient({ regionSlug }) {
       </div>
 
       {/* Main Content */}
-      <Container className="py-12 md:py-16">
+      <Container className="py-8 md:py-12">
         {/* Why Visit Section */}
-        <section className="mb-12 md:mb-16">
+        <section className="mb-8 md:mb-12">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-10">
               <span className="inline-block px-4 py-2 bg-brand-blue/10 text-brand-blue rounded-full text-sm font-black uppercase tracking-widest mb-6">
@@ -356,22 +356,20 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               </p>
             </div>
 
-            {/* Reasons List - Simple Layout */}
-            <div className="space-y-6">
+            {/* Reasons List - Responsive Layout */}
+            <div className="space-y-8 md:space-y-6">
               {/* Reason 1 */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center text-white shadow-md">
-                    <Globe className="w-8 h-8" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center text-white shadow-md">
+                    <Globe className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">Where East Meets West</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                  <h3 className="text-xl md:text-3xl font-black text-slate-900 mb-1 md:mb-2">Where East Meets West</h3>
+                  <p className="text-sm md:text-lg text-slate-600 leading-relaxed">
                     Azerbaijan sits at the crossroads of Europe and Asia, offering a unique cultural tapestry woven from Persian, 
-                    Turkish, Russian, and Soviet influences. Experience a nation that perfectly balances Eastern hospitality 
-                    with Western modernity, featuring 9 out of 11 climate zones and a blend of UNESCO World Heritage sites 
-                    alongside ultra-modern architecture.
+                    Turkish, Russian, and Soviet influences. 
                   </p>
                 </div>
               </div>
@@ -379,19 +377,17 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
               {/* Reason 2 */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-md">
-                    <Mountain className="w-8 h-8" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-md">
+                    <Mountain className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">Extraordinary Natural Beauty</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                  <h3 className="text-xl md:text-3xl font-black text-slate-900 mb-1 md:mb-2">Extraordinary Natural Beauty</h3>
+                  <p className="text-sm md:text-lg text-slate-600 leading-relaxed">
                     From the eternal flames of Yanar Dag to the bubbling mud volcanoes of Gobustan, Azerbaijan's landscapes 
-                    defy imagination. The country is home to nearly half of the world's mud volcanoes, while natural gas flames 
-                    have burned continuously for thousands of years. The Great Caucasus Mountains meet the Caspian Sea, 
-                    creating diverse ecosystems rarely found in such proximity.
+                    defy imagination.
                   </p>
                 </div>
               </div>
@@ -399,19 +395,17 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
               {/* Reason 3 */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-white shadow-md">
-                    <Clock className="w-8 h-8" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-white shadow-md">
+                    <Clock className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">Millennia of History</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                  <h3 className="text-xl md:text-3xl font-black text-slate-900 mb-1 md:mb-2">Millennia of History</h3>
+                  <p className="text-sm md:text-lg text-slate-600 leading-relaxed">
                     Walk through 40,000 years of human civilization at Gobustan's rock art galleries, explore medieval 
                     caravanserais along the Silk Road, and marvel at the intricate craftsmanship of the Sheki Khan's Palace. 
-                    Every corner tells a story spanning empires and epochs, with the medieval Old City of Icherisheher 
-                    standing proudly within the modern capital of Baku.
                   </p>
                 </div>
               </div>
@@ -419,19 +413,17 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
               {/* Reason 4 */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-pink-500 rounded-2xl flex items-center justify-center text-white shadow-md">
-                    <Coffee className="w-8 h-8" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-red-400 to-pink-500 rounded-2xl flex items-center justify-center text-white shadow-md">
+                    <Coffee className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">A Gastronomic Paradise</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                  <h3 className="text-xl md:text-3xl font-black text-slate-900 mb-1 md:mb-2">A Gastronomic Paradise</h3>
+                  <p className="text-sm md:text-lg text-slate-600 leading-relaxed">
                     Azerbaijani cuisine is a celebration of flavors, with over 30 varieties of dolma, aromatic saffron plov, 
-                    and succulent kebabs. The country's culinary traditions reflect its position as a historic trading hub, 
-                    blending spices and techniques from across continents. Experience world-renowned saffron and pomegranate 
-                    dishes that have been perfected over centuries.
+                    and succulent kebabs. The country's culinary traditions reflect its position as a historic trading hub.
                   </p>
                 </div>
               </div>
@@ -439,19 +431,17 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
               {/* Reason 5 */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-md">
-                    <Camera className="w-8 h-8" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-md">
+                    <Camera className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">Futuristic Architecture</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                  <h3 className="text-xl md:text-3xl font-black text-slate-900 mb-1 md:mb-2">Futuristic Architecture</h3>
+                  <p className="text-sm md:text-lg text-slate-600 leading-relaxed">
                     Baku's skyline is a testament to architectural ambition, featuring Zaha Hadid's flowing Heydar Aliyev Center 
-                    and the LED-lit Flame Towers that illuminate the night sky. The city seamlessly blends cutting-edge design 
-                    with its ancient heritage, creating a visual experience where medieval towers stand alongside structures 
-                    that push the boundaries of modern architecture.
+                    and the LED-lit Flame Towers that illuminate the night sky.
                   </p>
                 </div>
               </div>
@@ -459,27 +449,25 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
               {/* Reason 6 */}
-              <div className="flex gap-6 items-start">
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-violet-600 rounded-2xl flex items-center justify-center text-white shadow-md">
-                    <Users className="w-8 h-8" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-400 to-violet-600 rounded-2xl flex items-center justify-center text-white shadow-md">
+                    <Users className="w-6 h-6 md:w-8 md:h-8" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">Legendary Hospitality</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                  <h3 className="text-xl md:text-3xl font-black text-slate-900 mb-1 md:mb-2">Legendary Hospitality</h3>
+                  <p className="text-sm md:text-lg text-slate-600 leading-relaxed">
                     Azerbaijanis are renowned for their warmth and generosity. The national saying "Qonaq gələndə, bərəkət gələr" 
-                    (When a guest arrives, abundance comes) reflects the deep-rooted tradition of welcoming visitors as honored guests. 
-                    Tea culture is central to social gatherings, and the country is safe and tourist-friendly with widespread 
-                    multilingual support.
+                    reflects the deep-rooted tradition of welcoming visitors.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Summary Quote */}
-            <div className="mt-12 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 text-center">
-              <blockquote className="text-2xl md:text-3xl font-bold text-white leading-relaxed mb-4">
+            <div className="mt-10 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 md:p-10 text-center">
+              <blockquote className="text-xl md:text-2xl font-bold text-white leading-relaxed mb-4">
                 "Azerbaijan is not just a destination—it's a journey through time, 
                 where ancient flames still burn and modern dreams take flight."
               </blockquote>
@@ -490,9 +478,9 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
         {/* Key Highlights */}
         {regionData.highlights && (
-          <section className="mb-20 md:mb-32">
+          <section className="mb-16 md:mb-24">
             <Container>
-              <div className="text-center mb-12">
+              <div className="text-center mb-10">
                 <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tight">
                   Key Highlights
                 </h2>
@@ -512,7 +500,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     className="group flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-100/50 hover:shadow-2xl hover:border-brand-gold/20 transition-all duration-500"
                   >
                     {/* Image Header */}
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative h-56 md:h-64 overflow-hidden">
                       <Image
                         src={highlight.gallery?.[0]?.url || "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=800"}
                         alt={highlight.title}
@@ -528,31 +516,32 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     </div>
 
                     {/* Content Section */}
-                    <div className="p-10 flex flex-col flex-1">
-                      <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
+                    <div className="p-8 md:p-10 flex flex-col flex-1">
+                      <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4 tracking-tight">
                         {highlight.title}
                       </h3>
-                      <p className="text-slate-600 font-medium leading-relaxed mb-8 flex-1">
+                      <p className="text-sm md:text-slate-600 font-medium leading-relaxed mb-6 md:mb-8 flex-1">
                         {highlight.description}
                       </p>
                       
-                      <div className="flex items-center justify-between mt-auto">
+                      <div className="flex items-center justify-between mt-auto gap-4">
                         <button 
                           onClick={() => {
                             setSelectedGallery({ title: highlight.title, images: highlight.gallery || [] });
                             setGalleryOpen(true);
                           }}
-                          className="flex items-center gap-2 text-brand-blue font-bold text-sm hover:gap-3 transition-all"
+                          className="flex items-center gap-2 text-brand-blue font-bold text-xs md:text-sm hover:gap-3 transition-all shrink-0"
                         >
                           <Camera className="w-4 h-4" />
-                          <span>View Gallery</span>
+                          <span className="hidden sm:inline">View Gallery</span>
+                          <span className="sm:hidden">Gallery</span>
                         </button>
                         
                         <Link 
                           href={`#${highlight.slug || highlight.title.toLowerCase().replace(/ /g, "-")}`}
-                          className="px-6 py-2.5 bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-900 font-black rounded-xl text-xs uppercase tracking-widest transition-all"
+                          className="px-4 md:px-6 py-2 md:py-2.5 bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-900 font-black rounded-xl text-[10px] md:text-xs uppercase tracking-widest transition-all text-center flex-1 sm:flex-none"
                         >
-                          Explore Details
+                          Details
                         </Link>
                       </div>
                     </div>
@@ -565,82 +554,37 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
         {/* Detailed Highlight Sections */}
         {regionData.highlights && (
-          <section className="mb-20 md:mb-32 space-y-20 md:space-y-32">
+          <section className="mb-16 md:mb-24 space-y-16 md:space-y-24">
             {regionData.highlights.map((highlight, index) => (
               <div 
                 key={index} 
                 id={highlight.slug || highlight.title.toLowerCase().replace(/ /g, "-")}
-                className="scroll-mt-32"
+                className="scroll-mt-20 md:scroll-mt-24"
               >
                 <Container>
                   <div className={cn(
-                    "flex flex-col lg:items-center gap-12 md:gap-20",
+                    "flex flex-col lg:items-center gap-8 md:gap-16",
                     index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                   )}>
-                    {/* Text content */}
-                    <div className="flex-1 space-y-8">
+                    {/* Visual content (Higher priority for mobile mobile) */}
+                    <div className="flex-1 order-1 lg:order-none">
                       <motion.div
-                        initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                      >
-                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-gold/10 text-brand-gold rounded-full text-xs font-black uppercase tracking-widest mb-6 border border-brand-gold/20">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            Highlight No. 0{index + 1}
-                         </div>
-                         <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-                            {highlight.title}
-                         </h2>
-                         <p className="text-xl md:text-2xl font-bold text-slate-500 mb-8 leading-relaxed">
-                            {highlight.description}
-                         </p>
-                         
-                         <div className="h-1 w-20 bg-brand-gold rounded-full mb-8" />
-                         
-                         <p className="text-lg text-slate-600 leading-relaxed mb-10">
-                            {highlight.detailedContent || "Explore the profound beauty and cultural depth of this region through its most iconic landmarks and natural wonders. Each site tells a unique story of heritage, resilience, and architectural marvel."}
-                         </p>
-
-                         {highlight.keyFacts && (
-                           <div className="space-y-6">
-                              <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
-                                <Info className="w-4 h-4 text-brand-blue" />
-                                Key Facts & Information
-                              </h4>
-                              <div className="grid grid-cols-1 gap-4">
-                                {highlight.keyFacts.map((fact, idx) => (
-                                  <div key={idx} className="flex gap-4 p-5 bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue font-bold text-sm">
-                                      {idx + 1}
-                                    </div>
-                                    <p className="text-slate-600 font-medium">{fact}</p>
-                                  </div>
-                                ))}
-                              </div>
-                           </div>
-                         )}
-                      </motion.div>
-                    </div>
-
-                    {/* Image/Visual content */}
-                    <div className="flex-1">
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         className="relative"
                       >
                         {/* Main Image */}
-                        <div className="relative h-[400px] md:h-[600px] rounded-[3rem] overflow-hidden shadow-2xl z-10 group">
+                        <div className="relative h-[250px] sm:h-[400px] md:h-[500px] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10 group">
                           <Image
                             src={highlight.gallery?.[1]?.url || highlight.gallery?.[0]?.url || "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=1200"}
                             alt={highlight.title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-1000"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                          <div className="absolute bottom-10 left-10 right-10 p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                            <p className="text-white font-bold leading-relaxed italic">
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                          <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 p-4 md:p-8 bg-black/20 backdrop-blur-md rounded-xl md:rounded-2xl border border-white/20">
+                            <p className="text-white text-sm md:text-lg font-bold leading-relaxed italic">
                               "{highlight.gallery?.[1]?.caption || highlight.gallery?.[0]?.caption || highlight.description}"
                             </p>
                           </div>
@@ -648,29 +592,70 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
                         {/* Decorative elements */}
                         <div className={cn(
-                          "absolute -top-10 -right-10 w-40 h-40 bg-brand-gold/10 rounded-full blur-3xl",
-                          index % 2 !== 0 && "right-auto -left-10"
-                        )} />
-                        <div className={cn(
-                          "absolute -bottom-10 -left-10 w-60 h-60 bg-brand-blue/10 rounded-full blur-3xl",
-                          index % 2 !== 0 && "left-auto -right-10"
+                          "absolute -top-6 -right-6 md:-top-10 md:-right-10 w-24 h-24 md:w-40 md:h-40 bg-brand-gold/10 rounded-full blur-2xl md:blur-3xl",
+                          index % 2 !== 0 && "right-auto -left-6 md:-left-10"
                         )} />
                         
-                        {/* Floating stats or badges */}
+                        {/* Floating stats or badges (hidden on smallest screens) */}
                         <div className={cn(
-                          "absolute top-20 -right-8 z-20 bg-white p-6 rounded-3xl shadow-2xl border border-slate-100 hidden md:block",
-                          index % 2 !== 0 && "right-auto -left-8"
+                          "absolute top-10 -right-4 md:top-20 md:-right-8 z-20 bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-2xl border border-slate-100 hidden sm:block",
+                          index % 2 !== 0 && "right-auto -left-4 md:-left-8"
                         )}>
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-white">
-                              <Star className="w-6 h-6" />
+                          <div className="flex items-center gap-3 md:gap-4">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white">
+                              <Star className="w-5 h-5 md:w-6 md:h-6" />
                             </div>
                             <div>
                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Rating</p>
-                               <p className="text-xl font-black text-slate-900">4.9/5.0</p>
+                               <p className="text-lg md:text-xl font-black text-slate-900">4.9/5.0</p>
                             </div>
                           </div>
                         </div>
+                      </motion.div>
+                    </div>
+
+                    {/* Text content */}
+                    <div className="flex-1 space-y-6 md:space-y-8 order-2 lg:order-none">
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                      >
+                         <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-gold/10 text-brand-gold rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-4 md:mb-6 border border-brand-gold/20">
+                            <Sparkles className="w-3 md:w-3.5 h-3 md:h-3.5" />
+                            Highlight No. 0{index + 1}
+                         </div>
+                         <h2 className="text-3xl md:text-6xl font-black text-slate-900 mb-4 md:mb-6 tracking-tight leading-tight">
+                            {highlight.title}
+                         </h2>
+                         <p className="text-lg md:text-2xl font-bold text-slate-500 mb-6 md:mb-8 leading-relaxed">
+                            {highlight.description}
+                         </p>
+                         
+                         <div className="h-1 w-16 md:w-20 bg-brand-gold rounded-full mb-6 md:mb-8" />
+                         
+                         <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-8 md:mb-10">
+                            {highlight.detailedContent || "Explore the profound beauty and cultural depth of this region through its most iconic landmarks and natural wonders."}
+                         </p>
+
+                         {highlight.keyFacts && (
+                           <div className="space-y-4 md:space-y-6">
+                              <h4 className="text-xs md:text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-3">
+                                <Info className="w-4 h-4 text-brand-blue" />
+                                Facts & Information
+                              </h4>
+                              <div className="grid grid-cols-1 gap-3 md:gap-4">
+                                {highlight.keyFacts.map((fact, idx) => (
+                                  <div key={idx} className="flex gap-4 p-4 md:p-5 bg-white border border-slate-100 rounded-xl md:rounded-2xl shadow-sm">
+                                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue font-bold text-sm">
+                                      {idx + 1}
+                                    </div>
+                                    <p className="text-sm md:text-slate-600 font-medium">{fact}</p>
+                                  </div>
+                                ))}
+                              </div>
+                           </div>
+                         )}
                       </motion.div>
                     </div>
                   </div>
