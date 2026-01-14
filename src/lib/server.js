@@ -44,19 +44,21 @@ const serializeData = (obj, depth = 0, seen = new WeakSet()) => {
 export const fetchReviews = unstableCache(
   async () => {
     try {
+      console.log('[fetchReviews] Starting fetch...');
       const cacheRef = doc(db, COLLECTIONS.CACHED_REVIEWS, REVIEWS_DOC_ID);
       const cacheDoc = await getDoc(cacheRef);
 
       if (cacheDoc.exists()) {
         const cachedData = cacheDoc.data();
         const reviews = (cachedData.reviews || []).slice(0, 10).map(minimizeReviewData);
+        console.log(`[fetchReviews] Successfully fetched ${reviews.length} reviews`);
         return serializeData(reviews);
       }
 
-      // Fallback for development to avoid deadlocks
+      console.log('[fetchReviews] No cached reviews found, returning empty array');
       return [];
     } catch (err) {
-      console.error("Error in fetchReviews:", err);
+      console.error("[fetchReviews] Error:", err.message || err);
       return [];
     }
   },
@@ -226,15 +228,17 @@ const getAllPackagesByTheme = async () => {
 export const getRegionsForHome = unstableCache(
   async () => {
     try {
+      console.log('[getRegionsForHome] Starting fetch...');
       const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
       const querySnapshot = await getDocs(regionsQuery);
       const regions = querySnapshot.docs
         .map(sanitizeDocumentData)
         .map(minimizeRegionData);
 
+      console.log(`[getRegionsForHome] Successfully fetched ${regions.length} regions`);
       return serializeData(regions);
     } catch (error) {
-      console.error("Error in getRegionsForHome:", error);
+      console.error("[getRegionsForHome] Error:", error.message || error);
       return [];
     }
   },
@@ -244,28 +248,36 @@ export const getRegionsForHome = unstableCache(
 
 export const getCuratedPackagesForHome = async (packageType) => {
   try {
+    console.log(`[getCuratedPackagesForHome] Starting fetch for ${packageType}...`);
     const packages = await getCuratedPackages(packageType, [], true);
+    console.log(`[getCuratedPackagesForHome] Successfully fetched ${packages.length} ${packageType} packages`);
     return serializeData(packages.map(minimizePackageData));
   } catch (error) {
-    console.error(`Error in getCuratedPackagesForHome (${packageType}):`, error);
+    console.error(`[getCuratedPackagesForHome] Error fetching ${packageType}:`, error.message || error);
     return [];
   }
 };
 
 export const getGroupDeparturePackagesForHome = async () => {
   try {
+    console.log('[getGroupDeparturePackagesForHome] Starting fetch...');
     const packages = await getGroupDeparturePackages();
+    console.log(`[getGroupDeparturePackagesForHome] Successfully fetched ${packages.length} packages`);
     return serializeData(packages); 
   } catch (error) {
+    console.error('[getGroupDeparturePackagesForHome] Error:', error.message || error);
     return [];
   }
 };
 
 export const getThemePackagesForHome = async () => {
   try {
+    console.log('[getThemePackagesForHome] Starting fetch...');
     const data = await getAllPackagesByTheme();
+    console.log('[getThemePackagesForHome] Successfully fetched theme packages');
     return serializeData(data);
   } catch (error) {
+    console.error('[getThemePackagesForHome] Error:', error.message || error);
     return {};
   }
 };

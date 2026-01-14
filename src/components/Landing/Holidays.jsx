@@ -553,12 +553,11 @@ const Holidays = ({
 
   // Auto-select filter based on available packages
   useEffect(() => {
-    if (!mounted || isLoading) return;
+    if (!mounted) return;
 
     if (activeTab === "international") {
       if (hasCuratedPackages) setFilterType("curated");
       else if (hasTrendingPackages) setFilterType("trending");
-      else if (hasBestsellerPackages) setFilterType("bestseller");
       else if (hasVisaFreePackages) setFilterType("visafree");
       else if (hasValuePackages) setFilterType("value");
       else if (hasUnderratedPackages) setFilterType("underrated");
@@ -566,14 +565,12 @@ const Holidays = ({
       if (hasVisaFreePackages) setFilterType("visafree");
       else if (hasTrendingPackages) setFilterType("trending");
       else if (hasCuratedPackages) setFilterType("curated");
-      else if (hasBestsellerPackages) setFilterType("bestseller");
       else if (hasValuePackages) setFilterType("value");
       else if (hasUnderratedPackages) setFilterType("underrated");
     }
   }, [
     activeTab,
     mounted,
-    isLoading,
     hasCuratedPackages,
     hasTrendingPackages,
     hasBestsellerPackages,
@@ -582,7 +579,11 @@ const Holidays = ({
     hasUnderratedPackages,
   ]);
 
-  if (!mounted || isLoading) {
+  const currentLoading = intlLoading || domLoading;
+  const hasData = curatedPackages.length > 0;
+
+  // Only show skeleton if we're loading AND have no data to show
+  if (!mounted || (currentLoading && !hasData)) {
     return (
       <Container className="space-y-4 px-0 sm:px-5">
         <div className="flex justify-between">
@@ -673,7 +674,7 @@ const Holidays = ({
           Signature Picks
         </Button>
 
-        <Button
+        {/* <Button
           key="bestseller"
           variant={filterType === "bestseller" ? "default" : "outline"}
           onClick={() => setFilterType("bestseller")}
@@ -683,7 +684,7 @@ const Holidays = ({
           )}
         >
           Bestsellers
-        </Button>
+        </Button> */}
 
         <Button
           key="value"

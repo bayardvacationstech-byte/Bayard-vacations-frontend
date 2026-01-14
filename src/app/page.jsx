@@ -20,23 +20,82 @@ import Newsletter from "@/components/Landing/Newsletter";
 import TravelStyle from "@/components/Landing/TravelStyle";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
 
+// Timeout wrapper to prevent indefinite hanging
+const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${operationName} timed out after ${timeoutMs}ms`)), timeoutMs)
+    ),
+  ]).catch((error) => {
+    console.error(`[Error] ${operationName} failed:`, error.message);
+    return fallbackValue;
+  });
+};
+
+const trackPerformance = async (name, operation, fallbackValue) => {
+  const start = Date.now();
+  try {
+    const result = await operation();
+    const end = Date.now();
+    console.log(`[Performance] ✓ ${name} completed in ${end - start}ms`);
+    return result;
+  } catch (error) {
+    const end = Date.now();
+    console.error(`[Performance] ✗ ${name} failed after ${end - start}ms:`, error.message);
+    return fallbackValue;
+  }
+};
+
 
 const HomePage = async () => {
+  const pageStart = Date.now();
+  console.log('[HomePage] Starting data fetch...');
+  
+  const TIMEOUT_MS = 15000; // 15 seconds timeout per operation
+  
   const [
-    reviews,
-    groupDeparturePackages,
     regionData,
     internationalPackages,
     domesticPackages,
-    themePackages
+    themePackages,
+    groupDeparturePackages,
+    reviews
   ] = await Promise.all([
-    fetchReviews(),
-    getGroupDeparturePackagesForHome(),
-    getRegionsForHome(),
-    getCuratedPackagesForHome("international"),
-    getCuratedPackagesForHome("domestic"),
-    getThemePackagesForHome(),
+    trackPerformance(
+      "getRegionsForHome",
+      () => withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome"),
+      []
+    ),
+    trackPerformance(
+      "getCuratedPackagesForHome (international)",
+      () => withTimeout(getCuratedPackagesForHome("international"), TIMEOUT_MS, [], "getCuratedPackagesForHome (international)"),
+      []
+    ),
+    trackPerformance(
+      "getCuratedPackagesForHome (domestic)",
+      () => withTimeout(getCuratedPackagesForHome("domestic"), TIMEOUT_MS, [], "getCuratedPackagesForHome (domestic)"),
+      []
+    ),
+    trackPerformance(
+      "getThemePackagesForHome",
+      () => withTimeout(getThemePackagesForHome(), TIMEOUT_MS, {}, "getThemePackagesForHome"),
+      {}
+    ),
+    trackPerformance(
+      "getGroupDeparturePackagesForHome",
+      () => withTimeout(getGroupDeparturePackagesForHome(), TIMEOUT_MS, [], "getGroupDeparturePackagesForHome"),
+      []
+    ),
+    trackPerformance(
+      "fetchReviews",
+      () => withTimeout(fetchReviews(), TIMEOUT_MS, [], "fetchReviews"),
+      []
+    ),
   ]);
+
+  const pageEnd = Date.now();
+  console.log(`[Performance] ✓ Total Home Page Data Fetching completed in ${pageEnd - pageStart}ms`);
 
   const regions = regionData || [];
 

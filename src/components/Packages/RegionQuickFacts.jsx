@@ -26,6 +26,7 @@ import {
   Mountain,
   Theater
 } from "lucide-react";
+import regionDataJSON from "@/data/why-choose-regions.json";
 
 /**
  * RegionQuickFacts Component
@@ -41,6 +42,17 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
   }, []);
 
   const isAzerbaijan = regionName?.toLowerCase().includes('azerbaijan');
+
+  // Icon mapping for dynamic data
+  const iconMap = {
+    CalendarClock, Wallet, ThermometerSun, Clock4, Globe, Zap,
+    Sparkles, MapPin, FileCheck, Building2, Users, Info,
+    Plane, Flame, Landmark, ShieldCheck, Banknote, Mountain, Theater
+  };
+
+  const getIcon = (iconName) => {
+    return iconMap[iconName] || Info;
+  };
 
   // Helper to get icon config
   const getFactConfig = (label) => {
@@ -77,6 +89,16 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
   };
 
   const processedFacts = React.useMemo(() => {
+    // Get data from JSON first
+    const regionSlug = regionName?.toLowerCase();
+    const jsonData = regionDataJSON[regionSlug];
+    
+    // Use JSON data if available
+    if (jsonData?.quickFacts) {
+      return jsonData.quickFacts.map(fact => ({ ...fact, ...getFactConfig(fact.label) }));
+    }
+
+    // Fallback to hardcoded Azerbaijan data
     const azerbaijanFacts = [
       { label: "Best Season", value: "Apr–Jun" },
       { label: "Language", value: "Azeri, Eng" },
@@ -125,11 +147,10 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
     }
     
     return facts;
-  }, [mounted, regionData, isAzerbaijan]);
+  }, [mounted, regionData, isAzerbaijan, regionName]);
 
-  const displayName = regionName?.split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ") || regionName;
+  const regionSlug = regionName?.toLowerCase();
+  const jsonData = regionDataJSON[regionSlug];
 
   if (!mounted) return null;
 
@@ -150,14 +171,14 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
                 <div className="h-[1.5px] md:h-[2px] flex-1 md:w-12 bg-blue-600/20" />
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-slate-900 tracking-tighter leading-tight md:leading-[0.95] mb-2 md:mb-4">
-                About {isAzerbaijan ? "Azerbaijan" : displayName}
+                About {jsonData?.mainTitle?.replace('Why Visit ', '') || regionName}
               </h2>
               <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">
-                {isAzerbaijan ? "Land of Fire" : "Exploring the heart of the region"}
+                {jsonData?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
               </p>
               
               <p className="text-slate-600 text-sm lg:text-base leading-relaxed max-w-xl">
-                {isAzerbaijan ? "Azerbaijan is a captivating destination nestled between Europe and Asia in the Caucasus region. Known as the \"Land of Fire\" for its natural burning mountains, Azerbaijan offers a unique blend of ancient Silk Road heritage, modern futuristic architecture, and warm hospitality that makes it an unforgettable destination for Indian travelers." : regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
+                {jsonData?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
               </p>
             </div>
           </motion.div>
@@ -186,13 +207,13 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
             {/* CTAs Repositioned to Right */}
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-6">
               <div className="flex items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto">
-                <Link href={`/factsheet/${regionName?.toLowerCase()}`}>
+                <Link href={`/factsheet/${regionSlug}`}>
                   <div className="flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-8 bg-slate-900 rounded-full group cursor-pointer hover:bg-slate-800 hover:shadow-lg hover:shadow-slate-200/50 transition-all">
                     <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-white whitespace-nowrap">Factsheet</span>
                     <Zap className="w-3 sm:w-4 h-3 sm:h-4 text-amber-400 fill-amber-400 group-hover:scale-110 transition-transform" />
                   </div>
                 </Link>
-                <Link href={isAzerbaijan ? "https://prelive.bayardvacations.com/why-choose/azerbaijan" : `/why-choose/${regionName?.toLowerCase()}`}>
+                <Link href={`/why-choose/${regionSlug}`}>
                   <div className="flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-8 bg-amber-400 rounded-full group cursor-pointer hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-200/50 transition-all">
                     <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-900 whitespace-nowrap">Why Visit?</span>
                     <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-slate-900 group-hover:rotate-12 transition-transform" />
@@ -224,47 +245,69 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
           <div className="mt-8 pt-8 pb-12 border-t border-slate-100">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
-              <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Why Choose {displayName}?</h3>
+              <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Why Choose {regionName}?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-                {[
-                  { icon: Plane, title: "Direct & Easy Access", text: "4.5 hours from India with visa-free entry (₹2,200 e-visa)", color: "text-blue-600" },
-                  { icon: Flame, title: "Unique Natural Wonders", text: "Eternal fire mountains, mud volcanoes, and pristine Caspian beaches", color: "text-orange-600" },
-                  { icon: Landmark, title: "Rich Cultural Heritage", text: "UNESCO Heritage sites including ancient Baku Old City and Sheki's Silk Road palaces", color: "text-amber-600" },
-                  { icon: Building2, title: "Modern Meets Ancient", text: "Futuristic Flame Towers and Zaha Hadid's architectural masterpiece alongside 1000-year-old caravanserais", color: "text-indigo-600" },
-                  { icon: Banknote, title: "Budget-Friendly", text: "Complete 5-7 day trip for ₹40,000–₹80,000 with flights and accommodation", color: "text-emerald-600" },
-                  { icon: ShieldCheck, title: "Safe & Welcoming", text: "One of the safest countries in the region, known for hospitality to Indian travelers", color: "text-slate-600" }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                      <item.icon className={cn("w-5 h-5", item.color)} />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{item.title}</h4>
-                      <p className="text-sm text-slate-500 leading-tight">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
+                {(() => {
+                  const regionSlug = regionName?.toLowerCase();
+                  const jsonData = regionDataJSON[regionSlug];
+                  
+                  // Use JSON data if available
+                  const reasons = jsonData?.whyChooseReasons || [
+                    { icon: "Plane", title: "Direct & Easy Access", text: "4.5 hours from India with visa-free entry (₹2,200 e-visa)", color: "text-blue-600" },
+                    { icon: "Flame", title: "Unique Natural Wonders", text: "Eternal fire mountains, mud volcanoes, and pristine Caspian beaches", color: "text-orange-600" },
+                    { icon: "Landmark", title: "Rich Cultural Heritage", text: "UNESCO Heritage sites including ancient Baku Old City and Sheki's Silk Road palaces", color: "text-amber-600" },
+                    { icon: "Building2", title: "Modern Meets Ancient", text: "Futuristic Flame Towers and Zaha Hadid's architectural masterpiece alongside 1000-year-old caravanserais", color: "text-indigo-600" },
+                    { icon: "Banknote", title: "Budget-Friendly", text: "Complete 5-7 day trip for ₹40,000–₹80,000 with flights and accommodation", color: "text-emerald-600" },
+                    { icon: "ShieldCheck", title: "Safe & Welcoming", text: "One of the safest countries in the region, known for hospitality to Indian travelers", color: "text-slate-600" }
+                  ];
+
+                  return reasons.map((item, idx) => {
+                    const IconComponent = getIcon(item.icon);
+                    return (
+                      <div key={idx} className="flex gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                          <IconComponent className={cn("w-5 h-5", item.color)} />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{item.title}</h4>
+                          <p className="text-sm text-slate-500 leading-tight">{item.text}</p>
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
 
             <div>
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Must-Experience Attractions</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { icon: Flame, text: "Yanar Dag (Eternal Flame Mountains)", color: "text-orange-600" },
-                  { icon: Landmark, text: "Baku Old City (UNESCO Heritage)", color: "text-amber-600" },
-                  { icon: Building2, text: "Flame Towers & Heydar Aliyev Center", color: "text-indigo-600" },
-                  { icon: Mountain, text: "Gobustan Rock Art & Mud Volcanoes", color: "text-slate-600" },
-                  { icon: Mountain, text: "Gabala Mountains & Adventure Hub", color: "text-blue-600" },
-                  { icon: Theater, text: "Sheki Khan's Palace & Silk Road Legacy", color: "text-purple-600" }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 border border-slate-100 group hover:bg-white hover:shadow-sm transition-all">
-                    <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0 group-hover:border-blue-100 transition-colors">
-                      <item.icon className={cn("w-4 h-4", item.color)} />
-                    </div>
-                    <span className="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">{item.text}</span>
-                  </div>
-                ))}
+                {(() => {
+                  const regionSlug = regionName?.toLowerCase();
+                  const jsonData = regionDataJSON[regionSlug];
+                  
+                  // Use JSON data if available
+                  const attractions = jsonData?.mustExperienceAttractions || [
+                    { icon: "Flame", text: "Yanar Dag (Eternal Flame Mountains)", color: "text-orange-600" },
+                    { icon: "Landmark", text: "Baku Old City (UNESCO Heritage)", color: "text-amber-600" },
+                    { icon: "Building2", text: "Flame Towers & Heydar Aliyev Center", color: "text-indigo-600" },
+                    { icon: "Mountain", text: "Gobustan Rock Art & Mud Volcanoes", color: "text-slate-600" },
+                    { icon: "Mountain", text: "Gabala Mountains & Adventure Hub", color: "text-blue-600" },
+                    { icon: "Theater", text: "Sheki Khan's Palace & Silk Road Legacy", color: "text-purple-600" }
+                  ];
+
+                  return attractions.map((item, idx) => {
+                    const IconComponent = getIcon(item.icon);
+                    return (
+                      <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 border border-slate-100 group hover:bg-white hover:shadow-sm transition-all">
+                        <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0 group-hover:border-blue-100 transition-colors">
+                          <IconComponent className={cn("w-4 h-4", item.color)} />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">{item.text}</span>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
           </div>
