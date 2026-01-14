@@ -80,7 +80,7 @@ const moduleExports =
   process.env.NODE_ENV === "development"
     ? nextConfig
     : withSentryConfig(nextConfig, {
-        org: "swantech-5e",
+        org: process.env.SENTRY_ORG || "swantech-f0",
         project: "bayardvacations",
         silent: !process.env.CI,
         widenClientFileUpload: true,
