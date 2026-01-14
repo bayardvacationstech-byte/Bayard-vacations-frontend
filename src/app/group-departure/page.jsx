@@ -16,7 +16,7 @@ const GroupDeparturePage = async () => {
   const groupDeparturePackages = await getGroupDeparturePackages();
 
   return (
-    <main className="bg-[#020617] min-h-screen text-white overflow-hidden">
+    <main className="bg-[#0a0f1e] min-h-screen text-white overflow-hidden">
       {/* Hero Section */}
       <section className="relative h-[90vh] sm:h-[85vh] min-h-[600px] flex items-center overflow-hidden">
         <video
@@ -30,8 +30,8 @@ const GroupDeparturePage = async () => {
         </video>
         
         {/* Cinematic Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-[#020617] z-10" />
-        <div className="absolute inset-0 bg-slate-950/20 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1e]/95 via-[#0a0f1e]/40 to-[#0a0f1e] z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-blue/5 via-transparent to-brand-green/5 z-10" />
 
         <Container className="relative z-20 text-center">
           <div className="max-w-4xl mx-auto space-y-6">
@@ -60,8 +60,8 @@ const GroupDeparturePage = async () => {
 
       {/* Brand Section / Stats */}
       <section className="py-24 relative">
-         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/10 rounded-full blur-[120px] -z-10" />
-         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-brand-green/5 rounded-full blur-[100px] -z-10" />
+         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/20 rounded-full blur-[150px] -z-10 animate-pulse-slow" />
+         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-green/15 rounded-full blur-[120px] -z-10 animate-pulse-slow" />
          
          <Container>
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -77,15 +77,15 @@ const GroupDeparturePage = async () => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-xl hover:border-brand-blue/30 transition-colors">
-                        <Crown className="w-8 h-8 text-brand-blue mb-4" />
+                     <div className="group p-6 rounded-3xl bg-white/[0.05] border border-white/10 backdrop-blur-xl hover:border-brand-blue/50 hover:bg-white/[0.08] transition-all duration-500">
+                        <Crown className="w-8 h-8 text-brand-blue mb-4 group-hover:scale-110 transition-transform duration-500" />
                         <h4 className="font-bold text-lg mb-2">Exclusive Access</h4>
-                        <p className="text-sm text-slate-500">Curated experiences reserved for Bayard members.</p>
+                        <p className="text-sm text-slate-400">Curated experiences reserved for Bayard members.</p>
                      </div>
-                     <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-xl hover:border-brand-green/30 transition-colors">
-                        <Headphones className="w-8 h-8 text-brand-green mb-4" />
+                     <div className="group p-6 rounded-3xl bg-white/[0.05] border border-white/10 backdrop-blur-xl hover:border-brand-green/50 hover:bg-white/[0.08] transition-all duration-500">
+                        <Headphones className="w-8 h-8 text-brand-green mb-4 group-hover:scale-110 transition-transform duration-500" />
                         <h4 className="font-bold text-lg mb-2">24/7 Concierge</h4>
-                        <p className="text-sm text-slate-500">Dedicated travel artisan support throughout your journey.</p>
+                        <p className="text-sm text-slate-400">Dedicated travel artisan support throughout your journey.</p>
                      </div>
                   </div>
                </div>
@@ -119,8 +119,10 @@ const GroupDeparturePage = async () => {
       </section>
 
       {/* Experience Magic Section: The Packages Grid */}
-      <section className="py-24 bg-[#010413]">
-         <Container>
+      <section className="py-24 bg-[#050811] relative">
+         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand-blue/5 to-transparent" />
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-green/10 rounded-full blur-[200px] -z-10" />
+         <Container className="relative z-10">
             <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-16">
                <div className="space-y-4">
                   <div className="text-brand-blue font-black tracking-[0.3em] uppercase text-xs">Curated Selection</div>
@@ -158,11 +160,12 @@ const GroupDeparturePage = async () => {
       </section>
 
       {/* Features Grid */}
-      <section className="py-24">
+      <section className="py-24 relative">
+         <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-brand-accent/10 rounded-full blur-[150px] -z-10" />
          <Container>
             <div className="grid md:grid-cols-3 gap-12">
                <div className="space-y-4 group">
-                  <div className="w-16 h-16 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition-all duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-blue/20 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-blue/50 transition-all duration-500">
                      <Users className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-black">Like-Minded Community</h3>
@@ -172,7 +175,7 @@ const GroupDeparturePage = async () => {
                </div>
                
                <div className="space-y-4 group">
-                  <div className="w-16 h-16 rounded-2xl bg-brand-green/10 flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white transition-all duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-green/20 flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand-green/50 transition-all duration-500">
                      <Leaf className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-black">Expert Curation</h3>
@@ -182,7 +185,7 @@ const GroupDeparturePage = async () => {
                </div>
 
                <div className="space-y-4 group">
-                  <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-all duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-amber-500/50 transition-all duration-500">
                      <Star className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-black">Zero-Stress Planning</h3>

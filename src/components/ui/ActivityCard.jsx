@@ -27,7 +27,9 @@ const ActivityCard = ({
   data, 
   hoverGradient = "from-brand-green/95 to-brand-green",
   ctaLabel = "View Packages",
-  onCtaClick
+  onCtaClick,
+  secondaryCtaLabel,
+  onSecondaryCtaClick
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const Icon = data.icon || MapPin;
@@ -41,6 +43,14 @@ const ActivityCard = ({
     e.stopPropagation();
     if (onCtaClick) {
       onCtaClick(data);
+    }
+  };
+
+  const handleSecondaryCtaClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onSecondaryCtaClick) {
+      onSecondaryCtaClick(data);
     }
   };
 
@@ -236,13 +246,22 @@ const ActivityCard = ({
           </div>
 
           {/* Footer - CTA */}
-          <div className="pt-4 border-t border-white/20">
+          <div className="pt-4 border-t border-white/20 flex flex-col gap-2">
             <button 
               onClick={handleCtaClick}
               className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95"
             >
               {ctaLabel}
             </button>
+            {secondaryCtaLabel && (
+              <button 
+                onClick={handleSecondaryCtaClick}
+                className="w-full px-6 py-2 rounded-xl bg-white/10 border border-white/30 text-white font-bold uppercase tracking-widest text-xs transition-all duration-300 hover:bg-white/20 active:scale-95 flex items-center justify-center gap-2"
+              >
+                <MapPin className="w-3 h-3" />
+                {secondaryCtaLabel}
+              </button>
+            )}
           </div>
         </div>
       </div>

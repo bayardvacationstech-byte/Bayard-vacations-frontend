@@ -5,6 +5,8 @@ import { COLLECTIONS } from "@/config";
 
 export function useCuratedPackages(packageType, initialPackages = []) {
   const queryClient = useQueryClient();
+  const hasInitialData = initialPackages && initialPackages.length > 0;
+  
   const {
     data: packages = [],
     isLoading,
@@ -54,9 +56,12 @@ export function useCuratedPackages(packageType, initialPackages = []) {
       return await getCuratedPackages(packageType);
     },
     enabled: !!packageType,
-    staleTime: 5 * 60 * 1000, 
-    gcTime: 10 * 60 * 1000, 
-    initialData: initialPackages.length > 0 ? initialPackages : undefined,
+    // Use longer staleTime if we have initial data to prevent immediate refetch
+    staleTime: hasInitialData ? Infinity : 5 * 60 * 1000, 
+    gcTime: 10 * 60 * 1000,
+    // Use placeholderData instead of initialData to show content immediately
+    placeholderData: hasInitialData ? initialPackages : undefined,
+    initialData: hasInitialData ? initialPackages : undefined,
   });
 
   return {
