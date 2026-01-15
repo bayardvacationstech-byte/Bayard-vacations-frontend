@@ -60,8 +60,8 @@ const PackageHero = ({ packageData }) => {
   };
 
   return (
-    <section className="relative w-full bg-slate-950 overflow-hidden">
-      <div className="relative w-full min-h-screen lg:min-h-0 lg:h-[90vh] flex flex-col lg:flex-row items-stretch bg-slate-900">
+    <section className="relative w-full max-w-[100vw] bg-slate-950 overflow-hidden">
+      <div className="relative w-full min-h-screen lg:min-h-0 lg:h-[90vh] flex flex-col lg:flex-row items-stretch bg-slate-900 overflow-hidden">
         
         {/* Background Layer (Shared Swiper for Mobile and Desktop Backdrop) */}
         <div className="absolute inset-x-0 top-0 bottom-[40vh] lg:bottom-0 z-0 lg:w-3/5">
@@ -116,7 +116,7 @@ const PackageHero = ({ packageData }) => {
         )}
 
         {/* Right Side / Content Panel */}
-        <div className="relative w-full lg:w-2/5 ml-auto flex flex-col p-6 md:p-12 pt-28 lg:pt-32 pb-16 lg:pb-12 z-10 lg:bg-[#030712] border-l border-white/5">
+        <div className="relative w-full lg:w-2/5 lg:ml-auto flex flex-col p-6 md:p-12 pt-28 lg:pt-32 pb-16 lg:pb-12 z-10 lg:bg-[#030712] border-l border-white/5">
           
           {/* Mobile Stories Bars (Top) */}
           <div className="lg:hidden absolute top-16 left-6 right-6 flex gap-1.5 z-30">
@@ -158,10 +158,10 @@ const PackageHero = ({ packageData }) => {
                 className="flex items-center gap-4 py-2"
               >
                 <div className="w-12 h-12 bg-[#0a1a3a] rounded-xl flex items-center justify-center border border-white/5">
-                  <MapPin className="w-5 h-5 text-brand-blue" />
+                  <MapPin className="w-5 h-5 text-yellow-400" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[#3b82f6] font-black text-[10px] uppercase tracking-[0.2em] mb-0.5">Destination</span>
+                  <span className="text-yellow-400 font-black text-[10px] uppercase tracking-[0.2em] mb-0.5">Destination</span>
                   <span className="text-white font-bold text-xl uppercase tracking-wider">{location}</span>
                 </div>
               </motion.div>
@@ -174,24 +174,24 @@ const PackageHero = ({ packageData }) => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="grid grid-cols-3 gap-3 md:gap-4"
             >
-              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-4 md:p-6 rounded-3xl flex flex-col justify-center min-h-[90px] md:min-h-[100px]">
-                <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-2 md:mb-3">Duration</p>
+              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[70px] md:min-h-[80px]">
+                <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">Duration</p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{packageData?.nights || "3"}</span>
-                  <span className="text-white/40 text-[10px] md:text-xs font-black uppercase ml-1">N</span>
+                  <span className="text-yellow-400 text-sm md:text-base font-black uppercase ml-1">N</span>
                 </div>
               </div>
 
-              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-4 md:p-6 rounded-3xl flex flex-col justify-center min-h-[90px] md:min-h-[100px]">
-                <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-2 md:mb-3">Days</p>
+              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[70px] md:min-h-[80px]">
+                <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">Days</p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{(packageData?.nights || 3) + 1}</span>
-                  <span className="text-white/40 text-[10px] md:text-xs font-black uppercase ml-1">D</span>
+                  <span className="text-yellow-400 text-sm md:text-base font-black uppercase ml-1">D</span>
                 </div>
               </div>
 
-              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-4 md:p-6 rounded-3xl flex flex-col justify-center min-h-[90px] md:min-h-[100px]">
-                <p className="text-[#3b82f6] text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-2 md:mb-3">From</p>
+              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[70px] md:min-h-[80px]">
+                <p className="text-yellow-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">From</p>
                 <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">₹{Math.floor((packageData?.price || 45000) / 1000)}K</span>
               </div>
             </motion.div>
@@ -223,7 +223,7 @@ const PackageHero = ({ packageData }) => {
               </div>
 
               {/* Mobile Thumbnail Row (Visible only on Mobile) */}
-              <div className="lg:hidden flex gap-3 overflow-x-auto py-2 px-1 scrollbar-none snap-x shrink-0">
+              <div className="lg:hidden flex gap-3 overflow-x-auto py-2 px-1 scrollbar-none snap-x shrink-0 max-w-full">
                 {validBannerImages.map((image, index) => (
                   <motion.button
                     key={index}

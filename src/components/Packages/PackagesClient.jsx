@@ -120,8 +120,8 @@ const PackagesClient = () => {
           }
 
           // 2. Scroll Spy Logic
-          // Offset for sticky header (approx 100px) + some buffer
-          const scrollPosition = scrollY + 150; 
+          // Offset for sticky header (approx 80px) + sticky nav (approx 80px) + some buffer
+          const scrollPosition = scrollY + 200; 
           
           let currentActive = activeSection;
           
@@ -206,6 +206,22 @@ const PackagesClient = () => {
       <PremiumBookNowForm packageData={packageData} offerData={packageData.offer} />
     );
 
+  const EnquiryFormComponent = (
+    <div className="bg-white rounded-3xl">
+      <h3 className="text-xl font-bold text-slate-900 mb-4 px-1">Quick Enquiry</h3>
+      <EnquiryFormFields 
+        variant="inline" 
+        formType="potential"
+        hideFields={["destination"]}
+        initialData={{ destination: packageData?.region }}
+        onSuccess={() => setShowFullForm(false)}
+        buttonText="Send Enquiry"
+        whiteLabels={false}
+        brandYellow={true}
+      />
+    </div>
+  );
+
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN').format(price);
   };
@@ -232,51 +248,53 @@ const PackagesClient = () => {
         packageData={packageData} 
       />
 
-      {/* Main Content Wrapper with Gradient */}
-      <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white relative pb-12">
-        {/* 2. Sticky Navigation - Centered & Full Width */}
-        <PackageNavigation 
-            activeSection={activeSection} 
-            onScrollToSection={scrollToSection} 
-            sections={sections}
-        />
-        
-        {/* Two Column Layout: Main Content (Full on Mobile, 80% on Desktop) + Sticky Sidebar (Hidden on Mobile) */}
-        <Container className="relative flex flex-col lg:flex-row gap-8 lg:gap-8 pt-0">
-        {/* Main Content - Full width on Mobile, 80% on Desktop */}
-        <div className="w-full lg:w-[80%]">
-          {/* 3. Package Details Content */}
-              <div className="mt-0 px-0">
+      {/* Sticky Navigation - Outside overflow wrapper */}
+      <PackageNavigation 
+          activeSection={activeSection} 
+          onScrollToSection={scrollToSection} 
+          sections={sections}
+      />
+
+      {/* Two Column Layout Wrapper - Outside overflow constraint */}
+      <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-4 md:pt-16">
+        {/* Main Content Column with Overflow Control */}
+        <div className="w-full c-lg:w-[75%]">
+          {/* Main Content Wrapper with Gradient and Overflow Control */}
+          <div className="relative pb-12 w-full overflow-x-hidden">
+            {/* Package Details Content */}
+            <div className="mt-0 px-0">
               <div className="space-y-8 md:space-y-12">
-                <div id="overview" className="scroll-mt-36">
+                <div id="overview" className="scroll-mt-48">
                   <OverviewSection packageData={packageData} />
                 </div>
                 
-                <div id="itinerary" className="scroll-mt-36">
+                <div id="itinerary" className="scroll-mt-48">
                   <ItinerarySection packageData={packageData} />
                 </div>
 
-                <div id="stay" className="scroll-mt-36">
+                <div id="stay" className="scroll-mt-48">
                   <PackageHotels packageData={packageData} />
                 </div>
 
-                <div id="experiences" className="scroll-mt-36">
+                <div id="experiences" className="scroll-mt-48">
                   <PackageExperiences packageData={packageData} />
                 </div>
 
-                <div id="inclusions" className="scroll-mt-36">
+                <div id="inclusions" className="scroll-mt-48">
                   <InclusionsSection packageData={packageData} />
                 </div>
                 
-                <div id="faq" className="scroll-mt-36">
+                <div id="faq" className="scroll-mt-48">
                   <PremiumFaq faqData={packageData?.faq} />
                 </div>
               </div>
-              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="hidden lg:block w-[20%]" id="booking-sidebar">
-          <div className="sticky top-[100px] space-y-3">
+        {/* Sidebar - Outside overflow wrapper */}
+        <div className="hidden c-lg:block w-[25%]" id="booking-sidebar">
+          <div className="sticky top-[100px] md:top-[120px] space-y-3 z-30 pb-4">
             {/* Pricing Card */}
             {/* Primary Booking Card */}
             <div className="gradient-btn rounded-3xl shadow-xl overflow-hidden p-4 border border-white/20">
@@ -304,33 +322,37 @@ const PackagesClient = () => {
                   const label = starRatingNames[tier.type] || "Hotel";
                   const stars = starRatingCount[tier.type] || 5;
                   
-                  return (
-                    <button
-                      key={tier.type}
-                      onClick={() => setSelectedHotel(tier)}
-                      className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all duration-300 ${
-                        isActive 
-                          ? "bg-yellow-400/10 border-yellow-400 shadow-sm scale-105" 
-                          : "bg-white/5 border-white/10 hover:border-white/30"
-                      }`}
-                    >
-                      <span className={`text-[10px] font-black uppercase tracking-wider mb-1 ${isActive ? "text-yellow-400" : "text-white/60"}`}>
-                        {label}
-                      </span>
-                      <div className="flex gap-0.5 items-center justify-center">
-                        {[...Array(stars)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            size={10} 
-                            className={cn(
-                              "fill-current",
-                              isActive ? "text-yellow-400" : "text-white/30"
-                            )} 
-                          />
-                        ))}
-                      </div>
-                    </button>
-                  );
+                    return (
+                      <button
+                        key={tier.type}
+                        onClick={() => setSelectedHotel(tier)}
+                        className={cn(
+                          "flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-500",
+                          isActive 
+                            ? "bg-white/10 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.2)] scale-105" 
+                            : "bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10"
+                        )}
+                      >
+                        <span className={cn(
+                          "text-[9px] font-black uppercase tracking-wider mb-1.5 transition-colors",
+                          isActive ? "text-yellow-400" : "text-white/40"
+                        )}>
+                          {label}
+                        </span>
+                        <div className="flex gap-0.5 items-center justify-center">
+                          {[...Array(stars)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              size={10} 
+                              className={cn(
+                                "transition-all duration-500",
+                                isActive ? "fill-yellow-400 text-yellow-400 scale-110" : "fill-white/20 text-white/20"
+                              )} 
+                            />
+                          ))}
+                        </div>
+                      </button>
+                    );
                 })}
               </div>
 
@@ -369,7 +391,7 @@ const PackagesClient = () => {
               <EnquiryFormFields 
                 variant="inline" 
                 formType="potential"
-                hideFields={["destination", "message"]}
+                hideFields={["destination"]}
                 initialData={{ destination: packageData?.region }}
                 onSuccess={() => {}}
                 buttonText="Send Enquiry"
@@ -413,7 +435,6 @@ const PackagesClient = () => {
            {/* 6. Why Choose Bayard Vacations - Final Section */}
            <WhyBayardVacations />
       </Container>
-      </div>
 
 
 
@@ -422,7 +443,7 @@ const PackagesClient = () => {
 
       {/* Compact Sticky Bottom Bar - Mobile Only */}
       <div 
-        className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`c-lg:hidden fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ${
           showStickyBar ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -447,7 +468,7 @@ const PackagesClient = () => {
             >
               <X className="w-5 h-5" />
             </button>
-            {BookNowFormComponent}
+            {EnquiryFormComponent}
           </div>
         </div>
 
@@ -497,14 +518,13 @@ const PackagesClient = () => {
                   <span className="hidden sm:inline text-sm font-semibold">Call Us</span>
                 </a>
                 
-                {/* Book Now Button */}
                 <button
                   onClick={() => {
                     setShowFullForm(true);
                   }}
-                  className="px-6 py-2.5 gradient-btn text-white font-bold rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider"
+                  className="px-6 py-2.5 bg-[#facc15] text-[#1e293b] font-black rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider active:scale-95"
                 >
-                  Book Now
+                  Enquiry
                 </button>
               </div>
             </div>

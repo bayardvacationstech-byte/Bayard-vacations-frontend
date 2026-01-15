@@ -5,13 +5,14 @@ import { motion } from "framer-motion";
 const PackageNavigation = ({ activeSection, onScrollToSection, sections = [] }) => {
 
   return (
-    <div className="sticky top-20 z-40 py-2">
+    <div className="sticky top-[80px] md:top-[90px] z-40 py-4 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <div className="relative inline-flex">
-            <div className="absolute -inset-1 bg-brand-blue/5 rounded-full blur-lg opacity-40"></div>
+            {/* Glossy Background for the entire bar */}
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-xl rounded-full border border-white/40 shadow-sm" />
             
-            <div className="relative flex items-center gap-2 p-1 bg-white border border-slate-200 rounded-full overflow-x-auto scrollbar-hide max-w-[calc(100vw-24px)] md:max-w-max">
+            <div className="relative flex items-center gap-2 p-1.5 rounded-full overflow-x-auto scrollbar-hide max-w-[calc(100vw-32px)] md:max-w-max">
               {sections.map((section) => (
                 <button
                   key={section.id}

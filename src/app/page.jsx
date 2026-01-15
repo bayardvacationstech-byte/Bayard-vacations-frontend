@@ -19,6 +19,7 @@ import StartJourney from "@/components/Landing/StartJourney";
 import Newsletter from "@/components/Landing/Newsletter";
 import TravelStyle from "@/components/Landing/TravelStyle";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
+import RegionTestimonials from "@/components/Packages/RegionTestimonials";
 
 // Timeout wrapper to prevent indefinite hanging
 const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
@@ -161,7 +162,7 @@ const HomePage = async () => {
 
       {/* Moved Destination Spotlight */}
       <section className="bg-white overflow-hidden relative py-4 md:py-6 pb-2 md:pb-3 px-4 sm:px-6 lg:px-8">
-        <DestinationSpotlight initialRegions={regions} />
+        <DestinationSpotlight initialRegions={regions} eliteEscapePackages={eliteEscapePackages} />
       </section>
 
       <section className="bg-white relative overflow-hidden section-padding">
@@ -179,7 +180,7 @@ const HomePage = async () => {
       </section> */}
 
       <section className="relative overflow-hidden">
-        <Testimonials reviews={reviews} />
+        <RegionTestimonials regionName="Our Travelers" />
       </section>
 
 

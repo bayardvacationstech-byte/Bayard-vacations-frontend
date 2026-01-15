@@ -65,7 +65,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+      <div className="relative pt-40 pb-24 lg:pt-64 lg:pb-40 overflow-hidden">
         <img
           src={activity.image}
           alt={activity.title}
@@ -73,8 +73,8 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         
-        <Container className="relative h-full flex flex-col justify-between py-8 md:py-12">
-          <Link href={`/activities/${regionSlug}`}>
+        <Container className="relative z-10">
+           <Link href={`/activities/${regionSlug}`} className="inline-block mb-12 animate-in fade-in slide-in-from-left-4 duration-700">
             <Button 
               variant="ghost" 
               className="text-white hover:bg-white/20 backdrop-blur-sm gap-2"
@@ -97,8 +97,8 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
                 </span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
-                {activity.title}
+              <h1 className="text-4xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
+                 {activity.title}
               </h1>
               
               <p className="text-lg md:text-xl text-white/90 max-w-3xl font-medium leading-relaxed mt-4">

@@ -568,7 +568,7 @@ export default function EnquiryFormFields({
         {!isFieldHidden("message") && (
           <div>
             <span className={labelClass}>
-              {isSection ? "Your Message (Optional)" : "Message *"}
+              {isSection ? "Your Message (Optional)" : isInline ? "Comment" : "Message *"}
             </span>
             <Textarea
               className={cn(
@@ -579,7 +579,7 @@ export default function EnquiryFormFields({
               name={formType === "lead" ? "message" : "description"}
               value={formType === "lead" ? formData.message : formData.description}
               onChange={handleChange}
-              placeholder={isSection ? "Tell us about your dream destination..." : "Let us know more about what you want?"}
+              placeholder={isSection ? "Tell us about your dream destination..." : isInline ? "Any specific requirements or comments?" : "Let us know more about what you want?"}
               required={variant === "inline" && formType === "lead"}
             />
           </div>

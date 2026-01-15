@@ -143,6 +143,7 @@ body {
 body {
   @apply bg-[#FAFAFA] text-foreground;
   overflow-y: scroll !important; /* Prevent scrollbar from hiding when dropdowns open */
+  overflow-x: hidden !important; /* Prevent horizontal scroll on mobile */
 }
 
 /* Disable smooth scrolling initially to prevent auto-scroll on page load */

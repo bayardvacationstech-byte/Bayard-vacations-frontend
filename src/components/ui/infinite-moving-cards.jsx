@@ -1,141 +1,242 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Star, Quote, X } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+
+const Card = ({ item }) => {
+  const [showFullText, setShowFullText] = useState(false);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(y, [-100, 100], [10, -10]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-100, 100], [-10, 10]), { stiffness: 300, damping: 30 });
+
+  function handleMouseMove({ currentTarget, clientX, clientY }) {
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    
+    x.set(clientX - centerX);
+    y.set(clientY - centerY);
+
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <>
+      <motion.li
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        className="group relative w-[280px] sm:w-[320px] md:w-[380px] min-h-[200px] flex-shrink-0 cursor-default"
+      >
+        {/* Dynamic Border Spotlight */}
+        <motion.div
+          className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100 z-10"
+          style={{
+            background: useTransform(
+                [mouseX, mouseY],
+                ([mx, my]) => `radial-gradient(400px circle at ${mx}px ${my}px, rgba(34, 211, 238, 0.4), transparent 80%)`
+            ),
+          }}
+        />
+
+        {/* Main Card Content */}
+        <div 
+          style={{ transform: "translateZ(30px)" }}
+          className="relative h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-slate-950/90 p-6 shadow-2xl transition-all duration-500 group-hover:bg-slate-900 group-hover:border-white/20"
+        >
+          {/* Animated background glow */}
+          <div className="absolute -top-16 -right-16 w-32 h-32 bg-cyan-500/10 blur-[40px] group-hover:bg-cyan-500/20 transition-colors duration-700" />
+
+          <div className="relative flex flex-col h-full justify-between gap-4">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                 <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star
+                      key={index}
+                      className="size-3.5 fill-cyan-400 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]"
+                    />
+                  ))}
+                </div>
+                <Quote className="size-6 text-white/5" />
+              </div>
+
+              {/* Testimonial Text - TRUNCATED TO 3 LINES */}
+              <div className="relative space-y-2">
+                <p className="text-base text-white/90 font-medium leading-relaxed italic font-outfit line-clamp-3">
+                  &quot;{item.text}&quot;
+                </p>
+                {item.text.length > 100 && (
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowFullText(true);
+                    }}
+                    className="text-cyan-400 text-xs font-bold hover:underline underline-offset-4 tracking-wider uppercase transition-all"
+                  >
+                    Read More
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Author Info */}
+            <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+              <div className="relative size-12 rounded-full overflow-hidden border-2 border-cyan-500/20 group-hover:border-cyan-400 transition-all duration-500">
+                <Image
+                  fill
+                  alt={item.author_name || "Traveler"}
+                  src={item.profile_photo_url}
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-sm tracking-tight">
+                  {item.author_name}
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.2em] text-cyan-400 font-black">
+                   Verified Explorer
+                 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.li>
+
+      {/* FULL TEXT MODAL */}
+      <AnimatePresence>
+        {showFullText && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+            onClick={() => setShowFullText(false)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative max-w-lg w-full bg-slate-900 border border-white/10 rounded-3xl p-8 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setShowFullText(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+              >
+                <X className="size-5 text-white" />
+              </button>
+
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="relative size-14 rounded-full overflow-hidden border-2 border-cyan-400">
+                    <Image
+                      fill
+                      alt={item.author_name || "Traveler"}
+                      src={item.profile_photo_url}
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-white font-bold text-lg">{item.author_name}</span>
+                    <span className="text-xs uppercase tracking-widest text-cyan-400">Verified Explorer</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-1">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star key={index} className="size-4 fill-cyan-400 text-cyan-400" />
+                  ))}
+                </div>
+
+                <p className="text-white/80 text-lg leading-relaxed italic font-outfit">
+                  &quot;{item.text}&quot;
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
 
 export const InfiniteMovingCards = ({
   items,
   direction = "left",
-  speed = "fast",
+  speed = "slow",
   pauseOnHover = true,
   className,
 }) => {
   const [start, setStart] = useState(false);
+  const containerRef = useRef(null);
+  const scrollerRef = useRef(null);
 
   useEffect(() => {
-    // Start animation on mount
     setStart(true);
   }, []);
 
-  const containerRef = React.useRef(null);
-  const scrollerRef = React.useRef(null);
-
   useEffect(() => {
     if (containerRef.current) {
-      if (direction === "left") {
-        containerRef.current.style.setProperty(
-          "--animation-direction",
-          "forwards"
-        );
-      } else {
-        containerRef.current.style.setProperty(
-          "--animation-direction",
-          "reverse"
-        );
-      }
+      containerRef.current.style.setProperty(
+        "--animation-direction",
+        direction === "left" ? "forwards" : "reverse"
+      );
       
-      if (speed === "fast") {
-        containerRef.current.style.setProperty("--animation-duration", "40s");
-      } else if (speed === "normal") {
-        containerRef.current.style.setProperty("--animation-duration", "80s");
-      } else {
-        containerRef.current.style.setProperty("--animation-duration", "120s");
-      }
+      const duration = speed === "fast" ? "40s" : speed === "normal" ? "80s" : "160s";
+      containerRef.current.style.setProperty("--animation-duration", duration);
     }
   }, [direction, speed]);
 
-  function truncateText(text, maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
-  }
-
-  // Duplicate items for infinite scroll effect
   const duplicatedItems = React.useMemo(() => {
     if (!items || items.length === 0) return [];
-    // If fewer items, duplicate more times to fill width
-    const minItems = 10; 
+    const minItems = 8; 
     let result = [...items];
     while (result.length < minItems) {
        result = [...result, ...items];
     }
-    return [...result, ...result]; // Double it one last time for seamless loop
+    return [...result, ...result];
   }, [items]);
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "scroller relative z-20 max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]",
+        "scroller relative z-20 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_5%,white_95%,transparent)] py-10",
         className
       )}
     >
       <ul
         ref={scrollerRef}
         className={cn(
-          "flex min-w-full shrink-0 gap-4 py-4 w-max flex-nowrap",
+          "flex min-w-full shrink-0 gap-8 md:gap-12 py-4 w-max flex-nowrap",
           start && "animate-scroll",
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >
         {duplicatedItems.map((item, idx) => (
-          <li
-            key={idx}
-            className="w-[320px] sm:w-[400px] md:w-[500px] relative rounded-xl flex-shrink-0 bg-slate-800 border border-slate-700/50 p-4 md:p-5 transition-transform duration-300 hover:-translate-y-1 shadow-xl group overflow-hidden"
-          >
-             {/* Decorative Quote Icon Background */}
-            <div className="absolute top-2 left-4 opacity-5 pointer-events-none">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" className="text-white transform -scale-x-100">
-                  <path d="M14.017 21L14.017 18C14.017 16.8954 13.1216 16 12.017 16H9C9.00001 13.5912 10.1553 12.33 12.4649 12.2101L12.517 11.2099C8.30396 11.4286 7.98929 14.2818 8.00001 16H8V19H11V21H5V16C5 12 8 7 13 7V10C10 10 9 12 9 13.5042C9.176 13.5015 9.35624 13.5 9.54001 13.5029C10.6343 13.5205 11.7584 13.7845 12.5858 14.5858C13.4771 15.4488 14.017 16.6575 14.017 18V21ZM22.017 21L22.017 18C22.017 16.8954 21.1216 16 20.017 16H17C17 13.5912 18.1553 12.33 20.4649 12.2101L20.517 11.2099C16.304 11.4286 15.9893 14.2818 16 16H16V19H19V21H13V16C13 12 16 7 21 7V10C18 10 17 12 17 13.5042C17.176 13.5015 17.3562 13.5 17.54 13.5029C18.6343 13.5205 19.7584 13.7845 20.5858 14.5858C21.4771 15.4488 22.017 16.6575 22.017 18V21Z" />
-              </svg>
-            </div>
-
-            <div className="flex flex-col h-full relative z-10 justify-between gap-3">
-              {/* Text - Strict 2 lines */}
-              <p className="text-sm md:text-base leading-snug text-white/90 font-medium line-clamp-2">
-                &quot;{item.text}&quot;
-              </p>
-
-              {/* Bottom Row: User + Stars */}
-              <div className="flex justify-between items-center border-t border-white/10 pt-3 mt-1">
-                 {/* User Info */}
-                 <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <Image
-                        width={36}
-                        height={36}
-                        alt={item.author_name || "Traveler"}
-                        src={item.profile_photo_url}
-                        className="rounded-full object-cover size-9 border border-white/30"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-sm text-white">
-                        {item.author_name}
-                      </span>
-                      <span className="text-[10px] uppercase tracking-wider text-brand-blue">
-                        {item.author_role || "Traveler"}
-                      </span>
-                    </div>
-                 </div>
-
-                 {/* Stars */}
-                 <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Star
-                        key={index}
-                        className="size-3.5 fill-brand-accent text-brand-accent drop-shadow-sm"
-                      />
-                    ))}
-                 </div>
-              </div>
-            </div>
-          </li>
+          <Card key={`${item.author_name}-${idx}`} item={item} />
         ))}
       </ul>
     </div>
   );
 };
+

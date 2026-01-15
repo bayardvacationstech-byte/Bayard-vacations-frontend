@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Star, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Import banner data...
 const LUXURY_DATA = [
@@ -27,12 +28,26 @@ const LUXURY_DATA = [
   { name: "Indian Wildlife", tagline: "Safaris in India’s best tiger and wildlife reserves.", image: "https://images.unsplash.com/photo-1610482299914-874ca9f0464f?w=1200" }
 ];
 
-export default function DestinationSpotlight({ initialRegions = [] }) {
+export default function DestinationSpotlight({ initialRegions = [], eliteEscapePackages = [] }) {
   const [activeBanner, setActiveBanner] = useState(0);
   const carouselRef = useRef(null);
+  const router = useRouter();
 
   // Combine static luxury data with dynamic region data from Firebase
   const displays = useMemo(() => {
+    // If we have eliteEscapePackages, prioritize them
+    if (eliteEscapePackages && eliteEscapePackages.length > 0) {
+      return eliteEscapePackages.map(pkg => ({
+        id: pkg.id,
+        name: pkg.region || pkg.packageTitle,
+        fullTitle: pkg.packageTitle,
+        image: pkg.cardImages && pkg.cardImages.length > 0 ? pkg.cardImages[0].url : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200",
+        slug: pkg.packageSlug,
+        regionSlug: pkg.region?.toLowerCase().replace(/\s+/g, '-'),
+        isPackage: true
+      }));
+    }
+
     return LUXURY_DATA.map(item => {
       const region = initialRegions.find(r => 
         r.name?.toLowerCase().includes(item.name.toLowerCase()) || 
@@ -48,10 +63,11 @@ export default function DestinationSpotlight({ initialRegions = [] }) {
         // Mock some luxury stats if not in DB
         days: region?.defaultDays || 5 + Math.floor(Math.random() * 4),
         price: region?.startingPrice ? `₹${region.startingPrice}` : `₹1,${Math.floor(Math.random() * 9)}9,000`,
-        rating: 4.5 + (Math.random() * 0.4)
+        rating: 4.5 + (Math.random() * 0.4),
+        isPackage: false
       };
     });
-  }, [initialRegions]);
+  }, [initialRegions, eliteEscapePackages]);
 
   const active = displays[activeBanner] || displays[0];
 
@@ -154,7 +170,13 @@ export default function DestinationSpotlight({ initialRegions = [] }) {
           {displays.map((display, index) => (
             <button
               key={display.id}
-              onClick={() => setActiveBanner(index)}
+              onClick={() => {
+                if (activeBanner === index && display.isPackage) {
+                  router.push(`/packages/${display.regionSlug}/${display.slug}`);
+                } else {
+                  setActiveBanner(index);
+                }
+              }}
               className={`flex-shrink-0 relative w-40 h-48 sm:w-52 sm:h-60 md:w-64 md:h-72 lg:w-72 lg:h-[350px] rounded-[1.5rem] md:rounded-[2rem] lg:rounded-[3rem] overflow-hidden transition-all duration-700 ${
                 activeBanner === index
                   ? 'ring-4 ring-brand-peach scale-105 shadow-[0_30px_60px_-12px_rgba(242,194,136,0.3)] z-10'

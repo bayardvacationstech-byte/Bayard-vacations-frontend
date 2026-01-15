@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
@@ -29,6 +30,7 @@ import { useRegionsData } from "@/hooks/regions/useRegionsData";
 import { themeMapData } from "@/config/themePackages";
 
 export default function ActivitiesListingClient({ regionSlug }) {
+  const router = useRouter();
   const { domesticRegions, internationalRegions, regionIsLoading } = useRegionsData();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLocationType, setSelectedLocationType] = useState("all");
@@ -56,8 +58,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Caspian Adventure", "Baku Coastal Escape"],
       isRomantic: true,
       isInternational: false,
-      regionName: "Absheron",
-      regionSlug: "absheron"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 2,
@@ -73,8 +75,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Caucasian Peaks", "Nature Lovers Paradise"],
       isRomantic: false,
       isInternational: false,
-      regionName: "Guba",
-      regionSlug: "guba"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 3,
@@ -90,8 +92,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Wild Azerbaijan", "Green Escape"],
       isRomantic: false,
       isInternational: false,
-      regionName: "Gabala",
-      regionSlug: "gabala"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 4,
@@ -107,8 +109,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Active Baku", "Silk Road by Bike"],
       isRomantic: true,
       isInternational: false,
-      regionName: "Baku",
-      regionSlug: "baku"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 5,
@@ -124,8 +126,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Historic Azerbaijan", "Cultural Heritage Tour"],
       isRomantic: false,
       isInternational: false,
-      regionName: "Baku",
-      regionSlug: "baku"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 6,
@@ -141,8 +143,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Sunset Sail", "Maritime Experience"],
       isRomantic: true,
       isInternational: false,
-      regionName: "Lankaran",
-      regionSlug: "lankaran"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 7,
@@ -158,8 +160,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Starry Night Expedition", "Mountain Camp"],
       isRomantic: true,
       isInternational: false,
-      regionName: "Shahdag",
-      regionSlug: "shahdag"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 8,
@@ -175,8 +177,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
       packages: ["Culinary Journey", "Tastes of Azerbaijan"],
       isRomantic: false,
       isInternational: false,
-      regionName: "Ganja",
-      regionSlug: "ganja"
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     },
     {
       id: 9,
@@ -191,9 +193,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
       destinations: ["Baku Old City", "Lahij"],
       packages: ["Artisan Azerbaijan", "Craft & Culture"],
       isRomantic: false,
-      isInternational: true,
-      regionName: "Lahij",
-      regionSlug: "lahij"
+      isInternational: false,
+      regionName: "Azerbaijan",
+      regionSlug: "azerbaijan"
     }
   ];
 
@@ -240,7 +242,7 @@ export default function ActivitiesListingClient({ regionSlug }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-brand-green to-green-900 text-white py-16 md:py-24">
+      <div className="bg-gradient-to-br from-brand-green to-green-900 text-white pt-40 pb-24 lg:pt-64 lg:pb-40 relative overflow-hidden">
         <Container>
           <Link href={regionSlug ? `/packages/${regionSlug}` : "/packages"}>
             <Button 
@@ -264,8 +266,8 @@ export default function ActivitiesListingClient({ regionSlug }) {
               </span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6">
-              {regionName ? `Activities in ${regionName}` : "All Activities"}
+            <h1 className="text-4xl lg:text-7xl font-bold leading-tight tracking-tight mb-6">
+               {regionName ? `Activities in ${regionName}` : "All Activities"}
             </h1>
 
             <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-3xl">
@@ -450,9 +452,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
                 }}
                 hoverGradient="from-brand-green/95 to-emerald-900"
                 ctaLabel="Learn More"
-                onCtaClick={() => window.location.href = `/activities/${regionSlug || "azerbaijan"}/${activity.slug}`}
+                onCtaClick={() => router.push(`/activities/${regionSlug || "azerbaijan"}/${activity.slug}`)}
                 secondaryCtaLabel={`Explore ${activity.regionName}`}
-                onSecondaryCtaClick={() => window.location.href = `/packages/${activity.regionSlug}`}
+                onSecondaryCtaClick={() => router.push(`/packages/${activity.regionSlug}`)}
               />
             </motion.div>
           ))}
