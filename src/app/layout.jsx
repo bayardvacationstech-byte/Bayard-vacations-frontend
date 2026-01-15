@@ -19,6 +19,7 @@ import ClientProviders from "@/components/ClientProviders";
 import { DEFAULT_URL } from "@/config";
 import { TailwindIndicator } from "@/components/TailwindIndicator";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
+import ChatbotIcon from "@/components/ChatbotIcon";
 
 const nord = localFont({
   src: [
@@ -130,6 +131,7 @@ export default async function RootLayout({ children }) {
           {children}
           <LeadForm />
           <WhatsAppIcon />
+          <ChatbotIcon />
           <Toaster />
         </ClientProviders>
         <Footer />

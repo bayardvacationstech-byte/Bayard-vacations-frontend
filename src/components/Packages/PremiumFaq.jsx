@@ -157,7 +157,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section id="faq" className="relative py-12 md:py-16 bg-white overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-6">
+    <section id="faq" className="relative py-12 md:py-16 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-6">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" />
@@ -235,7 +235,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           className="mt-12"
         >
           <div className="relative overflow-hidden rounded-3xl">
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-blue/5 via-white to-brand-blue/5" />
+            <div className="absolute inset-0 bg-brand-blue/5 backdrop-blur-sm" />
             <div className="relative bg-transparent border border-brand-blue/10 rounded-3xl p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
               <div className="flex-shrink-0 w-16 h-16 bg-brand-blue rounded-2xl flex items-center justify-center shadow-lg shadow-brand-blue/30">
                 <HelpCircle className="w-8 h-8 text-white" />

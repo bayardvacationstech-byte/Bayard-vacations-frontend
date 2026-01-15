@@ -6,6 +6,8 @@ import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { getHotelsByIds } from "@/utils/firebase";
 import { Wifi, Utensils, Wind, Car, Building2, Star, MapPin, Bed, CheckCircle2 } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, FreeMode } from "swiper/modules";
 
 const PackageHotels = ({ packageData }) => {
   const [hotelsByCategory, setHotelsByCategory] = useState({});
@@ -105,8 +107,98 @@ const PackageHotels = ({ packageData }) => {
     fivestar: "5 Star"
   };
 
+  const getAmenityIcon = (name) => {
+    const n = name.toLowerCase();
+    if (n.includes('wifi')) return <Wifi size={14} className="text-brand-blue" />;
+    if (n.includes('breakfast') || n.includes('meal') || n.includes('dining')) return <Utensils size={14} className="text-brand-blue" />;
+    if (n.includes('ac') || n.includes('air conditioning')) return <Wind size={14} className="text-brand-blue" />;
+    if (n.includes('pool')) return <Building2 size={14} className="text-brand-blue" />;
+    if (n.includes('spa') || n.includes('gym')) return <Building2 size={14} className="text-brand-blue" />;
+    return <CheckCircle2 size={14} className="text-brand-blue" />;
+  };
+
+  const renderHotelCard = (hotel, idx) => (
+    <motion.div 
+      key={hotel.id || idx}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: idx * 0.1 }}
+      className="flex flex-col bg-white rounded-3xl border border-slate-100 overflow-hidden group hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500 h-full"
+    >
+      {/* Image Section - Reduced Height */}
+      <div className="relative w-full h-[180px] overflow-hidden">
+        <Image
+          src={hotel.images?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800"}
+          alt={hotel.name}
+          fill
+          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+        />
+        {/* Premium Badge */}
+        <div className="absolute top-3 left-3">
+          <div className="bg-slate-900/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1.5">
+            <div className="w-1 h-1 rounded-full bg-brand-blue animate-pulse" />
+            <span className="text-[9px] font-black text-white uppercase tracking-widest">Handpicked</span>
+          </div>
+        </div>
+
+        <div className="absolute top-3 right-3">
+          <div className="bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm border border-white/20 flex items-center gap-0.5">
+            {[...Array(parseInt(categoryLabels[selectedCategory]) || 5)].map((_, i) => (
+              <Star key={i} size={9} className="fill-yellow-500 text-yellow-500" />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Content Section - Compact */}
+      <div className="p-4 flex-1 flex flex-col">
+        {/* 1. Hotel Name */}
+        <h3 className="text-lg font-black mb-3 text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight line-clamp-1">
+          {hotel.name}
+        </h3>
+
+        {/* 2. Room Type - Inline */}
+        <div className="flex items-center gap-2 mb-3">
+          <Bed className="w-3.5 h-3.5 text-brand-blue flex-shrink-0" />
+          <p className="text-xs font-bold text-slate-700 line-clamp-1">{hotel.roomType || "Signature Premium Suite"}</p>
+        </div>
+
+        {/* 3. Amenities - Compact */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {(hotel.amenities || ["Wifi", "Breakfast", "AC", "Laundry"]).slice(0, 4).map((amenity, i) => (
+            <div key={i} className="flex items-center gap-1 px-2 py-1 bg-slate-50 border border-slate-100 rounded-lg">
+              {getAmenityIcon(amenity)}
+              <span className="text-[9px] font-bold text-slate-700">{amenity}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* 4. Location - Compact */}
+        <div className="flex items-start gap-2 mb-4">
+          <MapPin className="w-3.5 h-3.5 text-brand-blue flex-shrink-0 mt-0.5" />
+          <p className="text-[10px] font-semibold text-slate-600 leading-relaxed line-clamp-2">
+            {hotel.location || "Centrally located with easy access to attractions."}
+          </p>
+        </div>
+
+        {/* CTA - Compact */}
+        <div className="mt-auto">
+          <Button
+            asChild
+            variant="outline"
+            className="w-full border-brand-blue/40 text-brand-blue hover:bg-brand-blue hover:text-white rounded-xl py-3 font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95"
+          >
+            <a href={hotel.googleUrl || "#"} target="_blank" rel="noopener noreferrer">
+              View on Map
+            </a>
+          </Button>
+        </div>
+      </div>
+    </motion.div>
+  );
+
   return (
-    <section id="hotels-section" className="relative bg-white text-slate-900 py-8 md:py-12 rounded-3xl border border-slate-100 shadow-sm mb-4">
+    <section id="hotels-section" className="relative bg-transparent text-slate-900 py-10 md:py-16 overflow-hidden scroll-mt-24 mb-4">
       {/* Subtle Background Decoration */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse"></div>
@@ -145,92 +237,27 @@ const PackageHotels = ({ packageData }) => {
           </div>
         </div>
 
-        {/* Hotel Grid - More Minimal */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {currentHotels.map((hotel, idx) => (
-            <motion.div 
-              key={hotel.id || idx}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="flex flex-col bg-white rounded-3xl border border-slate-100 overflow-hidden group hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500"
-            >
-              {/* Image Section */}
-              <div className="relative w-full h-[220px] overflow-hidden">
-                <Image
-                  src={hotel.images?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800"}
-                  alt={hotel.name}
-                  fill
-                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                <div className="absolute top-4 right-4">
-                  <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm border border-white/20 flex items-center gap-1">
-                    {[...Array(parseInt(categoryLabels[selectedCategory]) || 5)].map((_, i) => (
-                      <Star key={i} size={10} className="fill-yellow-500 text-yellow-500" />
-                    ))}
-                  </div>
-                </div>
-              </div>
+        {/* Mobile: Swiper Carousel */}
+        <div className="block md:hidden">
+          <Swiper
+            modules={[Pagination, FreeMode]}
+            pagination={{ clickable: true }}
+            slidesPerView={1.1}
+            spaceBetween={16}
+            freeMode={true}
+            className="!pb-12"
+          >
+            {currentHotels.map((hotel, idx) => (
+              <SwiperSlide key={hotel.id || idx}>
+                {renderHotelCard(hotel, idx)}
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
 
-              {/* Content Section */}
-              <div className="p-6 flex-1 flex flex-col">
-                {/* 1. Hotel Name */}
-                <h3 className="text-xl font-black mb-4 text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight">
-                  {hotel.name}
-                </h3>
-
-                {/* 2. Room Type & Amenities */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-brand-blue/5 rounded-lg">
-                      <Bed className="w-4 h-4 text-brand-blue" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Room Type</p>
-                      <p className="text-sm font-bold text-slate-700">{hotel.roomType || "Signature Premium Suite"}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {(hotel.amenities || ["Wifi", "Breakfast", "AC", "Laundry"]).map((amenity, i) => (
-                      <div key={i} className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg">
-                        <CheckCircle2 size={12} className="text-brand-blue/60" />
-                        <span className="text-[10px] font-bold text-slate-600">{amenity}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 3. Location */}
-                <div className="mt-auto pt-6 border-t border-slate-100">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5">
-                      <MapPin className="w-4 h-4 text-brand-blue" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1.5">Location</p>
-                      <p className="text-xs font-semibold text-slate-600 leading-relaxed italic">
-                        {hotel.location || "Centrally located with easy access to attractions."}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <div className="mt-6">
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full border-brand-blue/20 text-brand-blue hover:bg-brand-blue hover:text-white rounded-xl py-5 font-bold text-[11px] uppercase tracking-widest transition-all active:scale-95"
-                  >
-                    <a href={hotel.googleUrl || "#"} target="_blank" rel="noopener noreferrer">
-                      View on Google Maps
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        {/* Desktop: Grid */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {currentHotels.map((hotel, idx) => renderHotelCard(hotel, idx))}
         </div>
       </Container>
 

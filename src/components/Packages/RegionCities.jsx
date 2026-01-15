@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import Container from "@/components/ui/Container";
 import { 
   Building2, 
@@ -29,6 +30,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const RegionCities = ({ regionName = "this destination", regionData = null }) => {
+  const router = useRouter();
+  const { region: regionSlug } = useParams();
   const [selectedCity, setSelectedCity] = useState("all");
 
   // Extract cities from regionData.mustDoExperiences.categories
@@ -199,7 +202,7 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                 }}
                 hoverGradient="from-brand-green/95 to-brand-green"
                 ctaLabel="View Packages"
-                onCtaClick={() => console.log("View packages for:", city.name)}
+                onCtaClick={() => router.push(`/packages/${regionSlug}`)}
               />
             </SwiperSlide>
           ))}

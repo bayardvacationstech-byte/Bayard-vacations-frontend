@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { splitCityStr } from "@/lib/utils";
+import { Download } from "lucide-react";
 
 const ItinerarySection = ({ packageData }) => {
   const [expandedDays, setExpandedDays] = useState([0]);
@@ -22,6 +23,13 @@ const ItinerarySection = ({ packageData }) => {
     }
   };
 
+  const handleDownloadItinerary = () => {
+    // TODO: Implement PDF generation or download logic
+    console.log("Download itinerary");
+    // For now, we'll just trigger a print dialog
+    window.print();
+  };
+
   return (
     <div id="itinerary" className="bg-white rounded-3xl py-4 md:py-6 px-3 md:px-6 scroll-mt-48 mb-4 border border-slate-100 shadow-sm">
       {/* Standard Header Block - Above Split Layout */}
@@ -36,12 +44,21 @@ const ItinerarySection = ({ packageData }) => {
           </p>
         </div>
         
-        <div className="flex flex-wrap gap-3 mt-4 lg:mt-0 lg:flex-shrink-0">
+        <div className="flex gap-2 md:gap-3 mt-4 lg:mt-0 lg:flex-shrink-0">
+          <button
+            onClick={handleDownloadItinerary}
+            className="flex items-center justify-center gap-2 px-3 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-brand-blue to-blue-600 hover:from-blue-600 hover:to-brand-blue text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 hover:shadow-xl hover:shadow-brand-blue/30 active:scale-95"
+          >
+            <Download className="w-3.5 h-3.5 md:w-4 md:h-4" />
+            <span className="hidden sm:inline">Download</span>
+            <span className="sm:hidden">PDF</span>
+          </button>
           <button
             onClick={toggleAllDays}
-            className="px-6 py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-2xl text-brand-blue font-black text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
+            className="flex-1 sm:flex-none px-3 md:px-6 py-2.5 md:py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-xl md:rounded-2xl text-brand-blue font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
           >
-            {expandedDays.length === packageData?.itineraries?.length ? "Collapse All Days" : "Expand All Days"}
+            <span className="hidden sm:inline">{expandedDays.length === packageData?.itineraries?.length ? "Collapse All Days" : "Expand All Days"}</span>
+            <span className="sm:hidden">{expandedDays.length === packageData?.itineraries?.length ? "Collapse" : "Expand"}</span>
           </button>
         </div>
       </div>
@@ -130,7 +147,7 @@ const ItinerarySection = ({ packageData }) => {
                                   const afterColon = content.substring(colonIndex);
                                   return (
                                     <>
-                                      <span className="font-semibold text-brand-green">
+                                      <span className="font-black text-brand-blue text-base">
                                         {beforeColon}
                                       </span>
                                       <span className="text-slate-600">{afterColon}</span>

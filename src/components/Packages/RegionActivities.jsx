@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { 
@@ -33,6 +34,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const RegionActivities = ({ regionName = "this destination", regionData = null }) => {
+  const router = useRouter();
+  const { region: regionSlug } = useParams();
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -304,8 +307,8 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                   ]
                 }}
                 hoverGradient="from-brand-green/95 to-emerald-900"
-                ctaLabel="Book Now"
-                onCtaClick={() => console.log("Book activity:", activity.title)}
+                ctaLabel="Learn More"
+                onCtaClick={() => router.push(`/activities/${regionSlug}/${activity.title.toLowerCase().replace(/\s+/g, '-')}`)}
               />
             </SwiperSlide>
           ))}

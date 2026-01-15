@@ -23,10 +23,10 @@ const PackageExperiences = ({ packageData }) => {
   }, [showJourney]);
 
   return (
-    <section ref={sectionRef} id="experiences-section" className="bg-white py-4 md:py-6 overflow-hidden scroll-mt-24 mb-4">
+    <section ref={sectionRef} id="experiences-section" className="bg-transparent py-2 md:py-4 overflow-hidden scroll-mt-24 mb-4">
       <Container>
         {/* Simple & Clean Header - Focused version */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-slate-50/50 p-8 md:p-12 rounded-[2.5rem] border border-slate-100 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-8 bg-slate-50/50 p-4 md:p-8 rounded-2xl md:rounded-[2.5rem] border border-slate-100 shadow-sm">
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -36,7 +36,7 @@ const PackageExperiences = ({ packageData }) => {
               <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-4 tracking-tight">
                 The <span className="text-brand-blue">Visual Journal</span>
               </h2>
-              <p className="text-base md:text-lg text-slate-500 leading-relaxed font-medium">
+              <p className="text-sm md:text-base text-slate-500 leading-relaxed font-medium">
                 Deep dive into the stunning visuals and daily experiences that await you. Discover the heart of this journey through our curated visual chapters.
               </p>
             </motion.div>
@@ -49,7 +49,7 @@ const PackageExperiences = ({ packageData }) => {
           >
             <button
               onClick={() => setShowJourney(true)}
-              className="flex items-center gap-4 px-8 py-5 bg-brand-blue text-white rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-blue/30 hover:bg-slate-900 transition-all active:scale-95 group whitespace-nowrap"
+              className="flex items-center gap-3 px-6 py-3 md:px-8 md:py-5 bg-brand-blue text-white rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-blue/30 hover:bg-slate-900 transition-all active:scale-95 group whitespace-nowrap"
             >
               <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
               Experience the Journey

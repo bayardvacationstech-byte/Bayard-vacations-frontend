@@ -20,12 +20,12 @@ module.exports = {
       colors: {
         "brand-blue": "#0146b3",
         "brand-blue-hovered": "#003488",
-        "brand-green": "#06b6d4",
-        "brand-green-hovered": "#0891b2",
-        "brand-accent": "#3b82f6",
-        "brand-deep": "#1e293b",
-        "brand-dark": "#0f172a",
-        "brand-light-cyan": "#22d3ee",
+        "brand-green": "#0146b3",
+        "brand-green-hovered": "#003488",
+        "brand-accent": "#0146b3",
+        "brand-deep": "#0146b3",
+        "brand-dark": "#0146b3",
+        "brand-light-cyan": "#4a8dd9",
         "brand-peach": "#F2C288",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -109,7 +109,17 @@ module.exports = {
         "pulse-slow": {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.8" },
-        }
+        },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down .4s ease-out",
@@ -120,6 +130,7 @@ module.exports = {
         shine: "shine 1s ease-in-out infinite",
         float: "float 6s ease-in-out infinite",
         "pulse-slow": "pulse-slow 4s ease-in-out infinite",
+        "gradient-x": "gradient-x 15s ease infinite",
       },
       fontFamily: {
         outfit: ["var(--font-outfit)"],
