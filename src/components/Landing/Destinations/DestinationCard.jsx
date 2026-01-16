@@ -19,8 +19,10 @@ export default function DestinationCard({
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const timer = setTimeout(() => {
       setShouldAnimate(true);
     }, index * 100);
@@ -70,7 +72,7 @@ export default function DestinationCard({
         onMouseLeave={() => setIsHovered(false)}
       >
         <Link href={`/packages/${regionSlug}`} className="block h-full">
-          {isLoading ? (
+          {!isMounted || isLoading ? (
             <div className="absolute inset-0 z-10 h-full w-full overflow-hidden rounded-xl md:rounded-2xl isolation-isolate">
               <div
                 className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"

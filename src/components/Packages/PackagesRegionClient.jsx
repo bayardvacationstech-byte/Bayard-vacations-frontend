@@ -24,7 +24,7 @@ import {
 
 import Container from "@/components/ui/Container";
 import { usePackages } from "@/hooks/packages";
-import { useRegion } from "@/hooks/regions/useRegion";
+import { useRegion, useWhyChooseRegion } from "@/hooks/regions";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -102,6 +102,7 @@ export default function PackagesRegionClient() {
   const isGroupPackage = searchParams.get("group") === "true";
   const { packages: allPackages, isLoading: packagesLoading, error: packagesError } = usePackages(regionName);
   const { regionData, isLoading: regionLoading, error: regionError } = useRegion(regionName);
+  const { whyChooseData, isLoading: whyChooseLoading } = useWhyChooseRegion(regionData?.id);
   const placeName = regionName?.split("-").join(" ") || "this destination";
 
   const isLoading = packagesLoading || regionLoading;
@@ -428,6 +429,7 @@ export default function PackagesRegionClient() {
           <RegionQuickFacts 
             regionName={placeName} 
             regionData={regionData}
+            whyChooseData={whyChooseData}
           />
         </Container>
       </section>

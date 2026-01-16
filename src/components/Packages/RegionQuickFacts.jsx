@@ -26,14 +26,13 @@ import {
   Mountain,
   Theater
 } from "lucide-react";
-import regionDataJSON from "@/data/why-choose-regions.json";
 
 /**
  * RegionQuickFacts Component
  * A "Minimalist Classic" design that focuses on typography and clean information hierarchy.
  * Removes shadows, decorative backgrounds, and complex card containers.
  */
-const RegionQuickFacts = ({ regionData, regionName }) => {
+const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
   const [mounted, setMounted] = React.useState(false);
   const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -89,13 +88,9 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
   };
 
   const processedFacts = React.useMemo(() => {
-    // Get data from JSON first
-    const regionSlug = regionName?.toLowerCase();
-    const jsonData = regionDataJSON[regionSlug];
-    
-    // Use JSON data if available
-    if (jsonData?.quickFacts) {
-      return jsonData.quickFacts.map(fact => ({ ...fact, ...getFactConfig(fact.label) }));
+    // Use dynamic data from whyChooseData first
+    if (whyChooseData?.details?.quickFacts) {
+      return whyChooseData.details.quickFacts.map(fact => ({ ...fact, ...getFactConfig(fact.label) }));
     }
 
     // Fallback to hardcoded Azerbaijan data
@@ -147,10 +142,10 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
     }
     
     return facts;
-  }, [mounted, regionData, isAzerbaijan, regionName]);
+  }, [mounted, regionData, isAzerbaijan, regionName, whyChooseData]);
 
-  const regionSlug = regionName?.toLowerCase();
-  const jsonData = regionDataJSON[regionSlug];
+  // Convert regionName to slug for URLs
+  const regionSlug = regionName?.toLowerCase().replace(/\s+/g, '-');
 
   if (!mounted) return null;
 
@@ -171,14 +166,14 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
                 <div className="h-[1.5px] md:h-[2px] flex-1 md:w-12 bg-blue-600/20" />
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-slate-900 tracking-tighter leading-tight md:leading-[0.95] mb-2 md:mb-4">
-                About {jsonData?.mainTitle?.replace('Why Visit ', '') || regionName}
+                About {whyChooseData?.details?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
               </h2>
               <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">
-                {jsonData?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
+                {whyChooseData?.details?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
               </p>
               
               <p className="text-slate-600 text-sm lg:text-base leading-relaxed max-w-xl">
-                {jsonData?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
+                {whyChooseData?.details?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
               </p>
             </div>
           </motion.div>
@@ -248,11 +243,8 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Why Choose {regionName}?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                 {(() => {
-                  const regionSlug = regionName?.toLowerCase();
-                  const jsonData = regionDataJSON[regionSlug];
-                  
-                  // Use JSON data if available
-                  const reasons = jsonData?.whyChooseReasons || [
+                  // Use dynamic data first, then fallback
+                  const reasons = whyChooseData?.details?.whyChooseReasons || [
                     { icon: "Plane", title: "Direct & Easy Access", text: "4.5 hours from India with visa-free entry (₹2,200 e-visa)", color: "text-blue-600" },
                     { icon: "Flame", title: "Unique Natural Wonders", text: "Eternal fire mountains, mud volcanoes, and pristine Caspian beaches", color: "text-orange-600" },
                     { icon: "Landmark", title: "Rich Cultural Heritage", text: "UNESCO Heritage sites including ancient Baku Old City and Sheki's Silk Road palaces", color: "text-amber-600" },
@@ -283,11 +275,8 @@ const RegionQuickFacts = ({ regionData, regionName }) => {
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Must-Experience Attractions</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(() => {
-                  const regionSlug = regionName?.toLowerCase();
-                  const jsonData = regionDataJSON[regionSlug];
-                  
-                  // Use JSON data if available
-                  const attractions = jsonData?.mustExperienceAttractions || [
+                  // Use dynamic data if available
+                  const attractions = whyChooseData?.details?.mustExperienceAttractions || [
                     { icon: "Flame", text: "Yanar Dag (Eternal Flame Mountains)", color: "text-orange-600" },
                     { icon: "Landmark", text: "Baku Old City (UNESCO Heritage)", color: "text-amber-600" },
                     { icon: "Building2", text: "Flame Towers & Heydar Aliyev Center", color: "text-indigo-600" },

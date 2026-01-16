@@ -18,6 +18,11 @@ import Link from "next/link";
 export default function ExploreDestinations({ initialRegions }) {
   const [activeTab, setActiveTab] = useState("international");
   const { internationalRegions, domesticRegions, regionIsLoading, error } = useRegionsData(initialRegions);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Get first 8 international regions
   const displayInternationalRegions = useMemo(() => {
@@ -71,51 +76,59 @@ export default function ExploreDestinations({ initialRegions }) {
       </div>
 
       <div className="relative overflow-hidden min-h-[350px] md:min-h-[450px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          >
-            {/* Carousel Content */}
-            <Carousel
-              opts={{ align: "start" }}
-              className="mt-4"
+        {!isMounted ? (
+          <div className="mt-4 flex gap-4 overflow-hidden">
+             {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-gray-100 rounded-xl md:rounded-2xl aspect-[5/6] w-[80%] sm:w-1/4 flex-shrink-0 animate-pulse" />
+             ))}
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
             >
-              <CarouselContent className="gap-4 ml-0">
-                {activeTab === "international" ? (    
-                  displayInternationalRegions.length > 0 ? (
-                    displayInternationalRegions.map((region, index) => (
-                      <DestinationCard key={index} regionSlug={region.slug} inCarousel={true} />
-                    ))
+              {/* Carousel Content */}
+              <Carousel
+                opts={{ align: "start" }}
+                className="mt-4"
+              >
+                <CarouselContent className="gap-4 ml-0">
+                  {activeTab === "international" ? (    
+                    displayInternationalRegions.length > 0 ? (
+                      displayInternationalRegions.map((region, index) => (
+                        <DestinationCard key={region.slug || index} regionSlug={region.slug} inCarousel={true} />
+                      ))
+                    ) : (
+                      <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
+                        {regionIsLoading ? "Loading International Destinations..." : 
+                        error ? "Error loading destinations. Please refresh the page." :
+                        "No international regions available."}
+                      </div>
+                    )
                   ) : (
-                    <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
-                      {regionIsLoading ? "Loading International Destinations..." : 
-                       error ? "Error loading destinations. Please refresh the page." :
-                       "No international regions available."}
-                    </div>
-                  )
-                ) : (
-                  displayDomesticRegions.length > 0 ? (
-                    displayDomesticRegions.map((region, index) => (
-                      <DestinationCard key={index} regionSlug={region.slug} inCarousel={true} />
-                    ))
-                  ) : (
-                    <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
-                      {regionIsLoading ? "Loading Domestic Destinations..." : 
-                       error ? "Error loading destinations. Please refresh the page." :
-                       "No domestic regions available."}
-                    </div>
-                  )
-                )}
-              </CarouselContent>
-              <CarouselPrevious className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
-              <CarouselNext className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
-            </Carousel>
-          </motion.div>
-        </AnimatePresence>
+                    displayDomesticRegions.length > 0 ? (
+                      displayDomesticRegions.map((region, index) => (
+                        <DestinationCard key={region.slug || index} regionSlug={region.slug} inCarousel={true} />
+                      ))
+                    ) : (
+                      <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
+                        {regionIsLoading ? "Loading Domestic Destinations..." : 
+                        error ? "Error loading destinations. Please refresh the page." :
+                        "No domestic regions available."}
+                      </div>
+                    )
+                  )}
+                </CarouselContent>
+                <CarouselPrevious className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
+                <CarouselNext className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
+              </Carousel>
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
 
       <div className="mt-4 md:mt-6 flex justify-center">

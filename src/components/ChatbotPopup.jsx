@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown } from "lucide-react";
+import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -57,6 +57,8 @@ const ChatPackageCard = ({ item }) => {
 
 export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
+  const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -70,7 +72,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   const [isMounted, setIsMounted] = useState(false);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [showDestinations, setShowDestinations] = useState(false);
-  const messagesEndRef = useRef(null);
 
   // Popular destinations data
   const popularDestinations = [
@@ -285,7 +286,13 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
-    // Could add a "Copied!" toast here if available
+  };
+
+  const handleEdit = (text) => {
+    setInputMessage(text);
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -455,6 +462,25 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                   })}
                 </p>
 
+                {message.sender === "user" && (
+                  <div className="flex items-center gap-1 mt-2 -mr-1 justify-end">
+                    <button 
+                      onClick={() => handleCopy(message.text)}
+                      className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
+                      title="Copy"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </button>
+                    <button 
+                      onClick={() => handleEdit(message.text)}
+                      className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
+                      title="Edit"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+
                 {message.sender === "bot" && (
                   <div className="flex items-center gap-1 mt-2 -ml-1">
                     <button 
@@ -557,6 +583,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         <div className="bg-white border-t border-gray-200 p-4 backdrop-blur-sm flex-shrink-0">
           <form onSubmit={handleSendMessage} className="flex gap-2 items-end">
             <Textarea
+              ref={textareaRef}
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={handleKeyDown}

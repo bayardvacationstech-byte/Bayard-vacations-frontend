@@ -24,6 +24,11 @@ export default function ThemeHighlights({
 }) {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Hook Calls ---------------------------------------------------------------
   const eliteEscapeData = usePackagesByTheme("elite-escape", initialEliteEscapePackages);
@@ -58,7 +63,11 @@ export default function ThemeHighlights({
 
   const packages = useMemo(() => {
     if (!currentThemePackages) return [];
-    const sortedPackages = currentThemePackages.sort((a, b) => a.basePrice - b.basePrice);
+    const sortedPackages = [...currentThemePackages].sort((a, b) => {
+      const priceDiff = a.basePrice - b.basePrice;
+      if (priceDiff !== 0) return priceDiff;
+      return (a.id || "").localeCompare(b.id || "");
+    });
     const seenRegions = new Set();
     const uniquePackages = sortedPackages.filter((pkg) => {
       if (seenRegions.has(pkg.region)) return false;
@@ -239,68 +248,79 @@ export default function ThemeHighlights({
 
              {/* RIGHT COLUMN - GRID */}
           <div className="lg:col-span-7 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentThemeIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start"
-              >
-                {currentThemeLoading && packages.length === 0 ? (
-                  Array.from({ length: 4 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-48 sm:h-64 rounded-2xl bg-slate-100 animate-pulse"
-                    />
-                  ))
-                ) : packages.length > 0 ? (
-                  packages.map((pkg, index) => (
-                    <div
-                      key={pkg.id || index}
-                      className="group cursor-pointer relative h-52 sm:h-64 lg:h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
-                    >
-                      <Link
-                        href={`/packages/${pkg.region}/${pkg.packageSlug}`}
-                        className="block w-full h-full"
+            {!isMounted ? (
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-52 sm:h-64 lg:h-72 rounded-2xl bg-slate-100 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentThemeIndex}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start"
+                >
+                  {currentThemeLoading && packages.length === 0 ? (
+                    Array.from({ length: 4 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-48 sm:h-64 rounded-2xl bg-slate-100 animate-pulse"
+                      />
+                    ))
+                  ) : packages.length > 0 ? (
+                    packages.map((pkg, index) => (
+                      <div
+                        key={pkg.id || index}
+                        className="group cursor-pointer relative h-52 sm:h-64 lg:h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
                       >
-                        <div className="absolute inset-0 bg-slate-200">
-                          <Image
-                            src={
-                              pkg.cardImages?.[0]?.url ||
-                              "/img/package-img/default.jpg"
-                            }
-                            alt={pkg.packageTitle}
-                            fill
-                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-
-                        <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end">
-                          <h3 className="text-sm sm:text-xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md capitalize leading-tight">
-                            {pkg.region.split("-").join(" ")}
-                          </h3>
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
-                            <p className="text-white/80 text-[10px] sm:text-sm line-clamp-1">
-                              {pkg.packageTitle}
-                            </p>
-                            <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto">
-                              ₹{formatPrice(pkg.basePrice)}
-                            </span>
+                        <Link
+                          href={`/packages/${pkg.region}/${pkg.packageSlug}`}
+                          className="block w-full h-full"
+                        >
+                          <div className="absolute inset-0 bg-slate-200">
+                            <Image
+                              src={
+                                pkg.cardImages?.[0]?.url ||
+                                "/img/package-img/default.jpg"
+                              }
+                              alt={pkg.packageTitle}
+                              fill
+                              className="object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
                           </div>
-                        </div>
-                      </Link>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+
+                          <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end">
+                            <h3 className="text-sm sm:text-xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md capitalize leading-tight">
+                              {pkg.region.split("-").join(" ")}
+                            </h3>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
+                              <p className="text-white/80 text-[10px] sm:text-sm line-clamp-1">
+                                {pkg.packageTitle}
+                              </p>
+                              <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto">
+                                ₹{formatPrice(pkg.basePrice)}
+                              </span>
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                      <p className="text-slate-400 font-medium">Coming Soon</p>
                     </div>
-                  ))
-                ) : (
-                  <div className="col-span-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                    <p className="text-slate-400 font-medium">Coming Soon</p>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            )}
 
              <div className="mt-8 flex justify-end">
                  <Link 

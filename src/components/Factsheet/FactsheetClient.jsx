@@ -27,7 +27,15 @@ import {
   CheckCircle2,
   XCircle,
   ChevronRight,
-  ChevronDown
+  ChevronDown,
+  Star,
+  Flame,
+  Landmark,
+  Banknote,
+  ShieldCheck,
+  Mountain,
+  Camera,
+  Heart
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
@@ -198,7 +206,23 @@ export default function FactsheetClient({ regionSlug }) {
           { name: "Icherisheher", type: "Souvenirs", highlight: "Antiques, carpets, and traditional crafts." },
           { name: "Taza Bazar", type: "Authentic", highlight: "A glimpse into local daily life and exotic spices." }
         ]
-      }
+      },
+      highlights: [
+        { icon: Star, title: "Flame Towers Visit", description: "Panoramic views of the Baku bay from the iconic tri-towers", iconColor: "text-yellow-500" },
+        { icon: Flame, title: "Yanar Dag Experience", description: "Witness the natural eternal flame that never goes out", iconColor: "text-orange-500" },
+        { icon: Landmark, title: "Old City Expedition", description: "Explore Icherisheher's ancient streets and Maiden Tower", iconColor: "text-amber-600" },
+        { icon: Plane, title: "Luxury Airport Pickup", description: "VIP arrival with premium chauffeur services to your hotel", iconColor: "text-blue-500" },
+        { icon: Building2, title: "Heydar Aliyev Center", description: "Modern architectural masterpiece by Zaha Hadid", iconColor: "text-indigo-500" },
+        { icon: ShieldCheck, title: "Golden Hospitality", description: "Hand-picked premium hotels for maximum comfort", iconColor: "text-emerald-500" },
+      ],
+      attractions: [
+        { icon: Flame, title: "Eternal Baku Fire", iconColor: "text-orange-500" },
+        { icon: Building2, title: "Futuristic Baku City", iconColor: "text-indigo-500" },
+        { icon: Mountain, title: "Scenic Caucasian Alps", iconColor: "text-blue-500" },
+        { icon: Landmark, title: "UNESCO Heritage Sites", iconColor: "text-amber-600" },
+        { icon: Camera, title: "Photo-ready Baku Bay", iconColor: "text-purple-500" },
+        { icon: MapPin, title: "Signature Tea Culture", iconColor: "text-rose-500" },
+      ]
     }
   };
 
@@ -236,6 +260,7 @@ export default function FactsheetClient({ regionSlug }) {
 
   const factsheetSections = [
     { id: "essentials", label: "Essentials" },
+    { id: "highlights", label: "Highlights" },
     { id: "history", label: "History" },
     { id: "climate", label: "Climate" },
     { id: "language", label: "Language" },
@@ -383,6 +408,38 @@ export default function FactsheetClient({ regionSlug }) {
                 </div>
               )}
             </section>
+
+            {/* Highlights Section */}
+            {currentData.highlights && (
+              <section id="highlights" className="scroll-mt-24">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 bg-white border border-slate-100 rounded-[3rem] p-6 md:p-10 shadow-sm">
+                  
+                  {/* Left Side: Region Highlights */}
+                  <div className="flex-1">
+                    <h2 className="text-3xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+                      Region <span className="text-brand-blue">Highlights</span>
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+                      {currentData.highlights.map((item, idx) => (
+                        <FeatureCard key={idx} {...item} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right Side: Top Attractions */}
+                  <div className="flex-1">
+                    <h2 className="text-3xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+                      Top <span className="text-brand-blue">Attractions</span>
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                      {currentData.attractions?.map((item, idx) => (
+                        <AttractionCard key={idx} {...item} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
 
             {/* 2. History Section */}
             {currentData.history && (
@@ -888,5 +945,26 @@ const SidebarBenefit = ({ icon: Icon, text }) => (
       <Icon className="w-4 h-4 text-brand-green" />
     </div>
     {text}
+  </div>
+);
+
+const FeatureCard = ({ icon: Icon, title, description, iconColor }) => (
+  <div className="flex gap-4">
+    <div className={cn("w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100", iconColor)}>
+      <Icon className="w-5 h-5" />
+    </div>
+    <div className="space-y-1">
+      <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider">{title}</h4>
+      <p className="text-xs text-slate-500 font-medium leading-relaxed">{description}</p>
+    </div>
+  </div>
+);
+
+const AttractionCard = ({ icon: Icon, title, iconColor }) => (
+  <div className="flex items-center gap-4 bg-[#f8fafc]/50 p-4 rounded-2xl border border-slate-100 hover:shadow-md transition-all duration-300">
+    <div className={cn("w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-white border border-slate-100", iconColor)}>
+      <Icon className="w-5 h-5" />
+    </div>
+    <span className="text-sm md:text-base font-bold text-slate-700 tracking-tight">{title}</span>
   </div>
 );
