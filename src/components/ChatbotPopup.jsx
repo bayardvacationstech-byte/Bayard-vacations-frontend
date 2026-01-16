@@ -2,9 +2,58 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight } from "lucide-react";
+import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { getPackagesByRegion } from "@/utils/firebase";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination as SwiperPagination } from "swiper/modules";
+import PackageCard from "@/components/ui/PackageCard";
+
+// Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+const ChatPackageCard = ({ item }) => {
+  const imageUrl = item.cardImages?.[0]?.url || item.bannerImages?.[0]?.url;
+  
+  return (
+    <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="relative aspect-[16/10] w-full">
+        {imageUrl ? (
+          <img src={imageUrl} alt={item.packageTitle} className="object-cover w-full h-full" />
+        ) : (
+          <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+            <MapPin className="w-6 h-6" />
+          </div>
+        )}
+        <div className="absolute top-2 left-2 bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+          {item.days}D/{item.nights}N
+        </div>
+      </div>
+      <div className="p-3">
+        <h4 className="font-bold text-xs text-gray-800 line-clamp-1 mb-2">{item.packageTitle}</h4>
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <span className="text-blue-600 font-bold text-sm">₹{item.offerPrice || item.basePrice}</span>
+            {item.offerPrice > 0 && item.basePrice > 0 && (
+              <span className="text-[10px] text-gray-400 line-through ml-1">₹{item.basePrice}</span>
+            )}
+          </div>
+          <a 
+            href={`/packages/${item.region}/${item.packageSlug}`}
+            target="_blank"
+            className="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Details
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
@@ -54,9 +103,37 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     { icon: Sparkles, text: "Special Offers", emoji: "✨" },
   ];
 
-  const handleDestinationClick = (slug) => {
-    router.push(`/packages/${slug}`);
-    onClose();
+  const handleDestinationClick = async (slug, name) => {
+    // Add user message for destination selection
+    const userMessage = {
+      id: Date.now(),
+      text: `Tell me about ${name} packages`,
+      sender: "user",
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    setShowDestinations(false);
+    setIsTyping(true);
+
+    try {
+      const regionPackages = await getPackagesByRegion(slug);
+      
+      const botResponse = {
+        id: Date.now() + 1,
+        text: `Here are some amazing tour packages for **${name}**! 🌴`,
+        sender: "bot",
+        timestamp: new Date(),
+        isHtml: true,
+        packages: regionPackages.slice(0, 5), // Only show top 5 for brevity
+      };
+      
+      setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Error fetching packages:", error);
+      handleSendMessage(null, `Tell me about Bali packages`); // Fallback to normal chat if fetch fails
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleQuickReply = (text) => {
@@ -67,62 +144,154 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     handleSendMessage(null, text);
   };
 
-  const handleSendMessage = async (e, quickReplyText = null) => {
+  const handleSendMessage = async (e, text = null, isRegenerate = false) => {
     if (e) e.preventDefault();
-    const messageText = quickReplyText || inputMessage;
+    const messageText = text || inputMessage;
     if (!messageText.trim()) return;
 
-    // Add user message
-    const userMessage = {
-      id: messages.length + 1,
-      text: messageText,
-      sender: "user",
-      timestamp: new Date(),
-    };
+    // Filter and format history for API
+    // If regenerating, we want to exclude the last bot message from history
+    let historyToProcess = messages;
+    if (isRegenerate) {
+      // Find the last bot message index
+      const lastBotIndex = [...messages].reverse().findIndex(m => m.sender === "bot");
+      if (lastBotIndex !== -1) {
+        // Remove the existing bot response being regenerated
+        const actualIndex = messages.length - 1 - lastBotIndex;
+        historyToProcess = messages.slice(0, actualIndex);
+        setMessages(historyToProcess); // Clean UI for fresh generation
+      }
+    }
 
-    setMessages((prev) => [...prev, userMessage]);
+    const chatHistory = historyToProcess
+      .filter(msg => msg.id !== 1)
+      .slice(-10)
+      .map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.text,
+      }));
+
+    // Add user message if not regenerating
+    if (!isRegenerate) {
+      const userMessage = {
+        id: Date.now(),
+        text: messageText,
+        sender: "user",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, userMessage]);
+    }
+
     setInputMessage("");
     setIsTyping(true);
 
+    // Prepare a placeholder for the bot response
+    const botMessageId = Date.now() + 1;
+    let botResponseText = "";
+
     try {
-      // Call the API through our Next.js API route to avoid CORS issues
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: messageText }),
+        body: JSON.stringify({ 
+          message: messageText,
+          history: chatHistory
+        }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to get response from AI");
       }
 
-      const data = await response.json();
-      
-      const botResponse = {
-        id: messages.length + 2,
-        text: data.ai_response || data.response || data.message || "I'm here to help! Please tell me more about your travel plans.",
-        sender: "bot",
-        timestamp: new Date(),
-        isHtml: true, // Flag to indicate this should be rendered as HTML
-      };
-      
-      setMessages((prev) => [...prev, botResponse]);
+      // Handle streaming response
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      setIsTyping(false); // Stop typing animation once we start receiving chunks
+
+      // Initial bot response state
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: botMessageId,
+          text: "",
+          sender: "bot",
+          timestamp: new Date(),
+          isHtml: true,
+        },
+      ]);
+
+      let buffer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        // Split buffer by newlines to process complete lines
+        const lines = buffer.split("\n");
+        // Keep the last (potentially incomplete) line in the buffer
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          if (trimmedLine.startsWith("data: ")) {
+            try {
+              const dataStr = trimmedLine.slice(6);
+              if (dataStr === "[DONE]") continue; // Handle end of stream if applicable
+              
+              const data = JSON.parse(dataStr);
+              if (data.token) {
+                botResponseText += data.token;
+
+                // Update the bot message in real-time
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === botMessageId ? { ...msg, text: botResponseText } : msg
+                  )
+                );
+              } else if (data.full_response && !botResponseText) {
+                // Fallback for non-streaming or final response if tokens were missed
+                botResponseText = data.full_response;
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === botMessageId ? { ...msg, text: botResponseText } : msg
+                  )
+                );
+              }
+            } catch (e) {
+              // Silently ignore parsing errors for partial lines or non-JSON data
+              console.debug("SSE Parse Error:", e);
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error("Error calling AI API:", error);
+      setIsTyping(false);
       
-      // Fallback response if API fails
       const fallbackResponse = {
-        id: messages.length + 2,
-        text: "I'm having trouble connecting right now. Please call us at +91 6363117421 or try again in a moment! �",
+        id: Date.now() + 2,
+        text: "I'm having trouble connecting right now. Please call us at +91 6363117421 or try again in a moment! 🙏",
         sender: "bot",
         timestamp: new Date(),
       };
       
       setMessages((prev) => [...prev, fallbackResponse]);
-    } finally {
-      setIsTyping(false);
+    }
+  };
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+    // Could add a "Copied!" toast here if available
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
     }
   };
 
@@ -146,15 +315,16 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     html = html.replace(/^# (.+)$/gm, '<h1 class="font-bold text-2xl mt-3 mb-2">$1</h1>');
 
     // Convert bullet points (• or -)
-    html = html.replace(/^[•\-] (.+)$/gm, '<li class="ml-4">$1</li>');
+    html = html.replace(/^\s*[•\-]\s+(.+)$/gm, '<li>$1</li>');
 
     // Wrap consecutive <li> items in <ul>
-    html = html.replace(/(<li.*?>.*?<\/li>\n?)+/g, (match) => {
-      return '<ul class="list-disc list-inside space-y-1 my-2">' + match + '</ul>';
+    html = html.replace(/(<li>.*?<\/li>\n?)+/g, (match) => {
+      return '<ul class="list-disc pl-5 space-y-1.5 my-3 marker:text-blue-400">' + match.trim() + '</ul>';
     });
 
-    // Convert line breaks
+    // Convert line breaks, but skip if they are inside <ul> to avoid extra spacing
     html = html.replace(/\n/g, '<br>');
+    html = html.replace(/(<ul.*?>.*?<\/ul>)<br>/g, '$1'); // Clean up trailing br after ul
 
     return html;
   };
@@ -163,12 +333,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     <>
       {/* Chat Panel - Enhanced Design */}
       <div
-        className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-[400px] h-[calc(100vh-120px)] sm:h-[550px] max-h-[650px] bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-50 transform transition-all duration-500 ease-out overflow-hidden ${
+        className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-[450px] h-[calc(100vh-120px)] sm:h-[600px] max-h-[750px] bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-50 transform transition-all duration-500 ease-out overflow-hidden flex flex-col ${
           isOpen ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95 pointer-events-none"
         }`}
       >
         {/* Animated Header with Gradient */}
-        <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white p-5 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white p-5 overflow-hidden flex-shrink-0">
           {/* Animated background circles */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse" />
           <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse [animation-delay:0.5s]" />
@@ -202,7 +372,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         </div>
 
         {/* Messages Container with Custom Scrollbar */}
-        <div className="h-[calc(100vh-280px)] sm:h-[360px] overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white custom-scrollbar">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white custom-scrollbar">
           {messages.map((message, index) => (
             <div
               key={message.id}
@@ -225,17 +395,50 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                 )}
               </div>
               <div
-                className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
+                className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
                   message.sender === "user"
                     ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-tr-none"
                     : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
                 }`}
               >
                 {message.isHtml && message.sender === "bot" ? (
-                  <div 
-                    className="text-sm leading-relaxed prose prose-sm max-w-none"
-                    dangerouslySetInnerHTML={{ __html: formatMarkdownToHTML(message.text) }}
-                  />
+                  <div className="space-y-3">
+                    <div 
+                      className="text-sm leading-relaxed prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: formatMarkdownToHTML(message.text) }}
+                    />
+                    
+                    {message.packages && message.packages.length > 0 && (
+                      <div className="relative mt-3">
+                        <Swiper
+                          modules={[Navigation, SwiperPagination]}
+                          spaceBetween={12}
+                          slidesPerView={1.15}
+                          grabCursor={true}
+                          navigation={{
+                            nextEl: `.chat-next-${message.id}`,
+                            prevEl: `.chat-prev-${message.id}`,
+                          }}
+                          className="rounded-xl overflow-hidden"
+                        >
+                          {message.packages.map((pkg) => (
+                            <SwiperSlide key={pkg.id}>
+                              <ChatPackageCard item={pkg} />
+                            </SwiperSlide>
+                          ))}
+                        </Swiper>
+                        
+                        <div className="flex justify-end gap-2 mt-3">
+                          <button className={`chat-prev-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
+                            <ChevronLeft className="w-4 h-4" />
+                          </button>
+                          <button className={`chat-next-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
                 )}
@@ -251,6 +454,37 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                     minute: "2-digit",
                   })}
                 </p>
+
+                {message.sender === "bot" && (
+                  <div className="flex items-center gap-1 mt-2 -ml-1">
+                    <button 
+                      onClick={() => {
+                        // Find the last user message text to regenerate
+                        const lastUserMessage = [...messages].reverse().find(m => m.sender === "user");
+                        if (lastUserMessage) {
+                          handleSendMessage(null, lastUserMessage.text, true);
+                        }
+                      }} 
+                      className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
+                      title="Regenerate"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </button>
+                    <button 
+                      onClick={() => handleCopy(message.text)}
+                      className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
+                      title="Copy"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </button>
+                    <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Good response">
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Bad response">
+                      <ThumbsDown className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -299,7 +533,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                 {popularDestinations.map((destination, index) => (
                   <button
                     key={index}
-                    onClick={() => handleDestinationClick(destination.slug)}
+                    onClick={() => handleDestinationClick(destination.slug, destination.name)}
                     className="flex items-center justify-between p-3 bg-gradient-to-br from-white to-blue-50 border-2 border-blue-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all duration-300 group hover:scale-105"
                   >
                     <div className="flex items-center gap-2">
@@ -320,20 +554,20 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         </div>
 
         {/* Enhanced Input Area */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 backdrop-blur-sm">
-          <form onSubmit={handleSendMessage} className="flex gap-2">
-            <Input
-              type="text"
+        <div className="bg-white border-t border-gray-200 p-4 backdrop-blur-sm flex-shrink-0">
+          <form onSubmit={handleSendMessage} className="flex gap-2 items-end">
+            <Textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Type your message..."
-              className="flex-1 rounded-full border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-5 py-2.5 transition-all duration-300"
+              className="flex-1 min-h-[44px] max-h-[120px] rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-5 py-2.5 transition-all duration-300 resize-none h-auto scrollbar-none"
               disabled={isTyping}
             />
             <Button
               type="submit"
               disabled={!inputMessage.trim() || isTyping}
-              className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 px-5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 w-11 h-11 p-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />
             </Button>
@@ -358,7 +592,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 5px;
+          height: 0px;
+        }
+        
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: #3b82f6 #f1f1f1;
+          overflow-x: hidden;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
@@ -373,6 +614,11 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(to bottom, #2563eb, #1d4ed8);
+        }
+        
+        /* Hide horizontal scrollbar specifically */
+        .custom-scrollbar::-webkit-scrollbar:horizontal {
+          display: none;
         }
       `}</style>
     </>

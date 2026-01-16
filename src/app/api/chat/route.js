@@ -2,24 +2,47 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
-    const body = await request.json();
+    const { message, history = [] } = await request.json();
     
-    // Call the MiraAI API
-    const response = await fetch('https://miraai-production.up.railway.app/api/test/chat', {
+    // Call the MiraAI Streaming API
+    const response = await fetch('https://miraai-production.up.railway.app/api/chat/stream', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ message, history }),
     });
 
     if (!response.ok) {
       throw new Error('Failed to get response from AI');
     }
 
-    const data = await response.json();
-    
-    return NextResponse.json(data);
+    // Proxy the streaming response as raw bytes
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body.getReader();
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            controller.enqueue(value);
+          }
+        } catch (err) {
+          controller.error(err);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    });
   } catch (error) {
     console.error('Error in chat API route:', error);
     return NextResponse.json(
