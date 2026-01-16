@@ -246,40 +246,94 @@ export const getRegionsForHome = unstableCache(
   { revalidate: 60 * 60 * 24 }
 );
 
-export const getCuratedPackagesForHome = async (packageType) => {
-  try {
-    console.log(`[getCuratedPackagesForHome] Starting fetch for ${packageType}...`);
-    const packages = await getCuratedPackages(packageType, [], true);
-    console.log(`[getCuratedPackagesForHome] Successfully fetched ${packages.length} ${packageType} packages`);
-    return serializeData(packages.map(minimizePackageData));
-  } catch (error) {
-    console.error(`[getCuratedPackagesForHome] Error fetching ${packageType}:`, error.message || error);
-    return [];
-  }
-};
+export const getCuratedPackagesForHome = unstableCache(
+  async (packageType) => {
+    try {
+      console.log(`[getCuratedPackagesForHome] Starting fetch for ${packageType}...`);
+      // Add limit to prevent fetching too many packages for the home page
+      const conditions = [limit(12)];
+      const packages = await getCuratedPackages(packageType, conditions, true);
+      console.log(`[getCuratedPackagesForHome] Successfully fetched ${packages.length} ${packageType} packages`);
+      return serializeData(packages);
+    } catch (error) {
+      console.error(`[getCuratedPackagesForHome] Error fetching ${packageType}:`, error.message || error);
+      return [];
+    }
+  },
+  ["curated-packages-home"],
+  { revalidate: 60 * 60 * 24 }
+);
 
-export const getGroupDeparturePackagesForHome = async () => {
-  try {
-    console.log('[getGroupDeparturePackagesForHome] Starting fetch...');
-    const packages = await getGroupDeparturePackages();
-    console.log(`[getGroupDeparturePackagesForHome] Successfully fetched ${packages.length} packages`);
-    return serializeData(packages); 
-  } catch (error) {
-    console.error('[getGroupDeparturePackagesForHome] Error:', error.message || error);
-    return [];
-  }
-};
+export const getGroupDeparturePackagesForHome = unstableCache(
+  async () => {
+    try {
+      console.log('[getGroupDeparturePackagesForHome] Starting fetch...');
+      const packages = await getGroupDeparturePackages();
+      console.log(`[getGroupDeparturePackagesForHome] Successfully fetched ${packages.length} packages`);
+      return serializeData(packages); 
+    } catch (error) {
+      console.error('[getGroupDeparturePackagesForHome] Error:', error.message || error);
+      return [];
+    }
+  },
+  ["group-departure-home"],
+  { revalidate: 60 * 60 * 24 }
+);
 
-export const getThemePackagesForHome = async () => {
-  try {
-    console.log('[getThemePackagesForHome] Starting fetch...');
-    const data = await getAllPackagesByTheme();
-    console.log('[getThemePackagesForHome] Successfully fetched theme packages');
-    return serializeData(data);
-  } catch (error) {
-    console.error('[getThemePackagesForHome] Error:', error.message || error);
-    return {};
-  }
-};
+export const getThemePackagesForHome = unstableCache(
+  async () => {
+    try {
+      console.log('[getThemePackagesForHome] Starting fetch...');
+      const data = await getAllPackagesByTheme();
+      console.log('[getThemePackagesForHome] Successfully fetched theme packages');
+      return serializeData(data);
+    } catch (error) {
+      console.error('[getThemePackagesForHome] Error:', error.message || error);
+      return {};
+    }
+  },
+  ["theme-packages-home"],
+  { revalidate: 60 * 60 * 24 }
+);
+
+export const getElitePackages = unstableCache(
+  async () => {
+    try {
+      console.log('[getElitePackages] Starting fetch...');
+      const packages = await getPackagesByTheme("elite-escape", [], []);
+      console.log(`[getElitePackages] Successfully fetched ${packages.length} packages`);
+      return serializeData(packages);
+    } catch (error) {
+      console.error('[getElitePackages] Error:', error.message || error);
+      return [];
+    }
+  },
+  ["elite-packages"],
+  { revalidate: 60 * 60 * 24 }
+);
+
+export const getWhyChooseRegionData = unstableCache(
+  async (regionId) => {
+    try {
+      console.log(`[getWhyChooseRegionData] Starting fetch for region ID: ${regionId}...`);
+      const docRef = doc(db, COLLECTIONS.WHY_CHOOSE_REGION, regionId);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        console.log(`[getWhyChooseRegionData] Successfully fetched data for region ID: ${regionId}`);
+        return serializeData(data);
+      }
+      
+      console.log(`[getWhyChooseRegionData] No data found for region ID: ${regionId}`);
+      return null;
+    } catch (error) {
+      console.error(`[getWhyChooseRegionData] Error fetching region ID ${regionId}:`, error.message || error);
+      return null;
+    }
+  },
+  ["why-choose-region"],
+  { revalidate: 60 * 60 * 24 }
+);
 
 

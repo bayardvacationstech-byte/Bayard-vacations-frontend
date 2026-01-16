@@ -10,6 +10,7 @@ import {
   addDoc,
   serverTimestamp,
   limit,
+  orderBy,
   Timestamp,
 } from "firebase/firestore";
 import { COLLECTIONS, PACKAGE_STATUS } from "@/config";
@@ -595,18 +596,25 @@ export const getCuratedPackages = async (
     }
 
     const packagesRef = collection(db, COLLECTIONS.PACKAGES);
-    const q = query(packagesRef, ...queryConstraints);
+    const q = query(
+      packagesRef, 
+      ...queryConstraints, 
+      orderBy("packageSlug", "asc")
+    );
 
     const querySnapshot = await getDocs(q);
+    const initialPackages = querySnapshot.docs.map(sanitizeDocumentData);
+
+    if (isHomePage) {
+      // Optimize for Homepage: batch resolve card images
+      const packages = await batchResolveCardReferences(initialPackages);
+      return packages.map(minimizePackageData).sort((a, b) => a.basePrice - b.basePrice);
+    }
+
+    // Full resolution for non-homepage calls
     const packages = await Promise.all(
-      querySnapshot.docs.map(async (doc) => {
-        const packageData = sanitizeDocumentData(doc);
-        // Optimize for Homepage: only resolve card images
-        const resolved = isHomePage 
-          ? await resolveCardReferences(packageData) 
-          : await resolveAllPackageReferences(packageData);
-          
-        return isHomePage ? minimizePackageData(resolved) : resolved;
+      initialPackages.map(async (packageData) => {
+        return await resolveAllPackageReferences(packageData);
       })
     );
     return packages.sort((a, b) => a.basePrice - b.basePrice);
@@ -695,7 +703,11 @@ export const getPackagesByTheme = async (
       queryConstraints = [...queryConstraints, ...conditions];
     }
 
-    const q = query(packagesRef, ...queryConstraints);
+    const q = query(
+      packagesRef, 
+      ...queryConstraints, 
+      orderBy("packageSlug", "asc")
+    );
 
     if (initialPackages.length > 0) {
       console.log(
@@ -705,14 +717,12 @@ export const getPackagesByTheme = async (
     }
 
     const querySnapshot = await getDocs(q);
-    const packages = await Promise.all(
-      querySnapshot.docs.map(async (doc) => {
-        const packageData = sanitizeDocumentData(doc);
-        // Use simpler resolution for themes as they are mostly used in cards
-        const resolved = await resolveCardReferences(packageData);
-        return minimizePackageData(resolved); 
-      })
-    );
+    const initialPackagesData = querySnapshot.docs.map(sanitizeDocumentData);
+    
+    // Use batch resolution for themes
+    const resolvedPackages = await batchResolveCardReferences(initialPackagesData);
+    const packages = resolvedPackages.map(minimizePackageData);
+    
     return packages.sort((a, b) => a.basePrice - b.basePrice);
   } catch (error) {
     console.error("Error fetching packages:", error);
@@ -814,7 +824,8 @@ export const getFeaturedImageByRegion = async (regionName) => {
       imagesRef,
       where("region", "==", regionName.toLowerCase()),
       where("type", "==", "card"),
-      where("frontPage", "==", true)
+      where("frontPage", "==", true),
+      limit(1)
     );
     const querySnapshot = await getDocs(q);
 
@@ -823,10 +834,7 @@ export const getFeaturedImageByRegion = async (regionName) => {
       return null;
     }
 
-    // Convert to array and select random image
-    const images = querySnapshot.docs.map(sanitizeDocumentData);
-    const randomIndex = Math.floor(Math.random() * images.length);
-    const randomImage = images[randomIndex];
+    const randomImage = sanitizeDocumentData(querySnapshot.docs[0]);
 
     return randomImage;
   } catch (error) {

@@ -8,114 +8,16 @@ import { Crown, Diamond, Martini, MapPin, Calendar, Users, Star, Sparkles, Chevr
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 
-export default function EliteEscapeClient() {
-  const [selectedTab, setSelectedTab] = useState("international");
+export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
+  const [selectedRegion, setSelectedRegion] = useState("All");
 
-  // Luxury packages data
-  const luxuryPackages = {
-    international: [
-      {
-        id: 1,
-        title: "Dubai Ultra Luxury Experience",
-        location: "Dubai, UAE",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-        price: "$8,999",
-        rating: 5.0,
-        highlights: ["Burj Al Arab Suite", "Private Yacht", "Helicopter Tour"],
-        category: "Ultimate Luxury",
-        serviceLevel: "5-Star Concierge"
-      },
-      {
-        id: 2,
-        title: "French Riviera VIP Getaway",
-        location: "Monaco & Nice, France",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800",
-        price: "$12,999",
-        rating: 5.0,
-        highlights: ["Luxury Villa", "Private Chef", "Casino Access"],
-        category: "Elite European",
-        serviceLevel: "Butler Service"
-      },
-      {
-        id: 3,
-        title: "Santorini Private Island Retreat",
-        location: "Santorini, Greece",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800",
-        price: "$7,499",
-        rating: 4.9,
-        highlights: ["Caldera Suite", "Private Pool", "Sunset Dining"],
-        category: "Island Luxury",
-        serviceLevel: "Premium Service"
-      },
-      {
-        id: 4,
-        title: "Maldives Overwater Paradise",
-        location: "Maldives",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
-        price: "$9,999",
-        rating: 5.0,
-        highlights: ["Overwater Villa", "Personal Diving", "Spa Infinity"],
-        category: "Tropical Luxury",
-        serviceLevel: "Elite Hospitality"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Udaipur Royal Palace Experience",
-        location: "Udaipur, Rajasthan",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-        price: "₹1,99,999",
-        rating: 5.0,
-        highlights: ["Palace Suite", "Royal Treatment", "Private Boat"],
-        category: "Royal Heritage",
-        serviceLevel: "Palace Service"
-      },
-      {
-        id: 6,
-        title: "Kerala Luxury Houseboat Cruise",
-        location: "Kerala",
-        duration: "3 Days / 2 Nights",
-        image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-        price: "₹1,49,999",
-        rating: 4.9,
-        highlights: ["Luxury Houseboat", "Private Chef", "Spa Onboard"],
-        category: "Backwater Luxury",
-        serviceLevel: "Premium Crew"
-      },
-      {
-        id: 7,
-        title: "Goa Private Beach Villa",
-        location: "Goa",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
-        price: "₹1,79,999",
-        rating: 4.8,
-        highlights: ["Beach Villa", "Infinity Pool", "Private Parties"],
-        category: "Beach Luxury",
-        serviceLevel: "VIP Service"
-      },
-      {
-        id: 8,
-        title: "Shimla Heritage Luxury Stay",
-        location: "Shimla",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800",
-        price: "₹1,24,999",
-        rating: 4.9,
-        highlights: ["Heritage Property", "Mountain Views", "Fine Dining"],
-        category: "Mountain Luxury",
-        serviceLevel: "Premium Staff"
-      }
-    ]
-  };
+  // Get regions that actually have Elite Escape packages
+  const availableRegions = Array.from(new Set(initialPackages.map(pkg => pkg.region))).sort();
 
-  const currentPackages = luxuryPackages[selectedTab];
+  // Filter packages based on selected region
+  const filteredPackages = selectedRegion === "All"
+    ? initialPackages
+    : initialPackages.filter(pkg => pkg.region === selectedRegion);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -195,112 +97,118 @@ export default function EliteEscapeClient() {
 
       {/* Packages Section */}
       <Container className="py-8 md:py-12">
-        {/* Tab Switcher */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-slate-800 rounded-full p-1.5 border border-amber-500/30">
+        {/* Region Filter */}
+        <div className="flex flex-col items-center mb-12 space-y-4">
+          <p className="text-amber-400 font-bold uppercase tracking-widest text-sm">Select Destination</p>
+          <div className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={() => setSelectedTab("international")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "international"
-                  ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 shadow-lg"
-                  : "text-amber-300 hover:text-amber-200"
+              onClick={() => setSelectedRegion("All")}
+              className={`px-6 py-2.5 rounded-full font-bold transition-all border ${
+                selectedRegion === "All"
+                  ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 border-transparent shadow-lg"
+                  : "text-amber-300 border-amber-500/30 hover:bg-amber-500/10"
               }`}
             >
-              International
+              All Regions
             </button>
-            <button
-              onClick={() => setSelectedTab("domestic")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "domestic"
-                  ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 shadow-lg"
-                  : "text-amber-300 hover:text-amber-200"
-              }`}
-            >
-              Domestic
-            </button>
+            {availableRegions.map(region => (
+              <button
+                key={region}
+                onClick={() => setSelectedRegion(region)}
+                className={`px-6 py-2.5 rounded-full font-bold transition-all border ${
+                  selectedRegion === region
+                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 border-transparent shadow-lg"
+                    : "text-amber-300 border-amber-500/30 hover:bg-amber-500/10"
+                }`}
+              >
+                {region}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2 border border-amber-500/20">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-slate-900/95 px-2 py-1 rounded-full border border-amber-500/30">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-bold text-white">{pkg.rating}</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors line-clamp-2">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Service Level */}
-                    <div className="flex items-center gap-2 text-sm text-amber-300">
-                      <Award className="w-4 h-4" />
-                      <span className="font-medium">{pkg.serviceLevel}</span>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-300">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500" />
-                          <span>{highlight}</span>
+        {filteredPackages.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredPackages.map((pkg, index) => (
+              <motion.div
+                key={pkg.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link href={`/packages/${pkg.region?.toLowerCase().replace(/\s+/g, '-')}/${pkg.packageSlug}`}>
+                  <div className="group bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2 border border-amber-500/20">
+                    {/* Image */}
+                    <div className="relative h-56 overflow-hidden">
+                      <Image
+                        src={pkg.cardImages?.[0]?.url || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800"}
+                        alt={pkg.packageTitle}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                      
+                      {/* Price Badge */}
+                      <div className="absolute top-4 left-4">
+                        <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 text-xs font-black uppercase backdrop-blur-sm">
+                          ₹{pkg.basePrice?.toLocaleString()}
                         </div>
-                      ))}
+                      </div>
+
+                      {/* Days */}
+                      <div className="absolute top-4 right-4 flex items-center gap-1 bg-slate-900/95 px-2 py-1 rounded-full border border-amber-500/30">
+                        <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                        <span className="text-xs font-bold text-white">{pkg.days}D / {pkg.nights}N</span>
+                      </div>
+
+                      {/* Location */}
+                      <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
+                        <MapPin className="w-4 h-4" />
+                        <span className="text-sm font-bold">{pkg.region}</span>
+                      </div>
                     </div>
 
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-amber-500/20 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-400 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-amber-400">{pkg.price}</p>
+                    {/* Content */}
+                    <div className="p-6 space-y-4">
+                      <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors line-clamp-2">
+                        {pkg.packageTitle}
+                      </h3>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2">
+                        {pkg.packageTags?.slice(0, 2).map((tag, idx) => (
+                          <div key={idx} className="flex items-center gap-1 text-[10px] text-amber-300 font-bold uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded">
+                            <Sparkles className="w-3 h-3 text-amber-500" />
+                            {tag}
+                          </div>
+                        ))}
                       </div>
-                      <div className="flex items-center gap-2 text-amber-400 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">Reserve</span>
-                        <ChevronRight className="w-4 h-4" />
+
+                      {/* Footer */}
+                      <div className="pt-4 border-t border-amber-500/20 flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-slate-400 font-medium italic">Premium Escapes</p>
+                        </div>
+                        <div className="flex items-center gap-2 text-amber-400 font-bold group-hover:gap-3 transition-all">
+                          <span className="text-sm">View Package</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-slate-800/30 rounded-[3rem] border border-dashed border-amber-500/20">
+            <Diamond className="w-12 h-12 text-amber-500 opacity-30 mx-auto mb-4" />
+            <h3 className="text-2xl font-black text-white mb-2">No Elite Packages Found</h3>
+            <p className="text-slate-400">We are currently handpicking exclusive experiences for this region. Stay tuned!</p>
+            <Button onClick={() => setSelectedRegion("All")} className="mt-6 bg-amber-500 text-slate-900 font-bold rounded-xl">View All Regions</Button>
+          </div>
+        )}
       </Container>
 
       {/* Why Elite Travel Section */}
@@ -311,7 +219,7 @@ export default function EliteEscapeClient() {
               Why Choose Elite Escapes?
             </h2>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Experience the pinnacle of luxury travel
+              Experience the pinnacle of luxury travel with Bayard Vacations
             </p>
           </div>
 

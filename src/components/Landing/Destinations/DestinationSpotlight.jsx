@@ -33,52 +33,37 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
   const carouselRef = useRef(null);
   const router = useRouter();
 
-  // Combine static luxury data with dynamic region data from Firebase
+  // Combine dynamic region data with static luxury data
   const displays = useMemo(() => {
-    // If we have eliteEscapePackages, prioritize them
-    if (eliteEscapePackages && eliteEscapePackages.length > 0) {
-      return eliteEscapePackages.map(pkg => ({
-        id: pkg.id,
-        name: pkg.region || pkg.packageTitle,
-        fullTitle: pkg.packageTitle,
-        image: pkg.cardImages && pkg.cardImages.length > 0 ? pkg.cardImages[0].url : "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200",
-        slug: pkg.packageSlug,
-        regionSlug: pkg.region?.toLowerCase().replace(/\s+/g, '-'),
-        isPackage: true
+    // If we have initialRegions, prioritize them as requested (show regions instead of packages)
+    if (initialRegions && initialRegions.length > 0) {
+      return initialRegions.map(region => ({
+        id: region.id,
+        name: region.name,
+        image: region.featuredImage?.url || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200",
+        slug: region.slug,
+        isPackage: false,
+        days: region.defaultDays || 5,
+        price: region.startingPrice ? `₹${region.startingPrice}` : null,
       }));
     }
 
-    return LUXURY_DATA.map(item => {
-      const region = initialRegions.find(r => 
-        r.name?.toLowerCase().includes(item.name.toLowerCase()) || 
-        item.name.toLowerCase().includes(r.name?.toLowerCase())
-      );
-      
-      return {
-        ...item,
-        id: region?.id || item.name,
-        slug: region?.slug || item.name.toLowerCase().replace(/ /g, "-"),
-        // Prioritize Firebase image if it exists
-        image: region?.featuredImage || item.image,
-        // Mock some luxury stats if not in DB
-        days: region?.defaultDays || 5 + Math.floor(Math.random() * 4),
-        price: region?.startingPrice ? `₹${region.startingPrice}` : `₹1,${Math.floor(Math.random() * 9)}9,000`,
-        rating: 4.5 + (Math.random() * 0.4),
-        isPackage: false
-      };
-    });
-  }, [initialRegions, eliteEscapePackages]);
+    // Fallback to static data if no regions
+    return LUXURY_DATA.map(item => ({
+      ...item,
+      id: item.name,
+      slug: item.name.toLowerCase().replace(/ /g, "-"),
+      image: item.image,
+      days: 5 + Math.floor(Math.random() * 4),
+      price: `₹1,${Math.floor(Math.random() * 9)}9,000`,
+      isPackage: false
+    }));
+  }, [initialRegions]);
 
   const active = displays[activeBanner] || displays[0];
 
   const scrollToItem = (index) => {
-    // DISABLED: This was causing auto-scroll on page load
-    // if (carouselRef.current) {
-    //   const item = carouselRef.current.children[index];
-    //   if (item) {
-    //     item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    //   }
-    // }
+    // Scroller logic...
   };
 
   // Track initial mount to prevent auto-scroll on page load
@@ -171,8 +156,8 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
             <button
               key={display.id}
               onClick={() => {
-                if (activeBanner === index && display.isPackage) {
-                  router.push(`/packages/${display.regionSlug}/${display.slug}`);
+                if (activeBanner === index) {
+                  router.push(`/themes/elite-escape`);
                 } else {
                   setActiveBanner(index);
                 }

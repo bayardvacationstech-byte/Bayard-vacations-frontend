@@ -32,8 +32,8 @@ import ActivityCard from "@/components/ui/ActivityCard";
 import GalleryCarousel from "@/components/ui/GalleryCarousel";
 import WhyBayardVacations from "@/components/Packages/WhyBayardVacations";
 import { cn } from "@/lib/utils";
-
-import regionDataJSON from "@/data/why-choose-regions.json";
+import { useRegion } from "@/hooks/regions";
+import { useWhyChooseRegion } from "@/hooks/regions/useWhyChooseRegion";
 
 export default function WhyChooseRegionClient({ regionSlug }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -42,6 +42,14 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+
+  // Fetch region data to get the region ID
+  const { regionData, isLoading: regionLoading } = useRegion(regionSlug);
+  
+  // Fetch why choose data using the region ID
+  const { whyChooseData, isLoading: whyChooseLoading } = useWhyChooseRegion(regionData?.id);
+  
+  const isLoading = regionLoading || whyChooseLoading;
 
   // Icon mapping - converts string names to actual icon components
   const iconMap = {
@@ -66,7 +74,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     return iconMap[iconName] || Sparkles;
   };
 
-  // Process the JSON data to convert icon strings to components
+  // Process the data to convert icon strings to components
   const processRegionData = (data) => {
     if (!data) return null;
     
@@ -98,16 +106,29 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     };
   };
 
-  const rawRegionData = regionDataJSON[regionSlug];
-  const regionData = processRegionData(rawRegionData) || {
+  // Use dynamic data from whyChooseData
+  const rawRegionData = whyChooseData?.details;
+  const regionDataProcessed = processRegionData(rawRegionData) || {
     featuredImage: "/img/default-region.jpg",
     overview: `${regionName} is a captivating destination that offers an unforgettable blend of culture, natural beauty, and unique experiences.`,
     whyVisit: `Discover the magic of ${regionName}, where every corner tells a story and every experience creates lasting memories.`,
     activities: []
   };
   
-  const highlights = regionData?.highlights || [];
-  const activities = regionData?.activities || [];
+  const highlights = regionDataProcessed?.highlights || [];
+  const activities = regionDataProcessed?.activities || [];
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-brand-blue border-t-transparent rounded-full animate-spin"></div>
+          <div className="text-slate-600 font-bold tracking-widest uppercase">Loading...</div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <>
@@ -123,7 +144,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
       {/* Hero Section */}
       <div className="relative h-[60vh] md:h-[80vh] overflow-hidden">
         <Image
-          src={regionData?.featuredImage || regionData?.heroImage || "/img/default-region.jpg"}
+          src={regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage || "/img/default-region.jpg"}
           alt={regionName || "Region Gallery"}
           fill
           className="object-cover"
@@ -169,7 +190,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl font-medium leading-relaxed drop-shadow-lg"
             >
-              {regionData?.overview}
+              {regionDataProcessed?.overview}
             </motion.p>
           </div>
         </Container>
@@ -182,19 +203,19 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           <div className="mx-auto">
             <div className="text-center mb-4 md:mb-6">
               <span className="inline-block px-4 py-2 bg-brand-blue/10 text-brand-blue rounded-full text-sm font-black uppercase tracking-widest mb-3 md:mb-4">
-                 {regionData.whyVisitSection?.subTitle || "Discovery"}
+                 {regionDataProcessed.whyVisitSection?.subTitle || "Discovery"}
               </span>
               <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-                {regionData.whyVisitSection?.mainTitle || `Why Visit ${regionName}?`}
+                {regionDataProcessed.whyVisitSection?.mainTitle || `Why Visit ${regionName}?`}
               </h2>
               <p className="text-lg md:text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed mb-8">
-                {regionData.whyVisitSection?.mainDescription || `Discover the magic of ${regionName}, where every corner tells a story and every experience creates lasting memories.`}
+                {regionDataProcessed.whyVisitSection?.mainDescription || `Discover the magic of ${regionName}, where every corner tells a story and every experience creates lasting memories.`}
               </p>
             </div>
 
             {/* Reasons List - Responsive Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-10">
-              {(regionData.whyVisitSection?.reasons || []).map((reason, idx) => (
+              {(regionDataProcessed.whyVisitSection?.reasons || []).map((reason, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-5 items-start">
                   <div className="flex-shrink-0">
                     <div className={cn(
@@ -215,13 +236,13 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
 
             {/* Summary Quote */}
-            {regionData.whyVisitSection?.quote && (
+            {regionDataProcessed.whyVisitSection?.quote && (
               <div className="mt-6 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 md:p-8 text-center">
                 <blockquote className="text-xl md:text-2xl font-bold text-white leading-relaxed mb-2">
-                  "{regionData.whyVisitSection.quote}"
+                  "{regionDataProcessed.whyVisitSection.quote}"
                 </blockquote>
-                {regionData.whyVisitSection.quoteAuthor && (
-                  <p className="text-slate-300 font-medium">— {regionData.whyVisitSection.quoteAuthor}</p>
+                {regionDataProcessed.whyVisitSection.quoteAuthor && (
+                  <p className="text-slate-300 font-medium">— {regionDataProcessed.whyVisitSection.quoteAuthor}</p>
                 )}
               </div>
             )}
@@ -239,9 +260,9 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         )}
 
         {/* Detailed Highlight Sections */}
-        {regionData.highlights && (
+        {regionDataProcessed.highlights && (
           <section className="mb-10 md:mb-16 space-y-12 md:space-y-16">
-            {regionData.highlights.map((highlight, index) => (
+            {regionDataProcessed.highlights.map((highlight, index) => (
               <div 
                 key={index} 
                 id={highlight.slug || highlight.title.toLowerCase().replace(/ /g, "-")}
@@ -360,7 +381,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tighter">Perfect For...</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {regionData.travelStyles?.map((style, i) => (
+              {regionDataProcessed.travelStyles?.map((style, i) => (
                 <div key={i} className="bg-white border border-slate-100 p-8 rounded-3xl flex flex-col gap-6 hover:shadow-xl hover:border-brand-green/20 transition-all group">
                   <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-brand-green group-hover:text-white transition-all transform group-hover:rotate-6">
                     <style.icon className="w-6 h-6" />
@@ -384,7 +405,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
             <div className="bg-slate-900 rounded-[3rem] p-10 text-white space-y-8 shadow-2xl relative overflow-hidden group">
                <div className="absolute top-0 right-0 w-80 h-80 bg-brand-blue/20 rounded-full blur-[100px] group-hover:bg-brand-blue/30 transition-colors duration-1000" />
-               {regionData.seasonalGuide?.map((s, i) => (
+               {regionDataProcessed.seasonalGuide?.map((s, i) => (
                  <motion.div 
                     key={i} 
                     initial={{ opacity: 0, x: 20 }}
@@ -405,7 +426,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         </section>
 
         {/* Regional Secrets */}
-        {regionData.secrets && (
+        {regionDataProcessed.secrets && (
            <section className="mb-12 md:mb-16">
               <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-10">
@@ -417,7 +438,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                  {regionData.secrets.map((secret, i) => (
+                  {regionDataProcessed.secrets.map((secret, i) => (
                     <div key={i} className="text-center">
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-blue to-blue-600 flex items-center justify-center mx-auto mb-6 shadow-lg">
                         <secret.icon className="w-8 h-8 text-white" />
