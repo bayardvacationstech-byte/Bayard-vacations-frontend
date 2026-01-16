@@ -15,6 +15,7 @@ import ItinerarySection from "./Sections/ItinerarySection";
 import InclusionsSection from "./Sections/InclusionsSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
+import PackageHighlights from "./PackageHighlights";
 import WhyBayardVacations from "./WhyBayardVacations";
 import { cn, convertAndSortHotels } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
@@ -247,6 +248,8 @@ const PackagesClient = () => {
       <PackageHero 
         packageData={packageData} 
       />
+
+      <PackageHighlights packageData={packageData} />
 
       {/* Sticky Navigation - Outside overflow wrapper */}
       <PackageNavigation 
