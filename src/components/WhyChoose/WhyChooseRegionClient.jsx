@@ -476,11 +476,14 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                       "Expert local guides included",
                       "Skip-the-line access available",
                       "Photo opportunities guaranteed"
-                    ]
+                    ],
+                    regionName: regionName,
+                    regionSlug: regionSlug
                   }}
                   hoverGradient="from-brand-blue/95 to-blue-900"
                   ctaLabel="Explore Activity"
-                  onCtaClick={() => window.location.href = `/activities/${regionSlug}/${activity.slug}`}
+                  onCtaClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}
+                  onCardClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}
                 />
               ))}
             </div>

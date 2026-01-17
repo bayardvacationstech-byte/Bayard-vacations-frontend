@@ -35,16 +35,28 @@ import {
   ShieldCheck,
   Mountain,
   Camera,
-  Heart
+  Heart,
+  Train,
+  Bus
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import GalleryCarousel from "@/components/ui/GalleryCarousel";
+import { useRegion } from "@/hooks/regions/useRegion";
+import { useRegionFactSheet } from "@/hooks/regions/useRegionFactSheet";
 
 export default function FactsheetClient({ regionSlug }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [selectedGallery, setSelectedGallery] = useState({ title: "", images: [] });
+
+  // Fetch region data to get ID
+  const { regionData, isLoading: regionLoading } = useRegion(regionSlug);
+  
+  // Fetch factsheet data using region ID
+  const { factSheetData, isLoading: factSheetLoading } = useRegionFactSheet(regionData?.id);
+  
+  const isLoading = regionLoading || factSheetLoading;
 
   const regionName = regionSlug
     ?.split("-")
@@ -226,7 +238,71 @@ export default function FactsheetClient({ regionSlug }) {
     }
   };
 
-  const currentData = REGION_DATA[regionSlug?.toLowerCase()] || {
+  // Icon map for dynamic lookup
+  const iconMap = {
+    Calendar, Wallet, ThermometerSun, Clock, Globe, FileCheck, Building2, 
+    Users, Plane, Lightbulb, Info, Smartphone, CreditCard, Compass, 
+    Car, MapPin, ArrowUpRight, CheckCircle2, XCircle, Star, Flame, 
+    Landmark, Banknote, ShieldCheck, Mountain, Camera, Heart, Train, Bus
+  };
+
+  // Map dynamic data if available
+  const dynamicData = factSheetData?.details;
+
+  const currentData = dynamicData ? {
+    heroTitle: dynamicData.hero?.title || regionName,
+    heroSubtitle: dynamicData.hero?.subtitle || `Essential information and insider tips for your perfect ${regionName} adventure.`,
+    heroImage: dynamicData.hero?.image || REGION_DATA[regionSlug?.toLowerCase()]?.heroImage,
+    essentials: dynamicData.essentials?.map(item => ({
+      ...item,
+      icon: iconMap[item.icon] || Info
+    })) || REGION_DATA[regionSlug?.toLowerCase()]?.essentials || [],
+    fastFacts: dynamicData.fastFacts || REGION_DATA[regionSlug?.toLowerCase()]?.fastFacts,
+    history: {
+      ...dynamicData.history,
+      spotlight: dynamicData.history?.spotlight ? {
+        ...dynamicData.history.spotlight,
+        icon: iconMap[dynamicData.history.spotlight.icon] || Info
+      } : undefined,
+      tags: dynamicData.history?.tags || [],
+      stats: dynamicData.history?.stats || []
+    },
+    climate: dynamicData.climate ? {
+      ...dynamicData.climate,
+      seasons: dynamicData.climate.seasons || []
+    } : undefined,
+    language: dynamicData.language || undefined,
+    culture: dynamicData.culture ? {
+      ...dynamicData.culture,
+      rules: dynamicData.culture.rules || []
+    } : undefined,
+    food: dynamicData.food ? {
+      ...dynamicData.food,
+      items: dynamicData.food.items || [],
+      drinks: dynamicData.food.beverages || dynamicData.food.drinks || []
+    } : undefined,
+    shopping: dynamicData.shopping ? {
+      ...dynamicData.shopping,
+      categories: dynamicData.shopping.categories || [],
+      hubs: dynamicData.shopping.hubs || []
+    } : undefined,
+    transport: dynamicData.transport ? {
+      ...dynamicData.transport,
+      stats: dynamicData.transport.stats?.map(s => ({
+        ...s,
+        icon: iconMap[s.icon] || Car
+      })) || []
+    } : undefined,
+    visa: dynamicData.visa || undefined,
+    highlights: dynamicData.highlights?.map(h => ({
+      ...h,
+      icon: iconMap[h.icon] || Star
+    })),
+    attractions: dynamicData.attractions?.map(a => ({
+      ...a,
+      icon: iconMap[a.icon] || MapPin
+    }))
+  } : REGION_DATA[regionSlug?.toLowerCase()] || {
     heroTitle: regionName,
     heroSubtitle: `Essential information and insider tips for your perfect ${regionName} adventure.`,
     essentials: [
@@ -247,6 +323,7 @@ export default function FactsheetClient({ regionSlug }) {
     }
   };
 
+
   const colorMap = {
     amber: "bg-amber-400 text-white",
     emerald: "bg-emerald-400 text-white",
@@ -259,17 +336,17 @@ export default function FactsheetClient({ regionSlug }) {
   };
 
   const factsheetSections = [
-    { id: "essentials", label: "Essentials" },
-    { id: "highlights", label: "Highlights" },
-    { id: "history", label: "History" },
-    { id: "climate", label: "Climate" },
-    { id: "language", label: "Language" },
-    { id: "culture", label: "Culture" },
-    { id: "gastronomy", label: "Food" },
-    { id: "shopping", label: "Shopping" },
-    { id: "transport", label: "Transport" },
-    { id: "visa", label: "Visa" }
-  ];
+    { id: "essentials", label: "Essentials", show: true },
+    { id: "highlights", label: "Highlights", show: currentData.highlights && currentData.highlights.length > 0 },
+    { id: "history", label: "History", show: !!currentData.history?.description },
+    { id: "climate", label: "Climate", show: !!currentData.climate?.timeZone },
+    { id: "language", label: "Language", show: !!currentData.language?.official },
+    { id: "culture", label: "Culture", show: !!currentData.culture?.description },
+    { id: "gastronomy", label: "Food", show: !!currentData.food?.items?.length > 0 },
+    { id: "shopping", label: "Shopping", show: !!currentData.shopping?.title },
+    { id: "transport", label: "Transport", show: !!currentData.transport?.stats?.length > 0 },
+    { id: "visa", label: "Visa", show: !!currentData.visa?.title }
+  ].filter(section => section.show);
 
   const [activeSection, setActiveSection] = useState("essentials");
   const [showSectionNav, setShowSectionNav] = useState(false);

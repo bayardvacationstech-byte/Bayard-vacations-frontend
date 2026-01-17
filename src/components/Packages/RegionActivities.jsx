@@ -1,33 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { 
-  Waves, 
-  Mountain, 
-  TreePine, 
-  Bike,
   Compass,
-  Sailboat,
-  Tent,
-  Utensils,
-  Palette,
-  Music,
   ChevronRight,
   ChevronLeft as ChevronLeftIcon,
-  ChevronUp,
-  MapPin,
-  Clock,
-  DollarSign,
-  Info,
-  X
+  Loader2
 } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { cn } from "@/lib/utils";
 import ActivityCard from "@/components/ui/ActivityCard";
+import { useActivitiesData } from "@/hooks/activities/useActivitiesData";
+import { formatCategoryName } from "@/utils/activityUtils";
 
 // Swiper styles
 import "swiper/css";
@@ -39,154 +27,28 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Get icon based on category name
-  const getCategoryIcon = (category) => {
-    const categoryLower = category?.toLowerCase() || "";
-    
-    if (categoryLower.includes("water") || categoryLower.includes("diving") || categoryLower.includes("sailing")) return Waves;
-    if (categoryLower.includes("mountain") || categoryLower.includes("trek") || categoryLower.includes("hiking")) return Mountain;
-    if (categoryLower.includes("nature") || categoryLower.includes("forest") || categoryLower.includes("safari")) return TreePine;
-    if (categoryLower.includes("bike") || categoryLower.includes("cycling")) return Bike;
-    if (categoryLower.includes("cultural") || categoryLower.includes("culture") || categoryLower.includes("sightseeing")) return Palette;
-    if (categoryLower.includes("music") || categoryLower.includes("dance") || categoryLower.includes("entertainment")) return Music;
-    if (categoryLower.includes("food") || categoryLower.includes("cooking") || categoryLower.includes("culinary")) return Utensils;
-    if (categoryLower.includes("camping") || categoryLower.includes("overnight")) return Tent;
-    if (categoryLower.includes("sailing") || categoryLower.includes("boat")) return Sailboat;
-    
-    return Compass; // Default icon
-  };
-
-  // Extract activities from API data
-  const apiActivities = regionData?.activities || [];
+  // Fetch activities using the hook
+  const { activities: allActivities, loading: activitiesLoading } = useActivitiesData(
+    regionSlug,
+    regionData?.id
+  );
   
-  // Transform API activities to component format
-  const transformedApiActivities = apiActivities.map((activity, index) => ({
-    id: `api-${index}`,
-    title: activity.title || "Untitled Activity",
-    category: activity.category || "General",
-    description: activity.description || "",
-    duration: activity.tourDuration || "Duration varies",
-    priceRange: activity.priceFrom || "Contact for pricing",
-    image: activity.image || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80",
-    icon: getCategoryIcon(activity.category),
-    difficulty: "Easy" // Default since API doesn't provide this
-  }));
-
-  // Default mock activities if none provided from backend
-  const defaultActivities = [
-    {
-      id: 1,
-      title: "Scuba Diving & Snorkeling",
-      category: "Water Sports",
-      description: "Explore vibrant coral reefs and underwater marine life in crystal-clear waters",
-      duration: "2-3 hours",
-      priceRange: "$50-$100",
-      image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
-      icon: Waves,
-      difficulty: "Beginner"
-    },
-    {
-      id: 2,
-      title: "Mountain Trekking",
-      category: "Adventure",
-      description: "Challenge yourself with guided treks through stunning mountain trails",
-      duration: "Half day - Full day",
-      priceRange: "$75-$150",
-      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
-      icon: Mountain,
-      difficulty: "Intermediate"
-    },
-    {
-      id: 3,
-      title: "Forest Safari",
-      category: "Nature",
-      description: "Wildlife spotting adventure through lush forests and national parks",
-      duration: "4-6 hours",
-      priceRange: "$80-$120",
-      image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
-      icon: TreePine,
-      difficulty: "Easy"
-    },
-    {
-      id: 4,
-      title: "Cycling Tours",
-      category: "Active",
-      description: "Pedal through scenic routes, villages, and countryside landscapes",
-      duration: "3-4 hours",
-      priceRange: "$40-$80",
-      image: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=800&q=80",
-      icon: Bike,
-      difficulty: "Easy"
-    },
-    {
-      id: 5,
-      title: "Cultural Walking Tours",
-      category: "Culture",
-      description: "Discover hidden alleys, local markets, and historical landmarks with expert guides",
-      duration: "2-3 hours",
-      priceRange: "$30-$60",
-      image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80",
-      icon: Compass,
-      difficulty: "Easy"
-    },
-    {
-      id: 6,
-      title: "Sailing & Boat Tours",
-      category: "Water Sports",
-      description: "Cruise along coastlines, explore islands, and enjoy sunset views from the water",
-      duration: "2-4 hours",
-      priceRange: "$60-$120",
-      image: "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6d?w=800&q=80",
-      icon: Sailboat,
-      difficulty: "Easy"
-    },
-    {
-      id: 7,
-      title: "Camping Experiences",
-      category: "Adventure",
-      description: "Overnight camping under starlit skies with bonfire and local cuisine",
-      duration: "Overnight",
-      priceRange: "$90-$180",
-      image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80",
-      icon: Tent,
-      difficulty: "Intermediate"
-    },
-    {
-      id: 8,
-      title: "Cooking Classes",
-      category: "Cultural",
-      description: "Learn to prepare authentic local dishes with professional chefs",
-      duration: "3-4 hours",
-      priceRange: "$50-$90",
-      image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80",
-      icon: Utensils,
-      difficulty: "Easy"
-    },
-    {
-      id: 9,
-      title: "Art & Craft Workshops",
-      category: "Cultural",
-      description: "Create handmade souvenirs in traditional art and craft sessions",
-      duration: "2-3 hours",
-      priceRange: "$35-$75",
-      image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80",
-      icon: Palette,
-      difficulty: "Easy"
-    }
-  ];
-
-  // Combine API activities with dummy activities
-  const allActivities = transformedApiActivities.length > 0 
-    ? [...transformedApiActivities, ...defaultActivities.slice(0, 3)] // Add 3 dummy activities
-    : defaultActivities; // Use all dummy if no API data
-  
-  // Get unique categories (excluding "all" since we'll use an Explore button instead)
-  const categories = [...new Set(allActivities.map(a => a.category))];
+  // Get unique categories
+  const categories = useMemo(() => {
+    if (!allActivities.length) return [];
+    return [...new Set(allActivities.map(a => a.category))];
+  }, [allActivities]);
   
   // Filter activities based on selected category
-  const displayActivities = selectedCategory === "all" 
-    ? allActivities 
-    : allActivities.filter(a => a.category === selectedCategory);
+  const displayActivities = useMemo(() => {
+    if (selectedCategory === "all") return allActivities;
+    return allActivities.filter(a => a.category === selectedCategory);
+  }, [allActivities, selectedCategory]);
+
+  // Don't render if no activities
+  if (!activitiesLoading && allActivities.length === 0) {
+    return null;
+  }
 
   // Get difficulty color
   const getDifficultyColor = (difficulty) => {
@@ -253,7 +115,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                     : "bg-white text-blue-600 hover:bg-slate-50 border border-slate-200"
                 }`}
               >
-                {category}
+                {formatCategoryName(category)}
               </button>
             ))}
           </div>
@@ -293,22 +155,26 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
               <ActivityCard 
                 data={{
                   name: activity.title,
-                  badge: activity.category,
+                  badge: activity.badge || formatCategoryName(activity.category),
                   title: activity.title,
                   description: activity.description,
                   image: activity.image,
                   icon: activity.icon,
-                  isPopular: activity.difficulty === "Easy",
+                  isPopular: activity.isPopular,
                   highlightsTitle: "What's Included:",
-                  highlights: [
+                  highlights: activity.highlights?.slice(0, 3) || [
                     "Professional guide & equipment",
                     "Safety briefing & insurance",
                     "Transport & refreshments"
-                  ]
+                  ],
+                  cityName: activity.cityName,
+                  regionName: activity.regionName,
+                  regionSlug: activity.regionSlug
                 }}
                 hoverGradient="from-brand-green/95 to-emerald-900"
                 ctaLabel="Learn More"
-                onCtaClick={() => router.push(`/activities/${regionSlug}/${activity.title.toLowerCase().replace(/\s+/g, '-')}`)}
+                onCtaClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
+                onCardClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
               />
             </SwiperSlide>
           ))}

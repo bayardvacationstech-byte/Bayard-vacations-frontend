@@ -13,12 +13,24 @@ import {
   Check,
   Star,
   ChevronRight,
-  Compass
+  ChevronLeft,
+  Compass,
+  Loader2,
+  ChevronDown,
+  X
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { useActivityDetail } from "@/hooks/activities/useActivitiesData";
+import { formatCategoryName } from "@/utils/activityUtils";
 
 export default function ActivityDetailClient({ regionSlug, activitySlug }) {
+  const { activity, loading, error } = useActivityDetail(regionSlug, activitySlug);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  
   const regionName = regionSlug
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -29,52 +41,56 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-  // Dummy activity data
-  const activity = {
-    title: activityName,
-    category: "Adventure",
-    description: `Experience the thrill of ${activityName} in ${regionName}. This unforgettable activity combines adventure, culture, and natural beauty for an experience you'll never forget.`,
-    longDescription: `Immerse yourself in an extraordinary ${activityName} experience in the heart of ${regionName}. Our expert guides will lead you through breathtaking landscapes, sharing local insights and ensuring your safety every step of the way. Whether you're a beginner or experienced adventurer, this activity is designed to create lasting memories.`,
-    duration: "3-4 hours",
-    priceRange: "$75-$150",
-    groupSize: "2-12 people",
-    difficulty: "Moderate",
-    image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
-    ],
-    included: [
-      "Professional guide",
-      "All necessary equipment",
-      "Safety gear and insurance",
-      "Transport to/from activity location",
-      "Refreshments and snacks",
-      "Souvenir photo package"
-    ],
-    highlights: [
-      `Spectacular views of ${regionName}`,
-      "Expert local guide",
-      "Small group experience",
-      "All skill levels welcome",
-      "Flexible booking options"
-    ]
-  };
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-brand-green animate-spin mx-auto mb-4" />
+          <p className="text-lg text-slate-600 font-medium">Loading activity details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !activity) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Container>
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 mb-6">
+              <X className="w-10 h-10 text-red-600" />
+            </div>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Activity Not Found</h2>
+            <p className="text-lg text-slate-600 mb-8">
+              {error || "The activity you're looking for doesn't exist."}
+            </p>
+            <Link href={`/activities/${regionSlug}`}>
+              <Button className="bg-brand-green hover:bg-green-700">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Activities
+              </Button>
+            </Link>
+          </div>
+        </Container>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="relative pt-40 pb-24 lg:pt-64 lg:pb-40 overflow-hidden">
         <img
-          src={activity.image}
+          src={activity.bannerImage || activity.image}
           alt={activity.title}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
         
         <Container className="relative z-10">
-           <Link href={`/activities/${regionSlug}`} className="inline-block mb-12 animate-in fade-in slide-in-from-left-4 duration-700">
+           <Link href={`/activities/${activity.regionSlug}`} className="inline-block mb-12 animate-in fade-in slide-in-from-left-4 duration-700">
             <Button 
               variant="ghost" 
               className="text-white hover:bg-white/20 backdrop-blur-sm gap-2"
@@ -93,7 +109,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/20 backdrop-blur-md rounded-full border border-brand-green/30 mb-4">
                 <Compass className="w-4 h-4 text-brand-green" />
                 <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
-                  {activity.category}
+                  {activity.badge || formatCategoryName(activity.category)}
                 </span>
               </div>
               
@@ -118,6 +134,12 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
                   <DollarSign className="w-4 h-4 text-white" />
                   <span className="text-sm font-bold text-white">{activity.priceRange}</span>
                 </div>
+                {activity.difficulty && (
+                  <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full">
+                    <Star className="w-4 h-4 text-white" />
+                    <span className="text-sm font-bold text-white">{activity.difficulty}</span>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>
@@ -169,14 +191,29 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
             <section>
               <h2 className="text-3xl font-black text-slate-900 mb-4">Gallery</h2>
               <div className="grid grid-cols-3 gap-4">
-                {activity.images.map((img, index) => (
-                  <div key={index} className="relative aspect-square rounded-2xl overflow-hidden">
+                {activity.gallery?.map((img, index) => (
+                  <div 
+                    key={index} 
+                    className="relative aspect-square rounded-2xl overflow-hidden cursor-pointer group"
+                    onClick={() => {
+                      setLightboxIndex(index);
+                      setLightboxOpen(true);
+                    }}
+                  >
                     <img
                       src={img}
                       alt={`${activity.title} ${index + 1}`}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+                        <svg className="w-6 h-6 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
+
                 ))}
               </div>
             </section>
@@ -236,6 +273,71 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
           </div>
         </div>
       </Container>
+
+      {/* Lightbox Modal */}
+      {lightboxOpen && activity?.gallery && (
+        <div 
+          className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center"
+          onClick={() => setLightboxOpen(false)}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-4 right-4 z-[10000] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-colors"
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
+
+          {/* Previous Button */}
+          {activity.gallery.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev - 1 + activity.gallery.length) % activity.gallery.length);
+              }}
+              className="absolute left-4 z-[10000] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-colors"
+            >
+              <ChevronLeft className="w-6 h-6 text-white" />
+            </button>
+          )}
+
+          {/* Image Container */}
+          <div 
+            className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <motion.img
+              key={lightboxIndex}
+              src={activity.gallery[lightboxIndex]}
+              alt={`${activity.title} ${lightboxIndex + 1}`}
+              className="max-w-full max-h-full object-contain rounded-lg"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+
+            {/* Image Counter */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+              <span className="text-white font-medium">
+                {lightboxIndex + 1} / {activity.gallery.length}
+              </span>
+            </div>
+          </div>
+
+          {/* Next Button */}
+          {activity.gallery.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((prev) => (prev + 1) % activity.gallery.length);
+              }}
+              className="absolute right-4 z-[10000] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-colors"
+            >
+              <ChevronRight className="w-6 h-6 text-white" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

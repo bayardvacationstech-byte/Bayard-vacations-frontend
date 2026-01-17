@@ -29,12 +29,25 @@ const ActivityCard = ({
   ctaLabel = "View Packages",
   onCtaClick,
   secondaryCtaLabel,
-  onSecondaryCtaClick
+  onSecondaryCtaClick,
+  onCardClick
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const Icon = data.icon || MapPin;
 
-  const handleCardClick = () => {
+  const handleCardClick = (e) => {
+    // Priority 1: Use onCardClick if provided
+    if (onCardClick) {
+      onCardClick(data);
+      return;
+    }
+    
+    // Priority 2: Use onCtaClick if provided (legacy support for "whole card is link")
+    if (onCtaClick && window.innerWidth > 768) {
+      onCtaClick(data);
+      return;
+    }
+
     setIsExpanded(!isExpanded);
   };
 
@@ -81,11 +94,11 @@ const ActivityCard = ({
             <span className="text-xs font-bold text-slate-900 uppercase">{data.badge || data.name}</span>
           </div>
 
-          {/* Secondary Badge (Popular/Featured) */}
-          {data.isPopular !== false && (
+          {/* Secondary Badge (Region Name) */}
+          {data.regionName && (
             <div className="px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase shadow-md flex items-center gap-1.5">
-              <Star className="w-3.5 h-3.5 fill-amber-500" />
-              <span>Popular</span>
+              <MapPin className="w-3.5 h-3.5 text-amber-500" />
+              <span>{data.regionName}</span>
             </div>
           )}
         </div>
@@ -112,47 +125,6 @@ const ActivityCard = ({
           <h3 className="text-2xl md:text-3xl font-black text-white leading-tight drop-shadow-lg">
             {data.title || data.name}
           </h3>
-          
-          {/* Description (truncated on front) */}
-          {data.description && (
-            <p className="text-white/95 text-sm md:text-base leading-relaxed line-clamp-2 drop-shadow-md">
-              {data.description}
-            </p>
-          )}
-
-          {/* Meta Info Icons - Dynamic based on data */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <div className="flex items-center gap-1.5 text-white/95">
-              <MapPin className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-bold">
-                {data.highlights?.slice(0, 2).join(", ") || "Explore"}
-                {data.highlights?.length > 2 ? "..." : ""}
-              </span>
-            </div>
-            {data.relatedPackages && (
-              <>
-                <div className="flex items-center gap-1.5 text-white/95">
-                  <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                  <span className="text-sm font-bold">
-                    {data.relatedPackages.length} {data.relatedPackages.length === 1 ? "Package" : "Packages"}
-                  </span>
-                </div>
-                {/* Immediate Package Visibility */}
-                <div className="w-full flex items-center gap-1.5 text-white/80 overflow-hidden mt-1">
-                  <Package className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span className="text-[11px] font-medium truncate">
-                    Included in: {data.relatedPackages.join(", ")}
-                  </span>
-                </div>
-              </>
-            )}
-            {!data.relatedPackages && (
-              <div className="flex items-center gap-1.5 text-white/95">
-                <Camera className="w-4 h-4" />
-                <span className="text-sm font-semibold">Photo Spots</span>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 

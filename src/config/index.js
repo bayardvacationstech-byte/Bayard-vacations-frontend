@@ -50,6 +50,7 @@ export const COLLECTIONS = {
   PLACES: "places",
   IMAGES: "images",
   WHY_CHOOSE_REGION: "why_choose_region",
+  REGION_FACTS_SHEET: "region_facts_sheet",
 };
 
 export const REVIEWS_CACHE_DURATION = 90 * 24 * 60 * 60 * 1000; // 90 days in milliseconds

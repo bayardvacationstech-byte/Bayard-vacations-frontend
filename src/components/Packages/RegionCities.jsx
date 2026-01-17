@@ -1,29 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Container from "@/components/ui/Container";
 import { 
-  Building2, 
-  Map as MapIcon, 
-  Mountain, 
-  Castle, 
-  Waves,
+  NavigationIcon,
   ChevronLeft as ChevronLeftIcon,
-  Navigation as NavigationIcon,
-  Camera,
-  Star,
-  ChevronUp,
-  Info,
-  X,
-  ChevronRight
+  ChevronRight,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import ActivityCard from "@/components/ui/ActivityCard";
+import { useActivitiesData } from "@/hooks/activities/useActivitiesData";
+import { formatCategoryName } from "@/utils/activityUtils";
 
 // Swiper styles
 import "swiper/css";
@@ -34,67 +26,76 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
   const { region: regionSlug } = useParams();
   const [selectedCity, setSelectedCity] = useState("all");
 
-  // Extract cities from regionData.mustDoExperiences.categories
-  const cityCategories = regionData?.mustDoExperiences?.categories || [];
-  
-  // Transform the data into a usable format - Mix real API data with demo data
-  const apiCities = cityCategories.map((cityData, index) => {
-    const cityName = cityData.category?.trim() || `City ${index + 1}`;
-    const items = cityData.items || [];
-    const firstItem = items[0] || {};
+  // Fetch activities for this region
+  const { activities: allActivities, loading: activitiesLoading } = useActivitiesData(
+    regionSlug, 
+    regionData?.id
+  );
+
+  // Group activities by city
+  const citiesWithActivities = useMemo(() => {
+    if (!allActivities.length) return [];
+
+    // Group activities by city
+    const cityMap = new Map();
     
-    return {
-      id: cityName.toLowerCase().replace(/\s+/g, '-'),
-      name: cityName,
-      title: firstItem.title || cityName,
-      description: firstItem.description || "",
-      image: firstItem.image || firstItem.imageUrl || "https://images.unsplash.com/photo-1523438097201-512ae7d59c44?w=800&q=80",
-      icon: MapIcon
-    };
-  });
+    allActivities.forEach(activity => {
+      if (activity.cityName && activity.citySlug) {
+        if (!cityMap.has(activity.citySlug)) {
+          cityMap.set(activity.citySlug, {
+            id: activity.citySlug,
+            slug: activity.citySlug,
+            name: activity.cityName,
+            activities: []
+          });
+        }
+        cityMap.get(activity.citySlug).activities.push(activity);
+      }
+    });
 
-  // Add demo cities for better presentation (will be replaced by real API data later)
-  const demoCities = [
-    {
-      id: 'gabala',
-      name: 'Gabala',
-      title: 'Nature & Adventure in Gabala',
-      description: 'Experience the stunning mountain landscapes, adventure parks, and natural beauty of Gabala, Azerbaijan\'s premier mountain resort destination.',
-      image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
-      icon: MapIcon
-    },
-    {
-      id: 'sheki',
-      name: 'Sheki',
-      title: 'Historic Silk Road City',
-      description: 'Discover the ancient Silk Road heritage, magnificent Khan\'s Palace, and traditional crafts in this charming historic mountain town.',
-      image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80',
-      icon: MapIcon
-    },
-    {
-      id: 'guba',
-      name: 'Guba',
-      title: 'Mountain Carpets & Culture',
-      description: 'Explore the famous carpet-weaving traditions, apple orchards, and scenic mountain villages of northern Azerbaijan.',
-      image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80',
-      icon: MapIcon
-    }
-  ];
+    return Array.from(cityMap.values());
+  }, [allActivities]);
 
-  // Combine API cities with demo cities
-  const allCities = [...apiCities, ...demoCities];
-  
-  // Get unique city names for filtering
-  const cityNames = ["all", ...allCities.map(c => c.name)];
-  
-  // Filter based on selected city
-  const displayCities = selectedCity === "all" 
-    ? allCities 
-    : allCities.filter(c => c.name === selectedCity);
-  
-  // If no data, don't render the section
-  if (allCities.length === 0) {
-    return null;
+  // Get city names for filter buttons
+  const cityNames = useMemo(() => {
+    return ["all", ...citiesWithActivities.map(c => c.name)];
+  }, [citiesWithActivities]);
+
+  // Filter cities based on selection
+  const displayCities = useMemo(() => {
+    if (selectedCity === "all") return citiesWithActivities;
+    return citiesWithActivities.filter(c => c.name === selectedCity);
+  }, [citiesWithActivities, selectedCity]);
+
+  // Get activities to display (one representative activity per city)
+  const displayActivities = useMemo(() => {
+    return displayCities.map(city => {
+      // Get the first (or most popular) activity for this city
+      const representativeActivity = city.activities.find(a => a.isPopular) || city.activities[0];
+      
+      return {
+        ...representativeActivity,
+        cityActivityCount: city.activities.length,
+        cityName: city.name,
+        citySlug: city.slug
+      };
+    });
+  }, [displayCities]);
+
+  // Don't render if no activities or still loading
+  if (activitiesLoading || citiesWithActivities.length === 0) {
+    return activitiesLoading ? (
+      <section className="bg-slate-50 py-6 md:py-8">
+        <Container>
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+              <p className="text-lg text-slate-600 font-medium">Loading cities...</p>
+            </div>
+          </div>
+        </Container>
+      </section>
+    ) : null;
   }
 
   return (
@@ -183,26 +184,29 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
           }}
           className="pb-12"
         >
-          {displayCities.map((city) => (
-            <SwiperSlide key={city.id}>
+          {displayActivities.map((activity) => (
+            <SwiperSlide key={activity.id}>
               <ActivityCard 
                 data={{
-                  name: city.name,
-                  badge: city.name,
-                  title: city.title || city.name,
-                  description: city.description,
-                  image: city.image,
-                  icon: city.icon,
-                  isPopular: true,
-                  highlightsTitle: "Top Attractions:",
-                  highlights: [
-                    "Historical landmarks & architecture",
-                    "Local artisan markets"
-                  ]
+                  name: activity.cityName,
+                  badge: `${activity.cityActivityCount} ${activity.cityActivityCount === 1 ? 'Activity' : 'Activities'}`,
+                  title: activity.title,
+                  description: activity.description,
+                  image: activity.image,
+                  icon: activity.icon,
+                  isPopular: activity.isPopular,
+                  highlightsTitle: "Featured Activity:",
+                  highlights: activity.highlights?.slice(0, 2) || [
+                    "Explore this amazing destination",
+                    "Unforgettable experiences await"
+                  ],
+                  cityName: activity.cityName,
+                  regionName: activity.regionName
                 }}
                 hoverGradient="from-brand-green/95 to-brand-green"
-                ctaLabel="View Packages"
-                onCtaClick={() => router.push(`/packages/${regionSlug}`)}
+                ctaLabel="Learn More"
+                onCtaClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
+                onCardClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
               />
             </SwiperSlide>
           ))}
