@@ -35,17 +35,51 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
 
   // Combine dynamic region data with static luxury data
   const displays = useMemo(() => {
-    // If we have initialRegions, prioritize them as requested (show regions instead of packages)
+    // Fallback images for common destinations
+    const fallbackImages = {
+      "azerbaijan": "https://images.unsplash.com/photo-1565022536102-b5c35c4b8e3f?w=1200",
+      "egypt": "https://images.unsplash.com/photo-1539768942893-daf53e448371?w=1200",
+      "bali": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200",
+      "bhutan": "https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=1200",
+      "cambodia": "https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=1200",
+      "maldives": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200",
+      "kolkata": "https://images.unsplash.com/photo-1558431382-27e303142255?w=1200",
+      "multi-countries": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200",
+      "south-africa": "https://images.unsplash.com/photo-1484318571209-661cf29a69c3?w=1200",
+      "dubai": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200",
+      "turkey": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200",
+      "georgia": "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=1200",
+    };
+
+    // If we have initialRegions, use them to show same destinations as Trending Destinations
     if (initialRegions && initialRegions.length > 0) {
-      return initialRegions.map(region => ({
-        id: region.id,
-        name: region.name,
-        image: region.featuredImage?.url || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200",
-        slug: region.slug,
-        isPackage: false,
-        days: region.defaultDays || 5,
-        price: region.startingPrice ? `₹${region.startingPrice}` : null,
-      }));
+      // Flatten all regions from all continents (for international) and domestic regions
+      const allRegions = [];
+      
+      initialRegions.forEach(item => {
+        if (item.regions && Array.isArray(item.regions)) {
+          // This is a continent with nested regions (international)
+          allRegions.push(...item.regions);
+        } else if (item.slug && item.name) {
+          // This is a direct region (domestic)
+          allRegions.push(item);
+        }
+      });
+
+      return allRegions.map(region => {
+        const slug = region.slug?.toLowerCase() || '';
+        const fallbackImage = fallbackImages[slug] || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200";
+        
+        return {
+          id: region.id,
+          name: region.name,
+          image: region.featuredImage?.url || region.image || fallbackImage,
+          slug: region.slug,
+          isPackage: false,
+          days: region.defaultDays || 5,
+          price: region.startingPrice ? `₹${region.startingPrice}` : null,
+        };
+      });
     }
 
     // Fallback to static data if no regions

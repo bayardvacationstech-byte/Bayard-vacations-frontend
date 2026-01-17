@@ -16,10 +16,11 @@ export function useDestinationImage(regionName, options = {}) {
     error,
     refetch,
   } = useQuery({
-    queryKey: [COLLECTIONS.IMAGES, "random", regionName],
+    queryKey: [COLLECTIONS.IMAGES, "featured", regionName],
     queryFn: () => getFeaturedImageByRegion(regionName),
     enabled: !!regionName,
-    staleTime: 5 * 60 * 1000, // 5 minutes - images don't change frequently
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 10, // 10 minutes
     ...options,
   });
 

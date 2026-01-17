@@ -13,6 +13,7 @@ import PremiumBookNowForm from "@/components/Forms/BookNowForm/PremiumBookNowFor
 import OverviewSection from "./Sections/OverviewSection";
 import ItinerarySection from "./Sections/ItinerarySection";
 import InclusionsSection from "./Sections/InclusionsSection";
+import EssentialInfoSection from "./Sections/EssentialInfoSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
 import PackageHighlights from "./PackageHighlights";
@@ -31,13 +32,19 @@ const PackagesClient = () => {
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [showFullForm, setShowFullForm] = useState(false);
   const [activeSection, setActiveSection] = useState("overview");
+  const activeSectionRef = React.useRef("overview");
+
+  // Sync ref with state
+  useEffect(() => {
+    activeSectionRef.current = activeSection;
+  }, [activeSection]);
 
   const sections = [
     { id: "overview", label: "Overview" },
     { id: "itinerary", label: "Itinerary" },
     { id: "hotels-section", label: "Stay" },
-    { id: "experiences-section", label: "Experiences" },
     { id: "inclusions", label: "Inclusions" },
+    { id: "essential-info", label: "Travel Info" },
     { id: "faq", label: "FAQ" },
   ];
 
@@ -121,28 +128,26 @@ const PackagesClient = () => {
           }
 
           // 2. Scroll Spy Logic
-          // Offset for sticky header (approx 80px) + sticky nav (approx 80px) + some buffer
-          const scrollPosition = scrollY + 200; 
+          const scrollPosition = scrollY + 150; 
           
-          let currentActive = activeSection;
+          let foundSection = activeSectionRef.current;
           
           // Iterate through sections to find the current one
           for (const section of sections) {
-             const element = sectionElements[section.id] || document.getElementById(section.id); // Fallback if cache missed
+             const element = sectionElements[section.id] || document.getElementById(section.id);
              if (element) {
-               // element.offsetTop is less expensive than getBoundingClientRect in a loop
                const { offsetTop, offsetHeight } = element;
                
                if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                 currentActive = section.id;
+                 foundSection = section.id;
                  break;
                }
              }
           }
           
           // Only update state if it changed
-          if (currentActive !== activeSection) {
-            setActiveSection(currentActive);
+          if (foundSection !== activeSectionRef.current) {
+            setActiveSection(foundSection);
           }
 
           ticking = false;
@@ -279,12 +284,14 @@ const PackagesClient = () => {
                   <PackageHotels packageData={packageData} />
                 </div>
 
-                <div id="experiences" className="scroll-mt-48">
-                  <PackageExperiences packageData={packageData} />
-                </div>
+
 
                 <div id="inclusions" className="scroll-mt-48">
                   <InclusionsSection packageData={packageData} />
+                </div>
+
+                <div id="essential-info" className="scroll-mt-48">
+                  <EssentialInfoSection packageData={packageData} />
                 </div>
                 
                 <div id="faq" className="scroll-mt-48">

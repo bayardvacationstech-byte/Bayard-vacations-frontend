@@ -26,6 +26,7 @@ import {
   Mountain,
   Theater
 } from "lucide-react";
+import { useRegionFactSheet } from "@/hooks/regions";
 
 /**
  * RegionQuickFacts Component
@@ -40,17 +41,44 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
     setMounted(true);
   }, []);
 
+  const { factSheetData, isLoading: factSheetLoading } = useRegionFactSheet(regionData?.id);
+
   const isAzerbaijan = regionName?.toLowerCase().includes('azerbaijan');
 
   // Icon mapping for dynamic data
   const iconMap = {
     CalendarClock, Wallet, ThermometerSun, Clock4, Globe, Zap,
     Sparkles, MapPin, FileCheck, Building2, Users, Info,
-    Plane, Flame, Landmark, ShieldCheck, Banknote, Mountain, Theater
+    Plane, Flame, Landmark, ShieldCheck, Banknote, Mountain, Theater,
+    "Calendar": CalendarClock,
+    "ThermometerSun": ThermometerSun,
+    "Clock": Clock4,
+    "FileCheck": FileCheck,
+    "Wallet": Wallet,
+    "Globe": Globe,
+    "Building2": Building2,
+    "Users": Users,
   };
 
   const getIcon = (iconName) => {
     return iconMap[iconName] || Info;
+  };
+
+  // Helper to map color strings to tailwind classes
+  const getColorClass = (color) => {
+    const colorMap = {
+      blue: "text-blue-600",
+      amber: "text-amber-600",
+      emerald: "text-emerald-600",
+      orange: "text-orange-600",
+      indigo: "text-indigo-600",
+      teal: "text-teal-600",
+      violet: "text-violet-600",
+      pink: "text-pink-600",
+      rose: "text-rose-600",
+      slate: "text-slate-600",
+    };
+    return colorMap[color] || "text-blue-600";
   };
 
   // Helper to get icon config
@@ -88,7 +116,17 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
   };
 
   const processedFacts = React.useMemo(() => {
-    // Use dynamic data from whyChooseData first
+    // 1. Use dynamic factsheet data if available
+    if (factSheetData?.details?.essentials) {
+      return factSheetData.details.essentials.map(fact => ({
+        label: fact.label,
+        value: fact.value,
+        icon: getIcon(fact.icon),
+        color: getColorClass(fact.color)
+      }));
+    }
+
+    // 2. Use dynamic data from whyChooseData
     if (whyChooseData?.details?.quickFacts) {
       return whyChooseData.details.quickFacts.map(fact => ({ ...fact, ...getFactConfig(fact.label) }));
     }
@@ -142,7 +180,7 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
     }
     
     return facts;
-  }, [mounted, regionData, isAzerbaijan, regionName, whyChooseData]);
+  }, [mounted, regionData, isAzerbaijan, regionName, whyChooseData, factSheetData]);
 
   // Convert regionName to slug for URLs
   const regionSlug = regionName?.toLowerCase().replace(/\s+/g, '-');
@@ -166,14 +204,14 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                 <div className="h-[1.5px] md:h-[2px] flex-1 md:w-12 bg-blue-600/20" />
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-slate-900 tracking-tighter leading-tight md:leading-[0.95] mb-2 md:mb-4">
-                About {whyChooseData?.details?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
+                About {factSheetData?.details?.hero?.title || whyChooseData?.details?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
               </h2>
               <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">
-                {whyChooseData?.details?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
+                {factSheetData?.details?.hero?.subtitle || whyChooseData?.details?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
               </p>
               
               <p className="text-slate-600 text-sm lg:text-base leading-relaxed max-w-xl">
-                {whyChooseData?.details?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
+                {factSheetData?.details?.history?.description || whyChooseData?.details?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
               </p>
             </div>
           </motion.div>
@@ -243,7 +281,22 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Why Choose {regionName}?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                 {(() => {
-                  // Use dynamic data first, then fallback
+                  // Use dynamic factsheet reasons first
+                  if (factSheetData?.details?.history?.cards) {
+                    return factSheetData.details.history.cards.map((card, idx) => (
+                      <div key={idx} className="flex gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                          <Info className={cn("w-5 h-5", getColorClass(card.color))} />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{card.title}</h4>
+                          <p className="text-sm text-slate-500 leading-tight line-clamp-3">{card.content}</p>
+                        </div>
+                      </div>
+                    ));
+                  }
+
+                  // Use dynamic data from whyChooseData
                   const reasons = whyChooseData?.details?.whyChooseReasons || [
                     { icon: "Plane", title: "Direct & Easy Access", text: "4.5 hours from India with visa-free entry (₹2,200 e-visa)", color: "text-blue-600" },
                     { icon: "Flame", title: "Unique Natural Wonders", text: "Eternal fire mountains, mud volcanoes, and pristine Caspian beaches", color: "text-orange-600" },
@@ -275,6 +328,18 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Must-Experience Attractions</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(() => {
+                  // Use dynamic factsheet items first
+                  if (factSheetData?.details?.food?.items) {
+                    return factSheetData.details.food.items.slice(0, 6).map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 border border-slate-100 group hover:bg-white hover:shadow-sm transition-all">
+                        <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0 group-hover:border-blue-100 transition-colors">
+                          <Zap className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">{item.name}</span>
+                      </div>
+                    ));
+                  }
+
                   // Use dynamic data if available
                   const attractions = whyChooseData?.details?.mustExperienceAttractions || [
                     { icon: "Flame", text: "Yanar Dag (Eternal Flame Mountains)", color: "text-orange-600" },

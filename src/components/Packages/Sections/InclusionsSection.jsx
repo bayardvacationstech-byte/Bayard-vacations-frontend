@@ -5,7 +5,8 @@ import {
   Lightbulb, 
   ShieldAlert,
   ListChecks,
-  AlertCircle
+  AlertCircle,
+  FileText
 } from "lucide-react";
 
 const InclusionsSection = ({ packageData }) => {
@@ -180,7 +181,6 @@ const InclusionsSection = ({ packageData }) => {
             </p>
           </div>
         </div>
-
         {/* Cancellation Policy - Spans 2 columns */}
         <div className="lg:col-span-2 bg-rose-50/50 border border-rose-100 rounded-3xl p-6 group hover:shadow-md transition-all duration-300 shadow-sm shadow-rose-100/30">
           <div className="flex items-center gap-3 mb-4">
@@ -206,6 +206,52 @@ const InclusionsSection = ({ packageData }) => {
                <AlertCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
                <p className="text-[11px] text-white font-bold leading-tight italic">Cancellation rules may vary by region. Please read full terms at checkout.</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 6. Terms & Conditions Section */}
+      <div className="mt-8 bg-slate-50 border border-slate-200 rounded-3xl p-6 md:p-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center">
+            <FileText className="w-5 h-5 text-white" />
+          </div>
+          <h4 className="text-xl font-black text-slate-900 tracking-tight">Terms & <span className="text-slate-500">Conditions</span></h4>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+          <div className="space-y-1">
+            <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Booking & Payment</h5>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">Payment in full is required at booking confirmation. Late payments may result in cancellation without notice.</p>
+          </div>
+          <div className="space-y-1">
+            <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Itinerary Changes</h5>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">Tour operator reserves the right to modify itinerary due to weather, local conditions, or circumstances beyond control.</p>
+          </div>
+          <div className="space-y-1">
+            <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Travel Documents</h5>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">You are responsible for obtaining necessary visas and ensuring passport validity. Tour operator is not responsible for entry denial.</p>
+          </div>
+          <div className="space-y-1">
+            <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Operator Responsibility</h5>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">Tour operator is not responsible for personal injury, theft, lost luggage, or flight delays beyond their control.</p>
+          </div>
+          <div className="space-y-1">
+            <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Conduct & Safety</h5>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">Guests must respect local laws and customs. Disruptive behavior may result in immediate tour termination without refund.</p>
+          </div>
+          <div className="space-y-1">
+            <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Health & Fitness</h5>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">By booking, you confirm you are in good health and capable of engaging in the described activities.</p>
+          </div>
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
+          <p className="text-[10px] text-slate-400 font-bold italic">* By booking this package, you acknowledge and agree to the above terms.</p>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-slate-300" />
+            <span className="w-2 h-2 rounded-full bg-slate-200" />
+            <span className="w-2 h-2 rounded-full bg-slate-100" />
           </div>
         </div>
       </div>

@@ -598,8 +598,7 @@ export const getCuratedPackages = async (
     const packagesRef = collection(db, COLLECTIONS.PACKAGES);
     const q = query(
       packagesRef, 
-      ...queryConstraints, 
-      orderBy("packageSlug", "asc")
+      ...queryConstraints
     );
 
     const querySnapshot = await getDocs(q);
@@ -705,8 +704,7 @@ export const getPackagesByTheme = async (
 
     const q = query(
       packagesRef, 
-      ...queryConstraints, 
-      orderBy("packageSlug", "asc")
+      ...queryConstraints
     );
 
     if (initialPackages.length > 0) {
@@ -820,21 +818,51 @@ export const getFeaturedImageByRegion = async (regionName) => {
     }
 
     const imagesRef = collection(db, COLLECTIONS.IMAGES);
-    const q = query(
+    
+    // Try multiple query variations to find images
+    let querySnapshot;
+    
+    // First try: exact match with lowercase
+    let q = query(
       imagesRef,
       where("region", "==", regionName.toLowerCase()),
       where("type", "==", "card"),
-      where("frontPage", "==", true),
-      limit(1)
+      where("frontPage", "==", true)
     );
-    const querySnapshot = await getDocs(q);
+    querySnapshot = await getDocs(q);
+    
+    // Second try: exact match with original case
+    if (querySnapshot.empty) {
+      q = query(
+        imagesRef,
+        where("region", "==", regionName),
+        where("type", "==", "card"),
+        where("frontPage", "==", true)
+      );
+      querySnapshot = await getDocs(q);
+    }
+    
+    // Third try: without frontPage filter
+    if (querySnapshot.empty) {
+      q = query(
+        imagesRef,
+        where("region", "==", regionName.toLowerCase()),
+        where("type", "==", "card")
+      );
+      querySnapshot = await getDocs(q);
+    }
 
     if (querySnapshot.empty) {
-      console.log(`No images found for region: ${regionName}`);
+      console.warn(`[Firebase] No images found for region: ${regionName}`);
       return null;
     }
 
-    const randomImage = sanitizeDocumentData(querySnapshot.docs[0]);
+    // Get random image from available images
+    const images = querySnapshot.docs.map(sanitizeDocumentData);
+    const randomIndex = Math.floor(Math.random() * images.length);
+    const randomImage = images[randomIndex];
+    
+    console.log(`[Firebase] Found ${images.length} images for region: ${regionName}, selected index: ${randomIndex}`);
 
     return randomImage;
   } catch (error) {

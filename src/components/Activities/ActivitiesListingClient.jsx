@@ -6,35 +6,38 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
   Compass, 
-  Waves, 
-  Mountain, 
-  TreePine, 
-  Bike, 
-  Palette, 
-  Utensils, 
-  Tent, 
-  Sailboat,
-  Music,
   ArrowLeft,
   Clock,
   DollarSign,
   Search,
   MapPin,
-  Package
+  Package,
+  Star,
+  Loader2
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ActivityCard from "@/components/ui/ActivityCard";
 import { useRegionsData } from "@/hooks/regions/useRegionsData";
+import { useActivitiesData } from "@/hooks/activities/useActivitiesData";
 import { themeMapData } from "@/config/themePackages";
+import { 
+  getUniqueCategories, 
+  getUniqueCities, 
+  formatCategoryName,
+  filterActivities 
+} from "@/utils/activityUtils";
 
 export default function ActivitiesListingClient({ regionSlug }) {
   const router = useRouter();
   const { domesticRegions, internationalRegions, regionIsLoading } = useRegionsData();
+  const { activities: allActivities, loading: activitiesLoading } = useActivitiesData(regionSlug);
+  
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLocationType, setSelectedLocationType] = useState("all");
-  const [selectedRegion, setSelectedRegion] = useState("all");
+  const [selectedRegion, setSelectedRegion] = useState(regionSlug || "all");
+  const [selectedCity, setSelectedCity] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   
   const regionName = regionSlug
@@ -42,162 +45,28 @@ export default function ActivitiesListingClient({ regionSlug }) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-  // Enriched activities data with destination and package mappings
-  const activities = [
-    {
-      id: 1,
-      title: "Scuba Diving & Snorkeling",
-      slug: "scuba-diving-snorkeling",
-      category: "exploration-bundle",
-      description: "Explore vibrant coral reefs and underwater marine life in crystal-clear waters",
-      duration: "2-3 hours",
-      priceRange: "$50-$100",
-      image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
-      icon: Waves,
-      destinations: ["Baku", "Absheron"],
-      packages: ["Caspian Adventure", "Baku Coastal Escape"],
-      isRomantic: true,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 2,
-      title: "Mountain Trekking",
-      slug: "mountain-trekking",
-      category: "group-adventures",
-      description: "Challenge yourself with guided treks through stunning mountain trails",
-      duration: "Half day - Full day",
-      priceRange: "$75-$150",
-      image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
-      icon: Mountain,
-      destinations: ["Guba", "Gabala", "Sheki"],
-      packages: ["Caucasian Peaks", "Nature Lovers Paradise"],
-      isRomantic: false,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 3,
-      title: "Forest Safari",
-      slug: "forest-safari",
-      category: "solo-expedition",
-      description: "Wildlife spotting adventure through lush forests and national parks",
-      duration: "4-6 hours",
-      priceRange: "$80-$120",
-      image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
-      icon: TreePine,
-      destinations: ["Gabala", "Goygol"],
-      packages: ["Wild Azerbaijan", "Green Escape"],
-      isRomantic: false,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 4,
-      title: "Cycling Tours",
-      slug: "cycling-tours",
-      category: "relax-rejuvenate",
-      description: "Pedal through scenic routes, villages, and countryside landscapes",
-      duration: "3-4 hours",
-      priceRange: "$40-$80",
-      image: "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=800&q=80",
-      icon: Bike,
-      destinations: ["Baku Boulevard", "Sheki Village"],
-      packages: ["Active Baku", "Silk Road by Bike"],
-      isRomantic: true,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 5,
-      title: "Cultural Walking Tours",
-      slug: "cultural-walking-tours",
-      category: "educational",
-      description: "Discover hidden alleys, local markets, and historical landmarks with expert guides",
-      duration: "2-3 hours",
-      priceRange: "$30-$60",
-      image: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&q=80",
-      icon: Compass,
-      destinations: ["Old City Baku", "Sheki Old Town"],
-      packages: ["Historic Azerbaijan", "Cultural Heritage Tour"],
-      isRomantic: false,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 6,
-      title: "Sailing & Boat Tours",
-      slug: "sailing-boat-tours",
-      category: "elite-escape",
-      description: "Cruise along coastlines, explore islands, and enjoy sunset views from the water",
-      duration: "2-4 hours",
-      priceRange: "$60-$120",
-      image: "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6d?w=800&q=80",
-      icon: Sailboat,
-      destinations: ["Baku Bay", "Lankaran Coastal"],
-      packages: ["Sunset Sail", "Maritime Experience"],
-      isRomantic: true,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 7,
-      title: "Camping Experiences",
-      slug: "camping-experiences",
-      category: "solo-expedition",
-      description: "Overnight camping under starlit skies with bonfire and local cuisine",
-      duration: "Overnight",
-      priceRange: "$90-$180",
-      image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80",
-      icon: Tent,
-      destinations: ["Shahdag", "Xinaliq"],
-      packages: ["Starry Night Expedition", "Mountain Camp"],
-      isRomantic: true,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 8,
-      title: "Cooking Classes",
-      slug: "cooking-classes",
-      category: "family-funventure",
-      description: "Learn to prepare authentic local dishes with professional chefs",
-      duration: "3-4 hours",
-      priceRange: "$50-$90",
-      image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&q=80",
-      icon: Utensils,
-      destinations: ["Baku", "Ganja"],
-      packages: ["Culinary Journey", "Tastes of Azerbaijan"],
-      isRomantic: false,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    },
-    {
-      id: 9,
-      title: "Art & Craft Workshops",
-      slug: "art-craft-workshops",
-      category: "educational",
-      description: "Create handmade souvenirs in traditional art and craft sessions",
-      duration: "2-3 hours",
-      priceRange: "$35-$75",
-      image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80",
-      icon: Palette,
-      destinations: ["Baku Old City", "Lahij"],
-      packages: ["Artisan Azerbaijan", "Craft & Culture"],
-      isRomantic: false,
-      isInternational: false,
-      regionName: "Azerbaijan",
-      regionSlug: "azerbaijan"
-    }
-  ];
+  // Get unique categories from activities
+  const categories = useMemo(() => {
+    const uniqueCategories = getUniqueCategories(allActivities);
+    return uniqueCategories.map(cat => ({
+      id: cat,
+      slug: cat,
+      name: formatCategoryName(cat)
+    }));
+  }, [allActivities]);
+
+  // Get unique cities based on selected region
+  const availableCities = useMemo(() => {
+    const filteredByRegion = selectedRegion === "all" 
+      ? allActivities 
+      : allActivities.filter(a => a.regionSlug === selectedRegion);
+    
+    return getUniqueCities(filteredByRegion).map(city => ({
+      id: city.slug,
+      slug: city.slug,
+      name: city.name
+    }));
+  }, [allActivities, selectedRegion]);
 
   // Dynamic Regions from Header
   const flattenedInternationalRegions = useMemo(() => {
@@ -216,33 +85,34 @@ export default function ActivitiesListingClient({ regionSlug }) {
     return [...(domesticRegions || []), ...flattenedInternationalRegions];
   }, [selectedLocationType, domesticRegions, flattenedInternationalRegions]);
 
-  // Reset selected region when location type changes
+  // Reset selected region and city when location type changes
   useEffect(() => {
-    setSelectedRegion("all");
-  }, [selectedLocationType]);
+    if (!regionSlug) {
+      setSelectedRegion("all");
+    }
+    setSelectedCity("all");
+  }, [selectedLocationType, regionSlug]);
 
+  // Reset city when region changes
+  useEffect(() => {
+    setSelectedCity("all");
+  }, [selectedRegion]);
+
+  // Filter activities
   const filteredActivities = useMemo(() => {
-    return activities.filter(activity => {
-      const matchesCategory = selectedCategory === "all" || activity.category === selectedCategory;
-      
-      let matchesLocation = true;
-      if (selectedLocationType === "International") matchesLocation = activity.isInternational;
-      if (selectedLocationType === "Domestic") matchesLocation = !activity.isInternational;
-
-      const matchesRegion = selectedRegion === "all" || activity.regionName === selectedRegion;
-
-      const matchesSearch = activity.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                           activity.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           activity.destinations.some(d => d.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      return matchesCategory && matchesLocation && matchesRegion && matchesSearch;
+    return filterActivities(allActivities, {
+      category: selectedCategory,
+      locationType: selectedLocationType,
+      region: selectedRegion,
+      city: selectedCity,
+      searchTerm
     });
-  }, [selectedCategory, selectedLocationType, selectedRegion, searchTerm]);
+  }, [allActivities, selectedCategory, selectedLocationType, selectedRegion, selectedCity, searchTerm]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-brand-green to-green-900 text-white pt-40 pb-24 lg:pt-64 lg:pb-40 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-brand-green to-green-900 text-white pt-32 pb-16 lg:pt-48 lg:pb-24 relative overflow-hidden">
         <Container>
           <Link href={regionSlug ? `/packages/${regionSlug}` : "/packages"}>
             <Button 
@@ -278,31 +148,91 @@ export default function ActivitiesListingClient({ regionSlug }) {
       </div>
 
       {/* Main Content */}
-      <Container className="py-12 md:py-20">
-        <div className="space-y-6 mb-12">
+      <Container className="py-8 md:py-12">
+        {/* Overview Section - Positioned Above Filters */}
+        <div className="mb-8 md:mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-stretch">
+            {/* Left Column: Overview Text */}
+            <div className="lg:col-span-2 relative pl-6 border-l-4 border-brand-green flex flex-col justify-center">
+              <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 tracking-tight">
+                {selectedRegion !== "all" ? `Experience ${regionName}` : "Curated Experiences"}
+              </h2>
+              <div className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">
+                <p>
+                  {selectedRegion !== "all" 
+                    ? `Discover the soul of ${regionName} through our handpicked collection of activities. Whether you're seeking adrenaline-pumping adventures, deep cultural immersions, or tranquil moments of reflection, our experiences are designed to connect you deeply with the local heritage and natural beauty of this magnificent region. Each activity is carefully selected to provide an authentic perspective and create lasting memories.`
+                    : "Welcome to our global collection of curated activities. At Bayard Vacations, we believe that travel is about more than just visiting a place—it's about the stories you create and the connections you make. Explore our diverse range of experiences across international and domestic destinations, each carefully selected to ensure your journey is nothing short of extraordinary."
+                  }
+                </p>
+              </div>
+            </div>
+
+            {/* Right Column: Quick Highlights Sidebar */}
+            <div className="lg:col-span-1 bg-slate-50 rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm h-full flex flex-col justify-center">
+              <h4 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
+                {selectedRegion !== "all" ? `${regionName} Highlights` : "Why Bayard?"}
+              </h4>
+              <ul className="space-y-5">
+                {[
+                  { icon: Compass, label: "Expert Local Guides", desc: "Native insights & storytelling" },
+                  { icon: Package, label: "Tailored Packages", desc: "Unique curated itineraries" },
+                  { icon: Star, label: "Premium Service", desc: "Veth-vetted luxury standards" },
+                  { icon: MapPin, label: "Iconic Locations", desc: "Best-in-class destinations" }
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-brand-green shadow-sm border border-slate-100 shrink-0">
+                      <item.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-slate-900 leading-tight">{item.label}</p>
+                      <p className="text-xs font-semibold text-slate-500 mt-0.5">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="sticky top-[80px] z-[50] bg-white/80 backdrop-blur-md pt-2 pb-1 -mx-4 px-4 mb-8 rounded-2xl transition-all duration-300 shadow-sm border border-slate-50">
           {/* Filter Toolbar */}
           <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
             
-            {/* Destinations Label */}
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Destinations:</span>
-            </div>
+
 
             {/* Single Row: Destinations, Search, and Travel Type */}
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center mb-6">
               {/* Destinations Dropdown */}
-              <div className="w-full lg:w-auto lg:min-w-[250px]">
-                <select 
-                  onChange={(e) => setSelectedRegion(e.target.value)}
-                  className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
-                  value={selectedRegion}
-                >
-                  <option value="all">Discover All Regions</option>
-                  {availableRegions.map(region => (
-                    <option key={region.id} value={region.name}>{region.name}</option>
-                  ))}
-                </select>
-              </div>
+              {!regionSlug && (
+                <div className="w-full lg:w-auto lg:min-w-[250px]">
+                  <select 
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
+                    value={selectedRegion}
+                  >
+                    <option value="all">Discover All Regions</option>
+                    {availableRegions.map(region => (
+                      <option key={region.id} value={region.slug}>{region.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Cities Dropdown - Show when region is selected */}
+              {availableCities.length > 0 && (
+                <div className="w-full lg:w-auto lg:min-w-[200px]">
+                  <select 
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
+                    value={selectedCity}
+                  >
+                    <option value="all">All Cities</option>
+                    {availableCities.map(city => (
+                      <option key={city.id} value={city.slug}>{city.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Search Bar */}
               <div className="relative w-full lg:flex-1">
@@ -317,41 +247,43 @@ export default function ActivitiesListingClient({ regionSlug }) {
               </div>
 
               {/* Travel Type */}
-              <div className="inline-flex p-1 bg-gray-100 rounded-full w-fit">
-                <button
-                  onClick={() => setSelectedLocationType("all")}
-                  className={cn(
-                    "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
-                    selectedLocationType === "all"
-                      ? "gradient-btn text-white shadow-md"
-                      : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
-                  )}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setSelectedLocationType("International")}
-                  className={cn(
-                    "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
-                    selectedLocationType === "International"
-                      ? "gradient-btn text-white shadow-md"
-                      : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
-                  )}
-                >
-                  International
-                </button>
-                <button
-                  onClick={() => setSelectedLocationType("Domestic")}
-                  className={cn(
-                    "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
-                    selectedLocationType === "Domestic"
-                      ? "gradient-btn text-white shadow-md"
-                      : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
-                  )}
-                >
-                  Domestic
-                </button>
-              </div>
+              {!regionSlug && (
+                <div className="inline-flex p-1 bg-gray-100 rounded-full w-fit">
+                  <button
+                    onClick={() => setSelectedLocationType("all")}
+                    className={cn(
+                      "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
+                      selectedLocationType === "all"
+                        ? "gradient-btn text-white shadow-md"
+                        : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
+                    )}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setSelectedLocationType("International")}
+                    className={cn(
+                      "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
+                      selectedLocationType === "International"
+                        ? "gradient-btn text-white shadow-md"
+                        : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
+                    )}
+                  >
+                    International
+                  </button>
+                  <button
+                    onClick={() => setSelectedLocationType("Domestic")}
+                    className={cn(
+                      "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
+                      selectedLocationType === "Domestic"
+                        ? "gradient-btn text-white shadow-md"
+                        : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
+                    )}
+                  >
+                    Domestic
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Collections */}
@@ -368,16 +300,9 @@ export default function ActivitiesListingClient({ regionSlug }) {
                 >
                   All Activities
                 </button>
-                {[
-                  { slug: "water-sports", text: "Water Sports" },
-                  { slug: "adventure", text: "Adventure" },
-                  { slug: "nature", text: "Nature" },
-                  { slug: "active", text: "Active" },
-                  { slug: "culture", text: "Culture" },
-                  { slug: "cultural", text: "Cultural" }
-                ].map((category) => (
+                {categories.map((category) => (
                   <button
-                    key={category.slug}
+                    key={category.id}
                     onClick={() => setSelectedCategory(category.slug)}
                     className={cn(
                       "px-5 py-2 rounded-full text-sm font-bold transition-all",
@@ -386,81 +311,99 @@ export default function ActivitiesListingClient({ regionSlug }) {
                         : "bg-white text-[#0146b3] border-2 border-gray-200 hover:border-[#0146b3]"
                     )}
                   >
-                    {category.text}
+                    {category.name}
                   </button>
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* Active Filter Indicator */}
-          {(selectedCategory !== "all" || selectedLocationType !== "all" || selectedRegion !== "all" || searchTerm) && (
-            <div className="flex items-center gap-3 text-sm text-slate-500 font-bold animate-in fade-in slide-in-from-left-4 duration-300">
-              <span className="uppercase text-[10px] tracking-widest text-slate-400">Filtered By:</span>
-              <div className="flex flex-wrap gap-2">
-                {selectedLocationType !== "all" && (
-                  <span className="px-3 py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[10px] font-black uppercase">{selectedLocationType}</span>
-                )}
-                {selectedCategory !== "all" && (
-                  <span className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-lg text-[10px] font-black uppercase">{selectedCategory}</span>
-                )}
-                {selectedRegion !== "all" && (
-                  <span className="px-3 py-1 bg-slate-800 text-white rounded-lg text-[10px] font-black uppercase">{selectedRegion}</span>
-                )}
-                {searchTerm && (
-                  <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase">"{searchTerm}"</span>
-                )}
+            
+            {/* Active Filter Indicator - Moved Inside for tighter gap */}
+            {(selectedCategory !== "all" || selectedLocationType !== "all" || selectedRegion !== "all" || selectedCity !== "all" || searchTerm) && (
+              <div className="flex items-center gap-3 text-sm text-slate-500 font-bold mt-6 pt-5 border-t border-slate-100 animate-in fade-in slide-in-from-left-4 duration-300">
+                <span className="uppercase text-[10px] tracking-widest text-slate-400">Filtered By:</span>
+                <div className="flex flex-wrap gap-2 flex-1">
+                  {selectedLocationType !== "all" && (
+                    <span className="px-3 py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[10px] font-black uppercase">{selectedLocationType}</span>
+                  )}
+                  {selectedCategory !== "all" && (
+                    <span className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-lg text-[10px] font-black uppercase">{selectedCategory}</span>
+                  )}
+                  {selectedRegion !== "all" && (
+                    <span className="px-3 py-1 bg-slate-800 text-white rounded-lg text-[10px] font-black uppercase">{selectedRegion}</span>
+                  )}
+                  {selectedCity !== "all" && (
+                    <span className="px-3 py-1 bg-purple-600 text-white rounded-lg text-[10px] font-black uppercase">{selectedCity}</span>
+                  )}
+                  {searchTerm && (
+                    <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase">"{searchTerm}"</span>
+                  )}
+                </div>
                 <button 
                   onClick={() => {
                     setSelectedCategory("all");
                     setSelectedLocationType("all");
                     setSelectedRegion("all");
+                    setSelectedCity("all");
                     setSearchTerm("");
                   }}
-                  className="text-[#0146b3] hover:underline text-[10px] font-black uppercase ml-2"
+                  className="text-brand-red hover:underline text-[10px] font-black uppercase px-2 py-1 rounded-md hover:bg-red-50 transition-colors"
                 >
                   Reset All
                 </button>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Activities Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredActivities.map((activity, index) => (
-            <motion.div
-              key={activity.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <ActivityCard 
-                data={{
-                  name: activity.title,
-                  badge: activity.category,
-                  title: activity.title,
-                  description: activity.description,
-                  image: activity.image,
-                  icon: activity.icon,
-                  isPopular: true,
-                  highlightsTitle: "Recommended Locations:",
-                  highlights: activity.destinations,
-                  relatedPackages: activity.packages,
-                  regionName: activity.regionName,
-                  regionSlug: activity.regionSlug
-                }}
-                hoverGradient="from-brand-green/95 to-emerald-900"
-                ctaLabel="Learn More"
-                onCtaClick={() => router.push(`/activities/${regionSlug || "azerbaijan"}/${activity.slug}`)}
-                secondaryCtaLabel={`Explore ${activity.regionName}`}
-                onSecondaryCtaClick={() => router.push(`/packages/${activity.regionSlug}`)}
-              />
-            </motion.div>
-          ))}
-        </div>
+        {activitiesLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 text-brand-green animate-spin mx-auto mb-4" />
+              <p className="text-lg text-slate-600 font-medium">Loading activities...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredActivities.map((activity, index) => (
+              <motion.div
+                key={activity.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <ActivityCard 
+                  data={{
+                    name: activity.title,
+                    badge: activity.badge || formatCategoryName(activity.category),
+                    title: activity.title,
+                    description: activity.description,
+                    image: activity.image,
+                    icon: activity.icon,
+                    isPopular: activity.isPopular,
+                    highlightsTitle: "What's Included:",
+                    highlights: activity.highlights?.slice(0, 3) || [
+                      "Professional guide & equipment",
+                      "Safety briefing & insurance",
+                      "Transport & refreshments"
+                    ],
+                    cityName: activity.cityName,
+                    regionName: activity.regionName,
+                    regionSlug: activity.regionSlug
+                  }}
+                  hoverGradient="from-brand-green/95 to-emerald-900"
+                  ctaLabel="Learn More"
+                  onCtaClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
+                  onCardClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
+                  secondaryCtaLabel={`Explore ${activity.regionName}`}
+                  onSecondaryCtaClick={() => router.push(`/packages/${activity.regionSlug}`)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
 
-        {filteredActivities.length === 0 && (
+        {!activitiesLoading && filteredActivities.length === 0 && (
           <div className="text-center py-20">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 mb-6">
               <Search className="w-8 h-8 text-slate-400" />
