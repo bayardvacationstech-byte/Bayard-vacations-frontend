@@ -531,6 +531,7 @@ export default function MobileNavbar() {
                      pathname === "/about" || 
                      pathname === "/faq" || 
                      pathname === "/login" || 
+                     pathname?.startsWith("/why-choose") ||
                      pathname?.startsWith("/blogs") ||
                      pathname?.startsWith("/packages/");
   const showGradient = !isHeroPage || !atTop || isMenuActive || isSearchActive;

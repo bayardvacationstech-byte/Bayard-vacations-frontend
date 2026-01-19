@@ -87,12 +87,12 @@ const HighlightsSection = ({ packageData }) => {
 
   // Journey data for flowchart
   const journeyData = [
-    { city: "ROME", days: "DAY 1-3", icon: "🏛️", color: "teal-600" },
-    { city: "FLORENCE", days: "DAY 4-5", icon: "🎨", color: "slate-400" },
-    { city: "PISA", days: "DAY 6", icon: "🗼", color: "rose-600" },
-    { city: "VENICE", days: "DAY 7-9", icon: "🚤", color: "slate-400" },
-    { city: "MILAN", days: "DAY 10-11", icon: "🏙️", color: "blue-600" },
-    { city: "NAPLES", days: "DAY 12-13", icon: "🍕", color: "orange-600" }
+    { city: "ROME", days: "DAY 1-3", icon: "🏛️", color: "teal-600", bg: "bg-teal-600", border: "border-l-teal-600" },
+    { city: "FLORENCE", days: "DAY 4-5", icon: "🎨", color: "slate-400", bg: "bg-slate-400", border: "border-l-slate-400" },
+    { city: "PISA", days: "DAY 6", icon: "🗼", color: "rose-600", bg: "bg-rose-600", border: "border-l-rose-600" },
+    { city: "VENICE", days: "DAY 7-9", icon: "🚤", color: "slate-400", bg: "bg-slate-400", border: "border-l-slate-400" },
+    { city: "MILAN", days: "DAY 10-11", icon: "🏙️", color: "blue-600", bg: "bg-blue-600", border: "border-l-blue-600" },
+    { city: "NAPLES", days: "DAY 12-13", icon: "🍕", color: "orange-600", bg: "bg-orange-600", border: "border-l-orange-600" }
   ];
 
   const toggleExpand = (index) => {
@@ -121,7 +121,7 @@ const HighlightsSection = ({ packageData }) => {
       {/* Horizontal Scrollable Cards */}
       <div className="relative">
         {/* Right Fade Indicator - More prominent to show scrollability */}
-        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-white via-white/90 to-transparent pointer-events-none z-10"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/90 to-transparent pointer-events-none z-10 hidden md:block"></div>
         
         <div className="overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 pb-2 scrollbar-hide">
         <div className="flex gap-4">
@@ -135,7 +135,7 @@ const HighlightsSection = ({ packageData }) => {
             return (
               <div 
                 key={index} 
-                className="flex-shrink-0 w-[280px] sm:w-[280px] md:w-[300px] lg:w-[280px] bg-slate-50 rounded-2xl p-4 border border-slate-100 hover:shadow-md transition-all"
+                className="flex-shrink-0 w-[230px] sm:w-[230px] md:w-[300px] lg:w-[280px] bg-slate-50 rounded-2xl p-4 border border-slate-100 hover:shadow-md transition-all"
               >
                 {/* City Header */}
                 <div className="mb-3 pb-2 border-b border-slate-200">
@@ -183,8 +183,8 @@ const HighlightsSection = ({ packageData }) => {
       </div>
 
       <div className="mt-6 pt-5 border-t border-slate-200">
-        <div className="max-w-md mx-auto bg-brand-blue rounded-xl py-1.5 px-6 mb-3">
-          <h3 className="text-white text-sm md:text-lg font-black text-center tracking-wide uppercase">
+        <div className="max-w-xs mx-auto bg-brand-blue rounded-full py-2 px-8 mb-3 shadow-md border border-white/10">
+          <h3 className="text-white text-[12px] md:text-sm font-black text-center tracking-widest uppercase">
             Journey Overview
           </h3>
         </div>
@@ -208,20 +208,25 @@ const HighlightsSection = ({ packageData }) => {
             <div className="flex items-center justify-start md:justify-center gap-2 min-w-max px-2">
             {journeyData.map((journey, index) => (
               <React.Fragment key={index}>
-                {/* City Circle */}
-                <div className="flex flex-col items-center">
-                  <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full border-3 border-${journey.color} bg-white flex flex-col items-center justify-center shadow-md`}>
-                    <span className="text-lg md:text-xl">{journey.icon}</span>
-                    <span className="text-[9px] md:text-[10px] font-black text-slate-900">{journey.city}</span>
-                    <span className="text-[7px] md:text-[8px] text-slate-500 font-medium">{journey.days}</span>
+                {/* City Card Node */}
+                <div className="flex flex-col items-center flex-shrink-0">
+                  <div className="relative group">
+                    <div className={`absolute -top-1 left-1/2 -translate-x-1/2 w-8 h-1 ${journey.bg} rounded-full z-10`} />
+                    <div className="w-20 h-24 md:w-24 md:h-28 rounded-2xl border-2 border-slate-100 bg-white flex flex-col items-center justify-center shadow-lg shadow-slate-200/50 group-hover:border-brand-blue/30 transition-all duration-300">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                        <span className="text-xl md:text-2xl">{journey.icon}</span>
+                      </div>
+                      <span className="text-[10px] md:text-[11px] font-black text-slate-900 uppercase tracking-tighter">{journey.city}</span>
+                      <span className="text-[8px] md:text-[9px] text-brand-blue font-bold mt-1 px-2 py-0.5 bg-brand-blue/5 rounded-full">{journey.days}</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Arrow - Only if not the last item */}
                 {index < journeyData.length - 1 && (
-                  <div className="flex items-center">
-                    <div className={`w-6 md:w-8 h-0.5 bg-${journey.color}`}></div>
-                    <div className={`w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] border-l-${journey.color}`}></div>
+                  <div className="flex items-center flex-shrink-0">
+                    <div className={`w-6 md:w-8 h-0.5 ${journey.bg}`}></div>
+                    <div className={`w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] ${journey.border}`}></div>
                   </div>
                 )}
               </React.Fragment>

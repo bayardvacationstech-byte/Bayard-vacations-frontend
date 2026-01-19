@@ -17,16 +17,23 @@ import {
   PhoneCall,
   UserCheck
 } from "lucide-react";
+import Container from "@/components/ui/Container";
 
 const EssentialInfoSection = ({ packageData }) => {
   const isThailand = packageData?.region?.toLowerCase().includes('thailand') || true; // Defaulting to Thailand info as per reference
 
   return (
-    <div id="essential-info" className="hidden md:block space-y-8 md:space-y-12">
+    <div id="essential-info" className="hidden md:block relative bg-white py-12 md:py-16 overflow-hidden rounded-3xl border border-slate-100 shadow-sm mt-6 mb-6">
+      {/* Decorative Blurs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
+
+      <Container className="relative z-10">
+        <div className="space-y-8 md:space-y-12">
       
 
       {/* 2. Packing Checklist */}
-      <div className="bg-white rounded-[32px] p-6 md:p-10 border border-slate-100 shadow-sm relative overflow-hidden group">
+      <div className="bg-white rounded-[32px] p-4 md:p-6 border border-slate-100 shadow-sm relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -166,31 +173,8 @@ const EssentialInfoSection = ({ packageData }) => {
         </div>
       </div>
 
-      {/* 4. Final Checklist Countdown */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm">
-        <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-3">
-          <UserCheck className="w-6 h-6 text-brand-blue" /> Departure Checklist
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            <span className="text-[10px] font-black text-slate-400 uppercase">2 Weeks Before</span>
-            <p className="text-xs font-bold text-slate-900 mt-1">Check Passport Validity</p>
-          </div>
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            <span className="text-[10px] font-black text-slate-400 uppercase">1 Week Before</span>
-            <p className="text-xs font-bold text-slate-900 mt-1">Notify Bank of Travel</p>
-          </div>
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            <span className="text-[10px] font-black text-slate-400 uppercase">3 Days Before</span>
-            <p className="text-xs font-bold text-slate-900 mt-1">Confirm All Bookings</p>
-          </div>
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            <span className="text-[10px] font-black text-slate-400 uppercase">1 Day Before</span>
-            <p className="text-xs font-bold text-slate-900 mt-1">Final Luggage Check</p>
-          </div>
         </div>
-      </div>
-
+      </Container>
     </div>
   );
 };

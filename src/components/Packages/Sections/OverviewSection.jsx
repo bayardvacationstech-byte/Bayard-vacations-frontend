@@ -21,17 +21,17 @@ const OverviewSection = ({ packageData }) => {
     : dummyHighlights;
 
   return (
-    <div className="space-y-4 mb-4">
+    <div className="space-y-4">
 
       {/* 2. Quick Facts & About Section */}
-      <div className="bg-white rounded-3xl py-3 md:py-6 px-3 md:px-8 border border-slate-100 shadow-sm relative overflow-hidden">
+      <div className="bg-white rounded-3xl py-2 md:py-4 px-3 md:px-8 border border-slate-100 shadow-sm relative overflow-hidden">
         <div className="absolute left-0 top-5 md:top-6 w-1 h-10 bg-brand-blue rounded-r-full" />
         <h2 className="text-lg md:text-2xl font-black text-slate-900 mb-3 tracking-tight">
           Package <span className="text-brand-blue">Overview</span>
         </h2>
         
         {/* Quick Facts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8 md:gap-x-12 mb-4 pb-4 border-b border-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8 md:gap-x-12 mb-2 pb-4 border-b border-slate-100">
           <div className="flex items-center justify-between group">
             <span className="text-slate-500 font-bold text-sm group-hover:text-brand-blue transition-colors">Activity Location:</span>
             <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">{packageData?.region || "Exotic Destination"}</span>

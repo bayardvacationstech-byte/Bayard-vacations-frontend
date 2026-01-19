@@ -157,11 +157,11 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section id="faq" className="relative py-8 md:py-16 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-0">
+    <section id="faq" className="relative py-8 md:py-10 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-4 md:mb-4">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -170,7 +170,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-6"
+          className="text-center mb-3"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full mb-4 uppercase tracking-widest text-[10px]">
             <MessageCircle className="w-3.5 h-3.5 text-brand-blue" />
@@ -222,7 +222,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mt-6 md:mt-12"
+          className="mt-4 md:mt-8"
         >
           <div className="relative overflow-hidden rounded-3xl">
             <div className="absolute inset-0 bg-brand-blue/5 backdrop-blur-sm" />

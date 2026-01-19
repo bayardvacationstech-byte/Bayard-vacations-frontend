@@ -13,7 +13,6 @@ import PremiumBookNowForm from "@/components/Forms/BookNowForm/PremiumBookNowFor
 import OverviewSection from "./Sections/OverviewSection";
 import ItinerarySection from "./Sections/ItinerarySection";
 import InclusionsSection from "./Sections/InclusionsSection";
-import EssentialInfoSection from "./Sections/EssentialInfoSection";
 import HighlightsSection from "./Sections/HighlightsSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
@@ -43,8 +42,7 @@ const PackagesClient = () => {
     { id: "overview", label: "Overview" },
     { id: "itinerary", label: "Itinerary" },
     { id: "hotels-section", label: "Stay" },
-    { id: "inclusions", label: "Inclusions" },
-    { id: "essential-info", label: "Travel Info" },
+    { id: "inclusions", label: "Inclusions & Info" },
     { id: "faq", label: "FAQ" },
   ];
 
@@ -128,7 +126,7 @@ const PackagesClient = () => {
           }
 
           // 2. Scroll Spy Logic
-          const scrollPosition = scrollY + 150; 
+          const scrollPosition = scrollY + 200; // Aligned with scroll-mt-48 (192px)
           
           let foundSection = activeSectionRef.current;
           
@@ -136,9 +134,12 @@ const PackagesClient = () => {
           for (const section of sections) {
              const element = sectionElements[section.id] || document.getElementById(section.id);
              if (element) {
-               const { offsetTop, offsetHeight } = element;
+               // Use getBoundingClientRect for absolute trigger point
+               const rect = element.getBoundingClientRect();
+               const top = rect.top + scrollY;
+               const height = rect.height;
                
-               if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+               if (scrollPosition >= top && scrollPosition < top + height) {
                  foundSection = section.id;
                  break;
                }
@@ -254,64 +255,47 @@ const PackagesClient = () => {
         packageData={packageData} 
       />
 
+      {/* 2. Highlights Section - Before Navbar */}
+      <Container className="pt-8 md:pt-4">
+        <HighlightsSection packageData={packageData} />
+      </Container>
+      
       {/* Sticky Navigation - Outside overflow wrapper */}
       <PackageNavigation 
           activeSection={activeSection} 
           onScrollToSection={scrollToSection} 
           sections={sections}
+          isBottomBarVisible={showStickyBar}
       />
 
       {/* Two Column Layout Wrapper - Outside overflow constraint */}
-      <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-4 md:pt-16">
+      <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-4 md:pt-22">
         {/* Main Content Column with Overflow Control */}
         <div className="w-full c-lg:w-[75%]">
-          {/* Package Highlights - New Section */}
-          <div className="mb-8 md:mb-12">
-            <HighlightsSection packageData={packageData} />
-          </div>
-
-          {/* Main Content Wrapper with Gradient and Overflow Control */}
-          <div className="relative pb-12 w-full overflow-x-hidden">
-            {/* Package Details Content */}
-            <div className="mt-0 px-0">
-              <div className="space-y-6 md:space-y-12">
-                <div id="overview" className="scroll-mt-48">
-                  <OverviewSection packageData={packageData} />
-                </div>
-                
-                <div id="itinerary" className="scroll-mt-48">
-                  <ItinerarySection packageData={packageData} />
-                </div>
-
-                <div id="stay" className="scroll-mt-48">
-                  <PackageHotels packageData={packageData} />
-                </div>
-
-
-
-                <div id="inclusions" className="scroll-mt-48">
-                  <InclusionsSection packageData={packageData} />
-                </div>
-
-                <div id="essential-info" className="hidden md:block scroll-mt-48">
-                  <EssentialInfoSection packageData={packageData} />
-                </div>
-                
-                <div id="faq" className="scroll-mt-48">
-                  <PremiumFaq 
-                    content={packageData?.faq} 
-                    regionName={packageData?.region} 
-                  />
-                </div>
-
-                {/* Related Packages - Moved inside stack for tighter spacing */}
-                {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
-                  <div id="related-packages" className="scroll-mt-48">
-                    <ItineraryFooter relatedPackages={filteredRelatedPackages} />
-                  </div>
-                )}
+          {/* Scroll IDs and Section Content */}
+          <div className="space-y-6 md:space-y-8">
+            {/* Overview Section - Content below navbar */}
+            <div id="overview" className="scroll-mt-48 space-y-6 md:space-y-8">
+              
+              {/* Main Content Wrapper with Gradient and Overflow Control for inner parts */}
+              <div className="relative pb-4 w-full overflow-x-hidden">
+                <OverviewSection packageData={packageData} />
               </div>
             </div>
+            
+            <div id="itinerary" className="scroll-mt-48">
+              <ItinerarySection packageData={packageData} />
+            </div>
+
+            <div id="hotels-section" className="scroll-mt-48">
+              <PackageHotels packageData={packageData} />
+            </div>
+
+            <div id="inclusions" className="scroll-mt-48">
+              <InclusionsSection packageData={packageData} />
+            </div>
+
+            
           </div>
         </div>
 
@@ -438,8 +422,18 @@ const PackagesClient = () => {
           </div>
         </div>
       </Container>
-
-        <WhyBayardVacations />
+      
+      {/* Full Width Sections - FAQ onwards */}
+      <div id="faq" className="scroll-mt-48">
+        <PremiumFaq 
+        content={packageData?.faq} 
+        regionName={packageData?.region} 
+      />
+      </div>
+      {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
+        <ItineraryFooter relatedPackages={filteredRelatedPackages} />
+      )}
+      <WhyBayardVacations />
 
 
 
@@ -449,7 +443,7 @@ const PackagesClient = () => {
 
       {/* Compact Sticky Bottom Bar - Mobile Only */}
       <div 
-        className={`c-lg:hidden fixed bottom-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`c-lg:hidden fixed bottom-[60px] left-0 right-0 z-50 transition-all duration-500 ${
           showStickyBar ? 'translate-y-0' : 'translate-y-full'
         }`}
       >

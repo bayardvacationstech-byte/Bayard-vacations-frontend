@@ -157,8 +157,8 @@ const PackageHero = ({ packageData }) => {
                   whileTap={{ scale: 0.95 }}
                   className={`relative w-20 h-20 shrink-0 rounded-2xl overflow-hidden border-2 transition-all duration-300 snap-center ${
                     index === currentImageIndex
-                      ? "border-brand-blue ring-4 ring-brand-blue/10 scale-105"
-                      : "border-white/5 opacity-40"
+                      ? "border-yellow-400 ring-4 ring-yellow-400/20"
+                      : "border-white/20"
                   }`}
                 >
                   <Image
@@ -257,8 +257,8 @@ const PackageHero = ({ packageData }) => {
                     onClick={() => handleThumbnailClick(index)}
                     className={`relative lg:w-32 lg:h-32 rounded-[2.5rem] overflow-hidden border-2 transition-all duration-300 ${
                       index === currentImageIndex
-                        ? "border-brand-blue ring-4 ring-brand-blue/10 scale-105"
-                        : "border-white/5 opacity-40 hover:opacity-100"
+                        ? "border-yellow-400 ring-4 ring-yellow-400/20"
+                        : "border-white/20 hover:border-white/40"
                     }`}
                   >
                     <Image

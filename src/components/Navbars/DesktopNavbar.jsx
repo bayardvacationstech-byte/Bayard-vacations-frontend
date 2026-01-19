@@ -43,6 +43,7 @@ const DesktopNavbar = () => {
                      pathname === "/about" || 
                      pathname === "/faq" || 
                      pathname === "/login" ||
+                     pathname?.startsWith("/why-choose") ||
                      pathname?.startsWith("/blogs") ||
                      pathname?.startsWith("/packages/");
 

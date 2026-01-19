@@ -1,18 +1,25 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const PackageNavigation = ({ activeSection, onScrollToSection, sections = [] }) => {
+const PackageNavigation = ({ activeSection, onScrollToSection, sections = [], isBottomBarVisible }) => {
 
   return (
-    <div className="sticky top-[80px] md:top-[90px] z-40 py-4 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-center">
-          <div className="relative inline-flex">
+    <div className={cn(
+      "z-40 transition-all duration-500",
+      "fixed md:sticky",
+      "bottom-0 md:top-[90px] md:bottom-auto",
+      "left-0 right-0 px-0 pb-0 md:px-2 md:py-4",
+      "h-[60px] md:h-auto"
+    )}>
+      <div className="w-full h-full md:w-auto md:h-auto md:max-w-7xl mx-auto px-0 md:px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center h-full">
+          <div className="relative flex w-full h-full md:w-auto md:h-auto md:inline-flex">
             {/* Glossy Background for the entire bar */}
-            <div className="absolute inset-0 bg-white/60 backdrop-blur-xl rounded-full border border-white/40 shadow-sm" />
+            <div className="absolute inset-0 bg-white md:bg-white/80 md:backdrop-blur-xl rounded-none md:rounded-full border-t border-slate-200/80 md:border shadow-none md:shadow-md" />
             
-            <div className="relative flex items-center gap-2 p-1.5 rounded-full overflow-x-auto scrollbar-hide max-w-[calc(100vw-32px)] md:max-w-max">
+            <div className="relative flex items-center justify-start md:justify-center gap-2 p-1.5 px-4 md:px-1.5 rounded-none md:rounded-full overflow-x-auto scrollbar-hide w-full md:w-auto md:max-w-max">
               {sections.map((section) => (
                 <button
                   key={section.id}

@@ -31,9 +31,9 @@ const ItinerarySection = ({ packageData }) => {
   };
 
   return (
-    <div id="itinerary" className="bg-white rounded-3xl py-4 md:py-6 px-3 md:px-6 scroll-mt-48 mb-4 border border-slate-100 shadow-sm">
+    <div id="itinerary" className="bg-white rounded-3xl py-3 md:py-5 px-3 md:px-6 scroll-mt-48 border border-slate-100 shadow-sm">
       {/* Standard Header Block - Above Split Layout */}
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6">
         <div className="flex-1 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full text-[9px] md:text-[10px] font-bold text-orange-600 border border-orange-100 mb-2 md:mb-4 uppercase tracking-widest">
             <span className="text-xs">🗺️</span> Journey Workflow
@@ -74,7 +74,7 @@ const ItinerarySection = ({ packageData }) => {
           {packageData?.itineraries?.map((day, index) => (
             <div
               key={index}
-              className="relative pl-0 md:pl-20 pb-8 last:pb-0"
+              className="relative pl-0 md:pl-20 pb-4 last:pb-0"
             >
               {/* Timeline Node - Desktop Only */}
               <div className="hidden md:block absolute left-0 top-0">
@@ -96,23 +96,23 @@ const ItinerarySection = ({ packageData }) => {
                     className="w-full text-left relative p-3.5 md:p-6 flex items-center justify-between gap-3 md:gap-4 transition-colors hover:bg-white/5"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                         {/* Mobile Day Indicator */}
                         <div className="md:hidden flex items-center gap-1.5 px-2 py-0.5 bg-brand-blue rounded-md text-[10px] font-black text-white uppercase tracking-tighter">
                           Day {(index + 1).toString().padStart(2, "0")}
                         </div>
                         
                         {/* Location badge */}
-                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-brand-green/5 rounded-full text-[10px] md:text-xs font-bold text-brand-green border border-brand-green/20">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-brand-green/10 rounded-full text-[10px] md:text-xs font-black text-brand-green border border-brand-green/20 shrink-0">
                           <span className="w-1 h-1 bg-brand-green rounded-full" />
                           {cities[index % cities.length] || "Destination"}
                         </div>
+
+                        {/* Title */}
+                        <h5 className={`text-base md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
+                          {day.title}
+                        </h5>
                       </div>
-                      
-                      {/* Title */}
-                      <h5 className={`text-base md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
-                        {day.title}
-                      </h5>
                     </div>
                     
                     {/* Expand/Collapse Icon */}
