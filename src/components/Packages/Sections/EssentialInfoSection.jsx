@@ -17,16 +17,23 @@ import {
   PhoneCall,
   UserCheck
 } from "lucide-react";
+import Container from "@/components/ui/Container";
 
 const EssentialInfoSection = ({ packageData }) => {
   const isThailand = packageData?.region?.toLowerCase().includes('thailand') || true; // Defaulting to Thailand info as per reference
 
   return (
-    <div id="essential-info" className="space-y-8 md:space-y-12">
+    <div id="essential-info" className="hidden md:block relative bg-white py-12 md:py-16 overflow-hidden rounded-3xl border border-slate-100 shadow-sm mt-6 mb-6">
+      {/* Decorative Blurs */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
+
+      <Container className="relative z-10">
+        <div className="space-y-8 md:space-y-12">
       
 
       {/* 2. Packing Checklist */}
-      <div className="bg-white rounded-[32px] p-6 md:p-10 border border-slate-100 shadow-sm relative overflow-hidden group">
+      <div className="bg-white rounded-[32px] p-4 md:p-6 border border-slate-100 shadow-sm relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -124,56 +131,50 @@ const EssentialInfoSection = ({ packageData }) => {
             <Wallet className="w-6 h-6 text-emerald-600" /> Money & Expenses
           </h3>
           <div className="space-y-5">
-            <div className="p-5 bg-emerald-50 rounded-2xl border border-emerald-100 text-center">
-              <p className="text-xs text-emerald-700 font-bold mb-1 uppercase tracking-widest">Local Currency</p>
-              <h4 className="text-2xl font-black text-emerald-900">Thai Baht (฿ THB)</h4>
-              <p className="text-[10px] text-emerald-600 font-bold mt-1">1 USD ≈ 33-36 THB</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                  <Wallet className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">Local Currency</h4>
+                  <p className="text-xs text-slate-500 font-medium">1 USD ≈ 33-36 THB</p>
+                </div>
+              </div>
+              <span className="text-lg font-black text-emerald-900">Thai Baht (฿ THB)</span>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                <h5 className="text-[10px] font-black text-slate-400 uppercase mb-2">Daily Budget</h5>
-                <p className="text-sm font-black text-slate-900">$50-100 <span className="text-[10px] font-medium text-slate-500">/day</span></p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                  <Briefcase className="w-5 h-5 text-slate-600" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">Daily Budget</h4>
+                  <p className="text-xs text-slate-500 font-medium">Per person estimate</p>
+                </div>
               </div>
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                <h5 className="text-[10px] font-black text-slate-400 uppercase mb-2">Tipping</h5>
-                <p className="text-sm font-black text-slate-900">10% <span className="text-[10px] font-medium text-slate-500">Appreciated</span></p>
-              </div>
+              <span className="text-lg font-black text-slate-900">$50-100 <span className="text-xs font-medium text-slate-500">/day</span></span>
             </div>
-
-            <div className="flex gap-4 p-4 items-start">
-               <Info className="w-5 h-5 text-slate-400 shrink-0 mt-0.5" />
-               <p className="text-[11px] text-slate-500 font-medium leading-relaxed">Carry smaller Baht notes for local markets and tips. ATMs are widely available but charging fees apply to foreign cards.</p>
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                  <HeartPulse className="w-5 h-5 text-slate-600" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">Tipping</h4>
+                  <p className="text-xs text-slate-500 font-medium">Service gratuity</p>
+                </div>
+              </div>
+              <span className="text-lg font-black text-slate-900">10% <span className="text-xs font-medium text-slate-500">Appreciated</span></span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. Final Checklist Countdown */}
-      <div className="bg-gradient-to-br from-brand-blue to-blue-700 rounded-3xl p-6 md:p-8 text-white relative shadow-xl shadow-brand-blue/20">
-        <h3 className="text-xl font-black mb-6 flex items-center gap-3">
-          <UserCheck className="w-6 h-6" /> Departure Checklist
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
-            <span className="text-[10px] font-black opacity-60 uppercase">2 Weeks Before</span>
-            <p className="text-xs font-bold mt-1">Check Passport Validity</p>
-          </div>
-          <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
-            <span className="text-[10px] font-black opacity-60 uppercase">1 Week Before</span>
-            <p className="text-xs font-bold mt-1">Notify Bank of Travel</p>
-          </div>
-          <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
-            <span className="text-[10px] font-black opacity-60 uppercase">3 Days Before</span>
-            <p className="text-xs font-bold mt-1">Confirm All Bookings</p>
-          </div>
-          <div className="p-4 bg-white/10 rounded-2xl border border-white/10">
-            <span className="text-[10px] font-black opacity-60 uppercase">1 Day Before</span>
-            <p className="text-xs font-bold mt-1">Final Luggage Check</p>
-          </div>
         </div>
-      </div>
-
+      </Container>
     </div>
   );
 };

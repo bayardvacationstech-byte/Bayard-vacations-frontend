@@ -36,6 +36,7 @@ import { useRegionFactSheet } from "@/hooks/regions";
 const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
   const [mounted, setMounted] = React.useState(false);
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isDescExpanded, setIsDescExpanded] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
@@ -210,9 +211,20 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                 {factSheetData?.details?.hero?.subtitle || whyChooseData?.details?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
               </p>
               
-              <p className="text-slate-600 text-sm lg:text-base leading-relaxed max-w-xl">
-                {factSheetData?.details?.history?.description || whyChooseData?.details?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
-              </p>
+              <div className="relative">
+                <p className={cn(
+                  "text-slate-600 text-sm lg:text-base leading-relaxed max-w-xl transition-all duration-300",
+                  !isDescExpanded && "line-clamp-3"
+                )}>
+                  {factSheetData?.details?.history?.description || whyChooseData?.details?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
+                </p>
+                <button
+                  onClick={() => setIsDescExpanded(!isDescExpanded)}
+                  className="text-blue-600 text-xs font-bold uppercase tracking-wider mt-2 hover:text-blue-700 transition-colors"
+                >
+                  {isDescExpanded ? "Read Less" : "Read More"}
+                </button>
+              </div>
             </div>
           </motion.div>
 

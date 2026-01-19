@@ -1,7 +1,8 @@
 import ActivitiesListingClient from "@/components/Activities/ActivitiesListingClient";
+import { getRegions } from "@/utils/firebase";
 
 export async function generateMetadata({ params }) {
-  const { region } = params;
+  const { region } = await params;
   const regionName = region
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -13,8 +14,11 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function ActivitiesListingPage({ params }) {
-  const { region } = params;
+export default async function ActivitiesListingPage({ params }) {
+  const { region } = await params;
+  
+  // Fetch regions on server to avoid hydration mismatch
+  const initialRegions = await getRegions();
 
-  return <ActivitiesListingClient regionSlug={region} />;
+  return <ActivitiesListingClient regionSlug={region} initialRegions={initialRegions} />;
 }

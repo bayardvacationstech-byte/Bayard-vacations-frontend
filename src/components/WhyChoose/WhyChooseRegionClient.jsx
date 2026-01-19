@@ -23,6 +23,7 @@ import {
   Mountain,
   ChevronUp,
   ChevronRight,
+  ArrowRight,
   Info,
   X
 } from "lucide-react";
@@ -38,6 +39,10 @@ import { useWhyChooseRegion } from "@/hooks/regions/useWhyChooseRegion";
 export default function WhyChooseRegionClient({ regionSlug }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [selectedGallery, setSelectedGallery] = useState({ title: "", images: [] });
+  const [isDescExpanded, setIsDescExpanded] = useState(false); // New state for hero description
+  const [expandedHighlights, setExpandedHighlights] = useState({}); // State for individual highlights
+  const [expandedFacts, setExpandedFacts] = useState({}); // State for individual facts lists
+  const [expandedReasons, setExpandedReasons] = useState({}); // State for Why Visit reasons
   const regionName = regionSlug
     ?.split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -142,7 +147,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
       <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="relative h-[60vh] md:h-[80vh] overflow-hidden">
+      <div className="relative min-h-[60vh] md:min-h-[80vh]">
         <Image
           src={regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage || "/img/default-region.jpg"}
           alt={regionName || "Region Gallery"}
@@ -152,18 +157,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
         
-        <Container className="relative h-full flex flex-col justify-between py-8 md:py-12">
-          {/* Back Button */}
-          <Link href={`/packages/${regionSlug}`}>
-            <Button 
-              variant="ghost" 
-              className="text-white hover:bg-white/20 backdrop-blur-sm gap-2 font-bold"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to {regionName} Portfolios
-            </Button>
-          </Link>
-
+        <Container className="relative h-full flex flex-col justify-between pt-24 md:pt-32 pb-8 md:pb-12">
           {/* Hero Content */}
           <div className="space-y-4 md:space-y-6">
             <motion.div
@@ -178,20 +172,31 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </span>
               </div>
               
-              <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white leading-tight tracking-tighter">
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif text-white leading-tight tracking-tighter">
                 Why Choose<br />
                 <span className="text-amber-400">{regionName}?</span>
               </h1>
             </motion.div>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl font-medium leading-relaxed drop-shadow-lg"
+              className="relative"
             >
-              {regionDataProcessed?.overview}
-            </motion.p>
+              <p className={cn(
+                "text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl font-medium leading-relaxed drop-shadow-lg transition-all duration-300",
+                !isDescExpanded && "line-clamp-3"
+              )}>
+                {regionDataProcessed?.overview}
+              </p>
+              <button
+                onClick={() => setIsDescExpanded(!isDescExpanded)}
+                className="text-amber-400 text-sm font-bold uppercase tracking-wider mt-4 hover:text-amber-300 transition-colors"
+              >
+                {isDescExpanded ? "View Less" : "View More"}
+              </button>
+            </motion.div>
           </div>
         </Container>
       </div>
@@ -205,10 +210,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <span className="inline-block px-4 py-2 bg-brand-blue/10 text-brand-blue rounded-full text-sm font-black uppercase tracking-widest mb-3 md:mb-4">
                  {regionDataProcessed.whyVisitSection?.subTitle || "Discovery"}
               </span>
-              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-5xl font-serif text-slate-900 mb-4 tracking-tight leading-tight">
                 {regionDataProcessed.whyVisitSection?.mainTitle || `Why Visit ${regionName}?`}
               </h2>
-              <p className="text-lg md:text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed mb-8">
+              <p className="text-lg md:text-xl text-slate-600 max-w-5xl mx-auto leading-relaxed mb-8">
                 {regionDataProcessed.whyVisitSection?.mainDescription || `Discover the magic of ${regionName}, where every corner tells a story and every experience creates lasting memories.`}
               </p>
             </div>
@@ -218,18 +223,24 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               {(regionDataProcessed.whyVisitSection?.reasons || []).map((reason, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-5 items-start">
                   <div className="flex-shrink-0">
-                    <div className={cn(
-                      "w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br rounded-2xl flex items-center justify-center text-white shadow-md",
-                      reason.gradient || "from-brand-blue to-blue-600"
-                    )}>
-                      <reason.icon className="w-6 h-6 md:w-8 md:h-8" />
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-brand-blue to-blue-700 rounded-2xl flex items-center justify-center text-white shadow-lg border border-white/10">
+                      <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
                     </div>
                   </div>
-                  <div className="flex-1">
+                   <div className="flex-1">
                     <h3 className="text-lg md:text-xl font-black text-slate-900 mb-1 leading-tight">{reason.title}</h3>
-                    <p className="text-sm md:text-sm text-slate-600 leading-relaxed">
+                    <p className={cn(
+                      "text-sm md:text-sm text-slate-600 leading-relaxed transition-all duration-300",
+                      !expandedReasons[idx] && "line-clamp-4"
+                    )}>
                       {reason.description}
                     </p>
+                    <button
+                      onClick={() => setExpandedReasons(prev => ({ ...prev, [idx]: !prev[idx] }))}
+                      className="text-brand-blue text-[10px] md:text-xs font-bold uppercase tracking-wider mt-2 hover:underline"
+                    >
+                      {expandedReasons[idx] ? "View Less" : "Read More"}
+                    </button>
                   </div>
                 </div>
               ))}
@@ -251,8 +262,8 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
         {/* Highlights Section Header */}
         {highlights.length > 0 && (
-          <div className="text-center mb-8 md:mb-12">
-             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight">Key Highlights</h2>
+          <div className="text-center mb-6 md:mb-8">
+             <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-2 tracking-tight">Key Highlights</h2>
              <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto">
                Deep dive into the unique experiences that define {regionName}.
              </p>
@@ -331,18 +342,27 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                             <Sparkles className="w-3 md:w-3.5 h-3 md:h-3.5" />
                             Highlight No. 0{index + 1}
                          </div>
-                         <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 md:mb-3 tracking-tight leading-tight">
+                         <h2 className="text-3xl md:text-4xl font-serif text-slate-900 mb-1 tracking-tight leading-tight">
                             {highlight.title}
                          </h2>
-                         <p className="text-lg md:text-xl font-bold text-slate-500 mb-3 md:mb-4 leading-tight">
+                         <p className="text-lg md:text-xl font-bold text-slate-500 mb-2 leading-tight">
                             {highlight.description}
                          </p>
                          
-                         <div className="h-1 w-12 md:w-16 bg-brand-gold rounded-full mb-3 md:mb-4" />
+                         <div className="h-1 w-12 md:w-16 bg-brand-gold rounded-full mb-3" />
                          
-                         <p className="text-sm md:text-base text-slate-600 leading-relaxed mb-4 md:mb-6">
+                         <p className={cn(
+                            "text-sm md:text-base text-slate-600 leading-relaxed transition-all duration-300",
+                            !expandedHighlights[index] && "line-clamp-3"
+                         )}>
                             {highlight.detailedContent || "Explore the profound beauty and cultural depth of this region through its most iconic landmarks and natural wonders."}
                          </p>
+                         <button
+                            onClick={() => setExpandedHighlights(prev => ({ ...prev, [index]: !prev[index] }))}
+                            className="text-brand-blue text-xs font-bold uppercase tracking-wider mb-4 md:mb-6 hover:underline"
+                         >
+                            {expandedHighlights[index] ? "View Less" : "Read More"}
+                         </button>
  
                          {highlight.keyFacts && (
                            <div className="space-y-3 md:space-y-4">
@@ -350,16 +370,24 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                                 <Info className="w-3.5 h-3.5 text-brand-blue" />
                                 Facts & Information
                               </h4>
-                              <div className="grid grid-cols-1 gap-2 md:gap-3">
-                                {highlight.keyFacts.map((fact, idx) => (
-                                  <div key={idx} className="flex gap-3 p-3 md:p-3.5 bg-white border border-slate-100 rounded-xl md:rounded-2xl shadow-sm">
-                                    <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue font-bold text-xs">
-                                      {idx + 1}
-                                    </div>
-                                    <p className="text-xs md:text-sm text-slate-600 font-medium leading-tight">{fact}</p>
-                                  </div>
-                                ))}
-                              </div>
+                               <div className="grid grid-cols-1 gap-2 md:gap-3">
+                                 {(expandedFacts[index] ? highlight.keyFacts : highlight.keyFacts.slice(0, 3)).map((fact, idx) => (
+                                   <div key={idx} className="flex gap-3 p-3 md:p-3.5 bg-white border border-slate-100 rounded-xl md:rounded-2xl shadow-sm">
+                                     <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue font-bold text-xs">
+                                       {idx + 1}
+                                     </div>
+                                     <p className="text-xs md:text-sm text-slate-600 font-medium leading-tight">{fact}</p>
+                                   </div>
+                                 ))}
+                               </div>
+                               {highlight.keyFacts.length > 3 && (
+                                 <button
+                                   onClick={() => setExpandedFacts(prev => ({ ...prev, [index]: !prev[index] }))}
+                                   className="text-brand-blue text-[10px] md:text-xs font-bold uppercase tracking-wider mt-2 hover:underline flex items-center gap-1"
+                                 >
+                                   {expandedFacts[index] ? "Show Less" : `Show More (${highlight.keyFacts.length - 3} more)`}
+                                 </button>
+                               )}
                            </div>
                          )}
                       </motion.div>
@@ -433,7 +461,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                   <span className="inline-block px-4 py-2 bg-amber-500/10 text-amber-600 rounded-full text-sm font-black uppercase tracking-widest mb-6">
                     Hidden Gems
                   </span>
-                  <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Regional Secrets</h2>
+                  <h2 className="text-3xl md:text-5xl font-serif text-slate-900 mb-4 tracking-tight">Regional Secrets</h2>
                   <p className="text-xl text-slate-600 font-medium">The hidden dimensions of {regionName}'s majesty.</p>
                 </div>
 
@@ -456,7 +484,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         {activities.length > 0 && (
           <section className="mb-10 md:mb-16">
             <div className="text-center mb-8">
-               <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight">Top Activities</h2>
+               <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-3 tracking-tight">Top Activities</h2>
                <p className="text-lg text-slate-500 font-medium">Iconic experiences you simply cannot miss.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

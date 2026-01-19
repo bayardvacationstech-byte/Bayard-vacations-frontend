@@ -157,38 +157,32 @@ const PackageHotels = ({ packageData }) => {
           {hotel.name}
         </h3>
 
-        {/* 2. Room Type - Inline */}
-        <div className="flex items-center gap-2 mb-3">
-          <Bed className="w-3.5 h-3.5 text-brand-blue flex-shrink-0" />
-          <p className="text-xs font-bold text-slate-700 line-clamp-1">{hotel.roomType || "Signature Premium Suite"}</p>
+        {/* 2. Room Type & City - Justified */}
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Bed className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+            <p className="text-[11px] font-bold text-slate-800 truncate">{hotel.roomType || "Premium Room"}</p>
+          </div>
+          <div className="flex items-center gap-1.5 shrink-0 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
+            <MapPin className="w-3 h-3 text-brand-blue" />
+            <p className="text-[10px] font-black text-brand-blue uppercase tracking-tight capitalize">{hotel.place?.name || hotel.city || "City Center"}</p>
+          </div>
         </div>
 
-        {/* 3. Amenities - Compact */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {(hotel.amenities || ["Wifi", "Breakfast", "AC", "Laundry"]).slice(0, 4).map((amenity, i) => (
-            <div key={i} className="flex items-center gap-1 px-2 py-1 bg-slate-50 border border-slate-100 rounded-lg">
-              {getAmenityIcon(amenity)}
-              <span className="text-[9px] font-bold text-slate-700">{amenity}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* 4. Location - Compact */}
-        <div className="flex items-start gap-2 mb-4">
-          <MapPin className="w-3.5 h-3.5 text-brand-blue flex-shrink-0 mt-0.5" />
-          <p className="text-[10px] font-semibold text-slate-600 leading-relaxed line-clamp-2">
-            {hotel.location || "Centrally located with easy access to attractions."}
+        {/* 3. Location Description - Brief */}
+        <div className="mb-5">
+          <p className="text-[10px] font-semibold text-slate-500 leading-relaxed line-clamp-2">
+            {hotel.location || "Prime location with easy access to key attractions."}
           </p>
         </div>
 
-        {/* CTA - Compact */}
+        {/* CTA - Centered Button */}
         <div className="mt-auto">
           <Button
             asChild
-            variant="outline"
-            className="w-full border-brand-blue/40 text-brand-blue hover:bg-brand-blue hover:text-white rounded-xl py-3 font-bold text-[10px] uppercase tracking-widest transition-all active:scale-95"
+            className="w-full bg-white hover:bg-brand-blue border-2 border-brand-blue text-brand-blue hover:text-white rounded-xl py-2.5 font-bold text-[10px] uppercase tracking-widest transition-all duration-300 active:scale-95 shadow-sm"
           >
-            <a href={hotel.googleUrl || "#"} target="_blank" rel="noopener noreferrer">
+            <a href={hotel.googleUrl || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
               View on Map
             </a>
           </Button>
@@ -198,7 +192,7 @@ const PackageHotels = ({ packageData }) => {
   );
 
   return (
-    <section id="hotels-section" className="relative bg-transparent text-slate-900 py-10 md:py-16 overflow-hidden scroll-mt-24 mb-4">
+    <section id="hotels-section" className="relative bg-transparent text-slate-900 py-4 md:py-8 overflow-hidden scroll-mt-24">
       {/* Subtle Background Decoration */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse"></div>
@@ -206,29 +200,29 @@ const PackageHotels = ({ packageData }) => {
       </div>
       <Container>
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-8 relative">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-4 relative">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue mb-4 uppercase tracking-widest">
               <span className="text-xs">🏨</span> Handpicked Stays
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-              Premium <span className="text-brand-blue">Accommodations</span>
+              Where You'll <span className="text-brand-blue">Stay</span>
             </h2>
-            <p className="text-base font-medium text-slate-500 leading-relaxed">
-              Discover our curated selection of top-rated hotels. Filter by rating to find your perfect stay.
-            </p>
           </div>
 
           {/* New Filter UI - Horizontal Scroll on Mobile */}
-          <div className="flex overflow-x-auto lg:flex-wrap gap-2 p-1.5 bg-slate-50 rounded-2xl border border-slate-100 w-full lg:w-fit scrollbar-hide">
-            {categories.sort().map((cat) => (
+          <div className="flex overflow-x-auto lg:flex-wrap gap-2 p-1.5 bg-white rounded-2xl border-2 border-slate-100 w-full lg:w-fit scrollbar-hide">
+            {categories.sort((a, b) => {
+              const order = ['twostar', 'threestar', 'fourstar', 'fivestar'];
+              return order.indexOf(a) - order.indexOf(b);
+            }).map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap ${
+                className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap border-2 ${
                   selectedCategory === cat
-                    ? "bg-brand-blue text-white shadow-lg shadow-brand-blue/20"
-                    : "text-slate-500 hover:text-brand-blue hover:bg-white"
+                    ? "bg-brand-blue text-white border-brand-blue shadow-lg shadow-brand-blue/20"
+                    : "text-slate-500 hover:text-brand-blue hover:bg-slate-50 border-transparent hover:border-slate-200"
                 }`}
               >
                 {categoryLabels[cat] || cat}
@@ -242,7 +236,7 @@ const PackageHotels = ({ packageData }) => {
           <Swiper
             modules={[Pagination, FreeMode]}
             pagination={{ clickable: true }}
-            slidesPerView={1.1}
+            slidesPerView={1.22}
             spaceBetween={16}
             freeMode={true}
             className="!pb-12"

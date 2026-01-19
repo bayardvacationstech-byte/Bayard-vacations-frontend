@@ -15,7 +15,10 @@ const ItineraryFooter = ({ relatedPackages }) => {
   if (!relatedPackages || relatedPackages.length === 0) return null;
 
   return (
-    <section className="bg-white py-8 border border-slate-100 shadow-sm rounded-3xl mb-8" id="related-packages">
+    <section className="bg-white py-8 md:py-10 border border-slate-100 shadow-sm rounded-3xl mb-4 md:mb-4 relative overflow-hidden" id="related-packages">
+      {/* Decorative Blur similar to WhyBayardVacations */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
       <Container>
         <div className="mb-8">
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
@@ -37,19 +40,20 @@ const ItineraryFooter = ({ relatedPackages }) => {
 
           <Swiper
             modules={[Navigation, Autoplay]}
-            spaceBetween={24}
-            slidesPerView={1}
+            spaceBetween={16}
+            slidesPerView={1.2}
+            centeredSlides={true}
             navigation={{
               prevEl: ".swiper-button-prev-pkg",
               nextEl: ".swiper-button-next-pkg",
             }}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
             breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-              1440: { slidesPerView: 4 },
+              640: { slidesPerView: 2, spaceBetween: 24, centeredSlides: false },
+              1024: { slidesPerView: 3, spaceBetween: 24, centeredSlides: false },
+              1440: { slidesPerView: 4, spaceBetween: 24, centeredSlides: false },
             }}
-            className="pb-12"
+            className="pb-6 md:pb-12"
           >
             {relatedPackages.map((item) => (
               <SwiperSlide key={item.id} className="h-full">
