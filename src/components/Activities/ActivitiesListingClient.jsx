@@ -13,7 +13,9 @@ import {
   MapPin,
   Package,
   Star,
-  Loader2
+  Loader2,
+  Calendar,
+  CheckCircle
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
@@ -29,9 +31,9 @@ import {
   filterActivities 
 } from "@/utils/activityUtils";
 
-export default function ActivitiesListingClient({ regionSlug }) {
+export default function ActivitiesListingClient({ regionSlug, initialRegions = [] }) {
   const router = useRouter();
-  const { domesticRegions, internationalRegions, regionIsLoading } = useRegionsData();
+  const { domesticRegions, internationalRegions, regionIsLoading } = useRegionsData(initialRegions);
   const { activities: allActivities, loading: activitiesLoading } = useActivitiesData(regionSlug);
   
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -45,28 +47,40 @@ export default function ActivitiesListingClient({ regionSlug }) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-  // Get unique categories from activities
+  // Get unique categories from activities based on selected region and location type
   const categories = useMemo(() => {
-    const uniqueCategories = getUniqueCategories(allActivities);
+    const filteredByBasics = allActivities.filter(a => {
+      const regionMatch = selectedRegion === "all" || a.regionSlug === selectedRegion;
+      const typeMatch = selectedLocationType === "all" || 
+        (selectedLocationType === "International" && a.isInternational) ||
+        (selectedLocationType === "Domestic" && !a.isInternational);
+      return regionMatch && typeMatch;
+    });
+    
+    const uniqueCategories = getUniqueCategories(filteredByBasics);
     return uniqueCategories.map(cat => ({
       id: cat,
       slug: cat,
       name: formatCategoryName(cat)
     }));
-  }, [allActivities]);
+  }, [allActivities, selectedRegion, selectedLocationType]);
 
-  // Get unique cities based on selected region
+  // Get unique cities based on selected region and location type
   const availableCities = useMemo(() => {
-    const filteredByRegion = selectedRegion === "all" 
-      ? allActivities 
-      : allActivities.filter(a => a.regionSlug === selectedRegion);
+    const filteredByBasics = allActivities.filter(a => {
+      const regionMatch = selectedRegion === "all" || a.regionSlug === selectedRegion;
+      const typeMatch = selectedLocationType === "all" || 
+        (selectedLocationType === "International" && a.isInternational) ||
+        (selectedLocationType === "Domestic" && !a.isInternational);
+      return regionMatch && typeMatch;
+    });
     
-    return getUniqueCities(filteredByRegion).map(city => ({
+    return getUniqueCities(filteredByBasics).map(city => ({
       id: city.slug,
       slug: city.slug,
       name: city.name
     }));
-  }, [allActivities, selectedRegion]);
+  }, [allActivities, selectedRegion, selectedLocationType]);
 
   // Dynamic Regions from Header
   const flattenedInternationalRegions = useMemo(() => {
@@ -93,9 +107,10 @@ export default function ActivitiesListingClient({ regionSlug }) {
     setSelectedCity("all");
   }, [selectedLocationType, regionSlug]);
 
-  // Reset city when region changes
+  // Reset city and category when region changes
   useEffect(() => {
     setSelectedCity("all");
+    setSelectedCategory("all");
   }, [selectedRegion]);
 
   // Filter activities
@@ -151,45 +166,123 @@ export default function ActivitiesListingClient({ regionSlug }) {
       <Container className="py-8 md:py-12">
         {/* Overview Section - Positioned Above Filters */}
         <div className="mb-8 md:mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-stretch">
-            {/* Left Column: Overview Text */}
-            <div className="lg:col-span-2 relative pl-6 border-l-4 border-brand-green flex flex-col justify-center">
-              <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 tracking-tight">
-                {selectedRegion !== "all" ? `Experience ${regionName}` : "Curated Experiences"}
-              </h2>
-              <div className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">
-                <p>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
+            {/* Left Column: Header Area (60% width on desktop) */}
+            <div className="lg:col-span-3">
+              <div className="relative pl-6 border-l-4 border-brand-green py-2 mb-6">
+                <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+                  {selectedRegion !== "all" ? `Experience ${regionName}` : "Curated Experiences"}
+                </h2>
+                <div className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">
                   {selectedRegion !== "all" 
-                    ? `Discover the soul of ${regionName} through our handpicked collection of activities. Whether you're seeking adrenaline-pumping adventures, deep cultural immersions, or tranquil moments of reflection, our experiences are designed to connect you deeply with the local heritage and natural beauty of this magnificent region. Each activity is carefully selected to provide an authentic perspective and create lasting memories.`
-                    : "Welcome to our global collection of curated activities. At Bayard Vacations, we believe that travel is about more than just visiting a place—it's about the stories you create and the connections you make. Explore our diverse range of experiences across international and domestic destinations, each carefully selected to ensure your journey is nothing short of extraordinary."
+                    ? `Discover the soul of ${regionName} through our handpicked collection of activities. Whether you're seeking adrenaline-pumping adventures or deep cultural immersions, our experiences are designed to connect you deeply with the local heritage.`
+                    : "Welcome to our global collection of curated activities. At Bayard Vacations, we believe that travel is about more than just visiting a place—it's about the stories you create and the connections you make across international and domestic destinations."
                   }
-                </p>
+                </div>
               </div>
             </div>
 
-            {/* Right Column: Quick Highlights Sidebar */}
-            <div className="lg:col-span-1 bg-slate-50 rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm h-full flex flex-col justify-center">
-              <h4 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-6">
-                {selectedRegion !== "all" ? `${regionName} Highlights` : "Why Bayard?"}
-              </h4>
-              <ul className="space-y-5">
-                {[
-                  { icon: Compass, label: "Expert Local Guides", desc: "Native insights & storytelling" },
-                  { icon: Package, label: "Tailored Packages", desc: "Unique curated itineraries" },
-                  { icon: Star, label: "Premium Service", desc: "Veth-vetted luxury standards" },
-                  { icon: MapPin, label: "Iconic Locations", desc: "Best-in-class destinations" }
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-brand-green shadow-sm border border-slate-100 shrink-0">
-                      <item.icon className="w-5 h-5" />
+            {/* Right Column: Highlights Info Grid (40% width on desktop) */}
+            <div className="lg:col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-y-6 gap-x-8">
+                {selectedRegion !== "all" ? (
+                  // Region-specific Highlights
+                  <>
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 border border-blue-100 group-hover:scale-110 transition-transform">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{availableCities.length} CITIES EXPLORED</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Diverse urban gems and hidden villages awaiting your visit.</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-black text-slate-900 leading-tight">{item.label}</p>
-                      <p className="text-xs font-semibold text-slate-500 mt-0.5">{item.desc}</p>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-100 group-hover:scale-110 transition-transform">
+                        <Compass className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{filteredActivities.length} DYNAMIC ACTIVITIES</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">From high-octane adventures to spiritual retreats.</p>
+                      </div>
                     </div>
-                  </li>
-                ))}
-              </ul>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 shrink-0 border border-amber-100 group-hover:scale-110 transition-transform">
+                        <Package className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{categories.length} ACTIVITY THEMES</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Hand-vetted categories including Culture and Nature.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 shrink-0 border border-rose-100 group-hover:scale-110 transition-transform">
+                        <Star className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">PREMIUM SELECTION</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Physically verified for safety and quality standards.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 shrink-0 border border-cyan-100 group-hover:scale-110 transition-transform">
+                        <Calendar className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">OPTIMAL TRAVEL TIME</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Best experienced during seasonal festival peaks.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 shrink-0 border border-slate-100 group-hover:scale-110 transition-transform">
+                        <CheckCircle className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">EASY BOOKING PROCESS</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Seamless concierge-led service for your peace of mind.</p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  // Global Highlights
+                  <>
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 border border-blue-100 group-hover:scale-110 transition-transform">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">50+ GLOBAL DESTINATIONS</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">From the Caucasus peaks to the beaches of Bali.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0 border border-emerald-100 group-hover:scale-110 transition-transform">
+                        <Compass className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{allActivities.length} CURATED ACTIVITIES</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Our ever-expanding library of luxury experiences.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4 group">
+                      <div className="w-11 h-11 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 shrink-0 border border-amber-100 group-hover:scale-110 transition-transform">
+                        <Star className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">LUXURY VETTED STANDARDS</h3>
+                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Uncompromising standards for service and safety.</p>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -203,36 +296,20 @@ export default function ActivitiesListingClient({ regionSlug }) {
             {/* Single Row: Destinations, Search, and Travel Type */}
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center mb-6">
               {/* Destinations Dropdown */}
-              {!regionSlug && (
-                <div className="w-full lg:w-auto lg:min-w-[250px]">
-                  <select 
-                    onChange={(e) => setSelectedRegion(e.target.value)}
-                    className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
-                    value={selectedRegion}
-                  >
-                    <option value="all">Discover All Regions</option>
-                    {availableRegions.map(region => (
-                      <option key={region.id} value={region.slug}>{region.name}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
+              <div className="w-full lg:w-auto lg:min-w-[250px]">
+                <select 
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
+                  value={selectedRegion}
+                >
+                  <option value="all">Discover All Regions</option>
+                  {availableRegions.map(region => (
+                    <option key={region.id} value={region.slug}>{region.name}</option>
+                  ))}
+                </select>
+              </div>
 
-              {/* Cities Dropdown - Show when region is selected */}
-              {availableCities.length > 0 && (
-                <div className="w-full lg:w-auto lg:min-w-[200px]">
-                  <select 
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
-                    value={selectedCity}
-                  >
-                    <option value="all">All Cities</option>
-                    {availableCities.map(city => (
-                      <option key={city.id} value={city.slug}>{city.name}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
+
 
               {/* Search Bar */}
               <div className="relative w-full lg:flex-1">
@@ -247,8 +324,7 @@ export default function ActivitiesListingClient({ regionSlug }) {
               </div>
 
               {/* Travel Type */}
-              {!regionSlug && (
-                <div className="inline-flex p-1 bg-gray-100 rounded-full w-fit">
+              <div className="inline-flex p-1 bg-gray-100 rounded-full w-fit">
                   <button
                     onClick={() => setSelectedLocationType("all")}
                     className={cn(
@@ -283,32 +359,33 @@ export default function ActivitiesListingClient({ regionSlug }) {
                     Domestic
                   </button>
                 </div>
-              )}
             </div>
 
             {/* Collections */}
-            <div>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className={cn(
-                    "px-5 py-2 rounded-full text-sm font-bold transition-all",
-                    selectedCategory === "all"
-                      ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 shadow-md"
-                      : "bg-white text-[#0146b3] border-2 border-gray-200 hover:border-[#0146b3]"
-                  )}
-                >
-                  All Activities
-                </button>
+            <div className="flex items-center gap-3">
+              {/* Sticky All Activities Button */}
+              <button
+                onClick={() => setSelectedCategory("all")}
+                className={cn(
+                  "w-[130px] py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex-shrink-0 sticky left-0 z-10 flex items-center justify-center",
+                  "bg-slate-900 text-white shadow-[4px_0_12px_-2px_rgba(0,0,0,0.15)]",
+                  selectedCategory !== "all" && "opacity-90 hover:opacity-100"
+                )}
+              >
+                All Activities
+              </button>
+              
+              {/* Scrollable Category Pills */}
+              <div className="flex gap-3 overflow-x-auto scrollbar-hide flex-1">
                 {categories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.slug)}
                     className={cn(
-                      "px-5 py-2 rounded-full text-sm font-bold transition-all",
+                      "px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex-shrink-0",
                       selectedCategory === category.slug
-                        ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 shadow-md"
-                        : "bg-white text-[#0146b3] border-2 border-gray-200 hover:border-[#0146b3]"
+                        ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 shadow-md scale-105"
+                        : "bg-white text-slate-600 border-2 border-gray-100 hover:border-yellow-400/50"
                     )}
                   >
                     {category.name}
@@ -316,6 +393,41 @@ export default function ActivitiesListingClient({ regionSlug }) {
                 ))}
               </div>
             </div>
+
+            {/* City Filter Pills - Show when cities are available */}
+            {availableCities.length > 0 && (
+              <div className="mt-4 flex items-center gap-3">
+                {/* Sticky All Cities Button */}
+                <button
+                  onClick={() => setSelectedCity("all")}
+                  className={cn(
+                    "w-[130px] py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex-shrink-0 sticky left-0 z-10 flex items-center justify-center",
+                    "bg-slate-900 text-white shadow-[4px_0_12px_-2px_rgba(0,0,0,0.15)]",
+                    selectedCity !== "all" && "opacity-90 hover:opacity-100"
+                  )}
+                >
+                  All Cities
+                </button>
+                
+                {/* Scrollable City Pills */}
+                <div className="flex gap-3 overflow-x-auto scrollbar-hide flex-1">
+                  {availableCities.map((city) => (
+                    <button
+                      key={city.id}
+                      onClick={() => setSelectedCity(city.slug)}
+                      className={cn(
+                        "px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex-shrink-0",
+                        selectedCity === city.slug
+                          ? "bg-gradient-to-r from-brand-blue to-brand-blue-hovered text-white shadow-md scale-105"
+                          : "bg-white text-slate-600 border-2 border-gray-100 hover:border-brand-blue/50"
+                      )}
+                    >
+                      {city.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             
             {/* Active Filter Indicator - Moved Inside for tighter gap */}
             {(selectedCategory !== "all" || selectedLocationType !== "all" || selectedRegion !== "all" || selectedCity !== "all" || searchTerm) && (
@@ -332,7 +444,7 @@ export default function ActivitiesListingClient({ regionSlug }) {
                     <span className="px-3 py-1 bg-slate-800 text-white rounded-lg text-[10px] font-black uppercase">{selectedRegion}</span>
                   )}
                   {selectedCity !== "all" && (
-                    <span className="px-3 py-1 bg-purple-600 text-white rounded-lg text-[10px] font-black uppercase">{selectedCity}</span>
+                    <span className="px-3 py-1 bg-brand-blue text-white rounded-lg text-[10px] font-black uppercase">{selectedCity}</span>
                   )}
                   {searchTerm && (
                     <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase">"{searchTerm}"</span>

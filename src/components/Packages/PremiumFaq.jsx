@@ -157,7 +157,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section id="faq" className="relative py-12 md:py-16 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-6">
+    <section id="faq" className="relative py-8 md:py-16 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-0">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" />
@@ -170,26 +170,16 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center mb-12"
+          className="text-center mb-6"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full mb-6 uppercase tracking-widest text-[10px]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full mb-4 uppercase tracking-widest text-[10px]">
             <MessageCircle className="w-3.5 h-3.5 text-brand-blue" />
             <span className="text-brand-blue font-bold">Got Questions?</span>
           </div>
           
-          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-3 md:mb-4 tracking-tight leading-tight px-4">
+          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-0 tracking-tight leading-tight px-4">
             Frequently Asked <span className="text-brand-blue">Questions</span>
           </h2>
-          <p className="text-slate-500 text-xs md:text-base max-w-2xl mx-auto font-medium px-6">
-            {regionName 
-              ? `Everything you need to know about traveling to ${displayName}` 
-              : "Find answers to common questions about your upcoming travel experience"
-            }
-          </p>
-          
-          <div className="flex justify-center mt-6">
-            <div className="h-1.5 w-24 bg-brand-blue rounded-full" />
-          </div>
         </motion.div>
 
         {/* FAQ Items - 2 Column Grid */}
@@ -232,7 +222,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mt-12"
+          className="mt-6 md:mt-12"
         >
           <div className="relative overflow-hidden rounded-3xl">
             <div className="absolute inset-0 bg-brand-blue/5 backdrop-blur-sm" />

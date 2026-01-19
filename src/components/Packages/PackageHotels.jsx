@@ -212,11 +212,8 @@ const PackageHotels = ({ packageData }) => {
               <span className="text-xs">🏨</span> Handpicked Stays
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-              Premium <span className="text-brand-blue">Accommodations</span>
+              Where You'll <span className="text-brand-blue">Stay</span>
             </h2>
-            <p className="text-base font-medium text-slate-500 leading-relaxed">
-              Discover our curated selection of top-rated hotels. Filter by rating to find your perfect stay.
-            </p>
           </div>
 
           {/* New Filter UI - Horizontal Scroll on Mobile */}

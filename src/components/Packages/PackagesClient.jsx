@@ -14,9 +14,9 @@ import OverviewSection from "./Sections/OverviewSection";
 import ItinerarySection from "./Sections/ItinerarySection";
 import InclusionsSection from "./Sections/InclusionsSection";
 import EssentialInfoSection from "./Sections/EssentialInfoSection";
+import HighlightsSection from "./Sections/HighlightsSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
-import PackageHighlights from "./PackageHighlights";
 import WhyBayardVacations from "./WhyBayardVacations";
 import { cn, convertAndSortHotels } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
@@ -254,8 +254,6 @@ const PackagesClient = () => {
         packageData={packageData} 
       />
 
-      <PackageHighlights packageData={packageData} />
-
       {/* Sticky Navigation - Outside overflow wrapper */}
       <PackageNavigation 
           activeSection={activeSection} 
@@ -267,11 +265,16 @@ const PackagesClient = () => {
       <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-4 md:pt-16">
         {/* Main Content Column with Overflow Control */}
         <div className="w-full c-lg:w-[75%]">
+          {/* Package Highlights - New Section */}
+          <div className="mb-8 md:mb-12">
+            <HighlightsSection packageData={packageData} />
+          </div>
+
           {/* Main Content Wrapper with Gradient and Overflow Control */}
           <div className="relative pb-12 w-full overflow-x-hidden">
             {/* Package Details Content */}
             <div className="mt-0 px-0">
-              <div className="space-y-8 md:space-y-12">
+              <div className="space-y-6 md:space-y-12">
                 <div id="overview" className="scroll-mt-48">
                   <OverviewSection packageData={packageData} />
                 </div>
@@ -290,13 +293,23 @@ const PackagesClient = () => {
                   <InclusionsSection packageData={packageData} />
                 </div>
 
-                <div id="essential-info" className="scroll-mt-48">
+                <div id="essential-info" className="hidden md:block scroll-mt-48">
                   <EssentialInfoSection packageData={packageData} />
                 </div>
                 
                 <div id="faq" className="scroll-mt-48">
-                  <PremiumFaq faqData={packageData?.faq} />
+                  <PremiumFaq 
+                    content={packageData?.faq} 
+                    regionName={packageData?.region} 
+                  />
                 </div>
+
+                {/* Related Packages - Moved inside stack for tighter spacing */}
+                {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
+                  <div id="related-packages" className="scroll-mt-48">
+                    <ItineraryFooter relatedPackages={filteredRelatedPackages} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -426,25 +439,8 @@ const PackagesClient = () => {
         </div>
       </Container>
 
-      <Container className="pt-0 pb-12">
-           {/* Related Packages */}
-           {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
-             <div className="mb-8">
-               <ItineraryFooter relatedPackages={filteredRelatedPackages} />
-             </div>
-           )}
+        <WhyBayardVacations />
 
-           {/* 5. FAQ Section - Answer Questions */}
-           <div id="faq" className="mb-16">
-             <PremiumFaq 
-               content={packageData?.faq} 
-               regionName={packageData?.region} 
-             />
-           </div>
-
-           {/* 6. Why Choose Bayard Vacations - Final Section */}
-           <WhyBayardVacations />
-      </Container>
 
 
 

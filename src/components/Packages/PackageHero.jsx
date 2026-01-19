@@ -143,13 +143,13 @@ const PackageHero = ({ packageData }) => {
         </div>
 
         {/* Content Panel (Below image on mobile, Side on desktop) */}
-        <div className="relative w-full lg:w-2/5 lg:ml-auto flex flex-col p-6 md:p-12 lg:pt-32 pb-16 lg:pb-12 z-10 lg:bg-[#030712] border-l border-white/5">
+        <div className="relative w-full lg:w-2/5 lg:ml-auto flex flex-col p-6 md:p-12 lg:pt-32 pb-8 lg:pb-12 z-10 bg-gradient-to-br from-blue-950 to-blue-900 border-l border-white/5">
           
           {/* Content Wrapper */}
-          <div className="w-full space-y-8 lg:space-y-12">
+          <div className="w-full space-y-4 lg:space-y-12">
             
             {/* Mobile-only Gallery (First in content) */}
-            <div className="lg:hidden flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x -mx-2 px-2">
+            <div className="lg:hidden flex gap-3 overflow-x-auto pb-2 scrollbar-none snap-x -mx-2 px-2 relative z-50">
               {validBannerImages.slice(0, 5).map((image, index) => (
                 <motion.button
                   key={index}
@@ -189,7 +189,7 @@ const PackageHero = ({ packageData }) => {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-4 py-2"
             >
-              <div className="w-12 h-12 bg-[#0a1a3a] rounded-xl flex items-center justify-center border border-white/5">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-800 to-blue-900 rounded-xl flex items-center justify-center border border-white/5">
                 <MapPin className="w-5 h-5 text-yellow-400" />
               </div>
               <div className="flex flex-col">
@@ -204,7 +204,7 @@ const PackageHero = ({ packageData }) => {
               animate={{ opacity: 1, y: 0 }}
               className="grid grid-cols-3 gap-3 md:gap-4"
             >
-              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
+              <div className="bg-gradient-to-br from-blue-900/60 to-blue-950/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
                 <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">Duration</p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{packageData?.nights || "3"}</span>
@@ -212,7 +212,7 @@ const PackageHero = ({ packageData }) => {
                 </div>
               </div>
 
-              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
+              <div className="bg-gradient-to-br from-blue-900/60 to-blue-950/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
                 <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">Days</p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{(packageData?.nights || 3) + 1}</span>
@@ -220,14 +220,14 @@ const PackageHero = ({ packageData }) => {
                 </div>
               </div>
 
-              <div className="bg-[#111827]/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
+              <div className="bg-gradient-to-br from-blue-900/60 to-blue-950/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
                 <p className="text-yellow-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">From</p>
                 <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">₹{Math.floor((packageData?.price || 45000) / 1000)}K</span>
               </div>
             </motion.div>
 
             {/* Content Grouping: Highlights & Desktop Thumbnails */}
-            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start pt-4">
+            <div className="hidden lg:flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start pt-4">
               {/* Highlights (Hidden on Mobile as per request) */}
               <div className="hidden lg:block flex-1">
                 <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Package Highlights</p>
@@ -250,7 +250,7 @@ const PackageHero = ({ packageData }) => {
               </div>
 
               {/* Desktop-only Thumbnail Grid */}
-              <div className="hidden lg:grid lg:grid-cols-2 gap-3 shrink-0">
+              <div className="hidden lg:grid lg:grid-cols-2 gap-3 shrink-0 relative z-50">
                 {validBannerImages.slice(0, 4).map((image, index) => (
                   <motion.button
                     key={index}
