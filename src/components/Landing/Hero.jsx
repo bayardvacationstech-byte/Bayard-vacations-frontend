@@ -196,10 +196,10 @@ const Hero = () => {
                     <div className="p-4">
                       {/* Regions */}
                       {searchResults.regions?.length > 0 && (
-                        <>
-                          <h4 className="mb-4 text-sm text-slate-500">
-                            Regions
-                          </h4>
+                          <>
+                            <p className="mb-4 text-sm text-slate-500">
+                              Regions
+                            </p>
                           <ul className="text-brand-blue mb-4">
                             {searchResults.regions.map((region, index) => (
                               <li key={index}>
@@ -222,10 +222,10 @@ const Hero = () => {
 
                       {/* Packages */}
                       {searchResults.packages?.length > 0 && (
-                        <>
-                          <h4 className="mb-4 text-sm text-slate-500">
-                            Available Packages
-                          </h4>
+                          <>
+                            <p className="mb-4 text-sm text-slate-500">
+                              Available Packages
+                            </p>
                           <ul className="text-brand-blue">
                             {searchResults.packages.map((pkg) => (
                               <li key={pkg.id}>
@@ -261,10 +261,10 @@ const Hero = () => {
                       {/* Quick Links */}
                       {!searchResults.packages?.length &&
                         !searchResults.regions?.length && (
-                          <>
-                            <h4 className="mb-2 text-sm text-slate-500">
-                              Quick Links
-                            </h4>
+                            <>
+                              <p className="mb-2 text-sm text-slate-500">
+                                Quick Links
+                              </p>
                             <ul className="text-brand-blue">
                               {TRENDING_PACKAGES.map((pkg) => (
                                 <li key={pkg}>

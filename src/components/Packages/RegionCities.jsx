@@ -205,8 +205,8 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                 }}
                 hoverGradient="from-brand-green/95 to-brand-green"
                 ctaLabel="Learn More"
-                onCtaClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
-                onCardClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
+                onCtaClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}
+                onCardClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}
               />
             </SwiperSlide>
           ))}

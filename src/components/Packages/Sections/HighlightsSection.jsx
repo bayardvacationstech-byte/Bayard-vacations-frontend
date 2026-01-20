@@ -4,95 +4,94 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 const HighlightsSection = ({ packageData }) => {
   const [expandedCards, setExpandedCards] = useState({});
 
-  // Dummy data with 8 cities to enable horizontal scrolling
+  // Static data for city highlights
   const cityActivities = [
     {
-      city: "ROME",
+      city: "HANOI ARRIVAL - CITY TOUR WITH LOCAL LUNCH (SIC)",
       activities: [
-        "Colosseum & Roman Forum",
-        "Vatican City & Museums",
-        "Trastevere Nights",
-        "Trevi Fountain Visit",
-        "Spanish Steps",
-        "Pantheon Tour"
+        "Temple of Literature: Visit Vietnam's first university, a historic Confucian temple",
+        "Ho Chi Minh Mausoleum: Explore the iconic monument and surrounding complex",
+        "Old Quarter Walking Tour: Wander through the bustling streets and traditional shops",
+        "Hoan Kiem Lake: Relax by the scenic lake and visit Ngoc Son Temple",
+        "Water Puppet Show: Experience traditional Vietnamese water puppetry"
       ]
     },
     {
-      city: "FLORENCE",
+      city: "HANOI",
       activities: [
-        "Duomo & Baptistery",
-        "Uffizi Gallery",
-        "Tuscan Day Trip",
-        "Ponte Vecchio Walk",
-        "Boboli Gardens"
+        "Hoa Lu Ancient Capital: Explore the historic temples of the Dinh and Le dynasties",
+        "Tam Coc Boat Ride: Cruise through stunning limestone karsts and rice paddies",
+        "Mua Cave Viewpoint: Climb 500 steps for panoramic views of Ninh Binh",
+        "Bich Dong Pagoda: Visit the beautiful three-level pagoda carved into limestone",
+        "Cycling Tour: Ride through scenic countryside and local villages"
       ]
     },
     {
-      city: "PISA",
+      city: "HALF DAY FANSIPAN TOUR + LUNCH",
       activities: [
-        "Leaning Tower",
-        "Piazza dei Miracoli",
-        "Ponte Vecio"
+        "Fansipan Cable Car Ride: Experience the world's longest cable car journey",
+        "Summit Exploration: Reach the 'Roof of Indochina' at 3,143 meters",
+        "Mountain Pagoda Complex: Visit beautiful spiritual sites at the summit",
+        "Panoramic Mountain Views: Enjoy breathtaking views of the Hoang Lien Son range",
+        "Photography Opportunities: Capture stunning landscapes and cloud-covered peaks"
       ]
     },
     {
-      city: "VENICE",
+      city: "DANANG",
       activities: [
-        "Grand Canal Gondola",
-        "St. Mark's Square",
-        "Doge's Palace",
-        "Rialto Bridge",
-        "Murano Island Visit"
-      ]
-    },
-    {
-      city: "MILAN",
-      activities: [
-        "Duomo di Milano",
-        "The Last Supper",
-        "Galleria Vittorio Emanuele II",
-        "Sforza Castle",
-        "Navigli District"
-      ]
-    },
-    {
-      city: "NAPLES",
-      activities: [
-        "Pompeii Ruins",
-        "Mount Vesuvius",
-        "Naples Historic Center",
-        "Pizza Making Class"
-      ]
-    },
-    {
-      city: "CINQUE TERRE",
-      activities: [
-        "Monterosso Beach",
-        "Vernazza Harbor",
-        "Hiking Trails",
-        "Local Wine Tasting"
-      ]
-    },
-    {
-      city: "AMALFI COAST",
-      activities: [
-        "Positano Village",
-        "Amalfi Cathedral",
-        "Ravello Gardens",
-        "Coastal Boat Tour",
-        "Limoncello Tasting"
+        "Marble Mountains: Explore sacred caves, pagodas, and marble stone villages",
+        "My Khe Beach: Relax on one of the world's most beautiful beaches",
+        "Dragon Bridge: Watch the spectacular fire and water show",
+        "Han River Cruise: Enjoy a scenic evening cruise with city views",
+        "Linh Ung Pagoda: Visit the iconic Lady Buddha statue overlooking the sea"
       ]
     }
   ];
 
-  // Journey data for flowchart
+  // Static data for journey overview
   const journeyData = [
-    { city: "ROME", days: "DAY 1-3", icon: "🏛️", color: "teal-600", bg: "bg-teal-600", border: "border-l-teal-600" },
-    { city: "FLORENCE", days: "DAY 4-5", icon: "🎨", color: "slate-400", bg: "bg-slate-400", border: "border-l-slate-400" },
-    { city: "PISA", days: "DAY 6", icon: "🗼", color: "rose-600", bg: "bg-rose-600", border: "border-l-rose-600" },
-    { city: "VENICE", days: "DAY 7-9", icon: "🚤", color: "slate-400", bg: "bg-slate-400", border: "border-l-slate-400" },
-    { city: "MILAN", days: "DAY 10-11", icon: "🏙️", color: "blue-600", bg: "bg-blue-600", border: "border-l-blue-600" },
-    { city: "NAPLES", days: "DAY 12-13", icon: "🍕", color: "orange-600", bg: "bg-orange-600", border: "border-l-orange-600" }
+    {
+      city: "HANOI ARRIVAL - CITY TOUR WITH LOCAL LUNCH (SIC)",
+      days: "DAY 1",
+      icon: "🏛️",
+      bg: "bg-brand-blue",
+      border: "border-l-brand-blue"
+    },
+    {
+      city: "HANOI",
+      days: "DAY 2-4",
+      icon: "🎨",
+      bg: "bg-teal-600",
+      border: "border-l-teal-600"
+    },
+    {
+      city: "HALF DAY FANSIPAN TOUR + LUNCH",
+      days: "DAY 5",
+      icon: "🗼",
+      bg: "bg-rose-600",
+      border: "border-l-rose-600"
+    },
+    {
+      city: "DANANG",
+      days: "DAY 6",
+      icon: "🚤",
+      bg: "bg-blue-600",
+      border: "border-l-blue-600"
+    },
+    {
+      city: "BA NA HILLS + GOLDEN BRIDGE + LUNCH",
+      days: "DAY 7",
+      icon: "🏙️",
+      bg: "bg-orange-600",
+      border: "border-l-orange-600"
+    },
+    {
+      city: "DEPARTURE",
+      days: "DAY 8",
+      icon: "🏞️",
+      bg: "bg-emerald-600",
+      border: "border-l-emerald-600"
+    }
   ];
 
   const toggleExpand = (index) => {
@@ -135,7 +134,7 @@ const HighlightsSection = ({ packageData }) => {
             return (
               <div 
                 key={index} 
-                className="flex-shrink-0 w-[230px] sm:w-[230px] md:w-[300px] lg:w-[280px] bg-slate-50 rounded-2xl p-4 border border-slate-100 hover:shadow-md transition-all"
+                className="flex-shrink-0 w-[230px] sm:w-[230px] md:w-[300px] lg:w-[280px] bg-slate-50 rounded-2xl p-4 border border-slate-100 hover:shadow-md transition-all flex flex-col min-h-[200px]"
               >
                 {/* City Header */}
                 <div className="mb-3 pb-2 border-b border-slate-200">
@@ -144,8 +143,8 @@ const HighlightsSection = ({ packageData }) => {
                   </h3>
                 </div>
                 
-                {/* Activities List */}
-                <div className="space-y-2">
+                {/* Activities List - Grows to fill space */}
+                <div className="space-y-2 flex-grow">
                   {displayedActivities.map((activity, actIndex) => (
                     <div key={actIndex} className="flex items-start gap-2">
                       <div className="flex-shrink-0 w-3.5 h-3.5 rounded-full border-2 border-slate-400 mt-0.5" />
@@ -156,11 +155,11 @@ const HighlightsSection = ({ packageData }) => {
                   ))}
                 </div>
 
-                {/* Read More/Less Button */}
+                {/* Read More/Less Button - Anchored to bottom */}
                 {hasMore && (
                   <button
                     onClick={() => toggleExpand(index)}
-                    className="mt-3 flex items-center gap-1 text-brand-blue hover:text-blue-700 text-xs font-semibold transition-colors"
+                    className="mt-auto pt-3 flex items-center gap-1 text-brand-blue hover:text-blue-700 text-xs font-semibold transition-colors"
                   >
                     {isExpanded ? (
                       <>

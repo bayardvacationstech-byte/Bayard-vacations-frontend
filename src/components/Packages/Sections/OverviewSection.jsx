@@ -38,7 +38,7 @@ const OverviewSection = ({ packageData }) => {
           </div>
           <div className="flex items-center justify-between group">
             <span className="text-slate-500 font-bold text-sm group-hover:text-brand-blue transition-colors">Starting Day:</span>
-            <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">{packageData?.startingDay || "Friday"}</span>
+            <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">{packageData?.startingDay || "Flexible"}</span>
           </div>
           <div className="flex items-center justify-between group">
             <span className="text-slate-500 font-bold text-sm group-hover:text-brand-blue transition-colors">Duration:</span>
@@ -46,15 +46,22 @@ const OverviewSection = ({ packageData }) => {
           </div>
           <div className="flex items-center justify-between group">
             <span className="text-slate-500 font-bold text-sm group-hover:text-brand-blue transition-colors">Hotel Category:</span>
-            <span className="text-brand-blue font-black text-sm text-right px-3 py-1 bg-brand-blue/5 rounded-lg border border-brand-blue/10">{packageData?.hotelCategory || "4-Star Premium"}</span>
+            <span className="text-brand-blue font-black text-sm text-right px-3 py-1 bg-brand-blue/5 rounded-lg border border-brand-blue/10">
+              {packageData?.hotelCategory ? (
+                packageData.hotelCategory.toLowerCase() === "threestar" ? "3-Star" :
+                packageData.hotelCategory.toLowerCase() === "fourstar" ? "4-Star" :
+                packageData.hotelCategory.toLowerCase() === "fivestar" ? "5-Star" :
+                packageData.hotelCategory
+              ) : "Premium Stay"}
+            </span>
           </div>
           <div className="flex items-center justify-between group">
             <span className="text-slate-500 font-bold text-sm group-hover:text-brand-blue transition-colors">Distance Covered:</span>
-            <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">~450 Km</span>
+            <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">{packageData?.distanceCovered || "As per Itinerary"}</span>
           </div>
           <div className="flex items-center justify-between group">
             <span className="text-slate-500 font-bold text-sm group-hover:text-brand-blue transition-colors">Meals:</span>
-            <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">All Meals Included</span>
+            <span className="text-slate-900 font-black text-sm text-right px-3 py-1 bg-slate-50 rounded-lg">{packageData?.mealsDetails || "Personalized Selection"}</span>
           </div>
         </div>
 

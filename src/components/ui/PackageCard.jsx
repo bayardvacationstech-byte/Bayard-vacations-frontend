@@ -44,16 +44,16 @@ const PackageCard = ({ item, className, isGroup = false }) => {
       ref={cardRef}
       href={href}
       className={cn(
-        "relative isolate overflow-hidden rounded-2xl sm:rounded-3xl bg-black group",
+        "block relative overflow-hidden rounded-2xl md:rounded-3xl group h-[450px] sm:h-[500px]",
         className
       )}
     >
       {/* IMAGE SECTION */}
       <div
         className="
-          relative w-full overflow-hidden
-          aspect-[3/4] sm:aspect-[3/4]
-          rounded-2xl sm:rounded-3xl
+          absolute inset-0 overflow-hidden
+          rounded-2xl md:rounded-3xl
+          bg-black
         "
       >
         <Swiper
@@ -136,32 +136,32 @@ const PackageCard = ({ item, className, isGroup = false }) => {
           bg-gradient-to-t from-black/95 via-black/80 to-transparent
           backdrop-blur-lg
           border-t-2 border-brand-blue/30
-          rounded-t-2xl sm:rounded-t-3xl
+          rounded-b-2xl md:rounded-b-3xl
         "
       >
         {/* Accent Color Bar */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-blue via-yellow-400 to-brand-blue"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-blue via-yellow-400 to-brand-blue rounded-bl-2xl md:rounded-bl-3xl"></div>
         
         <div className="relative px-4 sm:px-6 pb-2 sm:pb-4 pt-4 sm:pt-6">
           {/* REGION + DURATION */}
           <div className="mb-2 flex items-center justify-between gap-1">
             <div className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-gradient-to-r from-brand-blue/90 to-brand-blue/70 backdrop-blur-sm">
-              <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-wider text-white drop-shadow-lg">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-white drop-shadow-lg">
                 {item.region}
               </span>
             </div>
-            <span className="rounded-full bg-white/20 backdrop-blur-sm px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-[11px] font-bold text-white border border-white/30">
+            <span className="rounded-full bg-white/20 backdrop-blur-sm px-2 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-[11px] font-bold text-white border border-white/30">
               {item.days}D/{item.nights}N
             </span>
           </div>
 
           {/* TITLE - More compact on mobile */}
-          <h3 className="mb-2 sm:mb-3 line-clamp-2 text-xs sm:text-base font-black leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <h3 className="mb-2 sm:mb-3 line-clamp-2 text-[14px] sm:text-base font-black leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             {item.packageTitle}
           </h3>
 
           {/* PRICE + CTA ROW */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             {/* PRICE OR CONTACT MESSAGE */}
             {(item.offerPrice === 0 || !item.offerPrice) && (item.basePrice === 0 || !item.basePrice) ? (
               <div className="w-full sm:flex-shrink-0 sm:flex-1">
@@ -172,9 +172,9 @@ const PackageCard = ({ item, className, isGroup = false }) => {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap">
                 <div className="flex-shrink-0">
-                  <p className="text-base sm:text-xl font-black leading-none text-yellow-400 drop-shadow-lg">
+                  <p className="text-lg sm:text-xl font-black leading-none text-yellow-400 drop-shadow-lg">
                     ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                   </p>
                   {item.offerPrice > 0 && (
@@ -186,23 +186,23 @@ const PackageCard = ({ item, className, isGroup = false }) => {
 
                 {/* DISCOUNT BADGE */}
                 {item.offerPrice > 0 && item.basePrice > 0 && (
-                  <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-brand-accent to-yellow-400 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-black text-black shadow-lg">
-                    {Math.round(((item.basePrice - item.offerPrice) / item.basePrice) * 100)}% OFF
+                  <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-brand-accent to-yellow-400 px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-black text-black shadow-lg">
+                    {Math.round(((item.basePrice - item.offerPrice) / item.basePrice) * 100)}%
                   </span>
                 )}
               </div>
             )}
 
-            {/* CTA BUTTONS - Stack on very small screens */}
-            <div className="flex w-full sm:w-auto sm:flex-1 items-center gap-3 sm:gap-4">
-              <div className="flex-1 rounded-xl bg-brand-blue hover:bg-brand-blue-hovered px-2 sm:px-3 py-1.5 sm:py-2 text-center text-[9px] sm:text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
+            {/* CTA BUTTONS */}
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+              <div className="rounded-xl bg-brand-blue hover:bg-brand-blue-hovered px-3 sm:px-3 py-2 sm:py-2 text-center text-[11px] sm:text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
                 View
               </div>
 
               {!isGroup && (
                 <button
                   onClick={handleContactExpert}
-                  className="flex-shrink-0 rounded-xl bg-brand-green hover:bg-brand-green/90 px-2 sm:px-3 py-1.5 sm:py-2 text-[9px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
+                  className="flex-shrink-0 rounded-xl bg-brand-green hover:bg-brand-green/90 px-3 sm:px-3 py-2 sm:py-2 text-[11px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
                 >
                   Call
                 </button>

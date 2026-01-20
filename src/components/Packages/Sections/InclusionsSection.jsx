@@ -40,10 +40,10 @@ const InclusionsSection = ({ packageData }) => {
 
   const renderNotes = () => {
     const notes = packageData?.notes || [
-      "Standard check-in time is 14:00 hrs and check-out is 12:00 hrs.",
-      "Early check-in or late check-out is subject to availability.",
-      "Valid photo ID (Voter ID / Aadhaar / Passport) is mandatory for all travelers.",
-      "The itinerary can be shuffled depending on local weather conditions."
+      "Standard check-in time is usually 14:00 hrs and check-out is 12:00 hrs.",
+      "Early check-in or late check-out is subject to hotel availability.",
+      "Valid government photo ID is mandatory for all travelers.",
+      "Itinerary sequence may be adjusted based on local conditions or weather."
     ];
     const displayNotes = isNotesExpanded ? notes : notes.slice(0, 6);
 
@@ -83,10 +83,10 @@ const InclusionsSection = ({ packageData }) => {
 
   const renderPoints = () => {
     const points = packageData?.points || [
-      "Comfortable walking shoes are highly recommended.",
-      "Carry light woolens even in summer for chilly evenings in mountain areas.",
-      "Respect local customs and dress codes at religious sites.",
-      "Keep digital copies of all travel documents on your phone."
+      "Comfortable walking shoes are highly recommended for sightseeing.",
+      "Carry appropriate clothing for the season and specific region requirements.",
+      "Respect local customs, traditions, and dress codes at religious sites.",
+      "Maintain digital and physical copies of all your travel documents."
     ];
     const displayPoints = isPointsExpanded ? points : points.slice(0, 6);
 
@@ -261,44 +261,51 @@ const InclusionsSection = ({ packageData }) => {
       <ul className="space-y-3">
         <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
           <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-orange-500 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Water & Dining:</span> Drink bottled water only. Street food is generally safe in busy areas but choose freshly cooked meals.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-orange-500 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Temple Etiquette:</span> Remove shoes before entry. Dress modestly (knees and shoulders covered). Never touch Buddha images.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-orange-500 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Help Is Close:</span> Tourist Police: 1155. Save your hotel's contact details and keep a digital copy of your passport.</span>
+          <span><span className="font-bold text-slate-700">Safety & Ethics:</span> Always follow local laws and respect community guidelines. Keep emergency contact numbers and hotel addresses handy at all times.</span>
         </li>
       </ul>
     </div>
   );
 
-  const renderMoney = () => (
-    <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-emerald-600/20 hover:shadow-md transition-all duration-300 h-full">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-emerald-600/10 rounded-xl flex items-center justify-center">
-          <Wallet className="w-5 h-5 text-emerald-600" />
+  const getCurrencyInfo = (region) => {
+    const currencies = {
+        'thailand': { name: 'Thai Baht', symbol: '฿', rate: '1 USD ≈ 33-36 THB' },
+        'vietnam': { name: 'Vietnamese Dong', symbol: '₫', rate: '1 USD ≈ 24,000-25,000 VND' },
+        'bali': { name: 'Indonesian Rupiah', symbol: 'Rp', rate: '1 USD ≈ 15,000-16,000 IDR' },
+        'dubai': { name: 'UAE Dirham', symbol: 'AED', rate: '1 USD ≈ 3.67 AED' },
+        'singapore': { name: 'Singapore Dollar', symbol: 'S$', rate: '1 USD ≈ 1.34 SGD' },
+        'malaysia': { name: 'Malaysian Ringgit', symbol: 'RM', rate: '1 USD ≈ 4.70 MYR' }
+    };
+    return currencies[region?.toLowerCase()] || { name: 'Local Currency', symbol: '', rate: 'Check current exchange rates before travel' };
+  };
+
+  const renderMoney = () => {
+    const currency = getCurrencyInfo(packageData?.region);
+    return (
+      <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-emerald-600/20 hover:shadow-md transition-all duration-300 h-full">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-emerald-600/10 rounded-xl flex items-center justify-center">
+            <Wallet className="w-5 h-5 text-emerald-600" />
+          </div>
+          <h4 className="text-lg font-black text-slate-900 tracking-tight">Money & <span className="text-emerald-600">Expenses</span></h4>
         </div>
-        <h4 className="text-lg font-black text-slate-900 tracking-tight">Money & <span className="text-emerald-600">Expenses</span></h4>
+        <ul className="space-y-3">
+          <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
+            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
+            <span><span className="font-bold text-slate-700">Local Currency:</span> {currency.name} ({currency.symbol}). {currency.rate}</span>
+          </li>
+          <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
+            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
+            <span><span className="font-bold text-slate-700">Daily Budget:</span> Suggest budgeting for additional meals and personal expenses not covered in the package.</span>
+          </li>
+          <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
+            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
+            <span><span className="font-bold text-slate-700">Tipping:</span> Tipping is common for guides and drivers as a gesture for good service.</span>
+          </li>
+        </ul>
       </div>
-      <ul className="space-y-3">
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Local Currency:</span> Thai Baht (฿). Exchange rate: 1 USD ≈ 33-36 THB</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Daily Budget:</span> Estimate $50-100 per person per day for meals, activities, and local transport.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Tipping:</span> 10% service gratuity is appreciated but not mandatory in most establishments.</span>
-        </li>
-      </ul>
-    </div>
-  );
+    );
+  };
 
 
 

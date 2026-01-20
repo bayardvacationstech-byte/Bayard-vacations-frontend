@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Compass, 
   ArrowLeft,
@@ -15,7 +15,12 @@ import {
   Star,
   Loader2,
   Calendar,
-  CheckCircle
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  SlidersHorizontal,
+  X
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
@@ -41,6 +46,20 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
   const [selectedRegion, setSelectedRegion] = useState(regionSlug || "all");
   const [selectedCity, setSelectedCity] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  // Mobile filters state
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setIsDesktop(window.innerWidth >= 768);
+  }, []);
   
   const regionName = regionSlug
     ?.split("-")
@@ -113,6 +132,32 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
     setSelectedCategory("all");
   }, [selectedRegion]);
 
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, selectedLocationType, selectedRegion, selectedCity, searchTerm]);
+
+  // Resolve region slug for an activity (to ensure it points to a valid region page)
+  const resolveRegionSlug = (activity) => {
+    const allRegions = [...domesticRegions, ...flattenedInternationalRegions];
+    
+    // 1. Try to find a valid region from the activity data
+    const foundRegion = allRegions.find(r => 
+      r.slug === activity.regionSlug || 
+      (activity.regionName && r.name?.toLowerCase() === activity.regionName.toLowerCase())
+    );
+    if (foundRegion) return foundRegion.slug;
+
+    // 2. If no direct match, check if we are in a valid region context already
+    if (regionSlug && regionSlug !== "all") {
+      const contextRegion = allRegions.find(r => r.slug === regionSlug);
+      if (contextRegion) return contextRegion.slug;
+    }
+
+    // 3. Fallback
+    return activity.regionSlug;
+  };
+
   // Filter activities
   const filteredActivities = useMemo(() => {
     return filterActivities(allActivities, {
@@ -123,6 +168,18 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
       searchTerm
     });
   }, [allActivities, selectedCategory, selectedLocationType, selectedRegion, selectedCity, searchTerm]);
+
+  // Paginated activities
+  const totalPages = Math.ceil(filteredActivities.length / itemsPerPage);
+  const paginatedActivities = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredActivities.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredActivities, currentPage, itemsPerPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 400, behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -287,183 +344,260 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
           </div>
         </div>
 
-        <div className="sticky top-[80px] z-[50] bg-white/80 backdrop-blur-md pt-2 pb-1 -mx-4 px-4 mb-8 rounded-2xl transition-all duration-300 shadow-sm border border-slate-50">
+        <div className="sticky top-[80px] z-[50] bg-white/80 backdrop-blur-md pt-1 pb-1 -mx-4 px-4 mb-6 md:mb-8 rounded-2xl transition-all duration-300 shadow-sm border border-slate-50">
           {/* Filter Toolbar */}
-          <div className="bg-white p-6 rounded-2xl shadow-lg border border-slate-100">
-            
-
-
-            {/* Single Row: Destinations, Search, and Travel Type */}
-            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center mb-6">
-              {/* Destinations Dropdown */}
-              <div className="w-full lg:w-auto lg:min-w-[250px]">
-                <select 
-                  onChange={(e) => setSelectedRegion(e.target.value)}
-                  className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
-                  value={selectedRegion}
-                >
-                  <option value="all">Discover All Regions</option>
-                  {availableRegions.map(region => (
-                    <option key={region.id} value={region.slug}>{region.name}</option>
-                  ))}
-                </select>
-              </div>
-
-
-
-              {/* Search Bar */}
-              <div className="relative w-full lg:flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input 
-                  type="text"
-                  placeholder="Where do you want to go or what to do?..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] transition-all text-slate-700"
-                />
-              </div>
-
-              {/* Travel Type */}
-              <div className="inline-flex p-1 bg-gray-100 rounded-full w-fit">
-                  <button
-                    onClick={() => setSelectedLocationType("all")}
-                    className={cn(
-                      "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
-                      selectedLocationType === "all"
-                        ? "gradient-btn text-white shadow-md"
-                        : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
-                    )}
-                  >
-                    All
-                  </button>
-                  <button
-                    onClick={() => setSelectedLocationType("International")}
-                    className={cn(
-                      "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
-                      selectedLocationType === "International"
-                        ? "gradient-btn text-white shadow-md"
-                        : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
-                    )}
-                  >
-                    International
-                  </button>
-                  <button
-                    onClick={() => setSelectedLocationType("Domestic")}
-                    className={cn(
-                      "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
-                      selectedLocationType === "Domestic"
-                        ? "gradient-btn text-white shadow-md"
-                        : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
-                    )}
-                  >
-                    Domestic
-                  </button>
+          <div className="bg-white p-3 md:p-6 rounded-2xl shadow-lg border border-slate-100">
+            {/* Primary Toolbar Wrapper */}
+            <div className="flex flex-col gap-4">
+              {/* Row 1: Search + Desktop Filters | Mobile Search + Toggle */}
+              <div className="flex flex-row gap-2 md:gap-4 items-center">
+                {/* Search Bar (Persistent) */}
+                <div className="relative flex-1 group">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 md:w-5 md:h-5 group-focus-within:text-brand-blue transition-colors" />
+                  <input 
+                    type="text"
+                    placeholder="Search activities..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 md:pl-12 pr-4 py-2 md:py-3 rounded-xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] transition-all text-sm md:text-base text-slate-700 font-medium"
+                  />
                 </div>
-            </div>
 
-            {/* Collections */}
-            <div className="flex items-center gap-3">
-              {/* Sticky All Activities Button */}
-              <button
-                onClick={() => setSelectedCategory("all")}
-                className={cn(
-                  "w-[130px] py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex-shrink-0 sticky left-0 z-10 flex items-center justify-center",
-                  "bg-slate-900 text-white shadow-[4px_0_12px_-2px_rgba(0,0,0,0.15)]",
-                  selectedCategory !== "all" && "opacity-90 hover:opacity-100"
-                )}
-              >
-                All Activities
-              </button>
-              
-              {/* Scrollable Category Pills */}
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide flex-1">
-                {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.slug)}
-                    className={cn(
-                      "px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex-shrink-0",
-                      selectedCategory === category.slug
-                        ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 shadow-md scale-105"
-                        : "bg-white text-slate-600 border-2 border-gray-100 hover:border-yellow-400/50"
-                    )}
+                {/* Region Dropdown (Desktop Only) */}
+                <div className="hidden md:block min-w-[200px] lg:min-w-[250px]">
+                  <select 
+                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    className="w-full bg-slate-50 text-slate-700 text-sm font-bold px-4 py-[11px] rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
+                    value={selectedRegion}
                   >
-                    {category.name}
-                  </button>
-                ))}
-              </div>
-            </div>
+                    <option value="all">Discover All Regions</option>
+                    {availableRegions.map(region => (
+                      <option key={region.id} value={region.slug}>{region.name}</option>
+                    ))}
+                  </select>
+                </div>
 
-            {/* City Filter Pills - Show when cities are available */}
-            {availableCities.length > 0 && (
-              <div className="mt-4 flex items-center gap-3">
-                {/* Sticky All Cities Button */}
-                <button
-                  onClick={() => setSelectedCity("all")}
+                {/* Destination Type Buttons (Large Desktop Only) */}
+                <div className="hidden lg:block">
+                  <div className="inline-flex p-1 bg-slate-100 rounded-full h-[46px] items-center">
+                    {["all", "International", "Domestic"].map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => setSelectedLocationType(type)}
+                        className={cn(
+                          "px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 whitespace-nowrap",
+                          selectedLocationType === type
+                            ? "gradient-btn text-white shadow-md"
+                            : "text-brand-blue hover:bg-white/50"
+                        )}
+                      >
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobile/Tablet Filter Toggle */}
+                <Button
+                  variant="outline"
+                  onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
                   className={cn(
-                    "w-[130px] py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex-shrink-0 sticky left-0 z-10 flex items-center justify-center",
-                    "bg-slate-900 text-white shadow-[4px_0_12px_-2px_rgba(0,0,0,0.15)]",
-                    selectedCity !== "all" && "opacity-90 hover:opacity-100"
+                    "md:hidden flex items-center justify-center w-[40px] h-[40px] p-0 rounded-xl transition-all shrink-0",
+                    isFiltersExpanded 
+                      ? "bg-slate-900 text-white border-slate-900 shadow-md" 
+                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                   )}
                 >
-                  All Cities
-                </button>
-                
-                {/* Scrollable City Pills */}
-                <div className="flex gap-3 overflow-x-auto scrollbar-hide flex-1">
-                  {availableCities.map((city) => (
-                    <button
-                      key={city.id}
-                      onClick={() => setSelectedCity(city.slug)}
-                      className={cn(
-                        "px-5 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex-shrink-0",
-                        selectedCity === city.slug
-                          ? "bg-gradient-to-r from-brand-blue to-brand-blue-hovered text-white shadow-md scale-105"
-                          : "bg-white text-slate-600 border-2 border-gray-100 hover:border-brand-blue/50"
-                      )}
-                    >
-                      {city.name}
-                    </button>
-                  ))}
-                </div>
+                  {isFiltersExpanded ? <X className="w-5 h-5" /> : <SlidersHorizontal className="w-4 h-4" />}
+                </Button>
               </div>
-            )}
-            
-            {/* Active Filter Indicator - Moved Inside for tighter gap */}
-            {(selectedCategory !== "all" || selectedLocationType !== "all" || selectedRegion !== "all" || selectedCity !== "all" || searchTerm) && (
-              <div className="flex items-center gap-3 text-sm text-slate-500 font-bold mt-6 pt-5 border-t border-slate-100 animate-in fade-in slide-in-from-left-4 duration-300">
-                <span className="uppercase text-[10px] tracking-widest text-slate-400">Filtered By:</span>
-                <div className="flex flex-wrap gap-2 flex-1">
-                  {selectedLocationType !== "all" && (
-                    <span className="px-3 py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[10px] font-black uppercase">{selectedLocationType}</span>
-                  )}
-                  {selectedCategory !== "all" && (
-                    <span className="px-3 py-1 bg-brand-green/10 text-brand-green rounded-lg text-[10px] font-black uppercase">{selectedCategory}</span>
-                  )}
-                  {selectedRegion !== "all" && (
-                    <span className="px-3 py-1 bg-slate-800 text-white rounded-lg text-[10px] font-black uppercase">{selectedRegion}</span>
-                  )}
-                  {selectedCity !== "all" && (
-                    <span className="px-3 py-1 bg-brand-blue text-white rounded-lg text-[10px] font-black uppercase">{selectedCity}</span>
-                  )}
-                  {searchTerm && (
-                    <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase">"{searchTerm}"</span>
-                  )}
+
+              {/* Collapsible Content Section */}
+              <AnimatePresence>
+                {(isFiltersExpanded || !isMounted || (isMounted && isDesktop)) && (
+                  <motion.div
+                    initial={isMounted && !isDesktop ? { height: 0, opacity: 0 } : false}
+                    animate={isMounted && !isDesktop ? { height: "auto", opacity: 1 } : false}
+                    exit={isMounted && !isDesktop ? { height: 0, opacity: 0 } : false}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className={cn(
+                      "overflow-hidden",
+                      isMounted && !isDesktop && !isFiltersExpanded && "hidden"
+                    )}
+                  >
+                    <div className="flex flex-col gap-4 mt-2 md:mt-0">
+                      {/* Mobile-Only Secondary Filters Row */}
+                      <div className="flex flex-col md:hidden gap-3 py-2">
+                        {/* Mobile Region Select */}
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 pl-1">REGION</label>
+                          <select 
+                            onChange={(e) => setSelectedRegion(e.target.value)}
+                            className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
+                            value={selectedRegion}
+                          >
+                            <option value="all">Discover All Regions</option>
+                            {availableRegions.map(region => (
+                              <option key={region.id} value={region.slug}>{region.name}</option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {/* Mobile Travel Type */}
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 pl-1">TRAVEL TYPE</label>
+                          <div className="inline-flex p-1 bg-gray-100 rounded-full w-full">
+                            {["all", "International", "Domestic"].map((type) => (
+                              <button
+                                key={type}
+                                onClick={() => setSelectedLocationType(type)}
+                                className={cn(
+                                  "flex-1 px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 whitespace-nowrap",
+                                  selectedLocationType === type
+                                    ? "gradient-btn text-white shadow-md"
+                                    : "text-brand-blue bg-brand-blue/5"
+                                )}
+                              >
+                                {type.charAt(0).toUpperCase() + type.slice(1)}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Tablet Destination Type (Visible on md, hidden on lg+) */}
+                      <div className="hidden md:block lg:hidden">
+                        <div className="inline-flex p-1 bg-slate-100 rounded-full">
+                          {["all", "International", "Domestic"].map((type) => (
+                            <button
+                              key={type}
+                              onClick={() => setSelectedLocationType(type)}
+                              className={cn(
+                                "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap",
+                                selectedLocationType === type
+                                  ? "gradient-btn text-white shadow-md"
+                                  : "text-brand-blue"
+                              )}
+                            >
+                              {type.charAt(0).toUpperCase() + type.slice(1)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Pill Filters Grid (Categories + Cities side-by-side on desktop) */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 overflow-hidden">
+                        {/* Collections / Activity Themes (All devices) */}
+                        <div className="min-w-0">
+                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 md:hidden pl-1">ACTIVITY THEMES</label>
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => setSelectedCategory("all")}
+                              className={cn(
+                                "w-[110px] md:w-[120px] py-2 rounded-xl text-xs md:text-sm font-bold transition-all whitespace-nowrap flex-shrink-0 flex items-center justify-center",
+                                "bg-slate-900 text-white shadow-sm md:shadow-[4px_0_12px_-2px_rgba(0,0,0,0.15)]",
+                                selectedCategory !== "all" && "opacity-90 hover:opacity-100"
+                              )}
+                            >
+                              All Activities
+                            </button>
+                            
+                            <div className="flex gap-3 overflow-x-auto scrollbar-hide flex-1 py-1">
+                              {categories.map((category) => (
+                                <button
+                                  key={category.id}
+                                  onClick={() => setSelectedCategory(category.slug)}
+                                  className={cn(
+                                    "px-4 md:px-5 py-2 rounded-full text-[11px] md:text-sm font-bold transition-all whitespace-nowrap flex-shrink-0",
+                                    selectedCategory === category.slug
+                                      ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 shadow-md scale-105"
+                                      : "bg-white text-slate-600 border border-gray-100 hover:border-yellow-400/50"
+                                  )}
+                                >
+                                  {category.name}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* City Filter Pills (All devices) */}
+                        {availableCities.length > 0 && (
+                          <div className="min-w-0 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 md:hidden pl-1">EXPLORE CITIES</label>
+                            <div className="flex items-center gap-3">
+                              <button
+                                onClick={() => setSelectedCity("all")}
+                                className={cn(
+                                  "w-[110px] md:w-[120px] py-2 rounded-xl text-xs md:text-sm font-bold transition-all whitespace-nowrap flex-shrink-0 flex items-center justify-center",
+                                  "bg-slate-900 text-white shadow-sm md:shadow-[4px_0_12px_-2px_rgba(0,0,0,0.15)]",
+                                  selectedCity !== "all" && "opacity-90 hover:opacity-100"
+                                )}
+                              >
+                                All Cities
+                              </button>
+                              
+                              <div className="flex gap-3 overflow-x-auto scrollbar-hide flex-1 py-1">
+                                {availableCities.map((city) => (
+                                  <button
+                                    key={city.id}
+                                    onClick={() => setSelectedCity(city.slug)}
+                                    className={cn(
+                                      "px-4 md:px-5 py-2 rounded-full text-[11px] md:text-sm font-bold transition-all whitespace-nowrap flex-shrink-0",
+                                      selectedCity === city.slug
+                                        ? "bg-gradient-to-r from-brand-blue to-brand-blue-hovered text-white shadow-md scale-105"
+                                        : "bg-white text-slate-600 border border-gray-100 hover:border-brand-blue/50"
+                                    )}
+                                  >
+                                    {city.name}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Active Filter Indicator */}
+              {(selectedCategory !== "all" || selectedLocationType !== "all" || selectedRegion !== "all" || selectedCity !== "all" || searchTerm) && (
+                <div className="flex items-center gap-3 text-sm text-slate-500 font-bold mt-2 md:mt-2 pt-4 md:pt-4 border-t border-slate-100 animate-in fade-in slide-in-from-left-4 duration-300 overflow-x-auto scrollbar-hide">
+                  <span className="uppercase text-[9px] md:text-[10px] tracking-widest text-slate-400 whitespace-nowrap">Filtered By:</span>
+                  <div className="flex gap-2 flex-nowrap md:flex-wrap">
+                    {selectedLocationType !== "all" && (
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedLocationType}</span>
+                    )}
+                    {selectedCategory !== "all" && (
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-green/10 text-brand-green rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCategory}</span>
+                    )}
+                    {selectedRegion !== "all" && (
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-800 text-white rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedRegion}</span>
+                    )}
+                    {selectedCity !== "all" && (
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue text-white rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCity}</span>
+                    )}
+                    {searchTerm && (
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-100 text-slate-600 rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap truncate max-w-[100px]">"{searchTerm}"</span>
+                    )}
+                  </div>
+                  <button 
+                    onClick={() => {
+                      setSelectedCategory("all");
+                      setSelectedLocationType("all");
+                      setSelectedRegion("all");
+                      setSelectedCity("all");
+                      setSearchTerm("");
+                    }}
+                    className="text-brand-red hover:underline text-[9px] md:text-[10px] font-black uppercase px-2 py-1 rounded-md hover:bg-red-50 transition-colors ml-auto md:ml-0"
+                  >
+                    Reset
+                  </button>
                 </div>
-                <button 
-                  onClick={() => {
-                    setSelectedCategory("all");
-                    setSelectedLocationType("all");
-                    setSelectedRegion("all");
-                    setSelectedCity("all");
-                    setSearchTerm("");
-                  }}
-                  className="text-brand-red hover:underline text-[10px] font-black uppercase px-2 py-1 rounded-md hover:bg-red-50 transition-colors"
-                >
-                  Reset All
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
@@ -477,7 +611,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredActivities.map((activity, index) => (
+            {paginatedActivities.map((activity, index) => (
               <motion.div
                 key={activity.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -505,13 +639,87 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                   }}
                   hoverGradient="from-brand-green/95 to-emerald-900"
                   ctaLabel="Learn More"
-                  onCtaClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
-                  onCardClick={() => router.push(`/activities/${activity.regionSlug}/${activity.slug}`)}
-                  secondaryCtaLabel={`Explore ${activity.regionName}`}
-                  onSecondaryCtaClick={() => router.push(`/packages/${activity.regionSlug}`)}
+                  onCtaClick={() => {
+                    const rSlug = resolveRegionSlug(activity);
+                    router.push(`/activities/${rSlug}/${activity.slug}`);
+                  }}
+                  onCardClick={() => {
+                    const rSlug = resolveRegionSlug(activity);
+                    router.push(`/activities/${rSlug}/${activity.slug}`);
+                  }}
+                  secondaryCtaLabel={`Explore ${activity.cityName || activity.regionName}`}
+                  onSecondaryCtaClick={() => {
+                    const rSlug = resolveRegionSlug(activity);
+                    router.push(`/packages/${rSlug}`);
+                  }}
                 />
               </motion.div>
             ))}
+          </div>
+        )}
+
+        {/* Pagination UI */}
+        {!activitiesLoading && filteredActivities.length > itemsPerPage && (
+          <div className="flex flex-col items-center justify-center mt-12 gap-4">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-green disabled:opacity-50"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {[...Array(totalPages)].map((_, i) => {
+                  const pageNumber = i + 1;
+                  // Show current page, first, last, and pages around current
+                  if (
+                    pageNumber === 1 ||
+                    pageNumber === totalPages ||
+                    (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                  ) {
+                    return (
+                      <Button
+                        key={pageNumber}
+                        variant={currentPage === pageNumber ? "default" : "outline"}
+                        onClick={() => handlePageChange(pageNumber)}
+                        className={cn(
+                          "w-10 h-10 rounded-xl font-bold transition-all duration-200",
+                          currentPage === pageNumber 
+                            ? "bg-brand-green hover:bg-brand-green/90 text-white shadow-md scale-105" 
+                            : "border-slate-200 text-slate-500 hover:border-brand-green/30 hover:text-brand-green bg-white"
+                        )}
+                      >
+                        {pageNumber}
+                      </Button>
+                    );
+                  } else if (
+                    (pageNumber === currentPage - 2 && pageNumber > 1) ||
+                    (pageNumber === currentPage + 2 && pageNumber < totalPages)
+                  ) {
+                    return <span key={pageNumber} className="px-2 text-slate-400">...</span>;
+                  }
+                  return null;
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-green disabled:opacity-50"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </Button>
+            </div>
+            
+            <p className="text-sm font-medium text-slate-500">
+              Showing <span className="text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> - <span className="text-slate-900">{Math.min(currentPage * itemsPerPage, filteredActivities.length)}</span> of <span className="text-slate-900">{filteredActivities.length}</span> activities
+            </p>
           </div>
         )}
 

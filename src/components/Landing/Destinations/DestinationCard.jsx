@@ -68,10 +68,15 @@ export default function DestinationCard({
         className={`relative bg-gray-100 p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl aspect-[5/6] 
         w-[80%] sm:w-full
         basis-[80%] sm:basis-1/2 lg:basis-1/4 
-        overflow-hidden cursor-pointer transition-all duration-500 ease-out shadow-lg flex-shrink-0
+        cursor-pointer transition-all duration-500 ease-out shadow-lg flex-shrink-0
         ${shouldAnimate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
         ${isHovered ? "scale-[1.03] shadow-2xl" : "scale-100 shadow-lg"}
         `}
+        style={{
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+        }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

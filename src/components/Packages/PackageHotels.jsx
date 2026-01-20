@@ -200,18 +200,18 @@ const PackageHotels = ({ packageData }) => {
       </div>
       <Container>
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-4 relative">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 md:gap-4 lg:gap-8 mb-4 relative">
           <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue mb-4 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue mb-3 md:mb-4 uppercase tracking-widest">
               <span className="text-xs">🏨</span> Handpicked Stays
             </div>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
               Where You'll <span className="text-brand-blue">Stay</span>
             </h2>
           </div>
 
           {/* New Filter UI - Horizontal Scroll on Mobile */}
-          <div className="flex overflow-x-auto lg:flex-wrap gap-2 p-1.5 bg-white rounded-2xl border-2 border-slate-100 w-full lg:w-fit scrollbar-hide">
+          <div className="flex overflow-x-auto lg:flex-wrap justify-center lg:justify-start gap-2 p-1.5 bg-white rounded-2xl border-2 border-slate-100 w-full lg:w-fit scrollbar-hide">
             {categories.sort((a, b) => {
               const order = ['twostar', 'threestar', 'fourstar', 'fivestar'];
               return order.indexOf(a) - order.indexOf(b);

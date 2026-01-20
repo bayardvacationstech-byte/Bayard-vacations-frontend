@@ -6,8 +6,8 @@ import {
 } from "@/utils/firebase";
 import { COLLECTIONS } from "@/config";
 
-// Enable static export by disabling dynamic params
-export const dynamicParams = false;
+// Enable dynamic params
+export const dynamicParams = true;
 
 // Generate static params for all packages
 export async function generateStaticParams() {
