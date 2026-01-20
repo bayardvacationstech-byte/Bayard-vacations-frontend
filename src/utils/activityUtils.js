@@ -90,10 +90,10 @@ export function transformActivity(apiActivity) {
     icon: getActivityIcon(apiActivity.card?.icon, apiActivity.activityCategory),
     isPopular: apiActivity.card?.isPopular || false,
     isInternational: apiActivity.isInternational || false,
-    regionName: apiActivity.regionName || "",
-    regionSlug: apiActivity.regionSlug || "",
-    cityName: apiActivity.cityName || "",
-    citySlug: apiActivity.citySlug || "",
+    regionName: apiActivity.docRegionName || apiActivity.regionName || "",
+    regionSlug: apiActivity.docRegionSlug || apiActivity.regionSlug || "",
+    cityName: apiActivity.docCityName || apiActivity.cityName || "",
+    citySlug: apiActivity.docCitySlug || apiActivity.citySlug || "",
     highlights: apiActivity.details?.highlights || [],
     included: apiActivity.details?.included || [],
     excluded: apiActivity.details?.excluded || [],
@@ -186,15 +186,34 @@ export function filterActivities(activities, filters = {}) {
       return false;
     }
 
-    // Search term filter
+    // Enhanced Search term filter
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      const matchesTitle = activity.title?.toLowerCase().includes(searchLower);
-      const matchesDescription = activity.description?.toLowerCase().includes(searchLower);
-      const matchesCity = activity.cityName?.toLowerCase().includes(searchLower);
-      const matchesRegion = activity.regionName?.toLowerCase().includes(searchLower);
+      const keywords = searchLower.split(/\s+/).filter(k => k.length > 1);
       
-      if (!matchesTitle && !matchesDescription && !matchesCity && !matchesRegion) {
+      if (keywords.length === 0) return true; // Ignore single character searches or just whitespace
+
+      // Combine all searchable text
+      const searchableFields = [
+        activity.title,
+        activity.description,
+        activity.cityName,
+        activity.regionName,
+        activity.category,
+        activity.themeCategory,
+        ...(activity.highlights || []),
+        formatCategoryName(activity.category)
+      ].filter(Boolean).map(s => s.toLowerCase());
+
+      const searchableText = searchableFields.join(" ");
+
+      // Check if ALL keywords are present in the searchable text (OR logic can be applied if preferred, but AND is more precise)
+      // Changing to SOME keywords for more "elastic" feel, or weights?
+      // Let's go with "At least one word matches, but more matches is better" - actually, "Any match in these fields"
+      
+      const isMatch = keywords.some(keyword => searchableText.includes(keyword));
+      
+      if (!isMatch) {
         return false;
       }
     }

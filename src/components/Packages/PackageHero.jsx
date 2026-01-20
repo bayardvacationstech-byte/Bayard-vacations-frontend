@@ -207,7 +207,7 @@ const PackageHero = ({ packageData }) => {
               <div className="bg-gradient-to-br from-blue-900/60 to-blue-950/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
                 <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">Duration</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{packageData?.nights || "3"}</span>
+                  <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{packageData?.nights || "0"}</span>
                   <span className="text-yellow-400 text-sm md:text-base font-black uppercase ml-1">N</span>
                 </div>
               </div>
@@ -215,14 +215,14 @@ const PackageHero = ({ packageData }) => {
               <div className="bg-gradient-to-br from-blue-900/60 to-blue-950/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
                 <p className="text-white/40 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">Days</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{(packageData?.nights || 3) + 1}</span>
+                  <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">{packageData?.days || (packageData?.nights ? packageData.nights + 1 : "0")}</span>
                   <span className="text-yellow-400 text-sm md:text-base font-black uppercase ml-1">D</span>
                 </div>
               </div>
 
               <div className="bg-gradient-to-br from-blue-900/60 to-blue-950/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-2xl md:rounded-3xl flex flex-col justify-center min-h-[80px]">
                 <p className="text-yellow-400 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-1.5 md:mb-2">From</p>
-                <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">₹{Math.floor((packageData?.price || 45000) / 1000)}K</span>
+                <span className="text-white font-black text-2xl md:text-3xl tracking-tighter">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</span>
               </div>
             </motion.div>
 
@@ -234,12 +234,15 @@ const PackageHero = ({ packageData }) => {
                 <div className="space-y-4">
                   {(Array.isArray(packageData?.highlights) && packageData.highlights.length > 0 
                     ? packageData.highlights.slice(0, 4) 
-                    : [
-                      "Grand Mosque Visit & Cultural Tour",
-                      "Desert Safari with BBQ Dinner",
-                      "Burj Khalifa Observation Deck",
-                      "Dhow Cruise Dinner Experience"
-                    ]
+                    : (packageData?.includes 
+                        ? packageData.includes.slice(0, 4) 
+                        : [
+                          "Airport Assistance Upon Arrival",
+                          "Sightseeing Tours Included",
+                          "Premium Accommodations",
+                          "24x7 Call Assistance"
+                        ]
+                      )
                   ).map((item, i) => (
                     <div key={i} className="flex items-center gap-4">
                       <div className="w-1.5 h-1.5 rounded-full bg-brand-blue shadow-[0_0_8px_rgba(0,102,255,0.8)]" />
@@ -249,26 +252,28 @@ const PackageHero = ({ packageData }) => {
                 </div>
               </div>
 
-              {/* Desktop-only Thumbnail Grid */}
-              <div className="hidden lg:grid lg:grid-cols-2 gap-3 shrink-0 relative z-50">
-                {validBannerImages.slice(0, 4).map((image, index) => (
-                  <motion.button
-                    key={index}
-                    onClick={() => handleThumbnailClick(index)}
-                    className={`relative lg:w-32 lg:h-32 rounded-[2.5rem] overflow-hidden border-2 transition-all duration-300 ${
-                      index === currentImageIndex
-                        ? "border-yellow-400 ring-4 ring-yellow-400/20"
-                        : "border-white/20 hover:border-white/40"
-                    }`}
-                  >
-                    <Image
-                      src={image.url}
-                      alt={`Gallery ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </motion.button>
-                ))}
+              {/* Desktop-only Thumbnail Grid - Scrollable for more images */}
+              <div className="hidden lg:block shrink-0 relative z-50">
+                <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/40">
+                  {validBannerImages.map((image, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => handleThumbnailClick(index)}
+                      className={`relative w-32 h-32 rounded-[2.5rem] overflow-hidden border-2 transition-all duration-300 ${
+                        index === currentImageIndex
+                          ? "border-yellow-400 ring-4 ring-yellow-400/20"
+                          : "border-white/20 hover:border-white/40"
+                      }`}
+                    >
+                      <Image
+                        src={image.url}
+                        alt={`Gallery ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </motion.button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

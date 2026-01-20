@@ -420,7 +420,7 @@ const DesktopNavbar = () => {
               {/* Regions Section */}
               {searchResults.regions?.length > 0 && (
                 <>
-                  <h4 className="mb-4 text-sm text-slate-500">Regions</h4>
+                  <p className="mb-4 text-sm text-slate-500">Regions</p>
                   <ul className="space-y-4 text-brand-blue">
                     {searchResults.regions.map((region) => (
                       <li key={region.id}>
@@ -441,9 +441,9 @@ const DesktopNavbar = () => {
               {/* Available Packages Section */}
               {searchResults.packages?.length > 0 ? (
                 <>
-                  <h4 className="mb-4 text-sm text-slate-500">
+                  <p className="mb-4 text-sm text-slate-500">
                     Available Packages
-                  </h4>
+                  </p>
                   <ul className="space-y-4 text-brand-blue">
                     {searchResults.packages.map((pkg) => (
                       <li key={pkg.id}>
@@ -467,7 +467,7 @@ const DesktopNavbar = () => {
                 <p className="text-sm text-slate-500">No packages found</p>
               ) : (
                 <>
-                  <h4 className="mb-4 text-sm text-slate-500">Quick Links</h4>
+                  <p className="mb-4 text-sm text-slate-500">Quick Links</p>
                   <ul className="space-y-4 text-brand-blue">
                     {TRENDING_PACKAGES.map((pkg) => (
                       <li key={pkg}>

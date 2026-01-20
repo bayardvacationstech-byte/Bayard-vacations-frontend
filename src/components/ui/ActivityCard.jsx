@@ -112,7 +112,7 @@ const ActivityCard = ({
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className="md:hidden absolute -top-12 right-0 w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg active:scale-95 transition-all z-30 ring-4 ring-white/10"
+            className="md:hidden absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center shadow-lg active:scale-95 transition-all z-30 border border-white/30"
           >
             {isExpanded ? (
               <X className="w-5 h-5" />
@@ -122,9 +122,28 @@ const ActivityCard = ({
           </button>
 
           {/* Title */}
-          <h3 className="text-2xl md:text-3xl font-black text-white leading-tight drop-shadow-lg">
+          <h3 className="text-2xl md:text-3xl font-black text-white leading-tight drop-shadow-lg mb-1 line-clamp-1">
             {data.title || data.name}
           </h3>
+
+          {/* Mobile CTA Buttons (Directly on Card) */}
+          <div className="md:hidden flex flex-row gap-2 pt-1">
+            <button 
+              onClick={handleCtaClick}
+              className="flex-1 px-2 py-3 rounded-xl bg-gradient-to-r from-yellow-400/90 to-yellow-500/90 backdrop-blur-md shadow-lg text-slate-900 font-extrabold uppercase tracking-widest text-[11px] transition-all active:scale-95 whitespace-nowrap"
+            >
+              {ctaLabel}
+            </button>
+            {secondaryCtaLabel && (
+              <button 
+                onClick={handleSecondaryCtaClick}
+                className="flex-1 px-2 py-3 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold uppercase tracking-widest text-[11px] transition-all active:scale-95 flex items-center justify-center gap-1 whitespace-nowrap"
+              >
+                <MapPin className="w-3.5 h-3.5" />
+                {secondaryCtaLabel}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -140,7 +159,7 @@ const ActivityCard = ({
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <h4 className="text-xl md:text-2xl font-black text-white leading-tight">
+                <h4 className="text-xl md:text-2xl font-black text-white leading-tight line-clamp-1">
                   {data.title || data.name}
                 </h4>
                 <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1">
@@ -228,7 +247,7 @@ const ActivityCard = ({
             {secondaryCtaLabel && (
               <button 
                 onClick={handleSecondaryCtaClick}
-                className="w-full px-6 py-2 rounded-xl bg-white/10 border border-white/30 text-white font-bold uppercase tracking-widest text-xs transition-all duration-300 hover:bg-white/20 active:scale-95 flex items-center justify-center gap-2"
+                className="w-full px-6 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/30 text-white font-bold uppercase tracking-widest text-xs transition-all duration-300 hover:bg-white/20 active:scale-95 flex items-center justify-center gap-2"
               >
                 <MapPin className="w-3 h-3" />
                 {secondaryCtaLabel}

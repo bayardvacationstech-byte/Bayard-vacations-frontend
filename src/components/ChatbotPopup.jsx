@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil } from "lucide-react";
+import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -59,14 +59,15 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-  const [messages, setMessages] = useState([
+  const INITIAL_MESSAGES = [
     {
       id: 1,
       text: "Hello! 👋 Welcome to Bayard Vacations. How can I help you plan your perfect trip today?",
       sender: "bot",
       timestamp: new Date(),
     },
-  ]);
+  ];
+  const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -203,7 +204,9 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get response from AI");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Chat API error:", response.status, errorData);
+        throw new Error(errorData.error || "Failed to get response from AI");
       }
 
       // Handle streaming response
@@ -284,6 +287,13 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     }
   };
 
+  const handleClearChat = () => {
+    setMessages(INITIAL_MESSAGES);
+    setShowQuickReplies(true);
+    setShowDestinations(false);
+    setInputMessage("");
+  };
+
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
   };
@@ -340,7 +350,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     <>
       {/* Chat Panel - Enhanced Design */}
       <div
-        className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-[450px] h-[calc(100vh-120px)] sm:h-[600px] max-h-[750px] bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-50 transform transition-all duration-500 ease-out overflow-hidden flex flex-col ${
+        className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-[450px] h-[80vh] bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-50 transform transition-all duration-500 ease-out overflow-hidden flex flex-col ${
           isOpen ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95 pointer-events-none"
         }`}
       >
@@ -369,12 +379,23 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                 </div>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="hover:bg-white/20 p-2 rounded-full transition-all duration-300 hover:rotate-90"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              {messages.length > 1 && (
+                <button
+                  onClick={handleClearChat}
+                  className="hover:bg-white/20 p-2 rounded-full transition-all duration-300 group/clear"
+                  title="Clear conversation"
+                >
+                  <Trash2 className="w-5 h-5 group-hover/clear:scale-110 transition-transform" />
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="hover:bg-white/20 p-2 rounded-full transition-all duration-300 hover:rotate-90"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -383,24 +404,11 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           {messages.map((message, index) => (
             <div
               key={message.id}
-              className={`flex gap-2 animate-fadeIn ${
+              className={`flex animate-fadeIn ${
                 message.sender === "user" ? "flex-row-reverse" : "flex-row"
               }`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div
-                className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center shadow-md ${
-                  message.sender === "user"
-                    ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white"
-                    : "bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700"
-                }`}
-              >
-                {message.sender === "user" ? (
-                  <User className="w-4 h-4" />
-                ) : (
-                  <Bot className="w-4 h-4" />
-                )}
-              </div>
               <div
                 className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
                   message.sender === "user"
@@ -516,10 +524,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           ))}
 
           {isTyping && (
-            <div className="flex gap-2 animate-fadeIn">
-              <div className="flex-shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-md">
-                <Bot className="w-4 h-4 text-gray-700" />
-              </div>
+            <div className="flex animate-fadeIn">
               <div className="bg-white rounded-2xl rounded-tl-none px-5 py-3 shadow-sm border border-gray-100">
                 <div className="flex gap-1.5">
                   <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />

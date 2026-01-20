@@ -23,7 +23,11 @@ export function useRegionsData(initialRegions = []) {
       .filter((item) => item.isDomestic)
       .filter((item) => !EXCLUDED_DOMESTIC_REGIONS.includes(item.slug))
       .filter((item) => item.visible !== false) // Show if visible is true or undefined
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => {
+        const nameA = a.name || "";
+        const nameB = b.name || "";
+        return nameA.localeCompare(nameB, 'en', { sensitivity: 'base', numeric: true });
+      });
     
     console.log("Domestic regions filtered:", filtered.length);
     return filtered;
@@ -73,7 +77,11 @@ export function useRegionsData(initialRegions = []) {
       .filter((item) => !item.isDomestic)
       .filter((item) => !EXCLUDED_INTERNATIONAL_REGIONS.includes(item.slug))
       .filter((item) => item.visible !== false)
-      .sort((a, b) => a.name.localeCompare(b.name));
+      .sort((a, b) => {
+        const nameA = a.name || "";
+        const nameB = b.name || "";
+        return nameA.localeCompare(nameB, 'en', { sensitivity: 'base', numeric: true });
+      });
     
     console.log("International regions filtered:", intlRegions.length);
     

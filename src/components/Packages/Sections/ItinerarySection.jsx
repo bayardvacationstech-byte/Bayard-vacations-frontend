@@ -105,7 +105,7 @@ const ItinerarySection = ({ packageData }) => {
                         {/* Location badge */}
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-brand-green/10 rounded-full text-[10px] md:text-xs font-black text-brand-green border border-brand-green/20 shrink-0">
                           <span className="w-1 h-1 bg-brand-green rounded-full" />
-                          {cities[index % cities.length] || "Destination"}
+                          {day.title?.split('-')[0]?.split('—')[0]?.split('/')[0]?.split(',')[0]?.trim() || cities[index % cities.length] || "Stay"}
                         </div>
 
                         {/* Title */}

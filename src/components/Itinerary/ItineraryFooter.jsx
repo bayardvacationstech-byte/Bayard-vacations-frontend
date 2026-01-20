@@ -53,10 +53,10 @@ const ItineraryFooter = ({ relatedPackages }) => {
               1024: { slidesPerView: 3, spaceBetween: 24, centeredSlides: false },
               1440: { slidesPerView: 4, spaceBetween: 24, centeredSlides: false },
             }}
-            className="pb-6 md:pb-12"
+            className="pb-16"
           >
             {relatedPackages.map((item) => (
-              <SwiperSlide key={item.id} className="h-full">
+              <SwiperSlide key={item.id}>
                 <PackageCard item={item} />
               </SwiperSlide>
             ))}

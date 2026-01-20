@@ -75,7 +75,7 @@ export default function ExploreDestinations({ initialRegions }) {
         </div>
       </div>
 
-      <div className="relative overflow-hidden min-h-[350px] md:min-h-[450px]">
+      <div className="relative min-h-[350px] md:min-h-[450px] pb-4 px-0 md:px-12">
         {!isMounted ? (
           <div className="mt-4 flex gap-4 overflow-hidden">
              {Array.from({ length: 4 }).map((_, i) => (

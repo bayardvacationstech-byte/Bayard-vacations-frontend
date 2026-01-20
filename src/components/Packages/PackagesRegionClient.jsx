@@ -732,7 +732,7 @@ export default function PackagesRegionClient() {
                   640: { slidesPerView: 2, spaceBetween: 24 },
                   1024: { slidesPerView: 4, spaceBetween: 24 },
                 }}
-                className="pb-4"
+                className="pb-16"
               >
               {packagesWithOffers.slice(0, 6).map((item) => (
                 <SwiperSlide key={`rec-${item.id}`}>
@@ -830,7 +830,7 @@ export default function PackagesRegionClient() {
                   1024: { slidesPerView: 4, spaceBetween: 24 },
                   1280: { slidesPerView: 4, spaceBetween: 24 },
                 }}
-              className="pb-12"
+              className="pb-16"
             >
               {featuredBlogs.slice(0, 6).map((blog) => (
                 <SwiperSlide key={blog.id}>
@@ -901,7 +901,7 @@ export default function PackagesRegionClient() {
                   640: { slidesPerView: 2, spaceBetween: 24 },
                   1024: { slidesPerView: 4, spaceBetween: 24 },
                 }}
-                className="pb-8"
+                className="pb-16"
               >
                 {/* Show all available packages */}
                 {packagesWithOffers.slice(0, 12).map((item) => (

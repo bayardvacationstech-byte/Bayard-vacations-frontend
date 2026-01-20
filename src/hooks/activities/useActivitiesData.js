@@ -38,24 +38,23 @@ export function useActivitiesData(regionSlug = null, regionId = null) {
         let activitiesData = [];
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          console.log('[useActivitiesData] Document ID:', doc.id);
-          console.log('[useActivitiesData] Region data:', {
-            regionName: data.regionName,
-            regionId: data.regionId,
-            activitiesCount: data.activities?.length || 0
-          });
           
           // Filter by regionId if provided (use document ID or regionId field)
           if (regionId) {
             // Match by regionId field or document ID
             const docRegionId = data.regionId || doc.id;
             if (docRegionId === regionId) {
-              console.log('[useActivitiesData] ✓ Region match found by ID!');
               if (data.activities && Array.isArray(data.activities)) {
-                activitiesData = [...activitiesData, ...data.activities];
+                const effectiveRegionSlug = data.regionSlug || (regionSlug && regionSlug !== "all" ? regionSlug : (data.regionName ? data.regionName.toLowerCase().trim().replace(/\s+/g, "-") : data.slug));
+                const activitiesWithCtx = data.activities.map(a => ({
+                  ...a,
+                  docRegionSlug: effectiveRegionSlug,
+                  docRegionName: data.regionName,
+                  docCitySlug: data.citySlug,
+                  docCityName: data.cityName
+                }));
+                activitiesData = [...activitiesData, ...activitiesWithCtx];
               }
-            } else {
-              console.log('[useActivitiesData] ✗ Region ID mismatch:', docRegionId, '!==', regionId);
             }
           } else if (regionSlug && regionSlug !== 'all') {
             // Filter by regionSlug if provided and not 'all'
@@ -67,15 +66,32 @@ export function useActivitiesData(regionSlug = null, regionId = null) {
               doc.id === regionSlug;
 
             if (isMatch) {
-              console.log('[useActivitiesData] ✓ Region match found by slug/name!');
               if (data.activities && Array.isArray(data.activities)) {
-                activitiesData = [...activitiesData, ...data.activities];
+                const effectiveRegionSlug = data.regionSlug || regionSlug || (data.regionName ? data.regionName.toLowerCase().trim().replace(/\s+/g, "-") : data.slug);
+                const activitiesWithCtx = data.activities.map(a => ({
+                  ...a,
+                  docRegionSlug: effectiveRegionSlug,
+                  docRegionName: data.regionName,
+                  docCitySlug: data.citySlug,
+                  docCityName: data.cityName
+                }));
+                activitiesData = [...activitiesData, ...activitiesWithCtx];
               }
             }
           } else {
             // No filter or 'all' - get all activities
             if (data.activities && Array.isArray(data.activities)) {
-              activitiesData = [...activitiesData, ...data.activities];
+              const activitiesWithCtx = data.activities.map(a => {
+                const effectiveRegionSlug = data.regionSlug || (data.regionName ? data.regionName.toLowerCase().trim().replace(/\s+/g, "-") : data.slug);
+                return {
+                  ...a,
+                  docRegionSlug: effectiveRegionSlug,
+                  docRegionName: data.regionName,
+                  docCitySlug: data.citySlug,
+                  docCityName: data.cityName
+                };
+              });
+              activitiesData = [...activitiesData, ...activitiesWithCtx];
             }
           }
         });

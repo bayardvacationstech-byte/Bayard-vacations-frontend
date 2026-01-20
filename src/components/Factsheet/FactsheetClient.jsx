@@ -389,25 +389,25 @@ export default function FactsheetClient({ regionSlug }) {
   return (
     <div className="min-h-screen bg-slate-50/50">
       {/* Hero Section */}
-      <div ref={heroRef} className="bg-slate-900 text-white min-h-[35vh] md:min-h-[40vh] py-12 md:py-16 flex items-center relative overflow-hidden">
+      <div ref={heroRef} className="relative min-h-[60vh] md:min-h-[80vh] flex flex-col justify-end overflow-hidden">
         {/* Cinematic Background Image */}
         {currentData.heroImage && (
-          <div className="absolute inset-0 z-0 bg-slate-900 border-b border-white/5">
+          <div className="absolute inset-0 z-0">
              <Image 
                 src={currentData.heroImage} 
                 alt={currentData.heroTitle}
                 fill
                 priority
-                className="object-cover opacity-80 scale-105"
+                className="object-cover scale-105"
              />
-             <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/40 to-transparent z-10" />
+             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent z-10" />
           </div>
         )}
         {!currentData.heroImage && (
           <div className="absolute inset-0 bg-gradient-to-br from-brand-green/20 to-brand-blue/20 z-0" />
         )}
         
-        <Container className="relative z-20">
+        <Container className="relative z-20 pb-8 md:pb-16 pt-24 md:pt-32">
           <Link href={`/packages/${regionSlug}`}>
             <Button variant="ghost" className="text-white hover:bg-white/10 gap-2 mb-8 -ml-4 group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -415,12 +415,16 @@ export default function FactsheetClient({ regionSlug }) {
             </Button>
           </Link>
 
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="text-4xl md:text-8xl font-black mb-6 tracking-tighter leading-none uppercase">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-3xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-none uppercase text-white">
               {currentData.heroTitle}<br />
               <span className="text-brand-green italic lowercase drop-shadow-sm">Factsheet</span>
             </h1>
-            <p className="text-xl md:text-2xl text-slate-300 max-w-2xl font-medium leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-200 max-w-2xl font-medium leading-relaxed drop-shadow-lg">
               {currentData.heroSubtitle}
             </p>
           </motion.div>
@@ -457,12 +461,12 @@ export default function FactsheetClient({ regionSlug }) {
                 {currentData.essentials.map((item, index) => {
                   const Icon = item.icon;
                   return (
-                    <div key={index} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+                    <div key={index} className="bg-white p-5 md:p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
                       <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-inner", colorMap[item.color] || "bg-slate-200")}>
                         <Icon className="w-5 h-5" />
                       </div>
                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{item.label}</p>
-                      <p className="text-lg font-black text-slate-900 leading-tight">{item.value}</p>
+                      <p className="text-base md:text-lg font-black text-slate-900 leading-tight">{item.value}</p>
                     </div>
                   );
                 })}
@@ -470,15 +474,15 @@ export default function FactsheetClient({ regionSlug }) {
 
               {/* Fast Facts Block */}
               {currentData.fastFacts && (
-                <div className="bg-slate-900 rounded-[2.5rem] p-8 md:p-10 text-white flex flex-col md:flex-row items-center gap-8">
-                   <div className="w-16 h-16 bg-brand-green rounded-full flex items-center justify-center shrink-0">
-                      <Lightbulb className="w-8 h-8 text-white" />
+                <div className="bg-slate-900 rounded-[2.5rem] p-6 md:p-10 text-white flex flex-col md:flex-row items-center gap-8">
+                   <div className="w-14 h-14 md:w-16 md:h-16 bg-brand-green rounded-full flex items-center justify-center shrink-0">
+                      <Lightbulb className="w-6 h-6 md:w-8 md:h-8 text-white" />
                    </div>
-                   <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8">
+                   <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                       {currentData.fastFacts.map((fact, i) => (
                         <div key={i}>
                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{fact.label}</p>
-                           <p className="text-lg font-black text-white">{fact.value}</p>
+                           <p className="text-base md:text-lg font-black text-white">{fact.value}</p>
                         </div>
                       ))}
                    </div>
@@ -493,7 +497,7 @@ export default function FactsheetClient({ regionSlug }) {
                   
                   {/* Left Side: Region Highlights */}
                   <div className="flex-1">
-                    <h2 className="text-3xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+                    <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
                       Region <span className="text-brand-blue">Highlights</span>
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
@@ -505,7 +509,7 @@ export default function FactsheetClient({ regionSlug }) {
 
                   {/* Right Side: Top Attractions */}
                   <div className="flex-1">
-                    <h2 className="text-3xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+                    <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
                       Top <span className="text-brand-blue">Attractions</span>
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
@@ -522,9 +526,9 @@ export default function FactsheetClient({ regionSlug }) {
             {currentData.history && (
               <section id="history" className="scroll-mt-24">
                 <SectionHeader title="History & Heritage" badge="Our Origins" />
-                <div className="bg-white border border-slate-100 rounded-[3rem] p-6 md:p-10 shadow-sm">
-                  <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-6">{currentData.history.title}</h3>
-                  <p className="text-lg text-slate-600 font-medium leading-relaxed mb-6 max-w-3xl">
+                <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
+                  <h3 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 mb-6">{currentData.history.title}</h3>
+                  <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed mb-6 max-w-3xl">
                     {currentData.history.description}
                   </p>
                   
@@ -575,7 +579,7 @@ export default function FactsheetClient({ regionSlug }) {
             {currentData.climate && (
               <section id="climate" className="scroll-mt-24">
                 <SectionHeader title="Climate & Time" badge="Weather Guide" />
-                <div className="bg-white border border-slate-100 rounded-[3rem] p-6 md:p-10 shadow-sm">
+                <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-8">
                       <div className="space-y-4">
                         <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
@@ -641,7 +645,7 @@ export default function FactsheetClient({ regionSlug }) {
             {currentData.language && (
                <section id="language" className="scroll-mt-24">
                  <SectionHeader title="Language Guide" badge="Communication" />
-                 <div className="bg-white border border-slate-100 rounded-[3rem] p-6 md:p-10 shadow-sm">
+                 <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                        <div className="space-y-6">
                           <div>
@@ -686,20 +690,20 @@ export default function FactsheetClient({ regionSlug }) {
               <section id="culture" className="scroll-mt-24">
                 <SectionHeader title="Culture & Vibes" badge="Local Spirit" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-slate-900 rounded-[3rem] p-8 md:p-10 text-white flex flex-col justify-center">
-                    <Users className="w-12 h-12 text-brand-green mb-8" />
-                    <h3 className="text-4xl font-black mb-6">{currentData.culture.vibe}</h3>
-                    <p className="text-slate-300 font-medium leading-relaxed italic text-lg">
+                  <div className="bg-slate-900 rounded-[3rem] px-6 py-10 md:p-10 text-white flex flex-col justify-center">
+                    <Users className="w-10 h-10 md:w-12 md:h-12 text-brand-green mb-8" />
+                    <h3 className="text-3xl md:text-4xl font-black mb-6">{currentData.culture.vibe}</h3>
+                    <p className="text-slate-300 font-medium leading-relaxed italic text-base md:text-lg">
                       "{currentData.culture.description}"
                     </p>
                   </div>
                   <div className="space-y-4">
                     {currentData.culture.rules.map((rule, i) => (
-                      <div key={i} className="bg-white border border-slate-100 p-8 rounded-[2rem] shadow-sm flex items-start gap-6">
-                        <span className="text-3xl shrink-0">{rule.icon}</span>
+                      <div key={i} className="bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm flex items-start gap-5 md:gap-6">
+                        <span className="text-2xl md:text-3xl shrink-0">{rule.icon}</span>
                         <div>
                           <h4 className="font-black text-slate-900 mb-1 uppercase text-xs tracking-widest">{rule.label}</h4>
-                          <p className="text-slate-500 font-medium text-sm leading-relaxed">{rule.desc}</p>
+                          <p className="text-slate-500 font-medium text-xs md:text-sm leading-relaxed">{rule.desc}</p>
                         </div>
                       </div>
                     ))}
@@ -755,7 +759,7 @@ export default function FactsheetClient({ regionSlug }) {
               <section id="gastronomy" className="scroll-mt-24">
                 <SectionHeader title={currentData.food.title} badge="Cuisine" />
                 
-                <div className="bg-white border border-slate-100 rounded-[3rem] p-6 md:p-10 shadow-sm">
+                <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
                   <p className="text-lg text-slate-600 font-medium leading-relaxed mb-8 max-w-3xl">
                     {currentData.food.description}
                   </p>
@@ -916,7 +920,7 @@ export default function FactsheetClient({ regionSlug }) {
 
             {/* 8. Visa Section */}
             {currentData.visa && (
-              <section id="visa" className="scroll-mt-24 mb-10 md:mb-14 bg-rose-50 border border-rose-100 rounded-[3rem] p-10 md:p-16">
+              <section id="visa" className="scroll-mt-24 mb-10 md:mb-14 bg-rose-50 border border-rose-100 rounded-[3rem] px-5 py-10 md:p-16">
                 <div className="flex flex-col md:flex-row gap-12">
                   <div className="md:w-1/3">
                     <SectionHeader title="Visa Entry" badge="ASAN PORTAL" noMargin />
@@ -1006,11 +1010,11 @@ export default function FactsheetClient({ regionSlug }) {
 
 // Helper Components
 const SectionHeader = ({ title, badge, noMargin }) => (
-  <div className={cn("mb-4 md:mb-6", noMargin && "mb-0")}>
-    <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-2">
+  <div className={cn("mb-6 md:mb-8", noMargin && "mb-0")}>
+    <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-3">
       {badge}
     </span>
-    <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-none">
+    <h2 className="text-2xl sm:text-3xl md:text-6xl font-black text-slate-900 tracking-tight leading-none">
       {title}
     </h2>
   </div>

@@ -2,8 +2,8 @@ import PackagesRegionClient from "@/components/Packages/PackagesRegionClient";
 import { getAllDocuments } from "@/utils/firebase";
 import { COLLECTIONS } from "@/config";
 
-// Enable static export by disabling dynamic params
-export const dynamicParams = false;
+// Enable dynamic params
+export const dynamicParams = true;
 
 // Generate static params for all regions
 export async function generateStaticParams() {

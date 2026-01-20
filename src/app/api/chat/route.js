@@ -14,7 +14,12 @@ export async function POST(request) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get response from AI');
+      const errorText = await response.text();
+      console.error('External API error:', response.status, errorText);
+      return NextResponse.json(
+        { error: `External AI error: ${response.status}` },
+        { status: response.status }
+      );
     }
 
     // Proxy the streaming response as raw bytes

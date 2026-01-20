@@ -15,7 +15,7 @@ import ItinerarySection from "./Sections/ItinerarySection";
 import InclusionsSection from "./Sections/InclusionsSection";
 import HighlightsSection from "./Sections/HighlightsSection";
 import PackageNavigation from "./PackageNavigation";
-import { Phone, X, ChevronUp, Star, Share2 } from "lucide-react";
+import { Phone, X, ChevronUp, Star, Share2, Info, Calendar, Bed, CheckCircle, HelpCircle } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
 import { cn, convertAndSortHotels } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
@@ -39,11 +39,11 @@ const PackagesClient = () => {
   }, [activeSection]);
 
   const sections = [
-    { id: "overview", label: "Overview" },
-    { id: "itinerary", label: "Itinerary" },
-    { id: "hotels-section", label: "Stay" },
-    { id: "inclusions", label: "Inclusions & Info" },
-    { id: "faq", label: "FAQ" },
+    { id: "overview", label: "Overview", icon: Info },
+    { id: "itinerary", label: "Itinerary", icon: Calendar },
+    { id: "hotels-section", label: "Stay", icon: Bed },
+    { id: "inclusions", label: "Inclusions & Info", icon: CheckCircle },
+    { id: "faq", label: "FAQ", icon: HelpCircle },
   ];
 
   const { openModal } = useModal();
@@ -55,6 +55,12 @@ const PackagesClient = () => {
     isLoading: packageLoading,
     error: packageError,
   } = usePackage(slug);
+
+  useEffect(() => {
+    if (packageData) {
+      console.log("Package Data loaded:", packageData);
+    }
+  }, [packageData]);
 
   // Hotel Selection State
   const [selectedHotel, setSelectedHotel] = useState(null);
@@ -234,8 +240,8 @@ const PackagesClient = () => {
   };
 
   const finalPrice = packageData && selectedHotel
-    ? (packageData.offer?.offerPrice || packageData.basePrice || packageData.price || 32500) + (selectedHotel.additionalCharge || 0)
-    : 32500;
+    ? (packageData.offer?.offerPrice || packageData.basePrice || packageData.price || 0) + (selectedHotel.additionalCharge || 0)
+    : 0;
 
   const copyCurrentUrl = async () => {
     const baseUrl = window.location.origin;
@@ -255,29 +261,24 @@ const PackagesClient = () => {
         packageData={packageData} 
       />
 
-      {/* 2. Highlights Section - Before Navbar */}
-      <Container className="pt-8 md:pt-4">
-        <HighlightsSection packageData={packageData} />
-      </Container>
-      
-      {/* Sticky Navigation - Outside overflow wrapper */}
-      <PackageNavigation 
-          activeSection={activeSection} 
-          onScrollToSection={scrollToSection} 
-          sections={sections}
-          isBottomBarVisible={showStickyBar}
-      />
+      <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-8 md:pt-4">
+        {/* Main Content Column (75%) */}
+        <div className="w-full c-lg:w-[75%] space-y-6 md:space-y-8">
+          {/* 2. Highlights Section */}
+          <HighlightsSection packageData={packageData} />
 
-      {/* Two Column Layout Wrapper - Outside overflow constraint */}
-      <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-4 md:pt-22">
-        {/* Main Content Column with Overflow Control */}
-        <div className="w-full c-lg:w-[75%]">
-          {/* Scroll IDs and Section Content */}
+          {/* Sticky Navigation - Now part of the content column flow */}
+          <PackageNavigation 
+              activeSection={activeSection} 
+              onScrollToSection={scrollToSection} 
+              sections={sections}
+              isBottomBarVisible={showStickyBar}
+          />
+
+          {/* Main Content Sections */}
           <div className="space-y-6 md:space-y-8">
-            {/* Overview Section - Content below navbar */}
+            {/* Overview Section */}
             <div id="overview" className="scroll-mt-48 space-y-6 md:space-y-8">
-              
-              {/* Main Content Wrapper with Gradient and Overflow Control for inner parts */}
               <div className="relative pb-4 w-full overflow-x-hidden">
                 <OverviewSection packageData={packageData} />
               </div>
@@ -294,76 +295,68 @@ const PackagesClient = () => {
             <div id="inclusions" className="scroll-mt-48">
               <InclusionsSection packageData={packageData} />
             </div>
-
-            
           </div>
         </div>
 
-        {/* Sidebar - Outside overflow wrapper */}
+        {/* Sidebar Column (25%) - Now starts from the top */}
         <div className="hidden c-lg:block w-[25%]" id="booking-sidebar">
-          <div className="sticky top-[100px] md:top-[120px] space-y-3 z-30 pb-4">
+          <div className="sticky top-[80px] md:top-[100px] space-y-3 z-30 pb-4">
             {/* Pricing Card */}
-            {/* Primary Booking Card */}
             <div className="gradient-btn rounded-3xl shadow-xl overflow-hidden p-4 border border-white/20">
               <h3 className="text-lg font-bold text-white mb-4">Select Hotel Type</h3>
 
-              {/* Hotel Tiers Selection - Horizontal Grid */}
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {hotelTiers.map((tier) => {
                   const isActive = selectedHotel?.type === tier.type;
-                  
                   const starRatingNames = {
                     twostar: "2 Star",
                     threestar: "3 Star",
                     fourstar: "4 Star",
                     fivestar: "5 Star",
                   };
-
                   const starRatingCount = {
                     twostar: 2,
                     threestar: 3,
                     fourstar: 4,
                     fivestar: 5,
                   };
-
                   const label = starRatingNames[tier.type] || "Hotel";
                   const stars = starRatingCount[tier.type] || 5;
                   
-                    return (
-                      <button
-                        key={tier.type}
-                        onClick={() => setSelectedHotel(tier)}
-                        className={cn(
-                          "flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-500",
-                          isActive 
-                            ? "bg-white/10 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.2)] scale-105" 
-                            : "bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10"
-                        )}
-                      >
-                        <span className={cn(
-                          "text-[9px] font-black uppercase tracking-wider mb-1.5 transition-colors",
-                          isActive ? "text-yellow-400" : "text-white/40"
-                        )}>
-                          {label}
-                        </span>
-                        <div className="flex gap-0.5 items-center justify-center">
-                          {[...Array(stars)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              size={10} 
-                              className={cn(
-                                "transition-all duration-500",
-                                isActive ? "fill-yellow-400 text-yellow-400 scale-110" : "fill-white/20 text-white/20"
-                              )} 
-                            />
-                          ))}
-                        </div>
-                      </button>
-                    );
+                  return (
+                    <button
+                      key={tier.type}
+                      onClick={() => setSelectedHotel(tier)}
+                      className={cn(
+                        "flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-500",
+                        isActive 
+                          ? "bg-white/10 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.2)] scale-105" 
+                          : "bg-white/5 border-white/5 hover:border-white/20 hover:bg-white/10"
+                      )}
+                    >
+                      <span className={cn(
+                        "text-[9px] font-black uppercase tracking-wider mb-1.5 transition-colors",
+                        isActive ? "text-yellow-400" : "text-white/40"
+                      )}>
+                        {label}
+                      </span>
+                      <div className="flex gap-0.5 items-center justify-center">
+                        {[...Array(stars)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            size={10} 
+                            className={cn(
+                              "transition-all duration-500",
+                              isActive ? "fill-yellow-400 text-yellow-400 scale-110" : "fill-white/20 text-white/20"
+                            )} 
+                          />
+                        ))}
+                      </div>
+                    </button>
+                  );
                 })}
               </div>
 
-              {/* Price Details */}
               <div className="mb-6 p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
                 <div className="flex items-center justify-between mb-0.5">
                   <div className="flex items-baseline gap-1">
@@ -378,7 +371,6 @@ const PackagesClient = () => {
                 <p className="text-white/60 text-[10px] font-semibold">Per Person (Incl. all taxes)</p>
               </div>
 
-              {/* Action Buttons */}
               <div className="space-y-2">
                 <button
                   onClick={() => {
@@ -394,7 +386,6 @@ const PackagesClient = () => {
 
             <div className="gradient-btn rounded-3xl shadow-xl overflow-hidden p-4 border border-white/20">
               <h3 className="text-lg font-bold text-white mb-4">Quick Enquiry</h3>
-              
               <EnquiryFormFields 
                 variant="inline" 
                 formType="potential"
@@ -407,7 +398,6 @@ const PackagesClient = () => {
               />
             </div>
 
-            {/* Share Section */}
             <div className="mt-6 flex flex-col items-center">
               <button 
                 onClick={copyCurrentUrl}
@@ -443,7 +433,7 @@ const PackagesClient = () => {
 
       {/* Compact Sticky Bottom Bar - Mobile Only */}
       <div 
-        className={`c-lg:hidden fixed bottom-[60px] left-0 right-0 z-50 transition-all duration-500 ${
+        className={`c-lg:hidden fixed bottom-[75px] left-0 right-0 z-50 transition-all duration-500 ${
           showStickyBar ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
@@ -483,7 +473,7 @@ const PackagesClient = () => {
                   <div className="flex items-baseline gap-1">
                     <span className="text-brand-accent text-sm font-bold">₹</span>
                     <span className="text-white font-bold text-2xl drop-shadow-sm">
-                      {formatPrice(packageData?.price || packageData?.startingPrice || 32500)}
+                      {formatPrice(packageData?.basePrice || packageData?.price || packageData?.startingPrice || 0)}
                     </span>
                     <span className="text-white/40 text-xs">/person</span>
                   </div>
@@ -491,9 +481,20 @@ const PackagesClient = () => {
                 
                 {/* Hotel Category Badge */}
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-inner">
-                  <span className="text-brand-accent text-xs">⭐⭐⭐⭐</span>
+                  <span className="text-brand-accent text-xs">
+                    {"⭐".repeat(
+                      packageData?.hotelCategory?.toLowerCase() === "fivestar" ? 5 :
+                      packageData?.hotelCategory?.toLowerCase() === "fourstar" ? 4 :
+                      packageData?.hotelCategory?.toLowerCase() === "threestar" ? 3 : 4
+                    )}
+                  </span>
                   <span className="text-white text-xs font-semibold">
-                    {packageData?.hotelCategory || "Deluxe"} Hotels
+                    {packageData?.hotelCategory ? (
+                      packageData.hotelCategory.toLowerCase() === "threestar" ? "3-Star" :
+                      packageData.hotelCategory.toLowerCase() === "fourstar" ? "4-Star" :
+                      packageData.hotelCategory.toLowerCase() === "fivestar" ? "5-Star" :
+                      packageData.hotelCategory
+                    ) : "Deluxe"} Hotels
                   </span>
                 </div>
               </div>
