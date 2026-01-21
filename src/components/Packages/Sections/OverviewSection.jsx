@@ -27,7 +27,7 @@ const OverviewSection = ({ packageData }) => {
       <div className="bg-white rounded-3xl py-2 md:py-4 px-3 md:px-8 border border-slate-100 shadow-sm relative overflow-hidden">
         <div className="absolute left-0 top-5 md:top-6 w-1 h-10 bg-brand-blue rounded-r-full" />
         <h2 className="text-lg md:text-2xl font-black text-slate-900 mb-3 tracking-tight">
-          Package <span className="text-brand-blue">Overview</span>
+          Package <span className="text-brand-blue">Highlights</span>
         </h2>
         
         {/* Quick Facts Grid */}

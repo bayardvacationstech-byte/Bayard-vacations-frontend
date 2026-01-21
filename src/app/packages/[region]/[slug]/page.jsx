@@ -13,6 +13,7 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const packages = await getAllDocuments(COLLECTIONS.PACKAGES);
+    console.log("Packages for static params:", packages);
     return packages.map((pkg) => ({
       region: pkg.region,
       slug: pkg.packageSlug,

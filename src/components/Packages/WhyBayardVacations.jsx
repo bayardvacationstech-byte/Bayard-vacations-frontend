@@ -52,7 +52,7 @@ const WhyBayardVacations = () => {
   ];
 
   return (
-    <section className="bg-white py-8 md:py-10 relative overflow-hidden rounded-3xl border border-slate-100 shadow-sm mb-4 md:mb-4">
+    <section className="bg-white py-8 md:py-10 relative overflow-hidden rounded-3xl border border-slate-100 shadow-sm ">
       {/* Decorative Blur */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>

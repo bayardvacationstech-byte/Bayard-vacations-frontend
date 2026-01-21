@@ -49,6 +49,10 @@ import { useRegionFactSheet } from "@/hooks/regions/useRegionFactSheet";
 export default function FactsheetClient({ regionSlug }) {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [selectedGallery, setSelectedGallery] = useState({ title: "", images: [] });
+  const [historyExpanded, setHistoryExpanded] = useState(false);
+  const [isHistoryTextClamped, setIsHistoryTextClamped] = useState(false);
+  const historyTextRef = useRef(null);
+  const [expandedMilestones, setExpandedMilestones] = useState({});
 
   // Fetch region data to get ID
   const { regionData, isLoading: regionLoading } = useRegion(regionSlug);
@@ -386,6 +390,26 @@ export default function FactsheetClient({ regionSlug }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeSection, factsheetSections]);
 
+  // Check if history text is clamped (exceeds 4 lines)
+  useEffect(() => {
+    const checkTextClamping = () => {
+      if (historyTextRef.current) {
+        const element = historyTextRef.current;
+        // Compare scrollHeight (full content height) with clientHeight (visible height)
+        // If scrollHeight > clientHeight, the text is being clamped
+        setIsHistoryTextClamped(element.scrollHeight > element.clientHeight);
+      }
+    };
+
+    // Check on mount and when data changes
+    checkTextClamping();
+    
+    // Also check after a short delay to ensure fonts are loaded
+    const timeoutId = setTimeout(checkTextClamping, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, [currentData.history?.description]);
+
   return (
     <div className="min-h-screen bg-slate-50/50">
       {/* Hero Section */}
@@ -528,17 +552,40 @@ export default function FactsheetClient({ regionSlug }) {
                 <SectionHeader title="History & Heritage" badge="Our Origins" />
                 <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
                   <h3 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 mb-6">{currentData.history.title}</h3>
-                  <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed mb-6 max-w-3xl">
-                    {currentData.history.description}
-                  </p>
+                  <div className="mb-6 max-w-3xl">
+                    <p 
+                      ref={historyTextRef}
+                      className={cn(
+                        "text-base md:text-lg text-slate-600 font-medium leading-relaxed",
+                        !historyExpanded && "line-clamp-4"
+                      )}
+                    >
+                      {currentData.history.description}
+                    </p>
+                    {isHistoryTextClamped && (
+                      <button
+                        onClick={() => setHistoryExpanded(!historyExpanded)}
+                        className="mt-3 text-brand-green hover:text-brand-green/80 font-bold text-sm flex items-center gap-1 transition-colors"
+                      >
+                        {historyExpanded ? (
+                          <>
+                            Read Less
+                            <ChevronDown className="w-4 h-4 rotate-180 transition-transform" />
+                          </>
+                        ) : (
+                          <>
+                            Read More
+                            <ChevronDown className="w-4 h-4 transition-transform" />
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
                   
                   {/* Milestones Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     {currentData.history.milestones?.map((m, i) => (
-                      <div key={i} className="bg-slate-50/50 border border-slate-100 p-6 rounded-2xl">
-                        <h4 className="font-black text-slate-900 mb-2 uppercase text-[10px] tracking-widest">{m.title}</h4>
-                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{m.content}</p>
-                      </div>
+                      <MilestoneCard key={i} milestone={m} index={i} />
                     ))}
                   </div>
 
@@ -589,11 +636,11 @@ export default function FactsheetClient({ regionSlug }) {
                         <div className="grid grid-cols-2 gap-4">
                            <div>
                               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Standard</p>
-                              <p className="text-2xl font-black text-slate-900">{currentData.climate.timeZone}</p>
+                              <p className="text-lg font-black text-slate-900">{currentData.climate.timeZone}</p>
                            </div>
                            <div>
                               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Difference</p>
-                              <p className="text-sm font-bold text-slate-700">{currentData.climate.difference}</p>
+                              <p className="text-lg font-bold text-slate-700">{currentData.climate.difference}</p>
                            </div>
                         </div>
                         <div className="pt-4">
@@ -1019,6 +1066,60 @@ const SectionHeader = ({ title, badge, noMargin }) => (
     </h2>
   </div>
 );
+
+// Milestone Card Component with Read More functionality
+const MilestoneCard = ({ milestone, index }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isTextClamped, setIsTextClamped] = useState(false);
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const checkClamping = () => {
+      if (textRef.current) {
+        setIsTextClamped(textRef.current.scrollHeight > textRef.current.clientHeight);
+      }
+    };
+
+    checkClamping();
+    const timeoutId = setTimeout(checkClamping, 100);
+    return () => clearTimeout(timeoutId);
+  }, [milestone.content]);
+
+  return (
+    <div className="bg-slate-50/50 border border-slate-100 p-6 rounded-2xl">
+      <h4 className="font-black text-slate-900 mb-2 uppercase text-[10px] tracking-widest">
+        {milestone.title}
+      </h4>
+      <p
+        ref={textRef}
+        className={cn(
+          "text-sm text-slate-600 font-medium leading-relaxed",
+          !isExpanded && "line-clamp-4"
+        )}
+      >
+        {milestone.content}
+      </p>
+      {isTextClamped && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="mt-2 text-brand-green hover:text-brand-green/80 font-bold text-xs flex items-center gap-1 transition-colors"
+        >
+          {isExpanded ? (
+            <>
+              Read Less
+              <ChevronDown className="w-3 h-3 rotate-180 transition-transform" />
+            </>
+          ) : (
+            <>
+              Read More
+              <ChevronDown className="w-3 h-3 transition-transform" />
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+};
 
 const SidebarBenefit = ({ icon: Icon, text }) => (
   <div className="flex items-center gap-4 text-sm font-bold text-slate-300">

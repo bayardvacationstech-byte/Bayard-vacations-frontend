@@ -1,15 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Heart, MapPin, Calendar, Users, Star, Sparkles, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Heart, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Play, Info, Camera, Clock, Utensils, Music } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// Floating Hearts Background Component
+const FloatingHearts = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            opacity: 0, 
+            y: "100%", 
+            x: `${Math.random() * 100}%`,
+            scale: Math.random() * 0.5 + 0.5,
+            rotate: Math.random() * 360
+          }}
+          animate={{ 
+            opacity: [0, 0.4, 0], 
+            y: "-20%",
+            rotate: Math.random() * 360 + 360
+          }}
+          transition={{ 
+            duration: Math.random() * 10 + 15, 
+            repeat: Infinity,
+            delay: Math.random() * 20,
+            ease: "linear"
+          }}
+          className="absolute"
+        >
+          <Heart 
+            className={cn(
+              "w-8 h-8",
+              i % 3 === 0 ? "text-pink-200 fill-pink-200" : 
+              i % 3 === 1 ? "text-rose-300 fill-rose-300" : 
+              "text-red-200 fill-red-200"
+            )} 
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 export default function RomanticGetawaysClient() {
   const [selectedTab, setSelectedTab] = useState("international");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Romantic packages data
   const romanticPackages = {
@@ -98,222 +145,369 @@ export default function RomanticGetawaysClient() {
 
   const currentPackages = romanticPackages[selectedTab];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-rose-50">
-      {/* Hero Section */}
-      <div className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-rose-500 via-pink-500 to-red-500">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 10 C 25 10, 20 15, 20 20 C 20 25, 25 30, 30 35 C 35 30, 40 25, 40 20 C 40 15, 35 10, 30 10 Z' fill='white' fill-opacity='0.3'/%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }} />
-        </div>
+  if (!mounted) return null;
 
-        <Container className="relative h-full flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-            {/* Left Content */}
+  return (
+    <div className="min-h-screen bg-[#FFF9FA]">
+      {/* Immersive Hero Section */}
+      <div className="relative h-[85vh] md:h-[95vh] overflow-hidden flex items-center">
+        {/* Ken Burns Effect Background */}
+        <motion.div 
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=1920&q=80"
+            alt="Romantic background"
+            fill
+            className="object-cover"
+            priority
+          />
+        </motion.div>
+        
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-rose-900/60 via-rose-800/20 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rose-950/80 via-transparent to-rose-950/40 z-10" />
+        
+        <FloatingHearts />
+
+        <Container className="relative z-20 pt-40 pb-12 md:pt-48 md:pb-0">
+          <div className="max-w-4xl space-y-8 md:space-y-10">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-6"
+              className="space-y-4 md:space-y-6"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                <Heart className="w-4 h-4 text-white fill-white" />
-                <span className="text-sm font-bold text-white uppercase tracking-widest">
-                  Love & Romance
+              <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl">
+                <Heart className="w-5 h-5 text-rose-300 fill-rose-300 animate-pulse" />
+                <span className="text-sm font-black text-rose-100 uppercase tracking-[0.3em] font-sans">
+                  The Romance Collection
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-tight">
-                Romantic<br />
-                <span className="text-amber-300">Getaways</span>
-              </h1>
+              <div className="space-y-1 md:space-y-2">
+                <p className="text-rose-200 font-cursive text-2xl md:text-5xl tracking-wide opacity-90 mb-[-5px] md:mb-[-20px] ml-1" style={{ fontFamily: 'Damion, cursive' }}>
+                  Handpicked
+                </p>
+                <h1 className="text-4xl sm:text-7xl md:text-9xl font-black text-white leading-[0.95] md:leading-[0.9] tracking-tighter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                  Romantic<br />
+                  <span className="text-rose-400">Getaways</span>
+                </h1>
+              </div>
 
-              <p className="text-xl text-white/90 leading-relaxed max-w-xl">
-                All things love. Discover our handpicked domestic and international arrivals curated specifically for this theme.
+              <p className="text-lg md:text-2xl text-rose-50 font-medium leading-relaxed max-w-2xl drop-shadow-md">
+                Escape to the world's most intimate corners. Where every sunset is a celebration and every moment becomes a timeless memory.
               </p>
 
-              <div className="flex gap-4">
-                <Button size="lg" className="bg-white text-rose-600 hover:bg-rose-50 font-black px-8 py-6 rounded-2xl shadow-xl">
-                  Explore Packages
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-5 pt-4">
+                <Button size="lg" className="h-14 md:h-16 px-8 md:px-10 rounded-2xl bg-white text-rose-600 hover:bg-rose-50 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-none font-black text-base md:text-lg uppercase tracking-widest active:scale-95 transition-all">
+                  Book Your Escape
+                  <ChevronRight className="ml-2 w-5 h-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm">
-                  Customize Trip
+                <Button size="lg" variant="outline" className="h-14 md:h-16 px-8 md:px-10 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 backdrop-blur-md font-black text-base md:text-lg uppercase tracking-widest active:scale-95 transition-all">
+                  Customize Love
                 </Button>
               </div>
             </motion.div>
+          </div>
+        </Container>
+        
+        {/* Floating "Couples Card" */}
+        <Container className="absolute bottom-12 right-0 hidden lg:block z-30">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="ml-auto w-[380px] group"
+          >
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.3)] hover:bg-white/15 transition-all duration-500">
+              <div className="flex items-start gap-6">
+                <div className="w-16 h-16 rounded-2xl bg-rose-500/20 flex items-center justify-center border border-rose-400/30 group-hover:scale-110 transition-transform duration-500">
+                  <Star className="w-8 h-8 text-rose-300 fill-rose-300" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-black text-white">Elite Romance</h3>
+                  <p className="text-rose-100/70 text-sm leading-relaxed font-medium">
+                    "Bayard transformed our honeymoon into a living dream. The attention to detail was magical."
+                  </p>
+                  <div className="flex gap-1 pt-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} className="w-3 h-3 text-amber-400 fill-amber-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </Container>
 
-            {/* Right Image */}
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3 opacity-60">
+          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Unveil Romance</span>
+          <div className="w-[1px] h-16 bg-gradient-to-b from-white via-white/50 to-transparent" />
+        </div>
+      </div>
+
+      {/* Intro Section */}
+      <section className="py-20 md:py-32 relative overflow-hidden bg-white">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-rose-50 rounded-full blur-[120px] -mr-48 -mt-48" />
+        <Container className="relative">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative hidden lg:block"
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 border border-rose-100"
             >
-              <div className="relative w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl ring-8 ring-white/20">
+              <Sparkles className="w-4 h-4 text-rose-400" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-rose-500">Curated Experiences</span>
+            </motion.div>
+            <h2 className="text-4xl md:text-7xl font-serif text-slate-900 tracking-tight leading-tight">
+              Where <span className="text-rose-500 italic">Love</span> Meets the World’s Grandeur
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-500 font-medium leading-relaxed">
+              We don't just plan trips; we orchestrate love stories. Our romance collection spans the globe, from the turquoise lagoons of the Maldives to the royal palaces of Udaipur.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Packages Section */}
+      <section className="pb-24">
+        <Container>
+          {/* Tab Switcher */}
+          <div className="flex justify-center mb-16 px-4">
+            <div className="inline-flex bg-slate-100/80 backdrop-blur-sm rounded-[2rem] p-2 shadow-inner border border-slate-200/50">
+              <button
+                onClick={() => setSelectedTab("international")}
+                className={cn(
+                  "px-10 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
+                  selectedTab === "international"
+                    ? "bg-rose-600 text-white shadow-2xl shadow-rose-600/30 scale-105"
+                    : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                Global Destinations
+              </button>
+              <button
+                onClick={() => setSelectedTab("domestic")}
+                className={cn(
+                  "px-10 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
+                  selectedTab === "domestic"
+                    ? "bg-rose-600 text-white shadow-2xl shadow-rose-600/30 scale-105"
+                    : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                Incredible India
+              </button>
+            </div>
+          </div>
+
+          {/* Packages Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <AnimatePresence mode="wait">
+              {currentPackages.map((pkg, index) => (
+                <motion.div
+                  key={`${selectedTab}-${pkg.id}`}
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -30, scale: 0.95 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <Link href={`/packages/${pkg.id}`}>
+                    <div className="relative bg-white rounded-[3rem] overflow-hidden shadow-xl hover:shadow-[0_40px_80px_rgba(244,63,94,0.15)] transition-all duration-700 h-full flex flex-col border border-slate-100 hover:border-rose-200">
+                      {/* Image Container */}
+                      <div className="relative h-[320px] overflow-hidden">
+                        <Image
+                          src={pkg.image}
+                          alt={pkg.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
+                        />
+                        {/* Premium Overlays */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-rose-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
+                        
+                        {/* Category Badge */}
+                        <div className="absolute top-6 left-6">
+                          <div className="px-4 py-2 rounded-full bg-rose-500 text-white text-[10px] font-black uppercase tracking-widest backdrop-blur-md shadow-lg">
+                            {pkg.category}
+                          </div>
+                        </div>
+
+                        {/* Romantic Floating Tag */}
+                        <div className="absolute top-6 right-6 flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg transform group-hover:rotate-6 transition-transform">
+                          <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                          <span className="text-[10px] font-black text-rose-600">{pkg.rating}</span>
+                        </div>
+
+                        {/* Location Overlay */}
+                        <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                              <MapPin className="w-4 h-4" />
+                            </div>
+                            <span className="text-sm font-bold tracking-tight">{pkg.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2 bg-rose-500/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span className="text-[10px] font-black uppercase tracking-widest">{pkg.duration.split('/')[0]}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Content Area */}
+                      <div className="p-8 flex-1 flex flex-col justify-between space-y-6">
+                        <div className="space-y-4">
+                          <h3 className="text-2xl font-black text-slate-900 group-hover:text-rose-600 transition-colors leading-tight tracking-tight">
+                            {pkg.title}
+                          </h3>
+
+                          {/* Highlights with Icons */}
+                          <div className="space-y-3 pt-2">
+                            {pkg.highlights.map((highlight, idx) => (
+                              <div key={idx} className="flex items-center gap-3 text-slate-500 group-hover:text-slate-700 transition-colors">
+                                <div className="w-6 h-6 rounded-lg bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+                                  {idx === 0 && <Utensils className="w-3 h-3 text-rose-400" />}
+                                  {idx === 1 && <Camera className="w-3 h-3 text-rose-400" />}
+                                  {idx === 2 && <Music className="w-3 h-3 text-rose-400" />}
+                                </div>
+                                <span className="text-[11px] font-bold uppercase tracking-wider">{highlight}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Premium Footer */}
+                        <div className="pt-6 border-t border-slate-100 flex items-end justify-between">
+                          <div className="space-y-1">
+                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Curated Price</p>
+                            <p className="text-3xl font-black text-slate-900 tracking-tighter">
+                              {pkg.price}
+                              <span className="text-xs text-slate-400 font-bold ml-1 tracking-tight">/ couple</span>
+                            </p>
+                          </div>
+                          <div className="w-12 h-12 rounded-2xl bg-slate-900 hover:bg-rose-600 text-white flex items-center justify-center transition-all duration-500 shadow-xl group-hover:rotate-12">
+                            <ChevronRight className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </Container>
+      </section>
+
+      {/* Why Choose Section - Redesigned */}
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-slate-950" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-30 pointer-events-none" />
+        
+        {/* Animated Background Orbs */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-900/40 rounded-full blur-[150px] -mr-64 -mt-64 animate-float" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-900/20 rounded-full blur-[150px] -ml-64 -mb-64 animate-floatSlow" />
+
+        <Container className="relative">
+          <div className="flex flex-col lg:flex-row items-center gap-20">
+            <div className="flex-1 space-y-10">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-full">
+                  <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-rose-400">Our Romance Philosophy</span>
+                </div>
+                <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]">
+                  Why Trust Us With Your <span className="text-rose-500 italic font-serif">Heart?</span>
+                </h2>
+              </div>
+
+              <div className="grid grid-cols-1 gap-10">
+                {[
+                  { icon: Heart, title: "Emotion-First Curation", desc: "We don't just book rooms; we secure the specific table with the best sunset view, and the villa with the most privacy." },
+                  { icon: Sparkles, title: "Secret Inclusions", desc: "Private beach setups, surprise champagne arrivals, and localized romance traditions you won't find anywhere else." },
+                  { icon: Users, title: "24/7 Romance Concierge", desc: "Need a last-minute flower delivery in a remote village? Our team makes the impossible happen for your love story." }
+                ].map((feature, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="flex gap-8 group"
+                  >
+                    <div className="w-16 h-16 rounded-[1.5rem] bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-rose-500 group-hover:text-white transition-all duration-500">
+                      <feature.icon className="w-8 h-8 text-rose-500 group-hover:text-white transition-colors" />
+                    </div>
+                    <div className="space-y-2 pt-2">
+                      <h3 className="text-2xl font-black text-white tracking-tight">{feature.title}</h3>
+                      <p className="text-slate-400 font-medium leading-relaxed max-w-xl">{feature.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex-1 relative hidden lg:block">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                className="relative z-10 w-full aspect-square rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)]"
+              >
                 <Image
-                  src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=800"
-                  alt="Romantic couple"
+                  src="https://images.unsplash.com/photo-1510797215324-95aa89f43c33?w=1000&q=80"
+                  alt="Romantic sunset"
                   fill
                   className="object-cover"
                 />
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-rose-600 fill-rose-600" />
+                <div className="absolute inset-0 bg-gradient-to-t from-rose-950/60 to-transparent" />
+                <div className="absolute bottom-12 left-12 right-12">
+                  <div className="p-8 bg-white/10 backdrop-blur-3xl rounded-[2.5rem] border border-white/20">
+                    <p className="text-2xl font-black text-white italic leading-relaxed">
+                      "Distance is just a test to see how far love can travel."
+                    </p>
                   </div>
-                  <div>
-                    <p className="font-black text-slate-900">Perfect for Couples</p>
-                    <p className="text-sm text-slate-600">Unforgettable memories await</p>
+                </div>
+              </motion.div>
+              {/* Decorative Card Behind */}
+              <div className="absolute top-10 -right-10 w-full aspect-square bg-rose-600 rounded-[4rem] -z-10 opacity-30 transform rotate-6 border border-white/20" />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Final Premium CTA */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        <Container className="text-center">
+          <div className="max-w-3xl mx-auto space-y-10">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter leading-tight">
+              Ready to Write Your Next<br />
+              <span className="text-rose-500">Chapter Together?</span>
+            </h2>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-black text-lg uppercase tracking-widest transition-all">
+                Talk to a Specialist
+              </Button>
+              <div className="flex -space-x-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="w-12 h-12 rounded-full border-4 border-white overflow-hidden bg-slate-100">
+                    <Image src={`https://i.pravatar.cc/150?u=${i + 130}`} alt="Agent" width={48} height={48} />
                   </div>
+                ))}
+                <div className="w-12 h-12 rounded-full border-4 border-white bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-black">
+                  +12
                 </div>
               </div>
-            </motion.div>
+            </div>
+            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Join 500+ couples who celebrated with us last month</p>
           </div>
         </Container>
-      </div>
-
-      {/* Packages Section */}
-      <Container className="py-8 md:py-12">
-        {/* Tab Switcher */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-slate-100 rounded-full p-1.5">
-            <button
-              onClick={() => setSelectedTab("international")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "international"
-                  ? "bg-rose-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              International
-            </button>
-            <button
-              onClick={() => setSelectedTab("domestic")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "domestic"
-                  ? "bg-rose-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Domestic
-            </button>
-          </div>
-        </div>
-
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-rose-500 text-white text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-full">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-bold">{pkg.rating}</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-rose-600 transition-colors">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-slate-900">{pkg.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-rose-600 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">View Details</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-
-      {/* Why Choose Section */}
-      <div className="bg-gradient-to-br from-rose-50 to-pink-50 py-16 md:py-24">
-        <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
-              Why Choose Our Romantic Packages?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              We create magical moments that last a lifetime
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Heart, title: "Curated for Love", desc: "Every detail designed to enhance romance and create unforgettable memories together." },
-              { icon: Sparkles, title: "Exclusive Experiences", desc: "Private dinners, couples spa, and special moments just for the two of you." },
-              { icon: Users, title: "Expert Planning", desc: "Our romance specialists ensure every moment is perfect, from arrival to departure." }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center p-8"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-black text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </div>
+      </section>
     </div>
   );
 }

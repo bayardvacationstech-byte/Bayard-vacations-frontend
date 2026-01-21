@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 
 const PackageHero = ({ packageData }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHighlightsExpanded, setIsHighlightsExpanded] = useState(false);
   const swiperRef = useRef(null);
 
   const dummyBannerImages = [
@@ -228,14 +229,14 @@ const PackageHero = ({ packageData }) => {
 
             {/* Content Grouping: Highlights & Desktop Thumbnails */}
             <div className="hidden lg:flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start pt-4">
-              {/* Highlights (Hidden on Mobile as per request) */}
-              <div className="hidden lg:block flex-1">
+              
+              {/* <div className="hidden lg:block flex-1">
                 <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Package Highlights</p>
                 <div className="space-y-4">
                   {(Array.isArray(packageData?.highlights) && packageData.highlights.length > 0 
-                    ? packageData.highlights.slice(0, 4) 
+                    ? (isHighlightsExpanded ? packageData.highlights : packageData.highlights.slice(0, 4))
                     : (packageData?.includes 
-                        ? packageData.includes.slice(0, 4) 
+                        ? (isHighlightsExpanded ? packageData.includes : packageData.includes.slice(0, 4))
                         : [
                           "Airport Assistance Upon Arrival",
                           "Sightseeing Tours Included",
@@ -244,17 +245,37 @@ const PackageHero = ({ packageData }) => {
                         ]
                       )
                   ).map((item, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className="w-1.5 h-1.5 rounded-full bg-brand-blue shadow-[0_0_8px_rgba(0,102,255,0.8)]" />
-                      <p className="text-white/70 text-sm font-medium leading-none">{typeof item === 'string' ? item : item.text}</p>
-                    </div>
+                    <motion.div 
+                      key={i} 
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.6)]" />
+                      <p className="text-white text-sm font-medium leading-tight">
+                        {typeof item === 'string' ? item : (item.title || item.text || JSON.stringify(item))}
+                      </p>
+                    </motion.div>
                   ))}
+
+                  {(packageData?.highlights?.length > 4 || (!packageData?.highlights && packageData?.includes?.length > 4)) && (
+                    <button 
+                      onClick={() => setIsHighlightsExpanded(!isHighlightsExpanded)}
+                      className="text-yellow-400 text-xs font-black uppercase tracking-widest hover:text-yellow-300 transition-colors flex items-center gap-2 pt-2 group"
+                    >
+                      <span className="border-b border-yellow-400/30 group-hover:border-yellow-400 pb-0.5 transition-all">
+                        {isHighlightsExpanded ? "Show Less" : "View More Highlights"}
+                      </span>
+                      <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isHighlightsExpanded ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
+                    </button>
+                  )}
                 </div>
-              </div>
+              </div> */}
 
               {/* Desktop-only Thumbnail Grid - Scrollable for more images */}
               <div className="hidden lg:block shrink-0 relative z-50">
-                <div className="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/40">
+                <div className="grid grid-cols-4 gap-3 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/40">
                   {validBannerImages.map((image, index) => (
                     <motion.button
                       key={index}

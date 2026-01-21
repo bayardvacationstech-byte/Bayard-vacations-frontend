@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import BookNowForm from "@/components/Forms/BookNowForm/BookNowForm";
 import { useParams } from "next/navigation";
-import ItineraryFooter from "@/components/Itinerary/ItineraryFooter";
+import RelatedPackages from "@/components/Itinerary/RelatedPackages";
 import PackageHero from "./PackageHero";
 import PackageExperiences from "./PackageExperiences";
 import PackageHotels from "./PackageHotels";
@@ -17,6 +17,7 @@ import HighlightsSection from "./Sections/HighlightsSection";
 import PackageNavigation from "./PackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2, Info, Calendar, Bed, CheckCircle, HelpCircle } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
+import RegionTestimonials from "./RegionTestimonials";
 import { cn, convertAndSortHotels } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
 import { usePathname } from "next/navigation";
@@ -58,6 +59,9 @@ const PackagesClient = () => {
 
   useEffect(() => {
     if (packageData) {
+      if (slug === "shillong-5n-6d") {
+        console.log("DEBUG: Package Data for shillong-5n-6d:", JSON.stringify(packageData, null, 2));
+      }
       console.log("Package Data loaded:", packageData);
     }
   }, [packageData]);
@@ -260,7 +264,6 @@ const PackagesClient = () => {
       <PackageHero 
         packageData={packageData} 
       />
-
       <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-8 md:pt-4">
         {/* Main Content Column (75%) */}
         <div className="w-full c-lg:w-[75%] space-y-6 md:space-y-8">
@@ -420,13 +423,19 @@ const PackagesClient = () => {
         regionName={packageData?.region} 
       />
       </div>
-      {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
-        <ItineraryFooter relatedPackages={filteredRelatedPackages} />
-      )}
+
+      {/* Reviews/Testimonials Section - Social Proof */}
+      <section className="relative overflow-hidden">
+        <RegionTestimonials regionName={packageData?.packageName || packageData?.region} />
+      </section>
+
+      {/* Why Bayard Vacations - Company Trust */}
       <WhyBayardVacations />
 
-
-
+      {/* Related Packages - Upsell/Cross-sell */}
+      {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
+        <RelatedPackages relatedPackages={filteredRelatedPackages} />
+      )}
 
 
 

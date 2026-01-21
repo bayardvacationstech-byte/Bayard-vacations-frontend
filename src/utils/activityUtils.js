@@ -149,7 +149,24 @@ export function formatCategoryName(category) {
 }
 
 /**
- * Filter activities by various criteria
+ * Helper function to check if a search term matches a word boundary in text
+ * This prevents partial word matches (e.g., "goa" won't match "goal")
+ */
+function matchesWordBoundary(text, searchTerm) {
+  if (!text || !searchTerm) return false;
+  const textLower = text.toLowerCase();
+  const searchLower = searchTerm.toLowerCase();
+  
+  // Check for exact match
+  if (textLower === searchLower) return true;
+  
+  // Check for word boundary match using regex
+  const wordBoundaryRegex = new RegExp(`\\b${searchLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+  return wordBoundaryRegex.test(text);
+}
+
+/**
+ * Filter activities by various criteria with prioritized location matching
  */
 export function filterActivities(activities, filters = {}) {
   if (!Array.isArray(activities)) return [];
@@ -162,7 +179,7 @@ export function filterActivities(activities, filters = {}) {
     searchTerm
   } = filters;
 
-  return activities.filter(activity => {
+  let filtered = activities.filter(activity => {
     // Category filter
     if (category && category !== "all" && activity.category !== category) {
       return false;
@@ -186,38 +203,104 @@ export function filterActivities(activities, filters = {}) {
       return false;
     }
 
-    // Enhanced Search term filter
+    // Enhanced Search term filter with prioritized location matching
     if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
+      const searchLower = searchTerm.toLowerCase().trim();
       const keywords = searchLower.split(/\s+/).filter(k => k.length > 1);
       
       if (keywords.length === 0) return true; // Ignore single character searches or just whitespace
 
-      // Combine all searchable text
-      const searchableFields = [
-        activity.title,
-        activity.description,
-        activity.cityName,
-        activity.regionName,
-        activity.category,
-        activity.themeCategory,
-        ...(activity.highlights || []),
-        formatCategoryName(activity.category)
-      ].filter(Boolean).map(s => s.toLowerCase());
-
-      const searchableText = searchableFields.join(" ");
-
-      // Check if ALL keywords are present in the searchable text (OR logic can be applied if preferred, but AND is more precise)
-      // Changing to SOME keywords for more "elastic" feel, or weights?
-      // Let's go with "At least one word matches, but more matches is better" - actually, "Any match in these fields"
+      // Priority 1: Check for exact location matches (city or region name)
+      // This ensures searching for "goa" prioritizes Goa region/city
+      const cityName = activity.cityName || "";
+      const regionName = activity.regionName || "";
       
-      const isMatch = keywords.some(keyword => searchableText.includes(keyword));
-      
-      if (!isMatch) {
-        return false;
+      for (const keyword of keywords) {
+        // Exact match on city or region name (highest priority)
+        if (matchesWordBoundary(cityName, keyword) || matchesWordBoundary(regionName, keyword)) {
+          return true;
+        }
       }
+
+      // Priority 2: Check title with word boundaries
+      const title = activity.title || "";
+      for (const keyword of keywords) {
+        if (matchesWordBoundary(title, keyword)) {
+          return true;
+        }
+      }
+
+      // Priority 3: Check category matches
+      const category = activity.category || "";
+      const themeCategory = activity.themeCategory || "";
+      const formattedCategory = formatCategoryName(category);
+      
+      for (const keyword of keywords) {
+        if (matchesWordBoundary(category, keyword) || 
+            matchesWordBoundary(themeCategory, keyword) ||
+            matchesWordBoundary(formattedCategory, keyword)) {
+          return true;
+        }
+      }
+
+      // Priority 4: Check description and highlights (lower priority, broader match)
+      const description = (activity.description || "").toLowerCase();
+      const highlights = (activity.highlights || []).map(h => h.toLowerCase()).join(" ");
+      const combinedText = `${description} ${highlights}`;
+      
+      // For description/highlights, require at least one keyword to match
+      const hasDescriptionMatch = keywords.some(keyword => 
+        combinedText.includes(keyword)
+      );
+      
+      if (hasDescriptionMatch) {
+        return true;
+      }
+
+      // No matches found
+      return false;
     }
 
     return true;
   });
+
+  // If search term is provided, sort results by relevance
+  if (searchTerm && searchTerm.trim()) {
+    const searchLower = searchTerm.toLowerCase().trim();
+    const keywords = searchLower.split(/\s+/).filter(k => k.length > 1);
+    
+    filtered = filtered.map(activity => {
+      let score = 0;
+      
+      for (const keyword of keywords) {
+        // Exact city/region match = 100 points
+        if (matchesWordBoundary(activity.cityName, keyword) || 
+            matchesWordBoundary(activity.regionName, keyword)) {
+          score += 100;
+        }
+        
+        // Title match = 50 points
+        if (matchesWordBoundary(activity.title, keyword)) {
+          score += 50;
+        }
+        
+        // Category match = 25 points
+        if (matchesWordBoundary(activity.category, keyword) || 
+            matchesWordBoundary(activity.themeCategory, keyword)) {
+          score += 25;
+        }
+        
+        // Description/highlights match = 10 points
+        const description = (activity.description || "").toLowerCase();
+        const highlights = (activity.highlights || []).map(h => h.toLowerCase()).join(" ");
+        if (description.includes(keyword) || highlights.includes(keyword)) {
+          score += 10;
+        }
+      }
+      
+      return { ...activity, _searchScore: score };
+    }).sort((a, b) => (b._searchScore || 0) - (a._searchScore || 0));
+  }
+
+  return filtered;
 }
