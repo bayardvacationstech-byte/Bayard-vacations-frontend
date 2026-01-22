@@ -1,9 +1,30 @@
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp, CheckCircle2 } from "lucide-react";
+import { ChevronDown, ChevronUp, CheckCircle2, Award, MapPin } from "lucide-react";
 
 const HighlightsSection = ({ packageData }) => {
   const [expandedCards, setExpandedCards] = useState({});
 
+  const HIGHLIGHTS_SECTIONS = [
+    {
+      id: "major_activities",
+      heading: "MAJOR ACTIVITIES",
+      type: "bulleted_list",
+      items: [
+        "Baku Old City Walking Tour – UNESCO World Heritage Site exploration",
+        "Heydar Aliyev Center – Iconic modern architecture tour",
+        "Fire Temple (Ateshgah) – Ancient spiritual sanctuary visit",
+        "Burning Mountain (Yanardag) – Natural fire phenomenon experience",
+        "Gobustan Rock Art & Museum – Prehistoric petroglyphs from Mesolithic age",
+        "Mud Volcanoes Tour – Unique natural landscape exploration",
+        "Azerbaijan National Carpet Museum – Cultural heritage showcase",
+        "Maiden Tower – Historic fortress in Old City",
+        "Gabala Mountain Tour – Scenic upland exploration",
+        "Sheki Khan's Palace – Ancient royal residence",
+        "Kish Church – Historical religious monument"
+      ]
+    },
+
+  ];
   // Helpers for dynamic icons and colors
   const getIconForCity = (city = "", index) => {
     const cityLower = city.toLowerCase();
@@ -68,68 +89,115 @@ const HighlightsSection = ({ packageData }) => {
         </div>
       </div>
       
-      {/* Horizontal Scrollable Cards */}
-      <div className="relative">
-        {/* Right Fade Indicator - More prominent to show scrollability */}
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/90 to-transparent pointer-events-none z-10 hidden md:block"></div>
-        
-        <div className="overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 pb-2 scrollbar-hide">
-        <div className="flex gap-4">
-          {cityActivities.map((cityData, index) => {
-            const isExpanded = expandedCards[index];
-            const hasMore = cityData.activities.length > 3;
-            const displayedActivities = isExpanded 
-              ? cityData.activities 
-              : cityData.activities.slice(0, 3);
-
-            return (
-              <div 
-                key={index} 
-                className="flex-shrink-0 w-[230px] sm:w-[230px] md:w-[300px] lg:w-[280px] bg-slate-50 rounded-2xl p-4 border border-slate-100 hover:shadow-md transition-all flex flex-col min-h-[200px]"
-              >
-                {/* City Header */}
-                <div className="mb-3 pb-2 border-b border-slate-200 h-14 flex items-center">
-                  <h3 className="text-base font-black text-slate-900 uppercase tracking-tight line-clamp-2">
-                    {cityData.city}
-                  </h3>
-                </div>
+      {/* NEW PREMIUM EXPERIENCE CARDS DISPLAY */}
+      <div className="mt-4 space-y-10">
+        {HIGHLIGHTS_SECTIONS.map((section) => (
+          <div key={section.id}>
+            <h3 className="text-sm font-black text-slate-400 tracking-widest uppercase mb-4 pl-1 border-l-4 border-brand-blue/30">{section.heading}</h3>
+            
+            {section.type === "bulleted_list" && (
+              <div className="relative group/carousel">
+                {/* Scroll Indicators */}
+                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none hidden md:block" />
+                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none hidden md:block" />
                 
-                {/* Activities List - Grows to fill space */}
-                <div className="space-y-2 flex-grow">
-                  {displayedActivities.map((activity, actIndex) => (
-                    <div key={actIndex} className="flex items-start gap-3 group/item">
-                      <CheckCircle2 className="flex-shrink-0 w-3.5 h-3.5 mt-0.5 text-brand-blue group-hover/item:text-brand-blue transition-colors duration-300" />
-                      <p className="text-slate-600 text-[11px] font-medium leading-snug group-hover/item:text-slate-900 transition-colors duration-300">
-                        {activity}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                {/* 2-Row Horizontal Scroll Grid */}
+                <div className="grid grid-rows-2 grid-flow-col gap-4 overflow-x-auto pb-6 -mx-3 md:-mx-6 px-3 md:px-6 touch-pan-x snap-x scrollbar-hide auto-cols-[85vw] md:auto-cols-[calc(33.333%-16px)]">
+                  {section.items.map((item, index) => {
+                    const parts = item.split("–");
+                    const title = parts[0].trim();
+                    const desc = parts.slice(1).join("–").trim();
+                    const number = (index + 1).toString().padStart(2, '0');
+                    
+                    const accentColors = [
+                      "border-l-brand-blue text-brand-blue",
+                      "border-l-teal-500 text-teal-600",
+                      "border-l-rose-500 text-rose-600",
+                      "border-l-amber-500 text-amber-600",
+                    ];
+                    const accentClass = accentColors[index % accentColors.length];
+                    const bgClass = index % 2 === 0 ? "bg-slate-50" : "bg-white";
 
-                {/* Read More/Less Button - Anchored to bottom */}
-                {hasMore && (
-                  <button
-                    onClick={() => toggleExpand(index)}
-                    className="mt-auto pt-3 flex items-center gap-1 text-brand-blue hover:text-blue-700 text-xs font-semibold transition-colors"
-                  >
-                    {isExpanded ? (
-                      <>
-                        <span>Show Less</span>
-                        <ChevronUp className="w-3.5 h-3.5" />
-                      </>
-                    ) : (
-                      <>
-                        <span>Read More</span>
-                        <ChevronDown className="w-3.5 h-3.5" />
-                      </>
-                    )}
-                  </button>
-                )}
+                    return (
+                      <div 
+                        key={index} 
+                        className={`snap-start group relative flex flex-col p-4 md:p-5 rounded-2xl border border-slate-100 ${bgClass} hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full min-h-[140px]`}
+                      >
+                        <div className="absolute -right-4 -top-6 text-[60px] font-black text-slate-100/50 group-hover:text-slate-100 pointer-events-none select-none transition-colors duration-500 font-serif">
+                          {number}
+                        </div>
+
+                        <div className="flex items-start gap-3 z-10 h-full">
+                           {/* Left Accent Bar */}
+                          <div className={`w-1 h-12 rounded-full ${accentClass.split(' ')[0]} flex-shrink-0 transition-all duration-300 group-hover:h-full group-hover:bg-opacity-80`}></div>
+                          
+                          <div className="flex-grow flex flex-col h-full">
+                            <div className="flex items-center gap-2 mb-2">
+                               <span className={`text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-md bg-white border shadow-sm ${accentClass.split(' ')[1]}`}>
+                                 EXPERIENCE {number}
+                               </span>
+                            </div>
+
+                            <h4 className="font-bold text-slate-900 text-sm md:text-base leading-tight mb-1 group-hover:text-brand-blue transition-colors duration-300 line-clamp-2">
+                              {title}
+                            </h4>
+                            
+                            {desc && (
+                              <div className="flex items-start gap-1.5 mt-auto pt-1">
+                                <MapPin className="w-3 h-3 mt-0.5 text-slate-400 flex-shrink-0 group-hover:text-brand-blue/60 transition-colors" />
+                                <p className="text-slate-500 text-[10px] md:text-xs leading-relaxed group-hover:text-slate-600 transition-colors line-clamp-2">
+                                  {desc}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            )}
+
+
+            {section.type === "latex_list" && (
+              <div className="bg-gradient-to-br from-brand-blue/5 to-white rounded-3xl p-6 md:p-8 border border-brand-blue/10">
+                <div className="flex flex-col gap-4">
+                  {section.items.map((item, idx) => {
+                    // Parse latex format: \item **Key:** Value
+                    const cleanItem = item.replace(/^\\item\s*/, '');
+                    const parts = cleanItem.split(":**"); // Split at the bold colon marker if commonly used or just regex
+                    
+                    // Simple parser for "**Key:** Value"
+                    let key = "";
+                    let value = cleanItem;
+                    if (cleanItem.includes("**")) {
+                       const match = cleanItem.match(/\*\*(.*?)\*\*(.*)/);
+                       if (match) {
+                         key = match[1].replace(":", "").trim(); // Remove colon from key if captured
+                         value = match[2].trim();
+                       }
+                    }
+
+                    return (
+                      <div key={idx} className="flex gap-4 items-start p-3 hover:bg-white rounded-xl transition-colors">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-blue/10 flex items-center justify-center mt-1">
+                          <CheckCircle2 className="w-4 h-4 text-brand-blue" />
+                        </div>
+                        <div className="flex-grow">
+                           {key && (
+                             <h5 className="text-sm font-black text-slate-900 uppercase tracking-wide mb-1 opacity-80">{key}</h5>
+                           )}
+                           <p className="text-slate-700 font-medium text-sm md:text-base leading-relaxed">{value}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
 
       <div className="mt-6 pt-5 border-t border-slate-200">

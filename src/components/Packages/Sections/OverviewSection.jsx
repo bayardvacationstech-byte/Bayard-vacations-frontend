@@ -69,14 +69,29 @@ const OverviewSection = ({ packageData }) => {
         <div className="space-y-3">
           <h3 className="text-lg font-black text-slate-900">About {packageData?.packageTitle || "the Package"}:</h3>
           <div className="relative">
+            {/* Paragraph 1 - Always visible (truncated if collapsed) */}
             <p className={`text-slate-600 text-base leading-relaxed font-medium ${!isExpanded ? 'line-clamp-3' : ''}`}>
-              {packageData?.description || 
-                `Embark on an unforgettable ${packageData?.nights || 'multi'}-night journey through ${cities[0] || 'amazing destinations'}. This carefully curated package offers the perfect blend of adventure, relaxation, and cultural immersion. From the moment you arrive until your final departure, we ensure every detail is handled with the utmost care, allowing you to focus entirely on creating memories that will last a lifetime.`}
+              {packageData?.description || "Azerbaijan is a captivating destination where East meets West, blending ancient Silk Road heritage with cutting-edge modernity."}
             </p>
-            {!packageData?.description && isExpanded && (
-              <p className="text-slate-600 text-base leading-relaxed font-medium mt-3">
-                Explore iconic landmarks, savor authentic local cuisine, and retreat to hand-picked luxury accommodations. Whether you're seeking high-adrenaline activities or tranquil moments of reflection, our itinerary is designed to exceed your expectations.
-              </p>
+
+            {/* Additional Paragraphs - Only visible when expanded.
+                Using static content from user request if no dynamic description is present. 
+            */}
+            {(!packageData?.description && isExpanded) && (
+              <div className="space-y-3 mt-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                <p className="text-slate-600 text-base leading-relaxed font-medium">
+                  Known as the "Land of Fire," Azerbaijan showcases diverse landscapes from medieval mountain towns to cosmopolitan Baku.
+                </p>
+                <p className="text-slate-600 text-base leading-relaxed font-medium">
+                  This 5-night journey captures the essence of this enchanting nation—explore UNESCO-listed Old City bazaars, witness natural fire phenomena on mountainsides, uncover prehistoric rock carvings, and immerse yourself in centuries-old traditions.
+                </p>
+                <p className="text-slate-600 text-base leading-relaxed font-medium">
+                  Whether admiring the Flame Towers or wandering Sheki's historic bazaars, every moment reveals the soul of the Caucasus.
+                </p>
+                <p className="text-slate-600 text-base leading-relaxed font-medium">
+                  This carefully curated package ensures you experience Azerbaijan's most memorable attractions while enjoying comfortable accommodations and expert local guidance.
+                </p>
+              </div>
             )}
             
             {/* Read More/Less Button */}
