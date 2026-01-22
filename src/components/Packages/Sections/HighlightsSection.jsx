@@ -4,6 +4,32 @@ import { ChevronDown, ChevronUp, CheckCircle2, Award, MapPin } from "lucide-reac
 const HighlightsSection = ({ packageData }) => {
   const [expandedCards, setExpandedCards] = useState({});
 
+const journeyData = [
+  {
+    city: "Baku",
+    days: " 1 to 3",
+    icon: "🏙️",
+    bg: "bg-blue-500",
+    border: "border-l-blue-500"
+  },
+  {
+    city: "Gabala",
+    days: " 4 to 6",
+    icon: "🏔️",
+    bg: "bg-emerald-500",
+    border: "border-l-emerald-500"
+  },
+  {
+    city: "Sheki",
+    days: " 7 to 10",
+    icon: "🏛️",
+    bg: "bg-amber-500",
+    border: "border-l-amber-500"
+  }
+];
+
+
+
   const HIGHLIGHTS_SECTIONS = [
     {
       id: "major_activities",
@@ -55,16 +81,16 @@ const HighlightsSection = ({ packageData }) => {
   // Dynamic data mapping
   const cityActivities = packageData?.packageHighlights || [];
   
-  const journeyData = cityActivities.map((item, index) => {
-    const style = getColorStyles(index);
-    return {
-      city: item.city,
-      days: `DAY ${index + 1}`,
-      icon: getIconForCity(item.city, index),
-      bg: style.bg,
-      border: style.border
-    };
-  });
+  // const journeyData = cityActivities.map((item, index) => {
+  //   const style = getColorStyles(index);
+  //   return {
+  //     city: item.city,
+  //     days: `DAY ${index + 1}`,
+  //     icon: getIconForCity(item.city, index),
+  //     bg: style.bg,
+  //     border: style.border
+  //   };
+  // });
 
   const toggleExpand = (index) => {
     setExpandedCards(prev => ({
@@ -93,7 +119,7 @@ const HighlightsSection = ({ packageData }) => {
       <div className="mt-4 space-y-10">
         {HIGHLIGHTS_SECTIONS.map((section) => (
           <div key={section.id}>
-            <h3 className="text-sm font-black text-slate-400 tracking-widest uppercase mb-4 pl-1 border-l-4 border-brand-blue/30">{section.heading}</h3>
+            {/* Removed duplicate heading rendering */}
             
             {section.type === "bulleted_list" && (
               <div className="relative group/carousel">
@@ -200,83 +226,99 @@ const HighlightsSection = ({ packageData }) => {
         ))}
       </div>
 
-      <div className="mt-6 pt-5 border-t border-slate-200">
-        <div className="max-w-xs mx-auto bg-brand-blue rounded-full py-2 px-8 mb-3 shadow-md border border-white/10">
-          <h3 className="text-white text-[12px] md:text-sm font-black text-center tracking-widest uppercase">
-            Journey Overview
-          </h3>
-        </div>
 
-        {/* Scroll Hint */}
-        <div className="flex items-center justify-center gap-2 mb-2 text-slate-500 text-xs">
-          <span className="hidden md:inline">←</span>
-          <span className="font-medium">Scroll to see all</span>
-          <span className="hidden md:inline">→</span>
-        </div>
+    <div className="mt-6 pt-5 border-t border-slate-200">
+      {/* Title */}
+      <div className="max-w-xs mx-auto bg-brand-blue rounded-full py-2 px-8 mb-3 shadow-md border border-white/10">
+        <h3 className="text-white text-[12px] md:text-sm font-black text-center tracking-widest uppercase">
+          Journey Overview
+        </h3>
+      </div>
 
-        {/* Flowchart - Horizontal Scrollable with Fade Indicators */}
-        <div className="relative">
-          {/* Left Fade Indicator */}
-          <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 hidden md:block"></div>
-          
-          {/* Right Fade Indicator */}
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block"></div>
-          
-          <div className="overflow-x-auto pb-3 scrollbar-hide">
-            <div className="flex items-center justify-start md:justify-center gap-2 min-w-max px-2">
+      {/* Scroll Hint */}
+      <div className="flex items-center justify-center gap-2 mb-2 text-slate-500 text-xs">
+        <span className="hidden md:inline">←</span>
+        <span className="font-medium">Scroll to see all</span>
+        <span className="hidden md:inline">→</span>
+      </div>
+
+      {/* Flowchart */}
+      <div className="relative">
+        {/* Fade Indicators */}
+        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 hidden md:block" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block" />
+
+        <div className="overflow-x-auto pb-3 scrollbar-hide">
+          <div className="flex items-center justify-start md:justify-center gap-2 min-w-max px-2">
             {journeyData.map((journey, index) => (
               <React.Fragment key={index}>
-                {/* City Card Node */}
+                {/* City Card */}
                 <div className="flex flex-col items-center flex-shrink-0">
                   <div className="relative group">
-                    <div className={`absolute -top-1.5 left-1/2 -translate-x-1/2 w-10 h-1.5 ${journey.bg} rounded-full z-10 opacity-80`} />
+                    <div
+                      className={`absolute -top-1.5 left-1/2 -translate-x-1/2 w-10 h-1.5 ${journey.bg} rounded-full z-10 opacity-80`}
+                    />
+
                     <div className="w-24 h-36 md:w-28 md:h-36 rounded-[2rem] border-2 border-slate-100 bg-white flex flex-col items-center pt-4 pb-3 shadow-xl shadow-slate-200/40 group-hover:border-brand-blue/30 group-hover:shadow-2xl group-hover:shadow-blue-100/50 transition-all duration-500 ease-out relative overflow-hidden">
-                      {/* Decorative Background Glow */}
-                      <div className={`absolute -top-12 -right-12 w-24 h-24 ${journey.bg} opacity-0 group-hover:opacity-5 rounded-full blur-2xl transition-opacity duration-500`} />
-                      
-                      {/* Hexagon Icon Container */}
-                      <div 
+                      {/* Glow */}
+                      <div
+                        className={`absolute -top-12 -right-12 w-24 h-24 ${journey.bg} opacity-0 group-hover:opacity-5 rounded-full blur-2xl transition-opacity duration-500`}
+                      />
+
+                      {/* Icon */}
+                      <div
                         className="w-12 h-14 md:w-14 md:h-16 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-500"
                         style={{
-                          clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
+                          clipPath:
+                            "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                           backgroundColor: "#f8fafc",
                           border: "1px solid #f1f5f9"
                         }}
                       >
-                        <span className="text-2xl md:text-3xl filter drop-shadow-sm">{journey.icon}</span>
+                        <span className="text-2xl md:text-3xl">
+                          {journey.icon}
+                        </span>
                       </div>
 
+                      {/* City Name */}
                       <div className="flex-grow flex items-center justify-center px-2 py-1">
-                        <span 
-                          className="text-[10px] md:text-[11px] font-black text-slate-800 uppercase tracking-tight leading-tight text-center line-clamp-2 px-1"
-                          title={journey.city}
-                        >
+                        <span className="text-[10px] md:text-[11px] font-black text-slate-800 uppercase tracking-tight leading-tight text-center line-clamp-2">
                           {journey.city}
                         </span>
                       </div>
-                      
-                      <div className="mt-auto px-3">
-                        <span className="text-[8px] md:text-[9px] text-brand-blue font-bold px-2.5 py-1 bg-brand-blue/5 rounded-full border border-brand-blue/10 shrink-0 whitespace-nowrap">
-                          {journey.days}
-                        </span>
-                      </div>
+
+                      {/* Days */}
+                    {/* Days */}
+<div className="mt-auto px-3">
+  <span className="flex flex-col items-center justify-center text-[8px] md:text-[9px] text-brand-blue font-bold px-2.5 py-1 bg-brand-blue/5 rounded-full border border-brand-blue/10 whitespace-nowrap leading-tight">
+    <span>{journey.days}</span>
+    <span className="text-[7px] md:text-[8px] uppercase tracking-wide">
+      Days
+    </span>
+  </span>
+</div>
+
                     </div>
                   </div>
                 </div>
 
-                {/* Arrow - Only if not the last item */}
+                {/* Arrow */}
                 {index < journeyData.length - 1 && (
                   <div className="flex items-center flex-shrink-0">
-                    <div className={`w-6 md:w-8 h-0.5 ${journey.bg}`}></div>
-                    <div className={`w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] ${journey.border}`}></div>
+                    <div className={`w-6 md:w-8 h-0.5 ${journey.bg}`} />
+                    <div
+                      className={`w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[8px] ${journey.border}`}
+                    />
                   </div>
                 )}
               </React.Fragment>
             ))}
-            </div>
           </div>
         </div>
       </div>
+    </div>
+
+
     </div>
   );
 };
