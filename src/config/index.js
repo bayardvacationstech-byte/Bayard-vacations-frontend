@@ -113,7 +113,7 @@ export const EXCLUDED_INTERNATIONAL_REGIONS = [
 ];
 
 // Regions to exclude from domestic holidays section
-export const EXCLUDED_DOMESTIC_REGIONS = ["3-sisters"];
+export const EXCLUDED_DOMESTIC_REGIONS = [];
 
 export const PACKAGE_TAGS = {
   CURATED: "curated",

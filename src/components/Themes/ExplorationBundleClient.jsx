@@ -1,15 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Compass, Map, Tent, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Backpack, TreePine, Flame } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Compass, Map, Tent, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Backpack, TreePine, Flame, Zap, Wind, Navigation } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// Floating Adventure Elements
+const FloatingAdventureElements = () => {
+  const elements = [Compass, Mountain, Backpack, Navigation, Wind];
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {[...Array(12)].map((_, i) => {
+        const Icon = elements[i % elements.length];
+        return (
+          <motion.div
+            key={i}
+            initial={{ 
+              opacity: 0, 
+              y: "110%", 
+              x: `${Math.random() * 100}%`,
+              rotate: 0,
+              scale: Math.random() * 0.4 + 0.2,
+            }}
+            animate={{ 
+              opacity: [0, 0.4, 0], 
+              y: "-10%",
+              x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
+              rotate: [0, 360],
+            }}
+            transition={{ 
+              duration: Math.random() * 15 + 15, 
+              repeat: Infinity,
+              delay: Math.random() * 15,
+              ease: "linear"
+            }}
+            className="absolute text-emerald-300/30"
+          >
+            <Icon size={40} />
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
 
 export default function ExplorationBundleClient() {
   const [selectedTab, setSelectedTab] = useState("international");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Adventure packages data
   const adventurePackages = {
@@ -117,228 +162,263 @@ export default function ExplorationBundleClient() {
 
   const currentPackages = adventurePackages[selectedTab];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-white">
-      {/* Hero Section */}
-      <div className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-green-700 via-emerald-600 to-teal-600">
-        {/* Adventure Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 80 L30 60 L40 70 L50 50 L60 65 L70 55 L80 70' stroke='white' stroke-width='3' fill='none'/%3E%3Cpath d='M15 40 L25 35 L35 45 L45 30 L55 40 L65 35 L75 45' stroke='white' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E")`,
-            backgroundSize: '100px 100px'
-          }} />
-        </div>
+  if (!mounted) return null;
 
-        <Container className="relative h-full flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-            {/* Left Content */}
+  return (
+    <div className="min-h-screen bg-[#F8FAF9]">
+      {/* High-Energy Action Hero */}
+      <div className="relative h-[80vh] md:h-[90vh] overflow-hidden flex items-center bg-emerald-900">
+        {/* Ken Burns Background */}
+        <motion.div 
+          initial={{ scale: 1, x: "-2%" }}
+          animate={{ scale: 1.15, x: "2%" }}
+          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80"
+            alt="Adventure exploration"
+            fill
+            className="object-cover opacity-70"
+            priority
+          />
+        </motion.div>
+        
+        {/* Active Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-black/20 z-10" />
+        
+        <FloatingAdventureElements />
+
+        <Container className="relative z-20 pt-32 md:pt-40">
+          <div className="max-w-5xl space-y-8 md:space-y-12">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -60 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="space-y-6"
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="space-y-6 md:space-y-10 text-center md:text-left"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                <Compass className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold text-white uppercase tracking-widest">
-                  Travel Theme
+              <div className="inline-flex items-center gap-3 px-5 py-2 bg-emerald-500/30 backdrop-blur-xl rounded-full border border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <Zap className="w-4 h-4 text-yellow-300 fill-yellow-300 animate-pulse" />
+                <span className="text-[10px] md:text-xs font-black text-white uppercase tracking-[0.4em]">
+                  Exploration Bundle 2026
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-tight">
-                Exploration<br />
-                <span className="text-yellow-300">Bundle</span>
-              </h1>
+              <div className="space-y-2 md:space-y-4">
+                <h1 className="text-4xl sm:text-7xl md:text-[11rem] font-black text-white leading-[0.8] tracking-tighter uppercase italic">
+                  Push your<br />
+                  <span className="text-transparent stroke-text text-yellow-300">limits</span>
+                </h1>
+              </div>
 
-              <p className="text-xl text-white/90 leading-relaxed max-w-xl">
-                All things adventure. Discover our handpicked domestic and international arrivals curated specifically for this theme.
+              <p className="text-lg md:text-3xl text-emerald-50/90 font-light leading-snug max-w-3xl">
+                The ultimate toolkit for the modern explorer. Curated bundles that bridge the gap between curiosity and epic discovery.
               </p>
 
-              <div className="flex gap-4">
-                <Button size="lg" className="bg-white text-green-700 hover:bg-green-50 font-black px-8 py-6 rounded-2xl shadow-xl">
-                  Start Exploring
+              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 md:gap-8 pt-6">
+                <Button size="lg" className="h-16 md:h-20 px-10 md:px-16 rounded-none skew-x-[-12deg] bg-yellow-400 hover:bg-yellow-300 text-black border-none font-black text-lg md:text-2xl uppercase tracking-tighter transition-all group">
+                   <span className="skew-x-[12deg] flex items-center gap-3">
+                     Go Exploration
+                     <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                   </span>
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm">
-                  Adventure Bundles
-                </Button>
-              </div>
-            </motion.div>
-
-            {/* Right Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative hidden lg:block"
-            >
-              <div className="relative w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl ring-8 ring-white/20">
-                <Image
-                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=800"
-                  alt="Adventure explorer"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center">
-                    <Mountain className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-black text-slate-900">Epic Adventures Await</p>
-                    <p className="text-sm text-slate-600">Explore the unexplored</p>
-                  </div>
-                </div>
+                <Link href="#bundles">
+                  <Button size="lg" variant="outline" className="h-16 md:h-20 px-10 md:px-16 rounded-none skew-x-[-12deg] border-2 border-white/40 text-white hover:bg-white/10 font-bold text-lg md:text-xl uppercase tracking-widest transition-all">
+                    <span className="skew-x-[12deg]">Browse Bundles</span>
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           </div>
         </Container>
       </div>
 
-      {/* Packages Section */}
-      <Container className="py-8 md:py-12">
-        {/* Tab Switcher */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-slate-100 rounded-full p-1.5">
-            <button
-              onClick={() => setSelectedTab("international")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "international"
-                  ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              International
-            </button>
-            <button
-              onClick={() => setSelectedTab("domestic")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "domestic"
-                  ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Domestic
-            </button>
-          </div>
-        </div>
+      {/* The Exploration Manifesto */}
+      <section className="py-24 md:py-48 bg-emerald-950 relative overflow-hidden group">
+         <div className="absolute top-0 right-0 text-[20rem] font-black text-emerald-900/40 leading-none select-none -translate-y-1/2 translate-x-1/4 italic pointer-events-none">
+            THRIL
+         </div>
+         
+         <Container className="relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+               <motion.div
+                 initial={{ opacity: 0, scale: 0.9 }}
+                 whileInView={{ opacity: 1, scale: 1 }}
+                 viewport={{ once: true }}
+                 className="relative aspect-square md:aspect-video rounded-[2rem] overflow-hidden border-2 border-emerald-500/30"
+               >
+                  <Image
+                    src="https://images.unsplash.com/photo-1533240332313-0db49b459ad0?w=1200"
+                    alt="Wild expedition"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-emerald-950/20 mix-blend-multiply" />
+               </motion.div>
 
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-full">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-bold">{pkg.rating}</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
+               <div className="space-y-12">
+                  <h2 className="text-5xl md:text-7xl font-black text-white italic uppercase leading-none">
+                     The Exploration<br />Manifesto
+                  </h2>
+                  <div className="space-y-10">
+                     {[
+                       { title: "Discovery", desc: "Forcing your perspective to shift by witnessing the unseen corners of our planet." },
+                       { title: "Resilience", desc: "Testing your grit against nature's most formidable yet beautiful challenges." },
+                       { title: "Thrill", desc: "That precise moment when fear transforms into pure, unadulterated existence." }
+                     ].map((item, idx) => (
+                       <div key={idx} className="flex gap-8 group/item">
+                          <div className="text-4xl font-black text-emerald-500 group-hover/item:text-yellow-400 transition-colors">0{idx + 1}</div>
+                          <div className="space-y-3">
+                             <h3 className="text-2xl font-bold text-white uppercase tracking-wider">{item.title}</h3>
+                             <p className="text-emerald-100/60 text-lg leading-relaxed">{item.desc}</p>
+                          </div>
+                       </div>
+                     ))}
                   </div>
+               </div>
+            </div>
+         </Container>
+      </section>
 
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-green-700 transition-colors line-clamp-2">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Adventure Level */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Mountain className="w-4 h-4" />
-                      <span className="font-medium">{pkg.adventureLevel}</span>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-green-600 to-emerald-600" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-slate-900">{pkg.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-green-700 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">Explore</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-
-      {/* Why Adventure Travel Section */}
-      <div className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-16 md:py-24">
+      {/* Action Bundles (Packages Grid) */}
+      <section id="bundles" className="py-24 md:py-40">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
-              Why Exploration Bundles?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Push your limits and discover the extraordinary
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 md:mb-32">
+            <div className="space-y-4">
+              <div className="w-12 h-2 bg-emerald-500" />
+              <h2 className="text-6xl md:text-9xl font-black text-emerald-950 uppercase tracking-tighter leading-none italic">
+                Active<br />Bundles
+              </h2>
+            </div>
+            
+            <div className="flex bg-emerald-100/50 p-2 rounded-none skew-x-[-6deg]">
+              <button
+                onClick={() => setSelectedTab("international")}
+                className={cn(
+                  "px-8 py-3 rounded-none font-black text-sm uppercase tracking-widest transition-all",
+                  selectedTab === "international"
+                    ? "bg-emerald-600 text-white shadow-xl"
+                    : "text-emerald-900/60 hover:text-emerald-900"
+                )}
+              >
+                Global X
+              </button>
+              <button
+                onClick={() => setSelectedTab("domestic")}
+                className={cn(
+                  "px-8 py-3 rounded-none font-black text-sm uppercase tracking-widest transition-all",
+                  selectedTab === "domestic"
+                    ? "bg-emerald-600 text-white shadow-xl"
+                    : "text-emerald-900/60 hover:text-emerald-900"
+                )}
+              >
+                Local Ops
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Tent, title: "All-Inclusive Packages", desc: "Everything you need for your adventure—gear, guides, permits, and accommodations all bundled together." },
-              { icon: Backpack, title: "Expert Guidance", desc: "Professional adventure guides with local expertise ensure your safety while maximizing the thrill." },
-              { icon: TreePine, title: "Authentic Experiences", desc: "Off-the-beaten-path destinations and unique activities that go beyond typical tourist trails." }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center p-8"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-black text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <AnimatePresence mode="wait">
+              {currentPackages.map((pkg, index) => (
+                <motion.div
+                  key={`${selectedTab}-${pkg.id}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <Link href={`/packages/${pkg.id}`}>
+                    <div className="bg-white border-2 border-emerald-950/5 overflow-hidden transition-all duration-500 flex flex-col h-full hover:border-emerald-500 hover:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.2)]">
+                      {/* Action Header */}
+                      <div className="relative h-[280px] overflow-hidden">
+                        <Image
+                          src={pkg.image}
+                          alt={pkg.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        />
+                        <div className="absolute inset-0 bg-emerald-900/20 group-hover:bg-transparent transition-colors" />
+                        
+                        {/* Status Badge */}
+                        <div className="absolute top-4 left-4">
+                           <div className="px-3 py-1 bg-yellow-400 text-black text-[10px] font-black uppercase tracking-widest skew-x-[-12deg]">
+                              <span className="skew-x-[12deg] block">{pkg.adventureLevel}</span>
+                           </div>
+                        </div>
+
+                        {/* Rating Overlay */}
+                        <div className="absolute bottom-4 right-4 bg-emerald-950 text-white px-3 py-1.5 flex items-center gap-2">
+                           <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                           <span className="text-xs font-black">{pkg.rating}</span>
+                        </div>
+                      </div>
+
+                      {/* Info Body */}
+                      <div className="p-8 flex-1 flex flex-col justify-between space-y-8">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-2 text-emerald-600 text-[10px] font-bold uppercase tracking-widest">
+                             <MapPin className="w-3 h-3" />
+                             {pkg.location}
+                          </div>
+                          <h3 className="text-2xl font-black text-emerald-950 leading-tight uppercase group-hover:text-emerald-600 transition-colors">
+                            {pkg.title}
+                          </h3>
+                        </div>
+
+                        <div className="pt-6 border-t border-emerald-50 flex items-center justify-between">
+                          <div>
+                            <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Payload</p>
+                            <p className="text-2xl font-black text-emerald-950 italic">{pkg.price}</p>
+                          </div>
+                          <div className="w-12 h-12 bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                             <ChevronRight className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </Container>
-      </div>
+      </section>
+
+      {/* Extreme Call to Action */}
+      <section className="py-24 md:py-40 bg-white">
+         <Container>
+            <div className="bg-emerald-600 p-12 md:p-24 relative overflow-hidden flex flex-col items-center text-center space-y-12">
+               <div className="absolute top-0 left-0 w-full h-2 bg-yellow-300" />
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+               >
+                  <h2 className="text-5xl md:text-8xl font-black text-white italic uppercase leading-none tracking-tighter">
+                     Ready for<br />Extraction?
+                  </h2>
+               </motion.div>
+               <p className="text-emerald-50 md:text-2xl font-medium max-w-2xl">
+                  Limited bundles available for the upcoming season. Don't let the map be the only thing you explore.
+               </p>
+               <Button size="lg" className="h-20 px-16 rounded-none skew-x-[-12deg] bg-white hover:bg-emerald-50 text-emerald-900 border-none font-black text-2xl uppercase tracking-tighter transition-all">
+                  <span className="skew-x-[12deg]">Secure Bundle</span>
+               </Button>
+            </div>
+         </Container>
+      </section>
+
+      <style jsx global>{`
+        .stroke-text {
+          -webkit-text-stroke: 1px white;
+        }
+        .vertical-text {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+      `}</style>
     </div>
   );
 }

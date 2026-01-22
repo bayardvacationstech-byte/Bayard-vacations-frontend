@@ -386,14 +386,14 @@ export default function RegionTestimonials() {
             {/* Participation Banner */}
             <div className="w-full mt-6 md:mt-10 lg:mt-12 relative z-30">
               {/* Desktop Banner with Text */}
-              <div className="hidden md:flex bg-blue-600/90 backdrop-blur-md rounded-full px-10 py-6 items-center justify-between gap-4 shadow-2xl shadow-blue-900/40 border border-white/10 max-w-4xl mx-auto">
+              <div className="hidden md:flex bg-blue-600/90 backdrop-blur-md rounded-full px-8 py-4 items-center justify-between gap-4 shadow-2xl shadow-blue-900/40 border border-white/10 max-w-4xl mx-auto">
                 <div className="text-center md:text-left">
-                  <span className="text-white text-[11px] font-black uppercase tracking-[0.3em] block mb-1">Authentic Experiences</span>
+                  <span className="text-white text-[10px] font-bold uppercase tracking-[0.35em] block mb-0.5">Authentic Experiences</span>
                   <p className="text-white/80 text-sm font-medium leading-snug">Join 5,000+ happy travelers who explored Azerbaijan with us.</p>
                 </div>
                 <Link 
                   href="/reviews"
-                  className="bg-white text-blue-600 text-xs font-black uppercase tracking-widest px-8 py-3.5 rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
+                  className="bg-white/20 backdrop-blur-md border border-white/30 text-white text-[11px] font-bold uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/30 hover:border-white/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
                 >
                   Read All Reviews
                 </Link>
@@ -403,7 +403,7 @@ export default function RegionTestimonials() {
               <div className="md:hidden px-4">
                 <Link 
                   href="/reviews"
-                  className="w-full block bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-wide px-6 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-center"
+                  className="w-full block bg-white/10 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 shadow-lg text-center"
                 >
                   Read All Reviews
                 </Link>

@@ -157,7 +157,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
   };
 
   return (
-    <section id="faq" className="relative py-8 md:py-10 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm mb-4 md:mb-4">
+    <section id="faq" className="relative py-8 md:py-10 bg-transparent overflow-hidden scroll-mt-24 rounded-3xl border border-slate-100 shadow-sm">
       {/* Animated Background */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] animate-pulse" />

@@ -4,29 +4,9 @@ import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { 
-  CalendarClock, 
-  Wallet, 
-  ThermometerSun, 
-  Clock4, 
-  Globe, 
-  Zap, 
-  Sparkles, 
-  MapPin, 
-  ArrowRight,
-  FileCheck,
-  Building2,
-  Users,
-  Info,
-  Plane,
-  Flame,
-  Landmark,
-  ShieldCheck,
-  Banknote,
-  Mountain,
-  Theater
-} from "lucide-react";
+import { ArrowRight, Zap, Sparkles } from "lucide-react";
 import { useRegionFactSheet } from "@/hooks/regions";
+import { getIcon, getColorClass } from "@/utils/iconMapping";
 
 /**
  * RegionQuickFacts Component
@@ -44,76 +24,38 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
 
   const { factSheetData, isLoading: factSheetLoading } = useRegionFactSheet(regionData?.id);
 
-  const isAzerbaijan = regionName?.toLowerCase().includes('azerbaijan');
-
-  // Icon mapping for dynamic data
-  const iconMap = {
-    CalendarClock, Wallet, ThermometerSun, Clock4, Globe, Zap,
-    Sparkles, MapPin, FileCheck, Building2, Users, Info,
-    Plane, Flame, Landmark, ShieldCheck, Banknote, Mountain, Theater,
-    "Calendar": CalendarClock,
-    "ThermometerSun": ThermometerSun,
-    "Clock": Clock4,
-    "FileCheck": FileCheck,
-    "Wallet": Wallet,
-    "Globe": Globe,
-    "Building2": Building2,
-    "Users": Users,
-  };
-
-  const getIcon = (iconName) => {
-    return iconMap[iconName] || Info;
-  };
-
-  // Helper to map color strings to tailwind classes
-  const getColorClass = (color) => {
-    const colorMap = {
-      blue: "text-blue-600",
-      amber: "text-amber-600",
-      emerald: "text-emerald-600",
-      orange: "text-orange-600",
-      indigo: "text-indigo-600",
-      teal: "text-teal-600",
-      violet: "text-violet-600",
-      pink: "text-pink-600",
-      rose: "text-rose-600",
-      slate: "text-slate-600",
-    };
-    return colorMap[color] || "text-blue-600";
-  };
-
   // Helper to get icon config
   const getFactConfig = (label) => {
     const lowerLabel = label.toLowerCase();
     
     if (lowerLabel.includes('visit') || lowerLabel.includes('season') || (lowerLabel.includes('time') && !lowerLabel.includes('zone'))) {
-      return { icon: CalendarClock, label: "Best Season", color: "text-blue-600" };
+      return { icon: "CalendarClock", label: "Best Season", color: "blue" };
     }
     if (lowerLabel.includes('currency') || lowerLabel.includes('money')) {
-      return { icon: Wallet, label: "Currency", color: "text-blue-600" };
+      return { icon: "Wallet", label: "Currency", color: "blue" };
     }
     if (lowerLabel.includes('climate') || lowerLabel.includes('weather')) {
-      return { icon: ThermometerSun, label: "Climate", color: "text-blue-600" };
+      return { icon: "ThermometerSun", label: "Climate", color: "blue" };
     }
     if (lowerLabel.includes('time zone')) {
-      return { icon: Clock4, label: "Time Zone", color: "text-blue-600" };
+      return { icon: "Clock4", label: "Time Zone", color: "blue" };
     }
     if (lowerLabel.includes('safety')) {
-      return { icon: FileCheck, label: "Safety", color: "text-blue-600" };
+      return { icon: "FileCheck", label: "Safety", color: "blue" };
     }
     if (lowerLabel.includes('language')) {
-      return { icon: Globe, label: "Language", color: "text-blue-600" };
+      return { icon: "Globe", label: "Language", color: "blue" };
     }
     if (lowerLabel.includes('visa')) {
-      return { icon: FileCheck, label: "Visa", color: "text-blue-600" };
+      return { icon: "FileCheck", label: "Visa", color: "blue" };
     }
     if (lowerLabel.includes('capital')) {
-      return { icon: Building2, label: "Capital", color: "text-blue-600" };
+      return { icon: "Building2", label: "Capital", color: "blue" };
     }
     if (lowerLabel.includes('population')) {
-      return { icon: Users, label: "Population", color: "text-blue-600" };
+      return { icon: "Users", label: "Population", color: "blue" };
     }
-    return { icon: Info, label: label, color: "text-slate-400" };
+    return { icon: "Info", label: label, color: "slate" };
   };
 
   const processedFacts = React.useMemo(() => {
@@ -129,59 +71,35 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
 
     // 2. Use dynamic data from whyChooseData
     if (whyChooseData?.details?.quickFacts) {
-      return whyChooseData.details.quickFacts.map(fact => ({ ...fact, ...getFactConfig(fact.label) }));
+      return whyChooseData.details.quickFacts.map(fact => {
+        const config = getFactConfig(fact.label);
+        return {
+          ...fact,
+          ...config,
+          icon: getIcon(config.icon),
+          color: getColorClass(config.color)
+        };
+      });
     }
 
-    // Fallback to hardcoded Azerbaijan data
-    const azerbaijanFacts = [
-      { label: "Best Season", value: "Apr–Jun" },
-      { label: "Language", value: "Azeri, Eng" },
-      { label: "Currency", value: "AZN" },
-      { label: "Safety", value: "Very Safe" },
-      { label: "Time Zone", value: "GMT+4" },
-      { label: "Visa", value: "₹2,200 (e-visa)" },
-      { label: "Capital", value: "Baku" },
-      { label: "Population", value: "10.1M" }
-    ];
-
-    const defaultFacts = [
-      { label: "Best Season", value: "Sep to Apr" },
-      { label: "Currency", value: "Local" },
-      { label: "Climate", value: "Varied" },
-      { label: "Time Zone", value: "GMT+5:30" },
-      { label: "Language", value: "English" },
-      { label: "Visa", value: "On Arrival" },
-      { label: "Capital", value: "City" },
-      { label: "Population", value: "10M+" }
-    ];
-
-    if (isAzerbaijan) {
-      return azerbaijanFacts.map(fact => ({ ...fact, ...getFactConfig(fact.label) }));
-    }
-
-    let facts = [];
+    // 3. Use regionData quickFacts if available
     if (mounted && regionData?.quickFacts && Array.isArray(regionData.quickFacts)) {
-      facts = regionData.quickFacts
+      return regionData.quickFacts
         .filter(fact => !fact.label.toLowerCase().includes('insider'))
-        .map(fact => ({
-          ...fact,
-          ...getFactConfig(fact.label)
-        }));
+        .map(fact => {
+          const config = getFactConfig(fact.label);
+          return {
+            ...fact,
+            ...config,
+            icon: getIcon(config.icon),
+            color: getColorClass(config.color)
+          };
+        });
     }
     
-    if (facts.length < 4) {
-      const existingLabels = facts.map(f => f.label.toLowerCase());
-      const additional = defaultFacts
-        .filter(df => !existingLabels.some(existing => existing.includes(df.label.toLowerCase())))
-        .map(fact => ({
-          ...fact,
-          ...getFactConfig(fact.label)
-        }));
-      facts = [...facts, ...additional].slice(0, 8);
-    }
-    
-    return facts;
-  }, [mounted, regionData, isAzerbaijan, regionName, whyChooseData, factSheetData]);
+    // No data available
+    return [];
+  }, [mounted, regionData, whyChooseData, factSheetData]);
 
   // Convert regionName to slug for URLs
   const regionSlug = regionName?.toLowerCase().replace(/\s+/g, '-');
@@ -293,41 +211,32 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Why Choose {regionName}?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                 {(() => {
-                  // Use dynamic factsheet reasons first
+                  // Use dynamic factsheet reasons first, then whyChooseData
+                  let reasons = null;
+                  
                   if (factSheetData?.details?.history?.cards) {
-                    return factSheetData.details.history.cards.map((card, idx) => (
-                      <div key={idx} className="flex gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                          <Info className={cn("w-5 h-5", getColorClass(card.color))} />
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{card.title}</h4>
-                          <p className="text-sm text-slate-500 leading-tight line-clamp-3">{card.content}</p>
-                        </div>
-                      </div>
-                    ));
+                    reasons = factSheetData.details.history.cards;
+                  } else if (whyChooseData?.details?.whyChooseReasons) {
+                    reasons = whyChooseData.details.whyChooseReasons;
+                  }
+                  
+                  if (!reasons || reasons.length === 0) {
+                    return null; // Don't show section if no data
                   }
 
-                  // Use dynamic data from whyChooseData
-                  const reasons = whyChooseData?.details?.whyChooseReasons || [
-                    { icon: "Plane", title: "Direct & Easy Access", text: "4.5 hours from India with visa-free entry (₹2,200 e-visa)", color: "text-blue-600" },
-                    { icon: "Flame", title: "Unique Natural Wonders", text: "Eternal fire mountains, mud volcanoes, and pristine Caspian beaches", color: "text-orange-600" },
-                    { icon: "Landmark", title: "Rich Cultural Heritage", text: "UNESCO Heritage sites including ancient Baku Old City and Sheki's Silk Road palaces", color: "text-amber-600" },
-                    { icon: "Building2", title: "Modern Meets Ancient", text: "Futuristic Flame Towers and Zaha Hadid's architectural masterpiece alongside 1000-year-old caravanserais", color: "text-indigo-600" },
-                    { icon: "Banknote", title: "Budget-Friendly", text: "Complete 5-7 day trip for ₹40,000–₹80,000 with flights and accommodation", color: "text-emerald-600" },
-                    { icon: "ShieldCheck", title: "Safe & Welcoming", text: "One of the safest countries in the region, known for hospitality to Indian travelers", color: "text-slate-600" }
-                  ];
-
                   return reasons.map((item, idx) => {
-                    const IconComponent = getIcon(item.icon);
+                    const IconComponent = getIcon(item.icon || 'Info');
+                    const title = item.title || item.name;
+                    const content = item.text || item.content;
+                    
                     return (
                       <div key={idx} className="flex gap-4">
                         <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                          <IconComponent className={cn("w-5 h-5", item.color)} />
+                          <IconComponent className={cn("w-5 h-5", getColorClass(item.color))} />
                         </div>
                         <div>
-                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{item.title}</h4>
-                          <p className="text-sm text-slate-500 leading-tight">{item.text}</p>
+                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{title}</h4>
+                          <p className="text-sm text-slate-500 leading-tight line-clamp-3">{content}</p>
                         </div>
                       </div>
                     );
@@ -340,34 +249,19 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
               <h3 className="text-2xl font-serif text-slate-900 mb-8 border-b border-blue-100 pb-3 inline-block">Must-Experience Attractions</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(() => {
-                  // Use dynamic factsheet items first
-                  if (factSheetData?.details?.food?.items) {
-                    return factSheetData.details.food.items.slice(0, 6).map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 border border-slate-100 group hover:bg-white hover:shadow-sm transition-all">
-                        <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0 group-hover:border-blue-100 transition-colors">
-                          <Zap className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <span className="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">{item.name}</span>
-                      </div>
-                    ));
+                  // Use dynamic data from API
+                  const attractions = whyChooseData?.details?.mustExperienceAttractions;
+                  
+                  if (!attractions || attractions.length === 0) {
+                    return null; // Don't show section if no data
                   }
 
-                  // Use dynamic data if available
-                  const attractions = whyChooseData?.details?.mustExperienceAttractions || [
-                    { icon: "Flame", text: "Yanar Dag (Eternal Flame Mountains)", color: "text-orange-600" },
-                    { icon: "Landmark", text: "Baku Old City (UNESCO Heritage)", color: "text-amber-600" },
-                    { icon: "Building2", text: "Flame Towers & Heydar Aliyev Center", color: "text-indigo-600" },
-                    { icon: "Mountain", text: "Gobustan Rock Art & Mud Volcanoes", color: "text-slate-600" },
-                    { icon: "Mountain", text: "Gabala Mountains & Adventure Hub", color: "text-blue-600" },
-                    { icon: "Theater", text: "Sheki Khan's Palace & Silk Road Legacy", color: "text-purple-600" }
-                  ];
-
-                  return attractions.map((item, idx) => {
-                    const IconComponent = getIcon(item.icon);
+                  return attractions.slice(0, 6).map((item, idx) => {
+                    const IconComponent = getIcon(item.icon || 'Zap');
                     return (
                       <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 border border-slate-100 group hover:bg-white hover:shadow-sm transition-all">
                         <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0 group-hover:border-blue-100 transition-colors">
-                          <IconComponent className={cn("w-4 h-4", item.color)} />
+                          <IconComponent className={cn("w-4 h-4", item.color || "text-blue-600")} />
                         </div>
                         <span className="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">{item.text}</span>
                       </div>

@@ -1,15 +1,54 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Church, Waves, Sun, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Heart, Cloud } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Church, Waves, Sun, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Heart, Cloud, Globe, Sunrise, Moon } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// Floating Spiritual Elements (Light Orbs)
+const FloatingSpiritualElements = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            opacity: 0, 
+            y: "110%", 
+            x: `${Math.random() * 100}%`,
+            scale: Math.random() * 0.5 + 0.3,
+          }}
+          animate={{ 
+            opacity: [0, 0.6, 0], 
+            y: "-10%",
+            x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
+          }}
+          transition={{ 
+            duration: Math.random() * 20 + 20, 
+            repeat: Infinity,
+            delay: Math.random() * 20,
+            ease: "linear"
+          }}
+          className="absolute"
+        >
+          <div className="w-4 h-4 rounded-full bg-amber-200/40 blur-[4px] shadow-[0_0_20px_rgba(251,191,36,0.3)]" />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 export default function ReligiousRetreatClient() {
   const [selectedTab, setSelectedTab] = useState("international");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Religious retreat packages data
   const religiousPackages = {
@@ -117,228 +156,292 @@ export default function ReligiousRetreatClient() {
 
   const currentPackages = religiousPackages[selectedTab];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-white">
-      {/* Hero Section */}
-      <div className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-600">
-        {/* Peaceful Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 20 Q60 40 50 60 Q40 40 50 20 M30 50 Q40 60 50 50 Q40 40 30 50 M70 50 Q60 60 50 50 Q60 40 70 50' stroke='white' fill='none' stroke-width='2'/%3E%3C/svg%3E")`,
-            backgroundSize: '100px 100px'
-          }} />
-        </div>
+  if (!mounted) return null;
 
-        <Container className="relative h-full flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-            {/* Left Content */}
+  return (
+    <div className="min-h-screen bg-[#FFFDF9]">
+      {/* Divine Heritage Hero */}
+      <div className="relative h-[85vh] md:h-[95vh] overflow-hidden flex items-center bg-[#FDF2E9]">
+        {/* Ken Burns Animation */}
+        <motion.div 
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 35, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=1920&q=80"
+            alt="Divined religious background"
+            fill
+            className="object-cover opacity-95"
+            priority
+          />
+        </motion.div>
+        
+        {/* Divine Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-950/70 via-amber-900/10 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-transparent to-amber-950/30 z-10" />
+        
+        {/* Sacred Pattern Overlay */}
+        <div className="absolute inset-0 opacity-[0.03] z-10" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 Q35 15, 30 30 Q25 15, 30 0 M30 30 Q35 45, 30 60 Q25 45, 30 30 M0 30 Q15 35, 30 30 Q15 25, 0 30 M30 30 Q45 35, 60 30 Q45 25, 30 30' stroke='white' fill='none' stroke-width='1'/%3E%3C/svg%3E")`,
+        }} />
+        
+        <FloatingSpiritualElements />
+
+        <Container className="relative z-20 pt-32 md:pt-40">
+          <div className="max-w-4xl space-y-8 md:space-y-12">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="space-y-6"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+              className="space-y-6 md:space-y-10 text-center md:text-left"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                <Church className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold text-white uppercase tracking-widest">
-                  Travel Theme
+              <div className="inline-flex items-center gap-4 px-6 py-2.5 bg-amber-500/20 backdrop-blur-2xl rounded-lg border border-amber-400/30 shadow-2xl">
+                <Sunrise className="w-5 h-5 text-amber-300 animate-pulse" />
+                <span className="text-[10px] md:text-xs font-bold text-amber-50 uppercase tracking-[0.5em] font-serif">
+                  Divine Heritage Collection
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-tight">
-                Religious<br />
-                <span className="text-yellow-200">Retreat</span>
-              </h1>
+              <div className="space-y-2 md:space-y-4">
+                <p className="text-amber-200 font-serif italic text-xl md:text-5xl opacity-90 leading-tight">
+                  Journey to the soul
+                </p>
+                <h1 className="text-4xl sm:text-7xl md:text-[10rem] font-serif text-white leading-[0.85] tracking-tight drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                  Religious<br />
+                  <span className="text-amber-400 opacity-90 italic">Retreats</span>
+                </h1>
+              </div>
 
-              <p className="text-xl text-white/90 leading-relaxed max-w-xl">
-                All things spiritual. Discover our handpicked domestic and international arrivals curated specifically for this theme.
+              <p className="text-lg md:text-2xl text-amber-50/80 font-serif font-light leading-relaxed max-w-3xl border-l-2 border-amber-500/50 pl-6 md:pl-10">
+                Experience the profound beauty of faith. From ancient temples to sacred cathedrals, discover pilgrimages that transcend time and restore the spirit.
               </p>
 
-              <div className="flex gap-4">
-                <Button size="lg" className="bg-white text-amber-700 hover:bg-amber-50 font-black px-8 py-6 rounded-2xl shadow-xl">
-                  Explore Journeys
+              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-6 pt-4">
+                <Button size="lg" className="h-14 md:h-18 px-10 md:px-14 rounded-xl bg-amber-600 hover:bg-amber-500 text-white shadow-[0_20px_50px_rgba(217,119,6,0.3)] border-none font-serif text-lg tracking-widest transition-all hover:scale-105 active:scale-95 group">
+                   Begin Your Journey
+                   <Sparkles className="ml-3 w-5 h-5 group-hover:rotate-12 transition-transform" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm">
-                  Plan Pilgrimage
-                </Button>
-              </div>
-            </motion.div>
-
-            {/* Right Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative hidden lg:block"
-            >
-              <div className="relative w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl ring-8 ring-white/20">
-                <Image
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800"
-                  alt="Temple meditation"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
-                    <Sparkles className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-black text-slate-900">Inner Peace Awaits</p>
-                    <p className="text-sm text-slate-600">Journey to spiritual enlightenment</p>
-                  </div>
-                </div>
+                <Link href="#destinations">
+                  <Button size="lg" variant="outline" className="h-14 md:h-18 px-10 md:px-14 rounded-xl border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-md font-serif text-lg tracking-widest transition-all">
+                    Sacred Intel
+                  </Button>
+                </Link>
               </div>
             </motion.div>
           </div>
         </Container>
+        
+        {/* Majestic Vertical Coordinates */}
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-32 py-10 opacity-20 z-20">
+           {[1, 2, 3].map(i => (
+             <div key={i} className="flex items-center gap-4 vertical-text font-serif text-white text-xs tracking-[1.5em] uppercase">
+                Divine Presence 0{i}
+             </div>
+           ))}
+        </div>
+
+        {/* Scroll Call to Action */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-4 text-amber-200/60 font-serif text-[10px] tracking-[1em] uppercase">
+           <span>Descend</span>
+           <motion.div 
+             animate={{ y: [0, 15, 0] }}
+             transition={{ duration: 2, repeat: Infinity }}
+             className="w-[1px] h-20 bg-gradient-to-b from-amber-400 to-transparent"
+           />
+        </div>
       </div>
 
-      {/* Packages Section */}
-      <Container className="py-8 md:py-12">
-        {/* Tab Switcher */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-slate-100 rounded-full p-1.5">
-            <button
-              onClick={() => setSelectedTab("international")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "international"
-                  ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              International
-            </button>
-            <button
-              onClick={() => setSelectedTab("domestic")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "domestic"
-                  ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Domestic
-            </button>
-          </div>
-        </div>
+      {/* The Divine Connection Section */}
+      <section className="py-24 md:py-48 bg-[#FFFDF9] relative overflow-hidden">
+        {/* Background Texture */}
+        <div className="absolute inset-0 opacity-[0.02] bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
+        
+        <Container className="relative">
+           <div className="text-center max-w-4xl mx-auto mb-20 md:mb-40 space-y-8">
+              <div className="w-24 h-[1px] bg-amber-300 mx-auto" />
+              <h2 className="text-5xl md:text-8xl font-serif text-amber-950 leading-tight">The Divine Connection</h2>
+              <p className="text-xl md:text-2xl text-stone-500 font-serif leading-relaxed italic">
+                 "Faith is taking the first step even when you don't see the whole staircase."
+              </p>
+           </div>
 
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-600 to-orange-600 text-white text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-32">
+              {[
+                { icon: Sunrise, title: "Faith", desc: "Guided spiritual experiences across diverse religions, honoring the sanctity of every tradition." },
+                { icon: Sun, title: "Peace", desc: "Finding stillness in sacred silence, away from the modern world's noise and distractions." },
+                { icon: Globe, title: "Heritage", desc: "Exploring architectural wonders and cultural artifacts that have stood for millennia." }
+              ].map((pillar, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.2 }}
+                  className="text-center space-y-10 group"
+                >
+                   <div className="relative w-28 h-28 mx-auto flex items-center justify-center">
+                      <div className="absolute inset-0 bg-amber-50 rounded-full group-hover:bg-amber-100 transition-colors duration-700 group-hover:scale-110" />
+                      <pillar.icon className="w-12 h-12 text-amber-700 relative z-10 transition-transform duration-700 group-hover:rotate-12" />
+                   </div>
+                   <div className="space-y-6">
+                      <h3 className="text-3xl font-serif text-amber-950 italic">{pillar.title}</h3>
+                      <p className="text-stone-500 font-serif text-lg leading-relaxed font-light">{pillar.desc}</p>
+                   </div>
+                </motion.div>
+              ))}
+           </div>
+        </Container>
+      </section>
 
-                    {/* Rating */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-full">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-bold">{pkg.rating}</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-amber-700 transition-colors line-clamp-2">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Spiritual Level */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Sun className="w-4 h-4" />
-                      <span className="font-medium">{pkg.spiritualLevel}</span>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-slate-900">{pkg.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-amber-700 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">Begin Journey</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-
-      {/* Why Spiritual Journeys Section */}
-      <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-16 md:py-24">
+      {/* Heritage Units (Packages Grid) */}
+      <section id="destinations" className="py-24 md:py-40 bg-[#FBF9F4]">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
-              Why Choose Spiritual Journeys?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Find peace, purpose, and connection
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 md:mb-32">
+            <div className="space-y-6 max-w-2xl">
+              <span className="text-amber-600 font-serif font-bold text-xs uppercase tracking-[0.4em]">Ancient Paths</span>
+              <h2 className="text-5xl md:text-8xl font-serif text-amber-950 leading-[0.9]">Select<br /><span className="italic font-light opacity-80">Journeys</span></h2>
+            </div>
+            
+            <div className="flex bg-white/60 backdrop-blur-md p-2 rounded-2xl border border-amber-100 shadow-sm">
+              <button
+                onClick={() => setSelectedTab("international")}
+                className={cn(
+                  "px-10 py-4 rounded-xl font-serif text-sm tracking-widest transition-all duration-700",
+                  selectedTab === "international"
+                    ? "bg-amber-700 text-white shadow-xl"
+                    : "text-amber-900/60 hover:text-amber-900"
+                )}
+              >
+                Global Sacred
+              </button>
+              <button
+                onClick={() => setSelectedTab("domestic")}
+                className={cn(
+                  "px-10 py-4 rounded-xl font-serif text-sm tracking-widest transition-all duration-700",
+                  selectedTab === "domestic"
+                    ? "bg-amber-700 text-white shadow-xl"
+                    : "text-amber-900/60 hover:text-amber-900"
+                )}
+              >
+                Holy India
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Heart, title: "Inner Peace", desc: "Guided spiritual experiences designed to bring tranquility, clarity, and deep inner reflection." },
-              { icon: Cloud, title: "Sacred Spaces", desc: "Visit revered sites and holy places that have inspired faith and devotion for centuries." },
-              { icon: Waves, title: "Mindful Guidance", desc: "Expert spiritual leaders and guides accompany you, ensuring meaningful and respectful experiences." }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center p-8"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-600 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-black text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-14">
+            <AnimatePresence mode="wait">
+              {currentPackages.map((pkg, index) => (
+                <motion.div
+                  key={`${selectedTab}-${pkg.id}`}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <Link href={`/packages/${pkg.id}`}>
+                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-[0_20px_40px_-15px_rgba(120,53,15,0.08)] hover:shadow-[0_40px_80px_-20px_rgba(120,53,15,0.15)] transition-all duration-700 flex flex-col h-full border border-amber-50 group-hover:border-amber-200">
+                      {/* Heritage Image Header */}
+                      <div className="relative h-[340px] overflow-hidden">
+                        <Image
+                          src={pkg.image}
+                          alt={pkg.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out grayscale-[20%] group-hover:grayscale-0"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-amber-950/60 via-transparent to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
+                        
+                        {/* Sacred Rating */}
+                        <div className="absolute top-6 right-6 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full shadow-lg transform group-hover:-translate-y-1 transition-all">
+                           <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                           <span className="text-xs font-bold text-amber-950">{pkg.rating}</span>
+                        </div>
+
+                        {/* Location Overlay */}
+                        <div className="absolute bottom-6 left-6 right-6">
+                           <div className="inline-flex items-center gap-2.5 bg-amber-950/80 backdrop-blur-md px-4 py-2 rounded-lg text-white mb-2 border border-white/10">
+                              <MapPin className="w-3.5 h-3.5 text-amber-300" />
+                              <span className="text-[10px] font-bold uppercase tracking-widest">{pkg.location}</span>
+                           </div>
+                        </div>
+                      </div>
+
+                      {/* Content Body */}
+                      <div className="p-8 md:p-10 flex-1 flex flex-col justify-between space-y-8">
+                        <div className="space-y-6">
+                          <h3 className="text-2xl md:text-3xl font-serif text-amber-950 leading-tight group-hover:text-amber-700 transition-colors">
+                            {pkg.title}
+                          </h3>
+                          
+                          <div className="space-y-4">
+                             {pkg.highlights.map((h, idx) => (
+                               <div key={idx} className="flex items-center gap-3">
+                                  <div className="w-2 h-2 rounded-full bg-amber-400 opacity-60" />
+                                  <span className="text-xs font-serif text-stone-600 italic">
+                                    {h}
+                                  </span>
+                               </div>
+                             ))}
+                          </div>
+                        </div>
+
+                        <div className="pt-8 border-t border-amber-50 flex items-center justify-between">
+                          <div className="space-y-1">
+                            <p className="text-[10px] font-bold text-amber-800/40 uppercase tracking-[0.2em]">Offering</p>
+                            <p className="text-2xl font-serif text-amber-950">{pkg.price}</p>
+                          </div>
+                          <div className="w-12 h-12 rounded-full border border-amber-200 flex items-center justify-center group-hover:bg-amber-950 group-hover:border-amber-950 group-hover:text-amber-100 transition-all duration-700">
+                             <ChevronRight className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </Container>
-      </div>
+      </section>
+
+      {/* Divine Call to Action */}
+      <section className="py-32 md:py-56 bg-white relative overflow-hidden">
+         {/* Subtle Mandala Background */}
+         <div className="absolute inset-0 opacity-[0.05] pointer-events-none flex items-center justify-center">
+            <div className="w-[800px] h-[800px] rounded-full border-[1px] border-amber-900 border-dashed animate-spin-slow" />
+         </div>
+
+         <Container className="relative">
+            <div className="max-w-5xl mx-auto text-center space-y-16">
+               <motion.div
+                 initial={{ opacity: 0, scale: 0.95 }}
+                 whileInView={{ opacity: 1, scale: 1 }}
+                 viewport={{ once: true }}
+                 className="space-y-8"
+               >
+                  <Church className="w-16 h-16 text-amber-600 mx-auto" />
+                  <h2 className="text-6xl md:text-9xl font-serif text-amber-950 tracking-tight leading-none italic">
+                     Answer the <br />
+                     <span className="text-amber-700 not-italic font-light block mt-4">Sacred Call</span>
+                  </h2>
+               </motion.div>
+               <p className="text-xl md:text-3xl text-stone-500 font-serif leading-relaxed max-w-3xl mx-auto font-light">
+                  "Let your next journey be more than a vacation. Let it be a homecoming for your soul."
+               </p>
+               <div className="flex flex-col sm:flex-row items-center justify-center gap-10">
+                  <Button size="lg" className="h-18 md:h-20 px-14 md:px-20 rounded-xl bg-amber-950 hover:bg-stone-900 text-amber-100 font-serif text-xl tracking-widest shadow-2xl transition-all duration-700 hover:scale-105 active:scale-95">
+                     Book Your Pilgrimage
+                  </Button>
+                  <Link href="/contact" className="group flex items-center gap-4 text-amber-900 font-serif text-sm tracking-widest uppercase border-b border-amber-900/20 pb-2 hover:border-amber-900 transition-all">
+                     Sacred Consultation
+                     <ChevronRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </Link>
+               </div>
+            </div>
+         </Container>
+      </section>
     </div>
   );
 }

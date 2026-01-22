@@ -321,7 +321,7 @@ export const getWhyChooseRegionData = unstableCache(
       
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log(`[getWhyChooseRegionData] Successfully fetched data for region ID: ${regionId}`);
+        console.log(`[getWhyChooseRegionData] Successfully fetched data for region ID: ${regionId}`, data);
         return serializeData(data);
       }
       

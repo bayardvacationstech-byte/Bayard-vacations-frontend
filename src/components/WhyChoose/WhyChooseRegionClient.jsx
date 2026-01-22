@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -123,6 +123,24 @@ export default function WhyChooseRegionClient({ regionSlug }) {
   const highlights = regionDataProcessed?.highlights || [];
   const activities = regionDataProcessed?.activities || [];
   
+  // Handle scrolling to hash after data is loaded
+  useEffect(() => {
+    if (!isLoading && typeof window !== "undefined") {
+      const hash = window.location.hash;
+      if (hash) {
+        // Wait a small bit for the dynamic content to fully render
+        const timer = setTimeout(() => {
+          const id = hash.replace("#", "");
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [isLoading]);
+
   // Show loading state
   if (isLoading) {
     return (

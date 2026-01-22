@@ -82,7 +82,7 @@ const InclusionsSection = ({ packageData }) => {
   };
 
   const renderPoints = () => {
-    const points = packageData?.points || [
+    const points = packageData?.points_to_remember || packageData?.points || [
       "Comfortable walking shoes are highly recommended for sightseeing.",
       "Carry appropriate clothing for the season and specific region requirements.",
       "Respect local customs, traditions, and dress codes at religious sites.",
@@ -124,148 +124,188 @@ const InclusionsSection = ({ packageData }) => {
     );
   };
 
-  const renderProTip = () => (
-    <div className="bg-gradient-to-br from-brand-blue/5 to-transparent border border-brand-blue/10 rounded-3xl p-6 relative overflow-hidden group h-full">
-      <div className="absolute -right-4 -top-4 w-24 h-24 bg-brand-blue/5 rounded-full blur-2xl group-hover:bg-brand-blue/10 transition-all duration-500" />
-      <div className="relative">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 bg-white shadow-sm border border-brand-blue/10 rounded-lg flex items-center justify-center">
-            <Lightbulb className="w-4 h-4 text-brand-blue" />
-          </div>
-          <h6 className="text-brand-blue font-bold tracking-tight">Pro Tip</h6>
-        </div>
-        <p className="text-slate-600 text-sm leading-relaxed font-medium">
-          Book at least 45 days in advance to secure the best rates and premium room views. Contact our experts for special surprises!
-        </p>
-      </div>
-    </div>
-  );
+  const renderProTip = () => {
+    const tips = packageData?.proTips || [
+      "Book at least 45 days in advance to secure the best rates and premium room views. Contact our experts for special surprises!"
+    ];
+    // Show one random tip or the first one
+    const tip = tips[Math.floor(Math.random() * tips.length)];
 
-  const renderCancellation = () => (
-    <div className="bg-rose-50/50 border border-rose-100 rounded-3xl p-6 group hover:shadow-md transition-all duration-300 shadow-sm shadow-rose-100/30 h-full">
-      <div className="flex items-center gap-3 mb-4">
-         <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
-           <ShieldAlert className="w-5 h-5 text-rose-500" />
-         </div>
-         <h4 className="text-lg font-black text-slate-900 tracking-tight">Cancellation <span className="text-rose-500">Policy</span></h4>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
-           <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">30+ Days</span>
-           <p className="text-[12px] text-slate-600 font-medium">Full refund minus minimal transaction fee.</p>
-        </div>
-        <div className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
-           <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">15-30 Days</span>
-           <p className="text-[12px] text-slate-600 font-medium">50% refund of the total package cost.</p>
-        </div>
-        <div className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
-           <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">&lt; 15 Days</span>
-           <p className="text-[12px] text-slate-600 font-medium">No refund possible due to vendor commitments.</p>
-        </div>
-        <div className="flex gap-3 p-3 bg-rose-500 rounded-2xl border border-rose-100 shadow-sm shadow-rose-200/50 sm:col-span-2">
-           <AlertCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
-           <p className="text-[11px] text-white font-bold leading-tight italic">Cancellation rules may vary by region. Please read full terms at checkout.</p>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderChecklist = () => (
-    <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm relative overflow-hidden group h-full">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[100px] -mr-32 -mt-32" />
-      <div className="relative z-10">
-        <div className="flex flex-col gap-4 mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200 w-fit uppercase tracking-widest">
-            <Briefcase className="w-3 h-3" /> Smart Packing
-          </div>
-          <h3 className="text-xl font-black text-slate-900 tracking-tight">Travel Preparation <span className="text-brand-blue">Guide</span></h3>
-          <p className="text-slate-500 text-xs font-medium">Everything you need before departure</p>
-        </div>
-
-        {/* Packing Checklist */}
-        <div className="mb-6">
-          <h4 className="text-sm font-black text-slate-700 mb-3 flex items-center gap-2">
-            <Briefcase className="w-4 h-4 text-brand-blue" /> What to Pack
-          </h4>
-          <div className="grid grid-cols-1 gap-3">
-            <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4">
-              <h5 className="text-slate-900 font-bold text-xs mb-3 flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-brand-blue" /> Essentials
-              </h5>
-              <ul className="space-y-2">
-                {['Passport & Visas', 'Travel Insurance', 'Local SIM/E-sim', 'Power Bank'].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold text-left">
-                    <div className="w-1 h-1 rounded-full bg-brand-blue/30" /> {item}
-                  </li>
-                ))}
-              </ul>
+    return (
+      <div className="bg-gradient-to-br from-brand-blue/5 to-transparent border border-brand-blue/10 rounded-3xl p-6 relative overflow-hidden group h-full">
+        <div className="absolute -right-4 -top-4 w-24 h-24 bg-brand-blue/5 rounded-full blur-2xl group-hover:bg-brand-blue/10 transition-all duration-500" />
+        <div className="relative">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-8 h-8 bg-white shadow-sm border border-brand-blue/10 rounded-lg flex items-center justify-center">
+              <Lightbulb className="w-4 h-4 text-brand-blue" />
             </div>
-            <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4">
-              <h5 className="text-slate-900 font-bold text-xs mb-3 flex items-center gap-2">
-                <Umbrella className="w-3.5 h-3.5 text-emerald-500" /> Clothing
-              </h5>
-              <ul className="space-y-2">
-                {['Breathable Linens', 'Comfortable Sneakers', 'Modest Temple Wear', 'Swimwear'].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold text-left">
-                    <div className="w-1 h-1 rounded-full bg-emerald-500/30" /> {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4">
-              <h5 className="text-slate-900 font-bold text-xs mb-3 flex items-center gap-2">
-                <Camera className="w-3.5 h-3.5 text-blue-500" /> Extras
-              </h5>
-              <ul className="space-y-2">
-                {['High SPF Sunscreen', 'Insect Repellent', 'Universal Adapter', 'Dry Bag'].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold text-left">
-                    <div className="w-1 h-1 rounded-full bg-blue-500/30" /> {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <h6 className="text-brand-blue font-bold tracking-tight">Pro Tip</h6>
           </div>
+          <p className="text-slate-600 text-sm leading-relaxed font-medium">
+            {tip}
+          </p>
         </div>
+      </div>
+    );
+  };
 
-        {/* Pre-Departure Timeline */}
-        <div>
-          <h4 className="text-sm font-black text-slate-700 mb-3 flex items-center gap-2">
-            <UserCheck className="w-4 h-4 text-brand-blue" /> Pre-Departure Timeline
-          </h4>
-          <div className="grid grid-cols-1 gap-3">
-            {[
-              { time: "2 Weeks Before", task: "Check Passport Validity" },
-              { time: "1 Week Before", task: "Notify Bank of Travel" },
-              { time: "3 Days Before", task: "Confirm All Bookings" },
-              { time: "1 Day Before", task: "Final Luggage Check" }
-            ].map((item, idx) => (
-              <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-left">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{item.time}</span>
-                <p className="text-xs font-bold text-slate-900 mt-0.5">{item.task}</p>
-              </div>
-            ))}
+  const renderCancellation = () => {
+    const policy = packageData?.cancellationPolicy || {
+      note: "Cancellation rules may vary by region. Please read full terms at checkout.",
+      tiers: [
+        { period: "30+ Days Before Departure", refund: "Full refund minus minimal transaction fee." },
+        { period: "15-30 Days Before Departure", refund: "50% refund of the total package cost." },
+        { period: "Less than 15 Days Before Departure", refund: "No refund possible due to vendor commitments." }
+      ]
+    };
+
+    return (
+      <div className="bg-rose-50/50 border border-rose-100 rounded-3xl p-6 group hover:shadow-md transition-all duration-300 shadow-sm shadow-rose-100/30 h-full">
+        <div className="flex items-center gap-3 mb-4">
+           <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
+             <ShieldAlert className="w-5 h-5 text-rose-500" />
+           </div>
+           <h4 className="text-lg font-black text-slate-900 tracking-tight">Cancellation <span className="text-rose-500">Policy</span></h4>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {policy.tiers?.map((tier, idx) => (
+            <div key={idx} className="flex gap-3 p-3 bg-white/60 rounded-2xl border border-rose-50/50">
+               <span className="text-rose-500 font-bold text-xs shrink-0 min-w-16">{tier.period}</span>
+               <p className="text-[12px] text-slate-600 font-medium">{tier.refund}</p>
+            </div>
+          ))}
+          <div className="flex gap-3 p-3 bg-rose-500 rounded-2xl border border-rose-100 shadow-sm shadow-rose-200/50 sm:col-span-2">
+             <AlertCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
+             <p className="text-[11px] text-white font-bold leading-tight italic">{policy.note}</p>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
-  const renderLogistics = () => (
-    <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-orange-500/20 hover:shadow-md transition-all duration-300 h-full">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
-          <AlertTriangle className="w-5 h-5 text-orange-500" />
+  const renderChecklist = () => {
+    const packing = packageData?.travelPreparationGuide?.whatToPack || {
+      essentials: ['Passport & Visas', 'Travel Insurance', 'Local SIM/E-sim', 'Power Bank'],
+      clothing: ['Breathable Linens', 'Comfortable Sneakers', 'Modest Temple Wear', 'Swimwear'],
+      extras: ['High SPF Sunscreen', 'Insect Repellent', 'Universal Adapter', 'Dry Bag']
+    };
+
+    const timeline = packageData?.travelPreparationGuide?.preDepartureTimeline || [
+      { timeframe: "2 Weeks Before", task: "Check Passport Validity" },
+      { timeframe: "1 Week Before", task: "Notify Bank of Travel" },
+      { timeframe: "3 Days Before", task: "Confirm All Bookings" },
+      { timeframe: "1 Day Before", task: "Final Luggage Check" }
+    ];
+
+    return (
+      <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm relative overflow-hidden group h-full">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[100px] -mr-32 -mt-32" />
+        <div className="relative z-10">
+          <div className="flex flex-col gap-4 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200 w-fit uppercase tracking-widest">
+              <Briefcase className="w-3 h-3" /> Smart Packing
+            </div>
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">Travel Preparation <span className="text-brand-blue">Guide</span></h3>
+            <p className="text-slate-500 text-xs font-medium">Everything you need before departure</p>
+          </div>
+
+          {/* Packing Checklist */}
+          <div className="mb-6">
+            <h4 className="text-sm font-black text-slate-700 mb-3 flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-brand-blue" /> What to Pack
+            </h4>
+            <div className="grid grid-cols-1 gap-3">
+              {packing.essentials?.length > 0 && (
+                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4">
+                  <h5 className="text-slate-900 font-bold text-xs mb-3 flex items-center gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5 text-brand-blue" /> Essentials
+                  </h5>
+                  <ul className="space-y-2">
+                    {packing.essentials.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold text-left">
+                        <div className="w-1 h-1 rounded-full bg-brand-blue/30" /> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {packing.clothing?.length > 0 && (
+                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4">
+                  <h5 className="text-slate-900 font-bold text-xs mb-3 flex items-center gap-2">
+                    <Umbrella className="w-3.5 h-3.5 text-emerald-500" /> Clothing
+                  </h5>
+                  <ul className="space-y-2">
+                    {packing.clothing.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold text-left">
+                        <div className="w-1 h-1 rounded-full bg-emerald-500/30" /> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {packing.extras?.length > 0 && (
+                <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-4">
+                  <h5 className="text-slate-900 font-bold text-xs mb-3 flex items-center gap-2">
+                    <Camera className="w-3.5 h-3.5 text-blue-500" /> Extras
+                  </h5>
+                  <ul className="space-y-2">
+                    {packing.extras.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-slate-600 text-[11px] font-semibold text-left">
+                        <div className="w-1 h-1 rounded-full bg-blue-500/30" /> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Pre-Departure Timeline */}
+          <div>
+            <h4 className="text-sm font-black text-slate-700 mb-3 flex items-center gap-2">
+              <UserCheck className="w-4 h-4 text-brand-blue" /> Pre-Departure Timeline
+            </h4>
+            <div className="grid grid-cols-1 gap-3">
+              {timeline.map((item, idx) => (
+                <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-left">
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{item.timeframe || item.time}</span>
+                  <p className="text-xs font-bold text-slate-900 mt-0.5">{item.task}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <h4 className="text-lg font-black text-slate-900 tracking-tight">Logistics & <span className="text-orange-500">Safety</span></h4>
       </div>
-      <ul className="space-y-3">
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-orange-500 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Safety & Ethics:</span> Always follow local laws and respect community guidelines. Keep emergency contact numbers and hotel addresses handy at all times.</span>
-        </li>
-      </ul>
-    </div>
-  );
+    );
+  };
+
+  const renderLogistics = () => {
+    const logistics = packageData?.logisticsAndSafety || [
+      {
+        category: "Safety & Ethics",
+        description: "Always follow local laws and respect community guidelines. Keep emergency contact numbers and hotel addresses handy at all times."
+      }
+    ];
+
+    return (
+      <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-orange-500/20 hover:shadow-md transition-all duration-300 h-full">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5 text-orange-500" />
+          </div>
+          <h4 className="text-lg font-black text-slate-900 tracking-tight">Logistics & <span className="text-orange-500">Safety</span></h4>
+        </div>
+        <ul className="space-y-3">
+          {logistics.map((item, idx) => (
+            <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
+              <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-orange-500 transition-colors flex-shrink-0" />
+              <span><span className="font-bold text-slate-700">{item.category}:</span> {item.description}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
 
   const getCurrencyInfo = (region) => {
     const currencies = {
@@ -280,7 +320,14 @@ const InclusionsSection = ({ packageData }) => {
   };
 
   const renderMoney = () => {
-    const currency = getCurrencyInfo(packageData?.region);
+    const moneyData = packageData?.moneyAndExpenses || {
+      localCurrency: { name: 'Local Currency', symbol: '', exchangeRate: 'Check current rates' },
+      tips: [
+        { label: "Daily Budget", description: "Suggest budgeting for additional meals and personal expenses." },
+        { label: "Tipping", description: "Tipping is appreciated for good service." }
+      ]
+    };
+
     return (
       <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-emerald-600/20 hover:shadow-md transition-all duration-300 h-full">
         <div className="flex items-center gap-3 mb-4">
@@ -292,16 +339,14 @@ const InclusionsSection = ({ packageData }) => {
         <ul className="space-y-3">
           <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
             <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
-            <span><span className="font-bold text-slate-700">Local Currency:</span> {currency.name} ({currency.symbol}). {currency.rate}</span>
+            <span><span className="font-bold text-slate-700">Local Currency:</span> {moneyData.localCurrency?.name} ({moneyData.localCurrency?.symbol}). {moneyData.localCurrency?.exchangeRate}</span>
           </li>
-          <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
-            <span><span className="font-bold text-slate-700">Daily Budget:</span> Suggest budgeting for additional meals and personal expenses not covered in the package.</span>
-          </li>
-          <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
-            <span><span className="font-bold text-slate-700">Tipping:</span> Tipping is common for guides and drivers as a gesture for good service.</span>
-          </li>
+          {moneyData.tips?.map((tip, idx) => (
+            <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
+              <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-emerald-600 transition-colors flex-shrink-0" />
+              <span><span className="font-bold text-slate-700">{tip.label}:</span> {tip.description}</span>
+            </li>
+          ))}
         </ul>
       </div>
     );
@@ -309,43 +354,32 @@ const InclusionsSection = ({ packageData }) => {
 
 
 
-  const renderTerms = () => (
-    <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-slate-900/20 hover:shadow-md transition-all duration-300 h-full">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-slate-900/10 rounded-xl flex items-center justify-center">
-          <FileText className="w-5 h-5 text-slate-900" />
+  const renderTerms = () => {
+    const terms = packageData?.termsAndConditions || [
+      { category: "Booking & Payment", description: "Payment in full is required at booking confirmation." },
+      { category: "Itinerary Changes", description: "Tour operator reserves the right to modify itinerary due to weather." }
+    ];
+
+    return (
+      <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-slate-900/20 hover:shadow-md transition-all duration-300 h-full">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-slate-900/10 rounded-xl flex items-center justify-center">
+            <FileText className="w-5 h-5 text-slate-900" />
+          </div>
+          <h4 className="text-lg font-black text-slate-900 tracking-tight">Terms & <span className="text-slate-500">Conditions</span></h4>
         </div>
-        <h4 className="text-lg font-black text-slate-900 tracking-tight">Terms & <span className="text-slate-500">Conditions</span></h4>
+        
+        <ul className="space-y-3">
+          {terms.map((term, idx) => (
+            <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
+              <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
+              <span><span className="font-bold text-slate-700">{term.category}:</span> {term.description}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-      
-      <ul className="space-y-3">
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Booking & Payment:</span> Payment in full is required at booking confirmation. Late payments may result in cancellation without notice.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Itinerary Changes:</span> Tour operator reserves the right to modify itinerary due to weather, local conditions, or circumstances beyond control.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Travel Documents:</span> You are responsible for obtaining necessary visas and ensuring passport validity. Tour operator is not responsible for entry denial.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Operator Responsibility:</span> Tour operator is not responsible for personal injury, theft, lost luggage, or flight delays beyond their control.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Conduct & Safety:</span> Guests must respect local laws and customs. Disruptive behavior may result in immediate tour termination without refund.</span>
-        </li>
-        <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-          <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-slate-900 transition-colors flex-shrink-0" />
-          <span><span className="font-bold text-slate-700">Health & Fitness:</span> By booking, you confirm you are in good health and capable of engaging in the described activities.</span>
-        </li>
-      </ul>
-    </div>
-  );
+    );
+  };
 
   return (
     <div id="inclusions" className="bg-white rounded-3xl py-1.5 md:py-4 px-3 md:px-6 scroll-mt-48 border border-slate-100 shadow-sm">
@@ -556,42 +590,48 @@ const InclusionsSection = ({ packageData }) => {
                   <Briefcase className="w-5 h-5 text-brand-blue" /> What to Pack
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-colors">
-                    <h5 className="text-slate-900 font-bold text-sm mb-4 flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-brand-blue" /> Essentials
-                    </h5>
-                    <ul className="space-y-3">
-                      {['Passport & Visas', 'Travel Insurance', 'Local SIM/E-sim', 'Power Bank'].map((item) => (
-                        <li key={item} className="flex items-center gap-3 text-slate-600 text-xs font-bold text-left">
-                          <div className="w-2 h-2 rounded-full bg-brand-blue/30" /> {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-colors">
-                    <h5 className="text-slate-900 font-bold text-sm mb-4 flex items-center gap-2">
-                      <Umbrella className="w-4 h-4 text-emerald-500" /> Clothing
-                    </h5>
-                    <ul className="space-y-3">
-                      {['Breathable Linens', 'Comfortable Sneakers', 'Modest Temple Wear', 'Swimwear'].map((item) => (
-                        <li key={item} className="flex items-center gap-3 text-slate-600 text-xs font-bold text-left">
-                          <div className="w-2 h-2 rounded-full bg-emerald-500/30" /> {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-colors">
-                    <h5 className="text-slate-900 font-bold text-sm mb-4 flex items-center gap-2">
-                      <Camera className="w-4 h-4 text-blue-500" /> Extras
-                    </h5>
-                    <ul className="space-y-3">
-                      {['High SPF Sunscreen', 'Insect Repellent', 'Universal Adapter', 'Dry Bag'].map((item) => (
-                        <li key={item} className="flex items-center gap-3 text-slate-600 text-xs font-bold text-left">
-                          <div className="w-2 h-2 rounded-full bg-blue-500/30" /> {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {packageData?.travelPreparationGuide?.whatToPack?.essentials && (
+                    <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-colors">
+                      <h5 className="text-slate-900 font-bold text-sm mb-4 flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-brand-blue" /> Essentials
+                      </h5>
+                      <ul className="space-y-3">
+                        {packageData.travelPreparationGuide.whatToPack.essentials.map((item) => (
+                          <li key={item} className="flex items-center gap-3 text-slate-600 text-xs font-bold text-left">
+                            <div className="w-2 h-2 rounded-full bg-brand-blue/30" /> {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {packageData?.travelPreparationGuide?.whatToPack?.clothing && (
+                    <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-colors">
+                      <h5 className="text-slate-900 font-bold text-sm mb-4 flex items-center gap-2">
+                        <Umbrella className="w-4 h-4 text-emerald-500" /> Clothing
+                      </h5>
+                      <ul className="space-y-3">
+                        {packageData.travelPreparationGuide.whatToPack.clothing.map((item) => (
+                          <li key={item} className="flex items-center gap-3 text-slate-600 text-xs font-bold text-left">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500/30" /> {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {packageData?.travelPreparationGuide?.whatToPack?.extras && (
+                    <div className="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 hover:bg-slate-50 transition-colors">
+                      <h5 className="text-slate-900 font-bold text-sm mb-4 flex items-center gap-2">
+                        <Camera className="w-4 h-4 text-blue-500" /> Extras
+                      </h5>
+                      <ul className="space-y-3">
+                        {packageData.travelPreparationGuide.whatToPack.extras.map((item) => (
+                          <li key={item} className="flex items-center gap-3 text-slate-600 text-xs font-bold text-left">
+                            <div className="w-2 h-2 rounded-full bg-blue-500/30" /> {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -601,14 +641,14 @@ const InclusionsSection = ({ packageData }) => {
                   <UserCheck className="w-5 h-5 text-brand-blue" /> Pre-Departure Timeline
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {[
-                    { time: "2 Weeks Before", task: "Check Passport Validity" },
-                    { time: "1 Week Before", task: "Notify Bank of Travel" },
-                    { time: "3 Days Before", task: "Confirm All Bookings" },
-                    { time: "1 Day Before", task: "Final Luggage Check" }
-                  ].map((item, idx) => (
+                  {(packageData?.travelPreparationGuide?.preDepartureTimeline || [
+                    { timeframe: "2 Weeks Before", task: "Check Passport Validity" },
+                    { timeframe: "1 Week Before", task: "Notify Bank of Travel" },
+                    { timeframe: "3 Days Before", task: "Confirm All Bookings" },
+                    { timeframe: "1 Day Before", task: "Final Luggage Check" }
+                  ]).map((item, idx) => (
                     <div key={idx} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-slate-100 transition-colors">
-                      <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{item.time}</span>
+                      <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{item.timeframe || item.time}</span>
                       <p className="text-sm font-bold text-slate-900 mt-2">{item.task}</p>
                     </div>
                   ))}

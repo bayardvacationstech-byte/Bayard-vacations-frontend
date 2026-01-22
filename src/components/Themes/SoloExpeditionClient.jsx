@@ -1,15 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { User, Backpack, Compass, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Coffee, Tent, Zap } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Backpack, Compass, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Coffee, Tent, Zap, Wind, Shield, Rocket, Globe } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// Floating Explorer Elements Background Component
+const FloatingExplorerElements = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {[...Array(12)].map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            opacity: 0, 
+            y: "110%", 
+            x: `${Math.random() * 100}%`,
+            scale: Math.random() * 0.4 + 0.4,
+            rotate: Math.random() * 360
+          }}
+          animate={{ 
+            opacity: [0, 0.3, 0], 
+            y: "-10%",
+            rotate: Math.random() * 360 + 180
+          }}
+          transition={{ 
+            duration: Math.random() * 15 + 20, 
+            repeat: Infinity,
+            delay: Math.random() * 15,
+            ease: "linear"
+          }}
+          className="absolute"
+        >
+          {i % 2 === 0 ? (
+            <Mountain className="w-10 h-10 text-teal-200" />
+          ) : (
+            <Compass className="w-10 h-10 text-cyan-200" />
+          )}
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 export default function SoloExpeditionClient() {
   const [selectedTab, setSelectedTab] = useState("international");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Solo travel packages data
   const soloPackages = {
@@ -24,7 +68,7 @@ export default function SoloExpeditionClient() {
         rating: 4.9,
         highlights: ["Northern Lights", "Solo-Friendly Hostels", "Group Activities"],
         category: "Adventure & Nature",
-        groupSize: "Solo with optional meetups"
+        groupSize: "Solo with meetups"
       },
       {
         id: 2,
@@ -117,228 +161,345 @@ export default function SoloExpeditionClient() {
 
   const currentPackages = soloPackages[selectedTab];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 via-cyan-50 to-white">
-      {/* Hero Section */}
-      <div className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600">
-        {/* Adventure Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 10 L35 20 L45 22 L37 30 L39 40 L30 35 L21 40 L23 30 L15 22 L25 20 Z M10 40 L12 45 L17 46 L13 50 L14 55 L10 52 L6 55 L7 50 L3 46 L8 45 Z M50 40 L52 45 L57 46 L53 50 L54 55 L50 52 L46 55 L47 50 L43 46 L48 45 Z' fill='white'/%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }} />
-        </div>
+  if (!mounted) return null;
 
-        <Container className="relative h-full flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-            {/* Left Content */}
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Immersive Adventure Hero */}
+      <div className="relative h-[85vh] md:h-[95vh] overflow-hidden flex items-center bg-slate-900">
+        {/* Ken Burns Animation */}
+        <motion.div 
+          initial={{ scale: 1.1, x: "-2%" }}
+          animate={{ scale: 1, x: "0%" }}
+          transition={{ duration: 25, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=80"
+            alt="Solo adventure background"
+            fill
+            className="object-cover opacity-80"
+            priority
+          />
+        </motion.div>
+        
+        {/* Topo Map Overlay */}
+        <div className="absolute inset-0 opacity-20 z-10 mix-blend-overlay" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 80 Q 50 10, 90 80 T 170 80' fill='none' stroke='white' stroke-width='0.5'/%3E%3Cpath d='M10 120 Q 50 50, 90 120 T 170 120' fill='none' stroke='white' stroke-width='0.5'/%3E%3Cpath d='M10 160 Q 50 90, 90 160 T 170 160' fill='none' stroke='white' stroke-width='0.5'/%3E%3C/svg%3E")`,
+        }} />
+        
+        {/* Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/40 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/20 z-10" />
+        
+        <FloatingExplorerElements />
+
+        <Container className="relative z-20 pt-32 md:pt-40">
+          <div className="max-w-4xl space-y-6 md:space-y-10">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-6"
+              className="space-y-6 md:space-y-8"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                <Backpack className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold text-white uppercase tracking-widest">
-                  Travel Theme
+              <div className="inline-flex items-center gap-3 px-5 py-2 bg-teal-500/20 backdrop-blur-xl rounded-lg border border-teal-400/30 shadow-2xl">
+                <Compass className="w-5 h-5 text-teal-400 animate-spin-slow" />
+                <span className="text-[10px] md:text-xs font-black text-teal-100 uppercase tracking-[0.4em] font-mono">
+                  Route: Uncharted Territory
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-tight">
-                Solo<br />
-                <span className="text-cyan-200">Expedition</span>
-              </h1>
+              <div className="space-y-1 md:space-y-2">
+                <div className="flex items-center gap-4 text-amber-500 font-mono text-[10px] md:text-lg tracking-[0.3em] font-bold">
+                  <span className="h-[2px] w-8 md:w-12 bg-amber-500/50" />
+                  LAT: 64.1265° N | LON: 21.8174° W
+                </div>
+                <h1 className="text-4xl sm:text-7xl md:text-[10rem] font-black text-white leading-[0.85] tracking-tighter uppercase italic">
+                  Solo<br />
+                  <span className="text-teal-400 not-italic">Expedition</span>
+                </h1>
+              </div>
 
-              <p className="text-xl text-white/90 leading-relaxed max-w-xl">
-                All things you. Discover our handpicked domestic and international arrivals curated specifically for this theme.
+              <p className="text-base md:text-2xl text-slate-300 font-medium leading-relaxed max-w-2xl border-l-4 border-teal-500 pl-4 md:pl-6 py-1 md:py-2">
+                The ultimate test of freedom. No compromises. No waiting. Just you, the open road, and the thrill of absolute independence.
               </p>
 
-              <div className="flex gap-4">
-                <Button size="lg" className="bg-white text-teal-700 hover:bg-cyan-50 font-black px-8 py-6 rounded-2xl shadow-xl">
-                  Start Your Journey
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-5 pt-2 md:pt-4 text-center sm:text-left">
+                <Button size="lg" className="h-14 md:h-16 px-8 md:px-10 rounded-xl bg-teal-600 hover:bg-teal-500 text-white shadow-[0_20px_50px_rgba(13,148,136,0.2)] border-none font-black text-base md:text-lg uppercase tracking-widest transition-all hover:scale-105 active:scale-95">
+                   Enlist Now
+                  <Rocket className="ml-3 w-5 h-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm">
-                  Browse Adventures
+                <Button size="lg" variant="outline" className="h-14 md:h-16 px-8 md:px-10 rounded-xl border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-md font-black text-base md:text-lg uppercase tracking-widest transition-all">
+                  Browse Intel
                 </Button>
               </div>
             </motion.div>
+          </div>
+        </Container>
+        
+        {/* Tactical Coordinates Overlay */}
+        <div className="absolute top-1/2 right-10 -translate-y-1/2 hidden xl:flex flex-col gap-20 py-10 opacity-30 z-20">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="flex items-center gap-4 vertical-text font-mono text-white text-xs tracking-[1em]">
+               BAYARD-SYSTEM-0{i}
+            </div>
+          ))}
+        </div>
 
-            {/* Right Image */}
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-10 z-20 flex items-center gap-6">
+          <div className="flex flex-col gap-1 items-center">
+             <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
+             <div className="w-1.5 h-1.5 rounded-full bg-teal-500/50" />
+             <div className="w-1.5 h-1.5 rounded-full bg-teal-500/20" />
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/60">Begin Descent</span>
+        </div>
+      </div>
+
+      {/* Solo Manifesto Section */}
+      <section className="py-24 md:py-40 relative bg-slate-900 overflow-hidden border-y border-white/5">
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
+           <span className="text-[25vw] font-black tracking-tighter leading-none">FREEDOM</span>
+        </div>
+        <Container className="relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative hidden lg:block"
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative aspect-square md:aspect-video lg:aspect-square"
             >
-              <div className="relative w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl ring-8 ring-white/20">
+              <div className="absolute inset-0 bg-teal-600 rounded-[3rem] rotate-3 opacity-20" />
+              <div className="absolute inset-0 bg-slate-800 rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl">
                 <Image
-                  src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800"
-                  alt="Solo traveler"
+                  src="https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1000&q=80"
+                  alt="Solo explorer"
                   fill
                   className="object-cover"
                 />
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
-                    <User className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-black text-slate-900">Your Adventure, Your Way</p>
-                    <p className="text-sm text-slate-600">Freedom to explore independently</p>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent opacity-60" />
+                <div className="absolute bottom-10 left-10 p-6 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 max-w-xs">
+                  <p className="text-white font-mono text-[10px] uppercase tracking-widest mb-2 text-teal-400">STATUS: ACTIVE</p>
+                  <p className="text-white font-bold tracking-tight">"The man who goes alone can start today."</p>
                 </div>
               </div>
             </motion.div>
+
+            <div className="space-y-10">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-amber-500">
+                  <Zap className="w-4 h-4" />
+                  <span className="text-[10px] font-black uppercase tracking-widest">The Solo Manifesto</span>
+                </div>
+                <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none uppercase">
+                  Travel <br />
+                  <span className="text-teal-500 underline decoration-8 underline-offset-[12px]">Unfiltered.</span>
+                </h2>
+              </div>
+              <p className="text-slate-400 text-lg md:text-xl leading-relaxed font-medium">
+                Solo travel isn't just a trip; it's a brutalist approach to self-discovery. We strip away the noise of group dynamics and focus on the raw connection between you and the destination.
+              </p>
+              <div className="grid grid-cols-2 gap-8">
+                 <div className="space-y-2">
+                   <span className="text-4xl font-black text-white">100%</span>
+                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Decision Power</p>
+                 </div>
+                 <div className="space-y-2">
+                   <span className="text-4xl font-black text-white">24/7</span>
+                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Tactical Support</p>
+                 </div>
+              </div>
+            </div>
           </div>
         </Container>
-      </div>
+      </section>
 
-      {/* Packages Section */}
-      <Container className="py-8 md:py-12">
-        {/* Tab Switcher */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-slate-100 rounded-full p-1.5">
-            <button
-              onClick={() => setSelectedTab("international")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "international"
-                  ? "bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              International
-            </button>
-            <button
-              onClick={() => setSelectedTab("domestic")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "domestic"
-                  ? "bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Domestic
-            </button>
-          </div>
-        </div>
-
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-full">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-bold">{pkg.rating}</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-teal-600 transition-colors line-clamp-2">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Group Size */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <User className="w-4 h-4" />
-                      <span className="font-medium">{pkg.groupSize}</span>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-slate-900">{pkg.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-teal-600 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">Explore</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </Container>
-
-      {/* Why Solo Travel Section */}
-      <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50 py-16 md:py-24">
+      {/* Packages Exploration */}
+      <section className="py-24 bg-white">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
-              Why Solo Travel?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Discover yourself while discovering the world
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+            <div className="space-y-4">
+              <div className="w-12 h-1 bg-teal-600" />
+              <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter uppercase leading-none">
+                Elite <br />
+                Assignements
+              </h2>
+            </div>
+            
+            <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+              <button
+                onClick={() => setSelectedTab("international")}
+                className={cn(
+                  "px-8 py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all duration-300",
+                  selectedTab === "international"
+                    ? "bg-slate-900 text-white shadow-xl"
+                    : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                Overseas
+              </button>
+              <button
+                onClick={() => setSelectedTab("domestic")}
+                className={cn(
+                  "px-8 py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all duration-300",
+                  selectedTab === "domestic"
+                    ? "bg-slate-900 text-white shadow-xl"
+                    : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                Mainland
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Zap, title: "Total Freedom", desc: "Travel at your own pace, make spontaneous decisions, and create your perfect itinerary without compromise." },
-              { icon: Mountain, title: "Self Discovery", desc: "Solo travel pushes you out of your comfort zone, building confidence and revealing your true capabilities." },
-              { icon: Coffee, title: "Safety & Support", desc: "Carefully curated solo-friendly accommodations, 24/7 support, and meetup opportunities whenever you want company." }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center p-8"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-600 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-black text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <AnimatePresence mode="wait">
+              {currentPackages.map((pkg, index) => (
+                <motion.div
+                  key={`${selectedTab}-${pkg.id}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group"
+                >
+                  <Link href={`/packages/${pkg.id}`}>
+                    <div className="relative bg-white border border-slate-200 rounded-[2rem] overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition-all duration-700 flex flex-col h-full group-hover:border-teal-500/50">
+                      {/* Tactical Image Header */}
+                      <div className="relative h-[280px] overflow-hidden">
+                        <Image
+                          src={pkg.image}
+                          alt={pkg.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-60" />
+                        
+                        {/* Status Badge */}
+                        <div className="absolute top-6 left-6 flex items-center gap-2 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20">
+                           <div className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+                           <span className="text-[9px] font-black text-white uppercase tracking-widest">{pkg.category}</span>
+                        </div>
+
+                        {/* Community Badge */}
+                        <div className="absolute top-6 right-6 flex items-center gap-1.5 bg-teal-500 px-3 py-1.5 rounded-lg shadow-lg">
+                           <Users className="w-3 h-3 text-white" />
+                           <span className="text-[9px] font-black text-white">{pkg.rating}</span>
+                        </div>
+
+                        <div className="absolute bottom-6 left-6 flex flex-col gap-1">
+                           <div className="flex items-center gap-2 text-white/90">
+                              <MapPin className="w-3.5 h-3.5 text-teal-400" />
+                              <span className="text-xs font-bold tracking-tight uppercase">{pkg.location}</span>
+                           </div>
+                        </div>
+                      </div>
+
+                      {/* Intel Body */}
+                      <div className="p-8 flex-1 flex flex-col justify-between">
+                        <div className="space-y-6">
+                          <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight uppercase">
+                            {pkg.title}
+                          </h3>
+                          
+                          <div className="flex flex-wrap gap-2">
+                             {pkg.highlights.map((h, idx) => (
+                               <span key={idx} className="text-[9px] font-black text-slate-500 border border-slate-200 px-2 py-1 rounded uppercase tracking-tighter group-hover:bg-slate-50 transition-colors">
+                                 {h}
+                               </span>
+                             ))}
+                          </div>
+                        </div>
+
+                        <div className="pt-8 mt-8 border-t border-slate-100 flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Base Rate</p>
+                            <p className="text-2xl font-black text-slate-900 tracking-tighter lowercase">{pkg.price}</p>
+                          </div>
+                          <div className="w-12 h-12 bg-slate-950 text-white rounded-xl flex items-center justify-center group-hover:bg-teal-600 transition-all duration-500 shadow-xl group-hover:translate-x-1">
+                             <ChevronRight className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </Container>
-      </div>
+      </section>
+
+      {/* Safety & Logistics Info */}
+      <section className="py-24 bg-slate-50 overflow-hidden relative">
+         <div className="absolute top-0 left-0 w-1/2 h-full bg-white hidden lg:block" />
+         <Container className="relative">
+            <div className="flex flex-col lg:flex-row items-stretch border border-slate-200 shadow-2xl rounded-[3rem] overflow-hidden bg-white">
+               <div className="flex-1 p-10 md:p-20 space-y-12">
+                  <div className="space-y-6">
+                    <h2 className="text-4xl md:text-5xl font-black text-slate-950 uppercase tracking-tighter leading-none">
+                       Solo But <br />
+                       <span className="text-teal-600">Never Alone.</span>
+                    </h2>
+                    <p className="text-slate-500 font-medium text-lg leading-relaxed">
+                       True freedom requires the ultimate safety net. Our solo expeditions are backed by global infrastructure.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                     {[
+                       { icon: Shield, title: "Safety Net", desc: "Every route is vetted by local experts. We provide constant monitoring and emergency protocols." },
+                       { icon: Users, title: "Solo-Meetup", desc: "Digital connectivity to other solo travelers in your area. Join groups when you want, leave when you don't." },
+                       { icon: Globe, title: "Hyper-Local", desc: "Avoid the tourist traps. Our solo routes focus on authentic, underground experiences." },
+                       { icon: Wind, title: "Logistics Sync", desc: "All solo-friendly transport, baggage handling, and arrivals handled with millitary precision." }
+                     ].map((item, idx) => (
+                       <div key={idx} className="space-y-4">
+                          <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center text-teal-600">
+                             <item.icon className="w-5 h-5" />
+                          </div>
+                          <h4 className="font-black text-slate-900 uppercase tracking-tight">{item.title}</h4>
+                          <p className="text-xs text-slate-500 font-medium leading-relaxed">{item.desc}</p>
+                       </div>
+                     ))}
+                  </div>
+               </div>
+               <div className="flex-1 min-h-[400px] relative">
+                  <Image
+                    src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=1000&q=80"
+                    alt="Solo travel logistics"
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-teal-900/10" />
+               </div>
+            </div>
+         </Container>
+      </section>
+
+      {/* Final Tactical CTA */}
+      <section className="py-32 bg-slate-900 relative">
+         <Container className="text-center">
+            <div className="max-w-3xl mx-auto space-y-12">
+               <div className="inline-block p-4 border border-teal-500/30 rounded-full animate-pulse">
+                  <Globe className="w-8 h-8 text-teal-400" />
+               </div>
+               <h2 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-none uppercase">
+                  Ready to <br />
+                  <span className="text-teal-500 italic">Disappear?</span>
+               </h2>
+               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                  <Button size="lg" className="h-16 px-12 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-black text-xl uppercase tracking-widest transition-all shadow-2xl shadow-teal-500/20">
+                     Deploy Now
+                  </Button>
+                  <Link href="/contact" className="text-white font-black uppercase tracking-widest text-sm hover:text-teal-400 transition-colors border-b-2 border-white/20 pb-1">
+                     Consult a Strategist
+                  </Link>
+               </div>
+               <p className="text-slate-500 font-mono text-[10px] uppercase tracking-[0.4em]">Bayard Vacations | Solo Operations Unit</p>
+            </div>
+         </Container>
+      </section>
     </div>
   );
 }

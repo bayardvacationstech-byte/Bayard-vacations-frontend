@@ -202,7 +202,7 @@ const DesktopNavbar = () => {
 
           <div
             className={cn(
-              "relative mx-auto overflow-hidden rounded px-7 transition-all duration-300 ease-in-out",
+              "relative mx-auto overflow-hidden rounded px-4 lg:px-4 xl:px-6 2xl:px-8 transition-all duration-300 ease-in-out",
               {
                 "border border-solid border-white/30 backdrop-blur-3xl":
                   !isHeaderFixed,
@@ -250,83 +250,85 @@ const DesktopNavbar = () => {
           >
             <nav
               className={cn(
-                "h-16 flex items-center gap-4 text-white transition-all duration-300 ease-in-out",
+                "h-16 flex items-center justify-between gap-2 lg:gap-3 xl:gap-4 text-white transition-all duration-300 ease-in-out",
                 {
                   "opacity-0 h-0 scale-95": isSearchActive,
                   "opacity-100 scale-100": !isSearchActive,
-
                   "text-brand-blue": !isHeaderFixed,
                 }
               )}
             >
-              <Link href="/" onMouseOver={() => setActiveDropdown(null)}>
+              <Link href="/" onMouseOver={() => setActiveDropdown(null)} className="flex-shrink-0">
                 <Image
                   priority
                   width={180}
                   height={36}
                   alt="Bayard Vacations Logo"
                   src={isHeaderFixed ? "/img/logo.svg" : "/media/logo.svg"}
-                  className="w-36 sm:w-40 transition-all duration-300"
+                  className="w-28 lg:w-32 xl:w-36 2xl:w-40 transition-all duration-300"
                 />
               </Link>
-              <ul className="mx-auto flex gap-8">
+              <ul className="mx-auto flex items-center gap-2 lg:gap-3 xl:gap-5 2xl:gap-8 transition-all duration-300">
                 {navbarData.map((item) => (
                   <li key={item.id} onMouseOver={() => handleMouseOver(item)}>
                     <Link
                       href={item?.href || "/"}
-                      className="relative flex items-center gap-1 rounded-full text-[16px] font-semibold ease-out after:absolute after:bottom-0 after:left-0 after:inline-block  after:h-px after:w-full after:translate-y-1 after:scale-x-0 after:bg-[#59DF02] after:transition-all after:duration-300 after:content-[''] hover:after:scale-x-100"
+                      className="relative flex items-center gap-1 rounded-full text-[11px] lg:text-[13px] xl:text-[14px] 2xl:text-[16px] font-semibold whitespace-nowrap ease-out after:absolute after:bottom-0 after:left-0 after:inline-block  after:h-px after:w-full after:translate-y-1 after:scale-x-0 after:bg-[#59DF02] after:transition-all after:duration-300 after:content-[''] hover:after:scale-x-100"
                     >
                       <span>{item.title}</span>
-                      {item.hasDropdown && <ChevronDown className="size-4" />}
+                      {item.hasDropdown && <ChevronDown className="size-3 lg:size-3.5 xl:size-4 shrink-0" />}
                     </Link>
                   </li>
                 ))}
               </ul>
-              {(!isHomePage || (isHomePage && isScrolled)) && (
+
+              <div className="flex items-center gap-1.5 lg:gap-2 xl:gap-3 shrink-0">
+                {(!isHomePage || (isHomePage && isScrolled)) && (
+                  <Button
+                    className={cn(
+                      "rounded-full text-white hover:text-brand-blue",
+                      {
+                        "text-brand-blue": !isHeaderFixed,
+                      }
+                    )}
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleIsSearchActive}
+                    onMouseOver={() => setActiveDropdown(null)}
+                  >
+                    <Search className="!size-5" />
+                  </Button>
+                )}
                 <Button
-                  className={cn(
-                    "rounded-full text-white hover:text-brand-blue",
-                    {
-                      "text-brand-blue": !isHeaderFixed,
-                    }
-                  )}
+                  className={cn("rounded-full text-white hover:text-brand-blue", {
+                    "text-brand-blue": !isHeaderFixed,
+                  })}
                   variant="ghost"
                   size="icon"
-                  onClick={handleIsSearchActive}
                   onMouseOver={() => setActiveDropdown(null)}
                 >
-                  <Search />
+                  <Link
+                    href="/login"
+                    className="flex items-center justify-center"
+                  >
+                    <CircleUserRound className="!size-6" strokeWidth={1.5} />
+                  </Link>
                 </Button>
-              )}
-              <Button
-                className={cn("rounded-full text-white hover:text-brand-blue", {
-                  "text-brand-blue": !isHeaderFixed,
-                })}
-                variant="ghost"
-                size="icon"
-                onMouseOver={() => setActiveDropdown(null)}
-              >
-                <Link
-                  href="/login"
-                  className="flex items-center justify-center"
-                >
-                  <CircleUserRound className="!size-6" strokeWidth={1.5} />
-                </Link>
-              </Button>
 
-              <Button
-                onMouseOver={() => setActiveDropdown(null)}
-                className={cn(
-                  "border-2 border-solid border-white bg-transparent text-white shadow-none hover:bg-white hover:text-brand-blue rounded",
-                  {
-                    "border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white":
-                      !isHeaderFixed,
-                  }
-                )}
-                asChild
-              >
-                <Link href="/contact">Contact Us</Link>
-              </Button>
+                <Button
+                  onMouseOver={() => setActiveDropdown(null)}
+                  className={cn(
+                    "border-2 border-solid border-white bg-transparent text-white shadow-none hover:bg-white hover:text-brand-blue rounded px-2 lg:px-3 xl:px-4 2xl:px-5 h-8 lg:h-9 xl:h-10 text-[10px] lg:text-[12px] xl:text-[13px] 2xl:text-[14px] whitespace-nowrap transition-all duration-300",
+                    {
+                      "border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white":
+                        !isHeaderFixed,
+                    }
+                  )}
+                  asChild
+                >
+                  <Link href="/contact">Contact Us</Link>
+                </Button>
+              </div>
             </nav>
 
             {activeDropdown !== null && (
