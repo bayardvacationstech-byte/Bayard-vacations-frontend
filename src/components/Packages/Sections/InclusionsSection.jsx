@@ -27,8 +27,20 @@ import {
 
 const InclusionsSection = ({ packageData }) => {
   // Full Static Data from User Request
-  const TRAVEL_GUIDE_DATA = {
-    importantNotes: [
+  // Dynamically derive TRAVEL_GUIDE_DATA from packageData.sections
+  const getDynamicTravelGuideData = () => {
+    const sections = packageData?.sections || [];
+    
+    // 1. Important Notes
+    const importantNotesSection = sections.find(s => s.id === "important_notes");
+    const dynamicImportantNotes = importantNotesSection?.groups?.map(group => ({
+      title: group.title,
+      icon: group.title.toLowerCase().includes("hotel") ? "Building" :
+            group.title.toLowerCase().includes("transfer") || group.title.toLowerCase().includes("transport") ? "Car" :
+            group.title.toLowerCase().includes("tour") || group.title.toLowerCase().includes("activity") ? "Map" :
+            group.title.toLowerCase().includes("visa") || group.title.toLowerCase().includes("requirement") ? "FileCheck" : "AlertOctagon",
+      items: group.items.map(item => item.replace(/^\\item\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1'))
+    })) || [
       {
         title: "Hotel Policies",
         icon: "Building",
@@ -86,8 +98,11 @@ const InclusionsSection = ({ packageData }) => {
           "Price Changes: Prices valid only at time of booking; currency fluctuations may apply"
         ]
       }
-    ],
-    pointsToRemember: [
+    ];
+
+    // 2. Points to Remember
+    const pointsSection = sections.find(s => s.id === "points_to_remember");
+    const dynamicPointsToRemember = pointsSection?.items || [
       "Dress Code: Wear comfortable walking shoes; modest clothing recommended for religious sites",
       "Weather Preparation: Pack light clothing for summer (April-October); warm layers for early mornings/evenings in mountain areas",
       "Sun Protection: Carry sunscreen, hat, and sunglasses – UV exposure is high in Azerbaijan",
@@ -103,8 +118,28 @@ const InclusionsSection = ({ packageData }) => {
       "Valuables: Secure passports, money, and jewelry in hotel safe",
       "Bargaining: Accepted at bazaars; haggling is part of local culture but be respectful",
       "Tipping: Not mandatory but appreciated; 5-10% for good service is customary"
-    ],
-    travelPrep: {
+    ];
+
+    // 3. Travel Preparation Guide
+    const prepSection = sections.find(s => s.id === "travel_preparation_guide");
+    const dynamicTravelPrep = prepSection ? {
+      beforeDeparture: {
+        title: prepSection.subsections[0].title,
+        sections: prepSection.subsections[0].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      },
+      uponArrival: {
+        title: prepSection.subsections[1].title,
+        sections: prepSection.subsections[1].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      },
+      duringTravel: {
+        title: prepSection.subsections[2].title,
+        sections: prepSection.subsections[2].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      },
+      usefulInfo: {
+        title: prepSection.subsections[3].title,
+        sections: prepSection.subsections[3].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      }
+    } : {
       beforeDeparture: {
         title: "Before Departure",
         sections: [
@@ -141,11 +176,21 @@ const InclusionsSection = ({ packageData }) => {
           { subtitle: "Emergency Contacts", items: ["Police: 102", "Ambulance: 103", "Fire: 101", "Tourist Police: +994 12 490 20 26", "Your Embassy Contact: Save in phone immediately after arrival"] }
         ]
       }
-    }
+    };
+
+    return {
+      importantNotes: dynamicImportantNotes,
+      pointsToRemember: dynamicPointsToRemember,
+      travelPrep: dynamicTravelPrep
+    };
   };
+
+  const TRAVEL_GUIDE_DATA = getDynamicTravelGuideData();
 
   const [activeTab, setActiveTab] = useState("notes");
   const [prepTab, setPrepTab] = useState("beforeDeparture"); // New state for Travel Prep tabs
+  const [activeNotesTab, setActiveNotesTab] = useState(0); // For Important Notes tabs on mobile
+  const [activePointsTab, setActivePointsTab] = useState('preparation'); // For Points to Remember tabs on mobile
   const [isIncludesExpanded, setIsIncludesExpanded] = useState(false);
   const [isExcludesExpanded, setIsExcludesExpanded] = useState(false);
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
@@ -322,7 +367,7 @@ const InclusionsSection = ({ packageData }) => {
     ];
 
     return (
-      <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm relative overflow-hidden group h-full">
+      <div id="highlights-section" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-6 md:px-8 border border-slate-100 shadow-sm scroll-mt-32">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="relative z-10">
           <div className="flex flex-col gap-4 mb-6">
@@ -506,13 +551,13 @@ const InclusionsSection = ({ packageData }) => {
   };
 
   return (
-    <div id="inclusions" className="bg-white rounded-3xl py-1.5 md:py-4 px-3 md:px-6 scroll-mt-48 border border-slate-100 shadow-sm">
+    <div id="inclusions" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-4 md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
       {/* Standard Header */}
-      <div className="mb-2 md:mb-5 text-left">
+      <div className="mb-[15px] text-left">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[9px] md:text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
           <span className="text-xs">📋</span> Plan Details
         </div>
-        <h2 className="text-[22px] md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
+        <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
         <p className="text-xs md:text-lg font-medium text-slate-600">Everything you need for a seamless journey</p>
       </div>
       
@@ -651,15 +696,62 @@ const InclusionsSection = ({ packageData }) => {
       */}
 
       <div className="mt-8 space-y-8">
-        {/* 1. IMPORTANT NOTES GRID */}
+        {/* 1. IMPORTANT NOTES - TABS ON MOBILE, GRID ON DESKTOP */}
         <div>
-          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
              <span className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center">
                <Info className="w-5 h-5 text-brand-blue" />
              </span>
              Important <span className="text-brand-blue">Notes & Policies</span>
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+          {/* Mobile Tabs */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
+                const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
+                const isActive = activeNotesTab === idx;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveNotesTab(idx)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                      isActive
+                        ? 'bg-brand-blue text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {note.title}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Tab Content - Mobile */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <ul className="space-y-2">
+                {TRAVEL_GUIDE_DATA.importantNotes[activeNotesTab].items.map((item, i) => {
+                  const parts = item.match(/^([^:]+):\s*(.*)/);
+                  const key = parts ? parts[1] : null;
+                  const val = parts ? parts[2] : item;
+
+                  return (
+                    <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                      <span>
+                        {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
+                        {val}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
               const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
               return (
@@ -672,7 +764,6 @@ const InclusionsSection = ({ packageData }) => {
                   </div>
                   <ul className="space-y-2">
                     {note.items.map((item, i) => {
-                      // Check for Key: Value pattern
                       const parts = item.match(/^([^:]+):\s*(.*)/);
                       const key = parts ? parts[1] : null;
                       const val = parts ? parts[2] : item;
@@ -694,68 +785,172 @@ const InclusionsSection = ({ packageData }) => {
           </div>
         </div>
 
-        {/* 2. POINTS TO REMEMBER */}
-        <div className="bg-brand-blue/5 rounded-[32px] p-6 md:p-8 border border-brand-blue/10 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/10 rounded-full blur-[80px] -mr-20 -mt-20" />
-          <div className="relative z-10">
-            <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
-               <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                 <ListChecks className="w-5 h-5 text-brand-blue" />
-               </span>
-               Points to <span className="text-brand-blue">Remember</span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-              {TRAVEL_GUIDE_DATA.pointsToRemember.map((point, idx) => {
-                 const [title, desc] = point.split(": ");
-                 return (
-                   <div key={idx} className="flex gap-3 items-start p-3 bg-white/60 rounded-xl border border-blue-100/50 hover:bg-white transition-colors">
-                     <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
-                     <div className="text-sm text-slate-700 leading-snug">
-                       {desc ? (
-                         <>
-                           <span className="font-bold text-brand-blue">{title}:</span> {desc}
-                         </>
-                       ) : (
-                         <span className="font-medium">{point}</span>
-                       )}
-                     </div>
-                   </div>
-                 );
+        {/* 2. POINTS TO REMEMBER - TABS ON MOBILE */}
+        <div>
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+             <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+               <ListChecks className="w-5 h-5 text-brand-blue" />
+             </span>
+             Points to <span className="text-brand-blue">Remember</span>
+          </h3>
+
+          {/* Mobile Tabs */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              {[
+                { id: 'preparation', label: 'Preparation', icon: Briefcase },
+                { id: 'safety', label: 'Safety', icon: ShieldCheck },
+                { id: 'etiquette', label: 'Etiquette', icon: AlertCircle },
+                { id: 'practical', label: 'Practical', icon: Lightbulb }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activePointsTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActivePointsTab(tab.id)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                      isActive
+                        ? 'bg-brand-blue text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {tab.label}
+                  </button>
+                );
               })}
             </div>
+
+            {/* Active Tab Content - Mobile */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <div className="space-y-2">
+                {TRAVEL_GUIDE_DATA.pointsToRemember
+                  .filter(point => {
+                    const lowerPoint = point.toLowerCase();
+                    if (activePointsTab === 'preparation') {
+                      return lowerPoint.includes('dress') || lowerPoint.includes('weather') || 
+                             lowerPoint.includes('sun') || lowerPoint.includes('pack') ||
+                             lowerPoint.includes('fitness');
+                    } else if (activePointsTab === 'safety') {
+                      return lowerPoint.includes('hydration') || lowerPoint.includes('valuables') || 
+                             lowerPoint.includes('emergency') || lowerPoint.includes('contact');
+                    } else if (activePointsTab === 'etiquette') {
+                      return lowerPoint.includes('language') || lowerPoint.includes('photography') || 
+                             lowerPoint.includes('bargaining') || lowerPoint.includes('tipping');
+                    } else {
+                      return lowerPoint.includes('cash') || lowerPoint.includes('punctuality') || 
+                             lowerPoint.includes('dietary') || lowerPoint.includes('mobile') ||
+                             lowerPoint.includes('network');
+                    }
+                  })
+                  .map((point, idx) => {
+                    const [title, desc] = point.split(": ");
+                    return (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
+                        <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
+                        <span>
+                          {desc ? (
+                            <>
+                              <span className="font-bold text-slate-800">{title}:</span> {desc}
+                            </>
+                          ) : (
+                            <span className="font-medium">{point}</span>
+                          )}
+                        </span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+            {TRAVEL_GUIDE_DATA.pointsToRemember.map((point, idx) => {
+               const [title, desc] = point.split(": ");
+               return (
+                 <div key={idx} className="flex gap-3 items-start p-3 bg-slate-50 rounded-xl border border-slate-100 hover:bg-white transition-colors">
+                   <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
+                   <div className="text-sm text-slate-700 leading-snug">
+                     {desc ? (
+                       <>
+                         <span className="font-bold text-brand-blue">{title}:</span> {desc}
+                       </>
+                     ) : (
+                       <span className="font-medium">{point}</span>
+                     )}
+                   </div>
+                 </div>
+               );
+            })}
           </div>
         </div>
 
-        {/* 3. COMPREHENSIVE TRAVEL PREP GUIDE */}
-        <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-          {/* Header Banner */}
-          <div className="relative gradient-btn py-8 px-6 md:px-10 overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/20 rounded-full blur-[80px] -mr-16 -mt-16 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/10 rounded-full blur-[60px] -ml-12 -mb-12 pointer-events-none" />
-            
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-[10px] font-bold text-orange-300 uppercase tracking-widest mb-3">
-                  <Briefcase className="w-3 h-3" /> Essential Guide
-                </div>
-                <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                  Travel Preparation <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-200">Guide</span>
-                </h3>
-                <p className="text-slate-400 text-sm font-medium mt-1 max-w-lg">
-                  Everything you need to know before you go, organized by timeline.
-                </p>
-              </div>
-              
-              {/* Decorative Icon */}
-              <div className="hidden md:flex flex-shrink-0 w-16 h-16 bg-white/5 rounded-2xl border border-white/10 items-center justify-center backdrop-blur-sm">
-                <FileCheck className="w-8 h-8 text-orange-400" />
+        {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
+        <div>
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+             <span className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+               <Briefcase className="w-5 h-5 text-orange-500" />
+             </span>
+             Travel Preparation <span className="text-orange-500">Guide</span>
+          </h3>
+
+          {/* Mobile Tabs */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              {[
+                { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
+                { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
+                { id: 'duringTravel', label: 'During Stay', icon: MapIcon },
+                { id: 'usefulInfo', label: 'Good to Know', icon: Info }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = prepTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setPrepTab(tab.id)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                      isActive
+                        ? 'bg-brand-blue text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Tab Content - Mobile */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <div className="space-y-4">
+                {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
+                  <div key={idx}>
+                    <h5 className="font-bold text-slate-900 text-xs mb-2 flex items-center gap-2">
+                      <div className="w-1 h-3 rounded-full bg-brand-blue"></div>
+                      {sec.subtitle}
+                    </h5>
+                    <ul className="space-y-1.5">
+                      {sec.items.map((item, i) => (
+                        <li key={i} className="text-xs text-slate-600 flex items-start gap-2 leading-relaxed">
+                          <span className="w-1 h-1 rounded-full bg-slate-400 mt-1.5 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          
-          <div className="p-6 md:p-8">
+
+          {/* Desktop Tabs */}
+          <div className="hidden md:block">
             {/* Tabs Header */}
-            <div className="flex border-b border-slate-200 mb-8 overflow-x-auto no-scrollbar">
+            <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
                {[
                  { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
                  { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
