@@ -192,7 +192,7 @@ const PackageHotels = ({ packageData }) => {
   );
 
   return (
-    <section id="hotels-section" className="relative bg-transparent text-slate-900 py-4 md:py-8 overflow-hidden scroll-mt-24">
+    <section id="hotels-section" className="relative bg-transparent text-slate-900 pb-[30px] pt-0 md:py-8 overflow-hidden scroll-mt-24">
       {/* Subtle Background Decoration */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse"></div>
@@ -200,12 +200,12 @@ const PackageHotels = ({ packageData }) => {
       </div>
       <Container>
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 md:gap-4 lg:gap-8 mb-4 relative">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 md:gap-4 lg:gap-8 mb-[15px] relative">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue mb-3 md:mb-4 uppercase tracking-widest">
               <span className="text-xs">🏨</span> Handpicked Stays
             </div>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+            <h2 className="text-lg md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
               Where You'll <span className="text-brand-blue">Stay</span>
             </h2>
           </div>

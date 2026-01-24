@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { 
   Info, 
+  Calendar,
+  Plane, 
   CheckCircle2, 
   Lightbulb, 
   ShieldAlert,
@@ -25,124 +27,170 @@ import {
 
 const InclusionsSection = ({ packageData }) => {
   // Full Static Data from User Request
-  const TRAVEL_GUIDE_DATA = {
-    importantNotes: [
+  // Dynamically derive TRAVEL_GUIDE_DATA from packageData.sections
+  const getDynamicTravelGuideData = () => {
+    const sections = packageData?.sections || [];
+    
+    // 1. Important Notes
+    const importantNotesSection = sections.find(s => s.id === "important_notes");
+    const dynamicImportantNotes = importantNotesSection?.groups?.map(group => ({
+      title: group.title,
+      icon: group.title.toLowerCase().includes("hotel") ? "Building" :
+            group.title.toLowerCase().includes("transfer") || group.title.toLowerCase().includes("transport") ? "Car" :
+            group.title.toLowerCase().includes("tour") || group.title.toLowerCase().includes("activity") ? "Map" :
+            group.title.toLowerCase().includes("visa") || group.title.toLowerCase().includes("requirement") ? "FileCheck" : "AlertOctagon",
+      items: group.items.map(item => item.replace(/^\\item\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1'))
+    })) || [
       {
         title: "Hotel Policies",
         icon: "Building",
         items: [
-          "Check-in Time: 3:00 PM (Early check-in subject to availability)",
-          "Check-out Time: 11:00 AM (Late check-out charges apply)",
-          "Room Cancellation: Cancel 48 hours prior to check-in",
-          "Damage Policy: Guests responsible for property damage",
-          "Key Policy: Return keys at checkout; fees for lost keys"
+          "Check-in Time: 3:00 PM (Early check-in subject to availability and may incur additional charges)",
+          "Check-out Time: 11:00 AM (Late check-out charges apply after this time)",
+          "Room Cancellation: Rooms must be cancelled 48 hours prior to check-in date",
+          "Damage Policy: Guests are responsible for any damage to hotel property beyond normal wear and tear",
+          "Key Policy: Hotel room keys must be returned at checkout; replacement fees apply if lost"
         ]
       },
       {
         title: "Transfer & Transportation",
         icon: "Car",
         items: [
-          "Airport Transfer: Complimentary pickup. Extra charges if missed",
-          "Vehicle: Air-conditioned private vehicle; no shared transfers",
-          "Driver & Route: Fixed routes; deviations incur extra charges",
-          "Vehicle Capacity: Limited space; larger groups need multiple vehicles",
-          "Luggage: Reasonable limit; excess baggage surcharged"
+          "Airport Transfer: Complimentary pickup from airport. If missed, additional charges apply",
+          "Vehicle: Air-conditioned private vehicle provided; shared transfers not available",
+          "Driver & Route: Professional driver and predetermined routes; any deviations incur extra charges",
+          "Vehicle Capacity: Capacity limited; larger groups may require multiple vehicles",
+          "Luggage: Reasonable luggage allowed; excess baggage may incur surcharge"
         ]
       },
       {
         title: "Tour & Activity Operations",
         icon: "Map",
         items: [
-          "Guide: English-speaking guide for scheduled tours",
-          "Timing: Fixed schedules; delays may modify tour",
-          "Weather: Subject to change due to severe weather",
-          "Museum Hours: Dependent on operations; some close specific days",
-          "Photography: Restricted at certain historical sites",
-          "Group Size: Min 2 guests; singles may join groups"
+          "Guide Availability: English-speaking guide available for all scheduled tours",
+          "Activity Timing: Tours operate on fixed schedules; delays may result in tour modifications",
+          "Weather Conditions: Tours subject to cancellation or rescheduling due to severe weather",
+          "Museum Hours: Museum visits depend on operational hours; some sites may close on specific days",
+          "Photography: Commercial photography not permitted at certain historical sites",
+          "Group Size: Tours operate for minimum 2 guests; single travelers may join group tours"
         ]
       },
       {
-        title: "Travel Requirements",
+        title: "Travel Requirements & Restrictions",
         icon: "FileCheck",
         items: [
-          "Visa: E-visa required for Indian passports (separate process)",
-          "Passport: Min 6 months validity required",
-          "Vaccination: As per current government rules",
-          "Currency: AZN official; USD accepted widely",
-          "Insurance: Strongly recommended",
-          "Show Money: Min USD 250-500 cash/card recommended"
+          "Visa: E-visa required for Indian passport holders (process separately; not included in package)",
+          "Passport Validity: Minimum 6 months validity required at time of travel",
+          "Vaccination: As per Azerbaijan government requirements at time of travel",
+          "Currency: Azerbaijani Manat is official currency; USD also accepted in major establishments",
+          "Travel Insurance: Strongly recommended but not mandatory",
+          "Show Money: Visitors should carry minimum USD 250-500 equivalent in cash or card"
         ]
       },
       {
-        title: "Cancellation Policy",
+        title: "Cancellation & Modification Policy",
         icon: "AlertOctagon",
         items: [
-          "Package: Subject to standard company policy",
-          "Refunds: Processed within 15-21 business days",
-          "Force Majeure: No refunds for natural disasters/pandemic",
-          "Changes: Itinerary subject to change for unavoidable reasons",
-          "Price: Valid at booking; currency fluctuations apply"
+          "Package Cancellation: Subject to company's standard cancellation policy",
+          "Refund Timeline: Refunds processed within 15-21 business days of cancellation",
+          "Force Majeure: No refunds for cancellations due to natural disasters, political situations, or pandemic",
+          "Itinerary Changes: Company reserves right to modify itinerary due to unavoidable circumstances",
+          "Price Changes: Prices valid only at time of booking; currency fluctuations may apply"
         ]
       }
-    ],
-    pointsToRemember: [
-      "Dress Code: Comfortable shoes; modest wear for religious sites",
-      "Weather: Light clothes (summer); warm layers (mountains/winter)",
-      "Sun Protection: High UV - carry sunscreen, hat, sunglasses",
-      "Hydration: Drink water; one bottle daily provided",
-      "Cash & Cards: Carry cash (AZN/USD) for small buys",
-      "Language: English in tourist areas; learn basic local phrases",
-      "Photography: Ask permission before clicking locals",
-      "Punctuality: Be ready 15 mins before pickups",
-      "Fitness: Uneven terrain requires reasonable fitness",
-      "Diet: Inform special meal needs in advance",
-      "Network: Local SIMs available; roaming expensive",
-      "Emergency: Keep hotel/guide contacts handy",
-      "Valuables: Use hotel safe for passports/money",
-      "Bargaining: Accepted at bazaars but be respectful",
-      "Tipping: 5-10% appreciated for good service"
-    ],
-    travelPrep: {
+    ];
+
+    // 2. Points to Remember
+    const pointsSection = sections.find(s => s.id === "points_to_remember");
+    const dynamicPointsToRemember = pointsSection?.items || [
+      "Dress Code: Wear comfortable walking shoes; modest clothing recommended for religious sites",
+      "Weather Preparation: Pack light clothing for summer (April-October); warm layers for early mornings/evenings in mountain areas",
+      "Sun Protection: Carry sunscreen, hat, and sunglasses – UV exposure is high in Azerbaijan",
+      "Hydration: Drink bottled water regularly; one bottle provided daily but buy extras for activities",
+      "Cash & Cards: Carry cash (Manat or USD) for small purchases; major hotels accept credit cards",
+      "Language: English spoken in tourist areas; learn basic phrases for local interactions",
+      "Photography: Ask permission before photographing local people; respect cultural sensitivity",
+      "Punctuality: Be ready 15 minutes before scheduled pickups; delays impact group schedules",
+      "Physical Fitness: Some activities involve walking on uneven terrain; reasonable fitness required",
+      "Dietary Restrictions: Inform tour operator in advance for special meal requirements",
+      "Mobile Network: Local SIM cards available; international roaming may be expensive",
+      "Emergency Contacts: Keep hotel address and guide's phone number with you always",
+      "Valuables: Secure passports, money, and jewelry in hotel safe",
+      "Bargaining: Accepted at bazaars; haggling is part of local culture but be respectful",
+      "Tipping: Not mandatory but appreciated; 5-10% for good service is customary"
+    ];
+
+    // 3. Travel Preparation Guide
+    const prepSection = sections.find(s => s.id === "travel_preparation_guide");
+    const dynamicTravelPrep = prepSection ? {
+      beforeDeparture: {
+        title: prepSection.subsections[0].title,
+        sections: prepSection.subsections[0].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      },
+      uponArrival: {
+        title: prepSection.subsections[1].title,
+        sections: prepSection.subsections[1].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      },
+      duringTravel: {
+        title: prepSection.subsections[2].title,
+        sections: prepSection.subsections[2].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      },
+      usefulInfo: {
+        title: prepSection.subsections[3].title,
+        sections: prepSection.subsections[3].groups.map(g => ({ subtitle: g.title, items: g.items }))
+      }
+    } : {
       beforeDeparture: {
         title: "Before Departure",
         sections: [
-          { subtitle: "Documentation", items: ["Check passport validity (6mo+)", "Apply for E-visa (5-7 days)", "Print copies of docs", "Check visa confirmation"] },
-          { subtitle: "Health", items: ["Consult doctor 4-6 weeks prior", "Pack meds in original containers", "Buy travel insurance", "Pack medical kit"] },
-          { subtitle: "Packing", items: ["Walking shoes", "Breathable clothes", "Warm jacket", "Sunscreen/Hat", "Universal adapter (Type C/F)", "Power bank"] },
-          { subtitle: "Financial", items: ["Notify bank", "Exchange some AZN", "Budget ~$300-500", "Keep backups"] }
+          { subtitle: "Documentation", items: ["Ensure passport validity of minimum 6 months beyond travel dates", "Apply for Azerbaijan E-visa (processing takes 5-7 working days)", "Make two copies of passport bio-page; keep one separately", "Check email for visa confirmation", "Print flight itinerary and hotel booking confirmation"] },
+          { subtitle: "Health & Vaccinations", items: ["Consult doctor 4-6 weeks before travel for recommended vaccinations", "Carry prescription medications in original containers with pharmacy label", "Purchase travel insurance covering medical emergencies and trip cancellations", "Pack small medical kit: pain reliever, cold medicine, antacid, first-aid supplies", "Check if any vaccinations are currently required for Azerbaijan entry"] },
+          { subtitle: "Packing Essentials", items: ["Comfortable walking shoes (broken in before travel)", "Lightweight, breathable clothing for daytime", "Warm jacket or sweater for evenings and mountains", "Sturdy backpack for day trips", "Sunscreen SPF 50+, sunglasses, wide-brimmed hat", "Toiletries, personal hygiene items, and medications", "Phone charger and universal power adapter (Type C & F plugs used in Azerbaijan)", "Small notebook and pen for notes"] },
+          { subtitle: "Financial Preparation", items: ["Notify bank of travel dates to avoid card blocks", "Exchange some currency to Azerbaijani Manat before departure", "Carry mix of cash (USD/Manat) and credit/debit cards", "Keep financial documents in separate secure location", "Budget for meals, shopping, and tips: approximately USD 300-500 for 6 days"] }
         ]
       },
       uponArrival: {
         title: "Upon Arrival",
         sections: [
-          { subtitle: "Airport to Hotel", items: ["Collect luggage", "Find rep with signboard", "Share contact", "Transfer 30-45 mins"] },
-          { subtitle: "Hotel Check-In", items: ["Register with passport", "Collect keys/info", "Locate emergency exits", "Confirm breakfast/pickup times"] },
-          { subtitle: "First Evening", items: ["Rest & acclimatize", "Dinner nearby", "Set alarm for next day"] }
+          { subtitle: "Airport to Hotel", items: ["Collect luggage and proceed to arrivals area", "Look for tour operator representative with signboard", "Share contact number if not yet connected", "Confirm hotel address and check-in time", "Transfer to hotel takes 30-45 minutes from airport"] },
+          { subtitle: "Hotel Check-In", items: ["Register at reception with passport", "Collect room key and hotel information card", "Ask for emergency contact numbers", "Locate emergency exits and fire safety information", "Confirm breakfast timings and tour pickup times"] },
+          { subtitle: "First Evening", items: ["Rest and acclimatize after travel", "Explore immediate hotel vicinity if time permits", "Have dinner at hotel or nearby restaurant", "Confirm next day's tour departure time", "Set alarm for breakfast and ready documents"] }
         ]
       },
       duringTravel: {
         title: "During Travel",
         sections: [
-          { subtitle: "Daily Routine", items: ["Breakfast by 7:30 AM", "Carry daypack (water/meds)", "Sunscreen", "Follow safety rules"] },
-          { subtitle: "Sightseeing", items: ["Arrive 10m early", "Keep tickets safe", "Remove shoes at temples", "Respect photography rules"] },
-          { subtitle: "Local Interaction", items: ["Greet 'Salam'", "Use right hand", "Ask photo permission", "Bargain fairly"] },
-          { subtitle: "Health & Safety", items: ["Bottled water only", "Eat at recommended spots", "Keep hotel card", "Stay in lit areas"] }
+          { subtitle: "Daily Routine", items: ["Have breakfast by 7:30 AM before tour pickup", "Wear comfortable walking shoes daily", "Carry backpack with water, snacks, and medications", "Apply sunscreen before each outing", "Stay hydrated throughout the day", "Follow guide's instructions for safety at archaeological sites"] },
+          { subtitle: "Sightseeing Tips", items: ["Arrive at pickup points 10 minutes early", "Keep entrance tickets safe for museum exits", "Photography is allowed at most sites; check restrictions beforehand", "Remove shoes when entering religious spaces", "Respect \"No Photography\" signs at certain locations", "Wear long pants/skirts and covered shoulders in temples and churches"] },
+          { subtitle: "Local Interaction", items: ["Greet locals with \"Salam\" (hello) – shows respect", "Refuse with \"Xeyr\" (no) politely if needed", "Use right hand when giving/receiving items", "Photography of local people requires permission", "Bargaining at bazaars is expected but be fair"] },
+          { subtitle: "Health & Safety", items: ["Avoid drinking tap water; use provided bottled water", "Eat at hotel or recommended restaurants", "Keep medications accessible in day bag", "Inform guide immediately if unwell", "Note hotel location and contact details always", "Stay in well-lit areas during evening walks"] }
         ]
       },
       usefulInfo: {
         title: "Useful Information",
         sections: [
-          { subtitle: "Currency", items: ["1 USD ≈ 1.7 AZN", "ATMs available", "Credit cards in major spots"] },
-          { subtitle: "Communication", items: ["Local SIMs (Azercell/Bakcell)", "Free Hotel Wi-Fi", "Code: +994"] },
-          { subtitle: "Time & Climate", items: ["UTC+4", "Best: Apr-May, Sep-Oct", "Summers hot, Winters cold"] },
-          { subtitle: "Etiquette", items: ["Dress respectfully", "No PDA", "Respect Ramadan", "Polite refusal"] },
-          { subtitle: "Emergency", items: ["Police: 102", "Ambulance: 103", "Tourist Police: +994 12 490 20 26"] }
+          { subtitle: "Currency & Money", items: ["1 USD ≈ 1.7 AZN (rates change; check current rate)", "ATMs widely available; withdraw cash with passport copy", "Credit cards accepted in restaurants, hotels, and shops", "Avoid exchanging money on streets"] },
+          { subtitle: "Communication", items: ["Local SIM cards available at airport (Azercell, Bakcell, Nar)", "Internet cafes present in major cities", "Hotel provides free Wi-Fi", "International dialing code: +994"] },
+          { subtitle: "Time & Climate", items: ["Timezone: Azerbaijan Standard Time (UTC+4), no daylight saving", "Best season: April-May (spring) and September-October (autumn)", "Summer (June-August): Hot and dry; winter (December-February): Cold and occasionally snowy"] },
+          { subtitle: "Cultural Etiquette", items: ["Azerbaijan is Muslim majority; dress respectfully", "Ramadan customs respected; restaurants may have limited hours", "Public displays of affection not appreciated", "Loud conversations discouraged in public spaces", "Hospitality highly valued; refuse initial offers politely but graciously"] },
+          { subtitle: "Emergency Contacts", items: ["Police: 102", "Ambulance: 103", "Fire: 101", "Tourist Police: +994 12 490 20 26", "Your Embassy Contact: Save in phone immediately after arrival"] }
         ]
       }
-    }
+    };
+
+    return {
+      importantNotes: dynamicImportantNotes,
+      pointsToRemember: dynamicPointsToRemember,
+      travelPrep: dynamicTravelPrep
+    };
   };
 
+  const TRAVEL_GUIDE_DATA = getDynamicTravelGuideData();
+
   const [activeTab, setActiveTab] = useState("notes");
+  const [prepTab, setPrepTab] = useState("beforeDeparture"); // New state for Travel Prep tabs
+  const [activeNotesTab, setActiveNotesTab] = useState(0); // For Important Notes tabs on mobile
+  const [activePointsTab, setActivePointsTab] = useState('preparation'); // For Points to Remember tabs on mobile
   const [isIncludesExpanded, setIsIncludesExpanded] = useState(false);
   const [isExcludesExpanded, setIsExcludesExpanded] = useState(false);
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
@@ -319,7 +367,7 @@ const InclusionsSection = ({ packageData }) => {
     ];
 
     return (
-      <div className="bg-white rounded-[32px] p-6 border border-slate-100 shadow-sm relative overflow-hidden group h-full">
+      <div id="highlights-section" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-6 md:px-8 border border-slate-100 shadow-sm scroll-mt-32">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-[100px] -mr-32 -mt-32" />
         <div className="relative z-10">
           <div className="flex flex-col gap-4 mb-6">
@@ -503,13 +551,13 @@ const InclusionsSection = ({ packageData }) => {
   };
 
   return (
-    <div id="inclusions" className="bg-white rounded-3xl py-1.5 md:py-4 px-3 md:px-6 scroll-mt-48 border border-slate-100 shadow-sm">
+    <div id="inclusions" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-4 md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
       {/* Standard Header */}
-      <div className="mb-2 md:mb-5 text-left">
+      <div className="mb-[15px] text-left">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[9px] md:text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
           <span className="text-xs">📋</span> Plan Details
         </div>
-        <h2 className="text-[22px] md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
+        <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
         <p className="text-xs md:text-lg font-medium text-slate-600">Everything you need for a seamless journey</p>
       </div>
       
@@ -648,15 +696,62 @@ const InclusionsSection = ({ packageData }) => {
       */}
 
       <div className="mt-8 space-y-8">
-        {/* 1. IMPORTANT NOTES GRID */}
+        {/* 1. IMPORTANT NOTES - TABS ON MOBILE, GRID ON DESKTOP */}
         <div>
-          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
              <span className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center">
                <Info className="w-5 h-5 text-brand-blue" />
              </span>
              Important <span className="text-brand-blue">Notes & Policies</span>
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+          {/* Mobile Tabs */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
+                const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
+                const isActive = activeNotesTab === idx;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveNotesTab(idx)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                      isActive
+                        ? 'bg-brand-blue text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {note.title}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Tab Content - Mobile */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <ul className="space-y-2">
+                {TRAVEL_GUIDE_DATA.importantNotes[activeNotesTab].items.map((item, i) => {
+                  const parts = item.match(/^([^:]+):\s*(.*)/);
+                  const key = parts ? parts[1] : null;
+                  const val = parts ? parts[2] : item;
+
+                  return (
+                    <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                      <span>
+                        {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
+                        {val}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
               const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
               return (
@@ -668,12 +763,21 @@ const InclusionsSection = ({ packageData }) => {
                     <h4 className="font-bold text-slate-800 text-sm">{note.title}</h4>
                   </div>
                   <ul className="space-y-2">
-                    {note.items.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                        <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
+                    {note.items.map((item, i) => {
+                      const parts = item.match(/^([^:]+):\s*(.*)/);
+                      const key = parts ? parts[1] : null;
+                      const val = parts ? parts[2] : item;
+
+                      return (
+                        <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
+                          <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                          <span>
+                            {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
+                            {val}
+                          </span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               );
@@ -681,169 +785,220 @@ const InclusionsSection = ({ packageData }) => {
           </div>
         </div>
 
-        {/* 2. POINTS TO REMEMBER */}
-        <div className="bg-brand-green/5 rounded-[32px] p-6 md:p-8 border border-brand-green/10 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/10 rounded-full blur-[80px] -mr-20 -mt-20" />
-          <div className="relative z-10">
-            <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
-               <span className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-                 <ListChecks className="w-5 h-5 text-emerald-600" />
-               </span>
-               Points to <span className="text-emerald-600">Remember</span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-              {TRAVEL_GUIDE_DATA.pointsToRemember.map((point, idx) => {
-                 const [title, desc] = point.split(": ");
-                 return (
-                   <div key={idx} className="flex gap-3 items-start p-3 bg-white/60 rounded-xl border border-emerald-100/50 hover:bg-white transition-colors">
-                     <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                     <div className="text-sm text-slate-700 leading-snug">
-                       {desc ? (
-                         <>
-                           <span className="font-bold text-emerald-800">{title}:</span> {desc}
-                         </>
-                       ) : (
-                         <span className="font-medium">{point}</span>
-                       )}
-                     </div>
-                   </div>
-                 );
+        {/* 2. POINTS TO REMEMBER - TABS ON MOBILE */}
+        <div>
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+             <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+               <ListChecks className="w-5 h-5 text-brand-blue" />
+             </span>
+             Points to <span className="text-brand-blue">Remember</span>
+          </h3>
+
+          {/* Mobile Tabs */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              {[
+                { id: 'preparation', label: 'Preparation', icon: Briefcase },
+                { id: 'safety', label: 'Safety', icon: ShieldCheck },
+                { id: 'etiquette', label: 'Etiquette', icon: AlertCircle },
+                { id: 'practical', label: 'Practical', icon: Lightbulb }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activePointsTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActivePointsTab(tab.id)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                      isActive
+                        ? 'bg-brand-blue text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {tab.label}
+                  </button>
+                );
               })}
             </div>
+
+            {/* Active Tab Content - Mobile */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <div className="space-y-2">
+                {TRAVEL_GUIDE_DATA.pointsToRemember
+                  .filter(point => {
+                    const lowerPoint = point.toLowerCase();
+                    if (activePointsTab === 'preparation') {
+                      return lowerPoint.includes('dress') || lowerPoint.includes('weather') || 
+                             lowerPoint.includes('sun') || lowerPoint.includes('pack') ||
+                             lowerPoint.includes('fitness');
+                    } else if (activePointsTab === 'safety') {
+                      return lowerPoint.includes('hydration') || lowerPoint.includes('valuables') || 
+                             lowerPoint.includes('emergency') || lowerPoint.includes('contact');
+                    } else if (activePointsTab === 'etiquette') {
+                      return lowerPoint.includes('language') || lowerPoint.includes('photography') || 
+                             lowerPoint.includes('bargaining') || lowerPoint.includes('tipping');
+                    } else {
+                      return lowerPoint.includes('cash') || lowerPoint.includes('punctuality') || 
+                             lowerPoint.includes('dietary') || lowerPoint.includes('mobile') ||
+                             lowerPoint.includes('network');
+                    }
+                  })
+                  .map((point, idx) => {
+                    const [title, desc] = point.split(": ");
+                    return (
+                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
+                        <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
+                        <span>
+                          {desc ? (
+                            <>
+                              <span className="font-bold text-slate-800">{title}:</span> {desc}
+                            </>
+                          ) : (
+                            <span className="font-medium">{point}</span>
+                          )}
+                        </span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+            {TRAVEL_GUIDE_DATA.pointsToRemember.map((point, idx) => {
+               const [title, desc] = point.split(": ");
+               return (
+                 <div key={idx} className="flex gap-3 items-start p-3 bg-slate-50 rounded-xl border border-slate-100 hover:bg-white transition-colors">
+                   <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
+                   <div className="text-sm text-slate-700 leading-snug">
+                     {desc ? (
+                       <>
+                         <span className="font-bold text-brand-blue">{title}:</span> {desc}
+                       </>
+                     ) : (
+                       <span className="font-medium">{point}</span>
+                     )}
+                   </div>
+                 </div>
+               );
+            })}
           </div>
         </div>
 
-        {/* 3. COMPREHENSIVE TRAVEL PREP GUIDE */}
-        <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-          {/* Header Banner */}
-          <div className="relative bg-slate-900 py-8 px-6 md:px-10 overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/20 rounded-full blur-[80px] -mr-16 -mt-16 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/10 rounded-full blur-[60px] -ml-12 -mb-12 pointer-events-none" />
-            
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm text-[10px] font-bold text-orange-300 uppercase tracking-widest mb-3">
-                  <Briefcase className="w-3 h-3" /> Essential Guide
-                </div>
-                <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                  Travel Preparation <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-200">Guide</span>
-                </h3>
-                <p className="text-slate-400 text-sm font-medium mt-1 max-w-lg">
-                  Everything you need to know before you go, organized by timeline.
-                </p>
-              </div>
-              
-              {/* Decorative Icon */}
-              <div className="hidden md:flex flex-shrink-0 w-16 h-16 bg-white/5 rounded-2xl border border-white/10 items-center justify-center backdrop-blur-sm">
-                <FileCheck className="w-8 h-8 text-orange-400" />
+        {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
+        <div>
+          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+             <span className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+               <Briefcase className="w-5 h-5 text-orange-500" />
+             </span>
+             Travel Preparation <span className="text-orange-500">Guide</span>
+          </h3>
+
+          {/* Mobile Tabs */}
+          <div className="md:hidden mb-4">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+              {[
+                { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
+                { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
+                { id: 'duringTravel', label: 'During Stay', icon: MapIcon },
+                { id: 'usefulInfo', label: 'Good to Know', icon: Info }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = prepTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setPrepTab(tab.id)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                      isActive
+                        ? 'bg-brand-blue text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Tab Content - Mobile */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+              <div className="space-y-4">
+                {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
+                  <div key={idx}>
+                    <h5 className="font-bold text-slate-900 text-xs mb-2 flex items-center gap-2">
+                      <div className="w-1 h-3 rounded-full bg-brand-blue"></div>
+                      {sec.subtitle}
+                    </h5>
+                    <ul className="space-y-1.5">
+                      {sec.items.map((item, i) => (
+                        <li key={i} className="text-xs text-slate-600 flex items-start gap-2 leading-relaxed">
+                          <span className="w-1 h-1 rounded-full bg-slate-400 mt-1.5 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          
-          <div className="p-6 md:p-8 space-y-8">
-            {/* Phase 1: Before Departure */}
-            <div className="relative pl-8 md:pl-0">
-               <div className="md:hidden absolute left-3 top-2 bottom-0 w-0.5 bg-slate-200" />
-               <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                 <div className="md:col-span-3">
-                   <div className="sticky top-24">
-                     <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Phase 1</span>
-                     <h4 className="text-lg font-black text-slate-800">{TRAVEL_GUIDE_DATA.travelPrep.beforeDeparture.title}</h4>
-                   </div>
-                 </div>
-                 <div className="md:col-span-9 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {TRAVEL_GUIDE_DATA.travelPrep.beforeDeparture.sections.map((sec, idx) => (
-                     <div key={idx} className="bg-white rounded-xl p-5 border border-slate-100 shadow-sm">
-                       <h5 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                         <div className="w-1.5 h-4 rounded-full bg-brand-blue"></div> {sec.subtitle}
-                       </h5>
-                       <ul className="space-y-2">
-                         {sec.items.map((item, i) => (
-                           <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
-                             <span className="text-slate-300">•</span> {item}
-                           </li>
-                         ))}
-                       </ul>
-                     </div>
-                   ))}
-                 </div>
-               </div>
+
+          {/* Desktop Tabs */}
+          <div className="hidden md:block">
+            {/* Tabs Header */}
+            <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
+               {[
+                 { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
+                 { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
+                 { id: 'duringTravel', label: 'During Your Stay', icon: MapIcon },
+                 { id: 'usefulInfo', label: 'Good to Know', icon: AlertOctagon }
+               ].map((tab) => (
+                 <button
+                   key={tab.id}
+                   onClick={() => setPrepTab(tab.id)}
+                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-sm font-bold whitespace-nowrap transition-colors ${
+                     prepTab === tab.id
+                       ? "border-brand-blue text-brand-blue"
+                       : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                   }`}
+                 >
+                   <tab.icon className="w-4 h-4" />
+                   {tab.label}
+                 </button>
+               ))}
             </div>
 
-            {/* Phase 2: Upon Arrival */}
-            <div className="relative pl-8 md:pl-0">
-               <div className="md:hidden absolute left-3 top-2 bottom-0 w-0.5 bg-slate-200" />
-               <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                 <div className="md:col-span-3">
-                   <div className="sticky top-24">
-                     <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Phase 2</span>
-                     <h4 className="text-lg font-black text-slate-800">{TRAVEL_GUIDE_DATA.travelPrep.uponArrival.title}</h4>
-                   </div>
-                 </div>
-                 <div className="md:col-span-9 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                   {TRAVEL_GUIDE_DATA.travelPrep.uponArrival.sections.map((sec, idx) => (
-                     <div key={idx} className="bg-white rounded-xl p-5 border border-slate-100 shadow-sm">
-                       <h5 className="font-bold text-slate-900 text-sm mb-3 text-brand-green">{sec.subtitle}</h5>
-                       <ul className="space-y-2">
-                         {sec.items.map((item, i) => (
-                           <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
-                             <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0 mt-0.5" /> {item}
+            {/* Tab Content */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
+               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
+                  <div key={idx} className="bg-slate-50 rounded-xl p-5 border border-slate-100 hover:border-brand-blue/20 transition-colors group">
+                     <h5 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        {prepTab === 'uponArrival' ? (
+                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        ) : prepTab === 'duringTravel' ? (
+                            <MapPin className="w-4 h-4 text-brand-blue" />
+                        ) : prepTab === 'usefulInfo' ? (
+                            <Info className="w-4 h-4 text-amber-500" />
+                        ) : (
+                            <div className="w-1.5 h-4 rounded-full bg-brand-blue group-hover:h-6 transition-all duration-300"></div>
+                        )}
+                        {sec.subtitle}
+                     </h5>
+                     <ul className="space-y-2.5">
+                        {sec.items.map((item, i) => (
+                           <li key={i} className="text-xs text-slate-600 flex items-start gap-2.5 leading-relaxed">
+                              <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-1.5 shrink-0 group-hover:bg-brand-blue/50 transition-colors" />
+                              <span>{item}</span>
                            </li>
-                         ))}
-                       </ul>
-                     </div>
-                   ))}
-                 </div>
-               </div>
+                        ))}
+                     </ul>
+                  </div>
+               ))}
             </div>
-
-            {/* Phase 3: During Travel */}
-            <div className="relative pl-8 md:pl-0">
-               <div className="md:hidden absolute left-3 top-2 bottom-0 w-0.5 bg-slate-200" />
-               <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                 <div className="md:col-span-3">
-                   <div className="sticky top-24">
-                     <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Phase 3</span>
-                     <h4 className="text-lg font-black text-slate-800">{TRAVEL_GUIDE_DATA.travelPrep.duringTravel.title}</h4>
-                   </div>
-                 </div>
-                 <div className="md:col-span-9 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {TRAVEL_GUIDE_DATA.travelPrep.duringTravel.sections.map((sec, idx) => (
-                     <div key={idx} className="bg-white rounded-xl p-5 border border-slate-100 shadow-sm border-l-4 border-l-amber-400">
-                       <h5 className="font-bold text-slate-900 text-sm mb-3">{sec.subtitle}</h5>
-                       <ul className="space-y-2">
-                         {sec.items.map((item, i) => (
-                           <li key={i} className="text-xs text-slate-600 flex items-start gap-2">
-                             <span className="w-1 h-1 rounded-full bg-slate-300 mt-1.5" /> {item}
-                           </li>
-                         ))}
-                       </ul>
-                     </div>
-                   ))}
-                 </div>
-               </div>
-            </div>
-
-            {/* Useful Info */}
-             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-8 pt-8 border-t border-slate-100">
-                 <div className="md:col-span-3">
-                     <h4 className="text-lg font-black text-slate-800">{TRAVEL_GUIDE_DATA.travelPrep.usefulInfo.title}</h4>
-                 </div>
-                 <div className="md:col-span-9 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                   {TRAVEL_GUIDE_DATA.travelPrep.usefulInfo.sections.map((sec, idx) => (
-                     <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                       <h6 className="font-bold text-slate-900 text-xs mb-2">{sec.subtitle}</h6>
-                       <ul className="space-y-1">
-                         {sec.items.map((item, i) => (
-                           <li key={i} className="text-[10px] text-slate-600 leading-tight">
-                             {item}
-                           </li>
-                         ))}
-                       </ul>
-                     </div>
-                   ))}
-                 </div>
-             </div>
           </div>
         </div>
 

@@ -31,15 +31,15 @@ const ItinerarySection = ({ packageData }) => {
   };
 
   return (
-    <div id="itinerary" className="bg-white rounded-3xl py-3 md:py-5 px-3 md:px-6 scroll-mt-48 border border-slate-100 shadow-sm">
+    <div id="itinerary" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
       {/* Standard Header Block - Above Split Layout */}
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-[30px]">
         <div className="flex-1 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full text-[9px] md:text-[10px] font-bold text-orange-600 border border-orange-100 mb-2 md:mb-4 uppercase tracking-widest">
             <span className="text-xs">🗺️</span> Journey Workflow
           </div>
-          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">Your <span className="text-brand-green">Daily Itinerary</span></h2>
-          <p className="text-sm md:text-lg font-medium text-slate-600">
+          <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">Your <span className="text-brand-green">Daily Itinerary</span></h2>
+          <p className="text-xs md:text-lg font-medium text-slate-600">
             A carefully curated day-by-plan for your perfect adventure
           </p>
         </div>
@@ -93,7 +93,7 @@ const ItinerarySection = ({ packageData }) => {
                   {/* Clickable Card Header */}
                   <button 
                     onClick={() => toggleDay(index)}
-                    className="w-full text-left relative p-3.5 md:p-6 flex items-center justify-between gap-3 md:gap-4 transition-colors hover:bg-white/5"
+                    className="w-full text-left relative p-[15px] md:p-6 flex items-center justify-between gap-3 md:gap-4 transition-colors hover:bg-white/5"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -109,7 +109,7 @@ const ItinerarySection = ({ packageData }) => {
                         </div>
 
                         {/* Title */}
-                        <h5 className={`text-base md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
+                        <h5 className={`text-[15px] md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
                           {day.title}
                         </h5>
                       </div>
@@ -183,61 +183,67 @@ const ItinerarySection = ({ packageData }) => {
                           </div>
 
                           {/* Image Gallery - Premium Masonry Style */}
-                          {day.imageRefs && day.imageRefs.length > 0 && (
-                            <div className="mt-4">
-                              <div className="flex items-center gap-2 mb-3">
-                                <div className="w-6 h-6 rounded-lg bg-orange-100 flex items-center justify-center">
-                                  <span className="text-xs">📸</span>
-                                </div>
-                                <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Photo Gallery</span>
-                              </div>
-                              
-                              {day.imageRefs.length === 1 ? (
-                                <div className="relative aspect-video rounded-2xl overflow-hidden group/img cursor-pointer">
-                                  <div className="relative h-full rounded-2xl overflow-hidden border border-slate-200">
-                                    <Image
-                                      src={day.imageRefs[0].url}
-                                      alt={day.imageRefs[0].title || `Day ${index + 1} Image`}
-                                      fill
-                                      className="object-cover transform group-hover/img:scale-105 transition-transform duration-700"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                                    {day.imageRefs[0].title && (
-                                      <div className="absolute bottom-0 left-0 right-0 p-5">
-                                        <p className="text-white font-semibold text-lg">{day.imageRefs[0].title}</p>
-                                      </div>
-                                    )}
+                          {(() => {
+                            const validImages = (day.imageRefs || []).filter(img => img && typeof img.url === 'string' && img.url.trim() !== "");
+                            
+                            if (validImages.length === 0) return null;
+
+                            return (
+                              <div className="mt-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <div className="w-6 h-6 rounded-lg bg-orange-100 flex items-center justify-center">
+                                    <span className="text-xs">📸</span>
                                   </div>
+                                  <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Photo Gallery</span>
                                 </div>
-                              ) : (
-                                <div className={`grid gap-2 ${day.imageRefs.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'}`}>
-                                  {day.imageRefs.slice(0, 6).map((image, imgIndex) => (
-                                    <div
-                                      key={imgIndex}
-                                      className={`relative rounded-xl overflow-hidden group/img cursor-pointer ${imgIndex === 0 && day.imageRefs.length > 3 ? 'row-span-2 aspect-[3/4]' : 'aspect-[4/3]'}`}
-                                    >
-                                      <div className="relative h-full rounded-xl overflow-hidden border border-slate-200">
-                                        <Image
-                                          src={image.url}
-                                          alt={image.title || `Image ${imgIndex + 1}`}
-                                          fill
-                                          className="object-cover transform group-hover/img:scale-105 transition-transform duration-500"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover/img:opacity-100 transition-opacity" />
-                                        <div className="absolute inset-0 flex items-end p-3">
-                                          <div>
-                                            <p className="text-white text-xs font-medium line-clamp-2">
-                                              {image.title || "Experience"}
-                                            </p>
+                                
+                                {validImages.length === 1 ? (
+                                  <div className="relative aspect-video rounded-2xl overflow-hidden group/img cursor-pointer">
+                                    <div className="relative h-full rounded-2xl overflow-hidden border border-slate-200">
+                                      <Image
+                                        src={validImages[0].url}
+                                        alt={validImages[0].title || `Day ${index + 1} Image`}
+                                        fill
+                                        className="object-cover transform group-hover/img:scale-105 transition-transform duration-700"
+                                      />
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                      {validImages[0].title && (
+                                        <div className="absolute bottom-0 left-0 right-0 p-5">
+                                          <p className="text-white font-semibold text-lg">{validImages[0].title}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className={`grid gap-2 ${validImages.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-3'}`}>
+                                    {validImages.slice(0, 6).map((image, imgIndex) => (
+                                      <div
+                                        key={imgIndex}
+                                        className={`relative rounded-xl overflow-hidden group/img cursor-pointer ${imgIndex === 0 && validImages.length > 3 ? 'row-span-2 aspect-[3/4]' : 'aspect-[4/3]'}`}
+                                      >
+                                        <div className="relative h-full rounded-xl overflow-hidden border border-slate-200">
+                                          <Image
+                                            src={image.url}
+                                            alt={image.title || `Image ${imgIndex + 1}`}
+                                            fill
+                                            className="object-cover transform group-hover/img:scale-105 transition-transform duration-500"
+                                          />
+                                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover/img:opacity-100 transition-opacity" />
+                                          <div className="absolute inset-0 flex items-end p-3">
+                                            <div>
+                                              <p className="text-white text-xs font-medium line-clamp-2">
+                                                {image.title || "Experience"}
+                                              </p>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          )}
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </div>
                         
                         {/* Footer decoration */}

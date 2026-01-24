@@ -14,7 +14,8 @@ import OverviewSection from "./Sections/OverviewSection";
 import ItinerarySection from "./Sections/ItinerarySection";
 import InclusionsSection from "./Sections/InclusionsSection";
 import HighlightsSection from "./Sections/HighlightsSection";
-import PackageNavigation from "./PackageNavigation";
+import DesktopPackageNavigation from "./DesktopPackageNavigation";
+import MobilePackageNavigation from "./MobilePackageNavigation";
 import { Phone, X, ChevronUp, Star, Share2, Info, Calendar, Bed, CheckCircle, HelpCircle } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
 import RegionTestimonials from "./RegionTestimonials";
@@ -30,6 +31,7 @@ const PackagesClient = () => {
   const slug = params.slug;
   const [mounted, setMounted] = useState(false);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [isNavAtTop, setIsNavAtTop] = useState(false);
   const [showFullForm, setShowFullForm] = useState(false);
   const [activeSection, setActiveSection] = useState("overview");
   const activeSectionRef = React.useRef("overview");
@@ -131,7 +133,13 @@ const PackagesClient = () => {
           
           // 1. Handle Sticky Bar Visibility (Throttled)
           if (Math.abs(scrollY - (window.lastScrollY || 0)) > 10) { // Only update if significant scroll
-             setShowStickyBar(scrollY > 600);
+             const shouldBeAtTop = scrollY > 500; // Trigger point for moving to top
+             setIsNavAtTop(shouldBeAtTop);
+             setShowStickyBar(scrollY > 400); // Show pricing bar when scrolled past 400px
+             
+             // Dispatch event to hide/show main header
+             window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: shouldBeAtTop }));
+             
              window.lastScrollY = scrollY;
           }
 
@@ -264,24 +272,23 @@ const PackagesClient = () => {
       <PackageHero 
         packageData={packageData} 
       />
-      <Container className="relative flex flex-col c-lg:flex-row gap-8 c-lg:gap-8 pt-8 md:pt-4">
+      <Container className="relative flex flex-col c-lg:flex-row gap-[30px] c-lg:gap-8 pt-8 md:pt-4">
         {/* Main Content Column (75%) */}
-        <div className="w-full c-lg:w-[75%] space-y-6 md:space-y-8">
+        <div className="w-full c-lg:w-[75%] space-y-[30px] md:space-y-8">
           {/* 2. Highlights Section */}
           <HighlightsSection packageData={packageData} />
 
-          {/* Sticky Navigation - Now part of the content column flow */}
-          <PackageNavigation 
-              activeSection={activeSection} 
-              onScrollToSection={scrollToSection} 
-              sections={sections}
-              isBottomBarVisible={showStickyBar}
-          />
-
           {/* Main Content Sections */}
-          <div className="space-y-6 md:space-y-8">
+          <div className="space-y-[30px] md:space-y-8">
+            {/* Desktop Sticky Navigation - Between Journey Overview and Package Highlights */}
+            <DesktopPackageNavigation 
+                activeSection={activeSection} 
+                onScrollToSection={scrollToSection} 
+                sections={sections}
+            />
+
             {/* Overview Section */}
-            <div id="overview" className="scroll-mt-48 space-y-6 md:space-y-8">
+            <div id="overview" className="scroll-mt-48 space-y-[30px] md:space-y-8">
               <div className="relative pb-4 w-full overflow-x-hidden">
                 <OverviewSection packageData={packageData} />
               </div>
@@ -442,9 +449,10 @@ const PackagesClient = () => {
 
       {/* Compact Sticky Bottom Bar - Mobile Only */}
       <div 
-        className={`c-lg:hidden fixed bottom-[75px] left-0 right-0 z-50 transition-all duration-500 ${
-          showStickyBar ? 'translate-y-0' : 'translate-y-full'
-        }`}
+        className={cn(
+          "c-lg:hidden fixed left-0 right-0 bottom-0 z-50 transition-all duration-500",
+          showStickyBar ? "translate-y-0" : "translate-y-full"
+        )}
       >
         {/* Expanded Form Overlay */}
         {showFullForm && (
@@ -478,10 +486,10 @@ const PackagesClient = () => {
               {/* Price Info */}
               <div className="flex items-center gap-4">
                 <div>
-                  <p className="text-white/60 text-xs font-medium">Starting from</p>
+                  <p className="text-white/60 text-[10px] font-medium">Starting from</p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-brand-accent text-sm font-bold">₹</span>
-                    <span className="text-white font-bold text-2xl drop-shadow-sm">
+                    <span className="text-white font-bold text-[22px] drop-shadow-sm">
                       {formatPrice(packageData?.basePrice || packageData?.price || packageData?.startingPrice || 0)}
                     </span>
                     <span className="text-white/40 text-xs">/person</span>
@@ -541,6 +549,15 @@ const PackagesClient = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Package Navigation - Sticky Top and Bottom Bar */}
+      <MobilePackageNavigation 
+        activeSection={activeSection} 
+        onScrollToSection={scrollToSection} 
+        sections={sections}
+        isBottomBarVisible={showStickyBar}
+        isStickyTop={isNavAtTop}
+      />
     </>
   );
 };

@@ -490,6 +490,7 @@ export default function MobileNavbar() {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [atTop, setAtTop] = useState(true);
+  const [forceHide, setForceHide] = useState(false);
 
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -502,7 +503,14 @@ export default function MobileNavbar() {
 
     handleScroll(); // initial
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    
+    const handleForceHide = (e) => setForceHide(e.detail);
+    window.addEventListener('hideMainHeader', handleForceHide);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('hideMainHeader', handleForceHide);
+    };
   }, []);
 
   /* ================= BODY LOCK ================= */
@@ -539,7 +547,10 @@ export default function MobileNavbar() {
   return (
     <>
       {/* ================= HEADER ================= */}
-      <header className="fixed top-0 z-50 w-full c-lg:hidden">
+      <header className={cn(
+        "fixed top-0 z-50 w-full c-lg:hidden transition-all duration-500",
+        forceHide ? "-translate-y-[110%] opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
+      )}>
         <Container>
           <div
             className={cn(

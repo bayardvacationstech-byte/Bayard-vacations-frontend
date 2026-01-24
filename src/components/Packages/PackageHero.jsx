@@ -299,13 +299,6 @@ const PackageHero = ({ packageData }) => {
             </div>
           </div>
 
-          <button 
-            className="lg:hidden text-white/40 text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 pt-12"
-            onClick={scrollToNext}
-          >
-            Scroll To Journey
-            <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity }}>↓</motion.div>
-          </button>
         </div>
       </div>
     </section>

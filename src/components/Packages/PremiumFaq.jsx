@@ -177,7 +177,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
             <span className="text-brand-blue font-bold">Got Questions?</span>
           </div>
           
-          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-0 tracking-tight leading-tight px-4">
+          <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-0 tracking-tight leading-tight px-4">
             Frequently Asked <span className="text-brand-blue">Questions</span>
           </h2>
         </motion.div>
