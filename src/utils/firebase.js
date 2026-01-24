@@ -20,12 +20,15 @@ const sanitizeDocRef = (item) => {
   if (!item) return item;
   
   // For imageRefs which have a nested ref structure
-  if (item.ref && item.ref._key && item.ref._key.path) {
-    const segments = item.ref._key.path.segments;
-    return {
-      id: segments[segments.length - 1],
-      collection: segments[segments.length - 2],
-    };
+  if (item.ref) {
+    const path = item.ref._key?.path || item.ref._path;
+    if (path && path.segments) {
+      const segments = path.segments;
+      return {
+        id: segments[segments.length - 1],
+        collection: segments[segments.length - 2],
+      };
+    }
   }
   
   // For direct document references

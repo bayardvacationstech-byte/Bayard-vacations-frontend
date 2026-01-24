@@ -1,24 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { splitCityStr } from "@/lib/utils";
 import { ChevronDown, ChevronUp, Clock, MapPin, Users, Plane, Star, Languages, Calendar, CheckCircle2 } from "lucide-react";
 
 const OverviewSection = ({ packageData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const cities = splitCityStr(packageData?.citiesList) || ["Main Destination"];
-  
-  // High-quality dummy highlights
-  const dummyHighlights = [
-    "Experience the rich culture and stunning landscapes with our expert local guides.",
-    "Unwind in hand-picked premium accommodations featuring world-class amenities.",
-    "Discover hidden gems and iconic landmarks with a perfectly balanced itinerary.",
-    "Enjoy hassle-free travel with private transfers and personalized support 24/7.",
-    "Authentic local dining experiences included to savor the true flavors of the region."
-  ];
+  const [isHighlightsExpanded, setIsHighlightsExpanded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    setIsMounted(true);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const cities = splitCityStr(packageData?.citiesList) || [];
+  
   const highlights = Array.isArray(packageData?.highlights) && packageData.highlights.length > 0 
     ? packageData.highlights 
-    : dummyHighlights;
+    : [];
+
+  if (!isMounted) return null;
+
+  const highlightsItems = packageData?.sections?.find(s => s.id === "package_highlights")?.items || [];
+
+  const limit = isMobile ? 4 : 6;
+  const visibleHighlights = isHighlightsExpanded ? highlightsItems : highlightsItems.slice(0, limit);
 
   return (
     <div className="space-y-4">
@@ -30,19 +42,11 @@ const OverviewSection = ({ packageData }) => {
           Package <span className="text-brand-blue">Highlights</span>
         </h2>
         
-        {/* Quick Facts Grid - 2 Rows Horizontal Scroll on Mobile */}
+        {/* Quick Facts Grid - Vertical on Mobile, Grid on Desktop */}
         <div className="mb-6 pb-[15px] border-b border-slate-100">
-          <div className="overflow-x-auto scrollbar-hide -mx-4 md:mx-0">
-            <div className="grid grid-rows-2 grid-flow-col gap-x-4 gap-y-6 px-4 md:px-0 md:grid-rows-none md:grid-flow-row md:grid-cols-2 lg:grid-cols-3 md:gap-6">
-              {(packageData?.sections?.find(s => s.id === "package_highlights")?.items || [
-                "\\item *Duration:* 5 Nights / 6 Days all-inclusive experience",
-                "\\item *Destinations Covered:* Baku • Gabala • Gobustan • Absheron Peninsula • Sheki",
-                "\\item *Perfect For:* First-time visitors and culture enthusiasts",
-                "\\item *Travel Style:* Guided private tours with comfortable transportation",
-                "\\item *Highlights:* Blend of ancient heritage, modern architecture, and natural wonders",
-                "\\item *Language:* English-speaking professional guides throughout",
-                "\\item *Best Time to Visit:* April-May and September-October"
-              ]).map((item, idx) => {
+          <div className="md:mx-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6 px-4 md:px-0 md:gap-6">
+              {visibleHighlights.map((item, idx) => {
                 // Robust Parsing
                 const cleanItem = item.replace(/^\\item\s*/, '');
                 // Matches *Key:* Value or **Key:** Value or Key: Value
@@ -72,7 +76,7 @@ const OverviewSection = ({ packageData }) => {
                 };
 
                 return (
-                  <div key={idx} className="flex gap-4 group w-[280px] md:w-auto flex-shrink-0">
+                  <div key={idx} className="flex gap-4 group w-full flex-shrink-0">
                     <div className="flex-shrink-0 mt-0.5 p-1.5 bg-slate-50 rounded-lg group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-slate-100">
                       {getIcon(label)}
                     </div>
@@ -85,6 +89,26 @@ const OverviewSection = ({ packageData }) => {
               })}
             </div>
           </div>
+
+          {/* View All Button for Highlights */}
+          {highlightsItems.length > limit && (
+            <button
+              onClick={() => setIsHighlightsExpanded(!isHighlightsExpanded)}
+              className="mt-6 flex items-center gap-1 text-brand-blue text-[10px] font-black uppercase tracking-widest"
+            >
+              {isHighlightsExpanded ? (
+                <>
+                  <ChevronUp className="w-3.5 h-3.5" />
+                  <span>Show Less</span>
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                  <span>View All ({highlightsItems.length - limit} More)</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Full Description with Read More */}
@@ -95,11 +119,7 @@ const OverviewSection = ({ packageData }) => {
               // 1. Prepare Description Content
               const overviewSection = packageData?.sections?.find(s => s.id === "package_overview");
               const paragraphs = overviewSection?.content || 
-                (packageData?.description || `Azerbaijan is a captivating destination where East meets West, blending ancient Silk Road heritage with cutting-edge modernity.
-Known as the "Land of Fire," Azerbaijan showcases diverse landscapes from medieval mountain towns to cosmopolitan Baku.
-This 5-night journey captures the essence of this enchanting nation—explore UNESCO-listed Old City bazaars, witness natural fire phenomena on mountainsides, uncover prehistoric rock carvings, and immerse yourself in centuries-old traditions.
-Whether admiring the Flame Towers or wandering Sheki's historic bazaars, every moment reveals the soul of the Caucasus.
-This carefully curated package ensures you experience Azerbaijan's most memorable attractions while enjoying comfortable accommodations and expert local guidance.`).split(/\n\s*\n|\n/).filter(Boolean);
+                (packageData?.description || "").split(/\n\s*\n|\n/).filter(Boolean);
 
               // 2. Render Based on State
               if (!isExpanded) {

@@ -22,7 +22,11 @@ import {
   Car,
   FileCheck,
   AlertOctagon,
-  Map as MapIcon
+  Map as MapIcon,
+  X,
+  UserCheck,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 
 const InclusionsSection = ({ packageData }) => {
@@ -195,6 +199,17 @@ const InclusionsSection = ({ packageData }) => {
   const [isExcludesExpanded, setIsExcludesExpanded] = useState(false);
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [isPointsExpanded, setIsPointsExpanded] = useState(false);
+  const [expandedPrepSections, setExpandedPrepSections] = useState({}); // Tracking Travel Prep subsections
+  const [expandedNoteSections, setExpandedNoteSections] = useState({}); // Tracking Important Notes subsections
+
+  const togglePrepSection = (tabId, sectionIdx) => {
+    const key = `${tabId}-${sectionIdx}`;
+    setExpandedPrepSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const toggleNoteSection = (sectionIdx) => {
+    setExpandedNoteSections(prev => ({ ...prev, [sectionIdx]: !prev[sectionIdx] }));
+  };
 
   const tabs = [
     { id: "notes", label: "Notes", icon: Info },
@@ -554,138 +569,99 @@ const InclusionsSection = ({ packageData }) => {
     <div id="inclusions" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-4 md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
       {/* Standard Header */}
       <div className="mb-[15px] text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[9px] md:text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[10px] md:text-[11px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
           <span className="text-xs">📋</span> Plan Details
         </div>
         <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
-        <p className="text-xs md:text-lg font-medium text-slate-600">Everything you need for a seamless journey</p>
+        <p className="text-sm md:text-xl font-medium text-slate-600">Everything you need for a seamless journey</p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Includes Card */}
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-brand-green/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
+        {/* Inclusions List */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 border-b-2 border-brand-green/20 pb-4">
+             <div className="w-10 h-10 bg-brand-green/10 rounded-full flex items-center justify-center">
+               <CheckCircle2 className="w-5 h-5 text-brand-green" />
+             </div>
+             <div>
+               <h5 className="text-xl font-black text-slate-900 tracking-tight">What's Included</h5>
+               <p className="text-slate-500 text-[11px] font-bold uppercase tracking-widest">{packageData?.includes?.length || 0} Core Benefits</p>
+             </div>
+          </div>
           
-          <div className="relative h-full bg-white border border-slate-200 group-hover:border-brand-green/30 rounded-3xl overflow-hidden transition-all duration-500 shadow-sm">
-            {/* Header */}
-            <div className="relative px-4 md:px-6 py-4 md:py-6 bg-brand-green border-b border-brand-green/10">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="relative w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-inner">
-                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
+          <div className="grid grid-cols-1 gap-4">
+            {(isIncludesExpanded ? packageData?.includes : packageData?.includes?.slice(0, 8))?.map((item, index) => (
+              <div 
+                key={index}
+                className="flex items-start gap-3 group"
+              >
+                <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-brand-green/5 flex items-center justify-center group-hover:bg-brand-green/10 transition-colors">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-green" />
                 </div>
-                <div>
-                  <h5 className="text-xl font-black text-white tracking-tight">What's Included</h5>
-                  <p className="text-emerald-100 text-xs font-medium">{packageData?.includes?.length || 0} benefits included</p>
-                </div>
+                <span className="text-slate-700 text-base md:text-lg font-medium leading-relaxed group-hover:text-slate-900 transition-colors">
+                  {typeof item === "string" ? item : item.title}
+                </span>
               </div>
-            </div>
-            
-            {/* Items List */}
-            <div className="p-3 md:p-4 space-y-2 text-left">
-              {(isIncludesExpanded ? packageData?.includes : packageData?.includes?.slice(0, 6))?.map((item, index) => (
-                <div 
-                  key={index}
-                  className="group/item flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-emerald-50 hover:border-emerald-100 hover:shadow-sm transition-all duration-300"
-                >
-                  <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm group-hover/item:scale-110 transition-transform">
-                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700 text-sm font-medium leading-relaxed group-hover/item:text-slate-900 transition-colors">
-                    {typeof item === "string" ? item : item.title}
-                  </span>
-                </div>
-              ))}
+            ))}
 
-              {packageData?.includes?.length > 6 && (
-                <div className="pt-2 px-1">
-                  <button
-                    onClick={() => setIsIncludesExpanded(!isIncludesExpanded)}
-                    className="w-full py-2.5 text-[11px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/50 rounded-xl transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
-                  >
-                    {isIncludesExpanded ? 'Show Less' : `View All (${packageData.includes.length})`}
-                    <svg 
-                      className={`w-3.5 h-3.5 transition-transform duration-300 ${isIncludesExpanded ? 'rotate-180' : ''}`} 
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                </div>
-              )}
-            </div>
-            
-            <div className="h-1 bg-gradient-to-r from-transparent via-brand-green/20 to-transparent" />
+            {packageData?.includes?.length > 8 && (
+              <div className="pt-2">
+                <button
+                  onClick={() => setIsIncludesExpanded(!isIncludesExpanded)}
+                  className="text-brand-green font-black text-sm uppercase tracking-widest hover:translate-x-1 transition-all flex items-center gap-2"
+                >
+                  {isIncludesExpanded ? 'Collapse' : `View All (${packageData.includes.length})`}
+                  <svg className={`w-3.5 h-3.5 transition-transform ${isIncludesExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Exclusions Card */}
-        {packageData?.excludes && packageData.excludes.length > 0 && (
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-rose-500/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-            
-            <div className="relative h-full bg-white border border-slate-200 group-hover:border-rose-300/30 rounded-3xl overflow-hidden transition-all duration-500 shadow-sm">
-              {/* Header */}
-              <div className="relative px-4 md:px-6 py-4 md:py-6 bg-rose-500 border-b border-rose-500/10">
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <div className="relative w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-inner">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <h5 className="text-xl font-black text-white tracking-tight">Exclusions</h5>
-                    <p className="text-rose-100 text-xs font-medium">Items you'll need to arrange</p>
-                  </div>
-                </div>
-              </div>
-                            {/* Items List */}
-                <div className="p-3 md:p-4 space-y-2 text-left">
-                  {(isExcludesExpanded ? packageData.excludes : packageData.excludes.slice(0, 6)).map((item, index) => (
-                    <div 
-                      key={index}
-                      className="group/item flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-rose-50 hover:border-rose-100 hover:shadow-sm transition-all duration-300"
-                    >
-                      <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-rose-100 flex items-center justify-center group-hover/item:bg-rose-500 transition-all">
-                        <svg className="w-3 h-3 text-rose-500 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </div>
-                      <span className="text-slate-600 text-sm font-medium leading-relaxed group-hover/item:text-slate-900 transition-colors">
-                        {typeof item === "string" ? item : item.title}
-                      </span>
-                    </div>
-                  ))}
-
-                  {packageData.excludes.length > 6 && (
-                    <div className="pt-2 px-1">
-                      <button
-                        onClick={() => setIsExcludesExpanded(!isExcludesExpanded)}
-                        className="w-full py-2.5 text-[11px] font-black uppercase tracking-widest text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200/50 rounded-xl transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
-                      >
-                        {isExcludesExpanded ? 'Show Less' : `View All (${packageData.excludes.length})`}
-                        <svg 
-                          className={`w-3.5 h-3.5 transition-transform duration-300 ${isExcludesExpanded ? 'rotate-180' : ''}`} 
-                          fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              
-              <div className="h-1 bg-gradient-to-r from-transparent via-rose-500/20 to-transparent" />
-            </div>
+        {/* Exclusions List */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 border-b-2 border-rose-200 pb-4">
+             <div className="w-10 h-10 bg-rose-50 rounded-full flex items-center justify-center">
+               <X className="w-5 h-5 text-rose-500" />
+             </div>
+             <div>
+               <h5 className="text-xl font-black text-slate-900 tracking-tight">Exclusions</h5>
+               <p className="text-slate-500 text-[11px] font-bold uppercase tracking-widest">Self-Arranged Items</p>
+             </div>
           </div>
-        )}
+          
+          <div className="grid grid-cols-1 gap-4">
+            {(isExcludesExpanded ? packageData.excludes : packageData.excludes.slice(0, 8)).map((item, index) => (
+              <div 
+                key={index}
+                className="flex items-start gap-3 group"
+              >
+                <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+                  <X className="w-3.5 h-3.5 text-rose-500" />
+                </div>
+                <span className="text-slate-600 text-base md:text-lg font-medium leading-relaxed group-hover:text-slate-800 transition-colors">
+                  {typeof item === "string" ? item : item.title}
+                </span>
+              </div>
+            ))}
+
+            {packageData.excludes.length > 8 && (
+              <div className="pt-2">
+                <button
+                  onClick={() => setIsExcludesExpanded(!isExcludesExpanded)}
+                  className="text-rose-500 font-black text-sm uppercase tracking-widest hover:translate-x-1 transition-all flex items-center gap-2"
+                >
+                  {isExcludesExpanded ? 'Collapse' : `View All (${packageData.excludes.length})`}
+                  <svg className={`w-3.5 h-3.5 transition-transform ${isExcludesExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       
       {/* Mobile Tabs Navigation (REMOVED - Using unified vertical layout) */}
@@ -728,17 +704,17 @@ const InclusionsSection = ({ packageData }) => {
               })}
             </div>
 
-            {/* Active Tab Content - Mobile */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <ul className="space-y-2">
+            {/* Active Tab Content - Mobile - No Boxes */}
+            <div className="pt-4 border-t border-slate-100">
+              <ul className="space-y-4">
                 {TRAVEL_GUIDE_DATA.importantNotes[activeNotesTab].items.map((item, i) => {
                   const parts = item.match(/^([^:]+):\s*(.*)/);
                   const key = parts ? parts[1] : null;
                   const val = parts ? parts[2] : item;
 
                   return (
-                    <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                      <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                    <li key={i} className="flex items-start gap-4 text-sm text-slate-600 leading-relaxed">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
                       <span>
                         {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
                         {val}
@@ -750,27 +726,30 @@ const InclusionsSection = ({ packageData }) => {
             </div>
           </div>
 
-          {/* Desktop Grid */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Desktop Grid - No Boxes */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
             {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
               const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
+              const isExpanded = expandedNoteSections[idx];
+              const visibleItems = isExpanded ? note.items : note.items.slice(0, 3);
+              
               return (
-                <div key={idx} className="bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm text-slate-500 group-hover:text-brand-blue group-hover:border-brand-blue/30 transition-colors">
+                <div key={idx} className="group">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-brand-blue/10 group-hover:text-brand-blue transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <h4 className="font-bold text-slate-800 text-sm">{note.title}</h4>
+                    <h4 className="font-bold text-slate-900 text-sm">{note.title}</h4>
                   </div>
-                  <ul className="space-y-2">
-                    {note.items.map((item, i) => {
+                  <ul className="space-y-3">
+                    {visibleItems.map((item, i) => {
                       const parts = item.match(/^([^:]+):\s*(.*)/);
                       const key = parts ? parts[1] : null;
                       const val = parts ? parts[2] : item;
 
                       return (
-                        <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                          <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                        <li key={i} className="flex items-start gap-3 text-sm md:text-base text-slate-600 hover:text-slate-900 transition-colors leading-relaxed">
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
                           <span>
                             {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
                             {val}
@@ -779,6 +758,22 @@ const InclusionsSection = ({ packageData }) => {
                       );
                     })}
                   </ul>
+                  {note.items.length > 3 && (
+                    <button
+                      onClick={() => toggleNoteSection(idx)}
+                      className="mt-3 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
+                    >
+                      {isExpanded ? (
+                        <>
+                          <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-3 h-3" /> <span>Read More ({note.items.length - 3})</span>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               );
             })}
@@ -822,9 +817,9 @@ const InclusionsSection = ({ packageData }) => {
               })}
             </div>
 
-            {/* Active Tab Content - Mobile */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <div className="space-y-2">
+            {/* Active Tab Content - Mobile - No Boxes */}
+            <div className="pt-4 border-t border-slate-100">
+              <div className="space-y-4">
                 {TRAVEL_GUIDE_DATA.pointsToRemember
                   .filter(point => {
                     const lowerPoint = point.toLowerCase();
@@ -847,8 +842,8 @@ const InclusionsSection = ({ packageData }) => {
                   .map((point, idx) => {
                     const [title, desc] = point.split(": ");
                     return (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                        <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
+                      <div key={idx} className="flex items-start gap-3 text-sm text-slate-600 leading-relaxed">
+                        <CheckCircle2 className="w-4 h-4 text-brand-blue/50 mt-0.5 flex-shrink-0" />
                         <span>
                           {desc ? (
                             <>
@@ -865,17 +860,19 @@ const InclusionsSection = ({ packageData }) => {
             </div>
           </div>
 
-          {/* Desktop Grid */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-            {TRAVEL_GUIDE_DATA.pointsToRemember.map((point, idx) => {
+          {/* Desktop Grid - Minimal List */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6">
+            {(isPointsExpanded ? TRAVEL_GUIDE_DATA.pointsToRemember : TRAVEL_GUIDE_DATA.pointsToRemember.slice(0, 6)).map((point, idx) => {
                const [title, desc] = point.split(": ");
                return (
-                 <div key={idx} className="flex gap-3 items-start p-3 bg-slate-50 rounded-xl border border-slate-100 hover:bg-white transition-colors">
-                   <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
-                   <div className="text-sm text-slate-700 leading-snug">
+                 <div key={idx} className="flex gap-3 items-start group">
+                   <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-brand-blue/10 transition-colors">
+                    <CheckCircle2 className="w-3 h-3 text-brand-blue" />
+                   </div>
+                   <div className="text-base text-slate-700 leading-relaxed group-hover:text-slate-900 transition-colors">
                      {desc ? (
                        <>
-                         <span className="font-bold text-brand-blue">{title}:</span> {desc}
+                         <span className="font-bold text-slate-900">{title}:</span> {desc}
                        </>
                      ) : (
                        <span className="font-medium">{point}</span>
@@ -885,6 +882,28 @@ const InclusionsSection = ({ packageData }) => {
                );
             })}
           </div>
+
+          {/* Minimal Read More / Show Less Button */}
+          {TRAVEL_GUIDE_DATA.pointsToRemember.length > 6 && (
+            <div className="pt-6 border-t border-slate-50 mt-6 md:block hidden">
+              <button
+                onClick={() => setIsPointsExpanded(!isPointsExpanded)}
+                className="group flex items-center gap-2 text-brand-blue font-bold text-sm uppercase tracking-widest"
+              >
+                {isPointsExpanded ? (
+                  <>
+                    <ChevronUp className="w-4 h-4" />
+                    <span>Collapse Points</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4" />
+                    <span>Expand {TRAVEL_GUIDE_DATA.pointsToRemember.length - 6} More Points</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
@@ -924,19 +943,19 @@ const InclusionsSection = ({ packageData }) => {
               })}
             </div>
 
-            {/* Active Tab Content - Mobile */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <div className="space-y-4">
+            {/* Active Tab Content - Mobile - No Boxes */}
+            <div className="pt-4 border-t border-slate-100">
+              <div className="space-y-6">
                 {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
-                  <div key={idx}>
-                    <h5 className="font-bold text-slate-900 text-xs mb-2 flex items-center gap-2">
-                      <div className="w-1 h-3 rounded-full bg-brand-blue"></div>
+                  <div key={idx} className="space-y-3">
+                    <h5 className="font-black text-slate-900 text-[10px] uppercase tracking-widest flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-blue"></div>
                       {sec.subtitle}
                     </h5>
-                    <ul className="space-y-1.5">
+                    <ul className="space-y-3 ml-4">
                       {sec.items.map((item, i) => (
-                        <li key={i} className="text-xs text-slate-600 flex items-start gap-2 leading-relaxed">
-                          <span className="w-1 h-1 rounded-full bg-slate-400 mt-1.5 shrink-0" />
+                        <li key={i} className="text-sm text-slate-600 flex items-start gap-3 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2 shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -960,7 +979,7 @@ const InclusionsSection = ({ packageData }) => {
                  <button
                    key={tab.id}
                    onClick={() => setPrepTab(tab.id)}
-                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-sm font-bold whitespace-nowrap transition-colors ${
+                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-base font-bold whitespace-nowrap transition-colors ${
                      prepTab === tab.id
                        ? "border-brand-blue text-brand-blue"
                        : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
@@ -972,32 +991,45 @@ const InclusionsSection = ({ packageData }) => {
                ))}
             </div>
 
-            {/* Tab Content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
-               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
-                  <div key={idx} className="bg-slate-50 rounded-xl p-5 border border-slate-100 hover:border-brand-blue/20 transition-colors group">
-                     <h5 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                        {prepTab === 'uponArrival' ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        ) : prepTab === 'duringTravel' ? (
-                            <MapPin className="w-4 h-4 text-brand-blue" />
-                        ) : prepTab === 'usefulInfo' ? (
-                            <Info className="w-4 h-4 text-amber-500" />
-                        ) : (
-                            <div className="w-1.5 h-4 rounded-full bg-brand-blue group-hover:h-6 transition-all duration-300"></div>
-                        )}
-                        {sec.subtitle}
-                     </h5>
-                     <ul className="space-y-2.5">
-                        {sec.items.map((item, i) => (
-                           <li key={i} className="text-xs text-slate-600 flex items-start gap-2.5 leading-relaxed">
-                              <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-1.5 shrink-0 group-hover:bg-brand-blue/50 transition-colors" />
-                              <span>{item}</span>
-                           </li>
-                        ))}
-                     </ul>
-                  </div>
-               ))}
+            {/* Tab Content - No Boxes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 animate-in fade-in duration-300">
+               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
+                  const sectionKey = `${prepTab}-${idx}`;
+                  const isExpanded = expandedPrepSections[sectionKey];
+                  const visibleItems = isExpanded ? sec.items : sec.items.slice(0, 4);
+
+                  return (
+                    <div key={idx} className="space-y-4">
+                       <h5 className="font-black text-slate-900 text-base flex items-center gap-3 border-l-4 border-brand-blue pl-4">
+                          {sec.subtitle}
+                       </h5>
+                       <ul className="space-y-4 ml-7">
+                          {visibleItems.map((item, i) => (
+                             <li key={i} className="text-sm md:text-base text-slate-600 flex items-start gap-4 leading-relaxed hover:text-slate-900 transition-colors">
+                                <span className="w-2 h-2 rounded-full bg-slate-200 mt-2 shrink-0" />
+                                <span>{item}</span>
+                             </li>
+                          ))}
+                       </ul>
+                       {sec.items.length > 4 && (
+                          <button
+                            onClick={() => togglePrepSection(prepTab, idx)}
+                            className="ml-7 mt-2 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
+                          >
+                            {isExpanded ? (
+                              <>
+                                <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="w-3 h-3" /> <span>Read More ({sec.items.length - 4})</span>
+                              </>
+                            )}
+                          </button>
+                       )}
+                    </div>
+                  );
+               })}
             </div>
           </div>
         </div>

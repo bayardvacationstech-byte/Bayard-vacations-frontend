@@ -313,8 +313,8 @@ const Footer = async () => {
               <SwipeableContactCard key={index} {...card} />
             ))}
             
-            {/* Office - Non-swipeable info card */}
-            <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-5">
+            {/* Office - Non-swipeable info card - Hidden on mobile */}
+            <div className="hidden md:block relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-5">
               <div className="flex items-start gap-3">
                 <div className="bg-purple-500/20 p-2.5 rounded-lg">
                   <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

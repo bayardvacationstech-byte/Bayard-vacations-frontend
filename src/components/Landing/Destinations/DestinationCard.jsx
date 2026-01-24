@@ -14,8 +14,8 @@ export default function DestinationCard({
   inCarousel = false,
   index = 0,
 }) {
-  const { image: queryImage, isLoading: imageLoading } = useDestinationImage(regionSlug);
-  const { regionData, isLoading: regionLoading } = useRegion(regionSlug);
+  const { image: queryImage, isLoading: imageLoading, error: imageError } = useDestinationImage(regionSlug);
+  const { regionData, isLoading: regionLoading, error: regionError } = useRegion(regionSlug);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -24,6 +24,7 @@ export default function DestinationCard({
   // Use region's featuredImage first, then fall back to query image
   const image = regionData?.featuredImage || queryImage;
   const isLoading = regionLoading || imageLoading;
+  const error = regionError || imageError;
 
   useEffect(() => {
     setIsMounted(true);

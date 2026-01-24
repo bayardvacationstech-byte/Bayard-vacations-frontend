@@ -44,7 +44,7 @@ const PackageCard = ({ item, className, isGroup = false }) => {
       ref={cardRef}
       href={href}
       className={cn(
-        "block relative overflow-hidden rounded-2xl md:rounded-3xl group h-[450px] sm:h-[500px]",
+        "block relative overflow-hidden rounded-2xl md:rounded-3xl group h-[350px] sm:h-[500px]",
         className
       )}
     >

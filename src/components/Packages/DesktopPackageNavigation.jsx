@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const DesktopPackageNavigation = ({ activeSection, onScrollToSection, sections = [] }) => {
   return (
-    <div className="hidden md:block sticky top-[100px] z-40 py-4 mb-6">
+    <div className="hidden md:block sticky top-[80px] z-40 py-4 mb-6">
       <div className="flex justify-center">
         <div className="inline-flex items-center gap-3 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-full shadow-sm p-1">
         {sections.map((section) => {
