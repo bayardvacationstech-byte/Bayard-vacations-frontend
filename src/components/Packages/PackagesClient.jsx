@@ -45,7 +45,7 @@ const PackagesClient = () => {
     { id: "overview", label: "Overview", icon: Info },
     { id: "itinerary", label: "Itinerary", icon: Calendar },
     { id: "hotels-section", label: "Stay", icon: Bed },
-    { id: "inclusions", label: "Inclusions & Info", icon: CheckCircle },
+    { id: "inclusions", label: "Inclusions", icon: CheckCircle },
     { id: "faq", label: "FAQ", icon: HelpCircle },
   ];
 
@@ -55,16 +55,16 @@ const PackagesClient = () => {
   // Use the new hook to fetch package data
   const {
     packageData,
-    isLoading: packageLoading,
+    isLoading,
     error: packageError,
   } = usePackage(slug);
 
   useEffect(() => {
     if (packageData) {
-      if (slug === "shillong-5n-6d") {
-        console.log("DEBUG: Package Data for shillong-5n-6d:", JSON.stringify(packageData, null, 2));
-      }
       console.log("Package Data loaded:", packageData);
+      if (packageData.id === "tisYHa5YhXFcZQhdrMt6") {
+        console.log("DEBUG - Specific Package Info:", packageData);
+      }
     }
   }, [packageData]);
 
@@ -106,6 +106,12 @@ const PackagesClient = () => {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Hide main header on mobile mount
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: true }));
+    }
+
     // Clean up any hash from the URL when component mounts
     if (window.location.hash) {
       window.history.replaceState(
@@ -114,6 +120,13 @@ const PackagesClient = () => {
         window.location.pathname + window.location.search
       );
     }
+
+    // Reset header on unmount if needed, though usually navigation handles it
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: false }));
+      }
+    };
   }, []);
 
   // Optimize scroll handling with requestAnimationFrame and caching
@@ -134,11 +147,14 @@ const PackagesClient = () => {
           // 1. Handle Sticky Bar Visibility (Throttled)
           if (Math.abs(scrollY - (window.lastScrollY || 0)) > 10) { // Only update if significant scroll
              const shouldBeAtTop = scrollY > 500; // Trigger point for moving to top
+             const isMobile = window.innerWidth < 1024;
+
              setIsNavAtTop(shouldBeAtTop);
              setShowStickyBar(scrollY > 400); // Show pricing bar when scrolled past 400px
              
              // Dispatch event to hide/show main header
-             window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: shouldBeAtTop }));
+             // On mobile we keep it hidden ("dont show header")
+             window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: isMobile || shouldBeAtTop }));
              
              window.lastScrollY = scrollY;
           }
@@ -216,11 +232,11 @@ const PackagesClient = () => {
   };
 
   // Show loader only after component has mounted to prevent hydration mismatch
-  if (!mounted || packageLoading || !packageData) {
+  if (!mounted || isLoading || !packageData) {
     return <WebsiteLoader />;
   }
 
-  if (packageError) {
+  if (packageError && slug !== "azerbaijan-5n-6d-1") {
     return <div>Error loading package: {packageError.message}</div>;
   }
 
@@ -277,6 +293,15 @@ const PackagesClient = () => {
         <div className="w-full c-lg:w-[75%] space-y-[30px] md:space-y-8">
           {/* 2. Highlights Section */}
           <HighlightsSection packageData={packageData} />
+
+          {/* Mobile Package Navigation - Sticky in between sections */}
+          <MobilePackageNavigation 
+            activeSection={activeSection} 
+            onScrollToSection={scrollToSection} 
+            sections={sections}
+            isBottomBarVisible={showStickyBar}
+            isHeaderHidden={isNavAtTop}
+          />
 
           {/* Main Content Sections */}
           <div className="space-y-[30px] md:space-y-8">
@@ -422,6 +447,10 @@ const PackagesClient = () => {
           </div>
         </div>
       </Container>
+
+          {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
+        <RelatedPackages relatedPackages={filteredRelatedPackages} />
+      )}
       
       {/* Full Width Sections - FAQ onwards */}
       <div id="faq" className="scroll-mt-48">
@@ -436,15 +465,13 @@ const PackagesClient = () => {
         <RegionTestimonials regionName={packageData?.packageName || packageData?.region} />
       </section>
 
-      {/* Why Bayard Vacations - Company Trust */}
-      <WhyBayardVacations />
+  
 
       {/* Related Packages - Upsell/Cross-sell */}
-      {filteredRelatedPackages && filteredRelatedPackages.length > 0 && (
-        <RelatedPackages relatedPackages={filteredRelatedPackages} />
-      )}
+  
 
-
+    {/* Why Bayard Vacations - Company Trust */}
+      <WhyBayardVacations />
 
 
       {/* Compact Sticky Bottom Bar - Mobile Only */}
@@ -550,14 +577,6 @@ const PackagesClient = () => {
         </div>
       </div>
 
-      {/* Mobile Package Navigation - Sticky Top and Bottom Bar */}
-      <MobilePackageNavigation 
-        activeSection={activeSection} 
-        onScrollToSection={scrollToSection} 
-        sections={sections}
-        isBottomBarVisible={showStickyBar}
-        isStickyTop={isNavAtTop}
-      />
     </>
   );
 };

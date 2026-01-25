@@ -18,7 +18,7 @@ import { COLLECTIONS } from "@/config";
 import { sanitizeDocumentData } from "@/utils/firebase";
 
 // Blog Card Component
-const BlogCard = ({ blog, featured = false, categories = [] }) => {
+const BlogCard = ({ blog, featured = false }) => {
   // Format date from Firebase timestamp
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
@@ -30,19 +30,6 @@ const BlogCard = ({ blog, featured = false, categories = [] }) => {
     }).format(date);
   };
 
-  // Find the category name based on category ID
-  const getCategoryName = () => {
-    // If no categories field or empty, return Uncategorized
-    if (!blog.categories || blog.categories.length === 0)
-      return "Uncategorized";
-
-    // Get the first category ID (assuming we display the primary category)
-    const categoryId = blog.categories[0];
-
-    // Find matching category by ID
-    const category = categories.find((cat) => cat.id === categoryId);
-    return category ? category.name : "Uncategorized";
-  };
 
   return (
     <article
@@ -58,9 +45,6 @@ const BlogCard = ({ blog, featured = false, categories = [] }) => {
           height={featured ? 400 : 240}
           className="size-full object-cover transition-transform duration-300 hover:scale-105"
         />
-        <div className="absolute left-4 top-4 rounded-md bg-brand-blue px-3 py-1 text-xs font-medium text-white">
-          {getCategoryName()}
-        </div>
       </div>
       <div className="p-5">
         <div className="mb-3 flex items-center gap-4 text-xs text-gray-500">
@@ -87,26 +71,11 @@ const BlogCard = ({ blog, featured = false, categories = [] }) => {
 const BlogsPage = () => {
   const [featuredBlogs, setFeaturedBlogs] = useState([]);
   const [recentBlogs, setRecentBlogs] = useState([]);
-  const [blogCategories, setBlogCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        // Query for blog categories first
-        const categoriesQuery = query(collection(db, "blogCategories"));
-
-        const categoriesSnapshot = await getDocs(categoriesQuery);
-
-        // Process categories
-        const categories = [];
-        categoriesSnapshot.forEach((doc) => {
-          categories.push(sanitizeDocumentData(doc));
-        });
-
-        // Sort categories by name
-        categories.sort((a, b) => a.name.localeCompare(b.name));
-        setBlogCategories(categories);
 
         // Query for featured blogs (with featured field set to true)
         const featuredQuery = query(
@@ -161,22 +130,6 @@ const BlogsPage = () => {
     // Fallback function if we need to do client-side filtering
     const fetchAllBlogsAndFilter = async () => {
       try {
-        // Query for blog categories
-        const categoriesQuery = query(
-          collection(db, COLLECTIONS.BLOG_CATEGORIES)
-        );
-
-        const categoriesSnapshot = await getDocs(categoriesQuery);
-
-        // Process categories
-        const categories = [];
-        categoriesSnapshot.forEach((doc) => {
-          categories.push(sanitizeDocumentData(doc));
-        });
-
-        // Sort categories by name
-        categories.sort((a, b) => a.name.localeCompare(b.name));
-        setBlogCategories(categories);
 
         // Get all published blogs
         const blogsQuery = query(
@@ -215,30 +168,6 @@ const BlogsPage = () => {
     fetchBlogs();
   }, []);
 
-  // FIXED: Count blogs per category - now checks if the blog.categories array includes the categoryId
-  const getCategoryCount = (categoryId) => {
-    let count = 0;
-
-    // Get all blogs (both featured and recent, but avoid duplicates)
-    const allBlogs = [...featuredBlogs];
-
-    // Add recent blogs that aren't already in the featured blogs
-    recentBlogs.forEach((recentBlog) => {
-      if (!allBlogs.some((blog) => blog.id === recentBlog.id)) {
-        allBlogs.push(recentBlog);
-      }
-    });
-
-    // Count blogs that have this category in their categories array
-    count = allBlogs.filter(
-      (blog) =>
-        blog.categories &&
-        Array.isArray(blog.categories) &&
-        blog.categories.includes(categoryId)
-    ).length;
-
-    return count;
-  };
 
   return (
     <>
@@ -294,7 +223,6 @@ const BlogsPage = () => {
                   key={blog.id}
                   blog={blog}
                   featured={true}
-                  categories={blogCategories}
                 />
               ))
             ) : (
@@ -331,7 +259,6 @@ const BlogsPage = () => {
                 <BlogCard
                   key={blog.id}
                   blog={blog}
-                  categories={blogCategories}
                 />
               ))
             ) : (
@@ -349,72 +276,30 @@ const BlogsPage = () => {
         </Container>
       </section>
 
-      {/* Blog Categories & Newsletter */}
-      <section className="section-padding">
-        <Container>
-          <div className="grid grid-cols-1 gap-10 c-lg:grid-cols-3">
-            {/* Categories */}
-            <div className="c-lg:col-span-1">
-              <h3 className="mb-6 text-2xl font-bold text-brand-blue">
-                Blog Categories
-              </h3>
-              <div className="space-y-3">
-                {loading ? (
-                  // Loading placeholder
-                  Array(5)
-                    .fill(0)
-                    .map((_, index) => (
-                      <div
-                        key={index}
-                        className="h-14 animate-pulse rounded-lg bg-gray-200"
-                      ></div>
-                    ))
-                ) : blogCategories.length > 0 ? (
-                  blogCategories.map((category) => (
-                    <Link
-                      key={category.id}
-                      href={`/blogs/categories/${category.slug}`}
-                      className="flex items-center justify-between rounded-lg border border-gray-200 p-4 transition-colors hover:bg-[#F1F5FC]"
-                    >
-                      <span className="font-medium text-gray-700">
-                        {category.name}
-                      </span>
-                      {/* Count of blogs per category */}
-                      <span className="rounded-full bg-[#E5ECF7] px-3 py-1 text-sm text-brand-blue">
-                        {getCategoryCount(category.id)}
-                      </span>
-                    </Link>
-                  ))
-                ) : (
-                  <p className="text-center text-gray-500">
-                    No categories found
-                  </p>
-                )}
-              </div>
-            </div>
 
-            {/* Newsletter */}
-            <div className="rounded-2xl bg-brand-blue p-8 text-white c-lg:col-span-2">
-              <h3 className="mb-2 font-nord text-3xl font-bold">
-                Subscribe to Our Newsletter
-              </h3>
-              <p className="mb-6">
-                Get the latest travel tips, destination guides, and exclusive
-                offers delivered to your inbox.
-              </p>
-              <div className="flex flex-col gap-4 c-md:flex-row">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="w-full rounded-full px-6 py-3 text-gray-800 outline-none"
-                />
-                <Button
-                  variant="success"
-                  className="whitespace-nowrap rounded-full px-8 py-3"
-                >
-                  Subscribe
-                </Button>
-              </div>
+      {/* Newsletter */}
+      <section className="section-padding bg-white">
+        <Container>
+          <div className="rounded-2xl bg-brand-blue p-8 text-white">
+            <h3 className="mb-2 font-nord text-3xl font-bold">
+              Subscribe to Our Newsletter
+            </h3>
+            <p className="mb-6">
+              Get the latest travel tips, destination guides, and exclusive
+              offers delivered to your inbox.
+            </p>
+            <div className="flex flex-col gap-4 c-md:flex-row">
+              <input
+                type="email"
+                placeholder="Your email address"
+                className="w-full rounded-full px-6 py-3 text-gray-800 outline-none"
+              />
+              <Button
+                variant="success"
+                className="whitespace-nowrap rounded-full px-8 py-3"
+              >
+                Subscribe
+              </Button>
             </div>
           </div>
         </Container>

@@ -177,8 +177,8 @@ const SwipeableContactCard = ({
   // Mobile: Slide to call design
   return (
     <div className="relative rounded-xl border border-white/10 overflow-hidden">
-      {/* Info Section */}
-      <div className="bg-white/5 p-4 border-b border-white/10">
+      {/* Info Section - Hidden on mobile, shown on desktop */}
+      <div className="hidden md:block bg-white/5 p-4 border-b border-white/10">
         <div className="flex items-start gap-3">
           <div className={`${bgColor}/20 p-2.5 rounded-lg flex-shrink-0`}>
             {renderIcon(`w-5 h-5 ${color}`)}

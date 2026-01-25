@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Info, 
   Calendar,
@@ -22,7 +22,11 @@ import {
   Car,
   FileCheck,
   AlertOctagon,
-  Map as MapIcon
+  Map as MapIcon,
+  X,
+  UserCheck,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 
 const InclusionsSection = ({ packageData }) => {
@@ -39,7 +43,7 @@ const InclusionsSection = ({ packageData }) => {
             group.title.toLowerCase().includes("transfer") || group.title.toLowerCase().includes("transport") ? "Car" :
             group.title.toLowerCase().includes("tour") || group.title.toLowerCase().includes("activity") ? "Map" :
             group.title.toLowerCase().includes("visa") || group.title.toLowerCase().includes("requirement") ? "FileCheck" : "AlertOctagon",
-      items: group.items.map(item => item.replace(/^\\item\s*/, '').replace(/\*\*(.*?)\*\*/g, '$1'))
+      items: group.items.map(item => item.replace(/^\\item\s*/, '').replace(/\\/g, "").replace(/\*\*(.*?)\*\*/g, '$1').replace(/^["'\s]+|["'\s]+,?$/g, "").trim())
     })) || [
       {
         title: "Hotel Policies",
@@ -102,7 +106,7 @@ const InclusionsSection = ({ packageData }) => {
 
     // 2. Points to Remember
     const pointsSection = sections.find(s => s.id === "points_to_remember");
-    const dynamicPointsToRemember = pointsSection?.items || [
+    const dynamicPointsToRemember = pointsSection?.items?.map(item => item.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()) || [
       "Dress Code: Wear comfortable walking shoes; modest clothing recommended for religious sites",
       "Weather Preparation: Pack light clothing for summer (April-October); warm layers for early mornings/evenings in mountain areas",
       "Sun Protection: Carry sunscreen, hat, and sunglasses – UV exposure is high in Azerbaijan",
@@ -125,19 +129,19 @@ const InclusionsSection = ({ packageData }) => {
     const dynamicTravelPrep = prepSection ? {
       beforeDeparture: {
         title: prepSection.subsections[0].title,
-        sections: prepSection.subsections[0].groups.map(g => ({ subtitle: g.title, items: g.items }))
+        sections: prepSection.subsections[0].groups.map(g => ({ subtitle: g.title, items: g.items.map(item => item.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()) }))
       },
       uponArrival: {
         title: prepSection.subsections[1].title,
-        sections: prepSection.subsections[1].groups.map(g => ({ subtitle: g.title, items: g.items }))
+        sections: prepSection.subsections[1].groups.map(g => ({ subtitle: g.title, items: g.items.map(item => item.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()) }))
       },
       duringTravel: {
         title: prepSection.subsections[2].title,
-        sections: prepSection.subsections[2].groups.map(g => ({ subtitle: g.title, items: g.items }))
+        sections: prepSection.subsections[2].groups.map(g => ({ subtitle: g.title, items: g.items.map(item => item.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()) }))
       },
       usefulInfo: {
         title: prepSection.subsections[3].title,
-        sections: prepSection.subsections[3].groups.map(g => ({ subtitle: g.title, items: g.items }))
+        sections: prepSection.subsections[3].groups.map(g => ({ subtitle: g.title, items: g.items.map(item => item.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()) }))
       }
     } : {
       beforeDeparture: {
@@ -195,6 +199,32 @@ const InclusionsSection = ({ packageData }) => {
   const [isExcludesExpanded, setIsExcludesExpanded] = useState(false);
   const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [isPointsExpanded, setIsPointsExpanded] = useState(false);
+  const [expandedPrepSections, setExpandedPrepSections] = useState({ "beforeDeparture-0": true }); // Tracking Travel Prep subsections
+  const [expandedNoteSections, setExpandedNoteSections] = useState({}); // Tracking Important Notes subsections
+
+  useEffect(() => {
+    // Open the first section of a tab by default when switching tabs
+    const firstKey = `${prepTab}-0`;
+    setExpandedPrepSections(prev => ({ ...prev, [firstKey]: true }));
+  }, [prepTab]);
+
+  const togglePrepSection = (tabId, sectionIdx) => {
+    const key = `${tabId}-${sectionIdx}`;
+    setExpandedPrepSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const toggleNoteSection = (sectionIdx) => {
+    setExpandedNoteSections(prev => ({ ...prev, [sectionIdx]: !prev[sectionIdx] }));
+  };
+  
+  const shortenNoteTabLabel = (label) => {
+    if (label.toLowerCase().includes("hotel")) return "Hotels";
+    if (label.toLowerCase().includes("transfer") || label.toLowerCase().includes("transport")) return "Transfers";
+    if (label.toLowerCase().includes("tour") || label.toLowerCase().includes("activity")) return "Activities";
+    if (label.toLowerCase().includes("visa") || label.toLowerCase().includes("requirement")) return "Requirements";
+    if (label.toLowerCase().includes("cancellation") || label.toLowerCase().includes("policy")) return "Policies";
+    return label.split(' ')[0];
+  };
 
   const tabs = [
     { id: "notes", label: "Notes", icon: Info },
@@ -554,138 +584,103 @@ const InclusionsSection = ({ packageData }) => {
     <div id="inclusions" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-4 md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
       {/* Standard Header */}
       <div className="mb-[15px] text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[9px] md:text-[10px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[10px] md:text-[11px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
           <span className="text-xs">📋</span> Plan Details
         </div>
         <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
-        <p className="text-xs md:text-lg font-medium text-slate-600">Everything you need for a seamless journey</p>
+        <p className="text-sm md:text-xl font-medium text-slate-600">Everything you need for a seamless journey</p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Includes Card */}
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-brand-green/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        {/* Inclusions Card */}
+        <div className="border border-blue-100 rounded-3xl overflow-hidden shadow-sm">
+          {/* Header */}
+          <div className="bg-blue-700 p-6 flex items-center gap-4">
+             <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+               <CheckCircle2 className="w-6 h-6 text-white" />
+             </div>
+             <div>
+               <h5 className="text-xl font-black text-white tracking-tight">What's Included</h5>
+               <p className="text-blue-100/80 text-xs font-bold uppercase tracking-widest">{packageData?.includes?.length || 0} benefits included</p>
+             </div>
+          </div>
           
-          <div className="relative h-full bg-white border border-slate-200 group-hover:border-brand-green/30 rounded-3xl overflow-hidden transition-all duration-500 shadow-sm">
-            {/* Header */}
-            <div className="relative px-4 md:px-6 py-4 md:py-6 bg-brand-green border-b border-brand-green/10">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="relative w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-inner">
-                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
+          {/* List */}
+          <div className="p-4 space-y-3 bg-white">
+            {(isIncludesExpanded ? packageData?.includes : packageData?.includes?.slice(0, 8))?.map((item, index) => (
+              <div 
+                key={index}
+                className="flex items-start gap-4 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100/50"
+              >
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center mt-0.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                 </div>
-                <div>
-                  <h5 className="text-xl font-black text-white tracking-tight">What's Included</h5>
-                  <p className="text-emerald-100 text-xs font-medium">{packageData?.includes?.length || 0} benefits included</p>
-                </div>
+                <span className="text-slate-800 text-sm md:text-base font-bold leading-relaxed">
+                  {typeof item === "string" ? item : item.title}
+                </span>
               </div>
-            </div>
-            
-            {/* Items List */}
-            <div className="p-3 md:p-4 space-y-2 text-left">
-              {(isIncludesExpanded ? packageData?.includes : packageData?.includes?.slice(0, 6))?.map((item, index) => (
-                <div 
-                  key={index}
-                  className="group/item flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-emerald-50 hover:border-emerald-100 hover:shadow-sm transition-all duration-300"
-                >
-                  <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm group-hover/item:scale-110 transition-transform">
-                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700 text-sm font-medium leading-relaxed group-hover/item:text-slate-900 transition-colors">
-                    {typeof item === "string" ? item : item.title}
-                  </span>
-                </div>
-              ))}
+            ))}
 
-              {packageData?.includes?.length > 6 && (
-                <div className="pt-2 px-1">
-                  <button
-                    onClick={() => setIsIncludesExpanded(!isIncludesExpanded)}
-                    className="w-full py-2.5 text-[11px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/50 rounded-xl transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
-                  >
-                    {isIncludesExpanded ? 'Show Less' : `View All (${packageData.includes.length})`}
-                    <svg 
-                      className={`w-3.5 h-3.5 transition-transform duration-300 ${isIncludesExpanded ? 'rotate-180' : ''}`} 
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                </div>
-              )}
-            </div>
-            
-            <div className="h-1 bg-gradient-to-r from-transparent via-brand-green/20 to-transparent" />
+            {packageData?.includes?.length > 8 && (
+              <div className="pt-2 px-2">
+                <button
+                  onClick={() => setIsIncludesExpanded(!isIncludesExpanded)}
+                  className="w-full py-3 text-blue-600 font-black text-xs uppercase tracking-widest hover:bg-blue-50 rounded-xl transition-all flex items-center justify-center gap-2"
+                >
+                  {isIncludesExpanded ? 'Collapse' : `View All (${packageData.includes.length})`}
+                  <svg className={`w-4 h-4 transition-transform ${isIncludesExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Exclusions Card */}
-        {packageData?.excludes && packageData.excludes.length > 0 && (
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-rose-500/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-            
-            <div className="relative h-full bg-white border border-slate-200 group-hover:border-rose-300/30 rounded-3xl overflow-hidden transition-all duration-500 shadow-sm">
-              {/* Header */}
-              <div className="relative px-4 md:px-6 py-4 md:py-6 bg-rose-500 border-b border-rose-500/10">
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <div className="relative w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-inner">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <h5 className="text-xl font-black text-white tracking-tight">Exclusions</h5>
-                    <p className="text-rose-100 text-xs font-medium">Items you'll need to arrange</p>
-                  </div>
-                </div>
-              </div>
-                            {/* Items List */}
-                <div className="p-3 md:p-4 space-y-2 text-left">
-                  {(isExcludesExpanded ? packageData.excludes : packageData.excludes.slice(0, 6)).map((item, index) => (
-                    <div 
-                      key={index}
-                      className="group/item flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100/50 hover:bg-rose-50 hover:border-rose-100 hover:shadow-sm transition-all duration-300"
-                    >
-                      <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-full bg-rose-100 flex items-center justify-center group-hover/item:bg-rose-500 transition-all">
-                        <svg className="w-3 h-3 text-rose-500 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </div>
-                      <span className="text-slate-600 text-sm font-medium leading-relaxed group-hover/item:text-slate-900 transition-colors">
-                        {typeof item === "string" ? item : item.title}
-                      </span>
-                    </div>
-                  ))}
-
-                  {packageData.excludes.length > 6 && (
-                    <div className="pt-2 px-1">
-                      <button
-                        onClick={() => setIsExcludesExpanded(!isExcludesExpanded)}
-                        className="w-full py-2.5 text-[11px] font-black uppercase tracking-widest text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200/50 rounded-xl transition-all flex items-center justify-center gap-2 group/btn shadow-sm"
-                      >
-                        {isExcludesExpanded ? 'Show Less' : `View All (${packageData.excludes.length})`}
-                        <svg 
-                          className={`w-3.5 h-3.5 transition-transform duration-300 ${isExcludesExpanded ? 'rotate-180' : ''}`} 
-                          fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              
-              <div className="h-1 bg-gradient-to-r from-transparent via-rose-500/20 to-transparent" />
-            </div>
+        <div className="border border-rose-100 rounded-3xl overflow-hidden shadow-sm">
+          {/* Header */}
+          <div className="bg-rose-500 p-6 flex items-center gap-4">
+             <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+               <X className="w-6 h-6 text-white" />
+             </div>
+             <div>
+               <h5 className="text-xl font-black text-white tracking-tight">Exclusions</h5>
+               <p className="text-rose-100/80 text-xs font-bold uppercase tracking-widest">Items you'll need to arrange</p>
+             </div>
           </div>
-        )}
+          
+          {/* List */}
+          <div className="p-4 space-y-3 bg-white">
+            {(isExcludesExpanded ? packageData.excludes : packageData.excludes.slice(0, 8)).map((item, index) => (
+              <div 
+                key={index}
+                className="flex items-start gap-4 p-4 bg-rose-50/30 rounded-2xl border border-rose-100/50"
+              >
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center mt-0.5">
+                  <X className="w-3.5 h-3.5 text-rose-500" />
+                </div>
+                <span className="text-slate-700 text-sm md:text-base font-bold leading-relaxed">
+                  {typeof item === "string" ? item : item.title}
+                </span>
+              </div>
+            ))}
+
+            {packageData.excludes.length > 8 && (
+              <div className="pt-2 px-2">
+                <button
+                  onClick={() => setIsExcludesExpanded(!isExcludesExpanded)}
+                  className="w-full py-3 text-rose-500 font-black text-xs uppercase tracking-widest hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center gap-2"
+                >
+                  {isExcludesExpanded ? 'Collapse' : `View All (${packageData.excludes.length})`}
+                  <svg className={`w-4 h-4 transition-transform ${isExcludesExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       
       {/* Mobile Tabs Navigation (REMOVED - Using unified vertical layout) */}
@@ -707,7 +702,7 @@ const InclusionsSection = ({ packageData }) => {
 
           {/* Mobile Tabs */}
           <div className="md:hidden mb-4">
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex flex-wrap gap-2 pb-2">
               {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
                 const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
                 const isActive = activeNotesTab === idx;
@@ -715,30 +710,30 @@ const InclusionsSection = ({ packageData }) => {
                   <button
                     key={idx}
                     onClick={() => setActiveNotesTab(idx)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all border ${
                       isActive
-                        ? 'bg-brand-blue text-white shadow-md'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-brand-blue text-white shadow-md border-brand-blue'
+                        : 'bg-blue-50/50 text-slate-600 border-brand-blue/30 hover:bg-blue-100/50'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
-                    {note.title}
+                    {shortenNoteTabLabel(note.title)}
                   </button>
                 );
               })}
             </div>
 
-            {/* Active Tab Content - Mobile */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <ul className="space-y-2">
+            {/* Active Tab Content - Mobile - No Boxes */}
+            <div className="pt-4 border-t border-slate-100">
+              <ul className="space-y-4">
                 {TRAVEL_GUIDE_DATA.importantNotes[activeNotesTab].items.map((item, i) => {
                   const parts = item.match(/^([^:]+):\s*(.*)/);
                   const key = parts ? parts[1] : null;
                   const val = parts ? parts[2] : item;
 
                   return (
-                    <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                      <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                    <li key={i} className="flex items-start gap-4 text-sm text-slate-600 leading-relaxed">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
                       <span>
                         {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
                         {val}
@@ -750,27 +745,30 @@ const InclusionsSection = ({ packageData }) => {
             </div>
           </div>
 
-          {/* Desktop Grid */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Desktop Grid - No Boxes */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
             {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
               const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
+              const isExpanded = expandedNoteSections[idx];
+              const visibleItems = isExpanded ? note.items : note.items.slice(0, 3);
+              
               return (
-                <div key={idx} className="bg-slate-50 rounded-2xl p-5 border border-slate-100 hover:shadow-md transition-all group">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm text-slate-500 group-hover:text-brand-blue group-hover:border-brand-blue/30 transition-colors">
+                <div key={idx} className="group">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-brand-blue/10 group-hover:text-brand-blue transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <h4 className="font-bold text-slate-800 text-sm">{note.title}</h4>
+                    <h4 className="font-bold text-slate-900 text-sm">{note.title}</h4>
                   </div>
-                  <ul className="space-y-2">
-                    {note.items.map((item, i) => {
+                  <ul className="space-y-3">
+                    {visibleItems.map((item, i) => {
                       const parts = item.match(/^([^:]+):\s*(.*)/);
                       const key = parts ? parts[1] : null;
                       const val = parts ? parts[2] : item;
 
                       return (
-                        <li key={i} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                          <span className="mt-1.5 w-1 h-1 rounded-full bg-slate-400 flex-shrink-0" />
+                        <li key={i} className="flex items-start gap-3 text-sm md:text-base text-slate-600 hover:text-slate-900 transition-colors leading-relaxed">
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
                           <span>
                             {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
                             {val}
@@ -779,6 +777,22 @@ const InclusionsSection = ({ packageData }) => {
                       );
                     })}
                   </ul>
+                  {note.items.length > 3 && (
+                    <button
+                      onClick={() => toggleNoteSection(idx)}
+                      className="mt-3 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
+                    >
+                      {isExpanded ? (
+                        <>
+                          <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-3 h-3" /> <span>Read More ({note.items.length - 3})</span>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               );
             })}
@@ -796,7 +810,7 @@ const InclusionsSection = ({ packageData }) => {
 
           {/* Mobile Tabs */}
           <div className="md:hidden mb-4">
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex flex-wrap gap-2 pb-2">
               {[
                 { id: 'preparation', label: 'Preparation', icon: Briefcase },
                 { id: 'safety', label: 'Safety', icon: ShieldCheck },
@@ -809,10 +823,10 @@ const InclusionsSection = ({ packageData }) => {
                   <button
                     key={tab.id}
                     onClick={() => setActivePointsTab(tab.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all border ${
                       isActive
-                        ? 'bg-brand-blue text-white shadow-md'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-brand-blue text-white shadow-md border-brand-blue'
+                        : 'bg-blue-50/50 text-slate-600 border-brand-blue/30 hover:bg-blue-100/50'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -822,9 +836,9 @@ const InclusionsSection = ({ packageData }) => {
               })}
             </div>
 
-            {/* Active Tab Content - Mobile */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <div className="space-y-2">
+            {/* Active Tab Content - Mobile - No Boxes */}
+            <div className="pt-4 border-t border-slate-100">
+              <div className="space-y-4">
                 {TRAVEL_GUIDE_DATA.pointsToRemember
                   .filter(point => {
                     const lowerPoint = point.toLowerCase();
@@ -847,8 +861,8 @@ const InclusionsSection = ({ packageData }) => {
                   .map((point, idx) => {
                     const [title, desc] = point.split(": ");
                     return (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed">
-                        <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
+                      <div key={idx} className="flex items-start gap-3 text-sm text-slate-600 leading-relaxed">
+                        <CheckCircle2 className="w-4 h-4 text-brand-blue/50 mt-0.5 flex-shrink-0" />
                         <span>
                           {desc ? (
                             <>
@@ -865,17 +879,19 @@ const InclusionsSection = ({ packageData }) => {
             </div>
           </div>
 
-          {/* Desktop Grid */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-            {TRAVEL_GUIDE_DATA.pointsToRemember.map((point, idx) => {
+          {/* Desktop Grid - Minimal List */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6">
+            {(isPointsExpanded ? TRAVEL_GUIDE_DATA.pointsToRemember : TRAVEL_GUIDE_DATA.pointsToRemember.slice(0, 6)).map((point, idx) => {
                const [title, desc] = point.split(": ");
                return (
-                 <div key={idx} className="flex gap-3 items-start p-3 bg-slate-50 rounded-xl border border-slate-100 hover:bg-white transition-colors">
-                   <CheckCircle2 className="w-4 h-4 text-brand-blue mt-0.5 flex-shrink-0" />
-                   <div className="text-sm text-slate-700 leading-snug">
+                 <div key={idx} className="flex gap-3 items-start group">
+                   <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-brand-blue/10 transition-colors">
+                    <CheckCircle2 className="w-3 h-3 text-brand-blue" />
+                   </div>
+                   <div className="text-base text-slate-700 leading-relaxed group-hover:text-slate-900 transition-colors">
                      {desc ? (
                        <>
-                         <span className="font-bold text-brand-blue">{title}:</span> {desc}
+                         <span className="font-bold text-slate-900">{title}:</span> {desc}
                        </>
                      ) : (
                        <span className="font-medium">{point}</span>
@@ -885,6 +901,28 @@ const InclusionsSection = ({ packageData }) => {
                );
             })}
           </div>
+
+          {/* Minimal Read More / Show Less Button */}
+          {TRAVEL_GUIDE_DATA.pointsToRemember.length > 6 && (
+            <div className="pt-6 border-t border-slate-50 mt-6 md:block hidden">
+              <button
+                onClick={() => setIsPointsExpanded(!isPointsExpanded)}
+                className="group flex items-center gap-2 text-brand-blue font-bold text-sm uppercase tracking-widest"
+              >
+                {isPointsExpanded ? (
+                  <>
+                    <ChevronUp className="w-4 h-4" />
+                    <span>Collapse Points</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4" />
+                    <span>Expand {TRAVEL_GUIDE_DATA.pointsToRemember.length - 6} More Points</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
@@ -898,12 +936,12 @@ const InclusionsSection = ({ packageData }) => {
 
           {/* Mobile Tabs */}
           <div className="md:hidden mb-4">
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+            <div className="flex flex-wrap gap-2 pb-2">
               {[
-                { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
-                { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
-                { id: 'duringTravel', label: 'During Stay', icon: MapIcon },
-                { id: 'usefulInfo', label: 'Good to Know', icon: Info }
+                { id: 'beforeDeparture', label: 'Before', icon: Calendar },
+                { id: 'uponArrival', label: 'Arrival', icon: Plane },
+                { id: 'duringTravel', label: 'Stay', icon: MapIcon },
+                { id: 'usefulInfo', label: 'Info', icon: Info }
               ].map((tab) => {
                 const Icon = tab.icon;
                 const isActive = prepTab === tab.id;
@@ -911,10 +949,10 @@ const InclusionsSection = ({ packageData }) => {
                   <button
                     key={tab.id}
                     onClick={() => setPrepTab(tab.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all border ${
                       isActive
-                        ? 'bg-brand-blue text-white shadow-md'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-brand-blue text-white shadow-md border-brand-blue'
+                        : 'bg-blue-50/50 text-slate-600 border-brand-blue/30 hover:bg-blue-100/50'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -924,25 +962,41 @@ const InclusionsSection = ({ packageData }) => {
               })}
             </div>
 
-            {/* Active Tab Content - Mobile */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <div className="space-y-4">
-                {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
-                  <div key={idx}>
-                    <h5 className="font-bold text-slate-900 text-xs mb-2 flex items-center gap-2">
-                      <div className="w-1 h-3 rounded-full bg-brand-blue"></div>
-                      {sec.subtitle}
-                    </h5>
-                    <ul className="space-y-1.5">
-                      {sec.items.map((item, i) => (
-                        <li key={i} className="text-xs text-slate-600 flex items-start gap-2 leading-relaxed">
-                          <span className="w-1 h-1 rounded-full bg-slate-400 mt-1.5 shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+            {/* Active Tab Content - Mobile - Accordion Style */}
+            <div className="pt-4 border-t border-slate-100">
+              <div className="space-y-3">
+                {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
+                  const sectionKey = `${prepTab}-${idx}`;
+                  const isExpanded = expandedPrepSections[sectionKey];
+                  
+                  return (
+                    <div key={idx} className="border border-slate-100 rounded-xl overflow-hidden bg-slate-50/50">
+                      <button 
+                        onClick={() => togglePrepSection(prepTab, idx)}
+                        className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-slate-100/50"
+                      >
+                        <h5 className="font-black text-slate-900 text-[11px] uppercase tracking-widest flex items-center gap-3">
+                          <div className={`w-2 h-2 rounded-full transition-colors ${isExpanded ? 'bg-orange-500' : 'bg-slate-300'}`}></div>
+                          {sec.subtitle}
+                        </h5>
+                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-orange-500' : ''}`} />
+                      </button>
+                      
+                      {isExpanded && (
+                        <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1 duration-300">
+                          <ul className="space-y-3 ml-2 border-l-2 border-orange-100 pl-4 py-1">
+                            {sec.items.map((item, i) => (
+                              <li key={i} className="text-sm text-slate-600 flex items-start gap-3 leading-relaxed">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2 shrink-0" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -960,7 +1014,7 @@ const InclusionsSection = ({ packageData }) => {
                  <button
                    key={tab.id}
                    onClick={() => setPrepTab(tab.id)}
-                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-sm font-bold whitespace-nowrap transition-colors ${
+                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-base font-bold whitespace-nowrap transition-colors ${
                      prepTab === tab.id
                        ? "border-brand-blue text-brand-blue"
                        : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
@@ -972,32 +1026,45 @@ const InclusionsSection = ({ packageData }) => {
                ))}
             </div>
 
-            {/* Tab Content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
-               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => (
-                  <div key={idx} className="bg-slate-50 rounded-xl p-5 border border-slate-100 hover:border-brand-blue/20 transition-colors group">
-                     <h5 className="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
-                        {prepTab === 'uponArrival' ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        ) : prepTab === 'duringTravel' ? (
-                            <MapPin className="w-4 h-4 text-brand-blue" />
-                        ) : prepTab === 'usefulInfo' ? (
-                            <Info className="w-4 h-4 text-amber-500" />
-                        ) : (
-                            <div className="w-1.5 h-4 rounded-full bg-brand-blue group-hover:h-6 transition-all duration-300"></div>
-                        )}
-                        {sec.subtitle}
-                     </h5>
-                     <ul className="space-y-2.5">
-                        {sec.items.map((item, i) => (
-                           <li key={i} className="text-xs text-slate-600 flex items-start gap-2.5 leading-relaxed">
-                              <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-1.5 shrink-0 group-hover:bg-brand-blue/50 transition-colors" />
-                              <span>{item}</span>
-                           </li>
-                        ))}
-                     </ul>
-                  </div>
-               ))}
+            {/* Tab Content - No Boxes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 animate-in fade-in duration-300">
+               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
+                  const sectionKey = `${prepTab}-${idx}`;
+                  const isExpanded = expandedPrepSections[sectionKey];
+                  const visibleItems = isExpanded ? sec.items : sec.items.slice(0, 4);
+
+                  return (
+                    <div key={idx} className="space-y-4">
+                       <h5 className="font-black text-slate-900 text-base flex items-center gap-3 border-l-4 border-brand-blue pl-4">
+                          {sec.subtitle}
+                       </h5>
+                       <ul className="space-y-4 ml-7">
+                          {visibleItems.map((item, i) => (
+                             <li key={i} className="text-sm md:text-base text-slate-600 flex items-start gap-4 leading-relaxed hover:text-slate-900 transition-colors">
+                                <span className="w-2 h-2 rounded-full bg-slate-200 mt-2 shrink-0" />
+                                <span>{item}</span>
+                             </li>
+                          ))}
+                       </ul>
+                       {sec.items.length > 4 && (
+                          <button
+                            onClick={() => togglePrepSection(prepTab, idx)}
+                            className="ml-7 mt-2 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
+                          >
+                            {isExpanded ? (
+                              <>
+                                <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="w-3 h-3" /> <span>Read More ({sec.items.length - 4})</span>
+                              </>
+                            )}
+                          </button>
+                       )}
+                    </div>
+                  );
+               })}
             </div>
           </div>
         </div>

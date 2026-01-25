@@ -68,23 +68,10 @@ export function parseFaqContent(content) {
       }
     }
 
-    return faqArray.length
-      ? faqArray
-      : [
-          {
-            question: "Note",
-            answer: "No FAQ content available at the moment.",
-          },
-        ];
+    return faqArray;
   } catch (error) {
     console.error("Error parsing FAQ content:", error);
-    return [
-      {
-        question: "Error",
-        answer:
-          "There was an error parsing the FAQ content. Please try again later.",
-      },
-    ];
+    return [];
   }
 }
 

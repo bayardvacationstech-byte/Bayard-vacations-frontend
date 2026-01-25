@@ -192,7 +192,7 @@ const PackageHotels = ({ packageData }) => {
   );
 
   return (
-    <section id="hotels-section" className="relative bg-transparent text-slate-900 pb-[30px] pt-0 md:py-8 overflow-hidden scroll-mt-24">
+    <section id="hotels-section" className="relative bg-transparent text-slate-900 pb-4 pt-0 md:py-8 overflow-hidden scroll-mt-24">
       {/* Subtle Background Decoration */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse"></div>
@@ -200,7 +200,7 @@ const PackageHotels = ({ packageData }) => {
       </div>
       <Container>
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 md:gap-4 lg:gap-8 mb-[15px] relative">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 md:gap-4 lg:gap-8 mb-2 relative">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue mb-3 md:mb-4 uppercase tracking-widest">
               <span className="text-xs">🏨</span> Handpicked Stays
@@ -211,7 +211,7 @@ const PackageHotels = ({ packageData }) => {
           </div>
 
           {/* New Filter UI - Horizontal Scroll on Mobile */}
-          <div className="flex overflow-x-auto lg:flex-wrap justify-center lg:justify-start gap-2 p-1.5 bg-white rounded-2xl border-2 border-slate-100 w-full lg:w-fit scrollbar-hide">
+          <div className="flex overflow-x-auto lg:flex-wrap justify-center lg:justify-start gap-1 p-1.5 bg-white rounded-full border border-slate-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] w-fit lg:w-fit scrollbar-hide mx-auto lg:mx-0">
             {categories.sort((a, b) => {
               const order = ['twostar', 'threestar', 'fourstar', 'fivestar'];
               return order.indexOf(a) - order.indexOf(b);
@@ -219,10 +219,10 @@ const PackageHotels = ({ packageData }) => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 md:px-5 md:py-2.5 rounded-xl text-[10px] md:text-[11px] font-bold uppercase tracking-wider transition-all duration-300 whitespace-nowrap border-2 ${
+                className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-500 whitespace-nowrap ${
                   selectedCategory === cat
-                    ? "bg-brand-blue text-white border-brand-blue shadow-lg shadow-brand-blue/20"
-                    : "text-slate-500 hover:text-brand-blue hover:bg-slate-50 border-transparent hover:border-slate-200"
+                    ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/30 scale-[1.02]"
+                    : "text-slate-400 hover:text-slate-600"
                 }`}
               >
                 {categoryLabels[cat] || cat}
@@ -239,7 +239,7 @@ const PackageHotels = ({ packageData }) => {
             slidesPerView={1.22}
             spaceBetween={16}
             freeMode={true}
-            className="!pb-12"
+            className="!pb-6"
           >
             {currentHotels.map((hotel, idx) => (
               <SwiperSlide key={hotel.id || idx}>

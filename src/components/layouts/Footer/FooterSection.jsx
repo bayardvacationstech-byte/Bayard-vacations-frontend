@@ -32,11 +32,11 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
       <div className="relative">
         <div
           style={{
-            maxHeight: isExpanded ? "2000px" : "4.6rem", // Increased for comfortable 3-line fit
+            maxHeight: isExpanded ? "2000px" : "4.6rem",
             overflow: "hidden",
             transition: "max-height 0.4s ease-in-out",
           }}
-          className="relative"
+          className={cn("relative", !isExpanded && "max-md:!max-h-none")}
         >
           <div
             ref={contentRef}
@@ -62,7 +62,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
         {shouldShowButton && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-3 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent hover:from-yellow-300 hover:to-yellow-500 transition-all group"
+            className="hidden md:flex mt-3 items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent hover:from-yellow-300 hover:to-yellow-500 transition-all group"
             style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}
           >
             {isExpanded ? (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { splitCityStr } from "@/lib/utils";
-import { Download } from "lucide-react";
+import { Download, Sparkles } from "lucide-react";
 
 const ItinerarySection = ({ packageData }) => {
   const [expandedDays, setExpandedDays] = useState([0]);
@@ -44,21 +44,21 @@ const ItinerarySection = ({ packageData }) => {
           </p>
         </div>
         
-        <div className="flex gap-2 md:gap-3 mt-4 lg:mt-0 lg:flex-shrink-0">
+        <div className="flex w-full lg:w-auto gap-2 md:gap-3 mt-4 lg:mt-0 lg:flex-shrink-0">
           <button
             onClick={handleDownloadItinerary}
-            className="flex items-center justify-center gap-2 px-3 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-brand-blue to-blue-600 hover:from-blue-600 hover:to-brand-blue text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 hover:shadow-xl hover:shadow-brand-blue/30 active:scale-95"
+            className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-brand-blue to-blue-600 hover:from-blue-600 hover:to-brand-blue text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 hover:shadow-xl hover:shadow-brand-blue/30 active:scale-95"
           >
             <Download className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            <span className="hidden sm:inline">Download</span>
-            <span className="sm:hidden">PDF</span>
+            <span className="hidden sm:inline">Download Itinerary PDF</span>
+            <span className="sm:hidden">ITENARY PDF</span>
           </button>
           <button
             onClick={toggleAllDays}
-            className="flex-1 sm:flex-none px-3 md:px-6 py-2.5 md:py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-xl md:rounded-2xl text-brand-blue font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
+            className="flex-1 lg:flex-none px-3 md:px-6 py-2.5 md:py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-xl md:rounded-2xl text-brand-blue font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
           >
             <span className="hidden sm:inline">{expandedDays.length === packageData?.itineraries?.length ? "Collapse All Days" : "Expand All Days"}</span>
-            <span className="sm:hidden">{expandedDays.length === packageData?.itineraries?.length ? "Collapse" : "Expand"}</span>
+            <span className="sm:hidden">{expandedDays.length === packageData?.itineraries?.length ? "COLLAPSE" : "EXPAND"}</span>
           </button>
         </div>
       </div>
@@ -102,15 +102,9 @@ const ItinerarySection = ({ packageData }) => {
                           Day {(index + 1).toString().padStart(2, "0")}
                         </div>
                         
-                        {/* Location badge */}
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-brand-green/10 rounded-full text-[10px] md:text-xs font-black text-brand-green border border-brand-green/20 shrink-0">
-                          <span className="w-1 h-1 bg-brand-green rounded-full" />
-                          {day.title?.split('-')[0]?.split('—')[0]?.split('/')[0]?.split(',')[0]?.trim() || cities[index % cities.length] || "Stay"}
-                        </div>
-
                         {/* Title */}
                         <h5 className={`text-[15px] md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
-                          {day.title}
+                          {day.title.includes(":") ? day.title.split(":").slice(1).join(":").trim() : day.title}
                         </h5>
                       </div>
                     </div>
@@ -135,52 +129,105 @@ const ItinerarySection = ({ packageData }) => {
                       <div className="mx-6 h-px bg-slate-100" />
                         
                         <div className="px-4 md:px-6 py-4 md:py-6">
-                          {/* Description with enhanced formatting */}
-                          <div className="space-y-3 mb-6">
-                            {day.description?.split("\n").map((line, lineIndex) => {
-                              if (!line.trim()) return null;
-                              
-                              const formatLine = (content) => {
-                                const colonIndex = content.indexOf(":");
-                                if (colonIndex !== -1) {
-                                  const beforeColon = content.substring(0, colonIndex);
-                                  const afterColon = content.substring(colonIndex);
-                                  return (
-                                    <>
-                                      <span className="font-black text-brand-blue text-base">
-                                        {beforeColon}
+                          {/* Description or Activities with enhanced formatting */}
+                          <div className="space-y-4 mb-6">
+                            {day.activities ? (
+                              <ul className="space-y-4 list-none">
+                                {day.activities.map((act, actIdx) => (
+                                  <li key={actIdx} className="relative pl-6 md:pl-8 text-slate-700 text-sm md:text-base leading-relaxed group/item">
+                                    {/* Vertical Connecting Line */}
+                                    {actIdx !== day.activities.length - 1 && (
+                                      <div className="absolute left-[3px] md:left-[11px] top-4 bottom-[-16px] w-0.5 bg-gradient-to-b from-brand-blue/40 to-transparent" />
+                                    )}
+
+                                    {/* Unique Icon Indicator */}
+                                    <div className="absolute left-0 top-[7px] md:top-1.5 w-1.5 h-1.5 md:w-6 md:h-6 rounded-full md:rounded-lg md:bg-brand-blue/10 flex items-center justify-center transition-all duration-300 md:group-hover/item:bg-brand-blue md:group-hover/item:scale-110 md:shadow-sm md:border md:border-brand-blue/20">
+                                      <div className="w-1.5 h-1.5 md:w-1.5 md:h-1.5 rounded-full bg-brand-blue" />
+                                    </div>
+                                    
+                                    <p className="flex flex-col gap-0.5">
+                                      <span className="font-black text-brand-blue tracking-tight text-[15px] md:text-base">
+                                        {act.activity?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
                                       </span>
-                                      <span className="text-slate-600">{afterColon}</span>
-                                    </>
+                                      <span className="text-slate-500 font-medium text-xs md:text-sm">
+                                        {act.description?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
+                                      </span>
+                                    </p>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              day.description?.split("\n").map((line, lineIndex) => {
+                                if (!line.trim()) return null;
+                                
+                                const formatLine = (content) => {
+                                  const colonIndex = content.indexOf(":");
+                                  if (colonIndex !== -1) {
+                                    const beforeColon = content.substring(0, colonIndex);
+                                    const afterColon = content.substring(colonIndex);
+                                    return (
+                                      <>
+                                        <span className="font-black text-brand-blue text-base">
+                                          {beforeColon}
+                                        </span>
+                                        <span className="text-slate-600">{afterColon}</span>
+                                      </>
+                                    );
+                                  }
+                                  return content;
+                                };
+
+                                // Handle bullet points with icons
+                                if (line.startsWith("•")) {
+                                  const content = line.substring(1).trim();
+                                  return (
+                                    <div 
+                                      key={lineIndex} 
+                                      className="bg-slate-50 rounded-2xl p-4 flex items-start gap-4 mb-3 last:mb-0"
+                                    >
+                                      <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-blue-100/50 flex items-center justify-center">
+                                        <Sparkles className="w-4 h-4 text-blue-600 fill-blue-600" />
+                                      </div>
+                                      <div className="text-slate-700 text-sm leading-relaxed pt-1">
+                                         {formatLine(content)}
+                                      </div>
+                                    </div>
+                                  );
+                                } else if (line.trim()) {
+                                  return (
+                                    <div key={lineIndex} className="text-slate-600 text-sm leading-relaxed pl-1">
+                                      {formatLine(line.trim())}
+                                    </div>
                                   );
                                 }
-                                return content;
-                              };
-
-                              // Handle bullet points with icons
-                              if (line.startsWith("•")) {
-                                const content = line.substring(1).trim();
-                                return (
-                                  <div 
-                                    key={lineIndex} 
-                                    className="flex items-start gap-3 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors group/item"
-                                  >
-                                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-brand-green/10 flex items-center justify-center transition-all">
-                                      <span className="text-brand-green text-xs">✦</span>
-                                    </div>
-                                    <span className="text-slate-700 text-sm leading-relaxed">{formatLine(content)}</span>
-                                  </div>
-                                );
-                              } else if (line.trim()) {
-                                return (
-                                  <div key={lineIndex} className="text-slate-600 text-sm leading-relaxed pl-1">
-                                    {formatLine(line.trim())}
-                                  </div>
-                                );
-                              }
-                              return null;
-                            })}
+                                return null;
+                              })
+                            )}
                           </div>
+
+                          {/* night Stay Footer */}
+                          {day.overnight && (
+                            <div className="mb-6 p-4 bg-blue-50/50 rounded-2xl border border-blue-100 flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                                  <span className="text-xl">🏨</span>
+                                </div>
+                                <div>
+                                  <span className="block text-[10px] font-black text-blue-400 uppercase tracking-widest">Overnight Stay</span>
+                                  <span className="block text-sm font-bold text-slate-900">{day.overnight}</span>
+                                </div>
+                              </div>
+                              {day.meals && day.meals.length > 0 && (
+                                <div className="hidden sm:flex items-center gap-2">
+                                  {day.meals.map((meal, mIdx) => (
+                                    <span key={mIdx} className="px-2 py-1 bg-white rounded-lg text-[9px] font-bold text-slate-500 border border-slate-100 uppercase tracking-wider">
+                                      {meal}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
 
                           {/* Image Gallery - Premium Masonry Style */}
                           {(() => {
