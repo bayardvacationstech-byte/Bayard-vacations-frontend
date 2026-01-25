@@ -62,6 +62,9 @@ const PackagesClient = () => {
   useEffect(() => {
     if (packageData) {
       console.log("Package Data loaded:", packageData);
+      if (packageData.id === "tisYHa5YhXFcZQhdrMt6") {
+        console.log("DEBUG - Specific Package Info:", packageData);
+      }
     }
   }, [packageData]);
 
@@ -103,6 +106,12 @@ const PackagesClient = () => {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Hide main header on mobile mount
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: true }));
+    }
+
     // Clean up any hash from the URL when component mounts
     if (window.location.hash) {
       window.history.replaceState(
@@ -111,6 +120,13 @@ const PackagesClient = () => {
         window.location.pathname + window.location.search
       );
     }
+
+    // Reset header on unmount if needed, though usually navigation handles it
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: false }));
+      }
+    };
   }, []);
 
   // Optimize scroll handling with requestAnimationFrame and caching
@@ -131,11 +147,14 @@ const PackagesClient = () => {
           // 1. Handle Sticky Bar Visibility (Throttled)
           if (Math.abs(scrollY - (window.lastScrollY || 0)) > 10) { // Only update if significant scroll
              const shouldBeAtTop = scrollY > 500; // Trigger point for moving to top
+             const isMobile = window.innerWidth < 1024;
+
              setIsNavAtTop(shouldBeAtTop);
              setShowStickyBar(scrollY > 400); // Show pricing bar when scrolled past 400px
              
              // Dispatch event to hide/show main header
-             window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: shouldBeAtTop }));
+             // On mobile we keep it hidden ("dont show header")
+             window.dispatchEvent(new CustomEvent('hideMainHeader', { detail: isMobile || shouldBeAtTop }));
              
              window.lastScrollY = scrollY;
           }

@@ -48,7 +48,7 @@ const PackageHero = ({ packageData }) => {
   };
 
   return (
-    <section className="relative w-full lg:h-screen bg-slate-950 overflow-hidden flex flex-col lg:block">
+    <section className="relative w-full lg:h-screen bg-gradient-to-br from-[#0146b3] via-[#003488] to-[#0146b3] overflow-hidden flex flex-col lg:block">
       {/* Immersive Background Swiper */}
       <div className="relative lg:absolute lg:inset-0 h-[60vh] md:h-[55vh] lg:h-auto z-0 overflow-hidden">
         <Swiper
@@ -91,8 +91,8 @@ const PackageHero = ({ packageData }) => {
         <Container className="h-full flex flex-col justify-start lg:justify-center pt-6 pb-8 lg:py-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 items-start lg:items-center h-full">
             
-            {/* Title & Info Section */}
-            <div className="lg:col-span-7 lg:mt-0">
+            {/* Title & Info Section - Mobile Only now (since Desktop moved to right) */}
+            <div className="lg:hidden">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -101,14 +101,14 @@ const PackageHero = ({ packageData }) => {
               >
                 {/* Gallery Rail - Mobile Only (Top) */}
                 <div className="w-full mb-4 lg:hidden overflow-hidden">
-                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide snap-x intro-x">
+                  <div className="flex gap-2 overflow-x-auto p-2 scrollbar-hide snap-x intro-x">
                     {validBannerImages.map((image, index) => (
                       <motion.button
                         key={index}
                         onClick={() => swiperRef.current?.slideTo(index)}
                         className={cn(
-                          "relative flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border transition-all snap-start",
-                          currentImageIndex === index ? "border-yellow-400 scale-105" : "border-white/10 opacity-40"
+                          "relative flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border transition-all snap-start",
+                          currentImageIndex === index ? "border-yellow-400 scale-105" : "border-white/10"
                         )}
                       >
                         <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover" />
@@ -183,101 +183,70 @@ const PackageHero = ({ packageData }) => {
               </motion.div>
             </div>
 
-            {/* Price & Action Section */}
-            <div className="lg:col-span-5 flex flex-col items-end gap-4 lg:gap-8">
+            {/* PC Layout - Right Panel */}
+            <div className="hidden lg:flex lg:col-span-5 lg:col-start-8 lg:h-full flex-col justify-center bg-[#0146b3]/95 backdrop-blur-sm -my-8 py-20 px-12 lg:-mr-[calc((100vw-1280px)/2+2rem)] lg:pr-[calc((100vw-1280px)/2+4rem)] xl:-mr-[calc((100vw-1280px)/2+2rem)] xl:pr-[calc((100vw-1280px)/2+4rem)] relative z-30">
+              
+              <div className="space-y-8 w-full max-w-lg">
+                <h1 className="text-white font-bold text-5xl lg:text-6xl leading-tight font-serif">
+                  {title.replace(/ - /g, ' — ')}
+                </h1>
 
-
-              {/* Minimal Line 2: Price + Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className={cn(
-                  "w-full max-w-md relative group",
-                  "lg:bg-white/10 lg:backdrop-blur-2xl lg:border lg:border-white/20 lg:rounded-[2.5rem] lg:p-10 lg:shadow-2xl"
-                )}
-              >
-                <div className="relative z-10">
-                  {/* Desktop Only Labels/Details */}
-                  <div className="hidden lg:block space-y-6 mb-8">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Package Plan</p>
-                        <h3 className="text-white text-2xl font-bold flex items-center gap-2">Premium Gateway</h3>
-                      </div>
-                      <div className="bg-yellow-400 text-slate-900 px-3 py-1 rounded-lg text-[10px] font-black uppercase">Best Value</div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white/5 border border-white/10 rounded-2xl p-4 transition-all duration-300 hover:bg-white/10">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Clock className="w-4 h-4 text-yellow-400" />
-                          <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Duration</span>
-                        </div>
-                        <p className="text-white font-bold text-xl">{packageData?.nights || "0"} Nights</p>
-                      </div>
-                      <div className="bg-white/5 border border-white/10 rounded-2xl p-4 transition-all duration-300 hover:bg-white/10">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Calendar className="w-4 h-4 text-cyan-400" />
-                          <span className="text-white/40 text-[9px] font-black uppercase tracking-widest">Itinerary</span>
-                        </div>
-                        <p className="text-white font-bold text-xl">{packageData?.days || (packageData?.nights ? packageData.nights + 1 : "0")} Days</p>
-                      </div>
-                    </div>
+                {/* Destination Badge */}
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-700/50 rounded-lg flex items-center justify-center border border-blue-500/30">
+                    <MapPin className="text-yellow-400 w-6 h-6" />
                   </div>
-
-                  {/* Line 2 Container: Unified Row on Mobile */}
-                  <div className="hidden lg:flex lg:flex-col items-center lg:items-stretch gap-4">
-                    {/* Price - Condensed for mobile */}
-                    <div className={cn(
-                      "flex-1 lg:flex-none",
-                      "bg-white/5 lg:bg-gradient-to-r lg:from-brand-blue/40 lg:to-cyan-500/40 rounded-xl lg:rounded-2xl px-4 py-2 lg:p-6 flex items-center justify-center lg:block"
-                    )}>
-                      <div className="flex lg:block items-baseline gap-2">
-                        <span className="text-white/60 text-[8px] lg:text-[10px] font-black uppercase tracking-widest lg:mb-1 block lg:inline">From </span>
-                        <span className="text-white font-black text-xl lg:text-5xl tracking-tighter">
-                          ₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Action Button - Compact for mobile */}
-                    <button className="flex-1 bg-white text-slate-900 font-black uppercase tracking-widest text-[10px] lg:text-xs h-[42px] lg:h-auto lg:py-5 rounded-xl lg:rounded-2xl flex items-center justify-center">
-                      Inquire
-                    </button>
+                  <div className="flex flex-col">
+                    <span className="text-yellow-400 text-[10px] font-bold tracking-[0.2em] uppercase">Destination</span>
+                    <span className="text-white font-bold text-xl uppercase tracking-wider">{location}</span>
                   </div>
-
-                  <p className="hidden lg:block text-center text-white/40 text-[9px] font-medium tracking-wider mt-4">
-                    *Taxes & fees included. 24/7 Concierge Support.
-                  </p>
                 </div>
-              </motion.div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-blue-900/40 rounded-2xl p-4 border border-white/5">
+                    <span className="text-white/40 text-[9px] font-bold tracking-[0.2em] uppercase block mb-1">Duration</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold text-white">{packageData?.nights || 0}</span>
+                      <span className="text-yellow-400 font-bold text-sm">N</span>
+                    </div>
+                  </div>
+                  <div className="bg-blue-900/40 rounded-2xl p-4 border border-white/5">
+                    <span className="text-white/40 text-[9px] font-bold tracking-[0.2em] uppercase block mb-1">Days</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold text-white">{packageData?.days || 0}</span>
+                      <span className="text-yellow-400 font-bold text-sm">D</span>
+                    </div>
+                  </div>
+                  <div className="bg-blue-900/40 rounded-2xl p-4 border border-white/5">
+                    <span className="text-yellow-400 text-[9px] font-bold tracking-[0.2em] uppercase block mb-1">From</span>
+                    <div className="text-3xl font-bold text-white">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</div>
+                  </div>
+                </div>
+
+                {/* Gallery Items */}
+                <div className="flex gap-4 pt-4">
+                   {validBannerImages.slice(0, 3).map((image, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => swiperRef.current?.slideTo(index)}
+                      className={cn(
+                        "relative w-36 h-36 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer",
+                        currentImageIndex === index ? "border-yellow-400" : "border-transparent hover:border-white/20"
+                      )}
+                    >
+                      <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover" />
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </Container>
       </div>
 
-      {/* Desktop Floating Gallery Strip */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-6xl px-12 z-30 hidden lg:block">
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-3xl flex justify-center gap-4 shadow-2xl relative">
-          {validBannerImages.map((image, index) => (
-            <motion.button
-              key={index}
-              whileHover={{ y: -5, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => swiperRef.current?.slideTo(index)}
-              className={cn(
-                "relative w-24 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300",
-                currentImageIndex === index ? "border-yellow-400 scale-110 z-10 shadow-lg shadow-yellow-400/20" : "border-transparent opacity-40 hover:opacity-100"
-              )}
-            >
-              <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover" />
-              {currentImageIndex === index && (
-                <div className="absolute inset-0 bg-yellow-400/10 active:bg-transparent" />
-              )}
-            </motion.button>
-          ))}
-        </div>
-      </div>
+
       
       {/* Scroll Indicator */}
       <motion.div 

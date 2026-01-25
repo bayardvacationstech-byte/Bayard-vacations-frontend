@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { splitCityStr } from "@/lib/utils";
-import { ChevronDown, ChevronUp, Clock, MapPin, Users, Plane, Star, Languages, Calendar, CheckCircle2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const OverviewSection = ({ packageData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -45,44 +45,47 @@ const OverviewSection = ({ packageData }) => {
         {/* Quick Facts Grid - Vertical on Mobile, Grid on Desktop */}
         <div className="mb-6 pb-[15px] border-b border-slate-100">
           <div className="md:mx-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6 px-4 md:px-0 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 px-4 md:px-0 md:gap-y-6">
               {visibleHighlights.map((item, idx) => {
-                // Robust Parsing
-                const cleanItem = item.replace(/^\\item\s*/, '');
-                // Matches *Key:* Value or **Key:** Value or Key: Value
-                const match = cleanItem.match(/^(\*{1,2})?(.*?)(\*{1,2})?:\s*(.*)/);
+                // Comprehensive cleaning: remove \item, markdown stars, extra quotes, and trailing commas
+                const cleanedItem = item
+                  .replace(/^\\item\s*/, "") // Remove \item at the beginning
+                  .replace(/\\/g, "") // Remove all backslashes
+                  .replace(/^["'\s]+|["'\s]+,?$/g, "") // Remove leading/trailing quotes and trailing commas
+                  .replace(/\*+/g, "") // Remove markdown stars
+                  .trim();
+                
+                const match = cleanedItem.match(/^(.*?):\s*(.*)/);
                 
                 let label = "";
-                let value = cleanItem;
+                let value = cleanedItem;
                 
                 if (match) {
-                  // match[2] is the label (key)
-                  // match[4] is the value
-                  label = match[2].trim().replace(/\*/g, ''); // Ensure no residual stars
-                  value = match[4].trim();
+                  label = match[1].trim();
+                  value = match[2].trim();
                 }
 
-                // Icon Mapping
-                const getIcon = (label) => {
-                  const l = label.toLowerCase();
-                  if (l.includes("duration")) return <Clock className="w-5 h-5 text-brand-blue" />;
-                  if (l.includes("destination")) return <MapPin className="w-5 h-5 text-emerald-500" />;
-                  if (l.includes("perfect") || l.includes("group") || l.includes("for:")) return <Users className="w-5 h-5 text-orange-500" />;
-                  if (l.includes("style") || l.includes("transfer")) return <Plane className="w-5 h-5 text-blue-500" />;
-                  if (l.includes("highlight")) return <Star className="w-5 h-5 text-amber-400" />;
-                  if (l.includes("language")) return <Languages className="w-5 h-5 text-purple-500" />;
-                  if (l.includes("time") || l.includes("when")) return <Calendar className="w-5 h-5 text-rose-500" />;
-                  return <CheckCircle2 className="w-5 h-5 text-slate-400" />;
-                };
-
+                // Unified Bullet Style (matches Major Highlights)
                 return (
-                  <div key={idx} className="flex gap-4 group w-full flex-shrink-0">
-                    <div className="flex-shrink-0 mt-0.5 p-1.5 bg-slate-50 rounded-lg group-hover:bg-white group-hover:shadow-sm transition-all border border-transparent group-hover:border-slate-100">
-                      {getIcon(label)}
+                  <div key={idx} className="flex items-start gap-3 group">
+                    <div className="flex-shrink-0 mt-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-brand-blue transition-colors"></div>
                     </div>
-                    <div className="space-y-1">
-                      <span className="block text-[10px] font-black text-slate-400 uppercase tracking-wider">{label}</span>
-                      <span className="block text-sm md:text-base font-medium text-slate-700 leading-snug">{value}</span>
+                    <div className="min-w-0 flex-1 text-sm md:text-base leading-relaxed font-bold text-slate-900">
+                      {label ? (
+                        <>
+                          <span className="group-hover:text-brand-blue transition-colors">
+                            {label}:
+                          </span>
+                          <span className="ml-1">
+                            {value}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="group-hover:text-brand-blue transition-colors">
+                          {value}
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
@@ -92,22 +95,24 @@ const OverviewSection = ({ packageData }) => {
 
           {/* View All Button for Highlights */}
           {highlightsItems.length > limit && (
-            <button
-              onClick={() => setIsHighlightsExpanded(!isHighlightsExpanded)}
-              className="mt-6 flex items-center gap-1 text-brand-blue text-[10px] font-black uppercase tracking-widest"
-            >
-              {isHighlightsExpanded ? (
-                <>
-                  <ChevronUp className="w-3.5 h-3.5" />
-                  <span>Show Less</span>
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                  <span>View All ({highlightsItems.length - limit} More)</span>
-                </>
-              )}
-            </button>
+            <div className="pt-1 border-t border-slate-50 w-full">
+              <button
+                onClick={() => setIsHighlightsExpanded(!isHighlightsExpanded)}
+                className="group flex justify-end items-center gap-1 text-orange-500 font-bold text-xs uppercase tracking-widest w-full"
+              >
+                {isHighlightsExpanded ? (
+                  <>
+                    <ChevronUp className="w-4 h-4" />
+                    <span>Show Less</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4" />
+                    <span>View All ({highlightsItems.length - limit} More)</span>
+                  </>
+                )}
+              </button>
+            </div>
           )}
         </div>
 
@@ -124,42 +129,48 @@ const OverviewSection = ({ packageData }) => {
               // 2. Render Based on State
               if (!isExpanded) {
                 // Collapsed: Show condensed text with line clamp
+                const cleanCollapseText = paragraphs.map(p => p.replace(/^["'\s]+|["'\s]+,?$/g, "").trim()).join(" ");
                 return (
                    <p className="text-slate-600 text-sm leading-relaxed font-medium line-clamp-3">
-                    {paragraphs.join(" ")}
+                    {cleanCollapseText}
                   </p>
                 );
               } else {
                 // Expanded: Show full paragraphs with proper spacing
                 return (
                   <div className="space-y-4 animate-in fade-in slide-in-from-top-1 duration-300">
-                    {paragraphs.map((para, idx) => (
-                       <p key={idx} className="text-slate-600 text-sm leading-relaxed font-medium">
-                        {para}
-                      </p>
-                    ))}
+                    {paragraphs.map((para, idx) => {
+                      const cleanPara = para.replace(/^["'\s]+|["'\s]+,?$/g, "").trim();
+                      return (
+                        <p key={idx} className="text-slate-600 text-sm leading-relaxed font-medium">
+                          {cleanPara}
+                        </p>
+                      );
+                    })}
                   </div>
                 );
               }
             })()}
 
             {/* Read More/Less Button */}
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="mt-2 flex items-center gap-1 text-brand-blue hover:text-blue-700 text-sm font-semibold transition-colors"
-            >
-              {isExpanded ? (
-                <>
-                  <span>Show Less</span>
-                  <ChevronUp className="w-3.5 h-3.5" />
-                </>
-              ) : (
-                <>
-                  <span>Read More</span>
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </>
-              )}
-            </button>
+            <div className="pt-1 border-t border-slate-50 w-full mt-2">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="group flex justify-end items-center gap-1 text-orange-500 font-bold text-xs uppercase tracking-widest w-full"
+              >
+                {isExpanded ? (
+                  <>
+                    <ChevronUp className="w-4 h-4" />
+                    <span>Show Less</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4" />
+                    <span>Read More</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

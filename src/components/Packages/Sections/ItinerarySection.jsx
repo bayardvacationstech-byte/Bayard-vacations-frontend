@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { splitCityStr } from "@/lib/utils";
-import { Download } from "lucide-react";
+import { Download, Sparkles } from "lucide-react";
 
 const ItinerarySection = ({ packageData }) => {
   const [expandedDays, setExpandedDays] = useState([0]);
@@ -147,10 +147,10 @@ const ItinerarySection = ({ packageData }) => {
                                     
                                     <p className="flex flex-col gap-0.5">
                                       <span className="font-black text-brand-blue tracking-tight text-[15px] md:text-base">
-                                        {act.activity}
+                                        {act.activity?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
                                       </span>
                                       <span className="text-slate-500 font-medium text-xs md:text-sm">
-                                        {act.description}
+                                        {act.description?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
                                       </span>
                                     </p>
                                   </li>
@@ -183,13 +183,14 @@ const ItinerarySection = ({ packageData }) => {
                                   return (
                                     <div 
                                       key={lineIndex} 
-                                      className="flex items-start gap-2 md:gap-3 py-1"
+                                      className="bg-slate-50 rounded-2xl p-4 flex items-start gap-4 mb-3 last:mb-0"
                                     >
-                                      <div className="flex-shrink-0 w-1.5 md:w-6 h-1.5 md:h-6 mt-1.5 md:mt-0 rounded-full md:rounded-lg md:bg-brand-green/10 flex items-center justify-center">
-                                        <span className="hidden md:inline text-brand-green text-xs">✦</span>
-                                        <div className="md:hidden w-1.5 h-1.5 rounded-full bg-brand-green" />
+                                      <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-blue-100/50 flex items-center justify-center">
+                                        <Sparkles className="w-4 h-4 text-blue-600 fill-blue-600" />
                                       </div>
-                                      <span className="text-slate-700 text-sm leading-relaxed">{formatLine(content)}</span>
+                                      <div className="text-slate-700 text-sm leading-relaxed pt-1">
+                                         {formatLine(content)}
+                                      </div>
                                     </div>
                                   );
                                 } else if (line.trim()) {

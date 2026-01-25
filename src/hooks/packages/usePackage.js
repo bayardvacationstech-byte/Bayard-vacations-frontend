@@ -38,8 +38,8 @@ export function usePackage(slugOrId, options = {}) {
       return await getPackageWithAllReferences(slugOrId, { bySlug });
     },
     enabled: !!slugOrId, // Only run when slugOrId is provided
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 0, // Always fetch fresh data during development
+    gcTime: 0, 
   });
 
   const {

@@ -52,13 +52,13 @@ const WhyBayardVacations = () => {
   ];
 
   return (
-    <section className="bg-white py-8 md:py-10 relative overflow-hidden rounded-3xl border border-slate-100 shadow-sm ">
+    <section className="bg-white py-6 md:py-10 relative overflow-hidden rounded-3xl border border-slate-100 shadow-sm ">
       {/* Decorative Blur */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
 
       <Container>
-        <div className="flex flex-col items-center gap-12 relative z-10">
+        <div className="flex flex-col items-center gap-6 md:gap-12 relative z-10">
           {/* Title - Centered */}
           <div className="text-center px-4">
             <h3 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-[1.1] mb-4">

@@ -40,7 +40,14 @@ const HighlightsSection = ({ packageData }) => {
       <div className="space-y-4 px-4 md:px-0">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 md:gap-y-6">
           {visibleItems.map((item, index) => {
-            const parts = item.split("–");
+            // Comprehensive cleaning: remove \item, all backslashes, extra quotes, and trailing commas
+            const cleanedItem = item
+              .replace(/^\\item\s*/, "") // Remove \item at the beginning
+              .replace(/\\/g, "") // Remove all backslashes
+              .replace(/^["'\s]+|["'\s]+,?$/g, "") // Remove leading/trailing quotes and trailing commas
+              .replace(/\*+/g, "") // Remove markdown stars
+              .trim();
+            const parts = cleanedItem.split("–");
             const title = parts[0].trim();
             const desc = parts.slice(1).join("–").trim();
             
@@ -52,14 +59,14 @@ const HighlightsSection = ({ packageData }) => {
                 <div className="flex-shrink-0 mt-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-brand-blue transition-colors"></div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h4 className="font-bold text-slate-900 text-base md:text-lg leading-tight group-hover:text-brand-blue transition-colors">
-                    {title}
-                  </h4>
+                <div className="min-w-0 flex-1 text-sm md:text-base leading-relaxed font-bold text-slate-900">
+                  <span className="group-hover:text-brand-blue transition-colors">
+                    {title}{desc && ":"}
+                  </span>
                   {desc && (
-                    <p className="text-slate-500 text-sm md:text-base mt-1 leading-relaxed">
+                    <span className="ml-1">
                       {desc}
-                    </p>
+                    </span>
                   )}
                 </div>
               </div>
