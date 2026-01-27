@@ -50,9 +50,6 @@ export function useCuratedPackages(packageType, initialPackages = []) {
       }
 
       // If not found in cache, fetch from Firebase
-      console.log(
-        `No curated ${packageType} packages found in cache, fetching from Firebase`
-      );
       return await getCuratedPackages(packageType);
     },
     enabled: !!packageType,

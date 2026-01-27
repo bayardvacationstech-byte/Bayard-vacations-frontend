@@ -38,7 +38,6 @@ const FaqRenderer = ({ content, onError }) => {
       handleDOMEvents: {
         // Handle any parsing/rendering errors
         error: (view, event) => {
-          console.error("Tiptap rendering error:", event);
           setHasError(true);
           return true;
         },
@@ -56,7 +55,6 @@ const FaqRenderer = ({ content, onError }) => {
         editor.commands.setContent(content);
         setHasError(false);
       } catch (error) {
-        console.error("Error setting content in Tiptap:", error);
         setHasError(true);
       }
     }

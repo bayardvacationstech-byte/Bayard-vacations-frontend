@@ -22,7 +22,6 @@ export default function ProtectedLayout({ children }) {
 
   useEffect(() => {
     if (!userValid) {
-      console.log("No user found, redirecting to login");
       router.replace(`/login?callback=${encodeURIComponent(callbackUrl)}`);
     }
   }, [userValid, router, callbackUrl]);

@@ -24,21 +24,26 @@ const HighlightsSection = ({ packageData }) => {
   )?.items || [];
 
 
-  const limit = isMobile ? 3 : 6;
+  const limit = isMobile ? 4 : 6;
   const visibleItems = isExpanded ? highlightItems : highlightItems.slice(0, limit);
 
   return (
-    <div id="highlights-section" className="md:bg-white md:rounded-3xl p-0 md:p-6 md:border md:border-slate-100 md:shadow-sm scroll-mt-32">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6 px-4 md:px-0">
-        <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
+    <div id="highlights-section" className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm scroll-mt-32">
+      {/* Standard Header */}
+      <div className="mb-6 md:mb-8 md:px-0">
+        <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
           Major <span className="text-brand-blue">Highlights</span>
         </h2>
+        <p className="text-slate-500 text-sm md:text-xl font-medium">Key experiences crafted for your journey</p>
       </div>
       
       {/* Simple List of Highlights - No Boxes */}
-      <div className="space-y-4 px-4 md:px-0">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 md:gap-y-6">
+      <div className="space-y-4 md:px-0">
+        <div className="relative">
+          {/* Stylish Gradient Vertical Divider - Mobile Only */}
+          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-brand-blue/80 to-transparent -translate-x-1/2 md:hidden" />
+
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-0 lg:gap-x-12 gap-y-1 lg:gap-y-8">
           {visibleItems.map((item, index) => {
             // Comprehensive cleaning: remove \item, all backslashes, extra quotes, and trailing commas
             const cleanedItem = item
@@ -47,39 +52,32 @@ const HighlightsSection = ({ packageData }) => {
               .replace(/^["'\s]+|["'\s]+,?$/g, "") // Remove leading/trailing quotes and trailing commas
               .replace(/\*+/g, "") // Remove markdown stars
               .trim();
-            const parts = cleanedItem.split("–");
-            const title = parts[0].trim();
-            const desc = parts.slice(1).join("–").trim();
-            
             return (
               <div 
                 key={index} 
-                className="flex items-start gap-3 group"
+                className={`relative flex items-start gap-2 group pb-0 md:pb-0 
+                  ${(index % 2 === 0) ? 'pr-4 md:pr-0' : 'pl-4 md:pl-0'}`}
               >
                 <div className="flex-shrink-0 mt-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-brand-blue transition-colors"></div>
+                  <div className="w-1.5 h-1.5 rounded-full bg-slate-400 transition-colors"></div>
                 </div>
-                <div className="min-w-0 flex-1 text-sm md:text-base leading-relaxed font-bold text-slate-900">
-                  <span className="group-hover:text-brand-blue transition-colors">
-                    {title}{desc && ":"}
+                <div className="min-w-0 flex-1 text-sm md:text-base leading-snug font-bold text-slate-900">
+                  <span className="transition-colors">
+                    {cleanedItem}
                   </span>
-                  {desc && (
-                    <span className="ml-1">
-                      {desc}
-                    </span>
-                  )}
                 </div>
               </div>
             );
           })}
         </div>
+      </div>
 
         {/* Minimal Read More / Show Less Button */}
         {highlightItems.length > limit && (
-          <div className="pt-1 border-t border-slate-50">
+          <div className="pt-2">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="group flex justify-end items-center gap-1 text-orange-500 font-bold text-xs uppercase tracking-widest w-full"
+              className="group flex justify-end items-center gap-1 text-brand-blue font-black text-[10px] md:text-xs uppercase tracking-widest w-full pt-4 border-t border-slate-50"
             >
               {isExpanded ? (
                 <>
@@ -89,7 +87,7 @@ const HighlightsSection = ({ packageData }) => {
               ) : (
                 <>
                   <ChevronDown className="w-4 h-4" />
-                  <span>View All ({highlightItems.length - limit} More)</span>
+                  <span>Expand {highlightItems.length - limit} More Highlights</span>
                 </>
               )}
             </button>

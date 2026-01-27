@@ -27,7 +27,6 @@ export function parseFaqContent(content) {
   try {
     // Return empty array for null/undefined/empty content
     if (!content || typeof content !== "string") {
-      console.warn("FAQ content is empty or not a string");
       return [];
     }
 
@@ -70,7 +69,6 @@ export function parseFaqContent(content) {
 
     return faqArray;
   } catch (error) {
-    console.error("Error parsing FAQ content:", error);
     return [];
   }
 }

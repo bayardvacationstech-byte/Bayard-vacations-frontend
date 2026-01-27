@@ -12,11 +12,7 @@ export const trackLeadFormConversion = () => {
         currency: "INR",
       });
     } catch (error) {
-      console.error("Error tracking conversion:", error);
     }
   } else {
-    console.warn(
-      "gtag is not available. Make sure Google Analytics is loaded."
-    );
   }
 };

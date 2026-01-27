@@ -29,7 +29,7 @@ const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
       setTimeout(() => reject(new Error(`${operationName} timed out after ${timeoutMs}ms`)), timeoutMs)
     ),
   ]).catch((error) => {
-    console.error(`[Error] ${operationName} failed:`, error.message);
+    console.error(`${operationName} failed or timed out:`, error);
     return fallbackValue;
   });
 };
@@ -38,21 +38,15 @@ const trackPerformance = async (name, operation, fallbackValue) => {
   const start = Date.now();
   try {
     const result = await operation();
-    const end = Date.now();
-    console.log(`[Performance] ✓ ${name} completed in ${end - start}ms`);
     return result;
   } catch (error) {
-    const end = Date.now();
-    console.error(`[Performance] ✗ ${name} failed after ${end - start}ms:`, error.message);
+    console.error(`Performance tracking failed for ${name}:`, error);
     return fallbackValue;
   }
 };
 
 
 const HomePage = async () => {
-  const pageStart = Date.now();
-  console.log('[HomePage] Starting data fetch...');
-  
   const TIMEOUT_MS = 15000; // 15 seconds timeout per operation
   
   const [
@@ -94,9 +88,6 @@ const HomePage = async () => {
       []
     ),
   ]);
-
-  const pageEnd = Date.now();
-  console.log(`[Performance] ✓ Total Home Page Data Fetching completed in ${pageEnd - pageStart}ms`);
 
   const regions = regionData || [];
 

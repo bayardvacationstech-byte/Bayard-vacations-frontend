@@ -107,7 +107,6 @@ const BlogPost = () => {
         const blogSnapshot = await getDocs(blogQuery);
 
         if (blogSnapshot.empty) {
-          console.log("No blog found with slug:", params.blogId);
           setBlog(null);
           setLoading(false);
           return;
@@ -119,22 +118,18 @@ const BlogPost = () => {
         setBlog(blogData);
 
         // Parse meta keywords - explicitly log and process this
-        console.log("Raw blog data:", blogData);
         if (
           blogData.metaKeywords &&
           typeof blogData.metaKeywords === "string"
         ) {
-          console.log("Meta Keywords field:", blogData.metaKeywords);
           // Parse the string into an array of tags
           const keywordTags = blogData.metaKeywords
             .split(",")
             .map((tag) => tag.trim())
             .filter((tag) => tag.length > 0);
 
-          console.log("Parsed keyword tags:", keywordTags);
           setMetaKeywordTags(keywordTags);
         } else {
-          console.log("No metaKeywords field found or not a string");
           setMetaKeywordTags([]);
         }
 
@@ -165,7 +160,6 @@ const BlogPost = () => {
           setRelatedBlogs(related.slice(0, 3)); // Limit to 3 related blogs
         }
       } catch (error) {
-        console.error("Error fetching blog:", error);
       } finally {
         setLoading(false);
       }

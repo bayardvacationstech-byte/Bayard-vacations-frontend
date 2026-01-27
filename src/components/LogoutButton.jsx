@@ -17,7 +17,6 @@ const LogoutButton = () => {
       // Force a full page reload and redirect to login
       window.location.href = "/login";
     } catch (error) {
-      console.error("Error signing out:", error);
     }
   };
 

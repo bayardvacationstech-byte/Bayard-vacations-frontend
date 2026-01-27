@@ -5,7 +5,7 @@ import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import PackageCardGradient from "../../Packages/PackageCardGradient";
+import GroupPackageCard from "@/components/Landing/GroupPackageCard";
 
 const GroupDepartureSlider = ({ groupDeparturePackages }) => {
   if (!groupDeparturePackages || !Array.isArray(groupDeparturePackages) || groupDeparturePackages.length === 0) {
@@ -48,7 +48,7 @@ const GroupDepartureSlider = ({ groupDeparturePackages }) => {
         {groupDeparturePackages.map((item, idx) => (
           <SwiperSlide key={item.id || idx} className="h-full">
              <div className="h-[400px] md:h-[480px] w-full px-1">
-                <PackageCardGradient item={item} />
+                <GroupPackageCard item={item} />
              </div>
           </SwiperSlide>
         ))}

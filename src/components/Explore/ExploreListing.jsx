@@ -66,7 +66,6 @@ const ExploreListing = ({ initialPackages = [] }) => {
           const combined = [...(intl || []), ...(dom || [])];
           setAllPackages(combined);
         } catch (error) {
-          console.error("ExploreListing fetch error:", error);
         } finally {
           setIsLoading(false);
         }

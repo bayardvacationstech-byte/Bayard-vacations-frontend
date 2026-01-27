@@ -1,47 +1,80 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import categoryData from "@/data/categoryData";
 
-const ThemeGridItem = ({ item }) => {
-  // Normalize slug for internal linking (strip query params if any)
+const ThemeGridItem = ({ item, index }) => {
+  // Normalize slug for internal linking
   const baseSlug = item.slug.split("?")[0];
   
   return (
-    <Link href={`/themes/${baseSlug}`} className="group block focus:outline-none">
-      <div className="flex items-center gap-4 lg:gap-6 p-4 rounded-3xl transition-all duration-300 hover:bg-white/5 border border-transparent hover:border-white/10">
-        {/* Icon Container */}
-        <div className="relative shrink-0 w-16 h-16 lg:w-20 lg:h-20 bg-white rounded-2xl lg:rounded-3xl flex items-center justify-center p-4 shadow-lg group-hover:scale-105 transition-transform duration-300">
-          <Image
-            src={item.icon}
-            alt={item.title}
-            width={48}
-            height={48}
-            className="size-full object-contain"
-          />
-        </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ 
+        duration: 0.8, 
+        delay: index * 0.05,
+        ease: [0.16, 1, 0.3, 1] 
+      }}
+      viewport={{ once: true }}
+    >
+      <Link 
+        href={`/themes/${baseSlug}`} 
+        className="group relative block aspect-[4/5] overflow-hidden rounded-[24px] bg-slate-100 transition-all duration-500 hover:shadow-2xl"
+      >
+        {/* Background Image */}
+        <Image
+          src={item.img}
+          alt={item.title}
+          fill
+          className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+        />
         
-        {/* Content */}
-        <div className="flex-1">
-          <h3 className="text-xl lg:text-2xl font-bold text-white mb-1 group-hover:text-brand-green transition-colors">
-            {item.title}
-          </h3>
-          <p className="text-sm lg:text-base text-slate-400 font-medium">
-            {item.subtitle}
-          </p>
+        {/* Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-100 group-hover:opacity-80 transition-opacity duration-500" />
+        
+        {/* Simple Content Area */}
+        <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8 z-20">
+          <div className="space-y-1">
+            {/* Title - Clean & Elegant */}
+            <h3 className="text-2xl lg:text-3xl font-bold text-white tracking-tight font-klausen">
+              {item.title}
+            </h3>
+            
+            {/* Subtitle - Very Subtle */}
+            <p className="text-xs lg:text-sm text-white/70 font-medium tracking-wide">
+              {item.subtitle}
+            </p>
+          </div>
         </div>
-      </div>
-    </Link>
+
+        {/* Subtle Border Glow on Hover */}
+        <div className="absolute inset-0 border border-white/5 group-hover:border-white/20 rounded-[24px] transition-all duration-500 pointer-events-none" />
+      </Link>
+    </motion.div>
   );
 };
 
 const ThemeGrid = () => {
   return (
-    <section className="bg-black py-20 lg:py-32 overflow-hidden">
+    <section className="relative z-10 py-12 lg:py-20 bg-white">
       <Container>
+        {/* Simple Header */}
+        <div className="mb-12">
+          <h2 className="text-3xl lg:text-5xl font-bold text-slate-900 tracking-tight mb-4">
+            Curated <span className="text-brand-green">Travel Themes</span>
+          </h2>
+          <p className="text-slate-500 text-base lg:text-lg font-medium">
+            Explore our hand-crafted themes designed to match your specific style and desire for adventure.
+          </p>
+        </div>
+
+        {/* The Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {categoryData.map((item) => (
-            <ThemeGridItem key={item.id} item={item} />
+          {categoryData.map((item, index) => (
+            <ThemeGridItem key={item.id} item={item} index={index} />
           ))}
         </div>
       </Container>

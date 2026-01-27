@@ -52,7 +52,6 @@ const InternationalContent = ({
   };
 
   const handleItemHover = (item) => {
-    console.log("Hovered continent:", item);
     setActiveItem(item);
   };
 

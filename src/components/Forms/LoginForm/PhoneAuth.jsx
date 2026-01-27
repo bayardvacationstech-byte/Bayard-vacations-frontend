@@ -37,7 +37,6 @@ const PhoneAuth = () => {
         }
       );
     } catch (err) {
-      console.error("Error generating reCAPTCHA:", err);
       setError("Error setting up verification. Please try again.");
       toast({
         variant: "destructive",
@@ -74,7 +73,6 @@ const PhoneAuth = () => {
         description: "OTP sent successfully!",
       });
     } catch (err) {
-      console.error("Error sending OTP:", err);
       setError(err.message || "Error sending OTP. Please try again.");
       setLoading(false);
 
@@ -98,14 +96,12 @@ const PhoneAuth = () => {
 
     try {
       const result = await window.confirmationResult.confirm(otp);
-      console.log("User signed in:", result.user);
       toast({
         title: "Success",
         description: "Phone number verified successfully!",
       });
       setLoading(false);
     } catch (err) {
-      console.error("Error verifying OTP:", err);
       setError(err.message || "Invalid OTP. Please try again.");
       setLoading(false);
       toast({

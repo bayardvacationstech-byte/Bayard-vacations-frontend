@@ -80,10 +80,6 @@ export const fetchAndProcessOffers = async () => {
           { bySlug: false }
         );
 
-        if (!parentPackage) {
-          console.warn(`Package not found for offer: ${offer.id}`);
-          return null;
-        }
 
         const offerPrice =
           offer.discountType === "fixed"
@@ -113,7 +109,7 @@ export const fetchAndProcessOffers = async () => {
 
     return validOffers;
   } catch (error) {
-    console.error("Error fetching offers:", error);
+    console.error("Error fetching and processing offers:", error);
     return [];
   }
 };

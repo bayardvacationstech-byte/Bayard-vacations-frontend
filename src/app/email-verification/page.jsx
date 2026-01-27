@@ -74,7 +74,6 @@ const EmailVerificationPage = () => {
             const data = await response.json();
             customToken = data.customToken;
           } catch (tokenError) {
-            console.error("Error getting custom token:", tokenError);
             throw new Error("Failed to prepare session continuation");
           }
         }
@@ -87,14 +86,12 @@ const EmailVerificationPage = () => {
           try {
             await signInWithCustomToken(auth, customToken);
           } catch (signInError) {
-            console.error("Error signing in with custom token:", signInError);
             throw new Error("Failed to maintain session");
           }
         }
 
         setSuccess(true);
       } catch (err) {
-        console.error("Error verifying email:", err);
         if (err.code === "auth/invalid-action-code") {
           setError(
             "This verification link has expired or has already been used. Please request a new verification email."
@@ -173,7 +170,6 @@ const EmailVerificationPage = () => {
                       await refreshUserInfo();
                       window.location.href = continueUrl; // Using window.location for full page navigation
                     } catch (error) {
-                      console.error("Error refreshing user info:", error);
                       // Optionally handle the error, or proceed with navigation anyway
                       window.location.href = continueUrl;
                     }

@@ -32,13 +32,10 @@ export function useWhyChooseRegion(regionId) {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setWhyChooseData(data);
-          console.log(`[useWhyChooseRegion] Successfully fetched data for region ID: ${regionId}`, data);
         } else {
-          console.log(`[useWhyChooseRegion] No why_choose_region data found for region ID: ${regionId}`);
           setWhyChooseData(null);
         }
       } catch (err) {
-        console.error(`[useWhyChooseRegion] Error fetching data for region ID ${regionId}:`, err);
         setError(err);
         setWhyChooseData(null);
       } finally {

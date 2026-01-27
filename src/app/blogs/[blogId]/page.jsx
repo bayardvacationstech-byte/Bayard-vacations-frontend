@@ -32,29 +32,35 @@ const RelatedBlogCard = ({ blog }) => {
 
 
   return (
-    <article className="sm:hoverable-card overflow-hidden rounded-2xl bg-white shadow-md">
-      <div className="relative h-[180px] overflow-hidden">
+    <article className="group bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-brand-blue/10 transition-all duration-500 flex flex-col h-full">
+      <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={blog.featuredImage}
           alt={blog.title}
-          width={400}
-          height={180}
-          className="size-full object-cover transition-transform duration-300 hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-1000 group-hover:scale-110"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
-      <div className="p-4">
-        <div className="mb-2 flex items-center gap-3 text-xs text-gray-500">
-          <span>{formatDate(blog.createdAt)}</span>
+      
+      <div className="p-6 flex-1 flex flex-col">
+        <div className="flex items-center gap-2 mb-4">
+           <div className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
+           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{formatDate(blog.createdAt)}</span>
         </div>
-        <h3 className="mb-3 line-clamp-2 text-base font-bold text-brand-blue">
+        
+        <h3 className="text-xl font-black text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight leading-tight mb-6 line-clamp-2">
           {blog.title}
         </h3>
-        <Link
-          href={`/blogs/${blog.slug}`}
-          className="flex items-center gap-1 text-sm font-medium text-brand-blue"
-        >
-          Read more <ArrowUpRight className="size-4" />
-        </Link>
+        
+        <div className="mt-auto">
+          <Link
+            href={`/blogs/${blog.slug}`}
+            className="inline-flex items-center gap-2 text-brand-blue font-black text-xs uppercase tracking-widest border-b-2 border-transparent hover:border-brand-blue pb-1 transition-all"
+          >
+            Read Article <ArrowUpRight className="size-4" />
+          </Link>
+        </div>
       </div>
     </article>
   );
@@ -85,7 +91,6 @@ const BlogPost = () => {
         const blogSnapshot = await getDocs(blogQuery);
 
         if (blogSnapshot.empty) {
-          console.log("No blog found with slug:", params.blogId);
           setBlog(null);
           setLoading(false);
           return;
@@ -96,23 +101,19 @@ const BlogPost = () => {
         const blogData = { id: blogDoc.id, ...blogDoc.data() };
         setBlog(blogData);
 
-        // Parse meta keywords - explicitly log and process this
-        console.log("Raw blog data:", blogData);
+        // Parse meta keywords
         if (
           blogData.metaKeywords &&
           typeof blogData.metaKeywords === "string"
         ) {
-          console.log("Meta Keywords field:", blogData.metaKeywords);
           // Parse the string into an array of tags
           const keywordTags = blogData.metaKeywords
             .split(",")
             .map((tag) => tag.trim())
             .filter((tag) => tag.length > 0);
 
-          console.log("Parsed keyword tags:", keywordTags);
           setMetaKeywordTags(keywordTags);
         } else {
-          console.log("No metaKeywords field found or not a string");
           setMetaKeywordTags([]);
         }
 
@@ -143,7 +144,6 @@ const BlogPost = () => {
           setRelatedBlogs(related.slice(0, 3)); // Limit to 3 related blogs
         }
       } catch (error) {
-        console.error("Error fetching blog:", error);
       } finally {
         setLoading(false);
       }
@@ -199,25 +199,49 @@ const BlogPost = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-brand-blue py-24">
-        <div className="pattern-bg absolute inset-0 z-10 opacity-5"></div>
-        <Container>
-          <div className="relative z-10">
+      <section className="relative bg-slate-900 pt-28 pb-16 md:pt-40 md:pb-32 overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 opacity-[0.4] pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/20 via-slate-900 to-slate-900" />
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/10 rounded-full blur-[120px] -mr-96 -mt-96" />
+        </div>
+        
+        <Container className="relative z-10">
+          <div className="max-w-4xl">
             <Link
               href="/blogs"
-              className="mb-6 inline-flex items-center gap-2 text-white hover:underline"
+              className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors mb-6 group"
             >
-              <ChevronLeft className="size-4" />
-              Back to Blogs
+              <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-blue transition-all border border-white/10 group-hover:border-brand-blue">
+                <ChevronLeft className="size-4" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-widest">Back to Blogs</span>
             </Link>
-            <div className="max-w-3xl">
-              <h1 className="mb-6 font-nord text-4xl font-bold text-white c-md:text-5xl">
-                {blog.title}
-              </h1>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
-                <div className="flex items-center gap-1">
-                  <Calendar className="size-4" />
-                  <span>{formatDate(blog.createdAt)}</span>
+            
+            <h1 className="text-3xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl">
+              {blog.title}
+            </h1>
+            
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 backdrop-blur-sm">
+                  <Calendar className="size-5 text-brand-blue" />
+                </div>
+                <div>
+                  <span className="block text-[10px] font-black text-white/40 uppercase tracking-widest">Published</span>
+                  <span className="text-sm font-bold text-white">{formatDate(blog.createdAt)}</span>
+                </div>
+              </div>
+
+              <div className="h-10 w-px bg-white/10 hidden sm:block" />
+
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-brand-blue/20 flex items-center justify-center border border-brand-blue/30 backdrop-blur-sm">
+                   <Tag className="size-5 text-brand-blue" />
+                </div>
+                <div>
+                  <span className="block text-[10px] font-black text-white/40 uppercase tracking-widest">Category</span>
+                  <span className="text-sm font-bold text-white">Travel Guide</span>
                 </div>
               </div>
             </div>
@@ -226,24 +250,28 @@ const BlogPost = () => {
       </section>
 
       {/* Blog Content */}
-      <section className="py-12 c-md:py-16">
+      <section className="pt-8 pb-4 c-md:pt-12 c-md:pb-6">
         <Container>
           <div className="grid grid-cols-1 gap-8 c-lg:grid-cols-3">
             <div className="c-lg:col-span-2">
               {/* Featured Image */}
-              <div className="mb-8 overflow-hidden rounded-2xl">
+              <div className="mb-8 relative aspect-[16/9] rounded-[2rem] overflow-hidden border border-slate-100 shadow-2xl shadow-slate-200/50">
                 <Image
                   src={blog.featuredImage}
                   alt={blog.title}
-                  width={900}
-                  height={500}
-                  className="size-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
 
-              {/* Blog Content */}
+               {/* Blog Content */}
               <div
-                className="prose prose-lg max-w-none"
+                className="prose prose-lg max-w-none 
+                  prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900
+                  prose-p:text-slate-600 prose-p:font-medium prose-p:leading-relaxed
+                  prose-strong:font-black prose-strong:text-slate-900
+                  prose-li:text-slate-600 prose-li:font-medium
+                  prose-img:rounded-[2rem] prose-img:border prose-img:border-slate-100"
                 dangerouslySetInnerHTML={{ __html: blog.content }}
               />
 
@@ -285,26 +313,42 @@ const BlogPost = () => {
 
             {/* Sidebar */}
             <div className="c-lg:col-span-1">
-              {/* Newsletter Signup */}
-              <div className="mb-8 rounded-2xl bg-brand-blue p-6 text-white">
-                <h3 className="mb-3 font-nord text-xl font-bold">
-                  Subscribe to Our Newsletter
-                </h3>
-                <p className="mb-4 text-sm">
-                  Get travel tips and exclusive offers delivered to your inbox.
-                </p>
-                <div className="flex flex-col gap-3">
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    className="w-full rounded-full px-4 py-2 text-gray-800 outline-none"
-                  />
-                  <Button variant="success" className="rounded-full">
-                    Subscribe
-                  </Button>
+              {/* Newsletter Signup - Modern Redesign */}
+              <div className="sticky top-32">
+                <div className="rounded-[2rem] bg-slate-900 p-8 text-white relative overflow-hidden group shadow-xl">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-brand-blue/30 transition-all duration-700" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-md border border-white/10">
+                      <Share2 className="size-6 text-brand-blue" />
+                    </div>
+                    
+                    <h3 className="text-2xl font-black mb-4 tracking-tight leading-tight">
+                      Subscribe to <span className="text-brand-blue">Bayard News</span>
+                    </h3>
+                    <p className="mb-8 text-white/60 text-sm font-medium leading-relaxed">
+                      Stay updated with the latest travel trends, exclusive deals, and expert guides delivered straight to your inbox.
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <div className="relative">
+                        <input
+                          type="email"
+                          placeholder="Your email address"
+                          className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-4 text-white placeholder:text-white/30 outline-none focus:border-brand-blue/50 transition-all text-sm font-bold"
+                        />
+                      </div>
+                      <Button className="w-full rounded-2xl py-7 bg-brand-blue hover:bg-brand-blue-light text-white font-black uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-lg shadow-brand-blue/20">
+                        Join Newsletter
+                      </Button>
+                    </div>
+                    
+                    <p className="mt-6 text-[10px] text-white/40 text-center font-bold uppercase tracking-tighter">
+                      No spam, only pure inspiration.
+                    </p>
+                  </div>
                 </div>
               </div>
-
             </div>
           </div>
         </Container>
@@ -312,17 +356,16 @@ const BlogPost = () => {
 
       {/* Related Posts */}
       {relatedBlogs.length > 0 && (
-        <section className="section-padding bg-[#F1F5FC]">
+        <section className="pt-8 pb-16 bg-slate-50/50">
           <Container>
-            <h2 className="section-header-margin items-center gap-8 text-2xl uppercase !leading-[150%] text-brand-blue before:hidden before:h-px before:w-10 before:flex-1 before:bg-[#798290] before:content-[''] after:hidden after:h-px after:w-10 after:flex-1 after:bg-[#798290] after:content-[''] c-md:flex c-md:before:inline-block c-md:after:inline-block c-lg:text-4xl c-lg:!leading-[130%]">
-              <div className="text-center font-nord">
-                <span className="text-4xl font-light text-[#798290]">
-                  Related
-                </span>{" "}
-                <span className="text-4xl font-bold">articles</span>
-              </div>
-            </h2>
-            <div className="mt-8 grid grid-cols-1 gap-6 c-md:grid-cols-2 c-lg:grid-cols-3">
+            <div className="mb-12">
+              <h2 className="text-2xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+                Related <span className="text-brand-blue">Articles</span>
+              </h2>
+              <p className="text-slate-500 text-sm md:text-xl font-medium">Continue your discovery with more travel insights</p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {relatedBlogs.map((blog) => (
                 <RelatedBlogCard key={blog.id} blog={blog} />
               ))}

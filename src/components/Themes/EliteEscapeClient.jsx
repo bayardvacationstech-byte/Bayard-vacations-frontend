@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Crown, Diamond, Martini, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Award, Gem } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import PackageCard from "@/components/ui/PackageCard";
 
 export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
   const [selectedRegion, setSelectedRegion] = useState("All");
@@ -327,74 +328,11 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
         {filteredPackages.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredPackages.map((pkg, index) => (
-              <motion.div
+              <PackageCard
                 key={pkg.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link href={`/packages/${pkg.region?.toLowerCase().replace(/\s+/g, '-')}/${pkg.packageSlug}`}>
-                  <div className="group bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2 border border-amber-500/20">
-                    {/* Image */}
-                    <div className="relative h-56 overflow-hidden">
-                      <Image
-                        src={pkg.cardImages?.[0]?.url || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800"}
-                        alt={pkg.packageTitle}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                      
-                      {/* Price Badge */}
-                      <div className="absolute top-4 left-4">
-                        <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 text-xs font-black uppercase backdrop-blur-sm">
-                          ₹{pkg.basePrice?.toLocaleString()}
-                        </div>
-                      </div>
-
-                      {/* Days */}
-                      <div className="absolute top-4 right-4 flex items-center gap-1 bg-slate-900/95 px-2 py-1 rounded-full border border-amber-500/30">
-                        <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                        <span className="text-xs font-bold text-white">{pkg.days}D / {pkg.nights}N</span>
-                      </div>
-
-                      {/* Location */}
-                      <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                        <MapPin className="w-4 h-4" />
-                        <span className="text-sm font-bold">{pkg.region}</span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6 space-y-4">
-                      <h3 className="text-xl font-black text-white group-hover:text-amber-400 transition-colors line-clamp-2">
-                        {pkg.packageTitle}
-                      </h3>
-
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-2">
-                        {pkg.packageTags?.slice(0, 2).map((tag, idx) => (
-                          <div key={idx} className="flex items-center gap-1 text-[10px] text-amber-300 font-bold uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded">
-                            <Sparkles className="w-3 h-3 text-amber-500" />
-                            {tag}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Footer */}
-                      <div className="pt-4 border-t border-amber-500/20 flex items-center justify-between">
-                        <div>
-                          <p className="text-xs text-slate-400 font-medium italic">Premium Escapes</p>
-                        </div>
-                        <div className="flex items-center gap-2 text-amber-400 font-bold group-hover:gap-3 transition-all">
-                          <span className="text-sm">View Package</span>
-                          <ChevronRight className="w-4 h-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
+                variant="amber"
+                item={pkg}
+              />
             ))}
           </div>
         ) : (

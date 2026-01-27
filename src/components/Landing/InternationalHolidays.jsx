@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import PackageCard from "@/components/ui/PackageCard";
+import PackageCard from "@/components/Landing/PackageCard";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { MoveLeft, MoveRight } from "lucide-react";

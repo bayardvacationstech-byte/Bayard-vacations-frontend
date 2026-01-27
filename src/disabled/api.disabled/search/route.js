@@ -32,7 +32,6 @@ export async function GET(request) {
     try {
       await ensureCollectionExists();
     } catch (error) {
-      console.error("Failed to ensure collection exists:", error);
       // Continue with search attempt - collection might already exist
     }
 
@@ -76,7 +75,6 @@ export async function GET(request) {
       regions,
     });
   } catch (error) {
-    console.error("Error searching packages", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

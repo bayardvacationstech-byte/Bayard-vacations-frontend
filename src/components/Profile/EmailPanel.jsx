@@ -54,7 +54,6 @@ const EmailPanel = () => {
         }
       );
     } catch (err) {
-      console.error("Error generating reCAPTCHA:", err);
       setError("Error setting up verification. Please try again.");
       toast({
         variant: "destructive",
@@ -103,7 +102,6 @@ const EmailPanel = () => {
         });
       }
     } catch (error) {
-      console.error("Error in email submission:", error);
       setError(error.message || "Failed to proceed. Please try again later.");
       toast({
         variant: "destructive",
@@ -140,7 +138,6 @@ const EmailPanel = () => {
         description: "Verification link sent to your email.",
       });
     } catch (error) {
-      console.error("Error in OTP verification:", error);
       setError(error.message || "Failed to verify OTP. Please try again.");
       toast({
         variant: "destructive",

@@ -53,7 +53,6 @@ const CheckoutPage = () => {
 
         setSelectedPackage(response);
       } catch (err) {
-        console.log(err);
       }
     };
 
@@ -98,17 +97,14 @@ const CheckoutPage = () => {
       return; // Early return here
     }
 
-    console.log(newBooking);
 
     try {
       const firebaseOrderId = await storeBookings(newBooking);
-      console.log("FIREBASE ORDER ID", firebaseOrderId);
       const res = await fetch("/api/createOrder", {
         method: "POST",
         body: JSON.stringify({ amount: grandTotal * 100 }),
       });
       const razorpayOrder = await res.json();
-      console.log("RAZORPAY ORDER DATA", razorpayOrder);
       if (!razorpayOrder?.id) throw new Error("Payment failed");
 
       // Update paymentStatus to initialized
@@ -116,7 +112,6 @@ const CheckoutPage = () => {
       const updatedFirstoreData = await updateDoc(docRef, {
         paymentStatus: "Initialised",
       });
-      console.log(updatedFirstoreData);
 
       // PAYMENT PART
       const paymentData = {
@@ -134,14 +129,11 @@ const CheckoutPage = () => {
             });
             const verifyData = await verifyRes.json();
 
-            console.log("RAZORPAY PAYMENT DATA", verifyData);
-
             // Update paymentStatus to completed
             const docRef = doc(db, COLLECTIONS.BOOKINGS, firebaseOrderId);
             const updatedFirstoreData = await updateDoc(docRef, {
               paymentStatus: "Completed",
             });
-            console.log(updatedFirstoreData);
 
             if (verifyData.isOk) {
               const firebasePayment = await storePayments({
@@ -150,7 +142,6 @@ const CheckoutPage = () => {
                 razorpayOrderId: razorpayOrder.id,
                 razorpayPaymentId: verifyData.paymentId,
               });
-              console.log("FIREBASE PAYMENT", firebasePayment);
 
               toast("Success", {
                 description: "Your booking created.",
@@ -160,7 +151,6 @@ const CheckoutPage = () => {
               const updatedFirstoreFailedData = await updateDoc(docRef, {
                 paymentStatus: "Failed",
               });
-              console.log(updatedFirstoreFailedData);
 
               toast("Error", {
                 description: "Payment failed. Try after sometime",
@@ -172,7 +162,6 @@ const CheckoutPage = () => {
             const updatedFirstoreFailedData = await updateDoc(docRef, {
               paymentStatus: "Failed",
             });
-            console.log(updatedFirstoreFailedData);
             toast("Error", {
               description: "Payment failed. Try after sometime",
             });
@@ -183,7 +172,7 @@ const CheckoutPage = () => {
       const payment = new window.Razorpay(paymentData);
       payment.open();
     } catch (error) {
-      console.log(error);
+      console.error("Booking/Payment process error:", error);
     }
   };
 

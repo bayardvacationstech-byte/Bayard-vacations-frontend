@@ -15,16 +15,16 @@ const RelatedPackages = ({ relatedPackages }) => {
   if (!relatedPackages || relatedPackages.length === 0) return null;
 
   return (
-    <section className="bg-white py-6 md:py-10 border border-slate-100 shadow-sm rounded-3xl relative overflow-hidden mt-10" id="related-packages">
+    <section className="bg-white py-1 md:py-8 border border-slate-100 shadow-sm rounded-3xl relative overflow-hidden mt-2 md:mt-6" id="related-packages">
       {/* Decorative Blur similar to WhyBayardVacations */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
       <Container>
-        <div className="mb-6">
-          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight">
+        <div className="mb-2 md:mb-8">
+          <h2 className="text-xl md:text-4xl font-black text-slate-900 mb-1 md:mb-2 tracking-tight">
             More <span className="text-brand-green">Adventures</span>
           </h2>
-          <p className="text-sm md:text-lg text-slate-600 font-medium max-w-2xl">
+          <p className="text-xs md:text-base text-slate-600 font-medium max-w-2xl">
             Explore other handpicked signatures and top-rated escapes in this region.
           </p>
         </div>
@@ -53,7 +53,7 @@ const RelatedPackages = ({ relatedPackages }) => {
               1024: { slidesPerView: 3, spaceBetween: 24, centeredSlides: false },
               1440: { slidesPerView: 4, spaceBetween: 24, centeredSlides: false },
             }}
-            className="pb-16"
+            className="pb-8 md:pb-16"
           >
             {relatedPackages.map((item) => (
               <SwiperSlide key={item.id}>

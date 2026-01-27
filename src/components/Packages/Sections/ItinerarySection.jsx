@@ -25,22 +25,20 @@ const ItinerarySection = ({ packageData }) => {
 
   const handleDownloadItinerary = () => {
     // TODO: Implement PDF generation or download logic
-    console.log("Download itinerary");
     // For now, we'll just trigger a print dialog
     window.print();
   };
 
   return (
-    <div id="itinerary" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
+    <div id="itinerary" className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
       {/* Standard Header Block - Above Split Layout */}
-      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-[30px]">
+      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6 md:mb-8">
         <div className="flex-1 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-full text-[9px] md:text-[10px] font-bold text-orange-600 border border-orange-100 mb-2 md:mb-4 uppercase tracking-widest">
-            <span className="text-xs">🗺️</span> Journey Workflow
-          </div>
-          <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">Your <span className="text-brand-green">Daily Itinerary</span></h2>
-          <p className="text-xs md:text-lg font-medium text-slate-600">
-            A carefully curated day-by-plan for your perfect adventure
+          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+            Your <span className="text-brand-green">Daily Itinerary</span>
+          </h2>
+          <p className="text-slate-500 text-sm md:text-xl font-medium">
+            A carefully curated day-wise plan for your perfect adventure
           </p>
         </div>
         
@@ -128,7 +126,7 @@ const ItinerarySection = ({ packageData }) => {
                       {/* Decorative line */}
                       <div className="mx-6 h-px bg-slate-100" />
                         
-                        <div className="px-4 md:px-6 py-4 md:py-6">
+                        <div className="px-3 md:px-6 py-4 md:py-6">
                           {/* Description or Activities with enhanced formatting */}
                           <div className="space-y-4 mb-6">
                             {day.activities ? (
@@ -146,10 +144,10 @@ const ItinerarySection = ({ packageData }) => {
                                     </div>
                                     
                                     <p className="flex flex-col gap-0.5">
-                                      <span className="font-black text-brand-blue tracking-tight text-[15px] md:text-base">
+                                      <span className="font-black text-brand-blue tracking-tight text-sm md:text-base">
                                         {act.activity?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
                                       </span>
-                                      <span className="text-slate-500 font-medium text-xs md:text-sm">
+                                      <span className="text-slate-500 font-medium text-sm md:text-base">
                                         {act.description?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
                                       </span>
                                     </p>
@@ -167,7 +165,7 @@ const ItinerarySection = ({ packageData }) => {
                                     const afterColon = content.substring(colonIndex);
                                     return (
                                       <>
-                                        <span className="font-black text-brand-blue text-base">
+                                        <span className="font-black text-brand-blue text-sm md:text-base">
                                           {beforeColon}
                                         </span>
                                         <span className="text-slate-600">{afterColon}</span>
@@ -183,19 +181,19 @@ const ItinerarySection = ({ packageData }) => {
                                   return (
                                     <div 
                                       key={lineIndex} 
-                                      className="bg-slate-50 rounded-2xl p-4 flex items-start gap-4 mb-3 last:mb-0"
+                                      className="bg-slate-50 rounded-2xl p-3 md:p-4 flex items-start gap-3 md:gap-4 mb-3 last:mb-0"
                                     >
                                       <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-blue-100/50 flex items-center justify-center">
                                         <Sparkles className="w-4 h-4 text-blue-600 fill-blue-600" />
                                       </div>
-                                      <div className="text-slate-700 text-sm leading-relaxed pt-1">
+                                      <div className="text-slate-700 text-sm md:text-base leading-relaxed pt-1">
                                          {formatLine(content)}
                                       </div>
                                     </div>
                                   );
                                 } else if (line.trim()) {
                                   return (
-                                    <div key={lineIndex} className="text-slate-600 text-sm leading-relaxed pl-1">
+                                    <div key={lineIndex} className="text-slate-600 text-sm md:text-base leading-relaxed pl-1">
                                       {formatLine(line.trim())}
                                     </div>
                                   );

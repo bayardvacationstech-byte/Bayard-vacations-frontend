@@ -76,7 +76,6 @@ export async function GET() {
       const packages = querySnapshot.docs.map((doc) => doc.data());
       allPackages.push(...packages);
     } catch (error) {
-      console.error("Error fetching packages:", error);
     }
 
     // Generate package routes
@@ -103,7 +102,6 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Error generating sitemap:", error);
     return NextResponse.json(
       { error: "Failed to generate sitemap" },
       { status: 500 }

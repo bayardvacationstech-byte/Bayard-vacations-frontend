@@ -42,7 +42,6 @@ const GenderPanel = () => {
           setGender(userDoc.data().gender);
         }
       } catch (error) {
-        console.error("Error fetching gender:", error);
         if (error.code !== "not-found") {
           toast({
             variant: "destructive",
@@ -93,7 +92,6 @@ const GenderPanel = () => {
       });
       setIsEditing(false);
     } catch (error) {
-      console.error("Error updating gender:", error);
       setError("Failed to update gender. Please try again.");
       toast({
         variant: "destructive",

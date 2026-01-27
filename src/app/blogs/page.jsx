@@ -115,11 +115,8 @@ const BlogsPage = () => {
         });
         setRecentBlogs(recent);
       } catch (error) {
-        console.error("Error fetching blogs:", error);
-
         // If there's an error due to missing Firebase index, fall back to client-side filtering
         if (error.code === "failed-precondition") {
-          console.log("Index error, falling back to client-side filtering");
           fetchAllBlogsAndFilter();
         }
       } finally {
@@ -159,7 +156,6 @@ const BlogsPage = () => {
         // Get the most recent 4 blogs
         setRecentBlogs(allBlogs.slice(0, 4));
       } catch (error) {
-        console.error("Error in fallback fetch:", error);
       } finally {
         setLoading(false);
       }

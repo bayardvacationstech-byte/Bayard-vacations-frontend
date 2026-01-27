@@ -458,7 +458,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MoveLeft, MoveRight } from "lucide-react";
 import { Navigation } from "swiper/modules";
 
-import PackageCard from "@/components/Landing/HolidayPackageCard";
+import PackageCard from "@/components/Landing/PackageCard";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { useCuratedPackages } from "@/hooks/packages";

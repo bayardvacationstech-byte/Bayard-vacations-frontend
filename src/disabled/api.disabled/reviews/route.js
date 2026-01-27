@@ -37,7 +37,6 @@ export async function GET() {
     url.searchParams.append("key", process.env.GOOGLE_PLACES_API_KEY);
     url.searchParams.append("fields", "name,rating,reviews");
 
-    console.log("Fetching fresh data from Google Places API");
     const response = await fetch(url.toString());
     const data = await response.json();
 
@@ -82,7 +81,6 @@ export async function GET() {
       reviews: filteredReviews,
     });
   } catch (error) {
-    console.error("Error:", error);
     return NextResponse.json(
       {
         error: "Failed to fetch reviews",

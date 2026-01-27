@@ -58,7 +58,9 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
 
   // Get city names for filter buttons
   const cityNames = useMemo(() => {
-    return ["all", ...citiesWithActivities.map(c => c.name)];
+    // Use Set to ensure unique names for keys
+    const names = ["all", ...citiesWithActivities.map(c => c.name)];
+    return Array.from(new Set(names));
   }, [citiesWithActivities]);
 
   // Filter cities based on selection
