@@ -10,10 +10,19 @@ export const minimizePackageData = (pkg) => {
     savingsAmount: pkg.savingsAmount || 0,
     days: pkg.days || 1,
     nights: pkg.nights || 0,
-    cardImages: (pkg.cardImages || []).slice(0, 3).map(img => ({ 
-      url: img.url, 
-      title: img.title || "" 
-    })),
+    // Robust image scavenging in minimizer
+    cardImages: (pkg.cardImages || []).map(img => {
+      const url = typeof img === "string" ? img : img?.url;
+      return url ? { url, title: img?.title || "" } : null;
+    }).filter(Boolean).slice(0, 5),
+    bannerImages: (pkg.bannerImages || []).map(img => {
+      const url = typeof img === "string" ? img : img?.url;
+      return url ? { url, title: img?.title || "" } : null;
+    }).filter(Boolean).slice(0, 5),
+    image: pkg.image || "",
+    imageUrl: pkg.imageUrl || "",
+    imageRefs: pkg.imageRefs || [],
+    cardImageRef: pkg.cardImageRef || null,
     packageTags: pkg.packageTags || [],
     trending: !!pkg.trending,
     curated: !!pkg.curated,

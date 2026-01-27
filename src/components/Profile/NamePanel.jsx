@@ -57,7 +57,6 @@ const NamePanel = () => {
       setFirstName("");
       setLastName("");
     } catch (err) {
-      console.error("Error updating profile:", err);
       toast({
         variant: "destructive",
         title: "Error",

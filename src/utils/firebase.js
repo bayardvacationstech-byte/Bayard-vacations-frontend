@@ -141,7 +141,6 @@ const getReferencedData = async (docRef) => {
     }
     return null;
   } catch (error) {
-    console.error("Error fetching referenced document:", error);
     return null;
   }
 };
@@ -252,6 +251,17 @@ const resolveAllPackageReferences = async (packageData) => {
     packageData.cardImages = cardImagesData.filter(Boolean);
   }
 
+  if (packageData.imageRefs) {
+    const imageRefsData = await Promise.all(
+      packageData.imageRefs.map(getReferencedData)
+    );
+    packageData.imageRefs = imageRefsData.filter(Boolean);
+  }
+
+  if (packageData.cardImageRef) {
+    packageData.cardImageRef = await getReferencedData(packageData.cardImageRef);
+  }
+
   // Fetch itinerary image data if exists
   if (packageData.itineraries) {
     packageData.itineraries = await Promise.all(
@@ -307,7 +317,6 @@ export const getPackageWithAllReferences = async (slugOrId, options = {}) => {
     // Resolve all references
     return await resolveAllPackageReferences(packageData);
   } catch (error) {
-    console.error("Error fetching package with all references:", error);
     throw error;
   }
 };
@@ -325,7 +334,6 @@ export const getPackageWithReferences = async (slug) => {
     // Resolve all references
     return await resolveAllPackageReferences(packageData);
   } catch (error) {
-    console.error("Error:", error);
     throw error;
   }
 };
@@ -338,13 +346,11 @@ export const getDocumentBySlug = async (slug) => {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      console.warn(`Package not found for slug: ${slug}`);
       return null;
     }
 
     return sanitizeDocumentData(querySnapshot.docs[0]);
   } catch (error) {
-    console.error("Error fetching package:", error);
     return null;
   }
 };
@@ -361,7 +367,6 @@ export const getRegionDocumentBySlug = async (slug) => {
 
     return sanitizeDocumentData(querySnapshot.docs[0]);
   } catch (error) {
-    console.error("Error fetching region:", error);
     throw error;
   }
 };
@@ -378,7 +383,6 @@ export const getOfferByPackageId = async (packageId) => {
 
     return sanitizeDocumentData(querySnapshot.docs[0]);
   } catch (error) {
-    console.error("Error fetching offer:", error);
     throw error;
   }
 };
@@ -389,7 +393,6 @@ export const getAllDocuments = async (collectionName) => {
     const querySnapshot = await getDocs(collection(db, collectionName));
     return querySnapshot.docs.map(sanitizeDocumentData);
   } catch (error) {
-    console.error("Error fetching documents:", error);
     throw error;
   }
 };
@@ -459,6 +462,11 @@ export const searchPackages = async (searchTerm) => {
           packageSlug: data.packageSlug,
           region: data.region,
           bannerImages: data.bannerImages,
+          image: data.image || "",
+          imageUrl: data.imageUrl || "",
+          imageRefs: data.imageRefs || [],
+          cardImageRef: data.cardImageRef || null,
+          packageTags: data.packageTags || [],
         });
       }
     }
@@ -485,7 +493,6 @@ export const searchPackages = async (searchTerm) => {
 
     return data;
   } catch (error) {
-    console.error("Error in searchPackages:", error);
     return {
       regions: [],
       packages: [],
@@ -535,7 +542,7 @@ export const storePotentialLead = async (leadData) => {
 
     return docRef.id;
   } catch (error) {
-    console.error("Error storing lead:", error);
+    console.error("Error storing potential lead:", error);
     throw new Error("Failed to store lead data");
   }
 };
@@ -556,7 +563,7 @@ export const storeBookings = async (bookingData) => {
 
     return docRef.id;
   } catch (error) {
-    console.error("Error storing booking:", error);
+    console.error("Error creating Booking:", error);
     throw new Error("Failed to create Booking");
   }
 };
@@ -577,7 +584,7 @@ export const storePayments = async (paymentData) => {
 
     return docRef.id;
   } catch (error) {
-    console.error("Error storing payment:", error);
+    console.error("Error creating Payment:", error);
     throw new Error("Failed to create Payment");
   }
 };
@@ -621,7 +628,7 @@ export const getCuratedPackages = async (
     );
     return packages.sort((a, b) => a.basePrice - b.basePrice);
   } catch (error) {
-    console.error("Error fetching packages:", error);
+    console.error("Error fetching curated packages:", error);
     throw error;
   }
 };
@@ -642,7 +649,7 @@ export const getAllPublishedPackages = async (packageType) => {
     const packages = await batchResolveCardReferences(initialPackages);
     return packages.sort((a, b) => a.basePrice - b.basePrice);
   } catch (error) {
-    console.error(`Error fetching all published ${packageType} packages:`, error);
+    console.error("Error fetching all published packages:", error);
     return [];
   }
 };
@@ -684,7 +691,6 @@ export const getPackagesByRegion = async (regionName) => {
     );
     return packages.sort((a, b) => a.basePrice - b.basePrice);
   } catch (error) {
-    console.error("Error fetching packages:", error);
     throw error;
   }
 };
@@ -711,9 +717,6 @@ export const getPackagesByTheme = async (
     );
 
     if (initialPackages.length > 0) {
-      console.log(
-        `For theme ${themeType}, returning initial packages: ${initialPackages.length}`
-      );
       return initialPackages;
     }
 
@@ -726,7 +729,6 @@ export const getPackagesByTheme = async (
     
     return packages.sort((a, b) => a.basePrice - b.basePrice);
   } catch (error) {
-    console.error("Error fetching packages:", error);
     throw error;
   }
 };
@@ -758,7 +760,6 @@ export const getHotelsByIds = async (hotelIds) => {
     const results = await Promise.all(promises);
     return results.filter((hotel) => hotel !== null);
   } catch (error) {
-    console.error("Error fetching hotels by IDs:", error);
     throw error;
   }
 };
@@ -784,7 +785,6 @@ export const getPackageHotelDetails = async (hotelCharges) => {
         .filter(Boolean),
     }));
   } catch (error) {
-    console.error("Error fetching package hotel details:", error);
     throw error;
   }
 };
@@ -800,11 +800,9 @@ export const getRegions = async () => {
     const querySnapshot = await getDocs(regionsQuery);
     const regions = querySnapshot.docs.map(sanitizeDocumentData);
     
-    console.log('[Firebase] Fetched', regions.length, 'regions');
     
     return regions;
   } catch (error) {
-    console.error("[Firebase] Error fetching regions:", error);
     throw error;
   }
 };
@@ -856,7 +854,6 @@ export const getFeaturedImageByRegion = async (regionName) => {
     }
 
     if (querySnapshot.empty) {
-      console.warn(`[Firebase] No images found for region: ${regionName}`);
       return null;
     }
 
@@ -865,11 +862,9 @@ export const getFeaturedImageByRegion = async (regionName) => {
     const randomIndex = Math.floor(Math.random() * images.length);
     const randomImage = images[randomIndex];
     
-    console.log(`[Firebase] Found ${images.length} images for region: ${regionName}, selected index: ${randomIndex}`);
 
     return randomImage;
   } catch (error) {
-    console.error("Error fetching random image by region:", error);
     throw error;
   }
 };
@@ -880,7 +875,6 @@ export const getPlace = async (id) => {
     const placeSnap = await getDoc(placeRef);
     return sanitizeDocumentData(placeSnap);
   } catch (error) {
-    console.error("Error fetching place:", error);
     throw error;
   }
 };

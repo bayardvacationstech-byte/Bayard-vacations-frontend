@@ -104,7 +104,6 @@ const CategoryPage = () => {
         const categorySnapshot = await getDocs(categoryQuery);
 
         if (categorySnapshot.empty) {
-          console.log("Category not found:", categorySlug);
           setCategory(null);
           setLoading(false);
           return;
@@ -162,11 +161,8 @@ const CategoryPage = () => {
 
         setAllBlogs(allBlogsData);
       } catch (error) {
-        console.error("Error fetching category data:", error);
-
         // Fallback to client-side filtering if index error
         if (error.code === "failed-precondition") {
-          console.log("Index error, falling back to client-side filtering");
           fetchAllBlogsAndFilter();
         }
       } finally {
@@ -194,7 +190,6 @@ const CategoryPage = () => {
         );
 
         if (!currentCategory) {
-          console.log("Category not found:", categorySlug);
           setCategory(null);
           setLoading(false);
           return;
@@ -240,7 +235,6 @@ const CategoryPage = () => {
 
         setCategoryBlogs(filteredBlogs);
       } catch (error) {
-        console.error("Error in fallback fetch:", error);
       } finally {
         setLoading(false);
       }

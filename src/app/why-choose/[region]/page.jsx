@@ -57,6 +57,10 @@ function syncSchemaUrls(obj, region) {
 export async function generateMetadata({ params }) {
   const { region } = await params;
   
+  // Construct the correct canonical URL for why-choose page
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bayardvacations.com';
+  const canonicalUrl = `${baseUrl}/why-choose/${region}`;
+  
   try {
     // 1. Get region data to get the region ID
     const regionDoc = await getRegionDocumentBySlug(region);
@@ -76,12 +80,12 @@ export async function generateMetadata({ params }) {
         description: metaData.description,
         keywords: metaData.keywords?.join(", "),
         alternates: {
-          canonical: syncUrlWithRegion(metaData.canonical || metaData.Canonical, region),
+          canonical: canonicalUrl, // Use dynamic why-choose URL
         },
         openGraph: {
           title: metaData.openGraph?.title || metaData.openGraph?.Title,
           description: metaData.openGraph?.Description || metaData.openGraph?.description,
-          url: syncUrlWithRegion(metaData.openGraph?.url, region),
+          url: canonicalUrl, // Use dynamic why-choose URL
           siteName: SITE_DATA.name,
           images: [
             {
@@ -104,7 +108,6 @@ export async function generateMetadata({ params }) {
       };
     }
   } catch (error) {
-    console.error("Error generating metadata:", error);
   }
 
   // Fallback metadata
@@ -116,6 +119,9 @@ export async function generateMetadata({ params }) {
   return {
     title: `Why Choose ${regionName} | ${SITE_DATA.name}`,
     description: `Discover why ${regionName} should be your next travel destination. Explore highlights, attractions, and travel tips for an unforgettable experience.`,
+    alternates: {
+      canonical: canonicalUrl, // Use dynamic why-choose URL in fallback too
+    },
   };
 }
 
@@ -133,7 +139,6 @@ export default async function WhyChooseRegionPage({ params }) {
       }
     }
   } catch (error) {
-    console.error("Error fetching schema:", error);
   }
 
   return (

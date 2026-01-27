@@ -44,7 +44,6 @@ const PackageHotels = ({ packageData }) => {
         }
         setIsLoading(false);
       } catch (error) {
-        console.error("PackageHotels: Error:", error);
         useDummyFallback();
         setIsLoading(false);
       }
@@ -161,17 +160,17 @@ const PackageHotels = ({ packageData }) => {
         <div className="flex items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-1.5 min-w-0">
             <Bed className="w-3.5 h-3.5 text-brand-blue shrink-0" />
-            <p className="text-[11px] font-bold text-slate-800 truncate">{hotel.roomType || "Premium Room"}</p>
+            <p className="text-xs md:text-sm font-bold text-slate-800 truncate">{hotel.roomType || "Premium Room"}</p>
           </div>
           <div className="flex items-center gap-1.5 shrink-0 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
             <MapPin className="w-3 h-3 text-brand-blue" />
-            <p className="text-[10px] font-black text-brand-blue uppercase tracking-tight capitalize">{hotel.place?.name || hotel.city || "City Center"}</p>
+            <p className="text-xs font-black text-brand-blue uppercase tracking-tight capitalize">{hotel.place?.name || hotel.city || "City Center"}</p>
           </div>
         </div>
 
         {/* 3. Location Description - Brief */}
         <div className="mb-5">
-          <p className="text-[10px] font-semibold text-slate-500 leading-relaxed line-clamp-2">
+          <p className="text-xs md:text-sm font-semibold text-slate-500 leading-relaxed line-clamp-2">
             {hotel.location || "Prime location with easy access to key attractions."}
           </p>
         </div>
@@ -180,7 +179,7 @@ const PackageHotels = ({ packageData }) => {
         <div className="mt-auto">
           <Button
             asChild
-            className="w-full bg-white hover:bg-brand-blue border-2 border-brand-blue text-brand-blue hover:text-white rounded-xl py-2.5 font-bold text-[10px] uppercase tracking-widest transition-all duration-300 active:scale-95 shadow-sm"
+            className="w-full bg-white hover:bg-brand-blue border-2 border-brand-blue text-brand-blue hover:text-white rounded-xl py-2.5 font-bold text-xs uppercase tracking-widest transition-all duration-300 active:scale-95 shadow-sm"
           >
             <a href={hotel.googleUrl || "#"} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
               View on Map
@@ -198,64 +197,59 @@ const PackageHotels = ({ packageData }) => {
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-blue/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
-      <Container>
-        {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 md:gap-4 lg:gap-8 mb-2 relative">
-          <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/5 border border-brand-blue/10 rounded-full text-[10px] font-bold text-brand-blue mb-3 md:mb-4 uppercase tracking-widest">
-              <span className="text-xs">🏨</span> Handpicked Stays
-            </div>
-            <h2 className="text-lg md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-              Where You'll <span className="text-brand-blue">Stay</span>
-            </h2>
-          </div>
 
-          {/* New Filter UI - Horizontal Scroll on Mobile */}
-          <div className="flex overflow-x-auto lg:flex-wrap justify-center lg:justify-start gap-1 p-1.5 bg-white rounded-full border border-slate-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] w-fit lg:w-fit scrollbar-hide mx-auto lg:mx-0">
-            {categories.sort((a, b) => {
-              const order = ['twostar', 'threestar', 'fourstar', 'fivestar'];
-              return order.indexOf(a) - order.indexOf(b);
-            }).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-500 whitespace-nowrap ${
-                  selectedCategory === cat
-                    ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/30 scale-[1.02]"
-                    : "text-slate-400 hover:text-slate-600"
-                }`}
-              >
-                {categoryLabels[cat] || cat}
-              </button>
-            ))}
-          </div>
+      {/* Header Section */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-6 md:mb-8 relative">
+        <div className="max-w-xl">
+          <h2 className="text-2xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-2 md:mb-4">
+            Where You'll <span className="text-brand-blue">Stay</span>
+          </h2>
+          <p className="text-slate-500 text-sm md:text-xl font-medium">Comfortable accommodations for every budget</p>
         </div>
 
-        {/* Mobile: Swiper Carousel */}
-        <div className="block md:hidden">
-          <Swiper
-            modules={[Pagination, FreeMode]}
-            pagination={{ clickable: true }}
-            slidesPerView={1.22}
-            spaceBetween={16}
-            freeMode={true}
-            className="!pb-6"
-          >
-            {currentHotels.map((hotel, idx) => (
-              <SwiperSlide key={hotel.id || idx}>
-                {renderHotelCard(hotel, idx)}
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        {/* New Filter UI - Horizontal Scroll on Mobile */}
+        <div className="flex overflow-x-auto lg:flex-wrap justify-center lg:justify-start gap-1 p-1.5 bg-white rounded-full border border-slate-100/80 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] w-fit lg:w-fit scrollbar-hide mx-auto lg:mx-0">
+          {categories.sort((a, b) => {
+            const order = ['twostar', 'threestar', 'fourstar', 'fivestar'];
+            return order.indexOf(a) - order.indexOf(b);
+          }).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-500 whitespace-nowrap ${
+                selectedCategory === cat
+                  ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/30 scale-[1.02]"
+                  : "text-slate-400 hover:text-slate-600"
+              }`}
+            >
+              {categoryLabels[cat] || cat}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Desktop: Grid */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {currentHotels.map((hotel, idx) => renderHotelCard(hotel, idx))}
-        </div>
-      </Container>
+      {/* Mobile: Swiper Carousel */}
+      <div className="block md:hidden">
+        <Swiper
+          modules={[Pagination, FreeMode]}
+          pagination={{ clickable: true }}
+          slidesPerView={1.22}
+          spaceBetween={16}
+          freeMode={true}
+          className="!pb-6"
+        >
+          {currentHotels.map((hotel, idx) => (
+            <SwiperSlide key={hotel.id || idx}>
+              {renderHotelCard(hotel, idx)}
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
 
-
+      {/* Desktop: Grid */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {currentHotels.map((hotel, idx) => renderHotelCard(hotel, idx))}
+      </div>
     </section>
   );
 };

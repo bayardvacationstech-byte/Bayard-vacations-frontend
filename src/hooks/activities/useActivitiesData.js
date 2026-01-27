@@ -19,16 +19,13 @@ export function useActivitiesData(regionSlug = null, regionId = null) {
         setLoading(true);
         setError(null);
 
-        console.log('[useActivitiesData] Fetching activities for region:', regionSlug || 'all', 'regionId:', regionId);
 
         // Query Firestore directly - get all documents first
         const regionActivityRef = collection(db, 'region_activity');
         const querySnapshot = await getDocs(regionActivityRef);
         
-        console.log('[useActivitiesData] Total documents in collection:', querySnapshot.size);
 
         if (querySnapshot.empty) {
-          console.warn('[useActivitiesData] No documents found in region_activity collection');
           setActivities([]);
           setLoading(false);
           return;
@@ -96,17 +93,14 @@ export function useActivitiesData(regionSlug = null, regionId = null) {
           }
         });
 
-        console.log('[useActivitiesData] Total activities extracted:', activitiesData.length);
 
         // Transform activities to component format
         const transformedActivities = activitiesData
           .map(transformActivity)
           .filter(Boolean); // Remove any null results
 
-        console.log('[useActivitiesData] Transformed activities:', transformedActivities.length);
         setActivities(transformedActivities);
       } catch (err) {
-        console.error("[useActivitiesData] Error fetching activities:", err);
         setError(err.message || "Failed to fetch activities");
         setActivities([]);
       } finally {
@@ -176,7 +170,6 @@ export function useActivityDetail(regionSlug, activitySlug) {
         setLoading(true);
         setError(null);
 
-        console.log('[useActivityDetail] Fetching activity:', regionSlug, activitySlug);
 
         // Fetch all documents in region_activity collection
         const regionActivityRef = collection(db, 'region_activity');
@@ -211,17 +204,14 @@ export function useActivityDetail(regionSlug, activitySlug) {
         });
 
         if (!foundActivity) {
-          console.warn('[useActivityDetail] Activity not found in Firestore:', activitySlug);
           setError("Activity not found");
           setActivity(null);
           return;
         }
 
-        console.log('[useActivityDetail] Activity found:', foundActivity.card?.title);
         const transformedActivity = transformActivity(foundActivity);
         setActivity(transformedActivity);
       } catch (err) {
-        console.error("[useActivityDetail] Error fetching activity:", err);
         setError(err.message || "Activity not found");
         setActivity(null);
       } finally {

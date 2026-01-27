@@ -57,7 +57,6 @@ const NewBookNowForm = ({ packageData, offerData }) => {
         description: "Link Copied to Clipboard",
       });
     } catch (err) {
-      console.error("Failed to copy URL:", err);
     }
   };
 

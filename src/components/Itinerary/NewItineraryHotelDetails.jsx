@@ -111,7 +111,6 @@ const NewItineraryHotelDetails = ({ details }) => {
         }
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching hotel details:", error);
         setIsLoading(false);
       }
     };

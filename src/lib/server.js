@@ -44,21 +44,18 @@ const serializeData = (obj, depth = 0, seen = new WeakSet()) => {
 export const fetchReviews = unstableCache(
   async () => {
     try {
-      console.log('[fetchReviews] Starting fetch...');
       const cacheRef = doc(db, COLLECTIONS.CACHED_REVIEWS, REVIEWS_DOC_ID);
       const cacheDoc = await getDoc(cacheRef);
 
       if (cacheDoc.exists()) {
         const cachedData = cacheDoc.data();
         const reviews = (cachedData.reviews || []).slice(0, 10).map(minimizeReviewData);
-        console.log(`[fetchReviews] Successfully fetched ${reviews.length} reviews`);
         return serializeData(reviews);
       }
 
-      console.log('[fetchReviews] No cached reviews found, returning empty array');
       return [];
     } catch (err) {
-      console.error("[fetchReviews] Error:", err.message || err);
+      console.error("Error fetching reviews:", err);
       return [];
     }
   },
@@ -178,7 +175,7 @@ export const getGroupDeparturePackages = async () => {
 
     return serializeData(groupDeparturePackages.map(minimizePackageData));
   } catch (error) {
-    console.error("Error fetching group departure packages:", error);
+    console.error("Error getting group departure packages:", error);
     return [];
   }
 };
@@ -220,7 +217,7 @@ const getAllPackagesByTheme = async () => {
       relaxRejuvenatePackages: relaxRejuvenatePackages.map(minimizePackageData),
     };
   } catch (error) {
-    console.error("Error in getAllPackagesByTheme:", error);
+    console.error("Error getting all packages by theme:", error);
     return {};
   }
 };
@@ -228,17 +225,15 @@ const getAllPackagesByTheme = async () => {
 export const getRegionsForHome = unstableCache(
   async () => {
     try {
-      console.log('[getRegionsForHome] Starting fetch...');
       const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
       const querySnapshot = await getDocs(regionsQuery);
       const regions = querySnapshot.docs
         .map(sanitizeDocumentData)
         .map(minimizeRegionData);
 
-      console.log(`[getRegionsForHome] Successfully fetched ${regions.length} regions`);
       return serializeData(regions);
     } catch (error) {
-      console.error("[getRegionsForHome] Error:", error.message || error);
+      console.error("Error getting regions for home:", error);
       return [];
     }
   },
@@ -249,14 +244,12 @@ export const getRegionsForHome = unstableCache(
 export const getCuratedPackagesForHome = unstableCache(
   async (packageType) => {
     try {
-      console.log(`[getCuratedPackagesForHome] Starting fetch for ${packageType}...`);
       // Add limit to prevent fetching too many packages for the home page
       const conditions = [limit(12)];
       const packages = await getCuratedPackages(packageType, conditions, true);
-      console.log(`[getCuratedPackagesForHome] Successfully fetched ${packages.length} ${packageType} packages`);
       return serializeData(packages);
     } catch (error) {
-      console.error(`[getCuratedPackagesForHome] Error fetching ${packageType}:`, error.message || error);
+      console.error(`Error getting curated packages for home (type: ${packageType}):`, error);
       return [];
     }
   },
@@ -267,12 +260,10 @@ export const getCuratedPackagesForHome = unstableCache(
 export const getGroupDeparturePackagesForHome = unstableCache(
   async () => {
     try {
-      console.log('[getGroupDeparturePackagesForHome] Starting fetch...');
       const packages = await getGroupDeparturePackages();
-      console.log(`[getGroupDeparturePackagesForHome] Successfully fetched ${packages.length} packages`);
       return serializeData(packages); 
     } catch (error) {
-      console.error('[getGroupDeparturePackagesForHome] Error:', error.message || error);
+      console.error("Error getting group departure packages for home:", error);
       return [];
     }
   },
@@ -283,12 +274,10 @@ export const getGroupDeparturePackagesForHome = unstableCache(
 export const getThemePackagesForHome = unstableCache(
   async () => {
     try {
-      console.log('[getThemePackagesForHome] Starting fetch...');
       const data = await getAllPackagesByTheme();
-      console.log('[getThemePackagesForHome] Successfully fetched theme packages');
       return serializeData(data);
     } catch (error) {
-      console.error('[getThemePackagesForHome] Error:', error.message || error);
+      console.error("Error getting theme packages for home:", error);
       return {};
     }
   },
@@ -299,12 +288,10 @@ export const getThemePackagesForHome = unstableCache(
 export const getElitePackages = unstableCache(
   async () => {
     try {
-      console.log('[getElitePackages] Starting fetch...');
       const packages = await getPackagesByTheme("elite-escape", [], []);
-      console.log(`[getElitePackages] Successfully fetched ${packages.length} packages`);
       return serializeData(packages);
     } catch (error) {
-      console.error('[getElitePackages] Error:', error.message || error);
+      console.error("Error getting elite packages:", error);
       return [];
     }
   },
@@ -315,20 +302,17 @@ export const getElitePackages = unstableCache(
 export const getWhyChooseRegionData = unstableCache(
   async (regionId) => {
     try {
-      console.log(`[getWhyChooseRegionData] Starting fetch for region ID: ${regionId}...`);
       const docRef = doc(db, COLLECTIONS.WHY_CHOOSE_REGION, regionId);
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log(`[getWhyChooseRegionData] Successfully fetched data for region ID: ${regionId}`, data);
         return serializeData(data);
       }
       
-      console.log(`[getWhyChooseRegionData] No data found for region ID: ${regionId}`);
       return null;
     } catch (error) {
-      console.error(`[getWhyChooseRegionData] Error fetching region ID ${regionId}:`, error.message || error);
+      console.error(`Error getting why choose region data for ${regionId}:`, error);
       return null;
     }
   },

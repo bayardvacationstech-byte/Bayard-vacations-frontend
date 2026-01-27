@@ -49,7 +49,6 @@ const AddressPanel = () => {
           setIsEditing(true); // Show form if no address exists
         }
       } catch (error) {
-        console.error("Error fetching address:", error);
         if (error.code !== "not-found") {
           toast({
             variant: "destructive",
@@ -100,7 +99,6 @@ const AddressPanel = () => {
       });
       setIsEditing(false); // Exit edit mode after successful save
     } catch (error) {
-      console.error("Error updating address:", error);
       setError("Failed to update address. Please try again.");
       toast({
         variant: "destructive",

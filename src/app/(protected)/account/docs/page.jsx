@@ -86,7 +86,6 @@ const DocsPage = () => {
 
         setTravelCompanions(companions);
       } catch (error) {
-        console.error("Error fetching documents:", error);
       }
     };
 
@@ -122,7 +121,6 @@ const DocsPage = () => {
       await refreshDocuments();
       toast.success("Travel companion added successfully");
     } catch (error) {
-      console.error("Error adding companion:", error);
       toast.error("Failed to add travel companion");
     }
   };
@@ -182,7 +180,6 @@ const DocsPage = () => {
 
       setTravelCompanions(companions);
     } catch (error) {
-      console.error("Error refreshing documents:", error);
     }
   };
 

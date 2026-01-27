@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "./globals.css";
-import { Outfit, Damion } from "next/font/google";
+import { Outfit, Damion, Playfair_Display } from "next/font/google";
 import Footer from "@/components/layouts/Footer";
 import DesktopNavbar from "@/components/Navbars/DesktopNavbar";
 import MobileNavbar from "@/components/Navbars/MobileNavbar";
@@ -69,6 +69,11 @@ const damion = Damion({
   variable: "--font-damion",
 });
 
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
+
 export const metadata = {
   title: {
     default: "Bayard Vacations | Customized Travel Packages for Every Explorer",
@@ -121,7 +126,7 @@ export default async function RootLayout({ children }) {
       </head>
       <Metrics />
       <body
-        className={`${outfit.variable} ${nord.variable} ${damion.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${nord.variable} ${damion.variable} ${playfair.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ClientProviders>

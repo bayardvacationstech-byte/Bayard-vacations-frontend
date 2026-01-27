@@ -113,6 +113,12 @@ export default function PackagesRegionClient() {
   }, []);
 
   useEffect(() => {
+    if (regionName === "azerbaijan" && allPackages.length > 0) {
+      console.log("Azerbaijan Packages Data:", allPackages);
+    }
+  }, [regionName, allPackages]);
+
+  useEffect(() => {
     const handleScroll = () => {
       // 1. Handle Navigation Bar Visibility
       const recommendedElem = document.getElementById('recommended');
@@ -248,7 +254,6 @@ export default function PackagesRegionClient() {
   const paginatedArray = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    console.log(filteredArray.slice(startIndex, endIndex))
     return filteredArray.slice(startIndex, endIndex);
   }, [filteredArray, currentPage]);
 
@@ -423,8 +428,6 @@ export default function PackagesRegionClient() {
 
       <section className="relative z-30 py-2 md:py-6 bg-gradient-to-br from-orange-50 via-blue-50 to-white">
         <Container>
-          {/* Debug: Log region data to console */}
-          {regionData && console.log('Region Data:', regionData)}
           
           <RegionQuickFacts 
             regionName={placeName} 
@@ -625,7 +628,7 @@ export default function PackagesRegionClient() {
                 ))}
               </div>
             ) : paginatedArray.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-4 md:mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start mb-4 md:mb-12">
                 {paginatedArray.map((item) => (
                   <PackageCard key={item.id} item={item} />
                 ))}

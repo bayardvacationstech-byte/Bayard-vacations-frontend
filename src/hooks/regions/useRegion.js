@@ -26,17 +26,11 @@ export function useRegion(regionSlug) {
         );
 
         if (cachedRegion) {
-          console.log(
-            `Found region "${regionSlug}" in regions cache - using cache`
-          );
           return cachedRegion;
         }
       }
 
       // If not found in cache, fetch from Firebase
-      console.log(
-        `Region "${regionSlug}" not found in cache, fetching from Firebase`
-      );
       return getRegionDocumentBySlug(regionSlug);
     },
     enabled: !!regionSlug, // Only run when regionSlug is provided

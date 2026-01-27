@@ -56,7 +56,6 @@ const PremiumBookNowForm = ({ packageData, offerData }) => {
       await navigator.clipboard.writeText(fullUrl);
       toast.success("Link Copied to Clipboard");
     } catch (err) {
-      console.error("Failed to copy URL:", err);
     }
   };
 

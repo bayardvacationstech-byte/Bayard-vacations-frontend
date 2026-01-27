@@ -147,7 +147,6 @@ export default function RegionTestimonials() {
           }
         }
       } catch (error) {
-        console.warn("Using live-feed curated testimonials");
       } finally {
         setIsLoading(false);
       }

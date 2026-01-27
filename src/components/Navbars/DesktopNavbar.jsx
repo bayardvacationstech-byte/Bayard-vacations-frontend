@@ -75,7 +75,6 @@ const DesktopNavbar = () => {
           });
           setSearchResults(response.data || []);
         } catch (error) {
-          console.error("Error searching packages:", error);
           setSearchResults([]);
         }
         setIsLoading(false);

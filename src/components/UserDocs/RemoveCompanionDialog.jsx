@@ -42,7 +42,6 @@ export default function RemoveCompanionDialog({ companion, userId, onRemove }) {
         await Promise.all(deletionPromises);
       } catch (error) {
         // If directory doesn't exist or other storage errors, continue with Firestore deletion
-        console.log("No storage files found or error deleting files:", error);
       }
 
       // Delete the companion document from Firestore
@@ -66,7 +65,6 @@ export default function RemoveCompanionDialog({ companion, userId, onRemove }) {
         id: toastId,
       });
     } catch (error) {
-      console.error("Error removing companion:", error);
       toast.error("Failed to remove travel companion", {
         id: toastId,
       });

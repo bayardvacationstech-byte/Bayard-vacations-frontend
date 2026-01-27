@@ -131,7 +131,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
-      console.error("Error fetching packages:", error);
       handleSendMessage(null, `Tell me about Bali packages`); // Fallback to normal chat if fetch fails
     } finally {
       setIsTyping(false);
@@ -205,7 +204,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Chat API error:", response.status, errorData);
         throw new Error(errorData.error || "Failed to get response from AI");
       }
 
@@ -267,13 +265,11 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               }
             } catch (e) {
               // Silently ignore parsing errors for partial lines or non-JSON data
-              console.debug("SSE Parse Error:", e);
             }
           }
         }
       }
     } catch (error) {
-      console.error("Error calling AI API:", error);
       setIsTyping(false);
       
       const fallbackResponse = {

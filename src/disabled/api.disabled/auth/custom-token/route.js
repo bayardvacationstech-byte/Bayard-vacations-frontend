@@ -13,7 +13,6 @@ export async function POST(request) {
 
     return NextResponse.json({ customToken });
   } catch (error) {
-    console.error("Error generating custom token:", error);
     return NextResponse.json(
       { error: "Failed to generate custom token" },
       { status: 500 }

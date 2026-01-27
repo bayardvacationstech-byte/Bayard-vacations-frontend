@@ -45,7 +45,6 @@ const ProfileUpdate = () => {
         description: "Profile updated successfully!",
       });
     } catch (err) {
-      console.error("Error updating profile:", err);
       toast({
         variant: "destructive",
         title: "Error",

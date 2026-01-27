@@ -27,7 +27,6 @@ export function useRegionFactSheet(regionId) {
         setIsLoading(true);
         setError(null);
 
-        console.log(`[useRegionFactSheet] Fetching factsheet for region ID: ${regionId}`);
         
         // Use the correct collection name from config
         const collectionName = COLLECTIONS.REGION_FACTS_SHEET || "region_facts_sheet";
@@ -40,13 +39,10 @@ export function useRegionFactSheet(regionId) {
         if (!querySnapshot.empty) {
           const data = sanitizeDocumentData(querySnapshot.docs[0]);
           setFactSheetData(data);
-          console.log(`[useRegionFactSheet] Successfully fetched factsheet for region ID: ${regionId}`);
         } else {
-          console.warn(`[useRegionFactSheet] No factsheet data found for region ID: ${regionId}`);
           setFactSheetData(null);
         }
       } catch (err) {
-        console.error(`[useRegionFactSheet] Error fetching factsheet for region ID ${regionId}:`, err);
         setError(err);
         setFactSheetData(null);
       } finally {

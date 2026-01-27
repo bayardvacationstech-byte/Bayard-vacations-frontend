@@ -138,7 +138,6 @@ export default function UserDocs({
         id: toastId,
       });
     } catch (error) {
-      console.error("Error uploading document:", error);
       toast.error("Failed to upload document. Please try again.", {
         id: toastId,
       });

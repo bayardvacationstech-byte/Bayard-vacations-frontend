@@ -69,7 +69,6 @@ const ContactForm = () => {
     }
 
     // If validation passes, submit the form and reset
-    console.log("Form submitted:", formData);
     // Add your form submission logic here
     try {
       const response = await storePotentialLead({

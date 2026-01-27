@@ -36,16 +36,21 @@ const OverviewSection = ({ packageData }) => {
     <div className="space-y-4">
 
       {/* 2. Quick Facts & About Section */}
-      <div className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:border md:border-slate-100 md:shadow-sm relative overflow-hidden">
-        <div className="absolute left-0 top-5 md:top-6 w-1 h-10 bg-brand-blue rounded-r-full" />
-        <h2 className="text-lg md:text-2xl font-black text-slate-900 mb-[15px] tracking-tight pl-3">
-          Package <span className="text-brand-blue">Highlights</span>
-        </h2>
+      <div className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm relative overflow-hidden scroll-mt-32">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32" />
+        
+        {/* Standard Header */}
+        <div className="mb-6 md:mb-8">
+          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+            Package <span className="text-brand-blue">Highlights</span>
+          </h2>
+          <p className="text-slate-500 text-sm md:text-xl font-medium">Quick facts and details about your journey</p>
+        </div>
         
         {/* Quick Facts Grid - Vertical on Mobile, Grid on Desktop */}
         <div className="mb-6 pb-[15px] border-b border-slate-100">
           <div className="md:mx-0">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 px-4 md:px-0 md:gap-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 md:px-0 md:gap-y-6">
               {visibleHighlights.map((item, idx) => {
                 // Comprehensive cleaning: remove \item, markdown stars, extra quotes, and trailing commas
                 const cleanedItem = item
@@ -69,12 +74,12 @@ const OverviewSection = ({ packageData }) => {
                 return (
                   <div key={idx} className="flex items-start gap-3 group">
                     <div className="flex-shrink-0 mt-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-brand-blue transition-colors"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-400 transition-colors"></div>
                     </div>
                     <div className="min-w-0 flex-1 text-sm md:text-base leading-relaxed font-bold text-slate-900">
                       {label ? (
                         <>
-                          <span className="group-hover:text-brand-blue transition-colors">
+                          <span className="transition-colors font-bold">
                             {label}:
                           </span>
                           <span className="ml-1">
@@ -82,7 +87,7 @@ const OverviewSection = ({ packageData }) => {
                           </span>
                         </>
                       ) : (
-                        <span className="group-hover:text-brand-blue transition-colors">
+                        <span className="transition-colors">
                           {value}
                         </span>
                       )}
@@ -98,7 +103,7 @@ const OverviewSection = ({ packageData }) => {
             <div className="pt-1 border-t border-slate-50 w-full">
               <button
                 onClick={() => setIsHighlightsExpanded(!isHighlightsExpanded)}
-                className="group flex justify-end items-center gap-1 text-orange-500 font-bold text-xs uppercase tracking-widest w-full"
+                className="group flex justify-end items-center gap-1 text-brand-blue font-bold text-xs uppercase tracking-widest w-full"
               >
                 {isHighlightsExpanded ? (
                   <>
@@ -118,7 +123,7 @@ const OverviewSection = ({ packageData }) => {
 
         {/* Full Description with Read More */}
         <div className="space-y-3">
-          <h3 className="text-lg font-black text-slate-900">About {packageData?.packageTitle || "the Package"}:</h3>
+          <h3 className="text-base md:text-lg font-black text-slate-900">About {packageData?.packageTitle || "the Package"}:</h3>
           <div className="relative">
             {(() => {
               // 1. Prepare Description Content
@@ -131,7 +136,7 @@ const OverviewSection = ({ packageData }) => {
                 // Collapsed: Show condensed text with line clamp
                 const cleanCollapseText = paragraphs.map(p => p.replace(/^["'\s]+|["'\s]+,?$/g, "").trim()).join(" ");
                 return (
-                   <p className="text-slate-600 text-sm leading-relaxed font-medium line-clamp-3">
+                   <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium line-clamp-3">
                     {cleanCollapseText}
                   </p>
                 );
@@ -142,7 +147,7 @@ const OverviewSection = ({ packageData }) => {
                     {paragraphs.map((para, idx) => {
                       const cleanPara = para.replace(/^["'\s]+|["'\s]+,?$/g, "").trim();
                       return (
-                        <p key={idx} className="text-slate-600 text-sm leading-relaxed font-medium">
+                        <p key={idx} className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
                           {cleanPara}
                         </p>
                       );
@@ -156,7 +161,7 @@ const OverviewSection = ({ packageData }) => {
             <div className="pt-1 border-t border-slate-50 w-full mt-2">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="group flex justify-end items-center gap-1 text-orange-500 font-bold text-xs uppercase tracking-widest w-full"
+                className="group flex justify-end items-center gap-1 text-brand-blue font-bold text-xs uppercase tracking-widest w-full"
               >
                 {isExpanded ? (
                   <>

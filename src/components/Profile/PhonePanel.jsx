@@ -61,7 +61,6 @@ const PhonePanel = () => {
         }
       );
     } catch (err) {
-      console.error("Error generating reCAPTCHA:", err);
       setError("Error setting up verification. Please try again.");
       toast({
         variant: "destructive",
@@ -119,7 +118,6 @@ const PhonePanel = () => {
         });
       }
     } catch (error) {
-      console.error("Error in phone submission:", error);
       setError(error.message || "Failed to proceed. Please try again later.");
       toast({
         variant: "destructive",
@@ -167,7 +165,6 @@ const PhonePanel = () => {
         description: "Check your new phone number for the verification code.",
       });
     } catch (error) {
-      console.error("Error in old OTP verification:", error);
       setError(error.message || "Failed to verify OTP. Please try again.");
       toast({
         variant: "destructive",
@@ -197,7 +194,6 @@ const PhonePanel = () => {
         description: "Your phone number has been updated successfully.",
       });
     } catch (error) {
-      console.error("Error in new OTP verification:", error);
       setError(
         error.message || "Failed to update phone number. Please try again."
       );

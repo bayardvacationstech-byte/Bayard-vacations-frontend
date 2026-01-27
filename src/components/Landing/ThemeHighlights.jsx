@@ -288,6 +288,8 @@ export default function ThemeHighlights({
                             <Image
                               src={
                                 pkg.cardImages?.[0]?.url ||
+                                pkg.image ||
+                                pkg.imageUrl ||
                                 "/img/package-img/default.jpg"
                               }
                               alt={pkg.packageTitle}

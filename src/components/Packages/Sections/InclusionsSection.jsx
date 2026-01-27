@@ -191,16 +191,12 @@ const InclusionsSection = ({ packageData }) => {
 
   const TRAVEL_GUIDE_DATA = getDynamicTravelGuideData();
 
-  const [activeTab, setActiveTab] = useState("notes");
-  const [prepTab, setPrepTab] = useState("beforeDeparture"); // New state for Travel Prep tabs
-  const [activeNotesTab, setActiveNotesTab] = useState(0); // For Important Notes tabs on mobile
-  const [activePointsTab, setActivePointsTab] = useState('preparation'); // For Points to Remember tabs on mobile
   const [isIncludesExpanded, setIsIncludesExpanded] = useState(false);
   const [isExcludesExpanded, setIsExcludesExpanded] = useState(false);
-  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
   const [isPointsExpanded, setIsPointsExpanded] = useState(false);
+  const [prepTab, setPrepTab] = useState("beforeDeparture");
+  const [activePointsTab, setActivePointsTab] = useState('preparation');
   const [expandedPrepSections, setExpandedPrepSections] = useState({ "beforeDeparture-0": true }); // Tracking Travel Prep subsections
-  const [expandedNoteSections, setExpandedNoteSections] = useState({}); // Tracking Important Notes subsections
 
   useEffect(() => {
     // Open the first section of a tab by default when switching tabs
@@ -211,10 +207,6 @@ const InclusionsSection = ({ packageData }) => {
   const togglePrepSection = (tabId, sectionIdx) => {
     const key = `${tabId}-${sectionIdx}`;
     setExpandedPrepSections(prev => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const toggleNoteSection = (sectionIdx) => {
-    setExpandedNoteSections(prev => ({ ...prev, [sectionIdx]: !prev[sectionIdx] }));
   };
   
   const shortenNoteTabLabel = (label) => {
@@ -237,91 +229,49 @@ const InclusionsSection = ({ packageData }) => {
     { id: "terms", label: "Terms", icon: FileText },
   ];
 
-  const renderNotes = () => {
-    const notes = packageData?.notes || [
-      "Standard check-in time is usually 14:00 hrs and check-out is 12:00 hrs.",
-      "Early check-in or late check-out is subject to hotel availability.",
-      "Valid government photo ID is mandatory for all travelers.",
-      "Itinerary sequence may be adjusted based on local conditions or weather."
-    ];
-    const displayNotes = isNotesExpanded ? notes : notes.slice(0, 6);
 
-    return (
-      <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300 h-full">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-brand-blue/10 rounded-xl flex items-center justify-center">
-            <Info className="w-5 h-5 text-brand-blue" />
-          </div>
-          <h4 className="text-lg font-black text-slate-900 tracking-tight">Important <span className="text-brand-blue">Notes</span></h4>
-        </div>
-        <ul className="space-y-3">
-          {displayNotes.map((note, idx) => (
-            <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
-              <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/note:bg-brand-blue transition-colors flex-shrink-0" />
-              <span>{note}</span>
-            </li>
-          ))}
-        </ul>
-        {notes.length > 6 && (
-          <button
-            onClick={() => setIsNotesExpanded(!isNotesExpanded)}
-            className="w-full mt-4 py-2 text-xs font-bold text-brand-blue hover:text-blue-700 transition-colors flex items-center justify-center gap-1 group/btn"
-          >
-            {isNotesExpanded ? 'Show Less' : `Read More (${notes.length - 6} more)`}
-            <svg 
-              className={`w-3 h-3 transition-transform duration-300 ${isNotesExpanded ? 'rotate-180' : ''}`} 
-              fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        )}
-      </div>
-    );
-  };
+  // const renderPoints = () => {
+  //   const points = packageData?.points_to_remember || packageData?.points || [
+  //     "Comfortable walking shoes are highly recommended for sightseeing.",
+  //     "Carry appropriate clothing for the season and specific region requirements.",
+  //     "Respect local customs, traditions, and dress codes at religious sites.",
+  //     "Maintain digital and physical copies of all your travel documents."
+  //   ];
+  //   const displayPoints = isPointsExpanded ? points : points.slice(0, 6);
 
-  const renderPoints = () => {
-    const points = packageData?.points_to_remember || packageData?.points || [
-      "Comfortable walking shoes are highly recommended for sightseeing.",
-      "Carry appropriate clothing for the season and specific region requirements.",
-      "Respect local customs, traditions, and dress codes at religious sites.",
-      "Maintain digital and physical copies of all your travel documents."
-    ];
-    const displayPoints = isPointsExpanded ? points : points.slice(0, 6);
-
-    return (
-      <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-green/20 hover:shadow-md transition-all duration-300 h-full">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center">
-            <ListChecks className="w-5 h-5 text-brand-green" />
-          </div>
-          <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-green">Remember</span></h4>
-        </div>
-        <ul className="space-y-3">
-          {displayPoints.map((point, idx) => (
-            <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/point text-left">
-              <CheckCircle2 className="w-4 h-4 text-brand-green/50 mt-0.5 group-hover/point:text-brand-green transition-colors flex-shrink-0" />
-              <span>{point}</span>
-            </li>
-          ))}
-        </ul>
-        {points.length > 6 && (
-          <button
-            onClick={() => setIsPointsExpanded(!isPointsExpanded)}
-            className="w-full mt-4 py-2 text-xs font-bold text-brand-green hover:text-emerald-700 transition-colors flex items-center justify-center gap-1 group/btn"
-          >
-            {isPointsExpanded ? 'Show Less' : `Read More (${points.length - 6} more)`}
-            <svg 
-              className={`w-3 h-3 transition-transform duration-300 ${isPointsExpanded ? 'rotate-180' : ''}`} 
-              fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        )}
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-green/20 hover:shadow-md transition-all duration-300 h-full">
+  //       <div className="flex items-center gap-3 mb-4">
+  //         <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center">
+  //           <ListChecks className="w-5 h-5 text-brand-green" />
+  //         </div>
+  //         <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-green">Remember</span></h4>
+  //       </div>
+  //       <ul className="space-y-3">
+  //         {displayPoints.map((point, idx) => (
+  //           <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/point text-left">
+  //             <CheckCircle2 className="w-4 h-4 text-brand-green/50 mt-0.5 group-hover/point:text-brand-green transition-colors flex-shrink-0" />
+  //             <span>{point}</span>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //       {points.length > 6 && (
+  //         <button
+  //           onClick={() => setIsPointsExpanded(!isPointsExpanded)}
+  //           className="w-full mt-4 py-2 text-xs font-bold text-brand-green hover:text-emerald-700 transition-colors flex items-center justify-center gap-1 group/btn"
+  //         >
+  //           {isPointsExpanded ? 'Show Less' : `Read More (${points.length - 6} more)`}
+  //           <svg 
+  //             className={`w-3 h-3 transition-transform duration-300 ${isPointsExpanded ? 'rotate-180' : ''}`} 
+  //             fill="none" viewBox="0 0 24 24" stroke="currentColor"
+  //           >
+  //             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  //           </svg>
+  //         </button>
+  //       )}
+  //     </div>
+  //   );
+  // };
 
   const renderProTip = () => {
     const tips = packageData?.proTips || [
@@ -581,27 +531,28 @@ const InclusionsSection = ({ packageData }) => {
   };
 
   return (
-    <div id="inclusions" className="md:bg-white md:rounded-3xl p-0 md:p-[15px] md:py-4 md:px-6 scroll-mt-48 md:border md:border-slate-100 md:shadow-sm">
+    <div id="inclusions" className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm scroll-mt-48 overflow-hidden relative">
+      <div className="absolute right-0 top-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32" />
+      
       {/* Standard Header */}
-      <div className="mb-[15px] text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-blue/10 rounded-full text-[10px] md:text-[11px] font-bold text-brand-blue border border-brand-blue/20 mb-2 md:mb-4 uppercase tracking-widest">
-          <span className="text-xs">📋</span> Plan Details
-        </div>
-        <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-1 md:mb-4 tracking-tight leading-tight">Package <span className="text-brand-green">Inclusions</span></h2>
-        <p className="text-sm md:text-xl font-medium text-slate-600">Everything you need for a seamless journey</p>
+      <div className="mb-6 md:mb-8 relative z-10">
+        <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+          Package <span className="text-brand-blue">Inclusions</span>
+        </h2>
+        <p className="text-slate-500 text-sm md:text-xl font-medium">Everything you need for a seamless journey</p>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
         {/* Inclusions Card */}
         <div className="border border-blue-100 rounded-3xl overflow-hidden shadow-sm">
           {/* Header */}
-          <div className="bg-blue-700 p-6 flex items-center gap-4">
-             <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-               <CheckCircle2 className="w-6 h-6 text-white" />
+          <div className="bg-blue-700 py-3 px-5 flex items-center gap-4">
+             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+               <CheckCircle2 className="w-5 h-5 text-white" />
              </div>
              <div>
-               <h5 className="text-xl font-black text-white tracking-tight">What's Included</h5>
-               <p className="text-blue-100/80 text-xs font-bold uppercase tracking-widest">{packageData?.includes?.length || 0} benefits included</p>
+               <h5 className="text-lg font-black text-white tracking-tight leading-tight">What's Included</h5>
+               <p className="text-blue-100/80 text-[10px] font-bold uppercase tracking-widest">{packageData?.includes?.length || 0} benefits included</p>
              </div>
           </div>
           
@@ -640,13 +591,13 @@ const InclusionsSection = ({ packageData }) => {
         {/* Exclusions Card */}
         <div className="border border-rose-100 rounded-3xl overflow-hidden shadow-sm">
           {/* Header */}
-          <div className="bg-rose-500 p-6 flex items-center gap-4">
-             <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-               <X className="w-6 h-6 text-white" />
+          <div className="bg-rose-500 py-3 px-5 flex items-center gap-4">
+             <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+               <X className="w-5 h-5 text-white" />
              </div>
              <div>
-               <h5 className="text-xl font-black text-white tracking-tight">Exclusions</h5>
-               <p className="text-rose-100/80 text-xs font-bold uppercase tracking-widest">Items you'll need to arrange</p>
+               <h5 className="text-lg font-black text-white tracking-tight leading-tight">Exclusions</h5>
+               <p className="text-rose-100/80 text-[10px] font-bold uppercase tracking-widest">Items you'll need to arrange</p>
              </div>
           </div>
           
@@ -683,33 +634,38 @@ const InclusionsSection = ({ packageData }) => {
         </div>
       </div>
       
+
       {/* Mobile Tabs Navigation (REMOVED - Using unified vertical layout) */}
       {/* 
       <div className="md:hidden mt-4 mb-3">
         ...
       </div>
       */}
-
       <div className="mt-8 space-y-8">
-        {/* 1. IMPORTANT NOTES - TABS ON MOBILE, GRID ON DESKTOP */}
-        <div>
+        {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
+        {/* <div>
           <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
-             <span className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center">
-               <Info className="w-5 h-5 text-brand-blue" />
+             <span className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+               <Briefcase className="w-5 h-5 text-orange-500" />
              </span>
-             Important <span className="text-brand-blue">Notes & Policies</span>
+             Travel Preparation <span className="text-orange-500">Guide</span>
           </h3>
 
-          {/* Mobile Tabs */}
+          {/* Mobile Tabs *\/}
           <div className="md:hidden mb-4">
             <div className="flex flex-wrap gap-2 pb-2">
-              {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
-                const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
-                const isActive = activeNotesTab === idx;
+              {[
+                { id: 'beforeDeparture', label: 'Before', icon: Calendar },
+                { id: 'uponArrival', label: 'Arrival', icon: Plane },
+                { id: 'duringTravel', label: 'Stay', icon: MapIcon },
+                { id: 'usefulInfo', label: 'Info', icon: Info }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = prepTab === tab.id;
                 return (
                   <button
-                    key={idx}
-                    onClick={() => setActiveNotesTab(idx)}
+                    key={tab.id}
+                    onClick={() => setPrepTab(tab.id)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all border ${
                       isActive
                         ? 'bg-brand-blue text-white shadow-md border-brand-blue'
@@ -717,90 +673,122 @@ const InclusionsSection = ({ packageData }) => {
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
-                    {shortenNoteTabLabel(note.title)}
+                    {tab.label}
                   </button>
                 );
               })}
             </div>
 
-            {/* Active Tab Content - Mobile - No Boxes */}
+            {/* Active Tab Content - Mobile - Accordion Style *\/}
             <div className="pt-4 border-t border-slate-100">
-              <ul className="space-y-4">
-                {TRAVEL_GUIDE_DATA.importantNotes[activeNotesTab].items.map((item, i) => {
-                  const parts = item.match(/^([^:]+):\s*(.*)/);
-                  const key = parts ? parts[1] : null;
-                  const val = parts ? parts[2] : item;
-
+              <div className="space-y-3">
+                {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
+                  const sectionKey = `${prepTab}-${idx}`;
+                  const isExpanded = expandedPrepSections[sectionKey];
+                  
                   return (
-                    <li key={i} className="flex items-start gap-4 text-sm text-slate-600 leading-relaxed">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
-                      <span>
-                        {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
-                        {val}
-                      </span>
-                    </li>
+                    <div key={idx} className="border border-slate-100 rounded-xl overflow-hidden bg-slate-50/50">
+                      <button 
+                        onClick={() => togglePrepSection(prepTab, idx)}
+                        className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-slate-100/50"
+                      >
+                        <h5 className="font-black text-slate-900 text-[11px] uppercase tracking-widest flex items-center gap-3">
+                          <div className={`w-2 h-2 rounded-full transition-colors ${isExpanded ? 'bg-orange-500' : 'bg-slate-300'}`}></div>
+                          {sec.subtitle}
+                        </h5>
+                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-orange-500' : ''}`} />
+                      </button>
+                      
+                      {isExpanded && (
+                        <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1 duration-300">
+                          <ul className="space-y-3 ml-2 border-l-2 border-orange-100 pl-4 py-1">
+                            {sec.items.map((item, i) => (
+                              <li key={i} className="text-sm text-slate-600 flex items-start gap-3 leading-relaxed">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2 shrink-0" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
-              </ul>
+              </div>
             </div>
           </div>
 
-          {/* Desktop Grid - No Boxes */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
-            {TRAVEL_GUIDE_DATA.importantNotes.map((note, idx) => {
-              const Icon = { Building, Car, Map: MapIcon, FileCheck, AlertOctagon }[note.icon] || Info;
-              const isExpanded = expandedNoteSections[idx];
-              const visibleItems = isExpanded ? note.items : note.items.slice(0, 3);
-              
-              return (
-                <div key={idx} className="group">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-brand-blue/10 group-hover:text-brand-blue transition-colors">
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <h4 className="font-bold text-slate-900 text-sm">{note.title}</h4>
-                  </div>
-                  <ul className="space-y-3">
-                    {visibleItems.map((item, i) => {
-                      const parts = item.match(/^([^:]+):\s*(.*)/);
-                      const key = parts ? parts[1] : null;
-                      const val = parts ? parts[2] : item;
+          {/* Desktop Tabs *\/}
+          <div className="hidden md:block">
+            {/* Tabs Header *\/}
+            <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
+               {[
+                 { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
+                 { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
+                 { id: 'duringTravel', label: 'During Your Stay', icon: MapIcon },
+                 { id: 'usefulInfo', label: 'Good to Know', icon: AlertOctagon }
+               ].map((tab) => (
+                 <button
+                   key={tab.id}
+                   onClick={() => setPrepTab(tab.id)}
+                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-base font-bold whitespace-nowrap transition-colors ${
+                     prepTab === tab.id
+                       ? "border-brand-blue text-brand-blue"
+                       : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
+                   }`}
+                 >
+                   <tab.icon className="w-4 h-4" />
+                   {tab.label}
+                 </button>
+               ))}
+            </div>
 
-                      return (
-                        <li key={i} className="flex items-start gap-3 text-sm md:text-base text-slate-600 hover:text-slate-900 transition-colors leading-relaxed">
-                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-slate-300 flex-shrink-0" />
-                          <span>
-                            {key ? <span className="font-bold text-slate-800">{key}: </span> : null}
-                            {val}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  {note.items.length > 3 && (
-                    <button
-                      onClick={() => toggleNoteSection(idx)}
-                      className="mt-3 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
-                    >
-                      {isExpanded ? (
-                        <>
-                          <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
-                        </>
-                      ) : (
-                        <>
-                          <ChevronDown className="w-3 h-3" /> <span>Read More ({note.items.length - 3})</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-              );
-            })}
+            {/* Tab Content - No Boxes *\/}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 animate-in fade-in duration-300">
+               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
+                  const sectionKey = `${prepTab}-${idx}`;
+                  const isExpanded = expandedPrepSections[sectionKey];
+                  const visibleItems = isExpanded ? sec.items : sec.items.slice(0, 4);
+
+                  return (
+                    <div key={idx} className="space-y-4">
+                       <h5 className="font-black text-slate-900 text-base flex items-center gap-3 border-l-4 border-brand-blue pl-4">
+                          {sec.subtitle}
+                       </h5>
+                       <ul className="space-y-4 ml-7">
+                          {visibleItems.map((item, i) => (
+                             <li key={i} className="text-sm md:text-base text-slate-600 flex items-start gap-4 leading-relaxed hover:text-slate-900 transition-colors">
+                                <span className="w-2 h-2 rounded-full bg-slate-200 mt-2 shrink-0" />
+                                <span>{item}</span>
+                             </li>
+                          ))}
+                       </ul>
+                       {sec.items.length > 4 && (
+                          <button
+                            onClick={() => togglePrepSection(prepTab, idx)}
+                            className="ml-7 mt-2 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
+                          >
+                            {isExpanded ? (
+                              <>
+                                <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="w-3 h-3" /> <span>Read More ({sec.items.length - 4})</span>
+                              </>
+                            )}
+                          </button>
+                       )}
+                    </div>
+                  );
+               })}
+            </div>
           </div>
-        </div>
+        </div> */}
+
 
         {/* 2. POINTS TO REMEMBER - TABS ON MOBILE */}
-        <div>
+        {/* <div id="points-to-remember">
           <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
              <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                <ListChecks className="w-5 h-5 text-brand-blue" />
@@ -808,7 +796,7 @@ const InclusionsSection = ({ packageData }) => {
              Points to <span className="text-brand-blue">Remember</span>
           </h3>
 
-          {/* Mobile Tabs */}
+          {/* Mobile Tabs *\/}
           <div className="md:hidden mb-4">
             <div className="flex flex-wrap gap-2 pb-2">
               {[
@@ -836,7 +824,7 @@ const InclusionsSection = ({ packageData }) => {
               })}
             </div>
 
-            {/* Active Tab Content - Mobile - No Boxes */}
+            {/* Active Tab Content - Mobile - No Boxes *\/}
             <div className="pt-4 border-t border-slate-100">
               <div className="space-y-4">
                 {TRAVEL_GUIDE_DATA.pointsToRemember
@@ -879,7 +867,7 @@ const InclusionsSection = ({ packageData }) => {
             </div>
           </div>
 
-          {/* Desktop Grid - Minimal List */}
+          {/* Desktop Grid - Minimal List *\/}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6">
             {(isPointsExpanded ? TRAVEL_GUIDE_DATA.pointsToRemember : TRAVEL_GUIDE_DATA.pointsToRemember.slice(0, 6)).map((point, idx) => {
                const [title, desc] = point.split(": ");
@@ -902,7 +890,7 @@ const InclusionsSection = ({ packageData }) => {
             })}
           </div>
 
-          {/* Minimal Read More / Show Less Button */}
+          {/* Minimal Read More / Show Less Button *\/}
           {TRAVEL_GUIDE_DATA.pointsToRemember.length > 6 && (
             <div className="pt-6 border-t border-slate-50 mt-6 md:block hidden">
               <button
@@ -923,151 +911,7 @@ const InclusionsSection = ({ packageData }) => {
               </button>
             </div>
           )}
-        </div>
-
-        {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
-        <div>
-          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
-             <span className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
-               <Briefcase className="w-5 h-5 text-orange-500" />
-             </span>
-             Travel Preparation <span className="text-orange-500">Guide</span>
-          </h3>
-
-          {/* Mobile Tabs */}
-          <div className="md:hidden mb-4">
-            <div className="flex flex-wrap gap-2 pb-2">
-              {[
-                { id: 'beforeDeparture', label: 'Before', icon: Calendar },
-                { id: 'uponArrival', label: 'Arrival', icon: Plane },
-                { id: 'duringTravel', label: 'Stay', icon: MapIcon },
-                { id: 'usefulInfo', label: 'Info', icon: Info }
-              ].map((tab) => {
-                const Icon = tab.icon;
-                const isActive = prepTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setPrepTab(tab.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all border ${
-                      isActive
-                        ? 'bg-brand-blue text-white shadow-md border-brand-blue'
-                        : 'bg-blue-50/50 text-slate-600 border-brand-blue/30 hover:bg-blue-100/50'
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Active Tab Content - Mobile - Accordion Style */}
-            <div className="pt-4 border-t border-slate-100">
-              <div className="space-y-3">
-                {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
-                  const sectionKey = `${prepTab}-${idx}`;
-                  const isExpanded = expandedPrepSections[sectionKey];
-                  
-                  return (
-                    <div key={idx} className="border border-slate-100 rounded-xl overflow-hidden bg-slate-50/50">
-                      <button 
-                        onClick={() => togglePrepSection(prepTab, idx)}
-                        className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-slate-100/50"
-                      >
-                        <h5 className="font-black text-slate-900 text-[11px] uppercase tracking-widest flex items-center gap-3">
-                          <div className={`w-2 h-2 rounded-full transition-colors ${isExpanded ? 'bg-orange-500' : 'bg-slate-300'}`}></div>
-                          {sec.subtitle}
-                        </h5>
-                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-orange-500' : ''}`} />
-                      </button>
-                      
-                      {isExpanded && (
-                        <div className="px-4 pb-4 animate-in fade-in slide-in-from-top-1 duration-300">
-                          <ul className="space-y-3 ml-2 border-l-2 border-orange-100 pl-4 py-1">
-                            {sec.items.map((item, i) => (
-                              <li key={i} className="text-sm text-slate-600 flex items-start gap-3 leading-relaxed">
-                                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-2 shrink-0" />
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop Tabs */}
-          <div className="hidden md:block">
-            {/* Tabs Header */}
-            <div className="flex border-b border-slate-200 mb-6 overflow-x-auto no-scrollbar">
-               {[
-                 { id: 'beforeDeparture', label: 'Before Departure', icon: Calendar },
-                 { id: 'uponArrival', label: 'Upon Arrival', icon: Plane },
-                 { id: 'duringTravel', label: 'During Your Stay', icon: MapIcon },
-                 { id: 'usefulInfo', label: 'Good to Know', icon: AlertOctagon }
-               ].map((tab) => (
-                 <button
-                   key={tab.id}
-                   onClick={() => setPrepTab(tab.id)}
-                   className={`flex items-center gap-2 px-6 py-4 border-b-2 text-base font-bold whitespace-nowrap transition-colors ${
-                     prepTab === tab.id
-                       ? "border-brand-blue text-brand-blue"
-                       : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                   }`}
-                 >
-                   <tab.icon className="w-4 h-4" />
-                   {tab.label}
-                 </button>
-               ))}
-            </div>
-
-            {/* Tab Content - No Boxes */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 animate-in fade-in duration-300">
-               {TRAVEL_GUIDE_DATA.travelPrep[prepTab].sections.map((sec, idx) => {
-                  const sectionKey = `${prepTab}-${idx}`;
-                  const isExpanded = expandedPrepSections[sectionKey];
-                  const visibleItems = isExpanded ? sec.items : sec.items.slice(0, 4);
-
-                  return (
-                    <div key={idx} className="space-y-4">
-                       <h5 className="font-black text-slate-900 text-base flex items-center gap-3 border-l-4 border-brand-blue pl-4">
-                          {sec.subtitle}
-                       </h5>
-                       <ul className="space-y-4 ml-7">
-                          {visibleItems.map((item, i) => (
-                             <li key={i} className="text-sm md:text-base text-slate-600 flex items-start gap-4 leading-relaxed hover:text-slate-900 transition-colors">
-                                <span className="w-2 h-2 rounded-full bg-slate-200 mt-2 shrink-0" />
-                                <span>{item}</span>
-                             </li>
-                          ))}
-                       </ul>
-                       {sec.items.length > 4 && (
-                          <button
-                            onClick={() => togglePrepSection(prepTab, idx)}
-                            className="ml-7 mt-2 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
-                          >
-                            {isExpanded ? (
-                              <>
-                                <ChevronUp className="w-3 h-3" /> <span>Show Less</span>
-                              </>
-                            ) : (
-                              <>
-                                <ChevronDown className="w-3 h-3" /> <span>Read More ({sec.items.length - 4})</span>
-                              </>
-                            )}
-                          </button>
-                       )}
-                    </div>
-                  );
-               })}
-            </div>
-          </div>
-        </div>
+        </div> */}
 
       </div>
     </div>

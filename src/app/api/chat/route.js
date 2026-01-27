@@ -15,7 +15,6 @@ export async function POST(request) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('External API error:', response.status, errorText);
       return NextResponse.json(
         { error: `External AI error: ${response.status}` },
         { status: response.status }
@@ -49,7 +48,7 @@ export async function POST(request) {
       },
     });
   } catch (error) {
-    console.error('Error in chat API route:', error);
+    console.error("Chat API Error:", error);
     return NextResponse.json(
       { error: 'Failed to process chat request' },
       { status: 500 }

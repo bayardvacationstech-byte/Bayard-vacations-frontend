@@ -29,7 +29,6 @@ const SplashScreen = () => {
     // Ensure video plays when loaded
     if (videoRef.current) {
       videoRef.current.play().catch((error) => {
-        console.log("Video autoplay prevented:", error);
         // If autoplay fails, hide splash after 1 second
         setTimeout(handleHideSplash, 1000);
       });
@@ -38,7 +37,6 @@ const SplashScreen = () => {
     // If video doesn't load within 2 seconds, skip the splash screen
     const videoLoadTimeout = setTimeout(() => {
       if (!videoLoaded) {
-        console.log("Video took too long to load, skipping splash screen");
         handleHideSplash();
       }
     }, 2000);
@@ -98,12 +96,10 @@ const SplashScreen = () => {
           playsInline
           preload="auto"
           onLoadedData={() => {
-            console.log("Video loaded successfully");
             setVideoLoaded(true);
             videoRef.current?.play();
           }}
           onCanPlayThrough={() => {
-            console.log("Video can play through");
             setVideoLoaded(true);
           }}
           onEnded={handleHideSplash}

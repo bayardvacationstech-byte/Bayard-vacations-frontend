@@ -12,10 +12,8 @@ export function useRegionsData(initialRegions = []) {
 
   // Filter domestic regions
   const domesticRegions = useMemo(() => {
-    console.log("Regions data:", regions?.length || 0, "regions available");
     
     if (!regions || regions.length === 0) {
-      console.warn("No regions data available in useRegionsData");
       return [];
     }
     
@@ -29,7 +27,6 @@ export function useRegionsData(initialRegions = []) {
         return nameA.localeCompare(nameB, 'en', { sensitivity: 'base', numeric: true });
       });
     
-    console.log("Domestic regions filtered:", filtered.length);
     return filtered;
   }, [regions]);
 
@@ -69,7 +66,6 @@ export function useRegionsData(initialRegions = []) {
     const acc = JSON.parse(JSON.stringify(CONTINENTS));
 
     if (!regions || regions.length === 0) {
-      console.warn("No regions data for international regions grouping");
       return acc;
     }
 
@@ -83,7 +79,6 @@ export function useRegionsData(initialRegions = []) {
         return nameA.localeCompare(nameB, 'en', { sensitivity: 'base', numeric: true });
       });
     
-    console.log("International regions filtered:", intlRegions.length);
     
     const grouped = intlRegions.reduce((prev, region) => {
         // Use existing continent field, or fallback to mapping by slug
@@ -95,7 +90,6 @@ export function useRegionsData(initialRegions = []) {
           continentKey = CONTINENT_MAPPING[slug];
           
           if (!continentKey) {
-            console.warn(`Region ${region.name} (${slug}) has no continent mapping`);
             return prev;
           }
         }
@@ -108,14 +102,12 @@ export function useRegionsData(initialRegions = []) {
         if (continentIndex !== -1) {
           prev[continentIndex].regions.push(region);
         } else {
-          console.warn(`Region ${region.name} mapped to unknown continent: ${continentKey}`);
         }
 
         return prev;
       }, acc);
     
     const totalGrouped = grouped.reduce((sum, continent) => sum + continent.regions.length, 0);
-    console.log("International regions grouped by continent:", totalGrouped);
     
     return grouped;
   }, [regions]);

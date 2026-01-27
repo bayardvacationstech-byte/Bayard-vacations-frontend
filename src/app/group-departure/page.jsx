@@ -1,6 +1,6 @@
 import { getGroupDeparturePackages } from "@/lib/server";
 import Container from "@/components/ui/Container";
-import PackageCardGradient from "@/components/Packages/PackageCardGradient";
+import GroupPackageCard from "@/components/Landing/GroupPackageCard";
 import RegionStats from "@/components/Packages/RegionStats";
 import Newsletter from "@/components/Landing/Newsletter";
 import GroupDepartureSlider from "@/components/ui/sliders/GroupDepartureSlider";
@@ -163,7 +163,7 @@ const GroupDeparturePage = async () => {
                   <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-8">
                      {groupDeparturePackages.map((pkg) => (
                         <div key={pkg.id} className="h-[520px]">
-                           <PackageCardGradient item={pkg} />
+                           <GroupPackageCard item={pkg} />
                         </div>
                      ))}
                   </div>

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import Container from "@/components/ui/Container";
-import { MapPin, Clock, Calendar, IndianRupee, ChevronRight, Star, ExternalLink } from "lucide-react";
+import { MapPin, Clock, Calendar, IndianRupee, ChevronRight, Star, ExternalLink, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Import Swiper styles
@@ -40,23 +40,16 @@ const PackageHero = ({ packageData }) => {
   const title = packageData?.packageTitle || "";
   const location = packageData?.region || "";
 
-  const handleThumbnailClick = (index) => {
-    if (swiperRef.current) {
-      setCurrentImageIndex(index);
-      swiperRef.current.slideToLoop(index);
-    }
-  };
-
   return (
-    <section className="relative w-full lg:h-screen bg-gradient-to-br from-[#0146b3] via-[#003488] to-[#0146b3] overflow-hidden flex flex-col lg:block">
+    <section className="relative w-full h-[100dvh] lg:h-screen bg-slate-950 overflow-hidden">
       {/* Immersive Background Swiper */}
-      <div className="relative lg:absolute lg:inset-0 h-[60vh] md:h-[55vh] lg:h-auto z-0 overflow-hidden">
+      <div className="absolute inset-0 z-0">
         <Swiper
           modules={[Autoplay, EffectFade]}
           effect="fade"
           loop={validBannerImages.length > 1}
           autoplay={{
-            delay: 7000,
+            delay: 6000,
             disableOnInteraction: false,
           }}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -66,9 +59,9 @@ const PackageHero = ({ packageData }) => {
           {validBannerImages.map((image, index) => (
             <SwiperSlide key={index} className="w-full h-full relative overflow-hidden">
               <motion.div
-                initial={{ scale: 1.15 }}
-                animate={{ scale: index === currentImageIndex ? 1 : 1.15 }}
-                transition={{ duration: 8, ease: "linear" }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: index === currentImageIndex ? 1 : 1.1 }}
+                transition={{ duration: 6, ease: "linear" }}
                 className="w-full h-full"
               >
                 <Image
@@ -79,89 +72,48 @@ const PackageHero = ({ packageData }) => {
                   className="object-cover"
                 />
               </motion.div>
-              {/* Overlays for better depth - slightly brighter on mobile to keep it "clear" */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 lg:to-black/60 z-10" />
+              {/* Refined Overlays - Extreme bottom focus for mobile */}
+              <div className="absolute inset-0 bg-black/10 z-10" />
+              <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent z-10 opacity-90 lg:opacity-60" />
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
 
-      {/* Main Content Area */}
-      <div className="relative flex-1 z-20 lg:absolute lg:inset-0">
-        <Container className="h-full flex flex-col justify-start lg:justify-center pt-6 pb-8 lg:py-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 items-start lg:items-center h-full">
+      {/* Content Container */}
+      <div className="relative z-20 h-full w-full">
+        <Container className="h-full flex flex-col justify-end lg:justify-center pb-6 lg:pb-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-end lg:items-center">
             
-            {/* Title & Info Section - Mobile Only now (since Desktop moved to right) */}
-            <div className="lg:hidden">
+            {/* Left Section: Title & Badge */}
+            <div className="lg:col-span-12 xl:col-span-8 space-y-4 lg:space-y-8">
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="space-y-3 lg:space-y-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="space-y-2 lg:space-y-4"
               >
-                {/* Gallery Rail - Mobile Only (Top) */}
-                <div className="w-full mb-4 lg:hidden overflow-hidden">
-                  <div className="flex gap-2 overflow-x-auto p-2 scrollbar-hide snap-x intro-x">
-                    {validBannerImages.map((image, index) => (
-                      <motion.button
-                        key={index}
-                        onClick={() => swiperRef.current?.slideTo(index)}
-                        className={cn(
-                          "relative flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border transition-all snap-start",
-                          currentImageIndex === index ? "border-yellow-400 scale-105" : "border-white/10"
-                        )}
-                      >
-                        <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover" />
-                      </motion.button>
-                    ))}
-                  </div>
+                {/* Location Badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full shadow-2xl">
+                  <MapPin className="w-3 h-3 lg:w-4 lg:h-4 text-yellow-400 fill-yellow-400/20" />
+                  <span className="text-white font-bold text-[9px] lg:text-xs uppercase tracking-[0.2em]">{location}</span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 lg:block">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 lg:px-4 lg:py-2 bg-yellow-400/90 backdrop-blur-md rounded-full shadow-lg">
-                    <MapPin className="w-3 h-3 lg:w-4 lg:h-4 text-slate-900" />
-                    <span className="text-slate-900 font-bold text-[9px] lg:text-xs uppercase tracking-widest">{location}</span>
-                  </div>
+                {/* Elegant Typography Title */}
+                <h1 
+                  className="text-white font-bold text-4xl md:text-5xl lg:text-6xl leading-tight lg:leading-[1.1] tracking-tight drop-shadow-2xl max-w-4xl font-serif"
+                  style={{ fontFamily: "var(--font-playfair), serif" }}
+                >
+                  {title.replace(/ - /g, ' — ')}
+                </h1>
 
-                  {/* Highlights - Mobile Only (Beside Badge) */}
-                  <div className="flex lg:hidden items-center gap-4">
-                    <div className="flex items-center gap-2 text-white text-base uppercase font-black tracking-wider">
-                      <Clock className="w-5 h-5 text-yellow-400" />
-                      {packageData?.nights || "0"}N
-                    </div>
-                    <div className="w-[1px] h-4 bg-white/20" />
-                    <div className="flex items-center gap-2 text-white text-base uppercase font-black tracking-wider">
-                      <Calendar className="w-5 h-5 text-cyan-400" />
-                      {packageData?.days || (packageData?.nights ? packageData.nights + 1 : "0")}D
-                    </div>
-                    <div className="w-[1px] h-4 bg-white/20" />
-                    <div className="flex items-center gap-1.5 text-yellow-400">
-                      <Star className="w-5 h-5 fill-current" />
-                      <span className="text-white text-base font-bold">4.9</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex flex-col lg:block gap-2">
-                  <h1 
-                    className="text-white font-bold text-2xl md:text-6xl lg:text-7xl leading-tight lg:leading-[1.1] tracking-tight drop-shadow-2xl"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    <span className="lg:block">
-                      {title.replace(/ - /g, ' — ')}
-                    </span>
-                  </h1>
-
-
-                </div>
-
-                {/* Social Proof - Desktop Only */}
-                <div className="hidden lg:flex items-center gap-6 pt-4">
-                  <div className="flex -space-x-3">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-white/20 bg-slate-800 overflow-hidden shadow-xl">
+                {/* Social Proof & Rating Badge - More compact on mobile */}
+                <div className="flex items-center gap-3 lg:gap-6 py-1">
+                  <div className="flex -space-x-2.5 lg:-space-x-3">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="w-7 h-7 lg:w-10 lg:h-10 rounded-full border-2 border-white/20 bg-slate-800 overflow-hidden">
                         <Image 
-                          src={`https://i.pravatar.cc/100?img=${i + 10}`} 
+                          src={`https://i.pravatar.cc/100?img=${i + 15}`} 
                           alt="User" 
                           width={40} 
                           height={40} 
@@ -169,95 +121,123 @@ const PackageHero = ({ packageData }) => {
                         />
                       </div>
                     ))}
-                    <div className="w-10 h-10 rounded-full border-2 border-white/20 bg-brand-blue flex items-center justify-center text-[10px] text-white font-bold shadow-xl">
+                    <div className="w-7 h-7 lg:w-10 lg:h-10 rounded-full border-2 border-white/20 bg-brand-blue flex items-center justify-center text-[7px] lg:text-[10px] text-white font-bold">
                       +2k
                     </div>
                   </div>
-                  <div className="text-white/80">
-                    <div className="flex gap-1 text-yellow-400 mb-1">
-                      {[1, 2, 3, 4, 5].map(s => <Star key={s} className="w-4 h-4 fill-current" />)}
-                    </div>
-                    <p className="text-xs font-medium tracking-wide">Loved by 2,000+ Travelers</p>
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-black/40 backdrop-blur-md rounded-lg border border-white/10">
+                    <Star className="w-2.5 h-2.5 text-yellow-400 fill-current" />
+                    <span className="text-white text-[9px] lg:text-xs font-bold tracking-wide">4.9/5 Rating</span>
                   </div>
                 </div>
               </motion.div>
             </div>
 
-            {/* PC Layout - Right Panel */}
-            <div className="hidden lg:flex lg:col-span-5 lg:col-start-8 lg:h-full flex-col justify-center bg-[#0146b3]/95 backdrop-blur-sm -my-8 py-20 px-12 lg:-mr-[calc((100vw-1280px)/2+2rem)] lg:pr-[calc((100vw-1280px)/2+4rem)] xl:-mr-[calc((100vw-1280px)/2+2rem)] xl:pr-[calc((100vw-1280px)/2+4rem)] relative z-30">
-              
-              <div className="space-y-8 w-full max-w-lg">
-                <h1 className="text-white font-bold text-5xl lg:text-6xl leading-tight font-serif">
-                  {title.replace(/ - /g, ' — ')}
-                </h1>
-
-                {/* Destination Badge */}
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-700/50 rounded-lg flex items-center justify-center border border-blue-500/30">
-                    <MapPin className="text-yellow-400 w-6 h-6" />
+            {/* Bottom/Right: Action Cards & Stats */}
+            <div className="lg:col-span-12 xl:col-span-4 xl:col-start-9">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex flex-col gap-4"
+              >
+                {/* Desktop Only Stats Card */}
+                <div className="hidden xl:block bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-6 shadow-2xl space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">Starting from</p>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-black text-white">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</span>
+                        <span className="text-white/40 text-xs font-medium">/ person</span>
+                      </div>
+                    </div>
+                    <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(250,204,21,0.3)]">
+                      <IndianRupee className="w-6 h-6 text-slate-900" />
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-yellow-400 text-[10px] font-bold tracking-[0.2em] uppercase">Destination</span>
-                    <span className="text-white font-bold text-xl uppercase tracking-wider">{location}</span>
+
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <div>
+                        <span className="text-3xl font-bold text-white leading-none">{packageData?.nights || 0}N</span>
+                        <p className="text-white/40 text-[9px] uppercase font-bold tracking-wider">Nights</p>
+                      </div>
+                    </div>
+                    <div className="bg-white/5 rounded-2xl p-4 border border-white/5 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+                        <Calendar className="w-5 h-5 text-cyan-400" />
+                      </div>
+                      <div>
+                        <span className="text-3xl font-bold text-white leading-none">{packageData?.days || 0}D</span>
+                        <p className="text-white/40 text-[9px] uppercase font-bold tracking-wider">Days</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-blue-900/40 rounded-2xl p-4 border border-white/5">
-                    <span className="text-white/40 text-[9px] font-bold tracking-[0.2em] uppercase block mb-1">Duration</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-white">{packageData?.nights || 0}</span>
-                      <span className="text-yellow-400 font-bold text-sm">N</span>
+                {/* Mobile/Tablet Minimal Stats Row */}
+                <div className="xl:hidden flex items-center justify-between bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl p-3 mb-2">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-white/40 text-[8px] uppercase font-black tracking-widest">Starts from</span>
+                      <span className="text-white font-black text-lg">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</span>
+                    </div>
+                    <div className="w-[1px] h-6 bg-white/10" />
+                    <div className="flex flex-col">
+                      <span className="text-white/40 text-[8px] uppercase font-black tracking-widest">Duration</span>
+                      <span className="text-white font-black text-lg">{packageData?.nights || 0}N / {packageData?.days || 0}D</span>
                     </div>
                   </div>
-                  <div className="bg-blue-900/40 rounded-2xl p-4 border border-white/5">
-                    <span className="text-white/40 text-[9px] font-bold tracking-[0.2em] uppercase block mb-1">Days</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-white">{packageData?.days || 0}</span>
-                      <span className="text-yellow-400 font-bold text-sm">D</span>
-                    </div>
-                  </div>
-                  <div className="bg-blue-900/40 rounded-2xl p-4 border border-white/5">
-                    <span className="text-yellow-400 text-[9px] font-bold tracking-[0.2em] uppercase block mb-1">From</span>
-                    <div className="text-3xl font-bold text-white">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</div>
+                  <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
+                    <IndianRupee className="w-4 h-4 text-slate-900" />
                   </div>
                 </div>
 
-                {/* Gallery Items */}
-                <div className="flex gap-4 pt-4">
-                   {validBannerImages.slice(0, 3).map((image, index) => (
+                {/* Mobile Gallery "Moving Cards" - The Priority */}
+                <div className="xl:hidden flex gap-3 overflow-x-auto py-2 px-1 -mx-1 scrollbar-hide snap-x">
+                  {validBannerImages.map((image, index) => (
                     <motion.button
                       key={index}
+                      whileTap={{ scale: 0.95 }}
                       onClick={() => swiperRef.current?.slideTo(index)}
                       className={cn(
-                        "relative w-36 h-36 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer",
-                        currentImageIndex === index ? "border-yellow-400" : "border-transparent hover:border-white/20"
+                        "relative flex-shrink-0 w-28 h-28 rounded-2xl overflow-hidden border-2 transition-all duration-300 snap-center",
+                        currentImageIndex === index ? "border-yellow-400 scale-105 shadow-lg" : "border-white/20"
                       )}
                     >
                       <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover" />
                     </motion.button>
                   ))}
                 </div>
-              </div>
-
+              </motion.div>
             </div>
           </div>
         </Container>
       </div>
 
+      {/* Desktop Gallery Rail - Fixed Bottom */}
+      <div className="hidden xl:flex absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex-row gap-4">
+        {validBannerImages.slice(0, 5).map((image, index) => (
+          <motion.button
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 + index * 0.1 }}
+            onClick={() => swiperRef.current?.slideTo(index)}
+            className={cn(
+              "relative w-28 h-28 rounded-3xl overflow-hidden border-2 transition-all duration-300 group",
+              currentImageIndex === index ? "border-yellow-400 scale-110 shadow-[0_0_20px_rgba(250,204,21,0.3)]" : "border-white/20 hover:border-white/40"
+            )}
+          >
+            <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+          </motion.button>
+        ))}
+      </div>
 
-      
-      {/* Scroll Indicator */}
-      <motion.div 
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 opacity-40 hidden lg:flex flex-col items-center gap-2"
-      >
-        <div className="w-5 h-8 rounded-full border-2 border-white flex justify-center pt-2">
-          <div className="w-1 h-1.5 bg-white rounded-full" />
-        </div>
-      </motion.div>
+
     </section>
   );
 };
