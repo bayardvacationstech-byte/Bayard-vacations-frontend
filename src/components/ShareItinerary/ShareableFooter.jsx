@@ -14,139 +14,128 @@ const ShareableFooter = ({ contactInfo, importantNotes }) => {
   } = contactInfo;
 
   return (
-    <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-12 md:py-16 print:bg-white print:text-slate-900 print:py-6 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5 print:hidden">
-        <div className="absolute inset-0" style={{
+    <footer className="relative bg-gradient-to-br from-brand-blue via-blue-800 to-blue-900 text-white py-16 md:py-20 print:bg-white print:text-slate-900 print:py-8 overflow-hidden">
+      {/* Premium Background Elements */}
+      <div className="absolute inset-0 opacity-10 print:hidden">
+        <div className="absolute top-0 left-0 w-full h-full" style={{
           backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
+          backgroundSize: '32px 32px'
         }} />
       </div>
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-3xl print:hidden" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-brand-green/5 rounded-full blur-3xl print:hidden" />
+
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Important Notes */}
-        {importantNotes && importantNotes.length > 0 && (
-          <div className="mb-12 print:mb-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full mb-6 print:mb-3">
-              <AlertTriangle className="w-4 h-4 text-yellow-500" />
-              <span className="text-sm font-bold text-yellow-400 uppercase tracking-wider print:text-yellow-700">Important Notes</span>
+        {/* RESTRUCTURED: Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* Column 1: Brand & About (4 cols) */}
+          <div className="lg:col-span-4 space-y-8">
+            <div className="space-y-6">
+              <div className="relative h-12 w-48 print:w-36 print:h-10">
+                <Image
+                  src="/img/logo.svg"
+                  alt={companyName}
+                  fill
+                  className="object-contain object-left brightness-0 invert"
+                />
+              </div>
+              <p className="text-lg text-blue-100 leading-relaxed font-medium">
+                Designing extraordinary journeys that transform your travel dreams into lasting memories.
+              </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 print:gap-2">
-              {importantNotes.map((note, index) => (
-                <div key={index} className="group flex items-start gap-3 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-all duration-300 print:bg-slate-50 print:border-slate-200 print:gap-2 print:p-2 print:rounded-lg">
-                  <div className="flex-shrink-0 w-2 h-2 rounded-full bg-gradient-to-r from-brand-blue to-brand-green mt-2 print:w-1.5 print:h-1.5" />
-                  <span className="text-sm text-slate-200 print:text-slate-700 print:text-xs">{note}</span>
+            
+            <div className="flex items-center gap-4 py-6 border-y border-white/10">
+              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shadow-inner">
+                <Globe className="w-6 h-6 text-brand-green" />
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-0.5">Official Website</p>
+                <a href={`https://${website}`} target="_blank" rel="noopener noreferrer" className="text-base font-bold text-white hover:text-brand-green transition-colors">
+                  {website}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 2: Contact Info (4 cols) */}
+          <div className="lg:col-span-4">
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-brand-green mb-8 flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-brand-green" />
+              Get In Touch
+            </h4>
+            
+            <div className="space-y-6">
+              {[
+                { icon: Phone, label: 'Call Us', value: phone, color: 'brand-blue' },
+                { icon: MessageCircle, label: 'WhatsApp', value: whatsapp, color: 'brand-green' },
+                { icon: Mail, label: 'Email Support', value: email, color: 'purple-400' }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 group cursor-pointer">
+                  <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-brand-blue group-hover:border-white/20 transition-all duration-300`}>
+                    <item.icon className="w-5 h-5 text-white/80 group-hover:text-white" />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black text-blue-300 uppercase tracking-widest mb-1">{item.label}</p>
+                    <p className="text-base font-bold text-white group-hover:text-brand-green transition-colors">{item.value}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        )}
 
-        {/* Main Footer Content */}
-        <div className="border-t border-white/10 pt-12 print:border-slate-200 print:pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12 print:gap-4 print:mb-4">
-            {/* Contact Information */}
-            <div>
-              <h4 className="text-2xl font-black mb-6 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent print:text-slate-900 print:text-base print:mb-3">
-                Contact Us
-              </h4>
-              <div className="space-y-4 print:space-y-2">
-                <div className="flex items-start gap-3 group print:gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-brand-blue/20 flex items-center justify-center group-hover:bg-brand-blue transition-colors print:w-8 print:h-8 print:bg-brand-blue/10">
-                    <Phone className="w-5 h-5 text-brand-blue group-hover:text-white transition-colors print:w-4 print:h-4" />
+          {/* Column 3: Emergency Support (4 cols) */}
+          <div className="lg:col-span-4">
+            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-red-400 mb-8 flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-red-400" />
+              Critical Support
+            </h4>
+            
+            <div className="relative group overflow-hidden rounded-[2rem] p-8 border border-red-500/30 bg-white/5 backdrop-blur-xl">
+              <div className="absolute top-0 right-0 -tralsate-y-1/2 translate-x-1/2 w-32 h-32 bg-red-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+              
+              <div className="relative space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-red-500 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.4)]">
+                    <AlertTriangle className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 print:text-slate-600 print:text-[10px]">Phone</p>
-                    <p className="text-base font-bold text-white print:text-slate-900 print:text-xs">{phone}</p>
+                    <p className="text-[10px] font-black text-red-300 uppercase tracking-[0.2em] mb-1">24/7 Helpline</p>
+                    <p className="text-2xl font-black text-white">{emergencyContact}</p>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3 group print:gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-brand-green/20 flex items-center justify-center group-hover:bg-brand-green transition-colors print:w-8 print:h-8 print:bg-brand-green/10">
-                    <MessageCircle className="w-5 h-5 text-brand-green group-hover:text-white transition-colors print:w-4 print:h-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 print:text-slate-600 print:text-[10px]">WhatsApp</p>
-                    <p className="text-base font-bold text-white print:text-slate-900 print:text-xs">{whatsapp}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 group print:gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center group-hover:bg-purple-500 transition-colors print:w-8 print:h-8 print:bg-purple-500/10">
-                    <Mail className="w-5 h-5 text-purple-400 group-hover:text-white transition-colors print:w-4 print:h-4" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 print:text-slate-600 print:text-[10px]">Email</p>
-                    <p className="text-sm font-medium text-white break-all print:text-slate-900 print:text-xs">{email}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Emergency Contact */}
-            <div>
-              <h4 className="text-2xl font-black mb-6 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent print:text-slate-900 print:text-base print:mb-3">
-                Emergency Support
-              </h4>
-              <div className="relative bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 rounded-2xl p-6 overflow-hidden print:bg-red-50 print:border-red-200 print:rounded-xl print:p-3">
-                {/* Animated background glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 animate-pulse print:hidden" />
                 
-                <div className="relative flex items-start gap-4 print:gap-2">
-                  <div className="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center shrink-0 shadow-lg shadow-red-500/50 print:w-10 print:h-10 print:shadow-none">
-                    <AlertTriangle className="w-6 h-6 text-white print:w-5 print:h-5" />
+                <div className="pt-6 border-t border-white/10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
+                      <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest">{operatingHours}</span>
+                    </div>
+                    <span className="text-[10px] px-3 py-1 bg-white/10 rounded-full font-bold text-white">ACTIVE</span>
                   </div>
-                  <div>
-                    <p className="text-xs font-bold text-red-400 uppercase tracking-wider mb-2 print:text-red-600 print:text-[10px] print:mb-1">24/7 Helpline</p>
-                    <p className="text-2xl font-black text-white print:text-red-700 print:text-base">{emergencyContact}</p>
-                    <p className="text-xs text-slate-300 mt-2 print:text-slate-600 print:text-[10px] print:mt-1">{operatingHours}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Company Info */}
-            <div>
-              <h4 className="text-2xl font-black mb-6 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent print:text-slate-900 print:text-base print:mb-3">
-                About Us
-              </h4>
-              <div className="space-y-4 print:space-y-2">
-                <div className="flex items-center gap-3">
-                  <div className="relative h-8 w-40 print:w-32 print:h-8">
-                    <Image
-                      src="/img/logo.svg"
-                      alt={companyName}
-                      fill
-                      className="object-contain object-left"
-                    />
-                  </div>
-                </div>
-                <p className="text-sm text-slate-300 leading-relaxed print:text-slate-600 print:text-xs">
-                  Creating unforgettable travel experiences with personalized itineraries and exceptional service.
-                </p>
-                <div className="flex items-center gap-2 text-brand-green">
-                  <Globe className="w-4 h-4" />
-                  <p className="text-sm font-bold print:text-xs">{website}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Footer Bottom */}
-          <div className="pt-8 border-t border-white/10 print:pt-4 print:border-slate-200">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-sm text-slate-400 print:text-slate-600 print:text-xs">
-                © 2026 {companyName}. All rights reserved.
-              </p>
-              <div className="flex items-center gap-6 text-sm text-slate-400 print:text-slate-600 print:text-xs">
-                <a href="#" className="hover:text-brand-blue transition-colors print:no-underline">Terms & Conditions</a>
-                <a href="#" className="hover:text-brand-blue transition-colors print:no-underline">Privacy Policy</a>
-              </div>
-            </div>
+        </div>
+
+        {/* Final Footer Bottom */}
+        <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+          <div className="space-y-2">
+            <p className="text-sm font-bold text-blue-200">
+              © 2026 {companyName}. <span className="text-blue-400/60">Crafted with ❤️ for Travelers.</span>
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-8 text-[11px] font-black uppercase tracking-widest text-blue-300">
+            <a href="#" className="hover:text-brand-green transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-brand-green transition-colors">Privacy Policy</a>
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

@@ -13,8 +13,10 @@ export function usePackagesByTheme(theme, initialPackages = []) {
     queryKey: [COLLECTIONS.PACKAGES, "theme", theme],
     queryFn: () => getPackagesByTheme(theme, initialPackages),
     enabled: !!theme,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 0, // Truly immediate updates
+    gcTime: 1000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 
   return {

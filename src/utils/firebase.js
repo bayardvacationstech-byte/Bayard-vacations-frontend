@@ -3,8 +3,10 @@ import { minimizePackageData, minimizeRegionData, minimizeReviewData } from "@/u
 import {
   collection,
   doc,
-  getDocs,
   getDoc,
+  getDocs,
+  getDocFromServer,
+  getDocsFromServer,
   query,
   where,
   addDoc,
@@ -134,7 +136,7 @@ const getReferencedData = async (docRef) => {
       // return it as is if it's an object, otherwise null
       return typeof docRef === "object" ? docRef : null;
     }
-    const docSnap = await getDoc(doc(db, collectionName, documentId));
+    const docSnap = await getDocFromServer(doc(db, collectionName, documentId));
 
     if (docSnap.exists()) {
       return sanitizeDocumentData(docSnap);
@@ -305,7 +307,7 @@ export const getPackageWithAllReferences = async (slugOrId, options = {}) => {
       }
     } else {
       const packageRef = doc(db, COLLECTIONS.PACKAGES, slugOrId);
-      const docSnap = await getDoc(packageRef);
+      const docSnap = await getDocFromServer(packageRef);
 
       if (!docSnap.exists()) {
         throw new Error("Package not found");
@@ -343,7 +345,7 @@ export const getDocumentBySlug = async (slug) => {
   try {
     const packagesRef = collection(db, COLLECTIONS.PACKAGES);
     const q = query(packagesRef, where("packageSlug", "==", slug));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocsFromServer(q);
 
     if (querySnapshot.empty) {
       return null;

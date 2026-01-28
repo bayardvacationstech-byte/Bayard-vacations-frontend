@@ -18,10 +18,28 @@ const HighlightsSection = ({ packageData }) => {
   
   if (!isMounted) return null;
   
-  // Determine highlights sections from packageData.sections
-  const highlightItems = packageData?.sections?.find(s => 
-    s.id === "major_activities" || s.id === "package_highlights"
-  )?.items || [];
+  // Robust data fetching for highlights (handles both array and object structures)
+  let highlightItems = [];
+  
+  // 1. Check sections (can be array or object in different database versions)
+  if (packageData?.sections) {
+    if (Array.isArray(packageData.sections)) {
+      const section = packageData.sections.find(s => 
+        s.id === "major_activities" || s.id === "package_highlights" || s.id === "highlights" || s.id === "major_highlights"
+      );
+      if (section?.items) highlightItems = section.items;
+    } else {
+      highlightItems = packageData.sections.major_activities || 
+                       packageData.sections.package_highlights || 
+                       packageData.sections.highlights || 
+                       packageData.sections.major_highlights || [];
+    }
+  }
+
+  // 2. Fallback to top-level fields if sections didn't provide anything
+  if (highlightItems.length === 0) {
+    highlightItems = packageData?.highlights || packageData?.major_highlights || [];
+  }
 
 
   const limit = isMobile ? 4 : 6;

@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "./globals.css";
-import { Outfit, Damion, Playfair_Display } from "next/font/google";
+import { Outfit, Damion, Playfair_Display, Great_Vibes } from "next/font/google";
 import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/sonner";
 import ScrollReset from "@/components/ScrollReset";
@@ -69,6 +69,12 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
+const greatVibes = Great_Vibes({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-great-vibes",
+});
+
 export const metadata = {
   title: {
     default: "Bayard Vacations | Customized Travel Packages for Every Explorer",
@@ -124,7 +130,7 @@ export default async function RootLayout({ children }) {
       </head>
       <Metrics />
       <body
-        className={`${outfit.variable} ${nord.variable} ${damion.variable} ${playfair.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${nord.variable} ${damion.variable} ${playfair.variable} ${greatVibes.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ClientProviders>

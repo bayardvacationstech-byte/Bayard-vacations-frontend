@@ -3,8 +3,7 @@
 import React from 'react';
 import ShareableHeader from './ShareableHeader';
 import ShareableHighlights from './ShareableHighlights';
-import ShareableOverview from './ShareableOverview';
-import ShareableItineraryTimeline from './ShareableItineraryTimeline';
+import ShareableItineraryBook from './ShareableItineraryBook';
 import ShareableHotelInfo from './ShareableHotelInfo';
 import ShareableInclusions from './ShareableInclusions';
 import ShareablePaymentInfo from './ShareablePaymentInfo';
@@ -53,14 +52,8 @@ const ShareableItineraryClient = ({ itineraryData }) => {
       {/* 2. Package Highlights - NEW */}
       <ShareableHighlights highlights={itineraryData.highlights} />
 
-      {/* 3. Package Overview - NEW */}
-      <ShareableOverview 
-        overview={itineraryData.overview} 
-        description={itineraryData.description}
-      />
-
-      {/* 4. Day-by-day itinerary */}
-      <ShareableItineraryTimeline itineraries={itineraryData.itineraries} />
+      {/* 3. Day-by-day itinerary */}
+      <ShareableItineraryBook itineraries={itineraryData.itineraries} />
 
       {/* 5. Hotel Information */}
       <ShareableHotelInfo hotelDetails={itineraryData.hotelDetails} />

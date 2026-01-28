@@ -34,8 +34,10 @@ export function useRegion(regionSlug) {
       return getRegionDocumentBySlug(regionSlug);
     },
     enabled: !!regionSlug, // Only run when regionSlug is provided
-    staleTime: 10 * 60 * 1000, // 10 minutes - regions don't change often
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 0, // Truly immediate updates
+    gcTime: 1000, 
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 
   return {

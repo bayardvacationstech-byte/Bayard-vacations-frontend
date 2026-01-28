@@ -368,29 +368,100 @@ Special Requests: Dietary requirements, special occasions, accessibility needs -
       }
     ],
 
-    hotelDetails: {
-      name: "The Seminyak Beach Resort & Spa",
-      category: "5-Star Deluxe",
-      location: "Seminyak, Bali",
-      rating: 5,
-      roomType: "Deluxe Ocean View Room",
-      amenities: [
-        "Private Beach Access",
-        "Infinity Pool",
-        "Full-Service Spa",
-        "Multiple Dining Options",
-        "Fitness Center",
-        "Free Wi-Fi",
-        "24/7 Room Service"
-      ],
-      checkIn: "15 March 2026 (2:00 PM)",
-      checkOut: "22 March 2026 (12:00 PM)",
-      images: [
-        "/images/hotels/seminyak/resort-pool.jpg",
-        "/images/hotels/seminyak/pool-view.jpg",
-        "/images/packages/bali/hero.jpg"
-      ]
-    },
+    hotelDetails: [
+      {
+        name: "The Seminyak Beach Resort & Spa",
+        category: "5-Star Deluxe",
+        location: "Seminyak, Bali",
+        rating: 5,
+        roomType: "Deluxe Ocean View Room",
+        amenities: [
+          "Private Beach Access",
+          "Infinity Pool",
+          "Full-Service Spa",
+          "Multiple Dining Options",
+          "Fitness Center",
+          "Free Wi-Fi",
+          "24/7 Room Service"
+        ],
+        checkIn: "15 March 2026 (2:00 PM)",
+        checkOut: "19 March 2026 (12:00 PM)",
+        images: [
+          "/images/hotels/seminyak/resort-pool.jpg",
+          "/images/hotels/seminyak/pool-view.jpg",
+          "/images/packages/bali/hero.jpg"
+        ]
+      },
+      {
+        name: "Ubud Royal Retreat & Wellness",
+        category: "5-Star Luxury",
+        location: "Ubud, Bali",
+        rating: 5,
+        roomType: "Premium Valley View Suite",
+        amenities: [
+          "Jungle View Infinity Pool",
+          "Yoga & Meditation Center",
+          "Organic Farm-to-Table Restaurant",
+          "Traditional Healing Spa",
+          "Complimentary Bicycle Rental",
+          "Free Wi-Fi",
+          "Butler Service"
+        ],
+        checkIn: "19 March 2026 (2:00 PM)",
+        checkOut: "22 March 2026 (12:00 PM)",
+        images: [
+          "/images/packages/bali/hero.jpg",
+          "/images/hotels/seminyak/pool-view.jpg",
+          "/images/packages/bali/tanah-lot.jpg"
+        ]
+      },
+      {
+        name: "Nusa Dua Grand Resort & Villas",
+        category: "5-Star Premium",
+        location: "Nusa Dua, Bali",
+        rating: 5,
+        roomType: "Grand Suite with Private Pool",
+        amenities: [
+          "Private Pool Villa",
+          "Beachfront Location",
+          "Championship Golf Course",
+          "Kids Club & Playground",
+          "Multiple Restaurants & Bars",
+          "Free Wi-Fi",
+          "Concierge Service"
+        ],
+        checkIn: "16 March 2026 (3:00 PM)",
+        checkOut: "20 March 2026 (11:00 AM)",
+        images: [
+          "/images/packages/bali/tanah-lot.jpg",
+          "/images/hotels/seminyak/resort-pool.jpg",
+          "/images/packages/bali/water-sports.jpg"
+        ]
+      },
+      {
+        name: "Canggu Surf & Beach Club",
+        category: "4-Star Boutique",
+        location: "Canggu, Bali",
+        rating: 4,
+        roomType: "Ocean Breeze Deluxe Room",
+        amenities: [
+          "Surfboard Rental Included",
+          "Rooftop Bar & Restaurant",
+          "Beach Club Access",
+          "Yoga Classes",
+          "Co-working Space",
+          "Free Wi-Fi",
+          "Airport Shuttle"
+        ],
+        checkIn: "17 March 2026 (2:00 PM)",
+        checkOut: "21 March 2026 (12:00 PM)",
+        images: [
+          "/images/packages/bali/water-sports.jpg",
+          "/images/packages/bali/hero.jpg",
+          "/images/hotels/seminyak/pool-view.jpg"
+        ]
+      }
+    ],
 
     inclusions: [
       "Round-trip airport transfers in private air-conditioned vehicle",

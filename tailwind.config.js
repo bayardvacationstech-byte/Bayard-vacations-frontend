@@ -138,6 +138,7 @@ module.exports = {
         nord: ["var(--font-nord)"],
         damion: ["var(--font-damion)"],
         klausen: ["Klausen", "sans-serif"],
+        "great-vibes": ["var(--font-great-vibes)"],
       },
     },
   },
