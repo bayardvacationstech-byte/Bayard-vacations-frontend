@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prelivebayardvacations.netlify.app';
   const shareUrl = `/share/itinerary/${id}`;
   const heroImage = itineraryData.heroImage || '/img/bali-hero.png';
 
