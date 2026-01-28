@@ -5,21 +5,16 @@ import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "./globals.css";
 import { Outfit, Damion, Playfair_Display } from "next/font/google";
-import Footer from "@/components/layouts/Footer";
-import DesktopNavbar from "@/components/Navbars/DesktopNavbar";
-import MobileNavbar from "@/components/Navbars/MobileNavbar";
 import localFont from "next/font/local";
-import LeadForm from "@/components/Forms/EnquiryForm/LeadForm";
 import { Toaster } from "@/components/ui/sonner";
-import FloatingLeadButton from "@/components/FloatingLeadButton";
 import ScrollReset from "@/components/ScrollReset";
 
 import Metrics from "@/components/Metrics";
 import ClientProviders from "@/components/ClientProviders";
 import { DEFAULT_URL } from "@/config";
 import { TailwindIndicator } from "@/components/TailwindIndicator";
-import WhatsAppIcon from "@/components/WhatsAppIcon";
-import ChatbotIcon from "@/components/ChatbotIcon";
+import LayoutWrapper from "@/components/LayoutWrapper";
+import { fetchRegions } from "@/lib/server";
 
 const nord = localFont({
   src: [
@@ -113,6 +108,9 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  // Fetch footer data on the server
+  const { domesticRegions, internationalRegions } = await fetchRegions();
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -131,15 +129,13 @@ export default async function RootLayout({ children }) {
       >
         <ClientProviders>
           <ScrollReset />
-          <DesktopNavbar />
-          <MobileNavbar />
-          {children}
-          <LeadForm />
-          <WhatsAppIcon />
-          <ChatbotIcon />
+          
+          <LayoutWrapper footerData={{ domesticRegions, internationalRegions }}>
+            {children}
+          </LayoutWrapper>
+          
           <Toaster />
         </ClientProviders>
-        <Footer />
         <TailwindIndicator />
       </body>
     </html>
