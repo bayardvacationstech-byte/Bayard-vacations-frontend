@@ -14,8 +14,10 @@ export function usePackages(regionName) {
     queryKey: [COLLECTIONS.PACKAGES, regionName],
     queryFn: () => getPackagesByRegion(regionName),
     enabled: !!regionName,
-    staleTime: 5 * 60 * 1000, // 5 minutes - packages don't change often
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 0, // Truly immediate updates
+    gcTime: 1000, 
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
   });
 
   const domesticPackages = useMemo(

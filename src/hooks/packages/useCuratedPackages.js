@@ -54,8 +54,10 @@ export function useCuratedPackages(packageType, initialPackages = []) {
     },
     enabled: !!packageType,
     // Use longer staleTime if we have initial data to prevent immediate refetch
-    staleTime: hasInitialData ? Infinity : 5 * 60 * 1000, 
-    gcTime: 10 * 60 * 1000,
+    staleTime: 0, // Truly immediate updates
+    gcTime: 1000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'always',
     // Use placeholderData instead of initialData to show content immediately
     placeholderData: hasInitialData ? initialPackages : undefined,
     initialData: hasInitialData ? initialPackages : undefined,

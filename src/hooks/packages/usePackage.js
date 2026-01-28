@@ -18,28 +18,14 @@ export function usePackage(slugOrId, options = {}) {
   } = useQuery({
     queryKey: ["package", slugOrId, bySlug ? "slug" : "id"],
     queryFn: async () => {
-      const packagesQuery = queryClient
-        .getQueryCache()
-        .find({ queryKey: ["packages"] });
-      const cachedPackages = packagesQuery?.state.data;
-      if (cachedPackages) {
-        const foundPackage = cachedPackages.find((pkg) => {
-          if (bySlug) {
-            return pkg.packageSlug === slugOrId;
-          } else {
-            return pkg.id === slugOrId;
-          }
-        });
-        if (foundPackage) {
-          return foundPackage;
-        }
-      }
-      // If not found in cache, fetch from Firebase using unified function
+      // Fetch from Firebase using unified function - removing manual cache lookup for immediate updates
       return await getPackageWithAllReferences(slugOrId, { bySlug });
     },
     enabled: !!slugOrId, // Only run when slugOrId is provided
-    staleTime: 0, // Always fetch fresh data during development
-    gcTime: 0, 
+    staleTime: 0, // Truly immediate updates
+    gcTime: 1000, // Minimal garbage collection time for extreme freshness
+    refetchOnWindowFocus: true, // Refetch when switching back to the tab
+    refetchOnMount: 'always', // Always refetch on mount
   });
 
   const {
