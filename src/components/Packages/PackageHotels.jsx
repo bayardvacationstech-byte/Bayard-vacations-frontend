@@ -9,7 +9,7 @@ import { Wifi, Utensils, Wind, Car, Building2, Star, MapPin, Bed, CheckCircle2 }
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, FreeMode } from "swiper/modules";
 
-const PackageHotels = ({ packageData }) => {
+const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange }) => {
   const [hotelsByCategory, setHotelsByCategory] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -93,6 +93,13 @@ const PackageHotels = ({ packageData }) => {
 
     fetchHotelDetails();
   }, [packageData]);
+
+  // Sync with external selection
+  useEffect(() => {
+    if (activeHotelType && hotelsByCategory[activeHotelType]) {
+      setSelectedCategory(activeHotelType);
+    }
+  }, [activeHotelType, hotelsByCategory]);
 
   if (isLoading) return null;
 
@@ -215,7 +222,10 @@ const PackageHotels = ({ packageData }) => {
           }).map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => {
+                setSelectedCategory(cat);
+                if (onHotelTypeChange) onHotelTypeChange(cat);
+              }}
               className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-500 whitespace-nowrap ${
                 selectedCategory === cat
                   ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/30 scale-[1.02]"

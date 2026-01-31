@@ -331,7 +331,14 @@ const PackagesClient = () => {
             </div>
 
             <div id="hotels-section" className="scroll-mt-48">
-              <PackageHotels packageData={packageData} />
+              <PackageHotels 
+                packageData={packageData} 
+                activeHotelType={selectedHotel?.type}
+                onHotelTypeChange={(type) => {
+                  const tier = hotelTiers.find(t => t.type === type);
+                  if (tier) setSelectedHotel(tier);
+                }}
+              />
             </div>
 
             <div id="inclusions" className="scroll-mt-48">
