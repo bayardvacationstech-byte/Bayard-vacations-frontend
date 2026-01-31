@@ -1,5 +1,6 @@
 import { getItineraryById } from '@/data/dummy-itinerary-data';
 import ShareableItineraryClient from '@/components/ShareItinerary/ShareableItineraryClient';
+import { DEFAULT_URL } from '@/config';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }) {
@@ -13,14 +14,17 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prelivebayardvacations.netlify.app';
+  // Use the correctly configured DEFAULT_URL from config
+  const siteUrl = DEFAULT_URL;
   const shareUrl = `/share/itinerary/${id}`;
-  const heroImage = 'https://www.shutterstock.com/image-photo/woman-traveler-open-arms-sitting-600nw-2653002613.jpg';
+  
+  // Use a reliable high-quality absolute image URL for OG preview
+  const ogImage = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&h=630&fit=crop&q=80';
 
   return {
     metadataBase: new URL(siteUrl),
-    title: `${itineraryData.packageName} - Travel Itinerary | Bayard Vacations`,
-    description: `Check out this 7-day ${itineraryData.destination} itinerary. Includes ${itineraryData.hotelDetails.name}, adventures, and more.`,
+    title: `${itineraryData.packageName} - Your Travel Itinerary | Bayard Vacations`,
+    description: `Check out this ${itineraryData.duration} ${itineraryData.destination} itinerary. Includes ${itineraryData.hotelDetails?.[0]?.name || 'handpicked hotels'}, adventures, and expert-curated inclusions.`,
     keywords: [
       itineraryData.destination,
       itineraryData.region,
@@ -31,16 +35,16 @@ export async function generateMetadata({ params }) {
     ],
     authors: [{ name: 'Bayard Vacations' }],
     openGraph: {
-      title: itineraryData.packageName,
-      description: `Your 7-Day dream trip to ${itineraryData.destination}. View full itinerary details, hotels, and inclusions.`,
+      title: `✈️ My Trip to ${itineraryData.destination}: ${itineraryData.packageName}`,
+      description: `View the full itinerary for this journey to ${itineraryData.destination}. Discover our handpicked hotels, daily activities, and exclusive inclusions.`,
       url: shareUrl,
       siteName: 'Bayard Vacations',
       images: [
         {
-          url: heroImage,
+          url: ogImage,
           width: 1200,
           height: 630,
-          alt: itineraryData.packageName,
+          alt: `${itineraryData.packageName} in ${itineraryData.destination}`,
         }
       ],
       locale: 'en_IN',
@@ -48,9 +52,9 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: itineraryData.packageName,
-      description: `View this custom itinerary for ${itineraryData.destination} by Bayard Vacations.`,
-      images: [heroImage],
+      title: `Experience ${itineraryData.destination} with Bayard Vacations`,
+      description: `Check out this custom-built itinerary for ${itineraryData.destination}. Handpicked experiences and seamless travel at your fingertips.`,
+      images: [ogImage],
     },
     robots: {
       index: true,
