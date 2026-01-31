@@ -148,7 +148,6 @@ const PackageHero = ({ packageData }) => {
                       <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">Starting from</p>
                       <div className="flex items-baseline gap-1">
                         <span className="text-3xl font-black text-white">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</span>
-                        <span className="text-white/40 text-xs font-medium">/ person</span>
                       </div>
                     </div>
                     <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(250,204,21,0.3)]">

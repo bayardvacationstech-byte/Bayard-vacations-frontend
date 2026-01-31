@@ -290,7 +290,6 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                     <>
                       <p className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
                         ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
-                        <span className="text-xs sm:text-xs text-slate-400 font-bold ml-1 tracking-tight">/ couple</span>
                       </p>
                       {item.offerPrice > 0 && (
                         <p className="text-[8px] sm:text-[10px] text-slate-400 line-through">

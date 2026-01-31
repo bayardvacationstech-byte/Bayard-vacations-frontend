@@ -152,7 +152,6 @@ const GroupPackageCard = ({ item, className }) => {
                 <span className="text-2xl md:text-3xl font-black text-white tracking-tighter">
                   ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                 </span>
-                <span className="text-white/70 text-[10px] font-bold">/ person</span>
               </div>
             </div>
             
