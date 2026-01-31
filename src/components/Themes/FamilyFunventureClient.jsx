@@ -1,121 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Smile, Baby, PartyPopper, MapPin, Calendar, Users, Star, Palmtree, ChevronRight, IceCream, Rocket } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { usePackagesByTheme } from "@/hooks/packages";
+import PackageCard from "@/components/ui/PackageCard";
 
 export default function FamilyFunventureClient() {
   const [selectedTab, setSelectedTab] = useState("international");
 
-  // Family packages data
-  const familyPackages = {
-    international: [
-      {
-        id: 1,
-        title: "Disneyland Paris Magic Experience",
-        location: "Paris, France",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1538682125382-f2fe46c7e5c3?w=800",
-        price: "$3,799",
-        rating: 4.9,
-        highlights: ["Theme Park Tickets", "Character Meet & Greet", "Kids Club Activities"],
-        category: "Theme Park Adventure",
-        ageGroup: "All Ages"
-      },
-      {
-        id: 2,
-        title: "Dubai Family Fun Extravaganza",
-        location: "Dubai, UAE",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-        price: "$2,999",
-        rating: 4.8,
-        highlights: ["Dubai Parks & Resorts", "Desert Safari", "Beach Activities"],
-        category: "City & Adventure",
-        ageGroup: "5+ Years"
-      },
-      {
-        id: 3,
-        title: "Singapore Universal Studios Adventure",
-        location: "Singapore",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800",
-        price: "$3,299",
-        rating: 4.9,
-        highlights: ["Universal Studios", "Sentosa Island", "Night Safari"],
-        category: "Fun & Wildlife",
-        ageGroup: "All Ages"
-      },
-      {
-        id: 4,
-        title: "Maldives Family Beach Paradise",
-        location: "Maldives",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
-        price: "$4,299",
-        rating: 4.8,
-        highlights: ["Kids Club", "Water Sports", "Family Villa"],
-        category: "Beach & Relaxation",
-        ageGroup: "All Ages"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Goa Beach Family Getaway",
-        location: "Goa",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
-        price: "₹42,999",
-        rating: 4.7,
-        highlights: ["Water Park", "Beach Games", "Dolphin Watching"],
-        category: "Beach Fun",
-        ageGroup: "All Ages"
-      },
-      {
-        id: 6,
-        title: "Manali Snow Adventure for Families",
-        location: "Manali, Himachal",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800",
-        price: "₹36,999",
-        rating: 4.6,
-        highlights: ["Snow Activities", "Toy Train Ride", "Adventure Park"],
-        category: "Mountain Adventure",
-        ageGroup: "8+ Years"
-      },
-      {
-        id: 7,
-        title: "Rajasthan Royal Family Tour",
-        location: "Rajasthan",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-        price: "₹48,999",
-        rating: 4.8,
-        highlights: ["Palace Stays", "Camel Safari", "Cultural Shows"],
-        category: "Heritage & Culture",
-        ageGroup: "6+ Years"
-      },
-      {
-        id: 8,
-        title: "Kerala Backwater Family Cruise",
-        location: "Kerala",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-        price: "₹38,999",
-        rating: 4.7,
-        highlights: ["Houseboat Stay", "Village Tours", "Cooking Classes"],
-        category: "Nature & Culture",
-        ageGroup: "All Ages"
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("family-funventure");
 
-  const currentPackages = familyPackages[selectedTab];
+  const familyPackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+
+  const currentPackages = familyPackages[selectedTab] || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-yellow-50 to-white">
@@ -223,83 +145,33 @@ export default function FamilyFunventureClient() {
 
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-full">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-bold">{pkg.rating}</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-purple-600 transition-colors line-clamp-2">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Age Group */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Baby className="w-4 h-4" />
-                      <span className="font-medium">{pkg.ageGroup}</span>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-orange-400 to-pink-400" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-slate-900">{pkg.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-purple-600 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">Explore</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
+          {isLoading ? (
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="rounded-3xl bg-white p-6 animate-pulse flex flex-col h-full shadow-lg">
+                <div className="h-56 bg-slate-100 rounded-2xl mb-4"></div>
+                <div className="space-y-3">
+                  <div className="h-6 bg-slate-100 rounded-lg w-3/4"></div>
+                  <div className="h-4 bg-slate-100 rounded-lg w-1/2"></div>
                 </div>
-              </Link>
-            </motion.div>
-          ))}
+                <div className="mt-auto pt-6 border-t border-slate-100 flex justify-between items-end">
+                   <div className="space-y-2">
+                      <div className="h-3 bg-slate-100 rounded w-16"></div>
+                      <div className="h-6 bg-slate-100 rounded w-24"></div>
+                   </div>
+                   <div className="h-8 bg-slate-100 rounded-lg w-20"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <AnimatePresence mode="wait">
+              {currentPackages.map((pkg, index) => (
+                <PackageCard 
+                  key={`${selectedTab}-${pkg.id}`} 
+                  item={pkg}
+                />
+              ))}
+            </AnimatePresence>
+          )}
         </div>
       </Container>
 

@@ -12,7 +12,6 @@ import ShareableFAQ from './ShareableFAQ';
 import ShareableTestimonials from './ShareableTestimonials';
 import ShareableBlogsCarousel from './ShareableBlogsCarousel';
 import ShareableFooter from './ShareableFooter';
-import PrintButton from './PrintButton';
 
 const ShareableItineraryClient = ({ itineraryData }) => {
   if (!itineraryData) {
@@ -89,8 +88,6 @@ const ShareableItineraryClient = ({ itineraryData }) => {
         importantNotes={itineraryData.importantNotes}
       />
 
-      {/* Floating Print Button */}
-      <PrintButton />
     </div>
   );
 };

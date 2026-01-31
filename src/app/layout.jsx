@@ -6,7 +6,8 @@ import "swiper/css/thumbs";
 import "./globals.css";
 import { Outfit, Damion, Playfair_Display, Great_Vibes } from "next/font/google";
 import localFont from "next/font/local";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
+import { Toaster as RadixToaster } from "@/components/ui/toaster";
 import ScrollReset from "@/components/ScrollReset";
 
 import Metrics from "@/components/Metrics";
@@ -140,7 +141,8 @@ export default async function RootLayout({ children }) {
             {children}
           </LayoutWrapper>
           
-          <Toaster />
+          <SonnerToaster />
+          <RadixToaster />
         </ClientProviders>
         <TailwindIndicator />
       </body>

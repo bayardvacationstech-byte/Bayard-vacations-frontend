@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prelivebayardvacations.netlify.app';
   const shareUrl = `/share/itinerary/${id}`;
-  const heroImage = itineraryData.heroImage || '/img/bali-hero.png';
+  const heroImage = 'https://www.shutterstock.com/image-photo/woman-traveler-open-arms-sitting-600nw-2653002613.jpg';
 
   return {
     metadataBase: new URL(siteUrl),

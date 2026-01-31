@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,8 @@ import { User, Backpack, Compass, MapPin, Calendar, Users, Star, Mountain, Chevr
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePackagesByTheme } from "@/hooks/packages";
+import PackageCard from "@/components/ui/PackageCard";
 
 // Floating Explorer Elements Background Component
 const FloatingExplorerElements = () => {
@@ -55,111 +57,31 @@ export default function SoloExpeditionClient() {
     setMounted(true);
   }, []);
 
-  // Solo travel packages data
-  const soloPackages = {
-    international: [
-      {
-        id: 1,
-        title: "Iceland Solo Adventure",
-        location: "Iceland",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800",
-        price: "$2,999",
-        rating: 4.9,
-        highlights: ["Northern Lights", "Solo-Friendly Hostels", "Group Activities"],
-        category: "Adventure & Nature",
-        groupSize: "Solo with meetups"
-      },
-      {
-        id: 2,
-        title: "Bali Solo Wellness Retreat",
-        location: "Bali, Indonesia",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
-        price: "$1,799",
-        rating: 4.8,
-        highlights: ["Yoga Sessions", "Solo Dining", "Cultural Workshops"],
-        category: "Wellness & Culture",
-        groupSize: "Individual experience"
-      },
-      {
-        id: 3,
-        title: "New Zealand Hiking Solo Trek",
-        location: "New Zealand",
-        duration: "10 Days / 9 Nights",
-        image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800",
-        price: "$3,499",
-        rating: 4.9,
-        highlights: ["Guided Hikes", "Solo Camping", "Adventure Sports"],
-        category: "Outdoor Adventure",
-        groupSize: "Solo with guide support"
-      },
-      {
-        id: 4,
-        title: "Japan Cultural Solo Journey",
-        location: "Tokyo & Kyoto, Japan",
-        duration: "9 Days / 8 Nights",
-        image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
-        price: "$2,899",
-        rating: 4.8,
-        highlights: ["Cultural Immersion", "Solo-Friendly Transport", "Local Experiences"],
-        category: "Culture & Discovery",
-        groupSize: "Independent exploration"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Ladakh Solo Motorcycle Tour",
-        location: "Ladakh",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        price: "₹45,999",
-        rating: 4.9,
-        highlights: ["Bike Rental", "Safety Gear", "Solo Route Planning"],
-        category: "Adventure Biking",
-        groupSize: "Solo with backup support"
-      },
-      {
-        id: 6,
-        title: "Goa Solo Beach & Chill",
-        location: "Goa",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
-        price: "₹28,999",
-        rating: 4.6,
-        highlights: ["Beach Hostel", "Water Sports", "Solo Traveler Meetups"],
-        category: "Beach & Leisure",
-        groupSize: "Solo with social options"
-      },
-      {
-        id: 7,
-        title: "Rishikesh Solo Adventure Camp",
-        location: "Rishikesh",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800",
-        price: "₹22,999",
-        rating: 4.7,
-        highlights: ["River Rafting", "Bungee Jumping", "Camping"],
-        category: "Adventure Sports",
-        groupSize: "Solo-friendly groups"
-      },
-      {
-        id: 8,
-        title: "Kerala Solo Backpacking Trail",
-        location: "Kerala",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-        price: "₹32,999",
-        rating: 4.8,
-        highlights: ["Backpacker Hostels", "Local Transport", "Village Homestays"],
-        category: "Backpacking",
-        groupSize: "Independent travel"
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("solo-expedition");
 
-  const currentPackages = soloPackages[selectedTab];
+  const soloPackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+
+  const currentPackages = soloPackages[selectedTab] || [];
 
   if (!mounted) return null;
 
@@ -354,79 +276,33 @@ export default function SoloExpeditionClient() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <AnimatePresence mode="wait">
-              {currentPackages.map((pkg, index) => (
-                <motion.div
-                  key={`${selectedTab}-${pkg.id}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <Link href={`/packages/${pkg.id}`}>
-                    <div className="relative bg-white border border-slate-200 rounded-[2rem] overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] transition-all duration-700 flex flex-col h-full group-hover:border-teal-500/50">
-                      {/* Tactical Image Header */}
-                      <div className="relative h-[280px] overflow-hidden">
-                        <Image
-                          src={pkg.image}
-                          alt={pkg.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-60" />
-                        
-                        {/* Status Badge */}
-                        <div className="absolute top-6 left-6 flex items-center gap-2 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20">
-                           <div className="w-1.5 h-1.5 rounded-full bg-teal-400" />
-                           <span className="text-[9px] font-black text-white uppercase tracking-widest">{pkg.category}</span>
-                        </div>
-
-                        {/* Community Badge */}
-                        <div className="absolute top-6 right-6 flex items-center gap-1.5 bg-teal-500 px-3 py-1.5 rounded-lg shadow-lg">
-                           <Users className="w-3 h-3 text-white" />
-                           <span className="text-[9px] font-black text-white">{pkg.rating}</span>
-                        </div>
-
-                        <div className="absolute bottom-6 left-6 flex flex-col gap-1">
-                           <div className="flex items-center gap-2 text-white/90">
-                              <MapPin className="w-3.5 h-3.5 text-teal-400" />
-                              <span className="text-xs font-bold tracking-tight uppercase">{pkg.location}</span>
-                           </div>
-                        </div>
-                      </div>
-
-                      {/* Intel Body */}
-                      <div className="p-8 flex-1 flex flex-col justify-between">
-                        <div className="space-y-6">
-                          <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight uppercase">
-                            {pkg.title}
-                          </h3>
-                          
-                          <div className="flex flex-wrap gap-2">
-                             {pkg.highlights.map((h, idx) => (
-                               <span key={idx} className="text-[9px] font-black text-slate-500 border border-slate-200 px-2 py-1 rounded uppercase tracking-tighter group-hover:bg-slate-50 transition-colors">
-                                 {h}
-                               </span>
-                             ))}
-                          </div>
-                        </div>
-
-                        <div className="pt-8 mt-8 border-t border-slate-100 flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Base Rate</p>
-                            <p className="text-2xl font-black text-slate-900 tracking-tighter lowercase">{pkg.price}</p>
-                          </div>
-                          <div className="w-12 h-12 bg-slate-950 text-white rounded-xl flex items-center justify-center group-hover:bg-teal-600 transition-all duration-500 shadow-xl group-hover:translate-x-1">
-                             <ChevronRight className="w-6 h-6" />
-                          </div>
-                        </div>
-                      </div>
+            {isLoading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="rounded-[2rem] border border-slate-200 bg-white p-8 animate-pulse flex flex-col h-full shadow-lg">
+                  <div className="h-[240px] bg-slate-100 rounded-[1.5rem] mb-6"></div>
+                  <div className="space-y-3">
+                    <div className="h-8 bg-slate-100 rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-slate-100 rounded-lg w-1/2"></div>
+                  </div>
+                  <div className="mt-auto pt-6 border-t border-slate-100 flex justify-between items-end">
+                    <div className="space-y-2">
+                       <div className="h-3 bg-slate-100 rounded w-16"></div>
+                       <div className="h-8 bg-slate-100 rounded w-24"></div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                    <div className="w-12 h-12 bg-slate-100 rounded-2xl"></div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <AnimatePresence mode="wait">
+                {currentPackages.map((pkg, index) => (
+                  <PackageCard 
+                    key={`${selectedTab}-${pkg.id}`} 
+                    item={pkg}
+                  />
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </Container>
       </section>

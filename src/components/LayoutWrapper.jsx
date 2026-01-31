@@ -7,6 +7,7 @@ import LeadForm from '@/components/Forms/EnquiryForm/LeadForm';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import ChatbotIcon from '@/components/ChatbotIcon';
 import FooterClient from '@/components/layouts/FooterClient';
+import AuthModal from '@/components/Forms/LoginForm/AuthModal';
 
 export default function LayoutWrapper({ children, footerData }) {
   const pathname = usePathname();
@@ -31,6 +32,7 @@ export default function LayoutWrapper({ children, footerData }) {
           <WhatsAppIcon />
           <ChatbotIcon />
           <FooterClient {...footerData} />
+          <AuthModal />
         </>
       )}
     </>

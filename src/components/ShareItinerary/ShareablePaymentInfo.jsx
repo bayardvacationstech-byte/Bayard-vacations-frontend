@@ -14,10 +14,10 @@ const ShareablePaymentInfo = ({ paymentTerms, cancellationPolicy, bookingTerms }
   ].filter(tab => tab.content); // Only show tabs with content
 
   return (
-    <section className="py-12 md:py-16 bg-white print:py-8">
+    <section className="py-6 md:py-10 bg-slate-50/50 print:py-8">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-10 md:mb-12 print:mb-6">
+        <div className="text-center mb-4 md:mb-6 print:mb-6">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 mb-4 print:w-12 print:h-12">
             <Shield className="w-8 h-8 text-white print:w-6 print:h-6" />
           </div>

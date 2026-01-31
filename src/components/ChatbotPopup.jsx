@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil, Trash2 } from "lucide-react";
+import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil, Trash2, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,14 +10,45 @@ import { getPackagesByRegion } from "@/utils/firebase";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination as SwiperPagination } from "swiper/modules";
 import PackageCard from "@/components/ui/PackageCard";
+import BadgeSection from "@/components/BadgeSection";
 
 // Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const ChatPackageCard = ({ item }) => {
-  const imageUrl = item.cardImages?.[0]?.url || item.bannerImages?.[0]?.url;
+const ChatPackageCard = ({ item, onViewItinerary }) => {
+  const [showAllHighlights, setShowAllHighlights] = useState(false);
+
+  // Enhanced Multi-Source Image Scavenger
+  const imageUrl = useMemo(() => {
+    const scavenger = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val;
+      return [val];
+    };
+
+    const rawImages = [
+      ...scavenger(item.cardImages),
+      ...(item.cardImage ? [{ url: item.cardImage }] : []),
+      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []),
+    ];
+
+    const firstValid = rawImages.find(img => typeof img === "string" ? img : img?.url);
+    return typeof firstValid === "string" ? firstValid : firstValid?.url;
+  }, [item.cardImages, item.cardImage, item.cardImageRef]);
+
+  const highlights = useMemo(() => {
+    if (Array.isArray(item.highlights)) return item.highlights;
+    if (typeof item.highlights === 'string') return [item.highlights];
+    return [
+      "Premium Accommodation",
+      "Expert Guided Tours",
+      "Curated Experiences"
+    ];
+  }, [item.highlights]);
+
+  const visibleHighlights = showAllHighlights ? highlights : highlights.slice(0, 3);
   
   return (
     <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
@@ -29,28 +60,153 @@ const ChatPackageCard = ({ item }) => {
             <MapPin className="w-6 h-6" />
           </div>
         )}
-        <div className="absolute top-2 left-2 bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-          {item.days}D/{item.nights}N
+        <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-20">
+          <div className="bg-blue-600/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full w-fit">
+            {item.days}D/{item.nights}N
+          </div>
+          <BadgeSection item={item} />
         </div>
       </div>
-      <div className="p-3">
-        <h4 className="font-bold text-xs text-gray-800 line-clamp-1 mb-2">{item.packageTitle}</h4>
-        <div className="flex items-center justify-between gap-2">
+      <div className="pt-3 px-4 pb-4">
+        <h4 className="font-bold text-sm text-gray-900 line-clamp-1 mb-3">{item.packageTitle}</h4>
+        
+        {/* Highlights Section */}
+        <div className="space-y-2 mb-4">
+          {visibleHighlights.map((highlight, idx) => (
+            <div key={idx} className="flex items-center gap-2.5">
+              <div className="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0" />
+              <p className="text-[12px] text-gray-600 italic font-medium leading-tight">
+                {highlight}
+              </p>
+            </div>
+          ))}
+          
+          {highlights.length > 3 && (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowAllHighlights(!showAllHighlights);
+              }}
+              className="text-[11px] font-bold text-blue-600 hover:text-blue-700 transition-colors mt-1 flex items-center gap-1"
+            >
+              {showAllHighlights ? "Show Less" : `+${highlights.length - 3} More Highlights`}
+            </button>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between gap-3 pt-3 border-t border-gray-50">
           <div>
-            <span className="text-blue-600 font-bold text-sm">₹{item.offerPrice || item.basePrice}</span>
+            <span className="text-blue-600 font-extrabold text-base">₹{item.offerPrice || item.basePrice}</span>
             {item.offerPrice > 0 && item.basePrice > 0 && (
-              <span className="text-[10px] text-gray-400 line-through ml-1">₹{item.basePrice}</span>
+              <span className="text-xs text-gray-400 line-through ml-1.5">₹{item.basePrice}</span>
             )}
           </div>
-          <a 
-            href={`/packages/${item.region}/${item.packageSlug}`}
-            target="_blank"
-            className="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors"
+          <button 
+            onClick={() => onViewItinerary(item)}
+            className="bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
           >
             Details
-          </a>
+          </button>
         </div>
       </div>
+    </div>
+  );
+};
+
+const ChatItineraryView = ({ itineraries }) => {
+  const [openDay, setOpenDay] = useState(0);
+
+  if (!itineraries || itineraries.length === 0) return null;
+
+  return (
+    <div className="space-y-3 mt-4 animate-fadeIn">
+      <h3 className="text-lg font-black text-slate-900 mb-4 px-1">Day wise Itinerary</h3>
+      
+      {itineraries.map((day, idx) => {
+        const isOpen = openDay === idx;
+        return (
+          <div 
+            key={idx} 
+            className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300"
+          >
+            <button 
+              onClick={() => setOpenDay(isOpen ? -1 : idx)}
+              className="w-full flex items-stretch text-left"
+            >
+              <div className="bg-blue-50/50 w-16 py-3 flex flex-col items-center justify-center border-r border-slate-50">
+                <span className="text-[9px] font-black text-blue-400 uppercase tracking-[0.2em] mb-1 opacity-60">
+                  Day
+                </span>
+                <span className="text-xl font-black text-blue-600 leading-none tracking-tighter">
+                  {day.day?.toString().padStart(2, '0') || (idx + 1).toString().padStart(2, '0')}
+                </span>
+              </div>
+              <div className="flex-1 p-4 flex flex-col justify-center gap-1">
+                <span className="font-bold text-sm text-slate-900 line-clamp-1">{day.title}</span>
+                {day.overnight && (
+                  <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                    <MapPin className="w-3 h-3 text-blue-500" />
+                    Stay: {day.overnight}
+                  </span>
+                )}
+              </div>
+              <div className="pr-4 flex items-center">
+                <ChevronRight className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} />
+              </div>
+            </button>
+            
+            {isOpen && (
+              <div className="px-5 pb-5 pt-3 space-y-5 animate-fadeIn">
+                <div className="h-[1px] bg-slate-50 w-full mb-2" />
+                {day.activities ? (
+                  day.activities.map((act, actIdx) => {
+                    const clean = (txt) => typeof txt === 'string' ? txt.replace(/^[•\-\s\*]+/, '').trim() : txt;
+                    return (
+                      <div key={actIdx} className="relative pl-7 group">
+                        <div className="absolute left-0 top-2 w-2.5 h-2.5 rounded-full border-2 border-blue-500 bg-white" />
+                        {actIdx !== day.activities.length - 1 && (
+                          <div className="absolute left-[4.5px] top-5 bottom-[-20px] w-[1px] bg-slate-100" />
+                        )}
+                        {typeof act === 'string' ? (
+                          <p className="text-sm text-slate-800 leading-relaxed font-semibold">{clean(act)}</p>
+                        ) : (
+                          <>
+                            <p className="text-sm font-bold text-slate-900 mb-1">{clean(act.activity)}</p>
+                            <p className="text-[13px] text-slate-500 leading-relaxed italic">{clean(act.description)}</p>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })
+                ) : day.description ? (
+                  <div className="space-y-4">
+                    {day.description.split('\n').map((line, lIdx) => {
+                      if (!line.trim()) return null;
+                      const clean = (txt) => typeof txt === 'string' ? txt.replace(/^[•\-\s\*]+/, '').trim() : txt;
+                      const cleanedLine = clean(line);
+                      return (
+                        <div key={lIdx} className="flex gap-3 items-start">
+                          <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
+                          <p className="text-sm text-slate-700 leading-relaxed">
+                            {cleanedLine.includes(':') ? (
+                              <>
+                                <span className="font-bold text-slate-900">{cleanedLine.split(':')[0]}:</span>
+                                <span>{cleanedLine.split(':').slice(1).join(':')}</span>
+                              </>
+                            ) : cleanedLine}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400 italic text-center py-2">No details available for this day</p>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -59,20 +215,15 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-  const INITIAL_MESSAGES = [
-    {
-      id: 1,
-      text: "Hello! 👋 Welcome to Bayard Vacations. How can I help you plan your perfect trip today?",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ];
+  const INITIAL_MESSAGES = [];
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [showDestinations, setShowDestinations] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
 
   // Popular destinations data
   const popularDestinations = [
@@ -88,7 +239,48 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
   useEffect(() => {
     setIsMounted(true);
+
+    // Initialize Speech Recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+
+      recognitionRef.current.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        setInputMessage(transcript);
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error("Speech recognition error", event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
   }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (error) {
+        console.error("Failed to start speech recognition:", error);
+      }
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -135,6 +327,19 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     } finally {
       setIsTyping(false);
     }
+  };
+
+  const handleViewItinerary = (pkg) => {
+    const botResponse = {
+      id: Date.now(),
+      text: `Opening the itinerary for **${pkg.packageTitle}**...`,
+      sender: "bot",
+      timestamp: new Date(),
+      isHtml: true,
+      type: 'itinerary',
+      itineraries: pkg.itineraries,
+    };
+    setMessages((prev) => [...prev.filter(m => m.type !== 'itinerary'), botResponse]);
   };
 
   const handleQuickReply = (text) => {
@@ -344,14 +549,22 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
   return (
     <>
+      {/* Backdrop Overlay */}
+      <div
+        className={`fixed inset-0 bg-gradient-to-br from-black/40 via-black/60 to-black/80 backdrop-blur-[2px] z-[998] transition-all duration-500 ease-in-out ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onClose}
+      />
+
       {/* Chat Panel - Enhanced Design */}
       <div
-        className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:w-[450px] h-[80vh] bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-50 transform transition-all duration-500 ease-out overflow-hidden flex flex-col ${
+        className={`fixed inset-0 sm:inset-auto sm:top-[100px] sm:bottom-4 sm:right-4 sm:left-auto sm:w-[450px] bg-white rounded-none sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-[999] transform transition-all duration-500 ease-out overflow-hidden flex flex-col ${
           isOpen ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95 pointer-events-none"
         }`}
       >
         {/* Animated Header with Gradient */}
-        <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white p-5 overflow-hidden flex-shrink-0">
+        <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white py-3 px-6 overflow-hidden flex-shrink-0">
           {/* Animated background circles */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse" />
           <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse [animation-delay:0.5s]" />
@@ -406,7 +619,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
+                className={`${(message.type === 'itinerary' || (message.packages && message.packages.length > 0)) ? 'w-full' : 'max-w-[85%]'} rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
                   message.sender === "user"
                     ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-tr-none"
                     : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
@@ -423,8 +636,8 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                       <div className="relative mt-3">
                         <Swiper
                           modules={[Navigation, SwiperPagination]}
-                          spaceBetween={12}
-                          slidesPerView={1.15}
+                          spaceBetween={16}
+                          slidesPerView={1}
                           grabCursor={true}
                           navigation={{
                             nextEl: `.chat-next-${message.id}`,
@@ -434,7 +647,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                         >
                           {message.packages.map((pkg) => (
                             <SwiperSlide key={pkg.id}>
-                              <ChatPackageCard item={pkg} />
+                              <ChatPackageCard item={pkg} onViewItinerary={handleViewItinerary} />
                             </SwiperSlide>
                           ))}
                         </Swiper>
@@ -448,6 +661,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                           </button>
                         </div>
                       </div>
+                    )}
+
+                    {message.type === 'itinerary' && (
+                      <ChatItineraryView itineraries={message.itineraries} />
                     )}
                   </div>
                 ) : (
@@ -532,7 +749,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           )}
 
           {/* Quick Reply Buttons */}
-          {showQuickReplies && messages.length === 1 && (
+          {showQuickReplies && messages.length === 0 && (
             <div className="space-y-2 animate-fadeIn pt-2">
               <p className="text-xs text-gray-500 font-medium px-1">Quick options:</p>
               <div className="grid grid-cols-2 gap-2">
@@ -581,24 +798,49 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         </div>
 
         {/* Enhanced Input Area */}
-        <div className="bg-white border-t border-gray-200 p-4 backdrop-blur-sm flex-shrink-0">
-          <form onSubmit={handleSendMessage} className="flex gap-2 items-end">
-            <Textarea
-              ref={textareaRef}
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type your message..."
-              className="flex-1 min-h-[44px] max-h-[120px] rounded-2xl border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-5 py-2.5 transition-all duration-300 resize-none h-auto scrollbar-none"
-              disabled={isTyping}
-            />
-            <Button
-              type="submit"
-              disabled={!inputMessage.trim() || isTyping}
-              className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 w-11 h-11 p-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
+        <div className="bg-white p-4 flex-shrink-0">
+          <form onSubmit={handleSendMessage} className="relative group">
+            <div className="relative flex items-center">
+              <Textarea
+                ref={textareaRef}
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask anything about your plan"
+                className="flex-1 min-h-[42px] max-h-[120px] rounded-full border-[1.5px] border-transparent bg-white px-5 py-2.5 pr-12 transition-all duration-300 resize-none h-auto scrollbar-none text-sm placeholder:text-gray-400 focus:outline-none"
+                style={{
+                  backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #0146b3, #4a8dd9)',
+                  backgroundOrigin: 'border-box',
+                  backgroundClip: 'padding-box, border-box',
+                }}
+                disabled={isTyping}
+              />
+              <div className="absolute right-1.5 flex items-center gap-1">
+                {recognitionRef.current && (
+                  <button
+                    type="button"
+                    onClick={toggleListening}
+                    className={`p-1.5 rounded-full transition-all duration-300 ${
+                      isListening 
+                        ? "text-blue-600 animate-pulse bg-blue-50" 
+                        : "text-gray-400 hover:text-blue-500 hover:bg-blue-50"
+                    }`}
+                    title={isListening ? "Stop listening" : "Start voice input"}
+                  >
+                    {isListening ? <MicOff className="w-4.5 h-4.5" /> : <Mic className="w-4.5 h-4.5" />}
+                  </button>
+                )}
+                {!isListening && inputMessage.trim() && (
+                  <button
+                    type="submit"
+                    disabled={isTyping}
+                    className="p-2 text-blue-500 hover:text-blue-600 transition-colors"
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -647,6 +889,21 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         /* Hide horizontal scrollbar specifically */
         .custom-scrollbar::-webkit-scrollbar:horizontal {
           display: none;
+        }
+
+        @keyframes pulse-slow {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(165, 194, 249, 0.4);
+          }
+          50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 8px rgba(165, 194, 249, 0);
+          }
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
       `}</style>
     </>

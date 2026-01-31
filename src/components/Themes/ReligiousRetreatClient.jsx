@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,8 @@ import { Church, Waves, Sun, MapPin, Calendar, Users, Star, Sparkles, ChevronRig
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePackagesByTheme } from "@/hooks/packages";
+import PackageCard from "@/components/ui/PackageCard";
 
 // Floating Spiritual Elements (Light Orbs)
 const FloatingSpiritualElements = () => {
@@ -50,111 +52,31 @@ export default function ReligiousRetreatClient() {
     setMounted(true);
   }, []);
 
-  // Religious retreat packages data
-  const religiousPackages = {
-    international: [
-      {
-        id: 1,
-        title: "Vatican & Rome Pilgrimage",
-        location: "Vatican City & Rome, Italy",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800",
-        price: "$2,899",
-        rating: 4.9,
-        highlights: ["Vatican Museums", "St. Peter's Basilica", "Papal Audience"],
-        category: "Christian Pilgrimage",
-        spiritualLevel: "All Levels"
-      },
-      {
-        id: 2,
-        title: "Mecca & Medina Umrah Journey",
-        location: "Saudi Arabia",
-        duration: "10 Days / 9 Nights",
-        image: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800",
-        price: "$3,499",
-        rating: 4.9,
-        highlights: ["Holy Kaaba", "Prophet's Mosque", "Spiritual Guidance"],
-        category: "Islamic Pilgrimage",
-        spiritualLevel: "All Levels"
-      },
-      {
-        id: 3,
-        title: "Jerusalem Holy Land Tour",
-        location: "Jerusalem, Israel",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1544047567-245119f71b0c?w=800",
-        price: "$3,199",
-        rating: 4.8,
-        highlights: ["Western Wall", "Church of Holy Sepulchre", "Via Dolorosa"],
-        category: "Multi-Faith Pilgrimage",
-        spiritualLevel: "All Levels"
-      },
-      {
-        id: 4,
-        title: "Buddhist Meditation Retreat Thailand",
-        location: "Chiang Mai, Thailand",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1563368718-3eba2b541d91?w=800",
-        price: "$1,899",
-        rating: 4.7,
-        highlights: ["Temple Stay", "Meditation Sessions", "Monk Teachings"],
-        category: "Buddhist Retreat",
-        spiritualLevel: "Beginners Welcome"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Varanasi Spiritual Journey",
-        location: "Varanasi, Uttar Pradesh",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800",
-        price: "₹32,999",
-        rating: 4.9,
-        highlights: ["Ganga Aarti", "Temple Visits", "Yoga & Meditation"],
-        category: "Hindu Pilgrimage",
-        spiritualLevel: "All Levels"
-      },
-      {
-        id: 6,
-        title: "Amritsar Golden Temple Pilgrimage",
-        location: "Amritsar, Punjab",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=800",
-        price: "₹28,999",
-        rating: 4.8,
-        highlights: ["Golden Temple", "Langar Service", "Wagah Border"],
-        category: "Sikh Pilgrimage",
-        spiritualLevel: "All Levels"
-      },
-      {
-        id: 7,
-        title: "Rishikesh Yoga & Spiritual Retreat",
-        location: "Rishikesh, Uttarakhand",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        price: "₹24,999",
-        rating: 4.7,
-        highlights: ["Ashram Stay", "Daily Yoga", "Ganga Meditation"],
-        category: "Yoga & Wellness",
-        spiritualLevel: "Beginners Welcome"
-      },
-      {
-        id: 8,
-        title: "Char Dham Yatra",
-        location: "Uttarakhand",
-        duration: "10 Days / 9 Nights",
-        image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800",
-        price: "₹48,999",
-        rating: 4.9,
-        highlights: ["Four Sacred Shrines", "Mountain Temples", "Spiritual Guidance"],
-        category: "Hindu Pilgrimage",
-        spiritualLevel: "Moderate Fitness"
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("religious-retreat");
 
-  const currentPackages = religiousPackages[selectedTab];
+  const religiousPackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+
+  const currentPackages = religiousPackages[selectedTab] || [];
 
   if (!mounted) return null;
 
@@ -331,77 +253,34 @@ export default function ReligiousRetreatClient() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-14">
-            <AnimatePresence mode="wait">
-              {currentPackages.map((pkg, index) => (
-                <motion.div
-                  key={`${selectedTab}-${pkg.id}`}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <Link href={`/packages/${pkg.id}`}>
-                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-[0_20px_40px_-15px_rgba(120,53,15,0.08)] hover:shadow-[0_40px_80px_-20px_rgba(120,53,15,0.15)] transition-all duration-700 flex flex-col h-full border border-amber-50 group-hover:border-amber-200">
-                      {/* Heritage Image Header */}
-                      <div className="relative h-[340px] overflow-hidden">
-                        <Image
-                          src={pkg.image}
-                          alt={pkg.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out grayscale-[20%] group-hover:grayscale-0"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-amber-950/60 via-transparent to-transparent opacity-40 group-hover:opacity-60 transition-opacity" />
-                        
-                        {/* Sacred Rating */}
-                        <div className="absolute top-6 right-6 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full shadow-lg transform group-hover:-translate-y-1 transition-all">
-                           <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                           <span className="text-xs font-bold text-amber-950">{pkg.rating}</span>
-                        </div>
-
-                        {/* Location Overlay */}
-                        <div className="absolute bottom-6 left-6 right-6">
-                           <div className="inline-flex items-center gap-2.5 bg-amber-950/80 backdrop-blur-md px-4 py-2 rounded-lg text-white mb-2 border border-white/10">
-                              <MapPin className="w-3.5 h-3.5 text-amber-300" />
-                              <span className="text-[10px] font-bold uppercase tracking-widest">{pkg.location}</span>
-                           </div>
-                        </div>
-                      </div>
-
-                      {/* Content Body */}
-                      <div className="p-8 md:p-10 flex-1 flex flex-col justify-between space-y-8">
-                        <div className="space-y-6">
-                          <h3 className="text-2xl md:text-3xl font-serif text-amber-950 leading-tight group-hover:text-amber-700 transition-colors">
-                            {pkg.title}
-                          </h3>
-                          
-                          <div className="space-y-4">
-                             {pkg.highlights.map((h, idx) => (
-                               <div key={idx} className="flex items-center gap-3">
-                                  <div className="w-2 h-2 rounded-full bg-amber-400 opacity-60" />
-                                  <span className="text-xs font-serif text-stone-600 italic">
-                                    {h}
-                                  </span>
-                               </div>
-                             ))}
-                          </div>
-                        </div>
-
-                        <div className="pt-8 border-t border-amber-50 flex items-center justify-between">
-                          <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-amber-800/40 uppercase tracking-[0.2em]">Offering</p>
-                            <p className="text-2xl font-serif text-amber-950">{pkg.price}</p>
-                          </div>
-                          <div className="w-12 h-12 rounded-full border border-amber-200 flex items-center justify-center group-hover:bg-amber-950 group-hover:border-amber-950 group-hover:text-amber-100 transition-all duration-700">
-                             <ChevronRight className="w-6 h-6" />
-                          </div>
-                        </div>
-                      </div>
+            {isLoading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="rounded-[2rem] bg-white p-8 animate-pulse shadow-lg flex flex-col h-full border border-amber-50">
+                  <div className="h-[340px] bg-amber-50 rounded-2xl mb-6"></div>
+                  <div className="space-y-4">
+                    <div className="h-8 bg-amber-50 rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-amber-50 rounded-lg w-1/2"></div>
+                  </div>
+                  <div className="mt-auto pt-8 border-t border-amber-50 flex justify-between items-end">
+                    <div className="space-y-2">
+                       <div className="h-3 bg-amber-50 rounded w-16"></div>
+                       <div className="h-8 bg-amber-50 rounded w-24"></div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                    <div className="w-12 h-12 bg-amber-50 rounded-full"></div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <AnimatePresence mode="wait">
+                {currentPackages.map((pkg, index) => (
+                  <PackageCard 
+                    key={`${selectedTab}-${pkg.id}`} 
+                    item={pkg}
+                    variant="amber"
+                  />
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </Container>
       </section>

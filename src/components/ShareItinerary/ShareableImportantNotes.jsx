@@ -16,15 +16,15 @@ const ShareableImportantNotes = ({ notes }) => {
   const displayNotes = isExpanded ? notes : notes.slice(0, 6);
 
   return (
-    <section id="important-notes" className="py-16 md:py-24 bg-white overflow-hidden scroll-mt-24">
+    <section id="important-notes" className="py-6 md:py-10 bg-white print:py-8 overflow-hidden scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-blue/10 border border-brand-blue/20 rounded-full mb-6">
+        <div className="mb-8 md:mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-blue/10 border border-brand-blue/20 rounded-full mb-4">
             <Info className="w-4 h-4 text-brand-blue" />
             <span className="text-xs font-black text-brand-blue uppercase tracking-[0.2em]">Travel Support</span>
           </div>
-          <h2 className="text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-none">
+          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-none">
             Important <span className="text-brand-blue">Notes</span>
           </h2>
           <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl">
@@ -33,7 +33,7 @@ const ShareableImportantNotes = ({ notes }) => {
         </div>
 
         {/* Content Box */}
-        <div className="bg-slate-50 rounded-[2.5rem] p-8 md:p-16 border border-slate-100 relative group transition-all duration-700 hover:shadow-2xl hover:shadow-brand-blue/5">
+        <div className="bg-slate-50 rounded-[2.5rem] p-6 md:p-10 border border-slate-100 relative group transition-all duration-700 hover:shadow-2xl hover:shadow-brand-blue/5">
           {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/5 rounded-full blur-[100px] -mr-48 -mt-48 transition-all duration-700 group-hover:bg-brand-blue/10" />
           

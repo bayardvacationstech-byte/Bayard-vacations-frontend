@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,8 @@ import { Compass, Map, Tent, MapPin, Calendar, Users, Star, Mountain, ChevronRig
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePackagesByTheme } from "@/hooks/packages";
+import PackageCard from "@/components/ui/PackageCard";
 
 // Floating Adventure Elements
 const FloatingAdventureElements = () => {
@@ -56,111 +58,31 @@ export default function ExplorationBundleClient() {
     setMounted(true);
   }, []);
 
-  // Adventure packages data
-  const adventurePackages = {
-    international: [
-      {
-        id: 1,
-        title: "Patagonia Trekking Expedition",
-        location: "Chile & Argentina",
-        duration: "12 Days / 11 Nights",
-        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
-        price: "$4,299",
-        rating: 4.9,
-        highlights: ["Torres del Paine", "Glacier Hiking", "Wild Camping"],
-        category: "Extreme Trekking",
-        adventureLevel: "Advanced"
-      },
-      {
-        id: 2,
-        title: "African Safari Adventure",
-        location: "Kenya & Tanzania",
-        duration: "10 Days / 9 Nights",
-        image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800",
-        price: "$5,999",
-        rating: 5.0,
-        highlights: ["Big Five Safari", "Serengeti Camp", "Maasai Village"],
-        category: "Wildlife Expedition",
-        adventureLevel: "Moderate"
-      },
-      {
-        id: 3,
-        title: "Iceland Northern Lights Trek",
-        location: "Iceland",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800",
-        price: "$3,799",
-        rating: 4.8,
-        highlights: ["Aurora Hunting", "Volcano Hiking", "Ice Caves"],
-        category: "Arctic Adventure",
-        adventureLevel: "Intermediate"
-      },
-      {
-        id: 4,
-        title: "New Zealand Multi-Sport Adventure",
-        location: "New Zealand",
-        duration: "11 Days / 10 Nights",
-        image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800",
-        price: "$4,599",
-        rating: 4.9,
-        highlights: ["Bungee Jumping", "White Water Rafting", "Mountain Biking"],
-        category: "Multi-Adventure",
-        adventureLevel: "Advanced"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Ladakh Adventure Expedition",
-        location: "Ladakh",
-        duration: "9 Days / 8 Nights",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        price: "₹54,999",
-        rating: 4.9,
-        highlights: ["High Altitude Trekking", "Monastery Visits", "Camping"],
-        category: "Mountain Adventure",
-        adventureLevel: "Advanced"
-      },
-      {
-        id: 6,
-        title: "Spiti Valley Exploration",
-        location: "Himachal Pradesh",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=800",
-        price: "₹42,999",
-        rating: 4.8,
-        highlights: ["Remote Villages", "Desert Mountains", "Buddhist Culture"],
-        category: "Cultural Expedition",
-        adventureLevel: "Moderate"
-      },
-      {
-        id: 7,
-        title: "Rishikesh Adventure Bundle",
-        location: "Rishikesh",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800",
-        price: "₹32,999",
-        rating: 4.7,
-        highlights: ["River Rafting", "Rock Climbing", "Bungee Jumping"],
-        category: "Adventure Sports",
-        adventureLevel: "Intermediate"
-      },
-      {
-        id: 8,
-        title: "Andaman Island Exploration",
-        location: "Andaman & Nicobar",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
-        price: "₹48,999",
-        rating: 4.8,
-        highlights: ["Scuba Diving", "Island Hopping", "Jungle Trekking"],
-        category: "Island Adventure",
-        adventureLevel: "Moderate"
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("exploration-bundle");
 
-  const currentPackages = adventurePackages[selectedTab];
+  const adventurePackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+
+  const currentPackages = adventurePackages[selectedTab] || [];
 
   if (!mounted) return null;
 
@@ -319,69 +241,33 @@ export default function ExplorationBundleClient() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <AnimatePresence mode="wait">
-              {currentPackages.map((pkg, index) => (
-                <motion.div
-                  key={`${selectedTab}-${pkg.id}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <Link href={`/packages/${pkg.id}`}>
-                    <div className="bg-white border-2 border-emerald-950/5 overflow-hidden transition-all duration-500 flex flex-col h-full hover:border-emerald-500 hover:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.2)]">
-                      {/* Action Header */}
-                      <div className="relative h-[280px] overflow-hidden">
-                        <Image
-                          src={pkg.image}
-                          alt={pkg.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-emerald-900/20 group-hover:bg-transparent transition-colors" />
-                        
-                        {/* Status Badge */}
-                        <div className="absolute top-4 left-4">
-                           <div className="px-3 py-1 bg-yellow-400 text-black text-[10px] font-black uppercase tracking-widest skew-x-[-12deg]">
-                              <span className="skew-x-[12deg] block">{pkg.adventureLevel}</span>
-                           </div>
-                        </div>
-
-                        {/* Rating Overlay */}
-                        <div className="absolute bottom-4 right-4 bg-emerald-950 text-white px-3 py-1.5 flex items-center gap-2">
-                           <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                           <span className="text-xs font-black">{pkg.rating}</span>
-                        </div>
-                      </div>
-
-                      {/* Info Body */}
-                      <div className="p-8 flex-1 flex flex-col justify-between space-y-8">
-                        <div className="space-y-4">
-                          <div className="flex items-center gap-2 text-emerald-600 text-[10px] font-bold uppercase tracking-widest">
-                             <MapPin className="w-3 h-3" />
-                             {pkg.location}
-                          </div>
-                          <h3 className="text-2xl font-black text-emerald-950 leading-tight uppercase group-hover:text-emerald-600 transition-colors">
-                            {pkg.title}
-                          </h3>
-                        </div>
-
-                        <div className="pt-6 border-t border-emerald-50 flex items-center justify-between">
-                          <div>
-                            <p className="text-[10px] font-bold text-emerald-900/40 uppercase tracking-widest">Payload</p>
-                            <p className="text-2xl font-black text-emerald-950 italic">{pkg.price}</p>
-                          </div>
-                          <div className="w-12 h-12 bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                             <ChevronRight className="w-6 h-6" />
-                          </div>
-                        </div>
-                      </div>
+            {isLoading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="bg-white p-8 animate-pulse shadow-lg flex flex-col h-full border border-emerald-50">
+                  <div className="h-[280px] bg-emerald-50 rounded-lg mb-6"></div>
+                  <div className="space-y-4">
+                    <div className="h-8 bg-emerald-50 rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-emerald-50 rounded-lg w-1/2"></div>
+                  </div>
+                  <div className="mt-auto pt-6 border-t border-emerald-50 flex justify-between items-end">
+                    <div className="space-y-2">
+                       <div className="h-3 bg-emerald-50 rounded w-16"></div>
+                       <div className="h-8 bg-emerald-50 rounded w-24"></div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                    <div className="w-12 h-12 bg-emerald-50 rounded-full"></div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <AnimatePresence mode="wait">
+                {currentPackages.map((pkg, index) => (
+                  <PackageCard 
+                    key={`${selectedTab}-${pkg.id}`} 
+                    item={pkg}
+                  />
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </Container>
       </section>

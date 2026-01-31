@@ -11,10 +11,10 @@ const ShareableFAQ = ({ faqs = [] }) => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-br from-slate-50 to-blue-50 print:bg-white print:py-8">
+    <section className="py-6 md:py-10 bg-gradient-to-br from-slate-50 to-blue-50 print:bg-white print:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-10 md:mb-14 print:mb-6">
+        <div className="text-center mb-4 md:mb-6 print:mb-6">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 mb-4 print:w-12 print:h-12">
             <HelpCircle className="w-8 h-8 text-white print:w-6 print:h-6" />
           </div>

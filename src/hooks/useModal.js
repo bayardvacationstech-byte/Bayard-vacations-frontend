@@ -3,7 +3,8 @@ import { usePathname } from "next/navigation";
 
 // Global state to ensure modal state is accessible across the entire app
 let globalModalState = {
-  isOpen: false,
+  isOpen: false, // For Enquiry/Lead form
+  isAuthOpen: false, // For Login form
   region: "",
 };
 const globalModalListeners = new Set();
@@ -24,14 +25,24 @@ const useModal = () => {
     globalModalListeners.forEach((listener) => listener(globalModalState));
   }, []);
 
-  // Function to open modal
+  // Function to open enquiry modal
   const openModal = useCallback(() => {
     updateGlobalState({ isOpen: true });
   }, [updateGlobalState]);
 
-  // Function to close modal
+  // Function to close enquiry modal
   const closeModal = useCallback(() => {
     updateGlobalState({ isOpen: false });
+  }, [updateGlobalState]);
+
+  // Function to open auth modal
+  const openAuthModal = useCallback(() => {
+    updateGlobalState({ isAuthOpen: true });
+  }, [updateGlobalState]);
+
+  // Function to close auth modal
+  const closeAuthModal = useCallback(() => {
+    updateGlobalState({ isAuthOpen: false });
   }, [updateGlobalState]);
 
   // Function to set region
@@ -75,9 +86,12 @@ const useModal = () => {
 
   return {
     isOpen: modalState.isOpen,
+    isAuthOpen: modalState.isAuthOpen,
     region: modalState.region,
     openModal,
     closeModal,
+    openAuthModal,
+    closeAuthModal,
     setRegion,
   };
 };

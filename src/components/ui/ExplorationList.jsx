@@ -2,15 +2,22 @@
 import React from "react";
 import { usePackagesByTheme } from "@/hooks/packages";
 import { useSearchParams } from "next/navigation";
-import DestinationsCard from "../Landing/Destinations/DestinationCard";
+import PackageCard from "./PackageCard";
 
 // Loading skeleton component
 const ExplorationCardSkeleton = () => (
-  <div className="animate-pulse overflow-hidden rounded-2xl bg-[#E5ECF7]">
-    <div className="h-[420px] w-full overflow-hidden rounded-2xl bg-gray-300">
-      <div className="flex h-full items-end justify-center">
-        <div className="h-12 w-[90%] m-4 rounded-xl bg-gray-500/10" />
-      </div>
+   <div className="rounded-3xl bg-white p-6 animate-pulse flex flex-col h-full shadow-lg border border-slate-100">
+    <div className="h-56 bg-slate-50 rounded-2xl mb-4"></div>
+    <div className="space-y-3">
+      <div className="h-6 bg-slate-50 rounded-lg w-3/4"></div>
+      <div className="h-4 bg-slate-50 rounded-lg w-1/2"></div>
+    </div>
+    <div className="mt-auto pt-6 border-t border-slate-100 flex justify-between items-end">
+       <div className="space-y-2">
+          <div className="h-3 bg-slate-100 rounded w-16"></div>
+          <div className="h-6 bg-slate-100 rounded w-24"></div>
+       </div>
+       <div className="h-8 bg-slate-100 rounded-lg w-20"></div>
     </div>
   </div>
 );
@@ -20,31 +27,13 @@ const ExplorationList = ({ theme }) => {
   const searchParams = useSearchParams();
   const isDomestic = searchParams.get("domestic") === "true";
 
-  const themePackages = packages
-    // .filter((pkg) => pkg.theme.includes(theme) && pkg.cardImages[0] !== null)
+  const themePackages = (packages || [])
     .filter((pkg) => pkg.domestic === isDomestic);
 
-  const uniqueRegions = themePackages
-    .reduce((acc, current) => {
-      const isRegionPresent = acc.some(
-        (item) => item.region === current.region
-      );
-      if (!isRegionPresent) {
-        acc.push(current);
-      }
-      return acc;
-    }, [])
-    .sort((a, b) => a.region.localeCompare(b.region));
-
-  if (
-    packages.length === 0 ||
-    themePackages.length === 0 ||
-    uniqueRegions.length === 0 ||
-    isLoading
-  ) {
+  if (isLoading) {
     return (
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-        {Array.from({ length: 6 }).map((_, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {Array.from({ length: 4 }).map((_, index) => (
           <ExplorationCardSkeleton key={index} />
         ))}
       </div>
@@ -55,10 +44,18 @@ const ExplorationList = ({ theme }) => {
     return <h3>Error fetching packages: {error.message}</h3>;
   }
 
+  if (themePackages.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <h3 className="text-2xl font-bold text-slate-400 font-serif lowercase italic">No packages found for this theme and region.</h3>
+      </div>
+    )
+  }
+
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-      {uniqueRegions.map((item) => (
-        <DestinationsCard key={item.id} regionSlug={item.region} />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+      {themePackages.map((item) => (
+        <PackageCard key={item.id} item={item} />
       ))}
     </div>
   );

@@ -2,11 +2,11 @@ import React from 'react';
 
 const ShareableInclusions = ({ inclusions, exclusions }) => {
   return (
-    <div className="bg-slate-50 py-8 md:py-12 print:py-6 print:bg-white">
+    <section id="inclusions" className="bg-slate-50 py-6 md:py-10 print:py-6 print:bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-6 md:mb-8 print:mb-4">
-          <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight">
+        <div className="mb-3 md:mb-4 print:mb-4">
+          <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-1 tracking-tight">
             What's <span className="text-brand-green">Included</span>
           </h2>
           <p className="text-slate-600 text-sm md:text-lg font-medium">
@@ -74,7 +74,7 @@ const ShareableInclusions = ({ inclusions, exclusions }) => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

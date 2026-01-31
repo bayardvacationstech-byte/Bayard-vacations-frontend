@@ -21,6 +21,7 @@ import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/offerUtils";
+import BadgeSection from "@/components/BadgeSection";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -86,25 +87,9 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
 
     const rawImages = [
       ...scavenger(item.cardImages),
-      ...scavenger(item.bannerImages),
-      ...scavenger(item.images), // Common plural
-      ...scavenger(item.imageRefs), // Firestore reference arrays
-      ...scavenger(item.itineraries?.flatMap(it => it.imageRefs || [])), // Nested itineray images
-      ...(item.cardImage ? [{ url: item.cardImage }] : []), // Common singular
-      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []), // Singular ref
-      ...(item.bannerImage ? [{ url: item.bannerImage }] : []), // Common singular
-      ...(item.image ? [{ url: item.image }] : []),
-      ...(item.imageUrl ? [{ url: item.imageUrl }] : []),
-      ...(item.featuredImage ? [{ url: item.featuredImage }] : []),
+      ...(item.cardImage ? [{ url: item.cardImage }] : []),
+      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []),
     ];
-
-    // Last resort: scan itineraries for images
-    if (rawImages.length === 0 && item.itineraries?.length > 0) {
-      item.itineraries.forEach(pit => {
-        if (pit.imageRefs) rawImages.push(...scavenger(pit.imageRefs));
-        if (pit.image) rawImages.push(pit.image);
-      });
-    }
 
     // Normalize and filter unique valid images
     const seen = new Set();
@@ -120,13 +105,21 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
       });
     
     return { validImages: result, hasImages: result.length > 0 };
-  }, [item.cardImages, item.bannerImages, item.images, item.cardImage, item.bannerImage, item.image, item.imageUrl, item.itineraries]);
+  }, [item.cardImages, item.cardImage, item.cardImageRef]);
 
   // Diagnostic logging for missing images
 
+  // Robust Slug Generation
+  const regionSlug = useMemo(() => {
+    if (item.regionSlug) return item.regionSlug;
+    if (!item.region) return "unknown";
+    // Convert "Proper Name" to slug if it's not already
+    return item.region.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  }, [item.region, item.regionSlug]);
+
   const href = isGroup
-    ? `/packages/${item.region}/${item.packageSlug}?group=true`
-    : `/packages/${item.region}/${item.packageSlug}`;
+    ? `/packages/${regionSlug}/${item.packageSlug}?group=true`
+    : `/packages/${regionSlug}/${item.packageSlug}`;
 
   // Default highlights if not provided
   const highlights = item.highlights || [
@@ -152,7 +145,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
           className
         )}>
           {/* Image Container */}
-          <div className="relative h-[160px] sm:h-[320px] overflow-hidden">
+          <div className="relative h-[240px] sm:h-[320px] overflow-hidden">
             <Swiper
               modules={[Navigation, Autoplay, SwiperPagination]}
               loop={validImages.length > 1}
@@ -170,6 +163,8 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                 bulletClass: "swiper-pagination-bullet !size-1.5 !bg-white !opacity-50",
                 bulletActiveClass: "!opacity-100 !w-4 !rounded-full transition-all",
               }}
+              preventClicks={false}
+              preventClicksPropagation={false}
               className="h-full w-full"
             >
               {validImages.length > 0 ? (
@@ -229,14 +224,9 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
             {/* Premium Overlays */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700 pointer-events-none z-10" />
             
-            {/* Category / Region Badge */}
+            {/* Dynamic Tags Badge */}
             <div className="absolute top-4 left-4 z-20">
-              <div className={cn(
-                "px-4 py-1.5 rounded-full text-white text-[10px] font-black uppercase tracking-widest backdrop-blur-md shadow-lg",
-                theme.badge
-              )}>
-                {item.region || "Featured"}
-              </div>
+              <BadgeSection item={item} />
             </div>
 
             {/* Rating Tag */}
@@ -251,7 +241,9 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                 <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
                   <MapPin className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-bold tracking-tight capitalize">{item.region}</span>
+                <span className="text-sm font-bold tracking-tight capitalize">
+                  {item.location || regionSlug.split("-").join(" ")}
+                </span>
               </div>
               <div className={cn(
                 "flex items-center gap-2 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20",
@@ -267,26 +259,38 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
           </div>
 
           {/* Content Area */}
-          <div className="p-3 sm:p-8 flex-none sm:flex-1 flex flex-col justify-between space-y-2 sm:space-y-6">
-            <div className="space-y-1.5 sm:space-y-4">
+          <div className="pt-2 sm:pt-2 px-5 sm:px-8 pb-5 sm:pb-8 flex-none sm:flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
+            <div className="space-y-2 sm:space-y-2">
               <h3 className={cn(
-                "text-sm sm:text-2xl font-black text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
+                "text-xl sm:text-2xl font-black text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
                 theme.textHover
               )}>
                 {item.packageTitle}
               </h3>
+              
+              {/* Highlights Section */}
+              <div className="space-y-2 sm:space-y-2.5">
+                {(item.highlights || ["Premium Accommodation", "Expert Guided Tours", "Curated Experiences"]).slice(0, 3).map((highlight, idx) => (
+                  <div key={idx} className="flex items-center gap-2 sm:gap-3 group/hl">
+                    <div className="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)] group-hover/hl:scale-125 transition-transform" />
+                    <p className="text-sm sm:text-sm text-slate-600 italic font-medium leading-tight tracking-tight">
+                      {highlight}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Premium Footer */}
-            <div className="pt-3 sm:pt-6 border-t border-slate-100 flex items-end justify-between">
-              <div className="space-y-0.5 sm:space-y-1">
+            <div className="pt-4 sm:pt-6 border-t border-slate-100 flex items-end justify-between">
+              <div className="space-y-1 sm:space-y-1">
                 <p className="text-[8px] sm:text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Curated Price</p>
                 <div className="flex flex-col">
                   {(item.offerPrice > 0 || item.basePrice > 0) ? (
                     <>
-                      <p className="text-[17px] sm:text-3xl font-black text-slate-900 tracking-tighter">
+                      <p className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
                         ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
-                        <span className="text-[10px] sm:text-xs text-slate-400 font-bold ml-1 tracking-tight">/ couple</span>
+                        <span className="text-xs sm:text-xs text-slate-400 font-bold ml-1 tracking-tight">/ couple</span>
                       </p>
                       {item.offerPrice > 0 && (
                         <p className="text-[8px] sm:text-[10px] text-slate-400 line-through">
