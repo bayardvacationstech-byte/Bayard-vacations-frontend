@@ -47,7 +47,7 @@ export default function GroupDeparture({ groupDeparturePackages }) {
           {groupDeparturePackages && groupDeparturePackages.length > 0 ? (
             <GroupDepartureSlider groupDeparturePackages={groupDeparturePackages} />
           ) : (
-            <div className="h-[500px] w-full bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 font-semibold">
+            <div className="h-[520px] w-full bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 font-semibold">
               Experience the Extraordinary
             </div>
           )}

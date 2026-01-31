@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 
 export default function DestinationCard({
   regionSlug,
-  inCarousel = false,
   index = 0,
 }) {
   const { image: queryImage, isLoading: imageLoading, error: imageError } = useDestinationImage(regionSlug);
@@ -33,8 +32,6 @@ export default function DestinationCard({
     }, index * 100);
     return () => clearTimeout(timer);
   }, [index]);
-
-  const SliderItem = inCarousel ? CarouselItem : "div";
 
   return (
     <>
@@ -65,10 +62,9 @@ export default function DestinationCard({
         }
       `}</style>
 
-      <SliderItem
+      <div
         className={`relative bg-gray-100 p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl aspect-[5/6] 
-        w-[80%] sm:w-full
-        basis-[80%] sm:basis-1/2 lg:basis-1/4 
+        w-full
         cursor-pointer transition-all duration-500 ease-out shadow-lg flex-shrink-0
         ${shouldAnimate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
         ${isHovered ? "scale-[1.03] shadow-2xl" : "scale-100 shadow-lg"}
@@ -314,7 +310,7 @@ export default function DestinationCard({
             </div>
           )}
         </Link>
-      </SliderItem>
+      </div>
     </>
   );
 }

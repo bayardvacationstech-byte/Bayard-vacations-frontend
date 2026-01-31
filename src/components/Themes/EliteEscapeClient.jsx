@@ -7,11 +7,32 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Diamond, Martini, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Award, Gem } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
-import PackageCard from "@/components/ui/PackageCard";
+import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
 import { usePackagesByTheme } from "@/hooks/packages";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+import { getPaginationPages } from "@/utils/paginationUtils";
+import { useRef } from "react";
+import { cn } from "@/lib/utils";
+import ThemeLoader from "@/components/ui/ThemeLoader";
 export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [selectionType, setSelectionType] = useState("International");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const packagesRef = useRef(null);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedRegion, selectionType]);
 
   const { 
     packages: allThemePackages, 
@@ -61,11 +82,23 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
     return isLevelMatch && isTypeMatch;
   }), [elitePackages, selectedRegion, selectionType, initialRegions]);
 
+  const totalPages = Math.ceil(filteredPackages.length / itemsPerPage);
+  
+  const paginatedPackages = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredPackages.slice(start, start + itemsPerPage);
+  }, [filteredPackages, currentPage, itemsPerPage]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      <AnimatePresence>
+        {isLoading && (
+          <ThemeLoader theme="elite" fullScreen className="bg-slate-900" />
+        )}
+      </AnimatePresence>
       {/* Hero Section */}
       {/* Hero Section */}
-      <div className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#0A0C10] py-24 md:py-32">
+      <div className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#0A0C10] py-16 md:py-20">
         {/* Animated Background Gradients */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-500/10 blur-[120px] rounded-full animate-pulse" />
@@ -107,13 +140,13 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
               </motion.div>
 
               <div className="space-y-4">
-                <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
+                <h1 className="text-3xl sm:text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
                   Elite<br />
                   <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-200 bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer">
                     Escape
                   </span>
                 </h1>
-                <p className="text-lg md:text-xl text-slate-400 font-medium leading-relaxed max-w-xl mx-auto xl:mx-0">
+                <p className="text-base md:text-xl text-slate-400 font-medium leading-relaxed max-w-xl mx-auto xl:mx-0">
                   Curated for the connoisseur of fine travel. Immerse yourself in a world where luxury knows no bounds and every detail is a masterpiece.
                 </p>
               </div>
@@ -133,7 +166,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
               {/* Trust Indicators */}
               <div className="pt-8 flex flex-wrap items-center justify-center xl:justify-start gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                 <div className="flex flex-col">
-                  <span className="text-2xl font-black text-white">500+</span>
+                  <span className="text-xl md:text-2xl font-black text-white">500+</span>
                   <span className="text-[10px] uppercase tracking-widest text-amber-500">Luxury Resorts</span>
                 </div>
                 <div className="w-px h-8 bg-slate-800" />
@@ -143,7 +176,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                 </div>
                 <div className="w-px h-8 bg-slate-800" />
                 <div className="flex flex-col">
-                  <span className="text-2xl font-black text-white">Top 1%</span>
+                  <span className="text-xl md:text-2xl font-black text-white">Top 1%</span>
                   <span className="text-[10px] uppercase tracking-widest text-amber-500">Global Service</span>
                 </div>
               </div>
@@ -227,9 +260,9 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
 
       {/* Packages Section */}
-      <Container className="py-8 md:py-12">
+      <Container className="py-6 md:py-8">
         {/* Region Filter Section */}
-        <div className="relative mb-16">
+        <div className="relative mb-8">
           <div className="max-w-7xl mx-auto px-4">
             <div className="bg-slate-950/40 backdrop-blur-3xl rounded-[3rem] p-8 md:p-12 border border-white/5 shadow-2xl relative overflow-hidden">
               {/* Decorative background elements */}
@@ -346,55 +379,101 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
         </div>
 
         {/* Packages Grid */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="aspect-[4/5] rounded-[2.5rem] bg-slate-900/40 border border-white/5 p-6 animate-pulse flex flex-col justify-end gap-4 shadow-2xl">
-                <div className="h-6 bg-slate-800 rounded-lg w-3/4"></div>
-                <div className="h-4 bg-slate-800 rounded-lg w-1/2"></div>
-                <div className="h-10 bg-slate-800 rounded-xl w-full"></div>
-              </div>
-            ))}
-          </div>
-        ) : filteredPackages.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <AnimatePresence mode="wait">
-              {filteredPackages.map((pkg, index) => (
-                <PackageCard
-                  key={pkg.id}
-                  variant="amber"
-                  item={pkg}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-        ) : (
-          <div className="text-center py-20 bg-slate-800/30 rounded-[3rem] border border-dashed border-amber-500/20">
-            <Diamond className="w-12 h-12 text-amber-500 opacity-30 mx-auto mb-4" />
-            <h3 className="text-2xl font-black text-white mb-2">No Elite Packages Found</h3>
-            <p className="text-slate-400">We are currently handpicking exclusive experiences for this region. Stay tuned!</p>
-            <Button onClick={() => setSelectedRegion("All")} className="mt-6 bg-amber-500 text-slate-900 font-bold rounded-xl">View All Regions</Button>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 md:mb-10" ref={packagesRef}>
+          {isLoading ? (
+            <ThemeLoader theme="elite" />
+          ) : paginatedPackages.length > 0 ? (
+            paginatedPackages.map((pkg) => (
+              <ThemedPackageCard
+                key={pkg.id}
+                theme="elite"
+                item={pkg}
+              />
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center text-slate-400">
+              No Elite Escapes available for this region at the moment.
+            </div>
+          )}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-12 flex justify-center py-6">
+            <Pagination>
+              <PaginationContent className="gap-2">
+                <PaginationItem>
+                  <PaginationPrevious
+                    className={cn(
+                      "cursor-pointer rounded-xl h-12 w-12 bg-slate-800/50 border-amber-500/20 text-amber-500 hover:bg-amber-500 hover:text-white transition-all",
+                      currentPage === 1 && "pointer-events-none opacity-30"
+                    )}
+                    onClick={() => {
+                      setCurrentPage(currentPage - 1);
+                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                  />
+                </PaginationItem>
+                
+                  {getPaginationPages(currentPage, totalPages).map((page, i) => (
+                    <PaginationItem key={i} className="hidden sm:block">
+                      {page === "..." ? (
+                        <PaginationEllipsis className="text-amber-500" />
+                      ) : (
+                        <PaginationLink
+                          className={cn(
+                            "cursor-pointer rounded-xl h-12 w-12 bg-slate-800/50 font-bold transition-all border-amber-500/20",
+                            currentPage === page 
+                              ? "bg-amber-500 text-white shadow-lg border-transparent" 
+                              : "text-amber-500 hover:bg-amber-500/10"
+                          )}
+                          onClick={() => {
+                            setCurrentPage(page);
+                            packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    className={cn(
+                      "cursor-pointer rounded-xl h-12 w-12 bg-slate-800/50 border-amber-500/20 text-amber-500 hover:bg-amber-500 hover:text-white transition-all",
+                      currentPage === totalPages && "pointer-events-none opacity-30"
+                    )}
+                    onClick={() => {
+                      setCurrentPage(currentPage + 1);
+                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
       </Container>
 
       {/* Why Elite Travel Section */}
       {/* Why Elite Travel Section */}
-      <div className="relative py-24 md:py-32 overflow-hidden">
+      <div className="relative py-10 md:py-16 overflow-hidden">
         {/* Background Accents */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
 
         <Container>
-          <div className="flex flex-col lg:flex-row items-end justify-between gap-8 mb-20 text-center lg:text-left">
+          <div className="flex flex-col lg:flex-row items-end justify-between gap-8 mb-10 text-center lg:text-left">
             <div className="max-w-2xl">
               <span className="text-amber-500 font-black uppercase tracking-[0.4em] text-sm mb-4 block">The Bayard Distinction</span>
-              <h2 className="text-4xl md:text-6xl font-black text-white">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white">
                 Why Choose <br />
                 <span className="text-amber-500">Elite Escapes?</span>
               </h2>
             </div>
-            <p className="text-xl text-slate-400 max-w-md">
+            <p className="text-base md:text-xl text-slate-400 max-w-md">
               Experience the pinnacle of luxury travel where every moment is meticulously crafted for excellence.
             </p>
           </div>

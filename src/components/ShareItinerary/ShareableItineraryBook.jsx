@@ -25,7 +25,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
   
   // 1. Page 0 (Cover & Day 1 Header)
   physicalPages.push({
-    front: { type: 'cover', title: 'My Trip Itinerary' },
+    front: { type: 'cover', title: 'Your Customized Itinerary' },
     back: { type: 'header', dayData: itineraries[0] }
   });
 
@@ -167,12 +167,12 @@ const ShareableItineraryBook = ({ itineraries }) => {
   return (
     <section 
       ref={bookRef}
-      className="pt-4 pb-10 md:pt-6 md:pb-16 bg-white print:py-8 mobile-journal-trigger"
+      className="pt-6 pb-10 md:pt-10 md:pb-16 bg-white print:py-8 mobile-journal-trigger"
     >
       <div className="max-w-full mx-auto px-4 md:px-8 lg:px-12">
         <div className="text-center mb-8 md:mb-10 px-4">
           <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-3">
-            Our <span className="text-brand-blue uppercase">Journal</span>
+            Customized <span className="text-brand-blue uppercase">Itinerary</span>
           </h2>
           <p className="text-slate-500 font-medium italic text-lg md:text-xl">The pages of your journey unfold...</p>
         </div>
@@ -582,7 +582,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
                       </div>
                     )}
                   </div>
-                  <h3 className={`text-lg font-black leading-tight tracking-tight transition-colors ${isOpen ? 'text-brand-blue' : 'text-slate-900'}`}>
+                  <h3 className="text-lg font-black leading-tight tracking-tight text-brand-blue">
                     {day.title}
                   </h3>
                 </div>
@@ -638,12 +638,14 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
         );
       })}
 
-      <div className="mobile-card opacity-0 translate-y-8 bg-emerald-50 rounded-[1.5rem] p-8 text-center border-2 border-dashed border-emerald-200">
-        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
-          <span className="text-3xl">🏅</span>
+      <div className="mobile-card opacity-0 translate-y-8 bg-emerald-50 rounded-[1.5rem] p-4 flex items-center gap-4 border border-emerald-100 shadow-sm">
+        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+          <span className="text-2xl">🏅</span>
         </div>
-        <h4 className="text-lg font-black text-slate-900 mb-1 tracking-tight">Adventure Complete</h4>
-        <p className="text-emerald-700 text-xs font-bold uppercase tracking-widest">Memories for life</p>
+        <div>
+          <h4 className="text-base font-black text-slate-900 leading-tight">Adventure Complete</h4>
+          <p className="text-emerald-700 text-[10px] font-bold uppercase tracking-widest">Memories for life</p>
+        </div>
       </div>
     </div>
   );

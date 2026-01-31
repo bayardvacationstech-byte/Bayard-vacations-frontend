@@ -99,6 +99,18 @@ Perfect for couples, families, and adventure seekers, this itinerary offers the 
         location: "Ahmedabad, India",
         rating: 5,
         review: "Everything was seamless from start to finish. The sunset dinner cruise was romantic and memorable. Our tour guide went above and beyond to ensure we had the best experience. The spa treatments at the resort were world-class. Will definitely book with Bayard again!"
+      },
+      {
+        name: "Arjun Khanna",
+        location: "Chandigarh, India",
+        rating: 5,
+        review: "The customization was top-notch. I wanted a mix of off-beat places and famous spots, and Bayard delivered perfectly. The fast boat to Nusa Penida was smooth, and the snorkeling spots they chose were pristine. Truly a luxury experience."
+      },
+      {
+        name: "Deepak & Anjali",
+        location: "Pune, India",
+        rating: 4,
+        review: "Great experience overall. The hotels were exceptional and the local support was always available on WhatsApp. We particularly loved the traditional Balinese ceremony we got to witness. Highly recommended for couples!"
       }
     ],
     

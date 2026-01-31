@@ -3,6 +3,7 @@ import React from "react";
 import { usePackagesByTheme } from "@/hooks/packages";
 import { useSearchParams } from "next/navigation";
 import PackageCard from "./PackageCard";
+import ThemeLoader from "@/components/ui/ThemeLoader";
 
 // Loading skeleton component
 const ExplorationCardSkeleton = () => (
@@ -30,13 +31,23 @@ const ExplorationList = ({ theme }) => {
   const themePackages = (packages || [])
     .filter((pkg) => pkg.domestic === isDomestic);
 
+  // Map slug to theme loader key
+  const getThemeLoaderKey = (slug) => {
+    if (slug.includes('romantic')) return 'romantic';
+    if (slug.includes('exploration')) return 'exploration';
+    if (slug.includes('solo')) return 'solo';
+    if (slug.includes('religious')) return 'religious';
+    if (slug.includes('relax')) return 'relax';
+    if (slug.includes('family')) return 'family';
+    if (slug.includes('elite')) return 'elite';
+    if (slug.includes('educational')) return 'educational';
+    if (slug.includes('group')) return 'group';
+    return null;
+  };
+
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <ExplorationCardSkeleton key={index} />
-        ))}
-      </div>
+      <ThemeLoader theme={getThemeLoaderKey(theme)} />
     );
   }
 

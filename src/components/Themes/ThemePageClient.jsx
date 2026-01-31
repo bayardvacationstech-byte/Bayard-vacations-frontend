@@ -49,7 +49,7 @@ const ThemePageClient = ({ theme }) => {
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-green/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
         
         <Container className="relative z-10">
-          <div className="py-16 lg:py-24 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+          <div className="py-10 lg:py-16 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
             {/* Text Content */}
             <div className="flex-1 max-w-2xl">
               <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-brand-green text-xs font-bold tracking-[0.2em] uppercase mb-6">
@@ -86,7 +86,7 @@ const ThemePageClient = ({ theme }) => {
       {/* Tabs Section */}
       <section className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">
         <Container>
-          <div className="flex items-center justify-center gap-4 py-6">
+          <div className="flex items-center justify-center gap-4 py-4">
             <button
               onClick={() => handleTabChange("international")}
               className={`rounded-full px-10 py-3 text-base lg:text-lg font-bold transition-all transform hover:scale-105 ${
@@ -112,7 +112,7 @@ const ThemePageClient = ({ theme }) => {
       </section>
 
       {/* Packages Section */}
-      <section className="py-20 bg-slate-50 min-h-[600px]">
+      <section className="py-12 bg-slate-50 min-h-[600px]">
         <Container>
            {/* Custom sorting or filtering info could go here */}
           <ExplorationList theme={theme.slug.split("?")[0]} />

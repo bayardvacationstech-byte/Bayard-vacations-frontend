@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ShareableHeader = ({ itineraryData }) => {
   const { 
@@ -9,8 +10,12 @@ const ShareableHeader = ({ itineraryData }) => {
     customerName, 
     travelDates, 
     duration,
-    heroImage 
+    heroImage,
+    pricing
   } = itineraryData;
+
+  const formatPrice = (price) => new Intl.NumberFormat('en-IN').format(price);
+  const currencySymbol = pricing?.currency === 'INR' ? '₹' : (pricing?.currency || '₹');
 
   return (
     <>
@@ -29,15 +34,17 @@ const ShareableHeader = ({ itineraryData }) => {
 
         {/* Outer Section Logo - Absolute Top Left */}
         <div className="absolute top-6 left-6 md:top-10 md:left-10 z-30 print:hidden">
-          <div className="relative h-10 w-auto md:h-12 aspect-[130/27]">
-            <Image
-              src="/img/logo.svg"
-              alt="Bayard Vacations"
-              fill
-              className="object-contain object-left"
-              priority
-            />
-          </div>
+          <Link href="/" className="block">
+            <div className="relative h-10 w-auto md:h-12 aspect-[130/27]">
+              <Image
+                src="/img/logo.svg"
+                alt="Bayard Vacations"
+                fill
+                className="object-contain object-left cursor-pointer"
+                priority
+              />
+            </div>
+          </Link>
         </div>
 
         {/* Hero Content - Centered */}
@@ -45,17 +52,17 @@ const ShareableHeader = ({ itineraryData }) => {
 
           <div className="mt-8 md:mt-0 max-w-4xl mx-auto px-4 lg:px-20">
             <div className="mb-4">
-              <p className="font-great-vibes text-xl lg:text-3xl text-white/90 mb-1 tracking-wider opacity-80">
+              <p className="font-great-vibes text-xl lg:text-3xl text-white/90 mb-1 tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 Specially Curated For
               </p>
-              <h2 className="text-2xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-white drop-shadow-lg uppercase tracking-[0.2em]">
+              <h2 className="text-2xl lg:text-4xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase tracking-[0.2em] [text-shadow:0_0_20px_rgba(0,0,0,0.4)]">
                 {customerName}
               </h2>
             </div>
-            <p className="font-great-vibes text-2xl lg:text-4xl xl:text-5xl mb-2 bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] filter drop-shadow(0_0_15px_rgba(234,179,8,0.4)) -rotate-3 translate-y-1 tracking-[0.05em] select-none py-2 px-4 inline-block">
+            <p className="font-great-vibes text-2xl lg:text-4xl xl:text-5xl mb-2 bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] filter drop-shadow(0_0_20px_rgba(0,0,0,0.5)) -rotate-3 translate-y-1 tracking-[0.05em] select-none py-2 px-4 inline-block [-webkit-text-stroke:0.5px_rgba(0,0,0,0.2)]">
               Experience
             </p>
-            <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-white mb-4 tracking-wider leading-tight uppercase">
+            <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-white mb-4 tracking-wider leading-tight uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] [text-shadow:0_0_30px_rgba(0,0,0,0.3)]">
               {packageName}
             </h1>
             
@@ -83,9 +90,19 @@ const ShareableHeader = ({ itineraryData }) => {
                 priority
               />
             </div>
-            <div className="text-right">
-              <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Booking Ref</p>
-              <p className="text-brand-blue text-lg font-black">{bookingRef}</p>
+            <div className="text-right flex flex-col items-end gap-1">
+              <div>
+                <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Booking Ref</p>
+                <p className="text-brand-blue text-sm font-black leading-none">{bookingRef}</p>
+              </div>
+              {pricing && (
+                <div>
+                  <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-1">Trip Value</p>
+                  <p className="text-brand-blue text-sm font-black leading-none">
+                    {currencySymbol}{formatPrice(pricing.totalPrice)}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
           <h1 className="text-3xl font-black text-brand-blue mb-2">{packageName}</h1>
@@ -152,6 +169,27 @@ const ShareableHeader = ({ itineraryData }) => {
                 </div>
               </div>
             </div>
+
+            {/* Price Estimate */}
+            {pricing && (
+              <div className="group bg-white/25 backdrop-blur-lg border border-white/30 rounded-[2rem] p-3 lg:p-5 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-9 h-9 lg:w-12 lg:h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
+                      Package Value
+                    </p>
+                    <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                      {currencySymbol}{formatPrice(pricing.totalPrice)} {pricing.perPerson ? '/ Person' : ''}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -207,6 +245,23 @@ const ShareableHeader = ({ itineraryData }) => {
                 {destination}
               </p>
             </div>
+
+            {/* Price Estimate */}
+            {pricing && (
+              <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
+                <div className="w-9 h-9 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-3 shadow-md shadow-purple-100">
+                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
+                  Package Value
+                </p>
+                <p className="text-slate-900 text-sm font-black truncate">
+                  {currencySymbol}{formatPrice(pricing.totalPrice)}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

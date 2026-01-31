@@ -4,6 +4,7 @@ import DestinationCard from "./DestinationCard";
 import {
   Carousel,
   CarouselContent,
+  CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "../../ui/carousel";
@@ -75,7 +76,7 @@ export default function ExploreDestinations({ initialRegions }) {
         </div>
       </div>
 
-      <div className="relative min-h-[350px] md:min-h-[450px] pb-4 px-0 md:px-12">
+      <div className="relative min-h-[350px] md:min-h-[450px] pb-4 px-0">
         {!isMounted ? (
           <div className="mt-4 flex gap-4 overflow-hidden">
              {Array.from({ length: 4 }).map((_, i) => (
@@ -96,11 +97,13 @@ export default function ExploreDestinations({ initialRegions }) {
                 opts={{ align: "start" }}
                 className="mt-4"
               >
-                <CarouselContent className="gap-4 ml-0">
+                <CarouselContent>
                   {activeTab === "international" ? (    
                     displayInternationalRegions.length > 0 ? (
                       displayInternationalRegions.map((region, index) => (
-                        <DestinationCard key={region.slug || index} regionSlug={region.slug} inCarousel={true} />
+                        <CarouselItem key={region.slug || index} className="basis-[80%] sm:basis-1/2 lg:basis-1/4">
+                          <DestinationCard regionSlug={region.slug} index={index} />
+                        </CarouselItem>
                       ))
                     ) : (
                       <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
@@ -112,7 +115,9 @@ export default function ExploreDestinations({ initialRegions }) {
                   ) : (
                     displayDomesticRegions.length > 0 ? (
                       displayDomesticRegions.map((region, index) => (
-                        <DestinationCard key={region.slug || index} regionSlug={region.slug} inCarousel={true} />
+                        <CarouselItem key={region.slug || index} className="basis-[80%] sm:basis-1/2 lg:basis-1/4">
+                          <DestinationCard regionSlug={region.slug} index={index} />
+                        </CarouselItem>
                       ))
                     ) : (
                       <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
@@ -123,8 +128,8 @@ export default function ExploreDestinations({ initialRegions }) {
                     )
                   )}
                 </CarouselContent>
-                <CarouselPrevious className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
-                <CarouselNext className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
+                <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
+                <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
               </Carousel>
             </motion.div>
           </AnimatePresence>

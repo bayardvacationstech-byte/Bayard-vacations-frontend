@@ -19,13 +19,18 @@ export function useCuratedPackages(packageType, initialPackages = []) {
         .getQueryCache()
         .findAll({ queryKey: [COLLECTIONS.PACKAGES] });
 
-      let cachedPackages = [];
+      const packagesMap = new Map();
       for (const query of allPackageQueries) {
-        const packages = query.state.data;
-        if (packages && Array.isArray(packages)) {
-          cachedPackages = [...cachedPackages, ...packages];
+        const queryData = query.state.data;
+        if (Array.isArray(queryData)) {
+          queryData.forEach((pkg) => {
+            if (pkg && pkg.id) {
+              packagesMap.set(pkg.id, pkg);
+            }
+          });
         }
       }
+      const cachedPackages = Array.from(packagesMap.values());
 
       if (cachedPackages.length > 0) {
         // Check if we have packages from multiple regions (indicating more complete data)
@@ -38,7 +43,7 @@ export function useCuratedPackages(packageType, initialPackages = []) {
           const curatedPackages = cachedPackages
             .filter(
               (pkg) =>
-                pkg.curated === true &&
+                pkg.frontPage === true &&
                 pkg.domestic === (packageType === "domestic")
             )
             .sort((a, b) => a.basePrice - b.basePrice);

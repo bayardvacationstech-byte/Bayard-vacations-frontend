@@ -8,10 +8,31 @@ import { GraduationCap, BookOpen, Globe, MapPin, Calendar, Users, Star, Award, C
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { usePackagesByTheme } from "@/hooks/packages";
-import PackageCard from "@/components/ui/PackageCard";
+import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+import { getPaginationPages } from "@/utils/paginationUtils";
+import { useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import ThemeLoader from "@/components/ui/ThemeLoader";
 
 export default function EducationalToursClient() {
   const [selectedTab, setSelectedTab] = useState("international");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const packagesRef = useRef(null);
+
+  const handleTabChange = (tab) => {
+    setSelectedTab(tab);
+    setCurrentPage(1);
+  };
 
   const { 
     packages: allThemePackages, 
@@ -38,11 +59,22 @@ export default function EducationalToursClient() {
   }, [allThemePackages]);
 
   const currentPackages = educationalPackages[selectedTab] || [];
+  const totalPages = Math.ceil(currentPackages.length / itemsPerPage);
+  
+  const paginatedPackages = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return currentPackages.slice(start, start + itemsPerPage);
+  }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-cyan-50">
+      <AnimatePresence>
+        {isLoading && (
+          <ThemeLoader theme="educational" fullScreen className="bg-blue-50" />
+        )}
+      </AnimatePresence>
       {/* Hero Section */}
-      <div className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-600">
+      <div className="relative min-h-[90vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -67,12 +99,12 @@ export default function EducationalToursClient() {
                 </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-tight">
                 Educational<br />
                 <span className="text-amber-300">Tours</span>
               </h1>
 
-              <p className="text-xl text-white/90 leading-relaxed max-w-xl">
+              <p className="text-base md:text-xl text-white/90 leading-relaxed max-w-xl">
                 All things new. Discover our handpicked domestic and international arrivals curated specifically for this theme.
               </p>
 
@@ -116,12 +148,12 @@ export default function EducationalToursClient() {
       </div>
 
       {/* Packages Section */}
-      <Container className="py-8 md:py-12">
+      <Container className="py-4 md:py-8">
         {/* Tab Switcher */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-8">
           <div className="inline-flex bg-slate-100 rounded-full p-1.5">
             <button
-              onClick={() => setSelectedTab("international")}
+              onClick={() => handleTabChange("international")}
               className={`px-8 py-3 rounded-full font-bold transition-all ${
                 selectedTab === "international"
                   ? "bg-blue-600 text-white shadow-lg"
@@ -131,7 +163,7 @@ export default function EducationalToursClient() {
               International
             </button>
             <button
-              onClick={() => setSelectedTab("domestic")}
+              onClick={() => handleTabChange("domestic")}
               className={`px-8 py-3 rounded-full font-bold transition-all ${
                 selectedTab === "domestic"
                   ? "bg-blue-600 text-white shadow-lg"
@@ -144,42 +176,87 @@ export default function EducationalToursClient() {
         </div>
 
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ref={packagesRef}>
           {isLoading ? (
-            [...Array(4)].map((_, i) => (
-              <div key={i} className="rounded-3xl bg-white p-6 animate-pulse flex flex-col h-full shadow-lg">
-                <div className="h-56 bg-slate-100 rounded-2xl mb-4"></div>
-                <div className="space-y-3">
-                  <div className="h-6 bg-slate-100 rounded-lg w-3/4"></div>
-                  <div className="h-4 bg-slate-100 rounded-lg w-1/2"></div>
-                </div>
-                <div className="mt-auto pt-6 border-t border-slate-100 flex justify-between items-end">
-                   <div className="space-y-2">
-                      <div className="h-3 bg-slate-100 rounded w-16"></div>
-                      <div className="h-6 bg-slate-100 rounded w-24"></div>
-                   </div>
-                   <div className="h-8 bg-slate-100 rounded-lg w-20"></div>
-                </div>
-              </div>
-            ))
+            <ThemeLoader theme="educational" />
           ) : (
             <AnimatePresence mode="wait">
-              {currentPackages.map((pkg, index) => (
-                <PackageCard 
+              {paginatedPackages.map((pkg, index) => (
+                <ThemedPackageCard 
                   key={`${selectedTab}-${pkg.id}`} 
+                  theme="educational"
                   item={pkg}
                 />
               ))}
             </AnimatePresence>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-12 flex justify-center py-6">
+            <Pagination>
+              <PaginationContent className="gap-2">
+                <PaginationItem>
+                  <PaginationPrevious
+                    className={cn(
+                      "cursor-pointer rounded-xl h-11 w-11 bg-white border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-md",
+                      currentPage === 1 && "pointer-events-none opacity-30"
+                    )}
+                    onClick={() => {
+                      setCurrentPage(currentPage - 1);
+                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                  />
+                </PaginationItem>
+                
+                {getPaginationPages(currentPage, totalPages).map((page, i) => (
+                  <PaginationItem key={i} className="hidden sm:block">
+                    {page === "..." ? (
+                      <PaginationEllipsis className="text-blue-400" />
+                    ) : (
+                      <PaginationLink
+                        className={cn(
+                          "cursor-pointer rounded-xl h-11 w-11 bg-white font-bold transition-all border-blue-100 shadow-md",
+                          currentPage === page 
+                            ? "bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg border-transparent" 
+                            : "text-blue-600 hover:bg-blue-50"
+                        )}
+                        onClick={() => {
+                          setCurrentPage(page);
+                          packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }}
+                        isActive={currentPage === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationNext
+                    className={cn(
+                      "cursor-pointer rounded-xl h-11 w-11 bg-white border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-md",
+                      currentPage === totalPages && "pointer-events-none opacity-30"
+                    )}
+                    onClick={() => {
+                      setCurrentPage(currentPage + 1);
+                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </Container>
 
       {/* Why Choose Section */}
-      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 py-16 md:py-24">
+      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 py-8 md:py-10">
         <Container>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4">
               Why Educational Tours Matter?
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">

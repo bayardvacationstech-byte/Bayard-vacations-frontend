@@ -1,39 +1,34 @@
-import React from 'react';
-import Image from 'next/image';
-import { Phone, Mail, MessageCircle, AlertTriangle, MapPin, Globe } from 'lucide-react';
+'use client';
 
-const ShareableFooter = ({ contactInfo, importantNotes }) => {
+import Link from 'next/link';
+import Image from 'next/image';
+import { Phone, Mail, MessageCircle, AlertTriangle, Globe, Instagram, Facebook, MapPin } from 'lucide-react';
+
+const ShareableFooter = ({ contactInfo }) => {
+  if (!contactInfo) return null;
+
   const { 
     companyName, 
     phone, 
     whatsapp, 
     email, 
     website, 
-    emergencyContact,
-    operatingHours 
+    emergencyContact 
   } = contactInfo;
 
   return (
-    <footer className="relative bg-gradient-to-br from-brand-blue via-blue-800 to-blue-900 text-white py-4 md:py-8 print:bg-white print:text-slate-900 print:py-8 overflow-hidden">
-      {/* Premium Background Elements */}
-      <div className="absolute inset-0 opacity-10 print:hidden">
-        <div className="absolute top-0 left-0 w-full h-full" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-          backgroundSize: '32px 32px'
-        }} />
-      </div>
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-3xl print:hidden" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-brand-green/5 rounded-full blur-3xl print:hidden" />
+    <footer className="bg-brand-blue text-white pt-20 pb-12 border-t border-white/10 font-outfit relative overflow-hidden">
+      {/* Decorative Accents */}
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent skew-x-[-15deg] translate-x-1/4 pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
 
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* RESTRUCTURED: Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
           
-          {/* Column 1: Brand & About (4 cols) */}
-          <div className="lg:col-span-4 space-y-8">
+          {/* 1. Brand & Network (4 cols) */}
+          <div className="lg:col-span-4 space-y-10">
             <div className="space-y-6">
-              <div className="relative h-12 w-48 print:w-36 print:h-10">
+              <div className="h-10 w-52 relative">
                 <Image
                   src="/img/logo.svg"
                   alt={companyName}
@@ -41,79 +36,93 @@ const ShareableFooter = ({ contactInfo, importantNotes }) => {
                   className="object-contain object-left brightness-0 invert"
                 />
               </div>
-              <p className="text-lg text-blue-100 leading-relaxed font-medium">
-                Designing extraordinary journeys that transform your travel dreams into lasting memories.
+              <p className="text-blue-100/70 text-base leading-relaxed font-medium max-w-sm">
+                Designing extraordinary journeys that transform your travel dreams into lasting memories. Your global partner in premium experiences.
               </p>
             </div>
             
-            <div className="flex items-center gap-4 py-6 border-y border-white/10">
-              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shadow-inner">
-                <Globe className="w-6 h-6 text-brand-green" />
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-0.5">Official Website</p>
-                <a href={`https://${website}`} target="_blank" rel="noopener noreferrer" className="text-base font-bold text-white hover:text-brand-green transition-colors">
-                  {website}
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Column 2: Contact Info (4 cols) */}
-          <div className="lg:col-span-4">
-            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-brand-green mb-8 flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-brand-green" />
-              Get In Touch
-            </h4>
-            
-            <div className="space-y-6">
+            <div className="flex gap-4">
               {[
-                { icon: Phone, label: 'Call Us', value: phone, color: 'brand-blue' },
-                { icon: MessageCircle, label: 'WhatsApp', value: whatsapp, color: 'brand-green' },
-                { icon: Mail, label: 'Email Support', value: email, color: 'purple-400' }
+                { icon: Globe, link: `https://${website}` },
+                { icon: Instagram, link: "https://instagram.com/bayardvacations" },
+                { icon: Facebook, link: "https://facebook.com/bayardvacations" }
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4 group cursor-pointer">
-                  <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-brand-blue group-hover:border-white/20 transition-all duration-300`}>
-                    <item.icon className="w-5 h-5 text-white/80 group-hover:text-white" />
-                  </div>
-                  <div>
-                    <p className="text-[9px] font-black text-blue-300 uppercase tracking-widest mb-1">{item.label}</p>
-                    <p className="text-base font-bold text-white group-hover:text-brand-green transition-colors">{item.value}</p>
-                  </div>
-                </div>
+                <a 
+                  key={i} 
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-brand-blue transition-all duration-300 shadow-sm"
+                >
+                  <item.icon className="w-5 h-5" />
+                </a>
               ))}
             </div>
           </div>
 
-          {/* Column 3: Emergency Support (4 cols) */}
-          <div className="lg:col-span-4">
-            <h4 className="text-sm font-black uppercase tracking-[0.3em] text-red-400 mb-8 flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-red-400" />
-              Critical Support
-            </h4>
+          {/* 2. Communication Hub (5 cols) */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-10">
+            <div className="space-y-8">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-200/50 flex items-center gap-3">
+                <span className="w-4 h-[1px] bg-blue-200/30"></span>
+                Inquiries
+              </h4>
+              <ul className="space-y-8">
+                <li>
+                  <a href={`tel:${phone}`} className="group block">
+                    <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-1.5 group-hover:text-white transition-colors">Direct Line</p>
+                    <p className="text-xl font-bold text-white tracking-tight leading-none">{phone}</p>
+                  </a>
+                </li>
+                <li>
+                  <a href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} className="group block">
+                    <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-1.5 group-hover:text-white transition-colors">WhatsApp Concierge</p>
+                    <p className="text-xl font-bold text-white tracking-tight leading-none">Instant Chat</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
             
-            <div className="relative group overflow-hidden rounded-[2rem] p-8 border border-red-500/30 bg-white/5 backdrop-blur-xl">
-              <div className="absolute top-0 right-0 -tralsate-y-1/2 translate-x-1/2 w-32 h-32 bg-red-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-              
-              <div className="relative space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-red-500 flex items-center justify-center shadow-[0_0_30px_rgba(239,68,68,0.4)]">
-                    <AlertTriangle className="w-7 h-7 text-white" />
+            <div className="space-y-8">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-200/50 flex items-center gap-3">
+                <span className="w-4 h-[1px] bg-blue-200/30"></span>
+                Our Base
+              </h4>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-2">Headquarters</p>
+                  <p className="text-sm font-bold text-white leading-relaxed opacity-90">
+                    Nandini Layout, Bengaluru,<br />Karnataka 560096, India
+                  </p>
+                </div>
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[10px] font-bold text-emerald-100 uppercase tracking-[0.2em]">Support Online</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. Global Support Card (3 cols) */}
+          <div className="lg:col-span-3">
+            <div className="group relative">
+              <div className="absolute inset-0 bg-white/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+              <div className="h-full bg-white/10 rounded-[2.5rem] p-8 border border-white/20 backdrop-blur-md relative z-10 flex flex-col justify-between gap-8 hover:border-white/40 transition-all duration-500 shadow-2xl">
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform duration-500">
+                    <AlertTriangle className="w-7 h-7 text-red-600" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-red-300 uppercase tracking-[0.2em] mb-1">24/7 Helpline</p>
-                    <p className="text-2xl font-black text-white">{emergencyContact}</p>
+                    <h5 className="text-[11px] font-black text-red-200 uppercase tracking-[0.2em] mb-1">Priority</h5>
+                    <p className="text-xs font-bold text-white opacity-80 italic">24/7 Global Helpline</p>
                   </div>
                 </div>
                 
-                <div className="pt-6 border-t border-white/10">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse" />
-                      <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest">{operatingHours}</span>
-                    </div>
-                    <span className="text-[10px] px-3 py-1 bg-white/10 rounded-full font-bold text-white">ACTIVE</span>
-                  </div>
+                <div className="space-y-3">
+                  <p className="text-2xl font-black text-white tracking-tighter leading-none">{emergencyContact}</p>
+                  <p className="text-[10px] font-medium text-blue-100/60 leading-relaxed italic">
+                    Exclusively for travelers currently on trip.
+                  </p>
                 </div>
               </div>
             </div>
@@ -121,17 +130,21 @@ const ShareableFooter = ({ contactInfo, importantNotes }) => {
 
         </div>
 
-        {/* Final Footer Bottom */}
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-          <div className="space-y-2">
-            <p className="text-sm font-bold text-blue-200">
-              © 2026 {companyName}. <span className="text-blue-400/60">Crafted with ❤️ for Travelers.</span>
-            </p>
+        {/* Global Footer Bottom */}
+        <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="text-[11px] font-bold text-blue-100/50 uppercase tracking-[0.3em] text-center md:text-left">
+            © 2026 {companyName} <span className="mx-4 opacity-20 hidden md:inline">|</span> <span className="block md:inline mt-2 md:mt-0">Premium World Tours</span>
           </div>
           
-          <div className="flex items-center gap-8 text-[11px] font-black uppercase tracking-widest text-blue-300">
-            <a href="#" className="hover:text-brand-green transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-brand-green transition-colors">Privacy Policy</a>
+          <div className="flex gap-12 text-[10px] font-black uppercase tracking-[0.4em] text-blue-100/60">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors relative group">
+              Privacy Policy
+              <span className="absolute -bottom-1 left-0 w-0 h-[1.5px] bg-white group-hover:w-full transition-all duration-300" />
+            </Link>
+            <Link href="/terms-and-conditions" className="hover:text-white transition-colors relative group">
+              Terms of Use
+              <span className="absolute -bottom-1 left-0 w-0 h-[1.5px] bg-white group-hover:w-full transition-all duration-300" />
+            </Link>
           </div>
         </div>
       </div>

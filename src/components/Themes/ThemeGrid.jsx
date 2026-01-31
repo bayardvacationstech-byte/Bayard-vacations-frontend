@@ -59,7 +59,7 @@ const ThemeGridItem = ({ item, index }) => {
 
 const ThemeGrid = () => {
   return (
-    <section className="relative z-10 py-12 lg:py-20 bg-white">
+    <section className="relative z-10 py-8 lg:py-12 bg-white">
       <Container>
         {/* Simple Header */}
         <div className="mb-12">

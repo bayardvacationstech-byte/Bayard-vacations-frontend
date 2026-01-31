@@ -9,37 +9,67 @@ import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePackagesByTheme } from "@/hooks/packages";
-import PackageCard from "@/components/ui/PackageCard";
+import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+import { getPaginationPages } from "@/utils/paginationUtils";
+import { useRef } from "react";
+import ThemeLoader from "@/components/ui/ThemeLoader";
 
 // Floating Zen Elements (Lotus Petals)
 const FloatingZenElements = () => {
+  const [elements, setElements] = useState([]);
+
+  useEffect(() => {
+    const newElements = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      scale: Math.random() * 0.5 + 0.5,
+      rotateStart: Math.random() * 360,
+      rotateEnd: Math.random() * 360 + 360,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 20,
+    }));
+    setElements(newElements);
+  }, []);
+
+  if (elements.length === 0) return null;
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-      {[...Array(15)].map((_, i) => (
+      {elements.map((el, i) => (
         <motion.div
-          key={i}
+          key={el.id}
           initial={{ 
             opacity: 0, 
-            y: "-10%", 
-            x: `${Math.random() * 100}%`,
-            scale: Math.random() * 0.5 + 0.5,
-            rotate: Math.random() * 360
+            y: "100%", 
+            x: `${el.x}%`,
+            scale: el.scale,
+            rotate: el.rotateStart
           }}
           animate={{ 
             opacity: [0, 0.4, 0], 
-            y: "110%",
-            x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
-            rotate: Math.random() * 720
+            y: "-20%",
+            rotate: el.rotateEnd
           }}
           transition={{ 
-            duration: Math.random() * 15 + 15, 
+            duration: el.duration, 
             repeat: Infinity,
-            delay: Math.random() * 20,
-            ease: "easeInOut"
+            delay: el.delay,
+            ease: "linear"
           }}
           className="absolute"
         >
-          <Flower className="w-6 h-6 text-pink-100/40 fill-pink-100/20" />
+          <Flower 
+            className="w-8 h-8 text-stone-300/40 fill-stone-100/20" 
+          />
         </motion.div>
       ))}
     </div>
@@ -49,6 +79,14 @@ const FloatingZenElements = () => {
 export default function RelaxRejuvenateClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const packagesRef = useRef(null);
+
+  const handleTabChange = (tab) => {
+    setSelectedTab(tab);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -79,13 +117,24 @@ export default function RelaxRejuvenateClient() {
   }, [allThemePackages]);
 
   const currentPackages = wellnessPackages[selectedTab] || [];
+  const totalPages = Math.ceil(currentPackages.length / itemsPerPage);
+  
+  const paginatedPackages = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return currentPackages.slice(start, start + itemsPerPage);
+  }, [currentPackages, currentPage, itemsPerPage]);
 
-  if (!mounted) return null;
+  // if (!mounted) return null; // Removed check
 
   return (
     <div className="min-h-screen bg-[#FDFCFB]">
+      <AnimatePresence>
+        {isLoading && (
+          <ThemeLoader theme="relax" fullScreen className="bg-[#FDFCFB]" />
+        )}
+      </AnimatePresence>
       {/* Immersive Serenity Hero */}
-      <div className="relative h-[85vh] md:h-[95vh] overflow-hidden flex items-center bg-[#E5E1DA]">
+      <div className="relative min-h-[90vh] md:h-[95vh] overflow-hidden flex items-center bg-[#E5E1DA]">
         {/* Ken Burns Effect */}
         <motion.div 
           initial={{ scale: 1, x: "-1%" }}
@@ -106,9 +155,9 @@ export default function RelaxRejuvenateClient() {
         <div className="absolute inset-0 bg-gradient-to-r from-stone-100/60 via-stone-50/20 to-transparent z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-200/80 via-transparent to-stone-100/30 z-10" />
         
-        <FloatingZenElements />
+        {mounted && <FloatingZenElements />}
 
-        <Container className="relative z-20 pt-32 md:pt-40">
+        <Container className="relative z-20 pt-24 md:pt-40">
           <div className="max-w-4xl space-y-4 md:space-y-10">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -124,16 +173,16 @@ export default function RelaxRejuvenateClient() {
               </div>
 
               <div className="space-y-1 md:space-y-2">
-                <p className="text-sage-700 font-serif italic text-xl md:text-4xl opacity-80 mb-2">
+                <p className="text-sage-700 font-serif italic text-lg md:text-4xl opacity-80 mb-2">
                   Inner peace starts here
                 </p>
-                <h1 className="text-4xl sm:text-7xl md:text-[9rem] font-serif text-stone-900 leading-[0.9] tracking-tight lowercase">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[9rem] font-serif text-stone-900 leading-[0.9] tracking-tight lowercase">
                   Relax &<br />
-                  <span className="text-sage-600 font-light translate-x-4 md:translate-x-12 block">Rejuvenate</span>
+                  <span className="text-sage-600 font-light translate-x-2 md:translate-x-12 block">Rejuvenate</span>
                 </h1>
               </div>
 
-              <p className="text-base md:text-2xl text-stone-600 font-light leading-relaxed max-w-2xl mx-auto md:mx-0 px-4 md:px-0">
+              <p className="text-base md:text-xl text-stone-600 font-light leading-relaxed max-w-2xl mx-auto md:mx-0 px-4 md:px-0">
                 Shed the weight of the world. Rediscover stillness in earth’s most tranquil sanctuaries, curated for the modern soul.
               </p>
 
@@ -173,17 +222,17 @@ export default function RelaxRejuvenateClient() {
       </div>
 
       {/* The Three Pillars Section */}
-      <section className="py-24 md:py-40 bg-white">
-        <Container>
-           <div className="text-center max-w-3xl mx-auto mb-20 md:mb-32 space-y-6">
+      <section className="py-8 md:py-12 bg-white">
+         <Container>
+            <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16 space-y-4">
               <div className="w-16 h-[2px] bg-sage-400 mx-auto" />
-              <h2 className="text-4xl md:text-6xl font-serif text-stone-900 lowercase italic">The Three Pillars of Serenity</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-stone-900 lowercase italic leading-tight md:leading-normal">The Three Pillars of Serenity</h2>
               <p className="text-lg md:text-xl text-stone-500 font-light leading-relaxed">
                  We believe true rejuvenation occurs at the intersection of mind, body, and spirit. Each of our sanctuaries is vetted for these three core experiences.
               </p>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
               {[
                 { icon: Sun, title: "Mind", desc: "Digital detox, guided meditation, and neurological rest in silence-first environments." },
                 { icon: Leaf, title: "Body", desc: "Organic nutrition, ancient holistic treatments, and low-impact movement for physical restoration." },
@@ -212,17 +261,17 @@ export default function RelaxRejuvenateClient() {
       </section>
 
       {/* Sanctuary Units (Packages Grid) */}
-      <section id="packages" className="py-24 bg-[#F9F7F5]">
+      <section id="packages" className="py-8 md:py-10 bg-[#F9F7F5]">
         <Container>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-20 md:mb-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-12">
             <div className="space-y-4 max-w-xl">
               <span className="text-sage-600 font-bold text-xs uppercase tracking-[0.3em]">Curation</span>
-              <h2 className="text-4xl md:text-6xl font-serif text-stone-900 leading-tight">Handpicked <br />Sanctuaries</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-stone-900 leading-tight">Handpicked <br />Sanctuaries</h2>
             </div>
             
             <div className="flex bg-stone-200/50 p-1.5 rounded-full border border-stone-200">
               <button
-                onClick={() => setSelectedTab("international")}
+                onClick={() => handleTabChange("international")}
                 className={cn(
                   "px-8 py-3 rounded-full font-medium text-sm transition-all duration-500",
                   selectedTab === "international"
@@ -233,7 +282,7 @@ export default function RelaxRejuvenateClient() {
                 Global Safaris
               </button>
               <button
-                onClick={() => setSelectedTab("domestic")}
+                onClick={() => handleTabChange("domestic")}
                 className={cn(
                   "px-8 py-3 rounded-full font-medium text-sm transition-all duration-500",
                   selectedTab === "domestic"
@@ -246,40 +295,85 @@ export default function RelaxRejuvenateClient() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10" ref={packagesRef}>
             {isLoading ? (
-              [...Array(4)].map((_, i) => (
-                <div key={i} className="rounded-[2.5rem] bg-white p-8 animate-pulse shadow-lg flex flex-col h-full border border-stone-100">
-                  <div className="h-[320px] bg-stone-50 rounded-[2rem] mb-6"></div>
-                  <div className="space-y-4">
-                    <div className="h-8 bg-stone-50 rounded-lg w-3/4"></div>
-                    <div className="h-4 bg-stone-50 rounded-lg w-1/2"></div>
-                  </div>
-                  <div className="mt-auto pt-6 border-t border-stone-50 flex justify-between items-end">
-                    <div className="space-y-2">
-                       <div className="h-3 bg-stone-50 rounded w-16"></div>
-                       <div className="h-8 bg-stone-50 rounded w-24"></div>
-                    </div>
-                    <div className="w-10 h-10 bg-stone-50 rounded-full"></div>
-                  </div>
-                </div>
-              ))
+              <ThemeLoader theme="relax" />
             ) : (
               <AnimatePresence mode="wait">
-                {currentPackages.map((pkg, index) => (
-                  <PackageCard 
+                {paginatedPackages.map((pkg, index) => (
+                  <ThemedPackageCard 
                     key={`${selectedTab}-${pkg.id}`} 
+                    theme="relax"
                     item={pkg}
                   />
                 ))}
               </AnimatePresence>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex justify-center py-6">
+              <Pagination>
+                <PaginationContent className="gap-2">
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className={cn(
+                        "cursor-pointer rounded-full h-12 w-12 bg-white border-stone-200 text-stone-900 hover:bg-stone-900 hover:text-white transition-all shadow-lg",
+                        currentPage === 1 && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                  
+                  {getPaginationPages(currentPage, totalPages).map((page, i) => (
+                    <PaginationItem key={i} className="hidden sm:block">
+                      {page === "..." ? (
+                        <PaginationEllipsis className="text-stone-400" />
+                      ) : (
+                        <PaginationLink
+                          className={cn(
+                            "cursor-pointer rounded-full h-12 w-12 bg-white font-medium transition-all border-stone-200 shadow-md",
+                            currentPage === page 
+                              ? "bg-sage-600 text-white border-transparent shadow-xl" 
+                              : "text-stone-700 hover:bg-sage-50"
+                          )}
+                          onClick={() => {
+                            setCurrentPage(page);
+                            packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      className={cn(
+                        "cursor-pointer rounded-full h-12 w-12 bg-white border-stone-200 text-stone-900 hover:bg-stone-900 hover:text-white transition-all shadow-lg",
+                        currentPage === totalPages && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </Container>
       </section>
 
       {/* The Sanctuary Experience CTA */}
-      <section className="py-32 md:py-48 bg-[#E5E1DA] overflow-hidden relative">
+      <section className="py-10 md:py-16 bg-[#E5E1DA] overflow-hidden relative">
          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
          <Container className="relative">
             <div className="max-w-4xl mx-auto text-center space-y-12">
@@ -289,11 +383,11 @@ export default function RelaxRejuvenateClient() {
                  viewport={{ once: true }}
                  className="space-y-6"
                >
-                  <Flower className="w-12 h-12 text-sage-600 mx-auto" />
-                  <h2 className="text-5xl md:text-8xl font-serif text-stone-900 tracking-tight leading-none lowercase italic">
-                     Ready to begin your <br />
-                     <span className="text-sage-600 not-italic font-light block mt-4">transformation?</span>
-                  </h2>
+                   <Flower className="w-12 h-12 text-sage-600 mx-auto" />
+                   <h2 className="text-4xl sm:text-6xl md:text-8xl font-serif text-stone-900 tracking-tight leading-loose md:leading-none lowercase italic">
+                      Ready to begin your <br />
+                      <span className="text-sage-600 not-italic font-light block mt-4">transformation?</span>
+                   </h2>
                </motion.div>
                <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed italic">
                   "Your journey to tranquility isn't a destination, it's a decision. Let us find your stillness."

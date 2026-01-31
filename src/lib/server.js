@@ -253,7 +253,7 @@ export const getCuratedPackagesForHome = unstableCache(
       return [];
     }
   },
-  ["curated-packages-home"],
+  ["curated-packages-home-v2"],
   { revalidate: 60 * 60 * 24 }
 );
 
@@ -267,7 +267,7 @@ export const getGroupDeparturePackagesForHome = unstableCache(
       return [];
     }
   },
-  ["group-departure-home"],
+  ["group-departure-home-v2"],
   { revalidate: 60 * 60 * 24 }
 );
 
@@ -281,7 +281,7 @@ export const getThemePackagesForHome = unstableCache(
       return {};
     }
   },
-  ["theme-packages-home"],
+  ["theme-packages-home-v2"],
   { revalidate: 60 * 60 * 24 }
 );
 

@@ -1,98 +1,141 @@
 "use client";
+import React, { useState, useMemo, useEffect } from "react";
 
-import React, { useState, useMemo } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MoveLeft, MoveRight } from "lucide-react";
-import { Navigation } from "swiper/modules";
-
-import PackageCard from "@/components/Landing/PackageCard";
+import PremiumPackageCard from "@/components/Landing/PremiumPackageCard";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import "swiper/css";
-import "swiper/css/navigation";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-const STYLES = [
-  { id: "all", label: "All Packages" },
-  { id: "budget", label: "Budget-Friendly Trips" },
-  { id: "beach", label: "Beach Holidays" },
-  { id: "weekend", label: "Weekend Breaks" },
-  { id: "senior", label: "Senior-Friendly Getaways" },
-  { id: "group", label: "Small Group for Friends" },
-  { id: "womens", label: "Womens only package" },
-];
+// Helper to format tag labels
+const formatLabel = (tag) => {
+  if (typeof tag !== "string") return "";
+  return tag
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
 
 const TravelStyle = ({ 
   initialInternationalPackages = [], 
   initialDomesticPackages = [] 
 }) => {
-  const [swiper, setSwiper] = useState(null);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("international");
+  const [activeStyle, setActiveStyle] = useState("all");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
-  const allPackages = useMemo(() => 
-    [...initialDomesticPackages, ...initialInternationalPackages],
-    [initialDomesticPackages, initialInternationalPackages]
+  const currentTabPackages = useMemo(() => 
+    activeTab === "international" ? initialInternationalPackages : initialDomesticPackages,
+    [activeTab, initialInternationalPackages, initialDomesticPackages]
   );
+
+  // Dynamically extract unique tags for the current tab
+  const stylesList = useMemo(() => {
+    const tags = new Set();
+    
+    currentTabPackages.forEach(p => {
+      const tailoredTags = p.tailored_tag;
+      if (Array.isArray(tailoredTags)) {
+        tailoredTags.forEach(t => {
+          if (typeof t === "string") tags.add(t.trim().toLowerCase());
+        });
+      } else if (typeof tailoredTags === "string" && tailoredTags) {
+        tags.add(tailoredTags.trim().toLowerCase());
+      }
+    });
+    
+    const uniqueTags = Array.from(tags).sort();
+    return [
+      { id: "all", label: "All Packages" },
+      ...uniqueTags.map(tag => ({ id: tag, label: formatLabel(tag) }))
+    ];
+  }, [currentTabPackages]);
+
+  // Reset style filter when tab changes
+  useEffect(() => {
+    setActiveStyle("all");
+  }, [activeTab]);
   
-  const packages = useMemo(() => {
-    switch (activeTab) {
-      case "budget":
-        return allPackages.filter(p => p.basePrice <= 30000);
-      case "beach":
-        return allPackages.filter(p => 
-          p.packageTitle?.toLowerCase().includes("beach") || 
-          p.packageTitle?.toLowerCase().includes("island") ||
-          p.packageTitle?.toLowerCase().includes("goa") ||
-          p.packageTitle?.toLowerCase().includes("maldives")
-        );
-      case "weekend":
-        return allPackages.filter(p => p.days <= 3);
-      case "senior":
-        return allPackages.filter(p => 
-          p.packageTags?.includes("senior") || 
-          p.packageTitle?.toLowerCase().includes("senior") ||
-          p.packageTitle?.toLowerCase().includes("pilgrimage")
-        );
-      case "group":
-        return allPackages.filter(p => 
-          p.packageTags?.includes("group") || 
-          p.packageTitle?.toLowerCase().includes("group") ||
-          p.packageTitle?.toLowerCase().includes("friends")
-        );
-      case "womens":
-        return allPackages.filter(p => 
-          p.packageTags?.includes("womens") || 
-          p.packageTitle?.toLowerCase().includes("womens") ||
-          p.packageTitle?.toLowerCase().includes("ladies")
-        );
-      default:
-        return allPackages.slice(0, 12);
+  const displayPackages = useMemo(() => {
+    if (activeStyle === "all") {
+      return currentTabPackages;
     }
-  }, [allPackages, activeTab]);
+    return currentTabPackages.filter(p => {
+      const tailoredTags = p.tailored_tag;
+      if (Array.isArray(tailoredTags)) {
+        return tailoredTags.some(t => typeof t === "string" && t.trim().toLowerCase() === activeStyle);
+      }
+      if (typeof tailoredTags === "string" && tailoredTags) {
+        return tailoredTags.trim().toLowerCase() === activeStyle;
+      }
+      return false;
+    });
+  }, [currentTabPackages, activeStyle]);
+
+  if (!mounted) return null;
 
   return (
     <Container className="sm:px-5">
-      {/* HEADER */}
-      <div className="mb-4 md:mb-8">
-        <h2 className="section-title-light mb-0 md:mb-2">
-          <span className="md:hidden">Your Travel Style</span>
-          <span className="hidden md:inline">Trips Tailored to Your Travel Style</span>
-        </h2>
-        <p className="section-subtitle-light hidden md:block">Discover experiences that match your personality.</p>
+      {/* HEADER with Tab Switcher */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-8">
+        <div className="flex-1">
+          <h2 className="section-title-light mb-1 md:mb-2 text-2xl md:text-3xl lg:text-4xl font-bold text-brand-blue">
+            Trips Tailored to Your Travel Style
+          </h2>
+          <p className="section-subtitle-light hidden sm:block text-xs sm:text-sm md:text-base text-gray-600">
+            Discover experiences that match your personality and wanderlust.
+          </p>
+        </div>
+
+        {/* Tab Switcher - Consistent with Holidays.jsx */}
+        <div className="inline-flex p-1 bg-gray-100 rounded-full w-fit h-fit">
+          <button
+            onClick={() => setActiveTab("international")}
+            className={cn(
+              "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
+              activeTab === "international" 
+                ? "bg-brand-blue text-white shadow-md" 
+                : "text-gray-500 hover:text-brand-blue"
+            )}
+          >
+            International
+          </button>
+          <button
+            onClick={() => setActiveTab("domestic")}
+            className={cn(
+              "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
+              activeTab === "domestic" 
+                ? "bg-brand-blue text-white shadow-md" 
+                : "text-gray-500 hover:text-brand-blue"
+            )}
+          >
+            Domestic
+          </button>
+        </div>
       </div>
 
-      {/* FILTERS - Same style as Holidays.jsx */}
+      {/* DYNAMIC STYLE FILTERS */}
       <div className="mb-4 flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-        {STYLES.map((style) => (
+        {stylesList.map((style) => (
           <Button
             key={style.id}
-            variant={activeTab === style.id ? "default" : "outline"}
-            onClick={() => setActiveTab(style.id)}
+            variant={activeStyle === style.id ? "default" : "outline"}
+            onClick={() => setActiveStyle(style.id)}
             className={cn(
               "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              activeTab === style.id && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+              activeStyle === style.id && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
             {style.label}
@@ -100,62 +143,38 @@ const TravelStyle = ({
         ))}
       </div>
 
-      <div className="relative overflow-hidden min-h-[400px]">
+      <div className="relative min-h-[400px]">
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab}
+            key={`${activeTab}-${activeStyle}`}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            {/* SLIDER */}
+            {/* CAROUSEL */}
             <div className="relative">
-              {packages.length > 0 ? (
-                <>
-                  <button
-                    onClick={() => swiper?.slidePrev()}
-                    disabled={packages.length < 4}
-                    className={cn(
-                      "hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white shadow items-center justify-center transition-all hover:scale-110",
-                      packages.length < 4 && "opacity-40 cursor-not-allowed hover:scale-100"
-                    )}
-                  >
-                    <MoveLeft className="w-6 h-6" />
-                  </button>
-
-                  <Swiper
-                    onSwiper={setSwiper}
-                    modules={[Navigation]}
-                    loop={packages.length > 4}
-                    slidesPerView={1.2}
-                    spaceBetween={16}
-                    breakpoints={{
-                      640: { slidesPerView: 2, spaceBetween: 16 },
-                      1024: { slidesPerView: 4, spaceBetween: 20 },
-                    }}
-                  >
-                    {packages.map((item, index) => (
-                      <SwiperSlide key={`${item.id}-${index}`} className="!h-auto">
-                        <PackageCard item={item} />
-                      </SwiperSlide>
+              {displayPackages.length > 0 ? (
+                <Carousel
+                  opts={{ align: "start" }}
+                  className="w-full mt-4"
+                >
+                  <CarouselContent className="-ml-4">
+                    {displayPackages.map((item, index) => (
+                      <CarouselItem 
+                        key={`${item.id}-${index}`} 
+                        className="pl-4 basis-[80%] sm:basis-1/2 lg:basis-1/4"
+                      >
+                        <PremiumPackageCard item={item} />
+                      </CarouselItem>
                     ))}
-                  </Swiper>
-
-                  <button
-                    onClick={() => swiper?.slideNext()}
-                    disabled={packages.length < 4}
-                    className={cn(
-                      "hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white shadow items-center justify-center transition-all hover:scale-110",
-                      packages.length < 4 && "opacity-40 cursor-not-allowed hover:scale-100"
-                    )}
-                  >
-                    <MoveRight className="w-6 h-6" />
-                  </button>
-                </>
+                  </CarouselContent>
+                  <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
+                  <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
+                </Carousel>
               ) : (
-                <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-gray-100 rounded-3xl">
-                  <p className="text-gray-400 font-medium">No packages found for this style</p>
+                <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-gray-100 rounded-3xl w-full">
+                  <p className="text-gray-400 font-medium text-lg">No packages found for this style</p>
                 </div>
               )}
             </div>
