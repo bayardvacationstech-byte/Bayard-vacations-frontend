@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,8 @@ import { Flower, Sparkles, Waves, MapPin, Calendar, Users, Star, Heart, ChevronR
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePackagesByTheme } from "@/hooks/packages";
+import PackageCard from "@/components/ui/PackageCard";
 
 // Floating Zen Elements (Lotus Petals)
 const FloatingZenElements = () => {
@@ -52,111 +54,31 @@ export default function RelaxRejuvenateClient() {
     setMounted(true);
   }, []);
 
-  // Wellness packages data
-  const wellnessPackages = {
-    international: [
-      {
-        id: 1,
-        title: "Maldives Luxury Spa Retreat",
-        location: "Maldives",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800",
-        price: "$4,299",
-        rating: 4.9,
-        highlights: ["Overwater Spa", "Ayurvedic Treatments", "Yoga Sessions"],
-        category: "Luxury Wellness",
-        wellnessLevel: "Ultimate Relaxation"
-      },
-      {
-        id: 2,
-        title: "Bali Wellness & Detox Retreat",
-        location: "Ubud, Bali",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800",
-        price: "$2,499",
-        rating: 4.8,
-        highlights: ["Detox Programs", "Meditation", "Balinese Massage"],
-        category: "Holistic Healing",
-        wellnessLevel: "Deep Cleansing"
-      },
-      {
-        id: 3,
-        title: "Thailand Yoga & Spa Escape",
-        location: "Phuket, Thailand",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1540202404-a2f2a1d8d1c9?w=800",
-        price: "$1,999",
-        rating: 4.7,
-        highlights: ["Daily Yoga", "Thai Massage", "Beach Meditation"],
-        category: "Yoga & Spa",
-        wellnessLevel: "Mindful Rejuvenation"
-      },
-      {
-        id: 4,
-        title: "Switzerland Alpine Wellness",
-        location: "Swiss Alps",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        price: "$3,799",
-        rating: 4.9,
-        highlights: ["Mountain Spa", "Thermal Baths", "Alpine Air Therapy"],
-        category: "Mountain Wellness",
-        wellnessLevel: "Nature Healing"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Kerala Ayurveda Wellness",
-        location: "Kerala",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-        price: "₹38,999",
-        rating: 4.9,
-        highlights: ["Panchakarma", "Ayurvedic Cuisine", "Meditation"],
-        category: "Ayurvedic Healing",
-        wellnessLevel: "Traditional Therapy"
-      },
-      {
-        id: 6,
-        title: "Goa Beach Yoga Retreat",
-        location: "Goa",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
-        price: "₹32,999",
-        rating: 4.7,
-        highlights: ["Beach Yoga", "Spa Treatments", "Organic Meals"],
-        category: "Beach Wellness",
-        wellnessLevel: "Coastal Calm"
-      },
-      {
-        id: 7,
-        title: "Rishikesh Spiritual Wellness",
-        location: "Rishikesh",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800",
-        price: "₹28,999",
-        rating: 4.8,
-        highlights: ["Yoga Ashram", "Ganga Meditation", "Sound Healing"],
-        category: "Spiritual Healing",
-        wellnessLevel: "Soul Rejuvenation"
-      },
-      {
-        id: 8,
-        title: "Himachal Wellness Retreat",
-        location: "Dharamshala",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        price: "₹34,999",
-        rating: 4.6,
-        highlights: ["Mountain Views", "Tibetan Healing", "Nature Walks"],
-        category: "Mountain Retreat",
-        wellnessLevel: "Peaceful Escape"
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("relax-rejuvenate");
 
-  const currentPackages = wellnessPackages[selectedTab];
+  const wellnessPackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+
+  const currentPackages = wellnessPackages[selectedTab] || [];
 
   if (!mounted) return null;
 
@@ -325,73 +247,33 @@ export default function RelaxRejuvenateClient() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            <AnimatePresence mode="wait">
-              {currentPackages.map((pkg, index) => (
-                <motion.div
-                  key={`${selectedTab}-${pkg.id}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
-                >
-                  <Link href={`/packages/${pkg.id}`}>
-                    <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col h-full border border-stone-100 hover:border-sage-200">
-                      {/* Artistic Image Header */}
-                      <div className="relative h-[320px] overflow-hidden">
-                        <Image
-                          src={pkg.image}
-                          alt={pkg.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-1000 ease-in-out"
-                        />
-                        <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-stone-900/0 transition-colors duration-700" />
-                        
-                        {/* Rating Overlay */}
-                        <div className="absolute top-6 right-6 flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full">
-                           <Sparkles className="w-3.5 h-3.5 text-sage-500" />
-                           <span className="text-[10px] font-bold text-stone-800 tracking-tight">{pkg.rating}</span>
-                        </div>
-
-                        <div className="absolute bottom-6 left-6 right-6">
-                           <div className="inline-flex items-center gap-2 bg-sage-600/90 backdrop-blur-md px-3 py-1.5 rounded-lg text-white mb-2">
-                              <MapPin className="w-3.5 h-3.5" />
-                              <span className="text-[10px] font-bold uppercase tracking-widest">{pkg.location}</span>
-                           </div>
-                        </div>
-                      </div>
-
-                      {/* Content Body */}
-                      <div className="p-8 flex-1 flex flex-col justify-between space-y-8">
-                        <div className="space-y-4">
-                          <h3 className="text-2xl font-serif text-stone-900 lowercase leading-tight group-hover:text-sage-700 transition-colors">
-                            {pkg.title}
-                          </h3>
-                          
-                          <div className="flex flex-wrap gap-2">
-                             {pkg.highlights.map((h, idx) => (
-                               <span key={idx} className="text-[9px] font-bold text-sage-600/70 border border-sage-100 px-2 py-1 rounded-full uppercase tracking-widest">
-                                 {h}
-                               </span>
-                             ))}
-                          </div>
-                        </div>
-
-                        <div className="pt-6 border-t border-stone-50 flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <p className="text-[9px] font-bold text-stone-400 uppercase tracking-[0.2em]">Investment</p>
-                            <p className="text-xl font-serif text-stone-900">{pkg.price}</p>
-                          </div>
-                          <div className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center group-hover:bg-sage-600 group-hover:border-sage-600 group-hover:text-white transition-all duration-500">
-                             <ChevronRight className="w-5 h-5" />
-                          </div>
-                        </div>
-                      </div>
+            {isLoading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="rounded-[2.5rem] bg-white p-8 animate-pulse shadow-lg flex flex-col h-full border border-stone-100">
+                  <div className="h-[320px] bg-stone-50 rounded-[2rem] mb-6"></div>
+                  <div className="space-y-4">
+                    <div className="h-8 bg-stone-50 rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-stone-50 rounded-lg w-1/2"></div>
+                  </div>
+                  <div className="mt-auto pt-6 border-t border-stone-50 flex justify-between items-end">
+                    <div className="space-y-2">
+                       <div className="h-3 bg-stone-50 rounded w-16"></div>
+                       <div className="h-8 bg-stone-50 rounded w-24"></div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                    <div className="w-10 h-10 bg-stone-50 rounded-full"></div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <AnimatePresence mode="wait">
+                {currentPackages.map((pkg, index) => (
+                  <PackageCard 
+                    key={`${selectedTab}-${pkg.id}`} 
+                    item={pkg}
+                  />
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </Container>
       </section>

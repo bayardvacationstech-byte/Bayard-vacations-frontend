@@ -266,6 +266,54 @@ Special Requests: Dietary requirements, special occasions, accessibility needs -
           {
             activity: "Snorkeling at Crystal Bay",
             description: "Swim with tropical fish and sea turtles in pristine waters"
+          },
+          {
+            activity: "Manta Point Encounter",
+            description: "Swim with gentle giant Manta Rays in their natural habitat"
+          },
+          {
+            activity: "Atuh Beach Exploration",
+            description: "Discover the hidden cove with its white sand and emerald water"
+          },
+          {
+            activity: "Diamond Beach Viewpoint",
+            description: "Capture the most iconic staircase and crystal blue bay photos"
+          },
+          {
+            activity: "Thousand Islands Viewpoint",
+            description: "Admire the cluster of small islands from the famous cliff edge"
+          },
+          {
+            activity: "Rumah Pohon Tree House",
+            description: "Visit the world-famous molenteng tree house for panoramic views"
+          },
+          {
+            activity: "Teletubbies Hill",
+            description: "Enjoy the lush green rolling hills resembling the famous show"
+          },
+          {
+            activity: "Peguyangan Waterfall",
+            description: "Descend the iconic blue stairs for a spiritual cliffside experience"
+          },
+          {
+            activity: "Tembeling Forest & Pool",
+            description: "Trek through virgin forest to reach natural freshwater pools"
+          },
+          {
+            activity: "Suwehan Beach Adventure",
+            description: "A more secluded spot for those seeking ultimate tranquility"
+          },
+          {
+            activity: "Banah Cliff Sunset",
+            description: "One of the most dramatic sunset spots on the west coast"
+          },
+          {
+            activity: "Local Balinese Lunch",
+            description: "Savor authentic flavors at a traditional warung on the island"
+          },
+          {
+            activity: "Return Fast Boat Transfer",
+            description: "Late afternoon cruise back to the main island of Bali"
           }
         ],
         overnight: "Seminyak, Bali",

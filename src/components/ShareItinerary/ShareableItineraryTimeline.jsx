@@ -60,7 +60,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                         {/* Mobile Day Indicator */}
-                        <div className="md:hidden flex items-center gap-1.5 px-2 py-0.5 bg-brand-blue rounded-md text-[10px] font-black text-white uppercase tracking-tighter print:flex">
+                        <div className="md:hidden flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-blue/30 rounded-lg text-[10px] font-black text-brand-blue uppercase tracking-wider print:flex">
                           Day {day.day.toString().padStart(2, '0')}
                         </div>
                         

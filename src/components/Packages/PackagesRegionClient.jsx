@@ -43,7 +43,7 @@ import RegionTravelEssentials from "@/components/Packages/RegionTravelEssentials
 import RegionWhyChoose from "@/components/Packages/RegionWhyChoose";
 import SectionNav from "@/components/Packages/SectionNav";
 import WhyBayardVacations from "@/components/Packages/WhyBayardVacations";
-import { featuredBlogs } from "@/data/testBlogData";
+import { useBlogs } from "@/hooks/blogs/useBlogs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination as SwiperPagination, Autoplay } from "swiper/modules";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
@@ -103,6 +103,7 @@ export default function PackagesRegionClient() {
   const { packages: allPackages, isLoading: packagesLoading, error: packagesError } = usePackages(regionName);
   const { regionData, isLoading: regionLoading, error: regionError } = useRegion(regionName);
   const { whyChooseData, isLoading: whyChooseLoading } = useWhyChooseRegion(regionData?.id);
+  const { blogs: regionBlogs, fetchBlogs, isLoading: blogsLoading } = useBlogs();
   const placeName = regionName?.split("-").join(" ") || "this destination";
 
   const isLoading = packagesLoading || regionLoading;
@@ -116,7 +117,9 @@ export default function PackagesRegionClient() {
     if (regionName === "azerbaijan" && allPackages.length > 0) {
       console.log("Azerbaijan Packages Data:", allPackages);
     }
-  }, [regionName, allPackages]);
+    // Fetch blogs for the region
+    fetchBlogs({ region: regionName, limitCount: 6 });
+  }, [regionName, allPackages, fetchBlogs]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -835,7 +838,7 @@ export default function PackagesRegionClient() {
                 }}
               className="pb-16"
             >
-              {featuredBlogs.slice(0, 6).map((blog) => (
+              {regionBlogs.map((blog) => (
                 <SwiperSlide key={blog.id}>
                   <BlogCard blog={blog} />
                 </SwiperSlide>

@@ -48,10 +48,10 @@ const ShareableHighlights = ({ highlights = [] }) => {
   if (!highlights || highlights.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-20 bg-white print:bg-white print:py-8">
+    <section id="highlights" className="py-6 md:py-10 bg-slate-50/50 print:bg-white print:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Artistic Section Header */}
-        <div className="text-center mb-12 md:mb-16 print:mb-6">
+        <div className="text-center mb-8 md:mb-10 print:mb-6">
           <p className="font-great-vibes text-4xl md:text-5xl text-brand-blue mb-2 print:text-3xl">
             What Makes This Special
           </p>

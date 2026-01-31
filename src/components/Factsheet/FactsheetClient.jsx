@@ -295,17 +295,21 @@ export default function FactsheetClient({ regionSlug }) {
       stats: dynamicData.transport.stats?.map(s => ({
         ...s,
         icon: iconMap[s.icon] || Car
-      })) || []
+      })) || [],
+      apps: dynamicData.transport.apps || []
     } : undefined,
-    visa: dynamicData.visa || undefined,
+    visa: dynamicData.visa ? {
+      ...dynamicData.visa,
+      process: dynamicData.visa.process || []
+    } : undefined,
     highlights: dynamicData.highlights?.map(h => ({
       ...h,
       icon: iconMap[h.icon] || Star
-    })),
+    })) || [],
     attractions: dynamicData.attractions?.map(a => ({
       ...a,
       icon: iconMap[a.icon] || MapPin
-    }))
+    })) || []
   } : REGION_DATA[regionSlug?.toLowerCase()] || {
     heroTitle: regionName,
     heroSubtitle: `Essential information and insider tips for your perfect ${regionName} adventure.`,
@@ -444,7 +448,7 @@ export default function FactsheetClient({ regionSlug }) {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-3xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-none uppercase text-white">
+            <h1 className="text-3xl sm:text-6xl md:text-7xl font-black mb-6 tracking-tighter leading-none uppercase text-white">
               {currentData.heroTitle}<br />
               <span className="text-brand-green italic lowercase drop-shadow-sm">Factsheet</span>
             </h1>
@@ -482,7 +486,7 @@ export default function FactsheetClient({ regionSlug }) {
             <section id="essentials" className="scroll-mt-24">
               <SectionHeader title="The Essentials" badge="Quick Access" />
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
-                {currentData.essentials.map((item, index) => {
+                {currentData.essentials?.map((item, index) => {
                   const Icon = item.icon;
                   return (
                     <div key={index} className="bg-white p-5 md:p-6 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
@@ -503,7 +507,7 @@ export default function FactsheetClient({ regionSlug }) {
                       <Lightbulb className="w-6 h-6 md:w-8 md:h-8 text-white" />
                    </div>
                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-                      {currentData.fastFacts.map((fact, i) => (
+                      {currentData.fastFacts?.map((fact, i) => (
                         <div key={i}>
                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{fact.label}</p>
                            <p className="text-base md:text-lg font-black text-white">{fact.value}</p>
@@ -521,11 +525,11 @@ export default function FactsheetClient({ regionSlug }) {
                   
                   {/* Left Side: Region Highlights */}
                   <div className="flex-1">
-                    <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+                    <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
                       Region <span className="text-brand-blue">Highlights</span>
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-                      {currentData.highlights.map((item, idx) => (
+                      {currentData.highlights?.map((item, idx) => (
                         <FeatureCard key={idx} {...item} />
                       ))}
                     </div>
@@ -533,7 +537,7 @@ export default function FactsheetClient({ regionSlug }) {
 
                   {/* Right Side: Top Attractions */}
                   <div className="flex-1">
-                    <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-8">
+                    <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
                       Top <span className="text-brand-blue">Attractions</span>
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
@@ -551,7 +555,7 @@ export default function FactsheetClient({ regionSlug }) {
               <section id="history" className="scroll-mt-24">
                 <SectionHeader title="History & Heritage" badge="Our Origins" />
                 <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
-                  <h3 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 mb-6">{currentData.history.title}</h3>
+                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6">{currentData.history.title}</h3>
                   <div className="mb-6 max-w-3xl">
                     <p 
                       ref={historyTextRef}
@@ -603,14 +607,14 @@ export default function FactsheetClient({ regionSlug }) {
                   )}
 
                   <div className="flex flex-wrap gap-3 mb-12">
-                    {currentData.history.tags.map(tag => (
+                    {currentData.history.tags?.map(tag => (
                       <span key={tag} className="px-5 py-2 bg-slate-50 border border-slate-100 rounded-full text-xs font-bold text-slate-500 uppercase tracking-wider">
                         {tag}
                       </span>
                     ))}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {currentData.history.stats.map((stat, i) => (
+                    {currentData.history.stats?.map((stat, i) => (
                       <div key={i} className="bg-slate-50 border border-slate-100 p-8 rounded-[2.5rem]">
                         <p className="text-xs font-black text-brand-green uppercase tracking-[0.3em] mb-4">{stat.label}</p>
                         <h4 className="text-3xl font-black text-slate-900 mb-1">{stat.value}</h4>
@@ -660,7 +664,7 @@ export default function FactsheetClient({ regionSlug }) {
                    </div>
 
                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                      {currentData.climate.seasons.map((s, i) => (
+                      {currentData.climate.seasons?.map((s, i) => (
                         <div key={i} className="bg-slate-50/50 border border-slate-100 p-5 rounded-2xl text-center">
                            <span className="text-3xl block mb-2">{s.emoji}</span>
                            <h5 className="font-black text-slate-900 text-sm mb-1">{s.name}</h5>
@@ -676,7 +680,7 @@ export default function FactsheetClient({ regionSlug }) {
                      <div className="bg-amber-50 rounded-[2rem] p-8 border border-amber-100">
                         <h4 className="text-amber-900 font-black mb-4 uppercase text-xs tracking-widest">Seasonal Packing List</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-3">
-                           {currentData.climate.packing.map((item, i) => (
+                           {currentData.climate.packing?.map((item, i) => (
                              <div key={i} className="flex gap-3 text-amber-900/70 font-medium text-sm">
                                 <span className="text-amber-400">👒</span> {item}
                              </div>
@@ -696,8 +700,8 @@ export default function FactsheetClient({ regionSlug }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                        <div className="space-y-6">
                           <div>
-                             <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Official Language</h4>
-                             <p className="text-3xl font-black text-slate-900 italic">{currentData.language.official}</p>
+                             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Official Language</h4>
+                             <p className="text-2xl md:text-3xl font-black text-slate-900 italic">{currentData.language.official}</p>
                           </div>
                           <p className="text-base text-slate-600 font-medium leading-relaxed italic border-l-4 border-brand-green/30 pl-4">
                              {currentData.language.context}
@@ -719,7 +723,7 @@ export default function FactsheetClient({ regionSlug }) {
                        <div>
                           <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Essential Phrases</h4>
                           <div className="grid grid-cols-1 gap-4">
-                             {currentData.language.phrases.map((p, i) => (
+                             {currentData.language.phrases?.map((p, i) => (
                                <div key={i} className="bg-slate-50/50 p-4 rounded-xl flex justify-between items-center group hover:bg-white transition-colors border border-transparent hover:border-slate-100">
                                   <p className="text-[10px] font-black text-slate-400 uppercase">{p.label}</p>
                                   <p className="text-lg font-black text-slate-900 group-hover:text-brand-green transition-colors">{p.phrase}</p>
@@ -745,7 +749,7 @@ export default function FactsheetClient({ regionSlug }) {
                     </p>
                   </div>
                   <div className="space-y-4">
-                    {currentData.culture.rules.map((rule, i) => (
+                    {currentData.culture.rules?.map((rule, i) => (
                       <div key={i} className="bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm flex items-start gap-5 md:gap-6">
                         <span className="text-2xl md:text-3xl shrink-0">{rule.icon}</span>
                         <div>
@@ -813,7 +817,7 @@ export default function FactsheetClient({ regionSlug }) {
 
                   {/* Food Items Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                    {currentData.food.items.map((food, i) => (
+                    {currentData.food.items?.map((food, i) => (
                       <div 
                         key={i} 
                         onClick={() => {
@@ -856,7 +860,7 @@ export default function FactsheetClient({ regionSlug }) {
                         <Info className="w-4 h-4" /> Signature Drinks
                       </h4>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {currentData.food.drinks.map((drink, i) => (
+                        {currentData.food.drinks?.map((drink, i) => (
                           <div key={i} className="flex flex-col">
                             <span className="text-sm font-black text-white">{drink.name}</span>
                             <span className="text-[10px] text-white/70 font-bold uppercase tracking-wider">{drink.value}</span>
@@ -877,12 +881,12 @@ export default function FactsheetClient({ regionSlug }) {
                    <p className="text-lg text-slate-600 font-medium leading-relaxed mb-8">{currentData.shopping.description}</p>
                    
                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                      {currentData.shopping.categories.map((cat, i) => (
+                      {currentData.shopping.categories?.map((cat, i) => (
                         <div key={i} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100">
                            <span className="text-3xl block mb-4">{cat.icon}</span>
                            <h4 className="font-black text-slate-900 text-sm mb-4 uppercase tracking-widest">{cat.name}</h4>
                            <ul className="space-y-2">
-                              {cat.items.map((item, idx) => (
+                              {cat.items?.map((item, idx) => (
                                 <li key={idx} className="text-sm text-slate-500 font-medium flex items-center gap-2">
                                    <div className="w-1.5 h-1.5 rounded-full bg-brand-green" /> {item}
                                 </li>
@@ -895,7 +899,7 @@ export default function FactsheetClient({ regionSlug }) {
                    <div className="bg-slate-900 text-white rounded-[2.5rem] p-8">
                       <h4 className="text-brand-green font-black uppercase text-xs tracking-[0.2em] mb-6">Where to Shop (Local Hubs)</h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                         {currentData.shopping.hubs.map((hub, i) => (
+                         {currentData.shopping.hubs?.map((hub, i) => (
                            <div key={i}>
                               <p className="text-lg font-black mb-1">{hub.name}</p>
                               <p className="text-brand-green font-bold text-[10px] uppercase tracking-widest mb-2">{hub.type}</p>
@@ -914,7 +918,7 @@ export default function FactsheetClient({ regionSlug }) {
                 <SectionHeader title="On the Move" badge="Transport & Safety" />
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {currentData.transport.stats.map((stat, i) => {
+                    {currentData.transport.stats?.map((stat, i) => {
                       const Icon = stat.icon;
                       return (
                         <div key={i} className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm text-center">
@@ -971,7 +975,7 @@ export default function FactsheetClient({ regionSlug }) {
                 <div className="flex flex-col md:flex-row gap-12">
                   <div className="md:w-1/3">
                     <SectionHeader title="Visa Entry" badge="ASAN PORTAL" noMargin />
-                    <h3 className="text-4xl font-black text-slate-900 mt-6 mb-4">{currentData.visa.title}</h3>
+                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 mt-6 mb-4">{currentData.visa.title}</h3>
                     <p className="text-slate-600 font-medium leading-relaxed">
                       {currentData.visa.description}
                     </p>
@@ -983,7 +987,7 @@ export default function FactsheetClient({ regionSlug }) {
                   </div>
                   <div className="md:w-2/3 space-y-6">
                     <div className="grid grid-cols-1 gap-4">
-                      {currentData.visa.process.map((step, i) => (
+                      {currentData.visa.process?.map((step, i) => (
                         <div key={i} className="bg-white p-6 rounded-2xl border border-rose-100 shadow-sm flex gap-6 items-center">
                           <span className="w-8 h-8 rounded-full bg-rose-500 text-white text-xs font-black flex items-center justify-center shrink-0">{i+1}</span>
                           <p className="text-slate-700 font-medium leading-tight">{step}</p>
@@ -1056,16 +1060,22 @@ export default function FactsheetClient({ regionSlug }) {
 }
 
 // Helper Components
-const SectionHeader = ({ title, badge, noMargin }) => (
-  <div className={cn("mb-6 md:mb-8", noMargin && "mb-0")}>
-    <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-3">
-      {badge}
-    </span>
-    <h2 className="text-2xl sm:text-3xl md:text-6xl font-black text-slate-900 tracking-tight leading-none">
-      {title}
-    </h2>
-  </div>
-);
+const SectionHeader = ({ title, badge, noMargin }) => {
+  const words = title.split(" ");
+  const lastWord = words.pop();
+  const restOfTitle = words.join(" ");
+
+  return (
+    <div className={cn("mb-6 md:mb-8", noMargin && "mb-0")}>
+      <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-3 border border-slate-200">
+        {badge}
+      </span>
+      <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+        {restOfTitle} <span className="text-brand-blue">{lastWord}</span>
+      </h2>
+    </div>
+  );
+};
 
 // Milestone Card Component with Read More functionality
 const MilestoneCard = ({ milestone, index }) => {

@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Play, Info, Camera, Clock, Utensils, Music } from "lucide-react";
+import { Heart, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Play, Info, Camera, Clock, Utensils, Music, Package } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import PackageCard from "@/components/ui/PackageCard";
+import { usePackagesByTheme } from "@/hooks/packages";
 
 // Floating Hearts Background Component
 const FloatingHearts = () => {
@@ -59,92 +60,30 @@ export default function RomanticGetawaysClient() {
     setMounted(true);
   }, []);
 
-  // Romantic packages data
-  const romanticPackages = {
-    international: [
-      {
-        id: 1,
-        title: "Maldives Honeymoon Paradise",
-        location: "Maldives",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
-        price: "$2,499",
-        rating: 4.9,
-        highlights: ["Overwater Villa", "Candlelight Dinner", "Couples Spa"],
-        category: "Luxury Romance"
-      },
-      {
-        id: 2,
-        title: "Paris Love Story",
-        location: "Paris, France",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800",
-        price: "$3,299",
-        rating: 4.8,
-        highlights: ["Eiffel Tower Dinner", "Seine River Cruise", "Wine Tasting"],
-        category: "Classic Romance"
-      },
-      {
-        id: 3,
-        title: "Santorini Sunset Romance",
-        location: "Santorini, Greece",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800",
-        price: "$2,799",
-        rating: 4.9,
-        highlights: ["Caldera View Suite", "Private Yacht Tour", "Sunset Watching"],
-        category: "Island Romance"
-      },
-      {
-        id: 4,
-        title: "Bali Tropical Love Escape",
-        location: "Bali, Indonesia",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
-        price: "$1,999",
-        rating: 4.7,
-        highlights: ["Private Pool Villa", "Balinese Spa", "Beach Dinner"],
-        category: "Tropical Romance"
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Kashmir Valley Romance",
-        location: "Kashmir, India",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?w=800",
-        price: "₹45,999",
-        rating: 4.8,
-        highlights: ["Houseboat Stay", "Shikara Ride", "Mughal Gardens"],
-        category: "Mountain Romance"
-      },
-      {
-        id: 6,
-        title: "Goa Beach Love",
-        location: "Goa, India",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
-        price: "₹32,999",
-        rating: 4.6,
-        highlights: ["Beachfront Resort", "Sunset Cruise", "Candlelight Dinner"],
-        category: "Beach Romance"
-      },
-      {
-        id: 7,
-        title: "Udaipur Royal Romance",
-        location: "Udaipur, India",
-        duration: "4 Days / 3 Nights",
-        image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-        price: "₹38,999",
-        rating: 4.9,
-        highlights: ["Palace Hotel Stay", "Lake Pichola Boat Ride", "Royal Dining"],
-        category: "Heritage Romance"
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("romantic-getaways");
 
-  const currentPackages = romanticPackages[selectedTab];
+  const romanticPackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID for robustness
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+  const currentPackages = romanticPackages[selectedTab] || [];
 
   if (!mounted) return null;
 
@@ -174,41 +113,42 @@ export default function RomanticGetawaysClient() {
         
         <FloatingHearts />
 
-        <Container className="relative z-20 pt-40 pb-12 md:pt-48 md:pb-0">
-          <div className="max-w-4xl space-y-8 md:space-y-10">
+        <Container className="relative z-20 pt-32 pb-12 md:pt-48">
+          <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-4 md:space-y-6"
+              className="space-y-6 md:space-y-8"
             >
-              <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl">
-                <Heart className="w-5 h-5 text-rose-300 fill-rose-300 animate-pulse" />
-                <span className="text-sm font-black text-rose-100 uppercase tracking-[0.3em] font-sans">
+              {/* Refined Glassmorphism Badge */}
+              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-xl">
+                <Heart className="w-4 h-4 text-rose-400 fill-rose-400" />
+                <span className="text-[10px] md:text-sm font-black text-rose-50 uppercase tracking-[0.3em]">
                   The Romance Collection
                 </span>
               </div>
 
-              <div className="space-y-1 md:space-y-2">
-                <p className="text-rose-200 font-cursive text-2xl md:text-5xl tracking-wide opacity-90 mb-[-5px] md:mb-[-20px] ml-1" style={{ fontFamily: 'Damion, cursive' }}>
+              <div className="space-y-2">
+                <p className="text-rose-500 font-great-vibes text-4xl md:text-6xl tracking-wide ml-1 drop-shadow-sm">
                   Handpicked
                 </p>
-                <h1 className="text-4xl sm:text-7xl md:text-9xl font-black text-white leading-[0.95] md:leading-[0.9] tracking-tighter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                <h1 className="text-5xl sm:text-7xl md:text-9xl font-black text-white leading-[1] md:leading-[0.9] tracking-tight drop-shadow-2xl">
                   Romantic<br />
-                  <span className="text-rose-400">Getaways</span>
+                  <span className="text-[#FF3366]">Getaways</span>
                 </h1>
               </div>
 
-              <p className="text-lg md:text-2xl text-rose-50 font-medium leading-relaxed max-w-2xl drop-shadow-md">
+              <p className="text-sm md:text-xl text-white/90 font-medium leading-relaxed max-w-xl drop-shadow-md">
                 Escape to the world's most intimate corners. Where every sunset is a celebration and every moment becomes a timeless memory.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 md:gap-5 pt-4">
-                <Button size="lg" className="h-14 md:h-16 px-8 md:px-10 rounded-2xl bg-white text-rose-600 hover:bg-rose-50 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-none font-black text-base md:text-lg uppercase tracking-widest active:scale-95 transition-all">
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <Button size="lg" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl bg-white text-[#FF3366] hover:bg-rose-50 shadow-lg border-none font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all">
                   Book Your Escape
-                  <ChevronRight className="ml-2 w-5 h-5" />
+                  <ChevronRight className="ml-1 w-4 h-4 md:w-5 md:h-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="h-14 md:h-16 px-8 md:px-10 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 backdrop-blur-md font-black text-base md:text-lg uppercase tracking-widest active:scale-95 transition-all">
+                <Button size="lg" variant="outline" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl border-2 border-white/60 text-white hover:bg-white/10 backdrop-blur-md font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all">
                   Customize Love
                 </Button>
               </div>
@@ -309,20 +249,35 @@ export default function RomanticGetawaysClient() {
 
           {/* Packages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <AnimatePresence mode="wait">
-              {currentPackages.map((pkg, index) => (
-                <PackageCard 
-                  key={`${selectedTab}-${pkg.id}`} 
-                  variant="rose"
-                  item={{
-                    ...pkg,
-                    packageTitle: pkg.title,
-                    region: pkg.location,
-                    cardImages: [{ url: pkg.image }]
-                  }} 
-                />
-              ))}
-            </AnimatePresence>
+            {isLoading ? (
+              // Loading State - Show skeleton cards
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="rounded-[2.5rem] border border-rose-100 bg-white p-8 animate-pulse flex flex-col h-full shadow-lg">
+                  <div className="h-[240px] bg-rose-50/50 rounded-[1.5rem] mb-6"></div>
+                  <div className="space-y-3">
+                    <div className="h-8 bg-rose-50/50 rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-rose-50/50 rounded-lg w-1/2"></div>
+                  </div>
+                  <div className="mt-auto pt-6 border-t border-rose-50/30 flex justify-between items-end">
+                    <div className="space-y-2">
+                      <div className="h-3 bg-rose-50/50 rounded w-16"></div>
+                      <div className="h-8 bg-rose-50/50 rounded w-24"></div>
+                    </div>
+                    <div className="w-12 h-12 bg-rose-50/50 rounded-2xl"></div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <AnimatePresence mode="wait">
+                {currentPackages.map((pkg, index) => (
+                  <PackageCard 
+                    key={`${selectedTab}-${pkg.id}`} 
+                    variant="rose"
+                    item={pkg} 
+                  />
+                ))}
+              </AnimatePresence>
+            )}
           </div>
         </Container>
       </section>

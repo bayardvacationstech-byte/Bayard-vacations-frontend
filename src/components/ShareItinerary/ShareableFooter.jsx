@@ -14,7 +14,7 @@ const ShareableFooter = ({ contactInfo, importantNotes }) => {
   } = contactInfo;
 
   return (
-    <footer className="relative bg-gradient-to-br from-brand-blue via-blue-800 to-blue-900 text-white py-16 md:py-20 print:bg-white print:text-slate-900 print:py-8 overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-brand-blue via-blue-800 to-blue-900 text-white py-4 md:py-8 print:bg-white print:text-slate-900 print:py-8 overflow-hidden">
       {/* Premium Background Elements */}
       <div className="absolute inset-0 opacity-10 print:hidden">
         <div className="absolute top-0 left-0 w-full h-full" style={{
@@ -122,7 +122,7 @@ const ShareableFooter = ({ contactInfo, importantNotes }) => {
         </div>
 
         {/* Final Footer Bottom */}
-        <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div className="space-y-2">
             <p className="text-sm font-bold text-blue-200">
               © 2026 {companyName}. <span className="text-blue-400/60">Crafted with ❤️ for Travelers.</span>

@@ -531,18 +531,19 @@ const InclusionsSection = ({ packageData }) => {
   };
 
   return (
-    <div id="inclusions" className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm scroll-mt-48 overflow-hidden relative">
-      <div className="absolute right-0 top-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32" />
-      
-      {/* Standard Header */}
-      <div className="mb-6 md:mb-8 relative z-10">
+    <div id="inclusions" className="scroll-mt-48 relative">
+      {/* Standard Header - Moved Outside of Card */}
+      <div className="mb-6 md:mb-8">
         <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
           Package <span className="text-brand-blue">Inclusions</span>
         </h2>
         <p className="text-slate-500 text-sm md:text-xl font-medium">Everything you need for a seamless journey</p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+      <div className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm overflow-hidden relative">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl opacity-50 -mr-32 -mt-32" />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
         {/* Inclusions Card */}
         <div className="border border-blue-100 rounded-3xl overflow-hidden shadow-sm">
           {/* Header */}
@@ -915,7 +916,8 @@ const InclusionsSection = ({ packageData }) => {
 
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default InclusionsSection;

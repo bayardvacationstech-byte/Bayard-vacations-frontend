@@ -1,36 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Diamond, Martini, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Award, Gem } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import PackageCard from "@/components/ui/PackageCard";
-
+import { usePackagesByTheme } from "@/hooks/packages";
 export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [selectionType, setSelectionType] = useState("International");
 
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("elite-escape");
+
+  // Deduplicate and merge with initial packages for hydration if needed
+  const elitePackages = useMemo(() => {
+    const pkgSource = allThemePackages?.length > 0 ? allThemePackages : initialPackages;
+    
+    const uniqueMap = new Map();
+    pkgSource.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    return Array.from(uniqueMap.values());
+  }, [allThemePackages, initialPackages]);
+
   // Get regions that actually have Elite Escape packages
-  const availableRegions = Array.from(new Set(initialPackages.map(pkg => pkg.region))).sort();
+  const availableRegions = useMemo(() => 
+    Array.from(new Set(elitePackages.map(pkg => pkg.region))).sort()
+  , [elitePackages]);
 
   // Categorize available regions
-  const domesticRegions = availableRegions.filter(regionName => {
+  const domesticRegions = useMemo(() => availableRegions.filter(regionName => {
     const regionData = initialRegions.find(r => r.name === regionName || r.slug === regionName.toLowerCase().replace(/\s+/g, '-'));
     return regionData?.isDomestic;
-  });
+  }), [availableRegions, initialRegions]);
 
-  const internationalRegions = availableRegions.filter(regionName => {
+  const internationalRegions = useMemo(() => availableRegions.filter(regionName => {
     const regionData = initialRegions.find(r => r.name === regionName || r.slug === regionName.toLowerCase().replace(/\s+/g, '-'));
     return !regionData?.isDomestic;
-  });
+  }), [availableRegions, initialRegions]);
 
   const displayRegions = selectionType === "Domestic" ? domesticRegions : internationalRegions;
 
   // Filter packages based on selected region and type
-  const filteredPackages = initialPackages.filter(pkg => {
+  const filteredPackages = useMemo(() => elitePackages.filter(pkg => {
     const isLevelMatch = selectedRegion === "All" || pkg.region === selectedRegion;
     
     // Determine if package is domestic/international
@@ -38,7 +59,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
     const isTypeMatch = selectionType === "Domestic" ? regionData?.isDomestic : !regionData?.isDomestic;
     
     return isLevelMatch && isTypeMatch;
-  });
+  }), [elitePackages, selectedRegion, selectionType, initialRegions]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -325,15 +346,27 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
         </div>
 
         {/* Packages Grid */}
-        {filteredPackages.length > 0 ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredPackages.map((pkg, index) => (
-              <PackageCard
-                key={pkg.id}
-                variant="amber"
-                item={pkg}
-              />
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="aspect-[4/5] rounded-[2.5rem] bg-slate-900/40 border border-white/5 p-6 animate-pulse flex flex-col justify-end gap-4 shadow-2xl">
+                <div className="h-6 bg-slate-800 rounded-lg w-3/4"></div>
+                <div className="h-4 bg-slate-800 rounded-lg w-1/2"></div>
+                <div className="h-10 bg-slate-800 rounded-xl w-full"></div>
+              </div>
             ))}
+          </div>
+        ) : filteredPackages.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <AnimatePresence mode="wait">
+              {filteredPackages.map((pkg, index) => (
+                <PackageCard
+                  key={pkg.id}
+                  variant="amber"
+                  item={pkg}
+                />
+              ))}
+            </AnimatePresence>
           </div>
         ) : (
           <div className="text-center py-20 bg-slate-800/30 rounded-[3rem] border border-dashed border-amber-500/20">

@@ -11,11 +11,11 @@ const ShareableOverview = ({ overview, description }) => {
   const displayContent = (isExpanded || !isLongContent) ? content : content.substring(0, 500) + '...';
 
   return (
-    <section className="py-12 md:py-16 bg-white print:py-8">
+    <section id="overview" className="py-6 md:py-10 bg-white print:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-8 md:mb-12 print:mb-6">
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 print:text-2xl">
+        <div className="mb-6 md:mb-8 print:mb-6">
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2 print:text-2xl">
             <span className="bg-gradient-to-r from-brand-blue to-purple-600 bg-clip-text text-transparent">
               Package Overview
             </span>

@@ -1,129 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Users, CalendarCheck, Bus, MapPin, Calendar, Star, Shield, ChevronRight, Ticket, Group, Globe } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import { usePackagesByTheme } from "@/hooks/packages";
+import PackageCard from "@/components/ui/PackageCard";
 
 export default function GroupDepartureClient() {
   const [selectedTab, setSelectedTab] = useState("international");
 
-  // Group departure packages data
-  const groupPackages = {
-    international: [
-      {
-        id: 1,
-        title: "European Grand Tour",
-        location: "10 Cities across Europe",
-        duration: "15 Days / 14 Nights",
-        image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800",
-        price: "$3,999",
-        rating: 4.9,
-        highlights: ["Fixed Departure", "Group of 25-30", "All Meals Included"],
-        category: "Multi-Country Tour",
-        departureDate: "March 15, 2026",
-        seatsLeft: 12
-      },
-      {
-        id: 2,
-        title: "Dubai Shopping Festival Group Tour",
-        location: "Dubai, UAE",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800",
-        price: "$2,299",
-        rating: 4.8,
-        highlights: ["Shopping Festival", "Group Discounts", "Tour Manager"],
-        category: "Shopping & City Tour",
-        departureDate: "February 10, 2026",
-        seatsLeft: 8
-      },
-      {
-        id: 3,
-        title: "Thailand Grand Circuit",
-        location: "Bangkok-Phuket-Pattaya",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
-        price: "$1,799",
-        rating: 4.7,
-        highlights: ["Fixed Group Dates", "30+ Travelers", "Guided Tours"],
-        category: "Beach & Culture",
-        departureDate: "January 25, 2026",
-        seatsLeft: 5
-      },
-      {
-        id: 4,
-        title: "Singapore-Malaysia Combo",
-        location: "Singapore & Kuala Lumpur",
-        duration: "7 Days / 6 Nights",
-        image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800",
-        price: "$2,199",
-        rating: 4.8,
-        highlights: ["Group Departure", "City Tours", "Theme Parks"],
-        category: "City Explorer",
-        departureDate: "February 20, 2026",
-        seatsLeft: 15
-      }
-    ],
-    domestic: [
-      {
-        id: 5,
-        title: "Kashmir Group Tour",
-        location: "Srinagar-Gulmarg-Pahalgam",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?w=800",
-        price: "₹32,999",
-        rating: 4.9,
-        highlights: ["Fixed Departure", "Group of 20-25", "Shikara Rides"],
-        category: "Mountain & Valley",
-        departureDate: "March 5, 2026",
-        seatsLeft: 10
-      },
-      {
-        id: 6,
-        title: "Rajasthan Heritage Circuit",
-        location: "Jaipur-Udaipur-Jodhpur",
-        duration: "8 Days / 7 Nights",
-        image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800",
-        price: "₹38,999",
-        rating: 4.8,
-        highlights: ["Group Travel", "Palace Tours", "Cultural Shows"],
-        category: "Heritage & Culture",
-        departureDate: "February 15, 2026",
-        seatsLeft: 7
-      },
-      {
-        id: 7,
-        title: "Goa Beach Group Escape",
-        location: "North & South Goa",
-        duration: "5 Days / 4 Nights",
-        image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800",
-        price: "₹24,999",
-        rating: 4.6,
-        highlights: ["Beach Party", "Group Activities", "Water Sports"],
-        category: "Beach Fun",
-        departureDate: "January 30, 2026",
-        seatsLeft: 18
-      },
-      {
-        id: 8,
-        title: "Kerala Backwater Group Tour",
-        location: "Cochin-Munnar-Alleppey",
-        duration: "6 Days / 5 Nights",
-        image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-        price: "₹29,999",
-        rating: 4.7,
-        highlights: ["Houseboat Stay", "Group Discounts", "Tea Gardens"],
-        category: "Nature & Backwaters",
-        departureDate: "February 25, 2026",
-        seatsLeft: 12
-      }
-    ]
-  };
+  const { 
+    packages: allThemePackages, 
+    isLoading, 
+    error 
+  } = usePackagesByTheme("group-departure");
 
-  const currentPackages = groupPackages[selectedTab];
+  const groupPackages = useMemo(() => {
+    if (!allThemePackages) return { international: [], domestic: [] };
+    
+    // Deduplicate by package ID
+    const uniqueMap = new Map();
+    allThemePackages.forEach(pkg => {
+      if (pkg.id && !uniqueMap.has(pkg.id)) {
+        uniqueMap.set(pkg.id, pkg);
+      }
+    });
+    const uniquePackages = Array.from(uniqueMap.values());
+    
+    return {
+      international: uniquePackages.filter(pkg => !pkg.domestic),
+      domestic: uniquePackages.filter(pkg => pkg.domestic)
+    };
+  }, [allThemePackages]);
+
+  const currentPackages = groupPackages[selectedTab] || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-blue-50 to-white">
@@ -231,83 +145,33 @@ export default function GroupDepartureClient() {
 
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {currentPackages.map((pkg, index) => (
-            <motion.div
-              key={pkg.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link href={`/packages/${pkg.id}`}>
-                <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer hover:-translate-y-2">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    
-                    {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-indigo-600 to-cyan-600 text-white text-xs font-black uppercase backdrop-blur-sm">
-                        {pkg.category}
-                      </div>
-                    </div>
-
-                    {/* Seats Left Badge */}
-                    <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/95 px-2 py-1 rounded-full">
-                      <Ticket className="w-3.5 h-3.5 text-red-600" />
-                      <span className="text-xs font-bold">{pkg.seatsLeft} Left</span>
-                    </div>
-
-                    {/* Location */}
-                    <div className="absolute bottom-4 left-4 flex items-center gap-1.5 text-white">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-bold">{pkg.location}</span>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4">
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-2">
-                      {pkg.title}
-                    </h3>
-
-                    {/* Departure Date */}
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <CalendarCheck className="w-4 h-4" />
-                      <span className="font-medium">{pkg.departureDate}</span>
-                    </div>
-
-                    {/* Highlights */}
-                    <div className="space-y-2">
-                      {pkg.highlights.map((highlight, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-sm text-slate-600">
-                          <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-indigo-600 to-cyan-600" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-slate-500 font-medium">Starting from</p>
-                        <p className="text-2xl font-black text-slate-900">{pkg.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-indigo-600 font-bold group-hover:gap-3 transition-all">
-                        <span className="text-sm">Book Now</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
+          {isLoading ? (
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="rounded-3xl bg-white p-6 animate-pulse flex flex-col h-full shadow-lg">
+                <div className="h-56 bg-blue-50 rounded-2xl mb-4"></div>
+                <div className="space-y-3">
+                  <div className="h-6 bg-blue-50 rounded-lg w-3/4"></div>
+                  <div className="h-4 bg-blue-50 rounded-lg w-1/2"></div>
                 </div>
-              </Link>
-            </motion.div>
-          ))}
+                <div className="mt-auto pt-6 border-t border-slate-100 flex justify-between items-end">
+                   <div className="space-y-2">
+                      <div className="h-3 bg-blue-50 rounded w-16"></div>
+                      <div className="h-6 bg-blue-50 rounded w-24"></div>
+                   </div>
+                   <div className="h-8 bg-blue-50 rounded-lg w-20"></div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <AnimatePresence mode="wait">
+              {currentPackages.map((pkg, index) => (
+                <PackageCard 
+                  key={`${selectedTab}-${pkg.id}`} 
+                  item={pkg}
+                />
+              ))}
+            </AnimatePresence>
+          )}
         </div>
       </Container>
 

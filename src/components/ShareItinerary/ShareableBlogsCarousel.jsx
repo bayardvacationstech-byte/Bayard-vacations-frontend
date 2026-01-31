@@ -4,10 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, BookOpen, Calendar, MapPin } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 const ShareableBlogsCarousel = ({ destination = 'Bali' }) => {
   // Dummy blog data - replace with real blog posts from your backend
@@ -60,10 +59,10 @@ const ShareableBlogsCarousel = ({ destination = 'Bali' }) => {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-slate-50 to-white print:hidden">
+    <section className="py-6 md:py-10 bg-gradient-to-br from-slate-50 to-white print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-blue/10 rounded-full mb-4">
             <BookOpen className="w-5 h-5 text-brand-blue" />
             <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">Travel Inspiration</span>
@@ -79,16 +78,12 @@ const ShareableBlogsCarousel = ({ destination = 'Bali' }) => {
         {/* Blogs Carousel */}
         <div className="relative">
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
+            modules={[Navigation, Autoplay]}
             spaceBetween={24}
-            slidesPerView={1}
+            slidesPerView={1.2}
             navigation={{
               prevEl: '.blogs-swiper-button-prev',
               nextEl: '.blogs-swiper-button-next',
-            }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
             }}
             autoplay={{
               delay: 5000,
@@ -98,13 +93,13 @@ const ShareableBlogsCarousel = ({ destination = 'Bali' }) => {
               640: { slidesPerView: 2 },
               1024: { slidesPerView: 3 },
             }}
-            className="pb-12"
+            className="pb-6"
           >
             {blogs.map((blog) => (
               <SwiperSlide key={blog.id}>
                 <div className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full border border-slate-100">
                   {/* Blog Image */}
-                  <div className="relative h-52 overflow-hidden">
+                  <div className="relative h-40 md:h-52 overflow-hidden">
                     <Image
                       src={blog.image}
                       alt={blog.title}
@@ -119,8 +114,8 @@ const ShareableBlogsCarousel = ({ destination = 'Bali' }) => {
                   </div>
 
                   {/* Blog Content */}
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 text-xs text-slate-500 mb-3">
+                  <div className="p-4 md:p-6">
+                    <div className="flex items-center gap-3 text-xs text-slate-500 mb-1.5 md:mb-3">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5" />
                         <span>{blog.date}</span>
@@ -129,11 +124,11 @@ const ShareableBlogsCarousel = ({ destination = 'Bali' }) => {
                       <span>{blog.readTime}</span>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">
+                    <h3 className="text-base md:text-lg font-bold text-slate-900 mb-1.5 md:mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">
                       {blog.title}
                     </h3>
                     
-                    <p className="text-sm text-slate-600 line-clamp-2 mb-4">
+                    <p className="text-sm text-slate-600 line-clamp-2 mb-2 md:mb-4">
                       {blog.excerpt}
                     </p>
 

@@ -4,7 +4,7 @@ import ProfileUpdate from "./ProfileUpdate";
 import EmailUpdate from "./EmailUpdate";
 import { useAuth } from "@/contexts/AuthContext";
 
-const LoginForm = ({ callbackUrl }) => {
+const LoginForm = ({ callbackUrl, onSuccess }) => {
   const [formState, setFormState] = useState("no-user");
   const { userInfo } = useAuth();
 
@@ -23,15 +23,18 @@ const LoginForm = ({ callbackUrl }) => {
         break;
 
       default:
+        setFormState("done");
+        if (onSuccess) onSuccess();
         break;
     }
-  }, [userInfo]);
+  }, [userInfo, onSuccess]);
 
   return (
     <div>
       {formState === "no-user" && <PhoneAuth />}
       {formState === "no-profile" && <ProfileUpdate />}
       {formState === "no-email" && <EmailUpdate callbackUrl={callbackUrl} />}
+      {formState === "done" && <div className="text-center p-4">Logging you in...</div>}
     </div>
   );
 };

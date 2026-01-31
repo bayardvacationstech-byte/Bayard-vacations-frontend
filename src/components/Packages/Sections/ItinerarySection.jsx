@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { splitCityStr } from "@/lib/utils";
 import { Download, Sparkles } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import useModal from "@/hooks/useModal";
+import { toast } from "sonner";
 
 const ItinerarySection = ({ packageData }) => {
+  const { user } = useAuth();
+  const { openAuthModal } = useModal();
   const [expandedDays, setExpandedDays] = useState([0]);
   const cities = splitCityStr(packageData?.citiesList);
 
@@ -24,6 +29,17 @@ const ItinerarySection = ({ packageData }) => {
   };
 
   const handleDownloadItinerary = () => {
+    if (!user) {
+      toast.error("Authentication Required", {
+        description: "Please sign in to download the itinerary PDF.",
+        action: {
+          label: "Sign In",
+          onClick: () => openAuthModal(),
+        },
+      });
+      openAuthModal();
+      return;
+    }
     // TODO: Implement PDF generation or download logic
     // For now, we'll just trigger a print dialog
     window.print();
