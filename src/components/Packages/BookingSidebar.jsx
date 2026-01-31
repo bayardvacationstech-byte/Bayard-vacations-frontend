@@ -82,7 +82,7 @@ const BookingSidebar = ({
                 </span>
               )}
             </div>
-            <p className="text-white/60 text-[10px] font-semibold">Per Person (Incl. all taxes)</p>
+            <p className="text-white/60 text-[10px] font-semibold">Per Person (taxes excluded)</p>
           </div>
 
           <div className="space-y-2">
