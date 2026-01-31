@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   }
 
   // Detect host dynamically to ensure metadata matches the environment (prelive vs production)
-  const headersList = headers();
+  const headersList = await headers();
   const host = headersList.get('host') || 'bayardvacations.com';
   const protocol = host.includes('localhost') ? 'http' : 'https';
   const siteUrl = `${protocol}://${host}`;
