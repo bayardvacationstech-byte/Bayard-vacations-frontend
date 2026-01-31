@@ -3,6 +3,20 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Star, Calendar, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useDestinationImage } from "@/hooks/useDestinationImage";
+
+function SpotlightImage({ src, name, className }) {
+  const { image: fetchedImage } = useDestinationImage(name);
+  const displayImage = fetchedImage?.url || src;
+
+  return (
+    <img
+      src={displayImage}
+      alt={name}
+      className={className}
+    />
+  );
+}
 
 // Import banner data...
 const LUXURY_DATA = [
@@ -97,20 +111,24 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
   const active = displays[activeBanner] || displays[0];
 
   const scrollToItem = (index) => {
-    // Scroller logic...
+    if (carouselRef.current && carouselRef.current.children[index]) {
+      carouselRef.current.children[index].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
   };
 
   // Track initial mount to prevent auto-scroll on page load
   const isInitialMount = useRef(true);
 
   useEffect(() => {
-    // DISABLED: Completely disabled to prevent page auto-scroll
-    // Skip scrolling on initial mount
-    // if (isInitialMount.current) {
-    //   isInitialMount.current = false;
-    //   return;
-    // }
-    // scrollToItem(activeBanner);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    scrollToItem(activeBanner);
   }, [activeBanner]);
 
 
@@ -190,24 +208,22 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
             <button
               key={display.id}
               onClick={() => {
-                if (activeBanner === index) {
-                  router.push(`/themes/elite-escape`);
-                } else {
-                  setActiveBanner(index);
-                }
+                setActiveBanner(index);
+                router.push(`/packages/${display.slug}`);
               }}
               className={`flex-shrink-0 relative w-40 h-48 sm:w-52 sm:h-60 md:w-64 md:h-72 lg:w-72 lg:h-[350px] rounded-[1.5rem] md:rounded-[2rem] lg:rounded-[3rem] overflow-hidden transition-all duration-700 ${
                 activeBanner === index
-                  ? 'ring-4 ring-brand-peach scale-105 shadow-[0_30px_60px_-12px_rgba(242,194,136,0.3)] z-10'
+                  ? 'scale-105 shadow-[0_30px_60px_-12px_rgba(242,194,136,0.3)] z-10'
                   : 'shadow-xl hover:scale-[1.02]'
               }`}
               style={{ scrollSnapAlign: 'center' }}
             >
-              <img
+              <SpotlightImage
                 src={display.image}
-                alt={display.name}
+                name={display.name}
                 className="w-full h-full object-cover"
               />
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-100" />
               <div className="absolute bottom-4 md:bottom-10 left-0 right-0 text-center">
                 <p className="text-white text-sm sm:text-lg md:text-2xl lg:text-3xl font-black tracking-tighter uppercase">{display.name}</p>

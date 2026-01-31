@@ -162,7 +162,7 @@ const GroupDeparturePage = async () => {
                   {/* Desktop/Tablet Grid */}
                   <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-8">
                      {groupDeparturePackages.map((pkg) => (
-                        <div key={pkg.id} className="h-[520px]">
+                        <div key={pkg.id} className="h-[550px]">
                            <GroupPackageCard item={pkg} />
                         </div>
                      ))}

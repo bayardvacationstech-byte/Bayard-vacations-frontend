@@ -19,6 +19,7 @@ export default function BadgeSection({ item }) {
     CURATED: "bg-gradient-to-r from-red-500/90 to-rose-500/90",
     VALUE: "bg-gradient-to-r from-green-600/90 to-emerald-600/90",
     UNDERRATED: "bg-gradient-to-r from-purple-500/90 to-violet-500/90",
+    TAILORED: "bg-gradient-to-r from-amber-400/90 to-yellow-600/90",
   };
 
   const badges = [];
@@ -112,6 +113,41 @@ export default function BadgeSection({ item }) {
         <span className="drop-shadow-sm">Underrated</span>
       </div>
     );
+  }
+
+  // 8. TAILORED TAGS - Gold Glass Badges
+  if (item.tailored_tag) {
+    const Sparkles = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-6.857 2.286L12 21l-2.286-6.857L3 12l6.857-2.286L12 3z" />
+      </svg>
+    );
+
+    const formatLabel = (tag) => {
+      if (typeof tag !== "string") return "";
+      return tag
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    };
+
+    const tagsArray = Array.isArray(item.tailored_tag) 
+      ? item.tailored_tag 
+      : (typeof item.tailored_tag === "string" && item.tailored_tag ? [item.tailored_tag] : []);
+
+    tagsArray.forEach((tag, idx) => {
+      if (typeof tag === "string" && tag) {
+        badges.push(
+          <div
+            key={`tailored-${tag}-${idx}`}
+            className={`${baseStyle} ${BADGE_STYLES.TAILORED}`}
+          >
+            <Sparkles className="size-3.5 drop-shadow-sm" />
+            <span className="drop-shadow-sm">{formatLabel(tag)}</span>
+          </div>
+        );
+      }
+    });
   }
 
   if (badges.length === 0) return null;

@@ -120,6 +120,10 @@ module.exports = {
             "background-position": "right center",
           },
         },
+        "bounce-subtle": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down .4s ease-out",
@@ -131,6 +135,7 @@ module.exports = {
         float: "float 6s ease-in-out infinite",
         "pulse-slow": "pulse-slow 4s ease-in-out infinite",
         "gradient-x": "gradient-x 15s ease infinite",
+        "bounce-subtle": "bounce-subtle 3s ease-in-out infinite",
       },
       fontFamily: {
         outfit: ["var(--font-outfit)"],
@@ -139,6 +144,10 @@ module.exports = {
         damion: ["var(--font-damion)"],
         klausen: ["Klausen", "sans-serif"],
         "great-vibes": ["var(--font-great-vibes)"],
+        playfair: ["var(--font-playfair)"],
+        montserrat: ["var(--font-montserrat)"],
+        "space-grotesk": ["var(--font-space-grotesk)"],
+        crimson: ["var(--font-crimson)"],
       },
     },
   },

@@ -8,32 +8,61 @@ import { Heart, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Play, Inf
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import PackageCard from "@/components/ui/PackageCard";
+import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
 import { usePackagesByTheme } from "@/hooks/packages";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+import { getPaginationPages } from "@/utils/paginationUtils";
+import { useRef } from "react";
+import ThemeLoader from "@/components/ui/ThemeLoader";
 
 // Floating Hearts Background Component
 const FloatingHearts = () => {
+  const [hearts, setHearts] = useState([]);
+
+  useEffect(() => {
+    const newHearts = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      scale: Math.random() * 0.5 + 0.5,
+      rotateStart: Math.random() * 360,
+      rotateEnd: Math.random() * 360 + 360,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 20,
+    }));
+    setHearts(newHearts);
+  }, []);
+
+  if (hearts.length === 0) return null;
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-      {[...Array(15)].map((_, i) => (
+      {hearts.map((heart, i) => (
         <motion.div
-          key={i}
+          key={heart.id}
           initial={{ 
             opacity: 0, 
             y: "100%", 
-            x: `${Math.random() * 100}%`,
-            scale: Math.random() * 0.5 + 0.5,
-            rotate: Math.random() * 360
+            x: `${heart.x}%`,
+            scale: heart.scale,
+            rotate: heart.rotateStart
           }}
           animate={{ 
             opacity: [0, 0.4, 0], 
             y: "-20%",
-            rotate: Math.random() * 360 + 360
+            rotate: heart.rotateEnd
           }}
           transition={{ 
-            duration: Math.random() * 10 + 15, 
+            duration: heart.duration, 
             repeat: Infinity,
-            delay: Math.random() * 20,
+            delay: heart.delay,
             ease: "linear"
           }}
           className="absolute"
@@ -55,10 +84,18 @@ const FloatingHearts = () => {
 export default function RomanticGetawaysClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const packagesRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleTabChange = (tab) => {
+    setSelectedTab(tab);
+    setCurrentPage(1);
+  };
 
   const { 
     packages: allThemePackages, 
@@ -84,25 +121,35 @@ export default function RomanticGetawaysClient() {
     };
   }, [allThemePackages]);
   const currentPackages = romanticPackages[selectedTab] || [];
-
-  if (!mounted) return null;
+  const totalPages = Math.ceil(currentPackages.length / itemsPerPage);
+  
+  const paginatedPackages = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return currentPackages.slice(start, start + itemsPerPage);
+  }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-[#FFF9FA]">
-      {/* Immersive Hero Section */}
-      <div className="relative h-[85vh] md:h-[95vh] overflow-hidden flex items-center">
-        {/* Ken Burns Effect Background */}
+    <div className="min-h-screen bg-rose-50">
+      <AnimatePresence>
+        {isLoading && (
+          <ThemeLoader theme="romantic" fullScreen className="bg-rose-50" />
+        )}
+      </AnimatePresence>
+      
+      {/* Hero Section */}
+      <div className="relative min-h-[90vh] md:h-[80vh] overflow-hidden bg-rose-950 flex items-center">
+        {/* Ken Burns Animation */}
         <motion.div 
-          initial={{ scale: 1.1 }}
+          initial={{ scale: 1.15 }}
           animate={{ scale: 1 }}
-          transition={{ duration: 20, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
+          transition={{ duration: 35, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
           className="absolute inset-0"
         >
           <Image
             src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=1920&q=80"
             alt="Romantic background"
             fill
-            className="object-cover"
+            className="object-cover opacity-60"
             priority
           />
         </motion.div>
@@ -113,7 +160,7 @@ export default function RomanticGetawaysClient() {
         
         <FloatingHearts />
 
-        <Container className="relative z-20 pt-32 pb-12 md:pt-48">
+        <Container className="relative z-20 pt-24 pb-12 md:pt-32">
           <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -133,7 +180,7 @@ export default function RomanticGetawaysClient() {
                 <p className="text-rose-500 font-great-vibes text-4xl md:text-6xl tracking-wide ml-1 drop-shadow-sm">
                   Handpicked
                 </p>
-                <h1 className="text-5xl sm:text-7xl md:text-9xl font-black text-white leading-[1] md:leading-[0.9] tracking-tight drop-shadow-2xl">
+                 <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-white leading-tight md:leading-[0.9] tracking-tight drop-shadow-2xl">
                   Romantic<br />
                   <span className="text-[#FF3366]">Getaways</span>
                 </h1>
@@ -193,19 +240,22 @@ export default function RomanticGetawaysClient() {
       </div>
 
       {/* Intro Section */}
-      <section className="py-20 md:py-32 relative overflow-hidden bg-white">
+      <section className="py-8 md:py-10 relative overflow-hidden bg-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-rose-50 rounded-full blur-[120px] -mr-48 -mt-48" />
         <Container className="relative">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 border border-rose-100"
-            >
-              <Sparkles className="w-4 h-4 text-rose-400" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-rose-500">Curated Experiences</span>
-            </motion.div>
+          <div className="max-w-4xl mx-auto text-center space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  className="space-y-8"
+                >
+                   <Heart className="w-16 h-16 text-rose-500 fill-rose-500 mx-auto" />
+                   <h2 className="text-4xl sm:text-6xl md:text-9xl font-black text-rose-950 tracking-tighter leading-tight md:leading-none italic">
+                      Start Your <br />
+                      <span className="text-[#FF3366] not-italic font-light block mt-4">Love Story</span>
+                   </h2>
+                </motion.div>
             <h2 className="text-4xl md:text-7xl font-serif text-slate-900 tracking-tight leading-tight">
               Where <span className="text-rose-500 italic">Love</span> Meets the World’s Grandeur
             </h2>
@@ -217,13 +267,13 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Packages Section */}
-      <section className="pb-24">
+      <section className="pb-8">
         <Container>
           {/* Tab Switcher */}
-          <div className="flex justify-center mb-16 px-4">
+          <div className="flex justify-center mb-8 px-4">
             <div className="inline-flex bg-slate-100/80 backdrop-blur-sm rounded-[2rem] p-2 shadow-inner border border-slate-200/50">
               <button
-                onClick={() => setSelectedTab("international")}
+                onClick={() => handleTabChange("international")}
                 className={cn(
                   "px-10 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
                   selectedTab === "international"
@@ -234,7 +284,7 @@ export default function RomanticGetawaysClient() {
                 Global Destinations
               </button>
               <button
-                onClick={() => setSelectedTab("domestic")}
+                onClick={() => handleTabChange("domestic")}
                 className={cn(
                   "px-10 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
                   selectedTab === "domestic"
@@ -248,42 +298,85 @@ export default function RomanticGetawaysClient() {
           </div>
 
           {/* Packages Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref={packagesRef}>
             {isLoading ? (
-              // Loading State - Show skeleton cards
-              [...Array(4)].map((_, i) => (
-                <div key={i} className="rounded-[2.5rem] border border-rose-100 bg-white p-8 animate-pulse flex flex-col h-full shadow-lg">
-                  <div className="h-[240px] bg-rose-50/50 rounded-[1.5rem] mb-6"></div>
-                  <div className="space-y-3">
-                    <div className="h-8 bg-rose-50/50 rounded-lg w-3/4"></div>
-                    <div className="h-4 bg-rose-50/50 rounded-lg w-1/2"></div>
-                  </div>
-                  <div className="mt-auto pt-6 border-t border-rose-50/30 flex justify-between items-end">
-                    <div className="space-y-2">
-                      <div className="h-3 bg-rose-50/50 rounded w-16"></div>
-                      <div className="h-8 bg-rose-50/50 rounded w-24"></div>
-                    </div>
-                    <div className="w-12 h-12 bg-rose-50/50 rounded-2xl"></div>
-                  </div>
-                </div>
-              ))
+              <ThemeLoader theme="romantic" />
             ) : (
               <AnimatePresence mode="wait">
-                {currentPackages.map((pkg, index) => (
-                  <PackageCard 
+                {paginatedPackages.map((pkg, index) => (
+                  <ThemedPackageCard 
                     key={`${selectedTab}-${pkg.id}`} 
-                    variant="rose"
+                    theme="romantic"
                     item={pkg} 
                   />
                 ))}
               </AnimatePresence>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex justify-center">
+              <Pagination>
+                <PaginationContent className="gap-2">
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className={cn(
+                        "cursor-pointer rounded-xl h-10 w-10 border-rose-100 text-rose-600 hover:bg-rose-600 hover:text-white transition-all",
+                        currentPage === 1 && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                  
+                  {getPaginationPages(currentPage, totalPages).map((page, i) => (
+                    <PaginationItem key={i} className="hidden sm:block">
+                      {page === "..." ? (
+                        <PaginationEllipsis className="text-rose-400" />
+                      ) : (
+                        <PaginationLink
+                          className={cn(
+                            "cursor-pointer rounded-xl h-10 w-10 font-bold transition-all border-rose-100",
+                            currentPage === page 
+                              ? "bg-rose-600 text-white shadow-lg border-transparent" 
+                              : "text-rose-600 hover:bg-rose-50"
+                          )}
+                          onClick={() => {
+                            setCurrentPage(page);
+                            packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      className={cn(
+                        "cursor-pointer rounded-xl h-10 w-10 border-rose-100 text-rose-600 hover:bg-rose-600 hover:text-white transition-all",
+                        currentPage === totalPages && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </Container>
       </section>
 
       {/* Why Choose Section - Redesigned */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
+      <section className="relative py-8 md:py-12 overflow-hidden">
         <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-30 pointer-events-none" />
         
@@ -292,7 +385,7 @@ export default function RomanticGetawaysClient() {
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-900/20 rounded-full blur-[150px] -ml-64 -mb-64 animate-floatSlow" />
 
         <Container className="relative">
-          <div className="flex flex-col lg:flex-row items-center gap-20">
+          <div className="flex flex-col lg:flex-row items-center gap-10">
             <div className="flex-1 space-y-10">
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-full">
@@ -360,32 +453,32 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Final Premium CTA */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-8 bg-white relative overflow-hidden">
         <Container className="text-center">
-          <div className="max-w-3xl mx-auto space-y-10">
-            <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter leading-tight">
-              Ready to Write Your Next<br />
-              <span className="text-rose-500">Chapter Together?</span>
-            </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-black text-lg uppercase tracking-widest transition-all">
-                Talk to a Specialist
-              </Button>
-              <div className="flex -space-x-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-12 h-12 rounded-full border-4 border-white overflow-hidden bg-slate-100">
-                    <Image src={`https://i.pravatar.cc/150?u=${i + 130}`} alt="Agent" width={48} height={48} />
+            <div className="max-w-3xl mx-auto space-y-10">
+              <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter leading-tight">
+                Ready to Write Your Next<br />
+                <span className="text-rose-500">Chapter Together?</span>
+              </h2>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-black text-lg uppercase tracking-widest transition-all">
+                  Talk to a Specialist
+                </Button>
+                <div className="flex -space-x-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="w-12 h-12 rounded-full border-4 border-white overflow-hidden bg-slate-100">
+                      <Image src={`https://i.pravatar.cc/150?u=${i + 130}`} alt="Agent" width={48} height={48} />
+                    </div>
+                  ))}
+                  <div className="w-12 h-12 rounded-full border-4 border-white bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-black">
+                    +12
                   </div>
-                ))}
-                <div className="w-12 h-12 rounded-full border-4 border-white bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-black">
-                  +12
                 </div>
               </div>
+              <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Join 500+ couples who celebrated with us last month</p>
             </div>
-            <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Join 500+ couples who celebrated with us last month</p>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
     </div>
   );
 }

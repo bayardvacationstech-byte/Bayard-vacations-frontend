@@ -9,39 +9,68 @@ import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePackagesByTheme } from "@/hooks/packages";
-import PackageCard from "@/components/ui/PackageCard";
+import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+import { getPaginationPages } from "@/utils/paginationUtils";
+import { useRef } from "react";
+import ThemeLoader from "@/components/ui/ThemeLoader";
 
-// Floating Explorer Elements Background Component
+// Floating Explorer Elements (Maps, Compasses)
 const FloatingExplorerElements = () => {
+  const [elements, setElements] = useState([]);
+
+  useEffect(() => {
+    const newElements = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      scale: Math.random() * 0.5 + 0.5,
+      rotateStart: Math.random() * 360,
+      rotateEnd: Math.random() * 360 + 360,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 20,
+    }));
+    setElements(newElements);
+  }, []);
+
+  if (elements.length === 0) return null;
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-      {[...Array(12)].map((_, i) => (
+      {elements.map((el, i) => (
         <motion.div
-          key={i}
+          key={el.id}
           initial={{ 
             opacity: 0, 
-            y: "110%", 
-            x: `${Math.random() * 100}%`,
-            scale: Math.random() * 0.4 + 0.4,
-            rotate: Math.random() * 360
+            y: "100%", 
+            x: `${el.x}%`,
+            scale: el.scale,
+            rotate: el.rotateStart
           }}
           animate={{ 
             opacity: [0, 0.3, 0], 
-            y: "-10%",
-            rotate: Math.random() * 360 + 180
+            y: "-20%",
+            rotate: el.rotateEnd
           }}
           transition={{ 
-            duration: Math.random() * 15 + 20, 
+            duration: el.duration, 
             repeat: Infinity,
-            delay: Math.random() * 15,
+            delay: el.delay,
             ease: "linear"
           }}
           className="absolute"
         >
           {i % 2 === 0 ? (
-            <Mountain className="w-10 h-10 text-teal-200" />
+            <MapPin className="w-8 h-8 text-teal-200/20 fill-teal-200/20" />
           ) : (
-            <Compass className="w-10 h-10 text-cyan-200" />
+            <Compass className="w-10 h-10 text-cyan-200/20" />
           )}
         </motion.div>
       ))}
@@ -52,6 +81,14 @@ const FloatingExplorerElements = () => {
 export default function SoloExpeditionClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const packagesRef = useRef(null);
+
+  const handleTabChange = (tab) => {
+    setSelectedTab(tab);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -82,13 +119,24 @@ export default function SoloExpeditionClient() {
   }, [allThemePackages]);
 
   const currentPackages = soloPackages[selectedTab] || [];
+  const totalPages = Math.ceil(currentPackages.length / itemsPerPage);
+  
+  const paginatedPackages = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return currentPackages.slice(start, start + itemsPerPage);
+  }, [currentPackages, currentPage, itemsPerPage]);
 
-  if (!mounted) return null;
+  // if (!mounted) return null; // Removed to prevent footer flash
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <AnimatePresence>
+        {isLoading && (
+          <ThemeLoader theme="solo" fullScreen className="bg-slate-50" />
+        )}
+      </AnimatePresence>
       {/* Immersive Adventure Hero */}
-      <div className="relative h-[85vh] md:h-[95vh] overflow-hidden flex items-center bg-slate-900">
+      <div className="relative min-h-[90vh] md:h-[95vh] overflow-hidden flex items-center bg-slate-900">
         {/* Ken Burns Animation */}
         <motion.div 
           initial={{ scale: 1.1, x: "-2%" }}
@@ -114,12 +162,12 @@ export default function SoloExpeditionClient() {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/40 to-transparent z-10" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/20 z-10" />
         
-        <FloatingExplorerElements />
+        {mounted && <FloatingExplorerElements />}
 
-        <Container className="relative z-20 pt-32 md:pt-40">
+        <Container className="relative z-20 pt-24 md:pt-40">
           <div className="max-w-4xl space-y-6 md:space-y-10">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-6 md:space-y-8"
@@ -136,13 +184,13 @@ export default function SoloExpeditionClient() {
                   <span className="h-[2px] w-8 md:w-12 bg-amber-500/50" />
                   LAT: 64.1265° N | LON: 21.8174° W
                 </div>
-                <h1 className="text-4xl sm:text-7xl md:text-[10rem] font-black text-white leading-[0.85] tracking-tighter uppercase italic">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[10rem] font-black text-white leading-tight md:leading-[0.85] tracking-tighter uppercase italic">
                   Solo<br />
                   <span className="text-teal-400 not-italic">Expedition</span>
                 </h1>
               </div>
 
-              <p className="text-base md:text-2xl text-slate-300 font-medium leading-relaxed max-w-2xl border-l-4 border-teal-500 pl-4 md:pl-6 py-1 md:py-2">
+              <p className="text-sm md:text-xl text-slate-300 font-medium leading-relaxed max-w-2xl border-l-4 border-teal-500 pl-4 md:pl-6 py-1 md:py-2">
                 The ultimate test of freedom. No compromises. No waiting. Just you, the open road, and the thrill of absolute independence.
               </p>
 
@@ -180,12 +228,12 @@ export default function SoloExpeditionClient() {
       </div>
 
       {/* Solo Manifesto Section */}
-      <section className="py-24 md:py-40 relative bg-slate-900 overflow-hidden border-y border-white/5">
+      <section className="py-8 md:py-12 relative bg-slate-900 overflow-hidden border-y border-white/5">
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
-           <span className="text-[25vw] font-black tracking-tighter leading-none">FREEDOM</span>
+           <span className="text-[20vw] lg:text-[25vw] font-black tracking-tighter leading-none">FREEDOM</span>
         </div>
         <Container className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -214,7 +262,7 @@ export default function SoloExpeditionClient() {
                   <Zap className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-widest">The Solo Manifesto</span>
                 </div>
-                <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none uppercase">
+                <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight md:leading-none uppercase">
                   Travel <br />
                   <span className="text-teal-500 underline decoration-8 underline-offset-[12px]">Unfiltered.</span>
                 </h2>
@@ -238,12 +286,12 @@ export default function SoloExpeditionClient() {
       </section>
 
       {/* Packages Exploration */}
-      <section className="py-24 bg-white">
+      <section className="py-6 md:py-8 bg-white">
         <Container>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div className="space-y-4">
               <div className="w-12 h-1 bg-teal-600" />
-              <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter uppercase leading-none">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-slate-950 tracking-tighter uppercase leading-tight md:leading-none">
                 Elite <br />
                 Assignements
               </h2>
@@ -251,7 +299,7 @@ export default function SoloExpeditionClient() {
             
             <div className="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200">
               <button
-                onClick={() => setSelectedTab("international")}
+                onClick={() => handleTabChange("international")}
                 className={cn(
                   "px-8 py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all duration-300",
                   selectedTab === "international"
@@ -262,7 +310,7 @@ export default function SoloExpeditionClient() {
                 Overseas
               </button>
               <button
-                onClick={() => setSelectedTab("domestic")}
+                onClick={() => handleTabChange("domestic")}
                 className={cn(
                   "px-8 py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all duration-300",
                   selectedTab === "domestic"
@@ -275,46 +323,91 @@ export default function SoloExpeditionClient() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref={packagesRef}>
             {isLoading ? (
-              [...Array(4)].map((_, i) => (
-                <div key={i} className="rounded-[2rem] border border-slate-200 bg-white p-8 animate-pulse flex flex-col h-full shadow-lg">
-                  <div className="h-[240px] bg-slate-100 rounded-[1.5rem] mb-6"></div>
-                  <div className="space-y-3">
-                    <div className="h-8 bg-slate-100 rounded-lg w-3/4"></div>
-                    <div className="h-4 bg-slate-100 rounded-lg w-1/2"></div>
-                  </div>
-                  <div className="mt-auto pt-6 border-t border-slate-100 flex justify-between items-end">
-                    <div className="space-y-2">
-                       <div className="h-3 bg-slate-100 rounded w-16"></div>
-                       <div className="h-8 bg-slate-100 rounded w-24"></div>
-                    </div>
-                    <div className="w-12 h-12 bg-slate-100 rounded-2xl"></div>
-                  </div>
-                </div>
-              ))
+              <ThemeLoader theme="solo" />
             ) : (
-              <AnimatePresence mode="wait">
-                {currentPackages.map((pkg, index) => (
-                  <PackageCard 
+            <AnimatePresence mode="wait">
+                {paginatedPackages.map((pkg, index) => (
+                  <ThemedPackageCard 
                     key={`${selectedTab}-${pkg.id}`} 
+                    theme="solo"
                     item={pkg}
                   />
                 ))}
               </AnimatePresence>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex justify-center py-6">
+              <Pagination>
+                <PaginationContent className="gap-2">
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className={cn(
+                        "cursor-pointer rounded-xl h-12 w-12 bg-slate-900 text-white hover:bg-teal-600 transition-all shadow-xl",
+                        currentPage === 1 && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                  
+                  {getPaginationPages(currentPage, totalPages).map((page, i) => (
+                    <PaginationItem key={i} className="hidden sm:block">
+                      {page === "..." ? (
+                        <PaginationEllipsis className="text-teal-400" />
+                      ) : (
+                        <PaginationLink
+                          className={cn(
+                            "cursor-pointer rounded-xl h-12 w-12 bg-white font-black transition-all border-slate-200 shadow-lg",
+                            currentPage === page 
+                              ? "bg-teal-600 text-white border-transparent" 
+                              : "text-slate-900 hover:bg-teal-50"
+                          )}
+                          onClick={() => {
+                            setCurrentPage(page);
+                            packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      className={cn(
+                        "cursor-pointer rounded-xl h-12 w-12 bg-slate-900 text-white hover:bg-teal-600 transition-all shadow-xl",
+                        currentPage === totalPages && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </Container>
       </section>
 
       {/* Safety & Logistics Info */}
-      <section className="py-24 bg-slate-50 overflow-hidden relative">
+      <section className="py-6 md:py-8 bg-slate-50 overflow-hidden relative">
          <div className="absolute top-0 left-0 w-1/2 h-full bg-white hidden lg:block" />
          <Container className="relative">
             <div className="flex flex-col lg:flex-row items-stretch border border-slate-200 shadow-2xl rounded-[3rem] overflow-hidden bg-white">
                <div className="flex-1 p-10 md:p-20 space-y-12">
                   <div className="space-y-6">
-                    <h2 className="text-4xl md:text-5xl font-black text-slate-950 uppercase tracking-tighter leading-none">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 uppercase tracking-tighter leading-tight md:leading-none">
                        Solo But <br />
                        <span className="text-teal-600">Never Alone.</span>
                     </h2>
@@ -354,13 +447,13 @@ export default function SoloExpeditionClient() {
       </section>
 
       {/* Final Tactical CTA */}
-      <section className="py-32 bg-slate-900 relative">
+      <section className="py-10 md:py-12 bg-slate-900 relative">
          <Container className="text-center">
             <div className="max-w-3xl mx-auto space-y-12">
                <div className="inline-block p-4 border border-teal-500/30 rounded-full animate-pulse">
                   <Globe className="w-8 h-8 text-teal-400" />
                </div>
-               <h2 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-none uppercase">
+               <h2 className="text-4xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter leading-tight md:leading-none uppercase">
                   Ready to <br />
                   <span className="text-teal-500 italic">Disappear?</span>
                </h2>

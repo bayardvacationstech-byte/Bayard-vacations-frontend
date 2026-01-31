@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "./globals.css";
-import { Outfit, Damion, Playfair_Display, Great_Vibes } from "next/font/google";
+import { Outfit, Damion, Playfair_Display, Great_Vibes, Montserrat, Space_Grotesk, Crimson_Text } from "next/font/google";
 import localFont from "next/font/local";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster as RadixToaster } from "@/components/ui/toaster";
@@ -76,6 +76,23 @@ const greatVibes = Great_Vibes({
   variable: "--font-great-vibes",
 });
 
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-montserrat",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+});
+
+const crimsonText = Crimson_Text({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-crimson",
+});
+
 export const metadata = {
   title: {
     default: "Bayard Vacations | Customized Travel Packages for Every Explorer",
@@ -131,7 +148,7 @@ export default async function RootLayout({ children }) {
       </head>
       <Metrics />
       <body
-        className={`${outfit.variable} ${nord.variable} ${damion.variable} ${playfair.variable} ${greatVibes.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${nord.variable} ${damion.variable} ${playfair.variable} ${greatVibes.variable} ${montserrat.variable} ${spaceGrotesk.variable} ${crimsonText.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ClientProviders>

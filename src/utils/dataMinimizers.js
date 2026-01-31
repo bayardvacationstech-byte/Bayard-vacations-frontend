@@ -24,6 +24,7 @@ export const minimizePackageData = (pkg) => {
     imageRefs: pkg.imageRefs || [],
     cardImageRef: pkg.cardImageRef || null,
     packageTags: pkg.packageTags || [],
+    tailored_tag: pkg.tailored_tag || "",
     highlights: (pkg.highlights || []).slice(0, 5),
     domestic: !!pkg.domestic,
     location: pkg.location || "",

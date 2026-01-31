@@ -43,11 +43,11 @@ const GroupDepartureSlider = ({ groupDeparturePackages }) => {
           1024: { slidesPerView: 3, spaceBetween: 32 },
           1280: { slidesPerView: 4, spaceBetween: 32 },
         }}
-        className="pb-6 md:pb-16 h-[440px] md:h-[540px]"
+        className="pb-6 md:pb-16 h-[520px] md:h-[600px]"
       >
         {groupDeparturePackages.map((item, idx) => (
           <SwiperSlide key={item.id || idx} className="h-full">
-             <div className="h-[400px] md:h-[480px] w-full px-1">
+             <div className="h-[500px] md:h-[550px] w-full px-1">
                 <GroupPackageCard item={item} />
              </div>
           </SwiperSlide>
