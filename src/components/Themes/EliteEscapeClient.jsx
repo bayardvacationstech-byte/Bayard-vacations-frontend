@@ -1,10 +1,27 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crown, Diamond, Martini, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Award, Gem } from "lucide-react";
+import { 
+  Crown, 
+  Diamond, 
+  MapPin, 
+  Star, 
+  Sparkles, 
+  ChevronRight, 
+  Award, 
+  Gem,
+  ArrowRight,
+  ConciergeBell,
+  Plane,
+  ShieldCheck,
+  PlayCircle,
+  Search,
+  User,
+  Clock
+} from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
@@ -19,9 +36,9 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
-import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+
 export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [selectionType, setSelectionType] = useState("International");
@@ -40,7 +57,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
     error 
   } = usePackagesByTheme("elite-escape");
 
-  // Deduplicate and merge with initial packages for hydration if needed
   const elitePackages = useMemo(() => {
     const pkgSource = allThemePackages?.length > 0 ? allThemePackages : initialPackages;
     
@@ -53,12 +69,10 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
     return Array.from(uniqueMap.values());
   }, [allThemePackages, initialPackages]);
 
-  // Get regions that actually have Elite Escape packages
   const availableRegions = useMemo(() => 
     Array.from(new Set(elitePackages.map(pkg => pkg.region))).sort()
   , [elitePackages]);
 
-  // Categorize available regions
   const domesticRegions = useMemo(() => availableRegions.filter(regionName => {
     const regionData = initialRegions.find(r => r.name === regionName || r.slug === regionName.toLowerCase().replace(/\s+/g, '-'));
     return regionData?.isDomestic;
@@ -71,14 +85,10 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
   const displayRegions = selectionType === "Domestic" ? domesticRegions : internationalRegions;
 
-  // Filter packages based on selected region and type
   const filteredPackages = useMemo(() => elitePackages.filter(pkg => {
     const isLevelMatch = selectedRegion === "All" || pkg.region === selectedRegion;
-    
-    // Determine if package is domestic/international
     const regionData = initialRegions.find(r => r.name === pkg.region || r.slug === pkg.region.toLowerCase().replace(/\s+/g, '-'));
     const isTypeMatch = selectionType === "Domestic" ? regionData?.isDomestic : !regionData?.isDomestic;
-    
     return isLevelMatch && isTypeMatch;
   }), [elitePackages, selectedRegion, selectionType, initialRegions]);
 
@@ -90,331 +100,207 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
   }, [filteredPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-amber-500 selection:text-black">
       <AnimatePresence>
         {isLoading && (
-          <ThemeLoader theme="elite" fullScreen className="bg-slate-900" />
+          <ThemeLoader theme="elite" fullScreen className="bg-[#0a0a0a]" />
         )}
       </AnimatePresence>
+
       {/* Hero Section */}
-      {/* Hero Section */}
-      <div className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#0A0C10] py-16 md:py-20">
-        {/* Animated Background Gradients */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-amber-500/10 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
+        {/* Background Image with Parallax Effect */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=100" 
+            alt="Luxury Resort" 
+            fill
+            className="object-cover scale-110 opacity-60 transition-transform duration-1000"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/50 via-[#0a0a0a]/20 to-[#0a0a0a]"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/80 via-transparent to-[#0a0a0a]/80"></div>
         </div>
 
-        {/* Luxury Texture Overlay */}
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 5 L55 35 L85 40 L55 45 L50 75 L45 45 L15 40 L45 35 Z' fill='none' stroke='%23d97706' stroke-width='0.5'/%3E%3C/svg%3E")`,
-          backgroundSize: '80px 80px'
-        }} />
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center pt-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-8"
+          >
+            <span className="inline-block px-4 py-2 text-[10px] uppercase text-amber-500 tracking-[0.3em] font-bold border border-amber-500/20 bg-amber-500/5 rounded-full">
+              Private Collection
+            </span>
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-7xl md:text-9xl lg:text-[10rem] font-serif font-light leading-none mb-10"
+          >
+            <span className="block text-white">Elite</span>
+            <span className="block text-gold-gradient italic -mt-4 md:-mt-8">Escape</span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-16"
+          >
+            Beyond the ordinary. A curated selection of the world's most exclusive destinations, 
+            reserved for the discerning few.
+          </motion.p>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col md:flex-row gap-8 justify-center items-center"
+          >
+            <button className="group px-12 py-5 bg-transparent border border-amber-500/30 text-amber-500 text-xs uppercase tracking-[0.4em] font-black hover:bg-amber-500 hover:text-black transition-all duration-500 flex items-center gap-4">
+              <span>Explore Collection</span>
+              <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="text-xs uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors flex items-center gap-3 group">
+              <PlayCircle className="w-8 h-8 group-hover:scale-110 transition-transform text-amber-500/80" />
+              <span>View Film</span>
+            </button>
+          </motion.div>
+        </div>
 
-        <Container className="relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-12 xl:col-span-5 space-y-8 text-center xl:text-left"
-            >
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-amber-500/20 to-transparent backdrop-blur-xl rounded-full border border-amber-500/30"
-              >
-                <div className="relative">
-                  <Crown className="w-4 h-4 text-amber-500" />
-                  <motion.div 
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute inset-0 bg-amber-500 rounded-full blur-md"
-                  />
-                </div>
-                <span className="text-xs font-black text-amber-500 uppercase tracking-[0.3em]">
-                  The Pinnacle of Discovery
-                </span>
-              </motion.div>
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 text-gray-500">
+          <span className="text-[10px] uppercase tracking-[0.3em]">Scroll</span>
+          <div className="w-[1px] h-16 bg-gradient-to-b from-amber-500 to-transparent"></div>
+        </div>
 
-              <div className="space-y-4">
-                <h1 className="text-3xl sm:text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
-                  Elite<br />
-                  <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-200 bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer">
-                    Escape
-                  </span>
-                </h1>
-                <p className="text-base md:text-xl text-slate-400 font-medium leading-relaxed max-w-xl mx-auto xl:mx-0">
-                  Curated for the connoisseur of fine travel. Immerse yourself in a world where luxury knows no bounds and every detail is a masterpiece.
-                </p>
-              </div>
+        {/* Decorative Lines */}
+        <div className="absolute top-0 left-12 w-[1px] h-32 bg-gradient-to-b from-amber-500/30 to-transparent hidden md:block"></div>
+        <div className="absolute top-0 right-12 w-[1px] h-32 bg-gradient-to-b from-amber-500/30 to-transparent hidden md:block"></div>
+      </section>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center xl:justify-start">
-                <Button size="xl" className="h-16 px-10 bg-amber-500 text-slate-950 hover:bg-amber-400 rounded-2xl font-black text-lg shadow-[0_0_30px_-5px_rgba(245,158,11,0.5)] group transition-all duration-300">
-                  <span className="flex items-center gap-2">
-                    Explore Luxury
-                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </Button>
-                <Button size="xl" variant="outline" className="h-16 px-10 border-amber-500/30 text-white hover:bg-amber-500/10 rounded-2xl font-black text-lg backdrop-blur-sm border-2">
-                  VIP Concierge
-                </Button>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-8 flex flex-wrap items-center justify-center xl:justify-start gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-                <div className="flex flex-col">
-                  <span className="text-xl md:text-2xl font-black text-white">500+</span>
-                  <span className="text-[10px] uppercase tracking-widest text-amber-500">Luxury Resorts</span>
-                </div>
-                <div className="w-px h-8 bg-slate-800" />
-                <div className="flex flex-col">
-                  <span className="text-2xl font-black text-white">24/7</span>
-                  <span className="text-[10px] uppercase tracking-widest text-amber-500">Personal Butler</span>
-                </div>
-                <div className="w-px h-8 bg-slate-800" />
-                <div className="flex flex-col">
-                  <span className="text-xl md:text-2xl font-black text-white">Top 1%</span>
-                  <span className="text-[10px] uppercase tracking-widest text-amber-500">Global Service</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Multi-Image Grid */}
-            <div className="lg:col-span-12 xl:col-span-7 relative h-[500px] md:h-[600px] flex items-center justify-center">
-              {/* Main Image Container */}
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                className="relative w-[70%] h-[60%] rounded-[3rem] overflow-hidden shadow-2xl z-20 border-4 border-slate-900"
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2000&auto=format&fit=crop"
-                  alt="Ultra luxury suite"
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-1000"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="flex items-center gap-3 bg-white/10 backdrop-blur-2xl p-3 rounded-2xl border border-white/20">
-                    <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shrink-0">
-                      <Diamond className="w-6 h-6 text-black" />
-                    </div>
-                    <div>
-                      <h4 className="font-black text-white text-sm">Royal Residences</h4>
-                      <p className="text-amber-400 text-[10px] font-bold uppercase tracking-tighter">Unmatched Sophistication</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Secondary Images - Top Left */}
-              <motion.div 
-                initial={{ opacity: 0, x: -40, y: -40 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 1.2, delay: 0.4 }}
-                className="absolute left-0 top-0 w-[48%] h-[42%] rounded-[2.5rem] overflow-hidden shadow-2xl z-10 border-4 border-slate-900 rotate-[-6deg]"
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1544124499-58912cbddaad?q=80&w=2000&auto=format&fit=crop"
-                  alt="Luxury Dining"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-
-              {/* Secondary Images - Bottom Right */}
-              <motion.div 
-                initial={{ opacity: 0, x: 40, y: 40 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 1.2, delay: 0.6 }}
-                className="absolute right-0 bottom-0 w-[48%] h-[42%] rounded-[2.5rem] overflow-hidden shadow-2xl z-30 border-4 border-slate-900 rotate-[6deg]"
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=2000&auto=format&fit=crop"
-                  alt="Infinity Pool"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-
-              {/* Decorative Element */}
-              <motion.div
-                animate={{ 
-                  rotate: [0, 360],
+      {/* Filter and Selection Section */}
+      <section className="py-24 bg-[#0a0a0a] border-b border-white/5" ref={packagesRef}>
+        <Container>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-10">
+            <div className="mb-8 md:mb-0">
+              <h2 className="text-4xl md:text-5xl font-serif text-white mb-4">Curated Destinations</h2>
+              <p className="text-gray-500 font-light tracking-wide uppercase text-xs">Hand-selected properties and experiences</p>
+            </div>
+            
+            <div className="flex gap-1.5 bg-white/5 p-1 rounded-sm border border-white/10">
+              <button
+                onClick={() => {
+                  setSelectionType("International");
+                  setSelectedRegion("All");
                 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute right-[-20px] top-[10%] w-32 h-32 border-2 border-dashed border-amber-500/20 rounded-full flex items-center justify-center opacity-50 hidden md:flex"
+                className={cn(
+                  "px-8 py-3 text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300",
+                  selectionType === "International" 
+                    ? "bg-white text-black shadow-lg" 
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                )}
               >
-                <div className="w-3 h-3 bg-amber-500 rounded-full blur-[2px]" />
-              </motion.div>
+                International
+              </button>
+              <button
+                onClick={() => {
+                  setSelectionType("Domestic");
+                  setSelectedRegion("All");
+                }}
+                className={cn(
+                  "px-8 py-3 text-xs uppercase tracking-[0.2em] font-bold transition-all duration-300",
+                  selectionType === "Domestic" 
+                    ? "bg-white text-black shadow-lg" 
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                )}
+              >
+                Domestic
+              </button>
             </div>
           </div>
-        </Container>
-      </div>
 
+          {/* Region Tabs (Secondary Filter) */}
+          <div className="flex overflow-x-auto scrollbar-hide gap-6 mb-16 pb-4 border-b border-white/5">
+            <button
+              onClick={() => setSelectedRegion("All")}
+              className={cn(
+                "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-black transition-all border-b-2",
+                selectedRegion === "All" 
+                  ? "text-amber-500 border-amber-500" 
+                  : "text-gray-500 border-transparent hover:text-white"
+              )}
+            >
+              All Regions
+            </button>
+            {displayRegions.map(region => (
+              <button
+                key={region}
+                onClick={() => setSelectedRegion(region)}
+                className={cn(
+                  "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-black transition-all border-b-2",
+                  selectedRegion === region 
+                    ? "text-amber-500 border-amber-500" 
+                    : "text-gray-500 border-transparent hover:text-white"
+                )}
+              >
+                {region.replace(/-/g, ' ')}
+              </button>
+            ))}
+          </div>
 
-
-      {/* Packages Section */}
-      <Container className="py-6 md:py-8">
-        {/* Region Filter Section */}
-        <div className="relative mb-8">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="bg-slate-950/40 backdrop-blur-3xl rounded-[3rem] p-8 md:p-12 border border-white/5 shadow-2xl relative overflow-hidden">
-              {/* Decorative background elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[80px] rounded-full" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 blur-[80px] rounded-full" />
-
-              <div className="relative z-10 flex flex-col items-center gap-10">
-                {/* Category Toggle (International / Domestic) */}
-                <div className="flex flex-col items-center gap-4">
-                  <span className="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px]">Destination Class</span>
-                  <div className="inline-flex p-2 bg-slate-900/80 rounded-[2.5rem] border border-white/5 relative shadow-inner">
-                    <button
-                      onClick={() => {
-                        setSelectionType("International");
-                        setSelectedRegion("All");
-                      }}
-                      className={`relative px-12 py-3.5 rounded-[2rem] text-sm font-black transition-all duration-500 z-10 ${
-                        selectionType === "International" ? "text-slate-950" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      {selectionType === "International" && (
-                        <motion.div 
-                          layoutId="categoryToggle"
-                          className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-600 rounded-[2rem] shadow-[0_10px_20px_rgba(245,158,11,0.2)]"
-                          transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
-                        />
-                      )}
-                      <span className="relative z-10">International</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectionType("Domestic");
-                        setSelectedRegion("All");
-                      }}
-                      className={`relative px-12 py-3.5 rounded-[2rem] text-sm font-black transition-all duration-500 z-10 ${
-                        selectionType === "Domestic" ? "text-slate-950" : "text-slate-400 hover:text-white"
-                      }`}
-                    >
-                      {selectionType === "Domestic" && (
-                        <motion.div 
-                          layoutId="categoryToggle"
-                          className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-600 rounded-[2rem] shadow-[0_10px_20px_rgba(245,158,11,0.2)]"
-                          transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
-                        />
-                      )}
-                      <span className="relative z-10">Domestic</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Regions Horizontal Scroll */}
-                <div className="w-full flex flex-col gap-8">
-                  <div className="flex items-center justify-center gap-4">
-                    <div className="h-px w-12 bg-gradient-to-r from-transparent to-amber-500/50" />
-                    <h3 className="text-white font-black text-xl md:text-2xl uppercase tracking-tighter text-center">
-                      Select <span className="text-amber-500">{selectionType}</span> Region
-                    </h3>
-                    <div className="h-px w-12 bg-gradient-to-l from-transparent to-amber-500/50" />
-                  </div>
-                  
-                  <div className="relative group max-w-5xl mx-auto w-full">
-                    {/* Scroll Container */}
-                    <div className="flex overflow-x-auto scrollbar-hide gap-5 pb-6 px-4 scroll-smooth mask-fade-edges">
-                      <button
-                        onClick={() => setSelectedRegion("All")}
-                        className={`group relative flex-shrink-0 px-10 py-5 rounded-[2rem] font-black transition-all duration-500 overflow-hidden min-w-[160px] ${
-                          selectedRegion === "All"
-                            ? "text-slate-950 scale-105 shadow-2xl"
-                            : "text-slate-400 bg-slate-900/40 border border-white/5 hover:border-amber-500/30 hover:text-white"
-                        }`}
-                      >
-                        {selectedRegion === "All" && (
-                          <motion.div 
-                            layoutId="activeFilter"
-                            className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-600 rounded-[2rem]"
-                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                          />
-                        )}
-                        <span className="relative z-10 uppercase text-[10px] tracking-[0.2em]">All Regions</span>
-                      </button>
-
-                      {displayRegions.map(region => (
-                        <button
-                          key={region}
-                          onClick={() => setSelectedRegion(region)}
-                          className={`group relative flex-shrink-0 px-10 py-5 rounded-[2rem] font-black transition-all duration-500 overflow-hidden min-w-[160px] ${
-                            selectedRegion === region
-                              ? "text-slate-950 scale-105 shadow-2xl"
-                              : "text-slate-400 bg-slate-900/40 border border-white/5 hover:border-amber-500/30 hover:text-white"
-                          }`}
-                        >
-                          {selectedRegion === region && (
-                            <motion.div 
-                              layoutId="activeFilter"
-                              className="absolute inset-0 bg-gradient-to-r from-amber-400 to-amber-600 rounded-[2rem]"
-                              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                          )}
-                          <span className="relative z-10 capitalize whitespace-nowrap text-[10px] tracking-[0.2em]">
-                            {region.replace(/-/g, ' ')}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Fades for scroll indication */}
-                    <div className="absolute left-0 top-0 bottom-6 w-20 bg-gradient-to-r from-slate-950/60 to-transparent pointer-events-none rounded-l-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute right-0 top-0 bottom-6 w-20 bg-gradient-to-l from-slate-950/60 to-transparent pointer-events-none rounded-r-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                </div>
+          {/* Package Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 min-h-[400px]">
+            {isLoading ? (
+              [1, 2, 3, 4].map(i => (
+                <div key={i} className="h-96 bg-white/5 border border-white/10 animate-pulse rounded-sm" />
+              ))
+            ) : paginatedPackages.length > 0 ? (
+              <AnimatePresence mode="popLayout">
+                {paginatedPackages.map((pkg, idx) => (
+                  <motion.div
+                    key={pkg.id}
+                    layout
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  >
+                    <ThemedPackageCard
+                      theme="elite"
+                      item={pkg}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            ) : (
+              <div className="col-span-full py-32 text-center text-gray-500 font-serif italic text-2xl">
+                The collection for this selection is currently being curated.
               </div>
-            </div>
+            )}
           </div>
-        </div>
 
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 md:mb-10" ref={packagesRef}>
-          {isLoading ? (
-            <ThemeLoader theme="elite" />
-          ) : paginatedPackages.length > 0 ? (
-            paginatedPackages.map((pkg) => (
-              <ThemedPackageCard
-                key={pkg.id}
-                theme="elite"
-                item={pkg}
-              />
-            ))
-          ) : (
-            <div className="col-span-full py-20 text-center text-slate-400">
-              No Elite Escapes available for this region at the moment.
-            </div>
-          )}
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-12 flex justify-center py-6">
-            <Pagination>
-              <PaginationContent className="gap-2">
-                <PaginationItem>
-                  <PaginationPrevious
-                    className={cn(
-                      "cursor-pointer rounded-xl h-12 w-12 bg-slate-800/50 border-amber-500/20 text-amber-500 hover:bg-amber-500 hover:text-white transition-all",
-                      currentPage === 1 && "pointer-events-none opacity-30"
-                    )}
-                    onClick={() => {
-                      setCurrentPage(currentPage - 1);
-                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }}
-                  />
-                </PaginationItem>
-                
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-20 flex justify-center">
+              <Pagination>
+                <PaginationContent className="gap-3">
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className={cn(
+                        "cursor-pointer rounded-none h-14 px-8 border-white/10 text-gray-400 hover:bg-white hover:text-black hover:border-white transition-all",
+                        currentPage === 1 && "pointer-events-none opacity-20"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                  
                   {getPaginationPages(currentPage, totalPages).map((page, i) => (
                     <PaginationItem key={i} className="hidden sm:block">
                       {page === "..." ? (
@@ -422,10 +308,10 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-xl h-12 w-12 bg-slate-800/50 font-bold transition-all border-amber-500/20",
+                            "cursor-pointer rounded-none h-14 w-14 font-black transition-all border-white/10",
                             currentPage === page 
-                              ? "bg-amber-500 text-white shadow-lg border-transparent" 
-                              : "text-amber-500 hover:bg-amber-500/10"
+                              ? "bg-white text-black border-white shadow-xl" 
+                              : "text-gray-400 hover:bg-white/5"
                           )}
                           onClick={() => {
                             setCurrentPage(page);
@@ -439,87 +325,109 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                     </PaginationItem>
                   ))}
 
-                <PaginationItem>
-                  <PaginationNext
-                    className={cn(
-                      "cursor-pointer rounded-xl h-12 w-12 bg-slate-800/50 border-amber-500/20 text-amber-500 hover:bg-amber-500 hover:text-white transition-all",
-                      currentPage === totalPages && "pointer-events-none opacity-30"
-                    )}
-                    onClick={() => {
-                      setCurrentPage(currentPage + 1);
-                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        )}
-      </Container>
-
-      {/* Why Elite Travel Section */}
-      {/* Why Elite Travel Section */}
-      <div className="relative py-10 md:py-16 overflow-hidden">
-        {/* Background Accents */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
-
-        <Container>
-          <div className="flex flex-col lg:flex-row items-end justify-between gap-8 mb-10 text-center lg:text-left">
-            <div className="max-w-2xl">
-              <span className="text-amber-500 font-black uppercase tracking-[0.4em] text-sm mb-4 block">The Bayard Distinction</span>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white">
-                Why Choose <br />
-                <span className="text-amber-500">Elite Escapes?</span>
-              </h2>
+                  <PaginationItem>
+                    <PaginationNext
+                      className={cn(
+                        "cursor-pointer rounded-none h-14 px-8 border-white/10 text-gray-400 hover:bg-white hover:text-black hover:border-white transition-all",
+                        currentPage === totalPages && "pointer-events-none opacity-20"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
-            <p className="text-base md:text-xl text-slate-400 max-w-md">
-              Experience the pinnacle of luxury travel where every moment is meticulously crafted for excellence.
-            </p>
-          </div>
+          )}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { 
-                icon: Crown, 
-                title: "VIP Treatment", 
-                desc: "From private airport transfers to dedicated concierge service, every detail is handled with excellence.",
-                gradient: "from-amber-500 to-yellow-500"
-              },
-              { 
-                icon: Gem, 
-                title: "Exclusive Access", 
-                desc: "Private villas, Michelin-star dining, and experiences money can't typically buy—all arranged for you.",
-                gradient: "from-blue-500 to-indigo-500"
-              },
-              { 
-                icon: Sparkles, 
-                title: "Uncompromising Quality", 
-                desc: "5-star accommodations, premium amenities, and world-class service at every touchpoint.",
-                gradient: "from-purple-500 to-pink-500"
-              }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group relative p-10 bg-slate-900/40 rounded-[2.5rem] border border-white/5 hover:border-amber-500/30 transition-all duration-500"
-              >
-                <div className={`w-20 h-20 bg-gradient-to-br ${feature.gradient} rounded-3xl flex items-center justify-center mb-8 shadow-2xl group-hover:scale-110 transition-transform duration-500`}>
-                  <feature.icon className="w-10 h-10 text-slate-900" />
-                </div>
-                <h3 className="text-2xl font-black text-white mb-4 group-hover:text-amber-500 transition-colors">{feature.title}</h3>
-                <p className="text-slate-400 leading-relaxed text-lg">{feature.desc}</p>
-                
-                {/* Decorative border glow */}
-                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-amber-500/0 via-amber-500/0 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </motion.div>
-            ))}
+          <div className="mt-24 text-center">
+            <button className="px-16 py-5 border border-white/10 text-xs uppercase tracking-[0.4em] text-gray-400 font-black hover:text-white hover:border-amber-500/30 transition-all duration-500 group">
+              <span>View All Elite Properties</span>
+            </button>
           </div>
         </Container>
-      </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-32 bg-[#111111] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-full" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%)' }}></div>
+        </div>
+
+        <Container className="relative z-10">
+          <div className="grid md:grid-cols-3 gap-16 text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="group"
+            >
+              <div className="w-24 h-24 mx-auto mb-8 border border-amber-500/20 rounded-full flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all duration-700 shadow-[0_0_30px_rgba(212,175,55,0.05)]">
+                <ConciergeBell className="w-10 h-10" />
+              </div>
+              <h3 className="text-2xl font-serif text-white mb-6">24/7 Concierge</h3>
+              <p className="text-gray-500 font-light text-base leading-relaxed max-w-[280px] mx-auto">Dedicated lifestyle managers available around the clock to fulfill any request, anywhere.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="group"
+            >
+              <div className="w-24 h-24 mx-auto mb-8 border border-amber-500/20 rounded-full flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all duration-700 shadow-[0_0_30px_rgba(212,175,55,0.05)]">
+                <Plane className="w-10 h-10" />
+              </div>
+              <h3 className="text-2xl font-serif text-white mb-6">Private Aviation</h3>
+              <p className="text-gray-500 font-light text-base leading-relaxed max-w-[280px] mx-auto">Access to our fleet of private jets and helicopters ensuring absolute privacy and convenience.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="group"
+            >
+              <div className="w-24 h-24 mx-auto mb-8 border border-amber-500/20 rounded-full flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all duration-700 shadow-[0_0_30px_rgba(212,175,55,0.05)]">
+                <ShieldCheck className="w-10 h-10" />
+              </div>
+              <h3 className="text-2xl font-serif text-white mb-6">Discreet Security</h3>
+              <p className="text-gray-500 font-light text-base leading-relaxed max-w-[280px] mx-auto">Unobtrusive protection services and secure transportation for complete peace of mind.</p>
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="bg-[#0a0a0a] py-32 border-t border-white/5">
+        <Container>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+            <div className="text-center md:text-left">
+              <h2 className="text-4xl md:text-6xl font-serif text-white mb-4">Join the Elite</h2>
+              <p className="text-gray-500 font-light text-lg tracking-wide uppercase text-xs">Membership by invitation or application only</p>
+            </div>
+            <button className="px-12 py-5 bg-gold-gradient text-black text-xs uppercase tracking-[0.3em] font-black hover:shadow-[0_0_50px_rgba(212,175,55,0.4)] transition-all duration-500">
+              Request Membership
+            </button>
+          </div>
+        </Container>
+      </section>
+
+      <style jsx>{`
+        .text-gold-gradient {
+          background: linear-gradient(135deg, #f7e7ce 0%, #d4af37 50%, #b8941f 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .bg-gold-gradient {
+          background: linear-gradient(135deg, #f7e7ce 0%, #d4af37 50%, #b8941f 100%);
+        }
+      `}</style>
     </div>
   );
 }

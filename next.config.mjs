@@ -68,6 +68,16 @@ const nextConfig = {
         destination: "/categories/elite-escape",
         permanent: true,
       },
+      {
+        source: "/group-departure",
+        destination: "/themes/group-departure",
+        permanent: true,
+      },
+      {
+        source: "/themes/group-adventures",
+        destination: "/themes/group-departure",
+        permanent: true,
+      },
     ];
   },
 

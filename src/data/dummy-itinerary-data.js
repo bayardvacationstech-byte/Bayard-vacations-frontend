@@ -19,12 +19,20 @@ export const dummyItineraries = {
     },
     travelers: {
       adults: 2,
-      children: 0
+      children: 0,
+      toddlers: 0
     },
     pricing: {
-      basePrice: 89999,
-      taxes: 8999,
-      totalPrice: 98998,
+      hotelCategory: "4 STAR",
+      adultsRate: 159999,
+      childrenRate: 0,
+      toddlersRate: 0,
+      basePrice: 319998,
+      gstRate: 5,
+      gstAmount: 16000,
+      tcsRate: 5,
+      tcsAmount: 16000,
+      totalPrice: 351998,
       currency: "INR",
       perPerson: false
     },
@@ -566,12 +574,25 @@ Special Requests: Dietary requirements, special occasions, accessibility needs -
 
     contactInfo: {
       companyName: "Bayard Vacations",
-      phone: "+91 98765 43210",
-      whatsapp: "+91 98765 43210",
-      email: "support@bayardvacations.com",
+      phone: "+91 6363117421",
+      whatsapp: "+91 6363117421",
+      email: "info@bayardvacations.com",
       website: "www.bayardvacations.com",
-      emergencyContact: "+91 98765 43211",
-      operatingHours: "24/7 Support Available"
+      emergencyContact: "+91 6363117421",
+      operatingHours: "24/7 Support Available",
+      officeAddress: "144, 9th Main Rd, 4th Block, Kanteerava Nagar, Nandini Layout, Bengaluru, Karnataka 560096",
+      destinationExpert: {
+        name: "Gurudev M",
+        designation: "Destination Expert",
+        email: "gurudev@bayardvacations.com",
+        phone: "+91-7090672019"
+      },
+      bankDetails: {
+        accountName: "TRUE BAYARD VACATIONS PVT LTD",
+        accountNumber: "50200083335068",
+        ifscCode: "HDFC0000286",
+        accountType: "Current Account"
+      }
     }
   }
 };

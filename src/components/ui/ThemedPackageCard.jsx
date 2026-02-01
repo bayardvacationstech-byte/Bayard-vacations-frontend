@@ -15,7 +15,15 @@ import {
   Star,
   Users,
   Compass,
-  Info
+  Info,
+  Crown,
+  CheckCircle,
+  Tent,
+  Landmark,
+  Waves,
+  Mountain,
+  Smile,
+  University
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -52,14 +60,14 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       icon: <Users className="w-4 h-4 fill-emerald-600" />
     },
     family: {
-      card: "border-blue-100 hover:-translate-y-2 hover:shadow-blue-100/50 rounded-[30px_30px_30px_60px]",
-      title: "font-montserrat text-blue-700 font-extrabold",
-      featureDot: "bg-orange-400",
-      featureText: "text-blue-800 font-semibold",
-      price: "text-blue-700 font-bold",
-      cta: "bg-gradient-to-br from-blue-500 to-orange-500 rounded-full animate-bounce-subtle",
-      badge: "bg-blue-100 text-blue-700 rounded-xl",
-      icon: <Sparkles className="w-4 h-4 fill-blue-500" />
+      card: "border-orange-100 hover:rotate-1 hover:shadow-orange-200/40 rounded-[40px_15px_40px_15px] bg-gradient-to-br from-white to-orange-50/20 transition-all duration-500",
+      title: "font-sans text-slate-900 font-black tracking-tight",
+      featureDot: "bg-orange-500 ring-4 ring-orange-100",
+      featureText: "text-slate-700 font-medium",
+      price: "text-orange-600 font-black",
+      cta: "bg-gradient-to-br from-orange-500 to-pink-500 rounded-[15px_30px_15px_30px] shadow-lg shadow-orange-200/50",
+      badge: "bg-white/80 backdrop-blur-md text-orange-600 rounded-full border border-orange-100",
+      icon: <Smile className="w-4 h-4 fill-orange-500 text-white stroke-[3px]" />
     },
     solo: {
       card: "border-slate-200 hover:-translate-y-2 hover:shadow-slate-200/50 bg-gradient-to-b from-white to-slate-50",
@@ -72,14 +80,14 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       icon: <MapPin className="w-4 h-4 text-slate-500" />
     },
     elite: {
-      card: "border-amber-100 hover:-translate-y-2 hover:shadow-amber-100/50 bg-gradient-to-br from-white to-amber-50/30",
-      title: "font-playfair text-amber-900 font-normal tracking-wide",
-      featureDot: "bg-gradient-to-br from-amber-400 to-amber-600 shadow-amber-200",
-      featureText: "text-amber-800 font-medium",
-      price: "text-amber-700 font-playfair",
-      cta: "bg-gradient-to-br from-amber-400 to-amber-700 rounded-lg",
-      badge: "bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 text-amber-700",
-      icon: <Star className="w-4 h-4 fill-amber-500 stroke-amber-500" />
+      card: "bg-[#0a0a0a] border-white/5 hover:border-amber-500/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_30px_rgba(212,175,55,0.1)] transition-all duration-700 group overflow-hidden",
+      title: "font-serif text-white group-hover:text-amber-500 transition-colors tracking-tight",
+      featureDot: "bg-amber-500 rounded-none h-1 w-1",
+      featureText: "text-gray-400 font-light",
+      price: "text-amber-500 font-serif font-bold",
+      cta: "bg-amber-500 text-black hover:bg-white hover:text-black transition-all duration-500 rounded-none h-12 w-12 flex items-center justify-center p-0",
+      badge: "bg-amber-500/10 border border-amber-500/30 text-amber-500 font-bold tracking-[0.2em] px-4",
+      icon: <Crown className="w-4 h-4 text-amber-500" />
     },
     relax: {
       card: "border-green-100 hover:-translate-y-2 hover:shadow-green-100/50 bg-gradient-to-b from-white to-green-50/30",
@@ -101,6 +109,16 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       badge: "bg-yellow-100 text-orange-900 [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)] px-5",
       icon: <Compass className="w-4 h-4 text-orange-600" />
     },
+    exploration: {
+      card: "bg-white border-2 border-transparent hover:border-terra-500/20 hover:-translate-y-2 hover:rotate-1 hover:shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden",
+      title: "font-sans text-charcoal font-bold tracking-tight",
+      featureDot: "bg-sand-500 rounded-full h-1.5 w-1.5 shadow-[0_0_8px_rgba(233,196,106,0.6)]",
+      featureText: "text-gray-600 font-medium",
+      price: "text-terra-600 font-bold",
+      cta: "bg-charcoal text-white hover:bg-terra-500 transition-colors rounded-full h-12 w-12 flex items-center justify-center p-0",
+      badge: "bg-gradient-to-br from-terra-500 to-terra-600 text-white font-bold tracking-wider px-4 [clip-path:polygon(0_0,100%_0,100%_85%,50%_100%,0_85%)] py-2 pb-4",
+      icon: <Mountain className="w-4 h-4 text-white" />
+    },
     religious: {
       card: "border-amber-100 hover:-translate-y-2 hover:shadow-amber-100/50 bg-gradient-to-b from-white via-amber-50/50 to-amber-100/50",
       title: "font-crimson text-amber-900 font-normal tracking-tight",
@@ -112,14 +130,14 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       icon: <Info className="w-4 h-4 fill-amber-500" />
     },
     educational: {
-      card: "border-slate-200 hover:-translate-y-2 hover:shadow-slate-200/50 bg-white relative before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-[repeating-linear-gradient(45deg,#e53e3e,#e53e3e_10px,#ffffff_10px,#ffffff_20px,#3182ce_20px,#3182ce_30px,#ffffff_30px,#ffffff_40px)] before:opacity-30",
-      title: "font-crimson text-slate-800 font-bold",
-      featureDot: "bg-slate-600 rounded-none h-1.5 w-1.5",
-      featureText: "text-slate-700 font-crimson",
-      price: "text-slate-800 font-playfair font-bold",
-      cta: "bg-slate-800 rounded-md",
-      badge: "bg-purple-50 border border-purple-100 text-purple-700 font-crimson",
-      icon: <Info className="w-4 h-4 fill-purple-500" />
+      card: "border-indigo-900/10 hover:-translate-y-2 hover:shadow-indigo-950/10 bg-white rounded-sm architect-border transition-all duration-500",
+      title: "font-serif text-indigo-950 font-bold tracking-tight",
+      featureDot: "bg-amber-400 rounded-none h-1.5 w-1.5",
+      featureText: "text-slate-600 font-serif",
+      price: "text-indigo-900 font-serif font-bold",
+      cta: "bg-gradient-to-br from-indigo-950 to-indigo-800 rounded-sm shadow-indigo-900/10",
+      badge: "bg-amber-50 border border-amber-200 text-amber-700 font-bold tracking-widest px-3",
+      icon: <University className="w-4 h-4 text-amber-600" />
     }
   };
 

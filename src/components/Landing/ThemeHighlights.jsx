@@ -119,9 +119,6 @@ export default function ThemeHighlights({
       <Container>
         {/* Header */}
         <div className="mb-4 md:mb-8">
-          <div className="section-badge-light mb-4 md:mb-6">
-            Featured Collections
-          </div>
           <h2 className="section-title-light mb-2 md:mb-4">
             <span className="md:hidden">Curated Themes</span>
             <span className="hidden md:inline">Explore Curated Themes</span>
