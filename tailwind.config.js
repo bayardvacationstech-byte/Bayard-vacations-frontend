@@ -27,6 +27,40 @@ module.exports = {
         "brand-dark": "#0146b3",
         "brand-light-cyan": "#4a8dd9",
         "brand-peach": "#F2C288",
+        aurora: {
+          400: "#22d3ee",
+          500: "#06b6d4",
+          600: "#0891b2",
+        },
+        cosmic: {
+          900: "#0f172a",
+          800: "#1e1b4b",
+          700: "#312e81",
+        },
+        ice: {
+          100: "#e0f2fe",
+          200: "#bae6fd",
+        },
+        divine: {
+          50: "#faf9f6",
+          100: "#f0eee9",
+          200: "#e5e1d8",
+        },
+        gold: {
+          400: "#d4af37",
+          500: "#c5a028",
+          600: "#b8941f",
+        },
+        burgundy: {
+          500: "#800020",
+          600: "#6b001a",
+          700: "#5a0016",
+        },
+        sapphire: {
+          500: "#0f52ba",
+          600: "#0c4194",
+          700: "#093678",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -124,6 +158,30 @@ module.exports = {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(168, 85, 247, 0.5)" },
+          "50%": { boxShadow: "0 0 40px rgba(168, 85, 247, 0.8)" },
+        },
+        "slide-in-up": {
+          "0%": { transform: "translateY(50px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        "float-solo": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "gentle-float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-1000px 0" },
+          "100%": { backgroundPosition: "1000px 0" },
+        },
+        "fade-in-divine": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down .4s ease-out",
@@ -136,6 +194,12 @@ module.exports = {
         "pulse-slow": "pulse-slow 4s ease-in-out infinite",
         "gradient-x": "gradient-x 15s ease infinite",
         "bounce-subtle": "bounce-subtle 3s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "slide-in-up": "slide-in-up 0.8s ease-out forwards",
+        "float-solo": "float-solo 6s ease-in-out infinite",
+        "gentle-float": "gentle-float 8s ease-in-out infinite",
+        shimmer: "shimmer 3s linear infinite",
+        "fade-in-divine": "fade-in-divine 1.5s ease-out forwards",
       },
       fontFamily: {
         outfit: ["var(--font-outfit)"],
@@ -148,6 +212,10 @@ module.exports = {
         montserrat: ["var(--font-montserrat)"],
         "space-grotesk": ["var(--font-space-grotesk)"],
         crimson: ["var(--font-crimson)"],
+        syne: ["var(--font-syne)"],
+        display: ["var(--font-syne)"],
+        serif: ["var(--font-cormorant)", "serif"],
+        lato: ["var(--font-lato)", "sans-serif"],
       },
     },
   },

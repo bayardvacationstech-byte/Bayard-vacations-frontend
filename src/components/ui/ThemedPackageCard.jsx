@@ -23,7 +23,8 @@ import {
   Waves,
   Mountain,
   Smile,
-  University
+  University,
+  Church
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -70,14 +71,14 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       icon: <Smile className="w-4 h-4 fill-orange-500 text-white stroke-[3px]" />
     },
     solo: {
-      card: "border-slate-200 hover:-translate-y-2 hover:shadow-slate-200/50 bg-gradient-to-b from-white to-slate-50",
-      title: "font-crimson text-slate-800 font-semibold tracking-tight",
-      featureDot: "bg-transparent border-2 border-slate-600 h-2 w-2",
-      featureText: "text-slate-600 italic font-crimson",
-      price: "text-slate-800 font-crimson font-bold",
-      cta: "bg-slate-800 rounded-sm shadow-[4px_4px_0px_0px_#cbd5e0] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none",
-      badge: "bg-slate-100 border border-slate-200 text-slate-600",
-      icon: <MapPin className="w-4 h-4 text-slate-500" />
+      card: "border-purple-500/10 hover:-translate-y-2 hover:shadow-2xl bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] solo-card",
+      title: "font-display text-white font-bold tracking-tight",
+      featureDot: "bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.4)]",
+      featureText: "text-gray-300 font-medium",
+      price: "text-white font-display",
+      cta: "bg-gradient-to-br from-purple-500 to-purple-800 group-hover:from-aurora-400 group-hover:to-purple-600 rounded-lg",
+      badge: "bg-purple-600 text-white font-bold uppercase tracking-wider px-4 [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)]",
+      icon: <Compass className="w-4 h-4 text-aurora-400" />
     },
     elite: {
       card: "bg-[#0a0a0a] border-white/5 hover:border-amber-500/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_30px_rgba(212,175,55,0.1)] transition-all duration-700 group overflow-hidden",
@@ -120,14 +121,14 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       icon: <Mountain className="w-4 h-4 text-white" />
     },
     religious: {
-      card: "border-amber-100 hover:-translate-y-2 hover:shadow-amber-100/50 bg-gradient-to-b from-white via-amber-50/50 to-amber-100/50",
-      title: "font-crimson text-amber-900 font-normal tracking-tight",
-      featureDot: "bg-radial-gradient from-amber-300 to-amber-600 shadow-amber-200",
-      featureText: "text-amber-900 font-crimson italic",
-      price: "text-amber-900 font-crimson",
-      cta: "bg-gradient-to-br from-amber-400 to-amber-700 rounded-full",
-      badge: "bg-amber-50 border border-amber-200 text-amber-800",
-      icon: <Info className="w-4 h-4 fill-amber-500" />
+      card: "border-burgundy-500/10 hover:-translate-y-2 hover:shadow-2xl bg-white card-sacred",
+      title: "font-serif text-burgundy-700 font-bold tracking-tight",
+      featureDot: "bg-gold-400 shadow-[0_0_8px_rgba(212,175,55,0.4)]",
+      featureText: "text-stone-600 font-medium italic font-serif",
+      price: "text-burgundy-700 font-serif",
+      cta: "bg-burgundy-600 hover:bg-burgundy-700 rounded-full",
+      badge: "glass-sacred text-burgundy-700 font-bold uppercase tracking-wider px-4",
+      icon: <Church className="w-4 h-4 text-gold-600" />
     },
     educational: {
       card: "border-indigo-900/10 hover:-translate-y-2 hover:shadow-indigo-950/10 bg-white rounded-sm architect-border transition-all duration-500",
