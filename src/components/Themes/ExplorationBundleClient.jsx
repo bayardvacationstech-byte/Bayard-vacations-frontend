@@ -105,9 +105,9 @@ export default function ExplorationBundleClient() {
     <div className="min-h-screen bg-[#f7f5f3] text-[#1d1d1d] font-sans selection:bg-[#e76f51] selection:text-white overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="relative min-h-screen pt-20 topo-pattern overflow-hidden flex items-center">
+      <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 topo-pattern overflow-hidden flex items-center">
         {/* Animated Compass Background */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] compass-rose opacity-10 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[500px] md:h-[500px] compass-rose opacity-10 pointer-events-none">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
@@ -119,7 +119,7 @@ export default function ExplorationBundleClient() {
         </div>
         
         <Container className="relative z-10 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center py-12">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center py-6 md:py-8 lg:py-12">
             
             {/* Left Content */}
             <motion.div 
@@ -250,7 +250,7 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Filter Tabs Section */}
-      <section className="py-8 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
+      <section className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
         <Container>
           <div className="flex flex-wrap gap-4 justify-center">
             <button 
@@ -282,14 +282,14 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Main Content / Grid */}
-      <section id="bundles" className="py-24 map-texture overflow-hidden" ref={packagesRef}>
+      <section id="bundles" className="py-12 md:py-16 lg:py-20 map-texture overflow-hidden" ref={packagesRef}>
         <Container>
-          <div className="text-center mb-20">
+          <div className="text-center mb-10 md:mb-20">
             <h2 className="text-5xl md:text-7xl font-black text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">Curated combinations of our most popular explorations. Just book and go.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
             {isLoading ? (
               <ThemeLoader theme="exploration" />
             ) : paginatedPackages.length > 0 ? (
@@ -381,11 +381,11 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Features Section */}
-      <section className="py-32 bg-[#1d1d1d] text-white relative overflow-hidden">
+      <section className="py-12 md:py-24 bg-[#1d1d1d] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/topography.png')]"></div>
         
         <Container className="relative z-10">
-          <div className="grid md:grid-cols-3 gap-16 text-center">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-16 text-center">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -431,9 +431,9 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-32 bg-stone-50 border-t-4 border-[#e76f51]">
+      <section className="py-16 md:py-24 bg-stone-50 border-t-4 border-[#e76f51]">
         <Container>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-12">
             <div>
               <h2 className="text-4xl md:text-6xl font-black text-[#1d1d1d] mb-4">Ready for Discovery?</h2>
               <p className="text-xl text-gray-500 font-medium">Join the community of modern explorers today.</p>

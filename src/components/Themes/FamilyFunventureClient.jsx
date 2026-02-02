@@ -88,7 +88,7 @@ export default function FamilyFunventureClient() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] pt-20 overflow-hidden bg-gradient-to-br from-[#fef9f3] to-[#fff8f0]">
+      <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 overflow-hidden bg-gradient-to-br from-[#fef9f3] to-[#fff8f0]">
         {/* Watercolor Background Effects */}
         <div className="absolute inset-0 z-0 opacity-40">
           <div className="absolute top-0 -left-4 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
@@ -103,7 +103,7 @@ export default function FamilyFunventureClient() {
         }} />
 
         <Container className="relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-5rem)] py-12">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center min-h-[60vh] py-12">
             {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -238,7 +238,7 @@ export default function FamilyFunventureClient() {
       </section>
 
       {/* Filter Section */}
-      <section className="py-12 bg-[#fef9f3]">
+      <section className="py-8 bg-[#fef9f3]">
         <Container>
           <div className="flex justify-center">
             <div className="bg-white p-2 rounded-full shadow-xl inline-flex border border-orange-100">
@@ -270,13 +270,13 @@ export default function FamilyFunventureClient() {
       </section>
 
       {/* Packages Grid Section */}
-      <section className="py-16 bg-[#fef9f3]" ref={packagesRef}>
+      <section className="py-12 md:py-16 bg-[#fef9f3]" ref={packagesRef}>
         <Container>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Curated Adventures</h2>
             <p className="text-slate-600 max-w-2xl mx-auto text-lg">Handpicked destinations designed for multi-generational bonding and unforgettable stories</p>
@@ -387,7 +387,7 @@ export default function FamilyFunventureClient() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-white relative overflow-hidden">
         {/* Decorative background characters */}
         <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none flex items-center justify-between px-10">
           <div className="text-[20rem] font-serif text-orange-500 pointer-events-none">&ldquo;</div>
@@ -395,12 +395,12 @@ export default function FamilyFunventureClient() {
         </div>
         
         <Container className="relative z-10">
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-12">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
+              className="text-center p-6 md:p-8 lg:p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
               <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-orange-500 transform group-hover:rotate-6 transition-transform">
                 <ShieldCheck className="w-12 h-12" />
@@ -414,7 +414,7 @@ export default function FamilyFunventureClient() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
+              className="text-center p-6 md:p-8 lg:p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
               <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-teal-500 transform group-hover:-rotate-6 transition-transform">
                 <Users className="w-12 h-12" />

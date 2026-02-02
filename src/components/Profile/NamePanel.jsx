@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { PenLine, Loader2, X } from "lucide-react";
+import { PenLine, Loader2, X, User, Check } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -68,80 +68,110 @@ const NamePanel = () => {
   };
 
   return (
-    <div className="relative rounded-2xl border border-solid border-[#D9D9D9] px-6 py-8">
-      <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-nord font-bold uppercase text-brand-blue">
-        your name
-      </h5>
+    <div className="relative group overflow-hidden">
+      {/* Editorial Decorative Layer */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-3xl -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      
+      <div className="relative rounded-[2.5rem] border border-slate-100 bg-white/70 backdrop-blur-md p-10 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="space-y-6 flex-1">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-brand-blue/5 text-brand-blue border border-brand-blue/10 shadow-sm">
+                <User className="size-5" />
+              </div>
+              <div>
+                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                  Identity
+                </h5>
+                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Full Name</h4>
+              </div>
+            </div>
 
-      {!isEditing ? (
-        <>
-          <h3 className="mb-5 text-lg font-semibold">{userInfo.displayName}</h3>
-          <div className="mb-5">
-            <Button
-              onClick={handleEditClick}
-              className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              type="button"
-            >
-              <span className="mr-2">Edit</span>
-              <PenLine className="size-4" />
-            </Button>
+            {!isEditing ? (
+              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
+                <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                  {userInfo.displayName || "Not Specified"}
+                </h3>
+                <p className="text-xs text-slate-400 font-medium mt-3 flex items-center gap-2">
+                  <span className="size-1 rounded-full bg-emerald-500" />
+                  Matches official travel documentation
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleUpdateProfile} className="space-y-8 animate-in fade-in slide-in-from-top-2 duration-500">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">First Name</label>
+                    <Input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white focus:border-brand-blue/30 transition-all duration-300 shadow-sm"
+                      placeholder="John"
+                      disabled={updating}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Last Name</label>
+                    <Input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white focus:border-brand-blue/30 transition-all duration-300 shadow-sm"
+                      placeholder="Doe"
+                      disabled={updating}
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 pt-2">
+                  <Button
+                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-black uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
+                    type="submit"
+                    disabled={updating}
+                  >
+                    {updating ? (
+                      <Loader2 className="size-4 animate-spin text-white" />
+                    ) : (
+                      <>
+                        <Check className="size-4" />
+                        <span>Confirm Changes</span>
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={handleCancel}
+                    className="rounded-2xl border border-slate-200 bg-white px-8 h-12 text-slate-600 font-bold hover:bg-slate-50 transition-all"
+                    type="button"
+                    disabled={updating}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            )}
           </div>
-        </>
-      ) : (
-        <form onSubmit={handleUpdateProfile}>
-          <div className="mb-8 flex gap-5">
-            <Input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              placeholder="John"
-              disabled={updating}
-            />
-            <Input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              placeholder="Doe"
-              disabled={updating}
-            />
-          </div>
-          <div className="mb-5 flex gap-4">
-            <Button
-              className="rounded-xl border-2 border-solid border-brand-blue bg-brand-blue p-5 text-white hover:bg-brand-blue/90"
-              type="submit"
-              disabled={updating}
-            >
-              {updating ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  <span>Updating...</span>
-                </>
-              ) : (
-                <>
-                  <span className="mr-2">Save Changes</span>
+
+          {!isEditing && (
+            <div className="flex shrink-0">
+              <Button
+                onClick={handleEditClick}
+                className="rounded-3xl border border-slate-200 bg-white px-8 py-7 text-slate-800 font-bold hover:bg-slate-50 hover:border-brand-blue/30 hover:shadow-xl hover:shadow-brand-blue/5 transition-all duration-300 flex items-center gap-4 group/btn"
+                type="button"
+              >
+                <span className="flex flex-col items-start leading-none text-left">
+                  <span className="text-[9px] uppercase tracking-widest text-slate-400 mb-1">Configuration</span>
+                  <span className="text-sm">Edit Profile</span>
+                </span>
+                <div className="bg-slate-50 p-2.5 rounded-full group-hover/btn:bg-brand-blue group-hover/btn:text-white transition-all duration-300 shadow-sm">
                   <PenLine className="size-4" />
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={handleCancel}
-              className="rounded-xl border-2 border-solid border-gray-300 bg-transparent p-5 text-gray-700 hover:bg-gray-100"
-              type="button"
-              disabled={updating}
-            >
-              <span className="mr-2">Cancel</span>
-              <X className="size-4" />
-            </Button>
-          </div>
-        </form>
-      )}
-
-      <div>
-        <span className="text-xs text-[#696969]">
-          (Note: Name needs to be provided as per official documents)
-        </span>
+                </div>
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

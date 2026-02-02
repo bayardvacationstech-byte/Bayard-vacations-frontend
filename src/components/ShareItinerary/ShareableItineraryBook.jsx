@@ -10,6 +10,7 @@ if (typeof window !== 'undefined') {
 }
 
 const ShareableItineraryBook = ({ itineraries }) => {
+  if (!itineraries || itineraries.length === 0) return null;
   const bookRef = useRef(null);
   const state = useRef({});
   const zIndexCounter = useRef(100);
@@ -203,7 +204,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                   <div className="relative z-10 h-full flex flex-col justify-between py-12 lg:py-16 xl:py-20 px-12 lg:px-20">
                     <div className="space-y-8">
                        <div className="transition-all duration-700 group-hover:translate-x-1">
-                          <img src="/logo.png" alt="Bayard Vacations" className="h-12 lg:h-14 xl:h-16 w-auto object-contain brightness-95" />
+                          <img src="/media/bayard-logo.png" alt="Bayard Vacations" className="h-8 lg:h-10 xl:h-12 w-auto object-contain brightness-95" />
                        </div>
                        
                        <div className="relative pt-8">
@@ -255,7 +256,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                   <div className="relative z-10 h-full flex flex-col justify-between py-12 lg:py-16 xl:py-20 px-12 lg:px-20 text-right">
                     <div className="space-y-8">
                        <div className="transition-all duration-700 group-hover:-translate-x-1 inline-block">
-                          <img src="/logo.png" alt="Bayard Vacations" className="h-12 lg:h-14 xl:h-16 w-auto object-contain brightness-95" />
+                          <img src="/media/bayard-logo.png" alt="Bayard Vacations" className="h-8 lg:h-10 xl:h-12 w-auto object-contain brightness-95" />
                        </div>
                        
                        <div className="relative pt-8">
@@ -367,13 +368,14 @@ const PageContent = ({ data, side }) => {
   }
 
   if (data.type === 'header') {
-    const { day, title, overnight } = data.dayData;
+    const { day, title, overnight } = data.dayData || {};
+    const displayDay = day !== undefined && day !== null ? day.toString().padStart(2, '0') : '??';
     return (
       <div className={`h-full w-full flex flex-col items-center justify-start bg-white p-6 lg:p-10 pt-6 lg:pt-12 text-center overflow-y-auto custom-scrollbar ${side === 'back' ? 'border-r border-slate-100' : ''}`}>
          <div className="w-20 h-20 lg:w-24 lg:h-24 bg-brand-blue/5 rounded-2xl lg:rounded-3xl flex flex-col items-center justify-center border border-brand-blue/20 mb-2 lg:mb-4 shadow-inner relative group">
             <div className="absolute inset-0 bg-brand-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl lg:rounded-3xl" />
             <span className="relative z-10 text-[10px] lg:text-[11px] font-black text-brand-blue/80 uppercase tracking-[0.3em] mb-0.5 lg:mb-1">Day</span>
-            <span className="relative z-10 text-4xl lg:text-5xl font-black text-brand-blue leading-none tracking-tighter">{day.toString().padStart(2, '0')}</span>
+            <span className="relative z-10 text-4xl lg:text-5xl font-black text-brand-blue leading-none tracking-tighter">{displayDay}</span>
          </div>
           <h3 className="text-xl lg:text-3xl font-black text-slate-900 mb-2 lg:mb-4 px-4 leading-tight tracking-tight">
             {title}
@@ -573,7 +575,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1.5">
                     <div className="px-3 py-0.5 bg-brand-blue/5 border border-brand-blue/20 rounded-full text-[9px] font-black uppercase tracking-widest text-brand-blue">
-                      Day {day.day.toString().padStart(2, '0')}
+                      Day {(day?.day || idx + 1).toString().padStart(2, '0')}
                     </div>
                     {day.overnight && (
                       <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400">

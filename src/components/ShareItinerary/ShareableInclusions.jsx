@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ShareableInclusions = ({ inclusions, exclusions }) => {
+const ShareableInclusions = ({ inclusions = [], exclusions = [] }) => {
   return (
     <section id="inclusions" className="bg-slate-50 py-6 md:py-10 print:py-6 print:bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -2,8 +2,9 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersVertical, X, MapPin, Calendar, Package, ChevronDown, ChevronLeft, ChevronRight, ArrowUpRight, Info, CircleDollarSign, Clock, Compass, Filter } from "lucide-react";
+import { SlidersVertical, X, MapPin, Calendar, Package, ChevronDown, ChevronLeft, ChevronRight, ArrowUpRight, Info, CircleDollarSign, Clock, Compass, Filter, Sparkles } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -83,7 +84,7 @@ const durations = [
   { value: "10+", label: "10+ Days" },
 ];
 
-export default function PackagesRegionClient() {
+export default function PackagesRegionClient({ initialRegionData }) {
   const [range, setRange] = useState([0, 1000000]);
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
@@ -100,26 +101,37 @@ export default function PackagesRegionClient() {
   const { region: regionName } = useParams();
   const searchParams = useSearchParams();
   const isGroupPackage = searchParams.get("group") === "true";
-  const { packages: allPackages, isLoading: packagesLoading, error: packagesError } = usePackages(regionName);
-  const { regionData, isLoading: regionLoading, error: regionError } = useRegion(regionName);
+  const regionSlug = regionName?.toLowerCase();
+  const { packages: allPackages, isLoading: packagesLoading, error: packagesError, fetchPackages } = usePackages(regionSlug);
+  const { regionData, isLoading: regionLoading, error: regionError, refetch } = useRegion(regionSlug, initialRegionData);
   const { whyChooseData, isLoading: whyChooseLoading } = useWhyChooseRegion(regionData?.id);
   const { blogs: regionBlogs, fetchBlogs, isLoading: blogsLoading } = useBlogs();
   const placeName = regionName?.split("-").join(" ") || "this destination";
 
-  const isLoading = packagesLoading || regionLoading;
-  const error = packagesError || regionError;
+  const isLoading = (packagesLoading || regionLoading) && !initialRegionData;
+  const error = (packagesError || regionError) && !initialRegionData;
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    // Force a fresh fetch on mount to bypass any lingering caches
+    if (typeof window !== "undefined") {
+      refetch();
+      fetchPackages();
+    }
+  }, [refetch, fetchPackages]);
 
   useEffect(() => {
-    if (regionName === "azerbaijan" && allPackages.length > 0) {
-      console.log("Azerbaijan Packages Data:", allPackages);
+    if (regionName?.toLowerCase() === "azerbaijan") {
+      if (allPackages.length > 0) {
+        console.log("Azerbaijan Packages Data:", allPackages);
+      }
+      if (regionData) {
+        console.log("Azerbaijan Region Data:", regionData);
+      }
     }
     // Fetch blogs for the region
     fetchBlogs({ region: regionName, limitCount: 6 });
-  }, [regionName, allPackages, fetchBlogs]);
+  }, [regionName, allPackages, regionData, fetchBlogs]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -262,18 +274,38 @@ export default function PackagesRegionClient() {
 
   const totalPages = Math.ceil(filteredArray.length / itemsPerPage);
 
+  const heroBanners = useMemo(() => {
+    let rawBanners = [];
+    if (regionData?.bannerImages?.length > 0) {
+      rawBanners = regionData.bannerImages;
+    } else if (regionData?.bannerImage) {
+      rawBanners = [regionData.bannerImage];
+    }
+
+    // Normalize: ensure every item is { url: "...", label: "...", description: "..." }
+    return rawBanners.map(img => {
+      if (typeof img === 'string') return { url: img };
+      // Handle both 'url' and 'image' keys from different data sources
+      return {
+        url: img.url || img.image || "",
+        label: img.label || "",
+        description: img.description || ""
+      };
+    }).filter(item => item.url);
+  }, [regionData, filteredArray]);
+
   // Auto-rotate banner images
   useEffect(() => {
-    if (filteredArray.length > 0 && filteredArray[0]?.bannerImages?.length > 1) {
+    if (heroBanners.length > 1) {
       const interval = setInterval(() => {
         setCurrentBannerIndex((prevIndex) => 
-          (prevIndex + 1) % filteredArray[0].bannerImages.length
+          (prevIndex + 1) % heroBanners.length
         );
       }, 5000); // Change image every 5 seconds
 
       return () => clearInterval(interval);
     }
-  }, [filteredArray]);
+  }, [heroBanners]);
 
   const handleSliderChange = (values) => setRange(values);
   
@@ -308,14 +340,8 @@ export default function PackagesRegionClient() {
   const handleOpenFilterMenu = () => setFilterMenu(true);
   const handleCloseFilterMenu = () => setFilterMenu(false);
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-lg">Loading packages...</div>
-      </div>
-    );
-  }
-
+  // No early return for loading to allow SSR to show the hero section immediately
+  // Loading state for packages grid is handled in-situ
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -326,30 +352,46 @@ export default function PackagesRegionClient() {
     );
   }
 
-  if (!isMounted) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-brand-blue border-t-transparent rounded-full animate-spin"></div>
-          <div className="text-white font-bold tracking-widest uppercase">Preparing Journey...</div>
-        </div>
-      </div>
-    );
-  }
+  // No early return for mounting to support SSR of the hero section
+  // Hydration-sensitive UI elements are handled internally
 
   return (
     <>
       {/* Hero Section */}
       <section 
-        className="relative text-white overflow-hidden h-[85vh] min-h-[600px] md:min-h-[700px] bg-center flex items-center transition-all duration-1000 ease-in-out"
-        style={{
-          backgroundImage: filteredArray[0]?.bannerImages?.[currentBannerIndex]?.url 
-            ? `url(${filteredArray[0].bannerImages[currentBannerIndex].url})` 
-            : 'linear-gradient(to right, #f97316, #fb923c, #3b82f6, #2563eb)',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover'
-        }}
+        className="relative text-white overflow-hidden h-[85vh] min-h-[600px] md:min-h-[700px] flex items-center"
       >
+        <AnimatePresence initial={false}>
+        <motion.div
+          key={currentBannerIndex}
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ 
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.5 }
+          }}
+          className="absolute inset-0 z-0"
+        >
+            {heroBanners?.[currentBannerIndex]?.url ? (
+              <Image
+                src={heroBanners[currentBannerIndex].url}
+                alt={placeName}
+                fill
+                priority
+                className="object-cover"
+                sizes="100vw"
+              />
+            ) : (
+              <div 
+                className="w-full h-full bg-slate-200 flex items-center justify-center"
+              >
+                  <Sparkles className="w-20 h-20 text-slate-400 opacity-50" />
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
         {/* Advanced gradient overlay for cinematic feel */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10"></div>
         
@@ -381,16 +423,17 @@ export default function PackagesRegionClient() {
               transition={{ duration: 0.8 }}
               className="text-4xl md:text-5xl lg:text-7xl font-bold capitalize leading-[1.1] md:leading-tight tracking-tight px-4"
             >
-              Discover {placeName}
+              {heroBanners[0]?.label || `Discover ${placeName}`}
             </motion.h1>
 
             <motion.p 
+              key={`desc-${currentBannerIndex}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
+              transition={{ duration: 0.8 }}
               className="text-xs md:text-lg opacity-90 max-w-2xl mx-auto leading-relaxed px-6"
             >
-              Experience the land of fire and ice. From ancient history to modern architecture, explore the perfect blend of Eastern and Western cultures.
+              {heroBanners[currentBannerIndex]?.description || "Experience the land of fire and ice. From ancient history to modern architecture, explore the perfect blend of Eastern and Western cultures."}
             </motion.p>
             
             <motion.div
@@ -411,9 +454,9 @@ export default function PackagesRegionClient() {
         </div>
 
         {/* Banner Image Navigation Dots - Moved to Bottom Right */}
-        {filteredArray[0]?.bannerImages?.length > 1 && (
+        {heroBanners.length > 1 && (
           <div className="absolute bottom-12 right-12 z-30 flex gap-2">
-            {filteredArray[0].bannerImages.map((_, index) => (
+            {heroBanners.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentBannerIndex(index)}
@@ -619,7 +662,7 @@ export default function PackagesRegionClient() {
               </motion.div>
             </div>
             {/* Package Cards Grid */}
-            {!isMounted || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
+            {!isMounted || packagesLoading || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
               // Loading State - Show skeleton cards
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (

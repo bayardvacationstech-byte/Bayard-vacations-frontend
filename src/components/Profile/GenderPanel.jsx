@@ -6,7 +6,8 @@ import { db } from "@/firebase/firebaseConfig";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, UserCircle2, PenLine, X } from "lucide-react";
+import { Loader2, UserCircle2, PenLine, X, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,13 @@ const GenderPanel = () => {
   // Fetch existing gender when component mounts and user is authenticated
   useEffect(() => {
     const fetchGender = async () => {
+      // If we're on localhost use mock data
+      const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
+      if (isLocal) {
+        setGender("male");
+        return;
+      }
+      
       if (!user) return;
 
       setLoading(true);
@@ -105,95 +113,115 @@ const GenderPanel = () => {
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex flex-col items-center justify-center space-y-4">
-            <Loader2 className="size-8 animate-spin text-primary" />
-            <p className="text-sm text-muted-foreground">
-              Loading gender information...
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="relative rounded-3xl border border-slate-200 bg-white p-8 shadow-sm h-full flex items-center justify-center">
+        <Loader2 className="size-6 animate-spin text-brand-blue" />
+      </div>
     );
   }
 
   return (
-    <div className="relative flex-1 rounded-2xl border border-solid border-[#D9D9D9] px-6 py-8">
-      <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-nord font-bold uppercase text-brand-blue">
-        gender
-      </h5>
-
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <UserCircle2 className="size-5 text-muted-foreground" />
-            <div>
-              <p className="text-sm font-medium">
-                {gender
-                  ? GENDER_OPTIONS.find((g) => g.value === gender)?.label ||
-                    gender
-                  : "Not specified"}
-              </p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-            onClick={() => setIsEditing(!isEditing)}
-            disabled={saving}
-          >
-            {isEditing ? "Cancel" : "Edit"}
-            {isEditing ? (
-              <X className="size-4" />
-            ) : (
-              <PenLine className="size-4" />
-            )}
-          </Button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <RadioGroup
-            value={gender}
-            onValueChange={setGender}
-            className="flex flex-col items-start justify-between gap-4 c-lg:flex-row c-lg:items-center"
-            disabled={!isEditing}
-          >
-            {GENDER_OPTIONS.map((option) => (
-              <div
-                key={option.value}
-                className={`flex items-center gap-2 rounded-xl bg-neutral-200 p-4 ${!isEditing ? "opacity-70" : ""}`}
-              >
-                <RadioGroupItem value={option.value} id={option.value} />
-                <Label
-                  htmlFor={option.value}
-                  className={!isEditing ? "cursor-not-allowed" : ""}
-                >
-                  {option.label}
-                </Label>
+    <div className="relative group overflow-hidden h-full">
+      <div className="absolute top-0 left-0 w-32 h-32 bg-brand-blue/5 rounded-full blur-3xl -ml-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      
+      <div className="relative rounded-[2.5rem] border border-slate-100 bg-white/70 backdrop-blur-md p-8 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500 h-full">
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-brand-blue/5 text-brand-blue border border-brand-blue/10 shadow-sm">
+                <UserCircle2 className="size-5" />
               </div>
-            ))}
-          </RadioGroup>
+              <div>
+                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                  Preference
+                </h5>
+                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Gender Identity</h4>
+              </div>
+            </div>
+            {!isEditing && (
+              <Button
+                variant="ghost"
+                className="size-10 p-0 rounded-xl hover:bg-brand-blue/5 text-slate-400 hover:text-brand-blue transition-all"
+                onClick={() => setIsEditing(true)}
+              >
+                <PenLine className="size-4" />
+              </Button>
+            )}
+            {isEditing && (
+              <Button
+                variant="ghost"
+                className="size-10 p-0 rounded-xl hover:bg-red-50 text-slate-400 hover:text-red-500 transition-all"
+                onClick={() => setIsEditing(false)}
+              >
+                <X className="size-4" />
+              </Button>
+            )}
+          </div>
 
-          {isEditing && (
-            <Button type="submit" disabled={saving}>
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save"
-              )}
-            </Button>
-          )}
+          <div className="flex-1">
+            {!isEditing ? (
+              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
+                <p className="text-2xl font-black text-slate-800 capitalize tracking-tight">
+                  {gender
+                    ? GENDER_OPTIONS.find((g) => g.value === gender)?.label || gender
+                    : "Not specified"}
+                </p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
+                  <span className="size-1 rounded-full bg-slate-300" />
+                  Personal identification
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                <RadioGroup
+                  value={gender}
+                  onValueChange={setGender}
+                  className="grid grid-cols-1 gap-3"
+                  disabled={saving}
+                >
+                  {GENDER_OPTIONS.map((option) => (
+                    <Label
+                      key={option.value}
+                      className={cn(
+                        "flex items-center justify-between p-4 rounded-2xl border-2 transition-all cursor-pointer group/opt",
+                        gender === option.value 
+                          ? "border-brand-blue bg-brand-blue/5 text-brand-blue" 
+                          : "border-slate-50 bg-slate-50/50 hover:bg-white hover:border-slate-200 text-slate-400"
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={cn(
+                          "size-4 rounded-full border-2 flex items-center justify-center transition-all",
+                          gender === option.value ? "border-brand-blue bg-brand-blue" : "border-slate-200 bg-white"
+                        )}>
+                          {gender === option.value && <Check className="size-2 text-white" />}
+                        </div>
+                        <span className={cn("text-sm font-bold", gender === option.value ? "text-brand-blue" : "text-slate-600")}>
+                          {option.label}
+                        </span>
+                      </div>
+                      <RadioGroupItem value={option.value} id={option.value} className="sr-only" />
+                    </Label>
+                  ))}
+                </RadioGroup>
 
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-        </form>
+                <Button 
+                  type="submit" 
+                  disabled={saving}
+                  className="w-full rounded-2xl bg-brand-blue text-white font-black h-12 hover:shadow-xl hover:shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px]"
+                >
+                  {saving ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Check className="size-4" />
+                      <span>Save Preference</span>
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

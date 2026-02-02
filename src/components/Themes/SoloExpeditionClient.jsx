@@ -158,7 +158,7 @@ export default function SoloExpeditionClient() {
         </div>
 
         <Container className="relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center py-12">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center py-12">
             {/* Left Content */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -251,7 +251,7 @@ export default function SoloExpeditionClient() {
       {/* Filters */}
       <section className="py-8 bg-cosmic-900 border-y border-purple-500/10">
         <Container>
-          <div className="flex flex-wrap gap-6 justify-center items-center">
+          <div className="flex flex-wrap gap-4 md:gap-6 justify-center items-center">
             <span className="text-gray-400 text-sm font-bold uppercase tracking-wider">Mission Scope:</span>
             
             <button 
@@ -290,7 +290,7 @@ export default function SoloExpeditionClient() {
           </span>
         </div>
         <Container className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -366,7 +366,7 @@ export default function SoloExpeditionClient() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref={packagesRef}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8" ref={packagesRef}>
             {isLoading ? (
               <ThemeLoader theme="solo" />
             ) : (
@@ -458,7 +458,7 @@ export default function SoloExpeditionClient() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
                 {[
                   { icon: Shield, title: "Safety Net", desc: "Every route is vetted by local experts. We provide constant monitoring and emergency protocols." },
                   { icon: Users, title: "Solo-Meetup", desc: "Digital connectivity to other solo travelers in your area. Join groups when you want, leave when you don't." },

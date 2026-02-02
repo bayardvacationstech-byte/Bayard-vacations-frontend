@@ -15,7 +15,7 @@ import {
   sanitizeDocumentData,
   getCuratedPackages,
 } from "@/utils/firebase";
-import { doc, getDoc, getDocs, limit } from "firebase/firestore";
+import { doc, getDocFromServer, getDocsFromServer, limit } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { minimizePackageData, minimizeRegionData, minimizeReviewData } from "@/utils/dataMinimizers";
 
@@ -45,7 +45,7 @@ export const fetchReviews = unstableCache(
   async () => {
     try {
       const cacheRef = doc(db, COLLECTIONS.CACHED_REVIEWS, REVIEWS_DOC_ID);
-      const cacheDoc = await getDoc(cacheRef);
+      const cacheDoc = await getDocFromServer(cacheRef);
 
       if (cacheDoc.exists()) {
         const cachedData = cacheDoc.data();
@@ -61,7 +61,7 @@ export const fetchReviews = unstableCache(
   },
   ["reviews"],
   {
-    revalidate: 60 * 60 * 24,
+    revalidate: 60, // 1 minute
   }
 );
 
@@ -69,7 +69,7 @@ export const fetchRegions = unstableCache(
   async () => {
     try {
       const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
-      const regions = await getDocs(regionsQuery).then((res) =>
+      const regions = await getDocsFromServer(regionsQuery).then((res) =>
         res.docs.map(sanitizeDocumentData)
       );
 
@@ -101,7 +101,7 @@ export const fetchRegions = unstableCache(
   },
   ["regions"],
   {
-    revalidate: 60 * 60 * 24, // 1 day
+    revalidate: 60, // 1 minute
   }
 );
 
@@ -226,7 +226,7 @@ export const getRegionsForHome = unstableCache(
   async () => {
     try {
       const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
-      const querySnapshot = await getDocs(regionsQuery);
+      const querySnapshot = await getDocsFromServer(regionsQuery);
       const regions = querySnapshot.docs
         .map(sanitizeDocumentData)
         .map(minimizeRegionData);
@@ -238,7 +238,7 @@ export const getRegionsForHome = unstableCache(
     }
   },
   ["regions-home"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
 
 export const getCuratedPackagesForHome = unstableCache(
@@ -254,7 +254,7 @@ export const getCuratedPackagesForHome = unstableCache(
     }
   },
   ["curated-packages-home-v2"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
 
 export const getGroupDeparturePackagesForHome = unstableCache(
@@ -268,7 +268,7 @@ export const getGroupDeparturePackagesForHome = unstableCache(
     }
   },
   ["group-departure-home-v2"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
 
 export const getThemePackagesForHome = unstableCache(
@@ -282,7 +282,7 @@ export const getThemePackagesForHome = unstableCache(
     }
   },
   ["theme-packages-home-v2"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
 
 export const getElitePackages = unstableCache(
@@ -296,14 +296,14 @@ export const getElitePackages = unstableCache(
     }
   },
   ["elite-packages"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
 
 export const getWhyChooseRegionData = unstableCache(
   async (regionId) => {
     try {
       const docRef = doc(db, COLLECTIONS.WHY_CHOOSE_REGION, regionId);
-      const docSnap = await getDoc(docRef);
+      const docSnap = await getDocFromServer(docRef);
       
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -317,7 +317,7 @@ export const getWhyChooseRegionData = unstableCache(
     }
   },
   ["why-choose-region"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
 
 

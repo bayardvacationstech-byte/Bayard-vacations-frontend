@@ -25,7 +25,10 @@ import {
   ChevronRight,
   ArrowRight,
   Info,
-  X
+  X,
+  Quote,
+  Landmark,
+  Flame
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
@@ -141,6 +144,9 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     }
   }, [isLoading]);
 
+  const mobileHeroImage = whyChooseData?.mobileHeroImage || regionDataProcessed?.mobileHeroImage || regionData?.mobileHeroImage;
+  const desktopHeroImage = whyChooseData?.heroImage || regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage || "/img/default-region.jpg";
+
   // Show loading state
   if (isLoading) {
     return (
@@ -165,59 +171,104 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
       <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="relative min-h-[60vh] md:min-h-[80vh]">
-        <Image
-          src={regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage || "/img/default-region.jpg"}
-          alt={regionName || "Region Gallery"}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
-        
-        <Container className="relative h-full flex flex-col justify-between pt-24 md:pt-32 pb-8 md:pb-12">
-          {/* Hero Content */}
-          <div className="space-y-4 md:space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-md rounded-full border border-amber-500/30 mb-4">
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-bold text-amber-300 uppercase tracking-widest">
-                  Why Visit
-                </span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif text-white leading-tight tracking-tighter">
-                Why Choose<br />
-                <span className="text-amber-400">{regionName}?</span>
-              </h1>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
-            >
-              <p className={cn(
-                "text-base sm:text-lg md:text-2xl text-white/90 max-w-4xl font-medium leading-relaxed drop-shadow-lg transition-all duration-300",
-                !isDescExpanded && "line-clamp-3"
-              )}>
-                {regionDataProcessed?.overview}
-              </p>
-              <button
-                onClick={() => setIsDescExpanded(!isDescExpanded)}
-                className="text-amber-400 text-sm font-bold uppercase tracking-wider mt-4 hover:text-amber-300 transition-colors"
-              >
-                {isDescExpanded ? "View Less" : "View More"}
-              </button>
-            </motion.div>
+      {/* Hero Section */}
+      <section className="relative w-full aspect-[4/5] lg:aspect-[21/9] flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+          {/* Desktop Hero Image */}
+          <div className={cn("absolute inset-0 z-0", mobileHeroImage ? "hidden lg:block" : "block")}>
+            <Image
+              src={desktopHeroImage}
+              alt={regionName || "Region Gallery"}
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </div>
-        </Container>
-      </div>
+
+          {/* Mobile Hero Image */}
+          {mobileHeroImage && (
+            <div className="absolute inset-0 z-0 lg:hidden">
+              <Image
+                src={mobileHeroImage?.url || mobileHeroImage}
+                alt={regionName || "Region Gallery"}
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            </div>
+          )}
+          
+          {/* Gradient Overlays */}
+          {/* Desktop Gradient - Horizontal Fade */}
+          <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-slate-900/85 via-slate-900/40 to-slate-900/10 z-10" />
+          {/* Mobile Gradient - Vertical Bottom Fade */}
+          <div className="lg:hidden absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent z-10" />
+          
+
+        </div>
+
+        {/* Content Container */}
+        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0 pt-24 mt-auto lg:mt-0">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            
+            {/* Left Content */}
+            <div className="space-y-6 text-white max-w-2xl">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 border border-amber-400/30 backdrop-blur-sm rounded-full w-fit mb-4">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span className="text-amber-300 text-xs font-bold uppercase tracking-wider">Why Visit</span>
+                </div>
+
+                {/* Main Heading */}
+                <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-tight drop-shadow-lg">
+                  Why Choose <br className="lg:hidden"/>
+                  <span className="text-amber-400 italic mt-2 lg:inline block">{regionName}?</span>
+                </h1>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                {/* Description */}
+                <div className={cn(
+                  "text-lg md:text-xl text-slate-200 leading-relaxed font-light border-l-4 border-amber-400 pl-6 mb-6",
+                  !isDescExpanded && "line-clamp-3 lg:line-clamp-none"
+                )}>
+                  {regionDataProcessed?.overview || `Azerbaijan is a captivating destination nestled between Europe and Asia in the Caucasus region. Known as the 'Land of Fire' for its natural burning mountains, Azerbaijan offers a unique blend of ancient Silk Road heritage, modern futuristic architecture, and rich cultural traditions.`}
+                </div>
+
+                 {/* Mobile View More */}
+                 <button
+                  onClick={() => setIsDescExpanded(!isDescExpanded)}
+                  className="lg:hidden text-amber-400 text-sm font-bold uppercase tracking-wider mb-6 hover:text-amber-300 transition-colors inline-flex items-center gap-2"
+                >
+                  <span>{isDescExpanded ? "View Less" : "Read More"}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+
+
+              </motion.div>
+            </div>
+
+
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/50 animate-bounce hidden lg:block">
+            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
+                <div className="w-1 h-3 bg-white/50 rounded-full animate-scroll"></div>
+            </div>
+        </div>
+      </section>
 
       {/* Main Content */}
       <Container className="py-8 md:py-12">
@@ -237,12 +288,12 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
 
             {/* Reasons List - Responsive Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-x-12 md:gap-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-12 md:gap-y-10">
               {(regionDataProcessed.whyVisitSection?.reasons || []).map((reason, idx) => (
-                <div key={idx} className="flex flex-col sm:flex-row gap-5 items-start">
+                <div key={idx} className="flex flex-row gap-4 md:gap-5 items-start">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-brand-blue to-blue-700 rounded-2xl flex items-center justify-center text-white shadow-lg border border-white/10">
-                      <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
+                    <div className="w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-brand-blue to-blue-700 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg border border-white/10 mt-0.5 md:mt-0">
+                      <ArrowRight className="w-5 h-5 md:w-8 md:h-8" />
                     </div>
                   </div>
                    <div className="flex-1">
@@ -312,7 +363,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                       >
                         {/* Main Image */}
                         <div 
-                          className="relative h-[250px] sm:h-[400px] md:h-[500px] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10 group cursor-pointer"
+                          className="relative w-full aspect-[4/5] lg:aspect-[21/9] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10 group cursor-pointer"
                           onClick={() => {
                             setSelectedGallery({ title: highlight.title, images: highlight.gallery || [] });
                             setGalleryOpen(true);

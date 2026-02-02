@@ -25,11 +25,11 @@ function LeadFormComponent() {
 
   return (
     <AlertDialog open={isOpen} onOpenChange={closeAllModals}>
-      <AlertDialogContent className="h-[calc(100dvh-40px)] max-h-[660px] w-[calc(100vw-40px)] max-w-[800px] !rounded-3xl bg-[#F8F8F8] p-0">
+      <AlertDialogContent className="h-auto max-h-[calc(100dvh-40px)] w-[calc(100vw-40px)] max-w-[500px] !rounded-3xl bg-[#F8F8F8] p-0">
         <AlertDialogHeader>
           <div className="flex items-center justify-between pt-4">
-            <AlertDialogTitle className="text-left font-nord text-lg font-medium text-brand-blue c-md:text-2xl px-8">
-              Submit an enquiry
+            <AlertDialogTitle className="text-left font-nord text-lg font-medium text-brand-blue c-md:text-2xl px-8 uppercase tracking-widest">
+              Get in touch
             </AlertDialogTitle>
             <span className="flex items-center justify-center">
               <AlertDialogCancel type="button" onClick={closeAllModals}>
@@ -46,6 +46,7 @@ function LeadFormComponent() {
           />
           <EnquiryFormFields 
             variant="modal"
+            hideFields={["departureDate", "numTravellers", "destination", "departureCity", "numDays"]}
             initialData={{ destination: region }} 
             onSuccess={() => confirmationDialogControls.open()} 
           />

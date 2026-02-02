@@ -136,7 +136,7 @@ export default function ReligiousRetreatClient() {
         )}
       </AnimatePresence>
       {/* Hero Section */}
-      <section className="relative min-h-screen pt-20 overflow-hidden divine-light flex items-center">
+      <section className="relative min-h-[70vh] lg:min-h-[80vh] pt-20 overflow-hidden divine-light flex items-center">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           <motion.div 
@@ -158,7 +158,7 @@ export default function ReligiousRetreatClient() {
         </div>
 
         <Container className="relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center py-12">
+          <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-center py-6 md:py-8 lg:py-12">
             {/* Left Content */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -278,7 +278,7 @@ export default function ReligiousRetreatClient() {
       </section>
 
       {/* Path Selection */}
-      <section className="py-16 bg-white border-y border-gold-400/10">
+      <section className="py-6 md:py-8 lg:py-10 bg-white border-y border-gold-400/10">
         <Container>
           <div className="flex justify-center gap-4 flex-wrap">
             <button 
@@ -314,11 +314,11 @@ export default function ReligiousRetreatClient() {
       </section>
 
       {/* Sacred Features */}
-      <section className="py-24 bg-burgundy-50 relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-burgundy-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]" />
         
         <Container className="relative z-10">
-          <div className="grid md:grid-cols-3 gap-12 text-center">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-12 text-center">
             {[
               { 
                 icon: BookOpen, 
@@ -338,16 +338,15 @@ export default function ReligiousRetreatClient() {
             ].map((feature, idx) => (
               <motion.div 
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.2 }}
-                className="p-8 group"
-              >
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white border-2 border-gold-400 flex items-center justify-center text-3xl text-burgundy-600 shadow-lg group-hover:scale-110 transition-transform duration-500">
-                  <feature.icon className="w-10 h-10" />
-                </div>
-                <h3 className="text-2xl font-serif text-burgundy-700 mb-3">{feature.title}</h3>
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center p-6 md:p-8 lg:p-10 rounded-2xl bg-white/40 backdrop-blur-sm border border-gold-400/10 hover:bg-white/60 transition-all duration-500 group shadow-sm hover:shadow-xl"
+            >
+              <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-8 bg-gold-50 rounded-full flex items-center justify-center text-2xl md:text-3xl text-gold-600 border border-gold-400/20 shadow-[0_0_30px_rgba(212,175,55,0.05)]">
+                <Sun className="w-8 h-8 md:w-10 md:h-10" />
+              </div>
+              <h3 className="text-xl md:text-2xl font-serif text-burgundy-900 mb-2 md:mb-4 tracking-tight">Divine Architecture</h3>
                 <p className="text-gray-600 font-light leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
@@ -358,13 +357,13 @@ export default function ReligiousRetreatClient() {
       {/* Heritage Units (Packages Grid) */}
       <section id="destinations" className="py-5 md:py-6 bg-[#FBF9F4]">
         <Container>
-          <div className="text-center mb-16">
+          <div className="text-center mb-8 md:mb-16">
             <h2 className="text-4xl md:text-5xl font-serif text-burgundy-700 mb-4">Holy Destinations</h2>
             <p className="text-gray-600 max-w-2xl mx-auto font-light">Sanctified journeys to the world&apos;s most revered spiritual sites</p>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto mt-6" />
           </div>
           
-          <div className="flex justify-center mb-12">
+          <div className="flex justify-center mb-6 md:mb-12">
             <div className="flex bg-white p-1 rounded-full border border-gold-400/20 shadow-sm">
               <button
                 onClick={() => handleTabChange("international")}
@@ -469,7 +468,7 @@ export default function ReligiousRetreatClient() {
       </section>
 
       {/* Divine Call to Action */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-12 md:py-16 bg-white relative overflow-hidden">
         {/* Subtle Mandala Background */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center z-0">
           <motion.div 

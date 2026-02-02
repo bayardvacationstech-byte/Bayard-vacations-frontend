@@ -15,6 +15,7 @@ import ShareableBlogsCarousel from './ShareableBlogsCarousel';
 import ShareableFooter from './ShareableFooter';
 
 const ShareableItineraryClient = ({ itineraryData }) => {
+  console.log('CLIENT DEBUG: itineraryData keys:', itineraryData ? Object.keys(itineraryData) : 'null');
   if (!itineraryData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">

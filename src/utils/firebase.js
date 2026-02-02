@@ -112,7 +112,7 @@ const getReferencedData = async (docRef) => {
 
   try {
     // If it's already an object with data (not a Firestore ref), return as is
-    if (docRef.url || docRef.urlRef || docRef.title || docRef.displayName) {
+    if (docRef.url || docRef.image || docRef.label || docRef.description || docRef.urlRef || docRef.title || docRef.displayName) {
       return docRef;
     }
 
@@ -285,6 +285,22 @@ const resolveAllPackageReferences = async (packageData) => {
   return packageData;
 };
 
+// Helper function to resolve references for a region
+export const resolveRegionReferences = async (regionData) => {
+  if (regionData.bannerImages) {
+    const bannerImagesData = await Promise.all(
+      regionData.bannerImages.map(getReferencedData)
+    );
+    regionData.bannerImages = bannerImagesData.filter(Boolean);
+  }
+
+  if (regionData.bannerImage) {
+    regionData.bannerImage = await getReferencedData(regionData.bannerImage);
+  }
+
+  return regionData;
+};
+
 // Unified function to get package by slug or ID with all references resolved
 /**
  * Fetches a package by slug or ID and resolves all references (includes, excludes, bannerImages, cardImages, itineraries)
@@ -361,13 +377,14 @@ export const getRegionDocumentBySlug = async (slug) => {
   try {
     const regionsRef = collection(db, COLLECTIONS.REGIONS);
     const q = query(regionsRef, where("slug", "==", slug));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocsFromServer(q);
 
     if (querySnapshot.empty) {
       throw new Error("Region not found");
     }
 
-    return sanitizeDocumentData(querySnapshot.docs[0]);
+    const regionData = sanitizeDocumentData(querySnapshot.docs[0]);
+    return await resolveRegionReferences(regionData);
   } catch (error) {
     throw error;
   }
@@ -377,7 +394,7 @@ export const getOfferByPackageId = async (packageId) => {
   try {
     const offersRef = collection(db, COLLECTIONS.OFFERS);
     const q = query(offersRef, where("packageId", "==", packageId));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocsFromServer(q);
 
     if (querySnapshot.empty) {
       return null;
@@ -392,7 +409,7 @@ export const getOfferByPackageId = async (packageId) => {
 // Get all documents
 export const getAllDocuments = async (collectionName) => {
   try {
-    const querySnapshot = await getDocs(collection(db, collectionName));
+    const querySnapshot = await getDocsFromServer(collection(db, collectionName));
     return querySnapshot.docs.map(sanitizeDocumentData);
   } catch (error) {
     throw error;
@@ -411,14 +428,14 @@ export const searchPackages = async (searchTerm) => {
       where("status", "==", PACKAGE_STATUS.PUBLISHED),
       limit(PACKAGE_LIMIT)
     );
-    const querySnapshot = await getDocs(packagesRef);
+    const querySnapshot = await getDocsFromServer(packagesRef);
     const packages = [];
 
     // Get all regions
     // TODO: Add limit to regions
     // Fetchs all regions and filters them in the frontend, not good
     const regionsRef = query(collection(db, COLLECTIONS.REGIONS));
-    const regionsSnapshot = await getDocs(regionsRef);
+    const regionsSnapshot = await getDocsFromServer(regionsRef);
     const regions = [];
 
     // Filter regions
@@ -613,7 +630,7 @@ export const getCuratedPackages = async (
       ...queryConstraints
     );
 
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocsFromServer(q);
     const initialPackages = querySnapshot.docs.map(sanitizeDocumentData);
 
     if (isHomePage) {
@@ -644,7 +661,7 @@ export const getAllPublishedPackages = async (packageType) => {
       where("status", "==", PACKAGE_STATUS.PUBLISHED)
     );
 
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocsFromServer(q);
     const initialPackages = querySnapshot.docs.map(doc => sanitizeDocumentData(doc));
     
     // Use optimized batch resolver
@@ -673,7 +690,7 @@ export const getPackagesByRegion = async (regionName) => {
       where("status", "==", PACKAGE_STATUS.PUBLISHED)
     );
     
-    let querySnapshot = await getDocs(q);
+    let querySnapshot = await getDocsFromServer(q);
     
     // If no results, try the original slug as-is
     if (querySnapshot.empty) {
@@ -682,7 +699,7 @@ export const getPackagesByRegion = async (regionName) => {
         where("region", "==", regionName),
         where("status", "==", PACKAGE_STATUS.PUBLISHED)
       );
-      querySnapshot = await getDocs(q);
+      querySnapshot = await getDocsFromServer(q);
     }
 
     const packages = await Promise.all(
@@ -722,7 +739,7 @@ export const getPackagesByTheme = async (
       return initialPackages;
     }
 
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocsFromServer(q);
     const initialPackagesData = querySnapshot.docs.map(sanitizeDocumentData);
     
     // Use batch resolution for themes
@@ -740,7 +757,7 @@ export const getHotelsByIds = async (hotelIds) => {
     const hotelsRef = collection(db, COLLECTIONS.HOTELS);
     const promises = hotelIds.map(async (id) => {
       const docRef = doc(hotelsRef, id);
-      const docSnap = await getDoc(docRef);
+      const docSnap = await getDocFromServer(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
         let placeData = null;
@@ -799,7 +816,7 @@ export const getCollectionQuery = (collectionName, conditions = []) => {
 export const getRegions = async () => {
   try {
     const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
-    const querySnapshot = await getDocs(regionsQuery);
+    const querySnapshot = await getDocsFromServer(regionsQuery);
     const regions = querySnapshot.docs.map(sanitizeDocumentData);
     
     
@@ -832,7 +849,7 @@ export const getFeaturedImageByRegion = async (regionName) => {
       where("type", "==", "card"),
       where("frontPage", "==", true)
     );
-    querySnapshot = await getDocs(q);
+    querySnapshot = await getDocsFromServer(q);
     
     // Second try: exact match with original case
     if (querySnapshot.empty) {
@@ -842,7 +859,7 @@ export const getFeaturedImageByRegion = async (regionName) => {
         where("type", "==", "card"),
         where("frontPage", "==", true)
       );
-      querySnapshot = await getDocs(q);
+      querySnapshot = await getDocsFromServer(q);
     }
     
     // Third try: without frontPage filter
@@ -852,7 +869,7 @@ export const getFeaturedImageByRegion = async (regionName) => {
         where("region", "==", regionName.toLowerCase()),
         where("type", "==", "card")
       );
-      querySnapshot = await getDocs(q);
+      querySnapshot = await getDocsFromServer(q);
     }
 
     if (querySnapshot.empty) {
@@ -874,9 +891,60 @@ export const getFeaturedImageByRegion = async (regionName) => {
 export const getPlace = async (id) => {
   try {
     const placeRef = doc(db, COLLECTIONS.PLACES, id);
-    const placeSnap = await getDoc(placeRef);
+    const placeSnap = await getDocFromServer(placeRef);
     return sanitizeDocumentData(placeSnap);
   } catch (error) {
     throw error;
+  }
+};
+
+export const getSavedItinerary = async (id) => {
+  try {
+    console.log(`[getSavedItinerary] Attempting to fetch ID: ${id} from ${COLLECTIONS.SAVED_PDF}`);
+
+    // 1. Try fetching by Document Key (ID)
+    const docRef = doc(db, COLLECTIONS.SAVED_PDF, id);
+    const docSnap = await getDocFromServer(docRef);
+
+    if (docSnap.exists()) {
+      console.log(`[getSavedItinerary] Found document by KEY: ${id}`);
+      return sanitizeDocumentData(docSnap);
+    }
+    
+    // 2. Fallback: Try fetching by field "documentID"
+    console.log(`[getSavedItinerary] Document key not found. Querying field 'documentID' == ${id}`);
+    const q = query(
+      collection(db, COLLECTIONS.SAVED_PDF),
+      where("documentID", "==", id)
+    );
+    const querySnapshot = await getDocsFromServer(q);
+
+    if (!querySnapshot.empty) {
+      console.log(`[getSavedItinerary] Found document by FIELD 'documentID': ${id}`);
+      return sanitizeDocumentData(querySnapshot.docs[0]);
+    }
+    
+    console.log(`[getSavedItinerary] No document found for ID: ${id} (checked Key and Field)`);
+    return null;
+  } catch (error) {
+    console.error("Error fetching saved itinerary:", error);
+    return null;
+  }
+};
+
+export const getSavedItineraryById = async (id) => {
+  try {
+    const docRef = doc(db, COLLECTIONS.SAVED_PDFS, id);
+    const docSnap = await getDocFromServer(docRef);
+
+    if (!docSnap.exists()) {
+      return null;
+    }
+
+    const data = sanitizeDocumentData(docSnap);
+    return data;
+  } catch (error) {
+    console.error("Error fetching saved itinerary:", error);
+    return null;
   }
 };

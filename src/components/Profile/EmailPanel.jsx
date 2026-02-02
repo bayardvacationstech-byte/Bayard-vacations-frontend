@@ -1,8 +1,7 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Loader2, Mail, PenLine, X } from "lucide-react";
+import { Loader2, Mail, PenLine, X, Check } from "lucide-react";
 import {
   verifyBeforeUpdateEmail,
   PhoneAuthProvider,
@@ -67,6 +66,17 @@ const EmailPanel = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    // Mock bypass for localhost
+    const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
+    if (isLocal) {
+      setTimeout(() => {
+        setStep("completed");
+        setLoading(false);
+        toast({ title: "Mock Email Sent", description: "Verification link sent to " + email });
+      }, 800);
+      return;
+    }
 
     try {
       const lastSignIn = new Date(user.metadata.lastSignInTime).getTime();
@@ -173,148 +183,181 @@ const EmailPanel = () => {
     setStep("email");
   };
 
+  // New functions for the updated design
+  const handleEmailUpdate = async (e) => {
+    e.preventDefault();
+    setError("");
+    setUpdating(true);
+
+    try {
+      await verifyBeforeUpdateEmail(user, email, {
+        url: window.location.origin + "/profile", // Or a specific verification page
+      });
+      toast({
+        title: "Verification Link Sent",
+        description: `A verification link has been sent to ${email}. Please check your inbox.`,
+      });
+      setIsEditing(false);
+      setVerificationSent(true); // Indicate that a link was sent
+    } catch (err) {
+      setError(err.message || "Failed to send verification link.");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: err.message || "Failed to send verification link.",
+      });
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const sendVerificationLink = async () => {
+    setSendingLink(true);
+    setError("");
+    try {
+      await user.sendEmailVerification({
+        url: window.location.origin + "/profile", // Or a specific verification page
+      });
+      toast({
+        title: "Verification Link Sent",
+        description: "A new verification link has been sent to your email.",
+      });
+      setVerificationSent(true);
+    } catch (err) {
+      setError(err.message || "Failed to send verification email.");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: err.message || "Failed to send verification email.",
+      });
+    } finally {
+      setSendingLink(false);
+    }
+  };
+
   return (
-    <div className="relative flex-1 rounded-2xl border border-solid border-[#D9D9D9] px-6 py-8">
-      <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-nord font-bold uppercase text-brand-blue">
-        email id
-      </h5>
+    <div className="relative group overflow-hidden">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-3xl -mr-32 -mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      
+      <div className="relative rounded-[2.5rem] border border-slate-100 bg-white/70 backdrop-blur-md p-10 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="space-y-6 flex-1">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-brand-blue/5 text-brand-blue border border-brand-blue/10 shadow-sm">
+                <Mail className="size-5" />
+              </div>
+              <div>
+                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                  Communication
+                </h5>
+                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Email Address</h4>
+              </div>
+            </div>
 
-      {isEditing && false}
+            {!isEditing ? (
+              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
+                <div className="flex items-center gap-4">
+                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+                    {user?.email || "Not Specified"}
+                  </h3>
+                  {user?.emailVerified ? (
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
+                      <Check className="size-3" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Verified</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100 shadow-sm">
+                      <div className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Pending</span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-slate-400 font-medium mt-3">
+                  Account security and travel alerts will be sent here.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleEmailUpdate} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-500">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Email Address</label>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white focus:border-brand-blue/30 transition-all shadow-sm"
+                    placeholder="traveler@luxury.com"
+                    disabled={updating}
+                    required
+                  />
+                </div>
+                
+                <div className="flex items-center gap-3 pt-2">
+                  <Button
+                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-black uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
+                    type="submit"
+                    disabled={updating}
+                  >
+                    {updating ? (
+                      <Loader2 className="size-4 animate-spin text-white" />
+                    ) : (
+                      <>
+                        <Check className="size-4" />
+                        <span>Update Email</span>
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditing(false)}
+                    className="rounded-2xl border border-slate-200 bg-white px-8 h-12 text-slate-600 font-bold hover:bg-slate-50 transition-all"
+                    type="button"
+                    disabled={updating}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            )}
 
-      {step === "view" && (
-        <div className="flex flex-col items-start justify-start gap-4">
-          <div>
-            <h3 className="text-lg font-semibold">
-              {user?.email || "Not set"}
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Your registered email address
-            </p>
+            {step === "completed" && (
+              <div className="flex items-center gap-4 animate-in zoom-in-95 duration-300">
+                <div className="p-3 rounded-full bg-emerald-100 text-emerald-600">
+                  <Check className="size-6" />
+                </div>
+                <div>
+                  <p className="font-bold text-slate-800">Verification Link Sent!</p>
+                  <p className="text-xs text-slate-500 font-medium">Please check your inbox at {email}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="ml-auto rounded-2xl border-slate-200"
+                  onClick={handleComplete}
+                >
+                  Close
+                </Button>
+              </div>
+            )}
           </div>
-          <Button
-            onClick={startEdit}
-            variant="outline"
-            className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-          >
-            <span className="mr-2">Edit</span>
-            <PenLine className="size-4" />
-          </Button>
+
+          {step === "view" && (
+            <div className="flex shrink-0">
+              <Button
+                onClick={startEdit}
+                className="rounded-2xl border-2 border-brand-blue/20 bg-white px-6 py-6 text-brand-blue font-bold hover:bg-brand-blue hover:text-white hover:border-brand-blue hover:scale-[1.02] transition-all duration-300 shadow-sm flex items-center gap-2"
+                type="button"
+              >
+                <span>Change Email</span>
+                <PenLine className="size-4" />
+              </Button>
+            </div>
+          )}
         </div>
-      )}
-
-      {step === "email" && (
-        <form onSubmit={handleEmailSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">New Email Address</Label>
-            <Input
-              id="email"
-              type="email"
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="johndoe@example.com"
-              required
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 rounded-xl p-5"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              <X className="mr-2 size-4" />
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Mail className="mr-2 size-4" />
-                  Continue
-                </>
-              )}
-            </Button>
-          </div>
-        </form>
-      )}
-
-      {step === "otp" && (
-        <form onSubmit={handleOtpSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="otp">Verification Code</Label>
-            <Input
-              id="otp"
-              type="text"
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              placeholder="Enter verification code sent to your phone"
-              required
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 rounded-xl p-5"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              <X className="mr-2 size-4" />
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Verifying...
-                </>
-              ) : (
-                "Verify Code"
-              )}
-            </Button>
-          </div>
-        </form>
-      )}
-
-      {step === "completed" && (
-        <div className="py-4 text-center">
-          <p className="font-medium text-green-600">
-            Verification link has been sent to your email!
-          </p>
-          <p className="mb-8 mt-2 text-sm text-gray-500">
-            Please check your email and click the verification link to complete
-            the process.
-          </p>
-          <Button
-            className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-            onClick={handleComplete}
-          >
-            Done
-          </Button>
-        </div>
-      )}
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
+        
+        {error && (
+          <Alert variant="destructive" className="mt-6 rounded-2xl border-none bg-red-50 text-red-600">
+            <AlertDescription className="font-medium text-xs">{error}</AlertDescription>
+          </Alert>
+        )}
+      </div>
       <div id="recaptcha-container"></div>
     </div>
   );

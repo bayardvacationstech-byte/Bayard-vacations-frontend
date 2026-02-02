@@ -152,5 +152,12 @@ export default function BadgeSection({ item }) {
 
   if (badges.length === 0) return null;
 
-  return <div className="flex flex-wrap gap-2">{badges}</div>;
+  // Rule: Max show 1 tag only for maximum clarity
+  const displayBadges = badges.slice(0, 1);
+
+  return (
+    <div className="flex gap-2 max-w-[calc(100%-110px)] relative z-20">
+      {displayBadges}
+    </div>
+  );
 }

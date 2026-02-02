@@ -41,7 +41,7 @@ const RelatedPackages = ({ relatedPackages }) => {
           <Swiper
             modules={[Navigation, Autoplay]}
             spaceBetween={12}
-            slidesPerView={1.5}
+            slidesPerView={1.2}
             centeredSlides={false}
             navigation={{
               prevEl: ".swiper-button-prev-pkg",

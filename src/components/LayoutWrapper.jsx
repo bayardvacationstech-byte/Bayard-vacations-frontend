@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import DesktopNavbar from '@/components/Navbars/DesktopNavbar';
 import MobileNavbar from '@/components/Navbars/MobileNavbar';
 import LeadForm from '@/components/Forms/EnquiryForm/LeadForm';
+import LeadGenerationTrigger from '@/components/Forms/EnquiryForm/LeadGenerationTrigger';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import ChatbotIcon from '@/components/ChatbotIcon';
 import FooterClient from '@/components/layouts/FooterClient';
@@ -29,6 +30,7 @@ export default function LayoutWrapper({ children, footerData }) {
       {!isShareRoute && (
         <>
           <LeadForm />
+          <LeadGenerationTrigger />
           <WhatsAppIcon />
           <ChatbotIcon />
           <FooterClient {...footerData} />
