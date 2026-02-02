@@ -87,15 +87,16 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
 
     const rawImages = [
       ...scavenger(item.cardImages),
-      ...(item.cardImage ? [{ url: item.cardImage }] : []),
-      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []),
+      ...(item.cardImage ? [item.cardImage] : []),
+      ...(item.cardImageRef ? [item.cardImageRef] : []),
     ];
 
     // Normalize and filter unique valid images
     const seen = new Set();
     const result = rawImages
       .map(img => {
-        const url = typeof img === "string" ? img : img?.url;
+        if (!img) return null;
+        const url = typeof img === "string" ? img : img.url;
         return url ? { url } : null;
       })
       .filter(img => {
@@ -121,12 +122,19 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
     ? `/packages/${regionSlug}/${item.packageSlug}?group=true`
     : `/packages/${regionSlug}/${item.packageSlug}`;
 
-  // Default highlights if not provided
-  const highlights = item.highlights || [
-    "Premium Accommodation",
-    "Expert Guided Tours",
-    "Curated Experiences"
-  ];
+  // Process highlights: replace first two with destinations if available
+  const baseHighlights = useMemo(() => {
+    const rawHighlights = item.highlights || ["Premium Accommodation", "Expert Guided Tours", "Curated Experiences"];
+    const destinations = item.citiesList || item.location || "";
+    
+    if (destinations) {
+      return [
+        `Covering: ${destinations}`,
+        ...rawHighlights.slice(2)
+      ];
+    }
+    return rawHighlights;
+  }, [item.highlights, item.citiesList, item.location]);
 
 
   return (
@@ -229,29 +237,30 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
               <BadgeSection item={item} />
             </div>
 
-            {/* Rating Tag */}
-            <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg transform group-hover:rotate-6 transition-transform">
-              <Heart className={cn("w-3.5 h-3.5 fill-current", theme.text)} />
-              <span className={cn("text-[10px] font-black", theme.text)}>4.9</span>
+            {/* Rating Tag - Enhanced prominence */}
+            <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl transform group-hover:rotate-6 transition-transform border border-white/50">
+              <Heart className={cn("w-4 h-4 fill-current", theme.text)} />
+              <span className={cn("text-xs font-black", theme.text)}>4.9</span>
             </div>
 
-            {/* Location + Duration Overlay */}
-            <div className="absolute bottom-4 left-4 right-4 z-20 flex items-center justify-between text-white">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+            {/* Location + Duration Overlay - Enhanced highlighting */}
+            <div className="absolute bottom-5 left-4 right-4 z-20 flex items-center justify-between text-white">
+              <div className="flex items-center gap-2 bg-black/30 backdrop-blur-lg px-3 py-1.5 rounded-full border border-white/10 group-hover:bg-black/50 transition-all">
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
                   <MapPin className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-sm font-bold tracking-tight capitalize">
+                <span className="text-[13px] font-black tracking-tight capitalize drop-shadow-md">
                   {item.location || regionSlug.split("-").join(" ")}
                 </span>
               </div>
+              
               <div className={cn(
-                "flex items-center gap-2 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20",
+                "flex items-center gap-2 backdrop-blur-lg px-4 py-2 rounded-full border border-white/30 shadow-xl",
                 theme.badge,
-                "bg-opacity-80"
+                "bg-opacity-95 transform group-hover:scale-105 transition-transform"
               )}>
-                <Clock className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-black uppercase tracking-widest">
+                <Clock className="w-4 h-4" />
+                <span className="text-xs font-bold uppercase tracking-wider">
                   {item.days}D / {item.nights}N
                 </span>
               </div>
@@ -259,21 +268,23 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
           </div>
 
           {/* Content Area */}
-          <div className="pt-2 sm:pt-2 px-5 sm:px-8 pb-5 sm:pb-8 flex-none sm:flex-1 flex flex-col justify-between space-y-3 sm:space-y-4">
+          <div className="pt-1.5 sm:pt-2 px-5 sm:px-8 pb-3 sm:pb-5 flex-none sm:flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
             <div className="space-y-2 sm:space-y-2">
-              <h3 className={cn(
-                "text-xl sm:text-2xl font-black text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
-                theme.textHover
-              )}>
-                {item.packageTitle}
-              </h3>
+              <div className="min-h-[3rem] sm:min-h-[3.75rem]">
+                <h3 className={cn(
+                  "text-xl sm:text-2xl font-black text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
+                  theme.textHover
+                )}>
+                  {item.packageTitle}
+                </h3>
+              </div>
               
               {/* Highlights Section */}
-              <div className="space-y-2 sm:space-y-2.5">
-                {(item.highlights || ["Premium Accommodation", "Expert Guided Tours", "Curated Experiences"]).slice(0, 3).map((highlight, idx) => (
+              <div className="space-y-1.5 sm:space-y-2 min-h-[3rem] sm:min-h-[3.5rem]">
+                {baseHighlights.slice(0, 3).map((highlight, idx) => (
                   <div key={idx} className="flex items-center gap-2 sm:gap-3 group/hl">
-                    <div className="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)] group-hover/hl:scale-125 transition-transform" />
-                    <p className="text-sm sm:text-sm text-slate-600 italic font-medium leading-tight tracking-tight">
+                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)] group-hover/hl:scale-125 transition-transform" />
+                    <p className="text-sm sm:text-xs text-slate-600 italic font-medium leading-tight tracking-tight line-clamp-1">
                       {highlight}
                     </p>
                   </div>
@@ -282,7 +293,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
             </div>
 
             {/* Premium Footer */}
-            <div className="pt-4 sm:pt-6 border-t border-slate-100 flex items-end justify-between">
+            <div className="pt-2 sm:pt-3 border-t border-slate-100 flex items-end justify-between">
               <div className="space-y-1 sm:space-y-1">
                 <p className="text-[8px] sm:text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Curated Price</p>
                 <div className="flex flex-col">

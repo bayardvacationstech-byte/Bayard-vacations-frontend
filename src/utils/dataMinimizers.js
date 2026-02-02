@@ -32,6 +32,7 @@ export const minimizePackageData = (pkg) => {
     curated: !!pkg.curated,
     bestseller: !!pkg.bestseller,
     underrated: !!pkg.underrated,
+    citiesList: pkg.citiesList || "",
     // Add any others absolutely needed for cards
   };
 };

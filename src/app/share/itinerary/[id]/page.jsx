@@ -1,12 +1,22 @@
 import { getItineraryById } from '@/data/dummy-itinerary-data';
 import ShareableItineraryClient from '@/components/ShareItinerary/ShareableItineraryClient';
-import { DEFAULT_URL } from '@/config';
+import { getSavedItineraryById } from '@/utils/firebase';
+import { mapSavedItineraryToShareable } from '@/utils/itineraryMapper';
 import { headers } from 'next/headers';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const itineraryData = getItineraryById(id);
+  
+  let rawData;
+  let itineraryData;
+  
+  if (id === 'demo-001') {
+    itineraryData = getItineraryById(id);
+  } else {
+    rawData = await getSavedItineraryById(id);
+    itineraryData = mapSavedItineraryToShareable(rawData);
+  }
   
   if (!itineraryData) {
     return {
@@ -70,7 +80,16 @@ export async function generateMetadata({ params }) {
 
 export default async function ShareItineraryPage({ params }) {
   const { id } = await params;
-  const itineraryData = getItineraryById(id);
+  
+  let rawData;
+  let itineraryData;
+  
+  if (id === 'demo-001') {
+    itineraryData = getItineraryById(id);
+  } else {
+    rawData = await getSavedItineraryById(id);
+    itineraryData = mapSavedItineraryToShareable(rawData);
+  }
 
   return <ShareableItineraryClient itineraryData={itineraryData} />;
 }

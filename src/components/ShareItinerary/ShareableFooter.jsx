@@ -8,15 +8,15 @@ const ShareableFooter = ({ contactInfo }) => {
   if (!contactInfo) return null;
 
   const { 
-    companyName, 
-    phone, 
-    whatsapp, 
-    email, 
-    website, 
+    companyName = "Bayard Vacations", 
+    phone = "Contact our expert", 
+    whatsapp = "", 
+    email = "", 
+    website = "bayardvacations.com", 
     emergencyContact,
     destinationExpert,
     bankDetails
-  } = contactInfo;
+  } = contactInfo || {};
 
   return (
     <footer className="bg-brand-blue text-white pt-20 pb-12 border-t border-white/10 font-outfit relative overflow-hidden">

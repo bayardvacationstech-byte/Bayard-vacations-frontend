@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDocFromServer } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { COLLECTIONS } from "@/config";
 
@@ -27,7 +27,7 @@ export function useWhyChooseRegion(regionId) {
         setError(null);
 
         const docRef = doc(db, COLLECTIONS.WHY_CHOOSE_REGION, regionId);
-        const docSnap = await getDoc(docRef);
+        const docSnap = await getDocFromServer(docRef);
 
         if (docSnap.exists()) {
           const data = docSnap.data();

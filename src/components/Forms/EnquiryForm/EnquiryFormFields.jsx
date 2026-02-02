@@ -189,7 +189,7 @@ export default function EnquiryFormFields({
       if (formType === "lead") {
         response = await storeLead({
           ...formData,
-          departureDate: formatDateTime(formData.departureDate),
+          departureDate: formData.departureDate ? formatDateTime(formData.departureDate) : "Not Specified",
         });
         if (response) trackLeadFormConversion();
       } else {
@@ -259,7 +259,7 @@ export default function EnquiryFormFields({
       <div className={cn("grid", (isNewsletter || isSection || variant === "inline") ? "gap-3" : "gap-5")}>
         
         {/* Name and Email Row */}
-        <div className={cn("grid", (isNewsletter || isSection || variant === "inline") ? "grid-cols-1 gap-3" : "c-md:grid-cols-2 gap-5")}>
+        <div className={cn("grid", (isNewsletter || isSection || variant === "inline" || variant === "modal") ? "grid-cols-1 gap-3" : "c-md:grid-cols-2 gap-5")}>
           {!isFieldHidden("name") && (
             <div className="relative">
               {isNewsletter && <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />}
@@ -305,32 +305,20 @@ export default function EnquiryFormFields({
         </div>
 
         {/* Contact and Date Row */}
-        <div className={cn("grid gap-4", (isNewsletter || isSection || variant === "inline") ? "grid-cols-1" : "c-md:grid-cols-2")}>
+        <div className={cn("grid gap-4", (isNewsletter || isSection || variant === "inline" || variant === "modal") ? "grid-cols-1" : "c-md:grid-cols-2")}>
           {!isFieldHidden("contactNumber") && formType === "lead" && (
             <div>
               <span className={labelClass}>Contact Number *</span>
-              <div className="flex">
-                <div className={cn(
-                  "border border-r-0 border-solid border-[#B0B0B0] bg-[#F8F8F8] text-sm text-[#616161] flex items-center justify-center",
-                  variant === "modal" ? "rounded-l-2xl px-4 h-12" : "rounded-l-lg px-3",
-                  variant === "inline" ? "h-10 text-xs" : "h-12"
-                )}>
-                  +91
-                </div>
                 <Input
-                  className={cn(
-                    inputClass, 
-                    variant === "modal" ? "rounded-l-none rounded-r-2xl" : "rounded-l-none"
-                  )}
+                  className={inputClass}
                   type="text"
                   name="contactNumber"
                   value={formData.contactNumber}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="9991110000"
+                  placeholder="+91 9991110000"
                   required
                 />
-              </div>
               {touched.contactNumber && errors.contactNumber && (
                 <small className="ml-4 mt-1 block text-red-600 text-xs">
                   {errors.contactNumber}
@@ -342,22 +330,8 @@ export default function EnquiryFormFields({
           {!isFieldHidden("phone") && formType === "potential" && (
             <div className="relative">
               {!isNewsletter && <span className={labelClass}>Phone Number *</span>}
-              <div className="flex relative">
-                {isNewsletter && <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 z-10" />}
-                {!isNewsletter && (
-                  <div className={cn(
-                    "border border-r-0 border-solid border-[#B0B0B0] bg-[#F8F8F8] text-sm text-[#616161] flex items-center justify-center",
-                    variant === "modal" ? "rounded-l-2xl px-4" : "rounded-l-lg px-3",
-                    variant === "inline" ? "h-10 text-xs" : "h-12"
-                  )}>
-                    +91
-                  </div>
-                )}
                 <Input
-                  className={cn(
-                    inputClass,
-                    !isNewsletter && (variant === "modal" ? "rounded-l-none rounded-r-2xl" : "rounded-l-none")
-                  )}
+                  className={inputClass}
                   type="tel"
                   name="phone"
                   value={formData.phone}
@@ -367,7 +341,6 @@ export default function EnquiryFormFields({
                   placeholder={isNewsletter ? "Phone Number" : "9876543210"}
                   required
                 />
-              </div>
               {touched.phone && errors.phone && (
                 <small className="ml-4 mt-1 block text-red-600 text-xs">
                   {errors.phone}
@@ -586,7 +559,7 @@ export default function EnquiryFormFields({
         )}
       </div>
 
-      {variant !== "inline" && (
+      {variant !== "inline" && variant !== "modal" && (
         <div className="space-y-2 mt-6">
           <div className="flex items-start gap-3 text-slate-500 text-xs leading-relaxed transition-all">
             <Check className={cn("w-4 h-4 mt-0.5 shrink-0", whiteLabels ? "text-yellow-400" : "text-brand-blue")} />

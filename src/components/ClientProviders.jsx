@@ -9,18 +9,16 @@ import { QueryClient } from "@tanstack/react-query";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh longer
-      gcTime: 1000 * 60 * 60 * 24, // 24 hours - keep in cache for 24 hours
-      refetchOnWindowFocus: false, // Don't refetch when window regains focus
-      refetchOnMount: false, // Don't refetch when component mounts if data exists
+      staleTime: 0, // Truly immediate updates - never trust the cache
+      gcTime: 1000 * 60 * 60, // 1 hour - keep in memory for 1 hour
+      refetchOnWindowFocus: true, // Refetch when window regains focus
+      refetchOnMount: true, // Refetch when component mounts
       retry: 1, // Only retry once on failure
-      retryOnMount: false, // Don't retry failed queries on mount
     },
   },
 });
 // Increment CACHE_VERSION when you need to force all users to refresh their cache
-// (e.g., when making breaking changes to data structure or hiding/showing regions)
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v3";
 
 const persister = createSyncStoragePersister({
   storage: typeof window !== "undefined" ? window.localStorage : undefined,

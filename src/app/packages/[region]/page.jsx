@@ -2,6 +2,8 @@ import PackagesRegionClient from "@/components/Packages/PackagesRegionClient";
 import { getAllDocuments, getRegionDocumentBySlug } from "@/utils/firebase";
 import { COLLECTIONS } from "@/config";
 
+export const dynamic = 'force-dynamic'; // Bypass server-side cache entirely for this page
+
 // Enable dynamic params
 export const dynamicParams = true;
 
@@ -20,7 +22,7 @@ export async function generateStaticParams() {
 
 // Generate metadata for package region pages
 export async function generateMetadata({ params }) {
-  const { region } = params;
+  const { region } = await params;
   
   // Construct canonical URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bayardvacations.com';
@@ -94,6 +96,15 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function PackagesRegionPage() {
-  return <PackagesRegionClient />;
+export default async function PackagesRegionPage({ params }) {
+  const { region } = await params;
+  let initialRegionData = null;
+
+  try {
+    initialRegionData = await getRegionDocumentBySlug(region);
+  } catch (error) {
+    console.error("Error fetching initial region data:", error);
+  }
+
+  return <PackagesRegionClient initialRegionData={initialRegionData} />;
 }

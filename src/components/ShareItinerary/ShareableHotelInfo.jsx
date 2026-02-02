@@ -11,7 +11,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 const ShareableHotelInfo = ({ hotelDetails }) => {
-  const hotels = Array.isArray(hotelDetails) ? hotelDetails : [hotelDetails];
+  const hotels = hotelDetails ? (Array.isArray(hotelDetails) ? hotelDetails : [hotelDetails]) : [];
 
   if (!hotels || hotels.length === 0) return null;
 
@@ -56,7 +56,7 @@ const ShareableHotelInfo = ({ hotelDetails }) => {
             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-blue-50 rounded-md border border-blue-100">
               <MapPin className="w-3.5 h-3.5 text-blue-600" />
               <span className="text-[10px] font-black text-blue-600 uppercase tracking-wider">
-                {hotel.location || hotel.city || "Top Location"}
+                {hotel.category || "Premium Hotel"} • {hotel.location || hotel.city || "Top Location"}
               </span>
             </div>
             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-50 rounded-md border border-slate-100">

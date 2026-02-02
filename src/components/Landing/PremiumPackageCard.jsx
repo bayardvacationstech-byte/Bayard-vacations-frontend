@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronRight, ArrowRight, Heart, MapPin, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/offerUtils";
 
@@ -26,20 +26,18 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
 
     const rawImages = [
       ...scavenger(item.cardImages),
-      ...scavenger(item.bannerImages),
+      ...(item.cardImage ? [{ url: item.cardImage }] : []),
+      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []),
       ...scavenger(item.images),
       ...scavenger(item.imageRefs),
       ...scavenger(item.itineraries?.flatMap(it => it.imageRefs || [])),
-      ...(item.cardImage ? [{ url: item.cardImage }] : []),
-      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []),
-      ...(item.bannerImage ? [{ url: item.bannerImage }] : []),
       ...(item.image ? [{ url: item.image }] : []),
       ...(item.imageUrl ? [{ url: item.imageUrl }] : []),
       ...(item.featuredImage ? [{ url: item.featuredImage }] : []),
     ];
 
     const seen = new Set();
-    return rawImages
+    const filtered = rawImages
       .map(img => {
         const url = typeof img === "string" ? img : img?.url;
         return url ? { url } : null;
@@ -49,7 +47,23 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
         seen.add(img.url);
         return true;
       });
+
+    return filtered.length > 0 ? filtered : [{ url: "/img/placeholders/package-placeholder.png" }];
   }, [item]);
+
+  // Process highlights: replace first two with destinations if available
+  const baseHighlights = useMemo(() => {
+    const rawHighlights = item.highlights || ["Premium Accommodation", "Expert Guided Tours", "Curated Experiences"];
+    const destinations = item.citiesList || item.location || "";
+    
+    if (destinations) {
+      return [
+        `Covering: ${destinations}`,
+        ...rawHighlights.slice(2)
+      ];
+    }
+    return rawHighlights;
+  }, [item.highlights, item.citiesList, item.location]);
 
   const href = isGroup
     ? `/packages/${item.region}/${item.packageSlug}?group=true`
@@ -77,7 +91,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
         });
     }
 
-    return tags.slice(0, 2); // Show max 2 at top
+    return tags.slice(0, 1); // Show max 1 only for clarity
   }, [item]);
 
   return (
@@ -127,13 +141,13 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
           <div className="absolute inset-0 pointer-events-none z-10 shadow-[inset_0_0_100px_rgba(0,0,0,0.3)]" />
         </div>
 
-        {/* Top Tags - Glassmorphism & Highlighting */}
-        <div className="absolute top-5 left-5 right-5 z-20 flex flex-wrap gap-2">
+        {/* Top Tag - Single badge only for clarity */}
+        <div className="absolute top-5 left-5 right-5 z-20 flex gap-2 max-w-[calc(100%-120px)]">
           {topTags.map((tag, idx) => (
             <div 
               key={idx}
               className={cn(
-                "tag inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black tracking-widest uppercase text-white backdrop-blur-2xl border transition-all duration-300 hover:translate-y-[-2px] shadow-lg",
+                "tag inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase text-white backdrop-blur-2xl border transition-all duration-300 hover:translate-y-[-2px] shadow-lg",
                 tag.type === "trending" && "bg-orange-500/60 border-orange-400 shadow-orange-500/40",
                 tag.type === "curated" && "bg-rose-600/70 border-rose-400 shadow-rose-600/40",
                 tag.type === "value" && "bg-blue-600/70 border-blue-400 shadow-blue-600/40",
@@ -145,30 +159,52 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
             </div>
           ))}
         </div>
+        
+        {/* Rating Badge - Highlighted */}
+        <div className="absolute top-6 right-6 z-30 flex items-center gap-2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl transform hover:rotate-6 transition-transform border border-white/50">
+          <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+          <span className="text-sm font-black text-slate-900">4.9</span>
+        </div>
 
-        {/* Floating Middle Badges */}
-        <div className="absolute bottom-[135px] left-5 right-5 z-20 flex justify-between items-center">
-          <div className="location-badge inline-flex items-center px-4 py-2 bg-black/40 backdrop-blur-md border border-white/20 rounded-full text-white font-black text-xs tracking-wider uppercase transition-all hover:bg-black/60 hover:scale-105">
-            {item.region?.split("-").join(" ")}
+        {/* Floating Middle Badges - Moved higher to avoid content overlap */}
+        <div className="absolute bottom-[160px] left-5 right-5 z-20 flex justify-between items-center">
+          <div className="location-badge inline-flex items-center gap-2 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white font-black text-xs tracking-wider transition-all hover:bg-black/70 hover:scale-105">
+            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
+              <MapPin className="w-3.5 h-3.5" />
+            </div>
+            <span className="uppercase">{item.region?.split("-").join(" ")}</span>
           </div>
-          <div className="duration-badge px-4 py-2 bg-blue-600/90 backdrop-blur-md border border-white/30 rounded-full text-white font-black text-[13px] shadow-lg shadow-blue-600/40 transition-all hover:scale-105 hover:shadow-blue-600/60">
+          <div className="duration-badge px-5 py-2.5 bg-blue-600/95 backdrop-blur-md border border-white/40 rounded-full text-white font-black text-[14px] shadow-[0_10px_20px_rgba(37,99,235,0.4)] transition-all hover:scale-105 hover:shadow-blue-600/60 flex items-center gap-2">
+            <Clock className="w-4 h-4" />
             {item.days}D / {item.nights}N
           </div>
         </div>
-
-        {/* Bottom Content Panel - Frosted Glass */}
+        
+        {/* Bottom Content Panel - Darkened Frosted Glass for contrast */}
         <div 
-          className="absolute bottom-0 left-0 right-0 p-8 pb-7 z-20 bg-white/15 backdrop-blur-2xl border-t border-white/30"
+          className="absolute bottom-0 left-0 right-0 p-7 z-20 bg-black/70 backdrop-blur-xl border-t border-white/10"
           style={{
-            maskImage: "linear-gradient(to bottom, transparent, black 15%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent, black 15%)"
+            maskImage: "linear-gradient(to bottom, transparent, black 10%)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%)"
           }}
         >
           <h2 className="text-2xl font-[900] text-white mb-2 leading-tight drop-shadow-lg line-clamp-1 tracking-tight">
             {item.packageTitle}
           </h2>
+
+          {/* Highlights Section */}
+          <div className="space-y-1.5 mt-3">
+            {baseHighlights.slice(0, 2).map((highlight, idx) => (
+              <div key={idx} className="flex items-center gap-2 group/hl">
+                <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)]" />
+                <p className="text-[11px] text-white/90 italic font-medium leading-tight tracking-tight line-clamp-1">
+                  {highlight}
+                </p>
+              </div>
+            ))}
+          </div>
           
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-3">
             <div className="flex flex-col">
               <div className="text-3xl font-[900] text-white drop-shadow-lg flex items-baseline gap-1">
                 <span className="text-xl font-bold">₹</span>

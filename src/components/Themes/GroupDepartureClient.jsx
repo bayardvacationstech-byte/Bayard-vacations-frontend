@@ -74,7 +74,7 @@ export default function GroupDepartureClient() {
         )}
       </AnimatePresence>
       {/* Hero Section */}
-      <div className="relative min-h-[90vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-600">
+      <div className="relative min-h-[70vh] md:h-[75vh] lg:h-[80vh] overflow-hidden bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-600">
         {/* Group Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -84,7 +84,7 @@ export default function GroupDepartureClient() {
         </div>
 
         <Container className="relative h-full flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center w-full">
             {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -176,7 +176,7 @@ export default function GroupDepartureClient() {
         </div>
 
         {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ref={packagesRef}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" ref={packagesRef}>
           {isLoading ? (
             <ThemeLoader theme="group" />
           ) : (
@@ -264,7 +264,7 @@ export default function GroupDepartureClient() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {[
               { icon: Shield, title: "Guaranteed Departures", desc: "Fixed dates with confirmed departures—no cancellations due to low bookings. Your travel plans are secure." },
               { icon: Users, title: "Social Experience", desc: "Meet like-minded travelers, make new friends, and share unforgettable experiences together." },

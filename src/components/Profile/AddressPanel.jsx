@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { PenLine, Loader2, MapPin } from "lucide-react";
+import { PenLine, Loader2, MapPin, X, Check } from "lucide-react";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { Label } from "@/components/ui/label";
@@ -34,6 +34,21 @@ const AddressPanel = () => {
   // Fetch existing address when component mounts and user is authenticated
   useEffect(() => {
     const fetchAddress = async () => {
+      // Mock for localhost
+      const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
+      if (isLocal) {
+        setAddress({
+          street: "123 Luxury Villa Lane",
+          city: "Mumbai",
+          state: "Maharashtra",
+          pincode: "400001",
+          landmark: "Near Gateway of India",
+          country: "India",
+        });
+        setIsEditing(false);
+        return;
+      }
+
       if (!user) return;
 
       setLoading(true);
@@ -43,10 +58,10 @@ const AddressPanel = () => {
 
         if (userDoc.exists() && userDoc.data().address) {
           setAddress(userDoc.data().address);
-          setIsEditing(false); // Ensure edit mode is off when loading existing address
+          setIsEditing(false);
         } else {
           setAddress(initialAddress);
-          setIsEditing(true); // Show form if no address exists
+          setIsEditing(true);
         }
       } catch (error) {
         if (error.code !== "not-found") {
@@ -97,7 +112,7 @@ const AddressPanel = () => {
         title: "Success",
         description: "Your address has been updated successfully.",
       });
-      setIsEditing(false); // Exit edit mode after successful save
+      setIsEditing(false);
     } catch (error) {
       setError("Failed to update address. Please try again.");
       toast({
@@ -120,161 +135,157 @@ const AddressPanel = () => {
 
   if (loading) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-2xl border border-solid border-[#D9D9D9]">
-        <Loader2 className="size-8 animate-spin text-brand-blue" />
+      <div className="relative rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-xl shadow-slate-200/50 h-48 flex items-center justify-center">
+        <Loader2 className="size-6 animate-spin text-brand-blue" />
       </div>
     );
   }
 
   return (
-    <div className="relative rounded-2xl border border-solid border-[#D9D9D9] px-6 py-8">
-      <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-nord font-bold uppercase text-brand-blue">
-        address
-      </h5>
+    <div className="relative group overflow-hidden">
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-blue/5 rounded-full blur-3xl -ml-32 -mb-32 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      
+      <div className="relative rounded-[2.5rem] border border-slate-100 bg-white/70 backdrop-blur-md p-10 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="space-y-6 flex-1">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-brand-blue/5 text-brand-blue border border-brand-blue/10 shadow-sm">
+                <MapPin className="size-5" />
+              </div>
+              <div>
+                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                  Location
+                </h5>
+                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Primary Residence</h4>
+              </div>
+            </div>
 
-      {hasAddress && !isEditing ? (
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <Label className="text-sm text-gray-500">Street Address</Label>
-            <p className="text-lg">{address.street}</p>
+            {!isEditing ? (
+              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
+                {address.street ? (
+                  <div className="space-y-1">
+                    <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
+                      {address.street}, {address.city}
+                    </h3>
+                    <p className="text-lg font-bold text-slate-500 tracking-tight">
+                      {address.state} {address.pincode}, {address.country}
+                    </p>
+                  </div>
+                ) : (
+                  <h3 className="text-2xl font-black text-slate-400 tracking-tight">Not Specified</h3>
+                )}
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4 flex items-center gap-2">
+                  <span className="size-1 rounded-full bg-slate-300" />
+                  International dispatch address
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in slide-in-from-top-2 duration-500">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Street Address</label>
+                    <Input
+                      name="street"
+                      value={address.street}
+                      onChange={handleChange}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white focus:border-brand-blue/30 transition-all shadow-sm"
+                      placeholder="123 Luxury Lane"
+                      disabled={saving}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">City</label>
+                    <Input
+                      name="city"
+                      value={address.city}
+                      onChange={handleChange}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all"
+                      placeholder="City"
+                      disabled={saving}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">State / Province</label>
+                    <Input
+                      name="state"
+                      value={address.state}
+                      onChange={handleChange}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all"
+                      placeholder="State"
+                      disabled={saving}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Postal Code</label>
+                    <Input
+                      name="pincode"
+                      value={address.pincode}
+                      onChange={handleChange}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all"
+                      placeholder="Pincode"
+                      disabled={saving}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Country</label>
+                    <Input
+                      name="country"
+                      value={address.country}
+                      onChange={handleChange}
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all"
+                      placeholder="Country"
+                      disabled={saving}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <Button
+                    type="submit"
+                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-black uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
+                    disabled={saving}
+                  >
+                    {saving ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Check className="size-4" />
+                        <span>Confirm Location</span>
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="rounded-2xl border border-slate-200 bg-white px-8 h-12 text-slate-600 font-bold hover:bg-slate-50 transition-all"
+                    disabled={saving}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            )}
           </div>
 
-          {address.landmark && (
-            <div className="space-y-1">
-              <Label className="text-sm text-gray-500">Landmark</Label>
-              <p className="text-lg">{address.landmark}</p>
+          {!isEditing && (
+            <div className="flex shrink-0">
+              <Button
+                onClick={() => setIsEditing(true)}
+                className="rounded-3xl border border-slate-200 bg-white px-8 py-7 text-slate-800 font-bold hover:bg-slate-50 hover:border-brand-blue/30 hover:shadow-xl hover:shadow-brand-blue/5 transition-all duration-300 flex items-center gap-4 group/btn"
+                type="button"
+              >
+                <span className="flex flex-col items-start leading-none text-left">
+                  <span className="text-[9px] uppercase tracking-widest text-slate-400 mb-1">Logistics</span>
+                  <span className="text-sm">Edit Address</span>
+                </span>
+                <div className="bg-slate-50 p-2.5 rounded-full group-hover/btn:bg-brand-blue group-hover/btn:text-white transition-all duration-300 shadow-sm">
+                  <PenLine className="size-4" />
+                </div>
+              </Button>
             </div>
           )}
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <Label className="text-sm text-gray-500">City</Label>
-              <p className="text-lg">{address.city}</p>
-            </div>
-            <div className="space-y-1">
-              <Label className="text-sm text-gray-500">State</Label>
-              <p className="text-lg">{address.state}</p>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <Label className="text-sm text-gray-500">PIN Code</Label>
-            <p className="text-lg">{address.pincode}</p>
-          </div>
-
-          <Button
-            onClick={() => setIsEditing(true)}
-            className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-          >
-            <PenLine className="mr-2 size-4" />
-            Edit Address
-          </Button>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="street">Street Address</Label>
-            <Textarea
-              id="street"
-              name="street"
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              value={address.street}
-              onChange={handleChange}
-              placeholder="Enter your street address"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="landmark">Landmark (Optional)</Label>
-            <Input
-              id="landmark"
-              name="landmark"
-              value={address.landmark}
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              onChange={handleChange}
-              placeholder="Enter a nearby landmark"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="city">City</Label>
-              <Input
-                id="city"
-                name="city"
-                value={address.city}
-                className="rounded-2xl border-[#B0B0B0] p-4"
-                onChange={handleChange}
-                placeholder="Enter city"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="state">State</Label>
-              <Input
-                id="state"
-                name="state"
-                value={address.state}
-                className="rounded-2xl border-[#B0B0B0] p-4"
-                onChange={handleChange}
-                placeholder="Enter state"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="pincode">PIN Code</Label>
-            <Input
-              id="pincode"
-              name="pincode"
-              value={address.pincode}
-              onChange={handleChange}
-              placeholder="Enter PIN code"
-              required
-              className="rounded-2xl border-[#B0B0B0] p-4"
-            />
-          </div>
-
-          <div className="flex gap-4">
-            {hasAddress && (
-              <Button
-                type="button"
-                onClick={() => setIsEditing(false)}
-                className="flex-1 rounded-xl border-2 border-solid border-gray-300 bg-transparent p-5 text-gray-500 hover:bg-gray-100"
-              >
-                Cancel
-              </Button>
-            )}
-
-            <Button
-              type="submit"
-              className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              disabled={saving}
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Saving Changes...
-                </>
-              ) : (
-                <>
-                  <MapPin className="mr-2 size-4" />
-                  Save Address
-                </>
-              )}
-            </Button>
-          </div>
-        </form>
-      )}
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      </div>
     </div>
   );
 };

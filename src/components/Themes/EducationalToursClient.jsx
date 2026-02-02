@@ -89,7 +89,7 @@ export default function EducationalToursClient() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen pt-20 overflow-hidden bg-[#f9f7f0]">
+      <section className="relative min-h-[70vh] lg:min-h-[85vh] pt-20 overflow-hidden bg-[#f9f7f0]">
         {/* Texture Paper Overlay */}
         <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)'/%3E%3C/svg%3E")`
@@ -110,7 +110,7 @@ export default function EducationalToursClient() {
         <div className="absolute bottom-40 left-20 w-12 h-12 bg-indigo-900/5 hexagon-clip animate-float-slower" />
         
         <Container className="relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-5rem)] py-12">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-center min-h-[60vh] py-12">
             
             {/* Left Content */}
             <motion.div
@@ -241,7 +241,7 @@ export default function EducationalToursClient() {
       </section>
 
       {/* Filter Tabs */}
-      <section className="py-12 bg-[#f9f7f0] border-b border-indigo-900/10">
+      <section className="py-8 bg-[#f9f7f0] border-b border-indigo-900/10">
         <Container>
           <div className="flex justify-center">
             <div className="bg-white p-1.5 rounded-sm shadow-xl inline-flex border border-indigo-900/10">
@@ -275,7 +275,7 @@ export default function EducationalToursClient() {
       </section>
 
       {/* Programs Grid Section */}
-      <section className="py-20 bg-[#f9f7f0] relative" ref={packagesRef}>
+      <section className="py-12 md:py-16 bg-[#f9f7f0] relative" ref={packagesRef}>
         {/* Diagonal Stripes Background */}
         <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" style={{
           backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(251, 191, 36, 1) 10px, rgba(251, 191, 36, 1) 20px)`
@@ -286,7 +286,7 @@ export default function EducationalToursClient() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
             <div className="inline-block mb-4">
               <span className="text-amber-600 font-bold tracking-widest uppercase text-xs px-4 py-1.5 bg-amber-50 border border-amber-200 rounded-full">Curriculum 2026/27</span>
@@ -295,7 +295,7 @@ export default function EducationalToursClient() {
             <p className="text-slate-600 max-w-2xl mx-auto text-lg font-light leading-relaxed">Structured learning experiences designed by educators and historians for maximum intellectual engagement</p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
             {isLoading ? (
               [1, 2, 3, 4].map((i) => (
                 <div key={i} className="h-[450px] rounded-sm bg-white border border-indigo-900/5 animate-pulse" />
@@ -397,7 +397,7 @@ export default function EducationalToursClient() {
       </section>
 
       {/* Why Choose Section */}
-      <section className="py-24 bg-indigo-950 relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-indigo-950 relative overflow-hidden">
         {/* Pattern */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute inset-0" style={{ 
@@ -406,7 +406,7 @@ export default function EducationalToursClient() {
         </div>
         
         <Container className="relative z-10">
-          <div className="grid md:grid-cols-3 gap-12 text-center">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-12 text-center">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

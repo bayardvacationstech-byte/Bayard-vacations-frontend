@@ -134,7 +134,7 @@ export default function RelaxRejuvenateClient() {
         )}
       </AnimatePresence>
       {/* Immersive Serenity Hero */}
-      <div className="relative min-h-[90vh] md:h-[95vh] overflow-hidden flex items-center bg-[#E5E1DA]">
+      <div className="relative min-h-[75vh] md:h-[85vh] overflow-hidden flex items-center bg-[#E5E1DA]">
         {/* Ken Burns Effect */}
         <motion.div 
           initial={{ scale: 1, x: "-1%" }}
@@ -224,7 +224,7 @@ export default function RelaxRejuvenateClient() {
       {/* The Three Pillars Section */}
       <section className="py-8 md:py-12 bg-white">
          <Container>
-            <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16 space-y-4">
+            <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16 space-y-4">
               <div className="w-16 h-[2px] bg-sage-400 mx-auto" />
               <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-stone-900 lowercase italic leading-tight md:leading-normal">The Three Pillars of Serenity</h2>
               <p className="text-lg md:text-xl text-stone-500 font-light leading-relaxed">
@@ -232,7 +232,7 @@ export default function RelaxRejuvenateClient() {
               </p>
            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
               {[
                 { icon: Sun, title: "Mind", desc: "Digital detox, guided meditation, and neurological rest in silence-first environments." },
                 { icon: Leaf, title: "Body", desc: "Organic nutrition, ancient holistic treatments, and low-impact movement for physical restoration." },
@@ -263,7 +263,7 @@ export default function RelaxRejuvenateClient() {
       {/* Sanctuary Units (Packages Grid) */}
       <section id="packages" className="py-8 md:py-10 bg-[#F9F7F5]">
         <Container>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
             <div className="space-y-4 max-w-xl">
               <span className="text-sage-600 font-bold text-xs uppercase tracking-[0.3em]">Curation</span>
               <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-stone-900 leading-tight">Handpicked <br />Sanctuaries</h2>
@@ -295,7 +295,7 @@ export default function RelaxRejuvenateClient() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10" ref={packagesRef}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10" ref={packagesRef}>
             {isLoading ? (
               <ThemeLoader theme="relax" />
             ) : (

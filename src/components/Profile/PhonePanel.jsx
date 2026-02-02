@@ -1,5 +1,5 @@
 "use client";
-import { Loader2, PenLine, Phone, X } from "lucide-react";
+import { Loader2, PenLine, Phone, X, Check } from "lucide-react";
 import { Input } from "../ui/input";
 import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
@@ -74,6 +74,17 @@ const PhonePanel = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    // Mock bypass for localhost
+    const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
+    if (isLocal) {
+      setTimeout(() => {
+        setStep("new-otp");
+        setLoading(false);
+        toast({ title: "Mock OTP Sent", description: "Verification code sent to " + phoneNumber });
+      }, 800);
+      return;
+    }
 
     try {
       const lastSignIn = new Date(user.metadata.lastSignInTime).getTime();
@@ -181,6 +192,16 @@ const PhonePanel = () => {
     setError("");
     setLoading(true);
 
+    // Mock bypass
+    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+      setTimeout(() => {
+        setStep("completed");
+        setLoading(false);
+        toast({ title: "Success", description: "Phone number updated (Mock)" });
+      }, 800);
+      return;
+    }
+
     try {
       const credential = PhoneAuthProvider.credential(
         newVerificationId,
@@ -234,190 +255,142 @@ const PhonePanel = () => {
   };
 
   return (
-    <div className="relative flex-1 rounded-2xl border border-solid border-[#D9D9D9] px-6 py-8">
-      <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-nord font-bold uppercase text-brand-blue">
-        phone number
-      </h5>
-
-      {step === "view" && (
-        <div className="flex flex-col items-start justify-start gap-4">
-          <div>
-            <h3 className="text-lg font-semibold">
-              (+91){" "}
-              {user?.phoneNumber
-                ? removeFirstThree(user.phoneNumber)
-                : "Not set"}
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Your registered phone number
-            </p>
+    <div className="relative group overflow-hidden h-full">
+      <div className="absolute bottom-0 right-0 w-32 h-32 bg-brand-blue/5 rounded-full blur-3xl -mr-16 -mb-16 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      
+      <div className="relative rounded-[2.5rem] border border-slate-100 bg-white/70 backdrop-blur-md p-8 shadow-xl shadow-slate-200/40 hover:shadow-2xl hover:shadow-brand-blue/5 transition-all duration-500 h-full">
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-brand-blue/5 text-brand-blue border border-brand-blue/10 shadow-sm">
+                <Phone className="size-5" />
+              </div>
+              <div>
+                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                  Contact
+                </h5>
+                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Phone Number</h4>
+              </div>
+            </div>
+            {step === "view" ? (
+              <Button
+                variant="ghost"
+                className="size-10 p-0 rounded-xl hover:bg-brand-blue/5 text-slate-400 hover:text-brand-blue transition-all"
+                onClick={startEdit}
+              >
+                <PenLine className="size-4" />
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                className="size-10 p-0 rounded-xl hover:bg-red-50 text-slate-400 hover:text-red-500 transition-all"
+                onClick={handleCancel}
+              >
+                <X className="size-4" />
+              </Button>
+            )}
           </div>
-          <Button
-            onClick={startEdit}
-            variant="outline"
-            className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-          >
-            <span className="mr-2">Edit</span>
-            <PenLine className="size-4" />
-          </Button>
+
+          <div className="flex-1">
+            {step === "view" && (
+              <div className="animate-in fade-in slide-in-from-left-2 duration-300">
+                <h3 className="text-2xl font-black text-slate-800 tracking-tight leading-tight">
+                  (+91) {user?.phoneNumber ? removeFirstThree(user.phoneNumber) : "Not Specified"}
+                </h3>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
+                  <span className="size-1 rounded-full bg-emerald-500" />
+                  Primary contact for bookings
+                </p>
+              </div>
+            )}
+
+            {step === "phone" && (
+              <form onSubmit={handlePhoneSubmit} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Phone Number</label>
+                  <div className="flex items-center gap-3">
+                    <div className="bg-slate-50 border border-slate-100 rounded-2xl px-4 h-14 flex items-center text-sm font-black text-slate-400">+91</div>
+                    <Input
+                      type="tel"
+                      className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white focus:border-brand-blue/30 transition-all shadow-sm flex-1"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="9876543210"
+                      required
+                    />
+                  </div>
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full rounded-2xl bg-brand-blue text-white font-black h-12 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] shadow-lg shadow-brand-blue/10"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Check className="size-4" />
+                      <span>Request Code</span>
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+
+            {(step === "old-otp" || step === "new-otp") && (
+              <form onSubmit={step === "old-otp" ? handleOldOtpSubmit : handleNewOtpSubmit} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Verification Code</label>
+                  <Input
+                    type="text"
+                    className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all text-center text-2xl tracking-[0.5em] font-black"
+                    value={step === "old-otp" ? oldOtp : newOtp}
+                    onChange={(e) => step === "old-otp" ? setOldOtp(e.target.value) : setNewOtp(e.target.value)}
+                    placeholder="••••••"
+                    maxLength={6}
+                    required
+                  />
+                  <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-widest mt-2">
+                    Code sent to {step === "old-otp" ? "current" : "new"} number
+                  </p>
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full rounded-2xl bg-emerald-600 text-white font-black h-12 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] shadow-lg shadow-emerald-600/10"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Check className="size-4" />
+                      <span>Verify OTP</span>
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+
+            {step === "completed" && (
+              <div className="text-center space-y-4 animate-in zoom-in-95 duration-300">
+                <div className="size-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-100 shadow-inner">
+                  <Check className="size-8" />
+                </div>
+                <div>
+                  <p className="font-black text-slate-800">Refresh Complete</p>
+                  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Record updated successfully</p>
+                </div>
+                <Button
+                  className="w-full rounded-2xl border border-slate-200 bg-white text-slate-800 font-bold h-12 hover:bg-slate-50 transition-all x"
+                  onClick={handleComplete}
+                >
+                  Return to Dashboard
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
-
-      {step === "phone" && (
-        <form onSubmit={handlePhoneSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="phone">New Phone Number</Label>
-            <Input
-              id="phone"
-              type="tel"
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Enter your new phone number"
-              required
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 rounded-xl p-5"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              <X className="mr-2 size-4" />
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Phone className="mr-2 size-4" />
-                  Continue
-                </>
-              )}
-            </Button>
-          </div>
-        </form>
-      )}
-
-      {step === "old-otp" && (
-        <form onSubmit={handleOldOtpSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="old-otp">Verification Code</Label>
-            <Input
-              id="old-otp"
-              type="text"
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              value={oldOtp}
-              onChange={(e) => setOldOtp(e.target.value)}
-              placeholder="Enter verification code sent to your current number"
-              required
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 rounded-xl p-5"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              <X className="mr-2 size-4" />
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Verifying...
-                </>
-              ) : (
-                "Verify Current Number"
-              )}
-            </Button>
-          </div>
-        </form>
-      )}
-
-      {step === "new-otp" && (
-        <form onSubmit={handleNewOtpSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="new-otp">Verification Code</Label>
-            <Input
-              id="new-otp"
-              type="text"
-              className="rounded-2xl border-[#B0B0B0] p-4"
-              value={newOtp}
-              onChange={(e) => setNewOtp(e.target.value)}
-              placeholder="Enter verification code sent to your new number"
-              required
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 rounded-xl p-5"
-              onClick={handleCancel}
-              disabled={loading}
-            >
-              <X className="mr-2 size-4" />
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="flex-1 rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Updating...
-                </>
-              ) : (
-                "Update Phone Number"
-              )}
-            </Button>
-          </div>
-        </form>
-      )}
-
-      {step === "completed" && (
-        <div className="py-4 text-center">
-          <p className="font-medium text-green-600">
-            Phone number updated successfully!
-          </p>
-          <p className="mb-8 mt-2 text-sm text-gray-500">
-            Your new phone number is now associated with your account.
-          </p>
-          <Button
-            className="rounded-xl border-2 border-solid border-brand-blue bg-transparent p-5 text-brand-blue hover:bg-brand-blue hover:text-white"
-            onClick={handleComplete}
-          >
-            Done
-          </Button>
-        </div>
-      )}
-
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
+      </div>
       <div id="recaptcha-container"></div>
     </div>
   );

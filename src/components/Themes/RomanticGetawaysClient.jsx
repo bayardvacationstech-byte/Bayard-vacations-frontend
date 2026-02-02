@@ -137,7 +137,7 @@ export default function RomanticGetawaysClient() {
       </AnimatePresence>
       
       {/* Hero Section */}
-      <div className="relative min-h-[90vh] md:h-[80vh] overflow-hidden bg-rose-950 flex items-center">
+      <div className="relative min-h-[75vh] lg:min-h-[85vh] overflow-hidden bg-rose-950 flex items-center">
         {/* Ken Burns Animation */}
         <motion.div 
           initial={{ scale: 1.15 }}
@@ -160,7 +160,7 @@ export default function RomanticGetawaysClient() {
         
         <FloatingHearts />
 
-        <Container className="relative z-20 pt-24 pb-12 md:pt-32">
+        <Container className="relative z-20 pt-20 pb-10 md:pt-28">
           <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -240,7 +240,7 @@ export default function RomanticGetawaysClient() {
       </div>
 
       {/* Intro Section */}
-      <section className="py-8 md:py-10 relative overflow-hidden bg-white">
+      <section className="py-6 md:py-8 relative overflow-hidden bg-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-rose-50 rounded-full blur-[120px] -mr-48 -mt-48" />
         <Container className="relative">
           <div className="max-w-4xl mx-auto text-center space-y-4">
@@ -298,7 +298,7 @@ export default function RomanticGetawaysClient() {
           </div>
 
           {/* Packages Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref={packagesRef}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8" ref={packagesRef}>
             {isLoading ? (
               <ThemeLoader theme="romantic" />
             ) : (
@@ -376,7 +376,7 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Why Choose Section - Redesigned */}
-      <section className="relative py-8 md:py-12 overflow-hidden">
+      <section className="relative py-6 md:py-10 overflow-hidden">
         <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-30 pointer-events-none" />
         
@@ -385,7 +385,7 @@ export default function RomanticGetawaysClient() {
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-900/20 rounded-full blur-[150px] -ml-64 -mb-64 animate-floatSlow" />
 
         <Container className="relative">
-          <div className="flex flex-col lg:flex-row items-center gap-10">
+          <div className="flex flex-col lg:flex-row items-center gap-6 md:gap-10">
             <div className="flex-1 space-y-10">
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-full">
@@ -397,7 +397,7 @@ export default function RomanticGetawaysClient() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 gap-10">
+              <div className="grid grid-cols-1 gap-6 md:gap-10">
                 {[
                   { icon: Heart, title: "Emotion-First Curation", desc: "We don't just book rooms; we secure the specific table with the best sunset view, and the villa with the most privacy." },
                   { icon: Sparkles, title: "Secret Inclusions", desc: "Private beach setups, surprise champagne arrivals, and localized romance traditions you won't find anywhere else." },
@@ -453,7 +453,7 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Final Premium CTA */}
-      <section className="py-8 bg-white relative overflow-hidden">
+      <section className="py-6 bg-white relative overflow-hidden">
         <Container className="text-center">
             <div className="max-w-3xl mx-auto space-y-10">
               <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter leading-tight">

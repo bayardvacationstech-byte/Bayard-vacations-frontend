@@ -4,7 +4,7 @@ import {
   collection,
   query,
   where,
-  getDocs,
+  getDocsFromServer,
   orderBy,
   limit,
 } from "firebase/firestore";
@@ -47,7 +47,7 @@ export const useBlogs = () => {
       constraints.push(limit(limitCount + (excludeId ? 1 : 0)));
 
       const q = query(blogsRef, ...constraints);
-      const snapshot = await getDocs(q);
+      const snapshot = await getDocsFromServer(q);
       
       let fetchedBlogs = [];
       snapshot.forEach((doc) => {
@@ -66,7 +66,7 @@ export const useBlogs = () => {
           collection(db, COLLECTIONS.BLOGS),
           where("status", "==", "published")
         );
-        const fallbackSnapshot = await getDocs(fallbackQ);
+        const fallbackSnapshot = await getDocsFromServer(fallbackQ);
         let allBlogs = [];
         fallbackSnapshot.forEach((doc) => {
           allBlogs.push(sanitizeDocumentData(doc));

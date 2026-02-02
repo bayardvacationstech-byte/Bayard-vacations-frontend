@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const ShareableHeader = ({ itineraryData }) => {
+  console.log('DEBUG: ShareableHeader received:', itineraryData);
   const { 
     packageName, 
     destination, 
@@ -144,7 +145,7 @@ const ShareableHeader = ({ itineraryData }) => {
                     Travel Dates
                   </p>
                   <p className="text-white text-sm lg:text-base font-black tracking-wide">
-                    {travelDates.displayCheckIn}
+                    {travelDates?.displayCheckIn || 'DATES TO BE FINALIZED'}
                   </p>
                 </div>
               </div>
@@ -165,6 +166,25 @@ const ShareableHeader = ({ itineraryData }) => {
                   </p>
                   <p className="text-white text-sm lg:text-base font-black tracking-wide">
                     {destination}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Hotel Category */}
+            <div className="group bg-white/25 backdrop-blur-lg border border-white/30 rounded-[2rem] p-3 lg:p-5 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:scale-105 transition-all duration-300">
+              <div className="flex items-start gap-4">
+                <div className="w-9 h-9 lg:w-12 lg:h-12 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
+                    Hotel Category
+                  </p>
+                  <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                    {pricing?.hotelCategory || 'STANDARD'}
                   </p>
                 </div>
               </div>
@@ -226,7 +246,7 @@ const ShareableHeader = ({ itineraryData }) => {
                 Travel Date
               </p>
               <p className="text-slate-900 text-sm font-black">
-                {travelDates.displayCheckIn}
+                {travelDates?.displayCheckIn || 'TBA'}
               </p>
             </div>
 
@@ -243,6 +263,21 @@ const ShareableHeader = ({ itineraryData }) => {
               </p>
               <p className="text-slate-900 text-sm font-black truncate">
                 {destination}
+              </p>
+            </div>
+
+            {/* Hotel Category */}
+            <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
+              <div className="w-9 h-9 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl flex items-center justify-center mb-3 shadow-md shadow-emerald-100">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
+                Hotel Tier
+              </p>
+              <p className="text-slate-900 text-sm font-black truncate">
+                {pricing?.hotelCategory || 'Standard'}
               </p>
             </div>
 

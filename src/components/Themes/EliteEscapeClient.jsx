@@ -108,7 +108,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[80dvh] min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax Effect */}
         <div className="absolute inset-0 z-0">
           <Image 
@@ -148,7 +148,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-16"
+            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-8 md:mb-16"
           >
             Beyond the ordinary. A curated selection of the world's most exclusive destinations, 
             reserved for the discerning few.
@@ -183,9 +183,9 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
       </section>
 
       {/* Filter and Selection Section */}
-      <section className="py-24 bg-[#0a0a0a] border-b border-white/5" ref={packagesRef}>
+      <section className="py-12 md:py-16 bg-[#0a0a0a] border-b border-white/5" ref={packagesRef}>
         <Container>
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-10">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 border-b border-white/10 pb-6 md:pb-10">
             <div className="mb-8 md:mb-0">
               <h2 className="text-4xl md:text-5xl font-serif text-white mb-4">Curated Destinations</h2>
               <p className="text-gray-500 font-light tracking-wide uppercase text-xs">Hand-selected properties and experiences</p>
@@ -224,7 +224,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           </div>
 
           {/* Region Tabs (Secondary Filter) */}
-          <div className="flex overflow-x-auto scrollbar-hide gap-6 mb-16 pb-4 border-b border-white/5">
+          <div className="flex overflow-x-auto scrollbar-hide gap-4 md:gap-6 mb-8 md:mb-16 pb-4 border-b border-white/5">
             <button
               onClick={() => setSelectedRegion("All")}
               className={cn(
@@ -253,7 +253,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           </div>
 
           {/* Package Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 min-h-[400px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 min-h-[400px]">
             {isLoading ? (
               [1, 2, 3, 4].map(i => (
                 <div key={i} className="h-96 bg-white/5 border border-white/10 animate-pulse rounded-sm" />
@@ -351,13 +351,13 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
       </section>
 
       {/* Services Section */}
-      <section className="py-32 bg-[#111111] relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-[#111111] relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-0 w-full h-full" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%)' }}></div>
         </div>
 
         <Container className="relative z-10">
-          <div className="grid md:grid-cols-3 gap-16 text-center">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-16 text-center">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -403,9 +403,9 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
       </section>
 
       {/* Footer CTA */}
-      <section className="bg-[#0a0a0a] py-32 border-t border-white/5">
+      <section className="bg-[#0a0a0a] py-16 md:py-24 border-t border-white/5">
         <Container>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-12">
             <div className="text-center md:text-left">
               <h2 className="text-4xl md:text-6xl font-serif text-white mb-4">Join the Elite</h2>
               <p className="text-gray-500 font-light text-lg tracking-wide uppercase text-xs">Membership by invitation or application only</p>

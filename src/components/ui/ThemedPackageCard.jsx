@@ -154,14 +154,15 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
 
     const rawImages = [
       ...scavenger(item.cardImages),
-      ...(item.cardImage ? [{ url: item.cardImage }] : []),
-      ...(item.cardImageRef ? [{ url: item.cardImageRef }] : []),
+      ...(item.cardImage ? [item.cardImage] : []),
+      ...(item.cardImageRef ? [item.cardImageRef] : []),
     ];
 
     const seen = new Set();
     return rawImages
       .map(img => {
-        const url = typeof img === "string" ? img : img?.url;
+        if (!img) return null;
+        const url = typeof img === "string" ? img : img.url;
         return url ? { url } : null;
       })
       .filter(img => {
