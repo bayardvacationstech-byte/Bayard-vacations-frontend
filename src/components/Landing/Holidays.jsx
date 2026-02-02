@@ -160,7 +160,7 @@ const Holidays = ({
   return (
     <Container className="sm:px-5">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="flex-1">
           <h2 className="section-title-light mb-1 md:mb-2 text-2xl md:text-3xl lg:text-4xl font-bold text-brand-blue">
             Signature Collections
