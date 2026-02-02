@@ -13,7 +13,9 @@ const ShareableFooter = ({ contactInfo }) => {
     whatsapp, 
     email, 
     website, 
-    emergencyContact 
+    emergencyContact,
+    destinationExpert,
+    bankDetails
   } = contactInfo;
 
   return (
@@ -25,8 +27,8 @@ const ShareableFooter = ({ contactInfo }) => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
           
-          {/* 1. Brand & Network (4 cols) */}
-          <div className="lg:col-span-4 space-y-10">
+          {/* 1. Brand & Network (3 cols) */}
+          <div className="lg:col-span-3 space-y-10">
             <div className="space-y-6">
               <div className="h-10 w-52 relative">
                 <Image
@@ -36,95 +38,120 @@ const ShareableFooter = ({ contactInfo }) => {
                   className="object-contain object-left brightness-0 invert"
                 />
               </div>
-              <p className="text-blue-100/70 text-base leading-relaxed font-medium max-w-sm">
-                Designing extraordinary journeys that transform your travel dreams into lasting memories. Your global partner in premium experiences.
+              <p className="text-blue-100/70 text-sm leading-relaxed font-medium">
+                Designing extraordinary journeys that transform your travel dreams into lasting memories.
               </p>
             </div>
             
-            <div className="flex gap-4">
-              {[
-                { icon: Globe, link: `https://${website}` },
-                { icon: Instagram, link: "https://instagram.com/bayardvacations" },
-                { icon: Facebook, link: "https://facebook.com/bayardvacations" }
-              ].map((item, i) => (
-                <a 
-                  key={i} 
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-11 h-11 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-brand-blue transition-all duration-300 shadow-sm"
-                >
-                  <item.icon className="w-5 h-5" />
-                </a>
-              ))}
+            <div className="space-y-4">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-200/50">Connectivity</h4>
+              <div className="flex gap-3">
+                {[
+                  { icon: Globe, link: `https://${website}` },
+                  { icon: Instagram, link: "https://instagram.com/bayardvacations" },
+                  { icon: Facebook, link: "https://facebook.com/bayardvacations" }
+                ].map((item, i) => (
+                  <a 
+                    key={i} 
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-brand-blue transition-all duration-300"
+                  >
+                    <item.icon className="w-4.5 h-4.5" />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* 2. Communication Hub (5 cols) */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-10">
-            <div className="space-y-8">
+          {/* 2. Destination Expert & Inquiries (3 cols) */}
+          <div className="lg:col-span-3 space-y-10">
+            <div className="space-y-6">
               <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-200/50 flex items-center gap-3">
                 <span className="w-4 h-[1px] bg-blue-200/30"></span>
-                Inquiries
+                Travel Expert
               </h4>
-              <ul className="space-y-8">
-                <li>
-                  <a href={`tel:${phone}`} className="group block">
-                    <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-1.5 group-hover:text-white transition-colors">Direct Line</p>
-                    <p className="text-xl font-bold text-white tracking-tight leading-none">{phone}</p>
-                  </a>
-                </li>
-                <li>
-                  <a href={`https://wa.me/${whatsapp.replace(/\D/g, '')}`} className="group block">
-                    <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-1.5 group-hover:text-white transition-colors">WhatsApp Concierge</p>
-                    <p className="text-xl font-bold text-white tracking-tight leading-none">Instant Chat</p>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="space-y-8">
-              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-200/50 flex items-center gap-3">
-                <span className="w-4 h-[1px] bg-blue-200/30"></span>
-                Our Base
-              </h4>
-              <div className="space-y-6">
-                <div>
-                  <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-2">Headquarters</p>
-                  <p className="text-sm font-bold text-white leading-relaxed opacity-90">
-                    Nandini Layout, Bengaluru,<br />Karnataka 560096, India
-                  </p>
+              {destinationExpert && (
+                <div className="space-y-3">
+                  <p className="text-lg font-bold text-white leading-none">{destinationExpert.name}</p>
+                  <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest">{destinationExpert.designation}</p>
+                  <div className="space-y-2 pt-2">
+                    <a href={`mailto:${destinationExpert.email}`} className="flex items-center gap-2 text-sm text-blue-100/70 hover:text-white transition-colors">
+                      <Mail className="w-3.5 h-3.5" /> {destinationExpert.email}
+                    </a>
+                    <a href={`tel:${destinationExpert.phone}`} className="flex items-center gap-2 text-sm text-blue-100/70 hover:text-white transition-colors">
+                      <Phone className="w-3.5 h-3.5" /> {destinationExpert.phone}
+                    </a>
+                  </div>
                 </div>
+              )}
+            </div>
+
+            <div className="pt-4 border-t border-white/5 space-y-4">
+              <a href={`tel:${phone}`} className="group block">
+                <p className="text-[10px] font-black text-blue-300/80 uppercase tracking-widest mb-1 group-hover:text-white transition-colors">General Inquiries</p>
+                <p className="text-base font-bold text-white tracking-tight">{phone}</p>
+              </a>
+              <a href={`mailto:${email}`} className="group block">
+                <p className="text-sm text-blue-100/70 hover:text-white transition-colors break-all">{email}</p>
+              </a>
+            </div>
+          </div>
+
+          {/* 3. Office & Bank Details (6 cols) */}
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-10">
+            {/* Office */}
+            <div className="space-y-6">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-200/50 flex items-center gap-3">
+                <span className="w-4 h-[1px] bg-blue-200/30"></span>
+                Our Office
+              </h4>
+              <div className="space-y-4">
+                <p className="text-sm font-medium text-blue-100/80 leading-relaxed max-w-[240px]">
+                  {contactInfo.officeAddress || "Nandini Layout, Bengaluru, Karnataka 560096, India"}
+                </p>
                 <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-emerald-500/10 rounded-full border border-emerald-500/20">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] font-bold text-emerald-100 uppercase tracking-[0.2em]">Support Online</span>
+                  <span className="text-[10px] font-bold text-emerald-100 uppercase tracking-[0.2em]">Live Support</span>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* 3. Global Support Card (3 cols) */}
-          <div className="lg:col-span-3">
-            <div className="group relative">
-              <div className="absolute inset-0 bg-white/10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-              <div className="h-full bg-white/10 rounded-[2.5rem] p-8 border border-white/20 backdrop-blur-md relative z-10 flex flex-col justify-between gap-8 hover:border-white/40 transition-all duration-500 shadow-2xl">
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform duration-500">
-                    <AlertTriangle className="w-7 h-7 text-red-600" />
-                  </div>
+            {/* Bank Details */}
+            <div className="space-y-6">
+              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-blue-200/50 flex items-center gap-3">
+                <span className="w-4 h-[1px] bg-blue-200/30"></span>
+                Bank Details
+              </h4>
+              {bankDetails ? (
+                <div className="bg-white/5 rounded-2xl p-5 border border-white/10 space-y-4">
                   <div>
-                    <h5 className="text-[11px] font-black text-red-200 uppercase tracking-[0.2em] mb-1">Priority</h5>
-                    <p className="text-xs font-bold text-white opacity-80 italic">24/7 Global Helpline</p>
+                    <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Beneficiary Name</p>
+                    <p className="text-xs font-bold text-white uppercase">{bankDetails.accountName}</p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Account Number</p>
+                      <p className="text-sm font-black text-white tracking-wider">{bankDetails.accountNumber}</p>
+                    </div>
+                    <div className="flex justify-between gap-4">
+                      <div>
+                        <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">IFSC Code</p>
+                        <p className="text-xs font-bold text-white">{bankDetails.ifscCode}</p>
+                      </div>
+                      <div>
+                        <p className="text-[9px] font-black text-blue-300/50 uppercase tracking-widest mb-1">Type</p>
+                        <p className="text-xs font-bold text-white">{bankDetails.accountType}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="space-y-3">
-                  <p className="text-2xl font-black text-white tracking-tighter leading-none">{emergencyContact}</p>
-                  <p className="text-[10px] font-medium text-blue-100/60 leading-relaxed italic">
-                    Exclusively for travelers currently on trip.
-                  </p>
+              ) : (
+                <div className="h-full flex items-center">
+                  <p className="text-xs italic text-blue-200/50 font-medium">Please contact our team for bank details.</p>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

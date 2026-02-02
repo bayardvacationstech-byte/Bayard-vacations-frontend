@@ -1,10 +1,35 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Compass, Map as LucideMap, Tent, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Backpack, TreePine, Flame, Zap, Wind, Navigation } from "lucide-react";
+import { 
+  Compass, 
+  Map as LucideMap, 
+  Tent, 
+  MapPin, 
+  Calendar, 
+  Users, 
+  Star, 
+  Mountain, 
+  ChevronRight, 
+  Backpack, 
+  TreePine, 
+  Flame, 
+  Zap, 
+  Wind, 
+  Navigation,
+  ArrowRight,
+  Play,
+  Search,
+  ShoppingBag,
+  CheckCircle,
+  Landmark,
+  Waves,
+  Box,
+  Route
+} from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,65 +45,7 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
-import { useRef } from "react";
 import ThemeLoader from "@/components/ui/ThemeLoader";
-
-// Floating Adventure Elements (Use icons relevant to exploration)
-const FloatingAdventureElements = () => {
-  const [elements, setElements] = useState([]);
-
-  useEffect(() => {
-    const newElements = Array.from({ length: 15 }).map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      scale: Math.random() * 0.5 + 0.5,
-      rotateStart: Math.random() * 360,
-      rotateEnd: Math.random() * 360 + 360,
-      duration: Math.random() * 10 + 15,
-      delay: Math.random() * 20,
-    }));
-    setElements(newElements);
-  }, []);
-
-  if (elements.length === 0) return null;
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-      {elements.map((el, i) => (
-        <motion.div
-          key={el.id}
-          initial={{ 
-            opacity: 0, 
-            y: "100%", 
-            x: `${el.x}%`,
-            scale: el.scale,
-            rotate: el.rotateStart
-          }}
-          animate={{ 
-            opacity: [0, 0.4, 0], 
-            y: "-20%",
-            rotate: el.rotateEnd
-          }}
-          transition={{ 
-            duration: el.duration, 
-            repeat: Infinity,
-            delay: el.delay,
-            ease: "linear"
-          }}
-          className="absolute"
-        >
-          {i % 3 === 0 ? (
-            <MapPin className="w-8 h-8 text-emerald-200/20 fill-emerald-200/20" />
-          ) : i % 3 === 1 ? (
-            <Compass className="w-10 h-10 text-teal-200/20" />
-          ) : (
-             <Mountain className="w-12 h-12 text-green-200/20 fill-green-200/20" />
-          )}
-        </motion.div>
-      ))}
-    </div>
-  );
-};
 
 export default function ExplorationBundleClient() {
   const [selectedTab, setSelectedTab] = useState("international");
@@ -128,192 +95,239 @@ export default function ExplorationBundleClient() {
     return currentPackages.slice(start, start + itemsPerPage);
   }, [currentPackages, currentPage, itemsPerPage]);
 
-  // if (!mounted) return null; // Removed to prevent footer flash
+  if (!mounted) return null;
+
+  if (isLoading) {
+    return <ThemeLoader theme="exploration" fullScreen className="bg-[#f7f5f3]" />;
+  }
 
   return (
-    <div className="min-h-screen bg-[#F8FAF9]">
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="exploration" fullScreen className="bg-[#F8FAF9]" />
-        )}
-      </AnimatePresence>
-      {/* Immersive Adventure Hero */}
-      <div className="relative min-h-[90vh] md:h-[95vh] overflow-hidden flex items-center bg-emerald-950">
-        {/* Ken Burns Background */}
-        <motion.div 
-          initial={{ scale: 1, x: "-2%" }}
-          animate={{ scale: 1.15, x: "2%" }}
-          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-          className="absolute inset-0"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=1920&q=80"
-            alt="Adventure exploration"
-            fill
-            className="object-cover opacity-70"
-            priority
-          />
-        </motion.div>
-        
-        {/* Active Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/90 via-emerald-900/40 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-black/20 z-10" />
-        
-        {mounted && <FloatingAdventureElements />}
+    <div className="min-h-screen bg-[#f7f5f3] text-[#1d1d1d] font-sans selection:bg-[#e76f51] selection:text-white overflow-x-hidden">
 
-        <Container className="relative z-20 pt-24 md:pt-40">
-          <div className="max-w-5xl space-y-8 md:space-y-12">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
+      {/* Hero Section */}
+      <section className="relative min-h-screen pt-20 topo-pattern overflow-hidden flex items-center">
+        {/* Animated Compass Background */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] compass-rose opacity-20 pointer-events-none">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            className="w-full h-full"
+          >
+            <Compass className="w-full h-full text-[#e76f51]/10" />
+          </motion.div>
+        </div>
+        
+        <Container className="relative z-10 w-full">
+          <div className="grid lg:grid-cols-2 gap-12 items-center py-12">
+            
+            {/* Left Content */}
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="space-y-6 md:space-y-10 text-center md:text-left"
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
             >
-              <div className="inline-flex items-center gap-3 px-5 py-2 bg-emerald-500/30 backdrop-blur-xl rounded-full border border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                <Zap className="w-4 h-4 text-yellow-300 fill-yellow-300 animate-pulse" />
-                <span className="text-[10px] md:text-xs font-black text-white uppercase tracking-[0.4em]">
-                  Exploration Bundle 2026
-                </span>
+              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-[#e76f51]/10 border-2 border-[#e76f51]/20 rounded-full text-[#c44b34] font-bold text-sm uppercase tracking-wider">
+                <Flame className="w-4 h-4 text-[#e76f51]" />
+                <span>Bundle & Save 25%</span>
               </div>
-
-              <div className="space-y-2 md:space-y-4">
-                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[11rem] font-black text-white leading-[0.8] tracking-tighter uppercase italic">
-                  Push your<br />
-                  <span className="text-transparent stroke-text text-yellow-300">limits</span>
-                </h1>
-              </div>
-
-              <p className="text-base md:text-2xl text-emerald-50/90 font-light leading-snug max-w-3xl">
-                The ultimate toolkit for the modern explorer. Curated bundles that bridge the gap between curiosity and epic discovery.
+              
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] text-shadow-adventure">
+                <span className="block text-[#1d1d1d]">ADVENTURE</span>
+                <span className="block text-[#e76f51] mt-2">BUNDLES</span>
+                <span className="block text-[#2a9d8f] text-4xl md:text-5xl lg:text-6xl mt-4 font-serif italic font-normal">Curated Expeditions</span>
+              </h1>
+              
+              <p className="text-lg text-gray-600 max-w-lg leading-relaxed font-medium">
+                Multi-destination packages for the modern explorer. Combine treks, wildlife encounters, and cultural immersions into one epic journey.
               </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 md:gap-8 pt-6">
-                <Button size="lg" className="h-16 md:h-20 px-10 md:px-16 rounded-none skew-x-[-12deg] bg-yellow-400 hover:bg-yellow-300 text-black border-none font-black text-lg md:text-2xl uppercase tracking-tighter transition-all group">
-                   <span className="skew-x-[12deg] flex items-center gap-3">
-                     Go Exploration
-                     <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                   </span>
-                </Button>
-                <Link href="#bundles">
-                  <Button size="lg" variant="outline" className="h-16 md:h-20 px-10 md:px-16 rounded-none skew-x-[-12deg] border-2 border-white/40 text-white hover:bg-white/10 font-bold text-lg md:text-xl uppercase tracking-widest transition-all">
-                    <span className="skew-x-[12deg]">Browse Bundles</span>
-                  </Button>
-                </Link>
+              
+              <div className="flex flex-wrap gap-4 pt-4">
+                <button className="px-8 py-4 bg-[#e76f51] text-white rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#d65a3c] transition-all shadow-xl shadow-[#e76f51]/30 flex items-center space-x-2 group">
+                  <span>Explore Bundles</span>
+                  <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button className="px-8 py-4 bg-white border-2 border-[#2a9d8f] text-[#21867a] rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#2a9d8f]/5 transition-all flex items-center space-x-2">
+                  <Play className="w-5 h-5 fill-[#21867a]" />
+                  <span>Watch Reel</span>
+                </button>
+              </div>
+              
+              {/* Bundle Stats */}
+              <div className="flex space-x-8 pt-8 border-t-2 border-[#e76f51]/20">
+                <div className="text-center">
+                  <div className="text-4xl font-black text-[#e76f51]">12</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Bundle Options</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-black text-[#2a9d8f]">4-14</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Days Range</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-black text-[#e9c46a]">3-5</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Activities Per Bundle</div>
+                </div>
               </div>
             </motion.div>
+            
+            {/* Right Content - Adventure Collage */}
+            <div className="relative h-[500px] md:h-[600px] perspective-1000">
+              {/* Main Image */}
+              <motion.div 
+                initial={{ opacity: 0, x: 50, rotate: 5 }}
+                animate={{ opacity: 1, x: 0, rotate: 3 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="absolute top-0 right-0 w-4/5 h-4/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-0"
+              >
+                <Image 
+                  src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                  alt="Hiking Adventure" 
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-6 flex flex-col justify-end">
+                  <div className="text-white font-bold text-xl">Mountain Treks</div>
+                </div>
+              </motion.div>
+              
+              {/* Secondary Image */}
+              <motion.div 
+                initial={{ opacity: 0, x: -50, rotate: -5 }}
+                animate={{ opacity: 1, x: 0, rotate: -2 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="absolute bottom-0 left-0 w-3/5 h-3/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-10"
+              >
+                <Image 
+                  src="https://images.unsplash.com/photo-1533240332313-0db49b459ad6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Wildlife" 
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent p-6 flex flex-col justify-end">
+                  <div className="text-white font-bold text-lg">Wildlife Safaris</div>
+                </div>
+              </motion.div>
+              
+              {/* Floating Badge */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/2 left-0 transform -translate-y-1/2 z-20"
+              >
+                <div className="bg-[#2a9d8f] text-white p-5 rounded-2xl shadow-xl transform -rotate-12 border-2 border-white/20">
+                  <div className="text-2xl font-black">Best</div>
+                  <div className="text-[10px] uppercase tracking-widest font-bold">Value</div>
+                </div>
+              </motion.div>
+              
+              {/* Activity Icons */}
+              <div className="absolute bottom-10 right-10 flex space-x-3 z-20">
+                <motion.div 
+                  whileHover={{ y: -5 }}
+                  className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#e76f51] text-xl border-2 border-[#e76f51] cursor-pointer"
+                >
+                  <Mountain className="w-6 h-6" />
+                </motion.div>
+                <motion.div 
+                  whileHover={{ y: -5 }}
+                  transition={{ delay: 0.1 }}
+                  className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#2a9d8f] text-xl border-2 border-[#2a9d8f] cursor-pointer"
+                >
+                  <Tent className="w-6 h-6" />
+                </motion.div>
+                <motion.div 
+                  whileHover={{ y: -5 }}
+                  transition={{ delay: 0.2 }}
+                  className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#e9c46a] text-xl border-2 border-[#e9c46a] cursor-pointer"
+                >
+                  <LucideMap className="w-6 h-6" />
+                </motion.div>
+              </div>
+            </div>
           </div>
         </Container>
-      </div>
-
-      {/* The Exploration Manifesto */}
-      <section className="py-8 md:py-12 bg-emerald-950 relative overflow-hidden group">
-         <div className="absolute top-0 right-0 text-[10rem] md:text-[20rem] font-black text-emerald-900/40 leading-none select-none -translate-y-1/2 translate-x-1/4 italic pointer-events-none">
-            THRIL
-         </div>
-         
-         <Container className="relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-               <motion.div
-                 initial={{ opacity: 0, scale: 0.9 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: true }}
-                 className="relative aspect-square md:aspect-video rounded-[2rem] overflow-hidden border-2 border-emerald-500/30"
-               >
-                  <Image
-                    src="https://images.unsplash.com/photo-1533240332313-0db49b459ad0?w=1200"
-                    alt="Wild expedition"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-emerald-950/20 mix-blend-multiply" />
-               </motion.div>
-
-               <div className="space-y-12">
-                   <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white italic uppercase leading-tight md:leading-none">
-                      The Exploration<br />Manifesto
-                   </h2>
-                  <div className="space-y-10">
-                     {[
-                       { title: "Discovery", desc: "Forcing your perspective to shift by witnessing the unseen corners of our planet." },
-                       { title: "Resilience", desc: "Testing your grit against nature's most formidable yet beautiful challenges." },
-                       { title: "Thrill", desc: "That precise moment when fear transforms into pure, unadulterated existence." }
-                     ].map((item, idx) => (
-                       <div key={idx} className="flex gap-8 group/item">
-                          <div className="text-4xl font-black text-emerald-500 group-hover/item:text-yellow-400 transition-colors">0{idx + 1}</div>
-                          <div className="space-y-3">
-                             <h3 className="text-2xl font-bold text-white uppercase tracking-wider">{item.title}</h3>
-                             <p className="text-emerald-100/60 text-lg leading-relaxed">{item.desc}</p>
-                          </div>
-                       </div>
-                     ))}
-                  </div>
-               </div>
-            </div>
-         </Container>
       </section>
 
-      {/* Action Bundles (Packages Grid) */}
-      <section id="bundles" className="py-8 md:py-10">
+      {/* Filter Tabs Section */}
+      <section className="py-8 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
         <Container>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:mb-12">
-            <div className="space-y-4">
-              <div className="w-12 h-2 bg-emerald-500" />
-               <h2 className="text-4xl sm:text-6xl md:text-9xl font-black text-emerald-950 uppercase tracking-tighter leading-tight md:leading-none italic">
-                Active<br />Bundles
-              </h2>
-            </div>
-            
-            <div className="flex bg-emerald-100/50 p-2 rounded-none skew-x-[-6deg]">
-              <button
-                onClick={() => handleTabChange("international")}
-                className={cn(
-                  "px-8 py-3 rounded-none font-black text-xs uppercase tracking-widest transition-all duration-300 skew-x-[6deg]",
-                  selectedTab === "international"
-                    ? "bg-emerald-950 text-white shadow-2xl"
-                    : "text-emerald-900/60 hover:text-emerald-950"
-                )}
-              >
-                External intel
-              </button>
-              <button
-                onClick={() => handleTabChange("domestic")}
-                className={cn(
-                  "px-8 py-3 rounded-none font-black text-xs uppercase tracking-widest transition-all duration-300 skew-x-[6deg]",
-                  selectedTab === "domestic"
-                    ? "bg-emerald-950 text-white shadow-2xl"
-                    : "text-emerald-900/60 hover:text-emerald-950"
-                )}
-              >
-                Domestic intel
-              </button>
-            </div>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <button 
+              onClick={() => handleTabChange("international")}
+              className={cn(
+                "px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2",
+                selectedTab === "international" 
+                  ? "bg-[#1d1d1d] text-white shadow-lg shadow-[#1d1d1d]/20" 
+                  : "bg-stone-100 text-[#1d1d1d]/60 hover:bg-stone-200"
+              )}
+            >
+              <Navigation className="w-4 h-4" />
+              International Bundles
+            </button>
+            <button 
+              onClick={() => handleTabChange("domestic")}
+              className={cn(
+                "px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all flex items-center gap-2",
+                selectedTab === "domestic" 
+                  ? "bg-[#1d1d1d] text-white shadow-lg shadow-[#1d1d1d]/20" 
+                  : "bg-stone-100 text-[#1d1d1d]/60 hover:bg-stone-200"
+              )}
+            >
+              <MapPin className="w-4 h-4" />
+              Domestic Bundles
+            </button>
+          </div>
+        </Container>
+      </section>
+
+      {/* Main Content / Grid */}
+      <section id="bundles" className="py-24 map-texture overflow-hidden" ref={packagesRef}>
+        <Container>
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-7xl font-black text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">Curated combinations of our most popular explorations. Just book and go.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" ref={packagesRef}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {isLoading ? (
               <ThemeLoader theme="exploration" />
-            ) : (
-            <AnimatePresence mode="wait">
-                {paginatedPackages.map((pkg, index) => (
-                  <ThemedPackageCard 
-                    key={`${selectedTab}-${pkg.id}`} 
-                    theme="exploration"
-                    item={pkg}
-                  />
+            ) : paginatedPackages.length > 0 ? (
+              <AnimatePresence mode="popLayout">
+                {paginatedPackages.map((pkg, idx) => (
+                  <motion.div
+                    key={pkg.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  >
+                    <ThemedPackageCard
+                      theme="exploration"
+                      item={pkg}
+                    />
+                  </motion.div>
                 ))}
               </AnimatePresence>
+            ) : (
+              <div className="col-span-full py-32 text-center">
+                <div className="inline-block p-10 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+                  <Wind className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-2xl font-serif italic text-gray-500">The map for this region is currently being drawn.</p>
+                </div>
+              </div>
             )}
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-12 flex justify-center py-6">
+            <div className="mt-20 flex justify-center">
               <Pagination>
-                <PaginationContent className="gap-2">
+                <PaginationContent className="gap-3">
                   <PaginationItem>
                     <PaginationPrevious
                       className={cn(
-                        "cursor-pointer rounded-none h-14 w-14 bg-emerald-950 text-white hover:bg-yellow-400 hover:text-black transition-all shadow-xl skew-x-[-12deg]",
+                        "cursor-pointer rounded-2xl h-14 w-14 border-2 border-[#1d1d1d]/10 text-[#1d1d1d] hover:bg-[#e76f51] hover:text-white hover:border-[#e76f51] transition-all",
                         currentPage === 1 && "pointer-events-none opacity-30"
                       )}
                       onClick={() => {
@@ -326,14 +340,14 @@ export default function ExplorationBundleClient() {
                   {getPaginationPages(currentPage, totalPages).map((page, i) => (
                     <PaginationItem key={i} className="hidden sm:block">
                       {page === "..." ? (
-                        <PaginationEllipsis className="text-emerald-400" />
+                        <PaginationEllipsis className="text-[#e76f51]" />
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-none h-14 w-14 bg-white font-black transition-all border-emerald-100 shadow-md skew-x-[-12deg]",
+                            "cursor-pointer rounded-2xl h-14 w-14 font-black transition-all border-2",
                             currentPage === page 
-                              ? "bg-emerald-500 text-white border-transparent shadow-xl" 
-                              : "text-emerald-950 hover:bg-emerald-50"
+                              ? "bg-white text-[#e76f51] border-[#e76f51] shadow-xl" 
+                              : "border-[#1d1d1d]/10 text-gray-400 hover:bg-stone-50"
                           )}
                           onClick={() => {
                             setCurrentPage(page);
@@ -341,7 +355,7 @@ export default function ExplorationBundleClient() {
                           }}
                           isActive={currentPage === page}
                         >
-                          <span className="skew-x-[12deg]">{page}</span>
+                          {page}
                         </PaginationLink>
                       )}
                     </PaginationItem>
@@ -350,7 +364,7 @@ export default function ExplorationBundleClient() {
                   <PaginationItem>
                     <PaginationNext
                       className={cn(
-                        "cursor-pointer rounded-none h-14 w-14 bg-emerald-950 text-white hover:bg-yellow-400 hover:text-black transition-all shadow-xl skew-x-[-12deg]",
+                        "cursor-pointer rounded-2xl h-14 w-14 border-2 border-[#1d1d1d]/10 text-[#1d1d1d] hover:bg-[#e76f51] hover:text-white hover:border-[#e76f51] transition-all",
                         currentPage === totalPages && "pointer-events-none opacity-30"
                       )}
                       onClick={() => {
@@ -366,37 +380,92 @@ export default function ExplorationBundleClient() {
         </Container>
       </section>
 
-      {/* Extreme Call to Action */}
-      <section className="py-8 md:py-12 bg-white">
-         <Container>
-            <div className="bg-emerald-600 p-6 md:p-10 relative overflow-hidden flex flex-col items-center text-center space-y-6">
-               <div className="absolute top-0 left-0 w-full h-2 bg-yellow-300" />
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-               >
-                   <h2 className="text-4xl sm:text-6xl md:text-8xl font-black text-white italic uppercase leading-tight md:leading-none tracking-tighter">
-                      Ready for<br />Extraction?
-                   </h2>
-               </motion.div>
-               <p className="text-emerald-50 md:text-2xl font-medium max-w-2xl">
-                  Limited bundles available for the upcoming season. Don't let the map be the only thing you explore.
-               </p>
-               <Button size="lg" className="h-20 px-16 rounded-none skew-x-[-12deg] bg-white hover:bg-emerald-50 text-emerald-900 border-none font-black text-2xl uppercase tracking-tighter transition-all">
-                  <span className="skew-x-[12deg]">Secure Bundle</span>
-               </Button>
+      {/* Features Section */}
+      <section className="py-32 bg-[#1d1d1d] text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/topography.png')]"></div>
+        
+        <Container className="relative z-10">
+          <div className="grid md:grid-cols-3 gap-16 text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="group"
+            >
+              <div className="w-20 h-20 mx-auto mb-8 bg-[#e76f51] rounded-2xl rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:rotate-6 transition-transform">
+                <Box className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-black mb-4 uppercase tracking-wider">All-Inclusive</h3>
+              <p className="text-gray-400 text-lg leading-relaxed">Gear, guides, permits, and accommodation bundled. Just bring your sense of adventure.</p>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="group"
+            >
+              <div className="w-20 h-20 mx-auto mb-8 bg-[#2a9d8f] rounded-2xl -rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:-rotate-6 transition-transform">
+                <Route className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-black mb-4 uppercase tracking-wider">Curated Routes</h3>
+              <p className="text-gray-400 text-lg leading-relaxed">Expert-planned itineraries connecting multiple destinations efficiently.</p>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="group"
+            >
+              <div className="w-20 h-20 mx-auto mb-8 bg-[#e9c46a] rounded-2xl rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:rotate-6 transition-transform">
+                <Users className="w-10 h-10 text-white" />
+              </div>
+              <h3 className="text-2xl font-black mb-4 uppercase tracking-wider">Small Groups</h3>
+              <p className="text-gray-400 text-lg leading-relaxed">Maximum 12 explorers per bundle for intimate, flexible adventures.</p>
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="py-32 bg-stone-50 border-t-4 border-[#e76f51]">
+        <Container>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+            <div>
+              <h2 className="text-4xl md:text-6xl font-black text-[#1d1d1d] mb-4">Ready for Discovery?</h2>
+              <p className="text-xl text-gray-500 font-medium">Join the community of modern explorers today.</p>
             </div>
-         </Container>
+            <button className="px-12 py-5 bg-[#e76f51] text-white rounded-xl font-black text-xl uppercase tracking-widest hover:bg-[#d65a3c] transition-all shadow-2xl shadow-[#e76f51]/30">
+              Start Your Expedition
+            </button>
+          </div>
+        </Container>
       </section>
 
       <style jsx global>{`
-        .stroke-text {
-          -webkit-text-stroke: 1px white;
+        .topo-pattern {
+            background-color: #f7f5f3;
+            background-image: 
+                linear-gradient(rgba(231, 111, 111, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(231, 111, 111, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(42, 157, 143, 0.02) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(42, 157, 143, 0.02) 2px, transparent 2px);
+            background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
         }
-        .vertical-text {
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
+        
+        .map-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23e76f51' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .text-shadow-adventure {
+            text-shadow: 2px 2px 0px rgba(231, 111, 111, 0.2);
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
         }
       `}</style>
     </div>

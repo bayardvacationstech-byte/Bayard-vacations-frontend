@@ -19,7 +19,7 @@ const navbarData = [
     id: "nav-group-departure",
     title: "Group Departure",
     hasDropdown: false,
-    href: "/group-departure",
+    href: "/themes/group-departure",
   },
   {
     id: "nav-explore",

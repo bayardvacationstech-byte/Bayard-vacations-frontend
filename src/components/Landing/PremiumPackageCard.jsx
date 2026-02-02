@@ -61,12 +61,18 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
     if (item.trending) tags.push({ label: "Hot Right Now", icon: "✨", type: "trending" });
     if (item.curated) tags.push({ label: "Signature Pick", icon: "🏆", type: "curated" });
     
-    // Add first tailored tag if available
+    // Scavenge for other tags like budget/value
+    const hasBudgetTag = (item.packageTags || []).some(t => t.toLowerCase().includes('budget') || t.toLowerCase().includes('value'));
+    if (hasBudgetTag) {
+      tags.push({ label: "Value Choice", icon: "💰", type: "value" });
+    }
+
+    // Add tailored tag
     const tailored = Array.isArray(item.tailored_tag) ? item.tailored_tag[0] : item.tailored_tag;
     if (tailored) {
         tags.push({ 
             label: tailored.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
-            icon: "📷",
+            icon: "📍",
             type: "tailored"
         });
     }
@@ -121,20 +127,21 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
           <div className="absolute inset-0 pointer-events-none z-10 shadow-[inset_0_0_100px_rgba(0,0,0,0.3)]" />
         </div>
 
-        {/* Top Tags - Glassmorphism */}
+        {/* Top Tags - Glassmorphism & Highlighting */}
         <div className="absolute top-5 left-5 right-5 z-20 flex flex-wrap gap-2">
           {topTags.map((tag, idx) => (
             <div 
               key={idx}
               className={cn(
-                "tag inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black tracking-widest uppercase text-white backdrop-blur-xl border border-white/30 shadow-lg transition-all hover:translate-y-[-2px] hover:bg-white/40",
-                tag.type === "trending" && "bg-orange-500/30 border-orange-500/50",
-                tag.type === "curated" && "bg-rose-500/30 border-rose-500/50",
-                tag.type === "tailored" && "bg-violet-500/30 border-violet-500/50"
+                "tag inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black tracking-widest uppercase text-white backdrop-blur-2xl border transition-all duration-300 hover:translate-y-[-2px] shadow-lg",
+                tag.type === "trending" && "bg-orange-500/60 border-orange-400 shadow-orange-500/40",
+                tag.type === "curated" && "bg-rose-600/70 border-rose-400 shadow-rose-600/40",
+                tag.type === "value" && "bg-blue-600/70 border-blue-400 shadow-blue-600/40",
+                tag.type === "tailored" && "bg-violet-600/60 border-violet-400 shadow-violet-600/40"
               )}
             >
-              <span className="text-xs">{tag.icon}</span>
-              {tag.label}
+              <span className="text-xs filter drop-shadow-md">{tag.icon}</span>
+              <span className="drop-shadow-sm">{tag.label}</span>
             </div>
           ))}
         </div>

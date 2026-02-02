@@ -1,10 +1,25 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Smile, Baby, PartyPopper, MapPin, Calendar, Users, Star, Palmtree, ChevronRight, IceCream, Rocket } from "lucide-react";
+import { 
+  Heart,
+  Users,
+  ShieldCheck,
+  Check,
+  Camera,
+  Mountain,
+  Compass,
+  PlayCircle,
+  ArrowRight,
+  ChevronRight,
+  Star,
+  Calendar,
+  MapPin,
+  Smile
+} from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { usePackagesByTheme } from "@/hooks/packages";
@@ -19,7 +34,6 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
-import { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
 
@@ -43,7 +57,6 @@ export default function FamilyFunventureClient() {
   const familyPackages = useMemo(() => {
     if (!allThemePackages) return { international: [], domestic: [] };
     
-    // Deduplicate by package ID
     const uniqueMap = new Map();
     allThemePackages.forEach(pkg => {
       if (pkg.id && !uniqueMap.has(pkg.id)) {
@@ -67,227 +80,397 @@ export default function FamilyFunventureClient() {
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-yellow-50 to-white">
+    <div className="min-h-screen bg-[#fef9f3] overflow-x-hidden font-sans text-gray-800">
       <AnimatePresence>
         {isLoading && (
-          <ThemeLoader theme="family" fullScreen className="bg-orange-50" />
+          <ThemeLoader theme="family" fullScreen className="bg-[#fef9f3]" />
         )}
       </AnimatePresence>
+
       {/* Hero Section */}
-      <div className="relative min-h-[90vh] md:h-[80vh] overflow-hidden bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
-        {/* Playful Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='8' fill='white'/%3E%3Ccircle cx='60' cy='20' r='6' fill='white'/%3E%3Ccircle cx='40' cy='50' r='10' fill='white'/%3E%3Ccircle cx='70' cy='60' r='5' fill='white'/%3E%3C/svg%3E")`,
-            backgroundSize: '80px 80px'
-          }} />
+      <section className="relative min-h-[90vh] pt-20 overflow-hidden bg-gradient-to-br from-[#fef9f3] to-[#fff8f0]">
+        {/* Watercolor Background Effects */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-teal-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-700" />
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-amber-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000" />
         </div>
 
-        <Container className="relative h-full flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+        {/* Pattern Dots */}
+        <div className="absolute inset-0 opacity-[0.05]" style={{
+          backgroundImage: 'radial-gradient(#FF6B6B 1px, transparent 1px)',
+          backgroundSize: '20px 20px'
+        }} />
+
+        <Container className="relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-5rem)] py-12">
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-6"
+              className="space-y-8"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                <Smile className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold text-white uppercase tracking-widest">
-                  Travel Theme
-                </span>
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md text-orange-500 font-semibold text-sm tracking-wider uppercase border border-orange-200">
+                <Compass className="w-4 h-4 animate-spin-slow" />
+                <span>Adventure Theme</span>
               </div>
-
-              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-tight">
-                Family<br />
-                <span className="text-yellow-300">Funventure</span>
+              
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
+                <span className="block text-slate-900">Family</span>
+                <span className="block italic text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-pink-500 to-indigo-500 mt-2 transform -rotate-1 inline-block">
+                  Funventure
+                </span>
               </h1>
-
-              <p className="text-base md:text-xl text-white/90 leading-relaxed max-w-xl">
-                All things togetherness. Discover our handpicked domestic and international arrivals curated specifically for this theme.
+              
+              <p className="text-xl text-slate-600 max-w-lg leading-relaxed font-light">
+                Where laughter echoes across mountains and memories sparkle like ocean waves. 
+                Discover curated journeys that bring generations together in wonder.
               </p>
-
-              <div className="flex gap-4">
-                <Button size="lg" className="bg-white text-purple-600 hover:bg-yellow-50 font-black px-8 py-6 rounded-2xl shadow-xl">
-                  Explore Adventures
+              
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Button className="h-14 px-8 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 border-none">
+                  <span>Start Exploring</span>
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm">
-                  Plan Your Trip
+                <Button variant="outline" className="h-14 px-8 rounded-full border-2 border-slate-200 text-slate-900 font-semibold text-lg hover:border-orange-400 hover:text-orange-500 transition-all duration-300 flex items-center space-x-2 group bg-white/50 backdrop-blur-sm">
+                  <PlayCircle className="w-6 h-6 text-orange-500 group-hover:scale-110 transition-transform" />
+                  <span>Watch Stories</span>
                 </Button>
+              </div>
+              
+              {/* Stats */}
+              <div className="flex space-x-8 pt-8 border-t border-slate-200/50">
+                <div>
+                  <div className="text-3xl font-bold text-slate-900">500+</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider">Family Trips</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-orange-500">4.9</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider">Rating</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-teal-500">50+</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider">Destinations</div>
+                </div>
               </div>
             </motion.div>
-
-            {/* Right Image */}
+            
+            {/* Right Content - Artistic Composition */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
             >
-              <div className="relative w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl ring-8 ring-white/20">
-                <Image
-                  src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800"
-                  alt="Happy family"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center">
-                    <PartyPopper className="w-6 h-6 text-white" />
+              <div className="relative z-10 group">
+                {/* Organic Shape Container */}
+                <div className="relative w-full h-[500px] overflow-hidden shadow-2xl border-8 border-white/50 transform group-hover:scale-[1.02] transition-transform duration-500"
+                  style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}>
+                  <Image
+                    src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000"
+                    alt="Family Adventure"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  
+                  {/* Floating Badge */}
+                  <div className="absolute bottom-6 left-6 right-6 bg-white/80 backdrop-blur-lg rounded-2xl p-4 flex items-center space-x-4 border border-white/30">
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full flex items-center justify-center text-white shadow-lg">
+                      <Mountain className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-slate-900">Adventure for All Ages</div>
+                      <div className="text-sm text-slate-600 font-medium">Safe & exciting experiences</div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-black text-slate-900">Fun for Everyone</p>
-                    <p className="text-sm text-slate-600">Memories that last forever</p>
+                </div>
+
+                {/* Decorative Elements */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-100 animate-bounce-slow opacity-80 -z-10"
+                  style={{ borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' }} />
+                
+                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-teal-50 animate-float opacity-80 z-20 flex items-center justify-center shadow-lg"
+                  style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}>
+                  <Camera className="w-8 h-8 text-teal-500" />
+                </div>
+                
+                {/* Floating Info Cards */}
+                <div className="absolute top-10 -left-8 bg-white/90 backdrop-blur-md rounded-2xl p-3 shadow-xl z-20 animate-float-slow transition-transform hover:scale-105">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex -space-x-2">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden relative">
+                          <Image src={`https://i.pravatar.cc/100?img=${i+10}`} alt="User" fill />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-xs">
+                      <div className="font-bold text-slate-900">2k+ families</div>
+                      <div className="text-slate-500">joined this month</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="absolute bottom-20 -right-4 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-xl z-20 animate-float-slow delay-1000 transition-transform hover:scale-105">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600 shadow-inner">
+                      <Check className="w-6 h-6 font-bold" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-500 font-medium">Best Price</div>
+                      <div className="font-bold text-slate-900">Guaranteed</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </motion.div>
           </div>
         </Container>
-      </div>
 
-      {/* Packages Section */}
-      <Container className="py-4 md:py-8">
-        {/* Tab Switcher */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex bg-slate-100 rounded-full p-1.5">
-            <button
-              onClick={() => handleTabChange("international")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "international"
-                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              International
-            </button>
-            <button
-              onClick={() => handleTabChange("domestic")}
-              className={`px-8 py-3 rounded-full font-bold transition-all ${
-                selectedTab === "domestic"
-                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Domestic
-            </button>
-          </div>
+        {/* Wave Separator */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+          <svg className="w-full h-24 fill-[#fef9f3]" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
+          </svg>
         </div>
+      </section>
 
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ref={packagesRef}>
-          {isLoading ? (
-            <ThemeLoader theme="family" />
-          ) : (
-            <AnimatePresence mode="wait">
-              {paginatedPackages.map((pkg, index) => (
-                <ThemedPackageCard 
-                  key={`${selectedTab}-${pkg.id}`} 
-                  theme="family"
-                  item={pkg}
-                />
-              ))}
-            </AnimatePresence>
-          )}
-        </div>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-12 flex justify-center py-6">
-            <Pagination>
-              <PaginationContent className="gap-2">
-                <PaginationItem>
-                  <PaginationPrevious
-                    className={cn(
-                      "cursor-pointer rounded-xl h-11 w-11 bg-white border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-md",
-                      currentPage === 1 && "pointer-events-none opacity-30"
-                    )}
-                    onClick={() => {
-                      setCurrentPage(currentPage - 1);
-                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }}
-                  />
-                </PaginationItem>
-                
-                {getPaginationPages(currentPage, totalPages).map((page, i) => (
-                  <PaginationItem key={i} className="hidden sm:block">
-                    {page === "..." ? (
-                      <PaginationEllipsis className="text-purple-400" />
-                    ) : (
-                      <PaginationLink
-                        className={cn(
-                          "cursor-pointer rounded-xl h-11 w-11 bg-white font-bold transition-all border-blue-100 shadow-md",
-                          currentPage === page 
-                            ? "bg-gradient-to-br from-purple-600 to-pink-600 text-white shadow-lg border-transparent" 
-                            : "text-blue-600 hover:bg-blue-50"
-                        )}
-                        onClick={() => {
-                          setCurrentPage(page);
-                          packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                        }}
-                        isActive={currentPage === page}
-                      >
-                        {page}
-                      </PaginationLink>
-                    )}
-                  </PaginationItem>
-                ))}
-
-                <PaginationItem>
-                  <PaginationNext
-                    className={cn(
-                      "cursor-pointer rounded-xl h-11 w-11 bg-white border-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-md",
-                      currentPage === totalPages && "pointer-events-none opacity-30"
-                    )}
-                    onClick={() => {
-                      setCurrentPage(currentPage + 1);
-                      packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        )}
-      </Container>
-
-      {/* Why Family Adventures Section */}
-      <div className="bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 py-8 md:py-10">
+      {/* Filter Section */}
+      <section className="py-12 bg-[#fef9f3]">
         <Container>
-          <div className="text-center mb-8">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4">
-              Why Family Funventures?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Creating joyful memories for the whole family
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: IceCream, title: "Kid-Friendly Everything", desc: "From accommodations to activities, everything is designed with children in mind for maximum fun and safety." },
-              { icon: Palmtree, title: "Stress-Free Planning", desc: "We handle all the details so parents can relax and enjoy quality time with their children." },
-              { icon: Rocket, title: "Adventure for All Ages", desc: "Activities carefully curated to ensure everyone, from toddlers to grandparents, has a blast." }
-            ].map((feature, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center p-8"
+          <div className="flex justify-center">
+            <div className="bg-white p-2 rounded-full shadow-xl inline-flex border border-orange-100">
+              <button
+                onClick={() => handleTabChange("international")}
+                className={cn(
+                  "px-8 py-3 rounded-full font-bold transition-all duration-300",
+                  selectedTab === "international"
+                    ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-md"
+                    : "text-slate-500 hover:text-orange-500"
+                )}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 via-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-black text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
+                International
+              </button>
+              <button
+                onClick={() => handleTabChange("domestic")}
+                className={cn(
+                  "px-8 py-3 rounded-full font-bold transition-all duration-300",
+                  selectedTab === "domestic"
+                    ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-md"
+                    : "text-slate-500 hover:text-orange-500"
+                )}
+              >
+                Domestic
+              </button>
+            </div>
           </div>
         </Container>
-      </div>
+      </section>
+
+      {/* Packages Grid Section */}
+      <section className="py-16 bg-[#fef9f3]" ref={packagesRef}>
+        <Container>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Curated Adventures</h2>
+            <p className="text-slate-600 max-w-2xl mx-auto text-lg">Handpicked destinations designed for multi-generational bonding and unforgettable stories</p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {isLoading ? (
+              [1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-96 rounded-3xl bg-white shadow-md animate-pulse p-4 flex flex-col gap-4">
+                  <div className="h-52 rounded-2xl bg-slate-100 w-full" />
+                  <div className="h-6 bg-slate-100 rounded w-3/4" />
+                  <div className="h-4 bg-slate-100 rounded w-1/2" />
+                  <div className="mt-auto h-12 bg-slate-100 rounded-full w-full" />
+                </div>
+              ))
+            ) : (
+              <AnimatePresence mode="popLayout">
+                {paginatedPackages.length > 0 ? (
+                  paginatedPackages.map((pkg, index) => (
+                    <motion.div
+                      key={pkg.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                    >
+                      <ThemedPackageCard 
+                        theme="family"
+                        item={pkg}
+                      />
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="col-span-full py-20 text-center">
+                    <p className="text-slate-500 text-lg">No packages found for this selection.</p>
+                  </div>
+                )}
+              </AnimatePresence>
+            )}
+          </div>
+          
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-16 flex justify-center">
+              <Pagination>
+                <PaginationContent className="gap-2">
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className={cn(
+                        "cursor-pointer rounded-full h-12 px-6 bg-white border-slate-200 text-slate-700 hover:bg-orange-500 hover:text-white transition-all shadow-md",
+                        currentPage === 1 && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage - 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                  
+                  {getPaginationPages(currentPage, totalPages).map((page, i) => (
+                    <PaginationItem key={i} className="hidden sm:block">
+                      {page === "..." ? (
+                        <PaginationEllipsis className="text-orange-400" />
+                      ) : (
+                        <PaginationLink
+                          className={cn(
+                            "cursor-pointer rounded-full h-12 w-12 bg-white font-bold transition-all border-slate-200 shadow-md",
+                            currentPage === page 
+                              ? "bg-gradient-to-br from-orange-500 to-pink-500 text-white shadow-lg border-transparent" 
+                              : "text-slate-700 hover:bg-orange-50"
+                          )}
+                          onClick={() => {
+                            setCurrentPage(page);
+                            packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      className={cn(
+                        "cursor-pointer rounded-full h-12 px-6 bg-white border-slate-200 text-slate-700 hover:bg-orange-500 hover:text-white transition-all shadow-md",
+                        currentPage === totalPages && "pointer-events-none opacity-30"
+                      )}
+                      onClick={() => {
+                        setCurrentPage(currentPage + 1);
+                        packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+
+          <div className="text-center mt-12">
+            <Button variant="outline" className="px-10 py-6 border-2 border-slate-200 text-slate-700 rounded-full font-bold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300">
+              View All Family Packages
+            </Button>
+          </div>
+        </Container>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-24 bg-white relative overflow-hidden">
+        {/* Decorative background characters */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none flex items-center justify-between px-10">
+          <div className="text-[20rem] font-serif text-orange-500 pointer-events-none">&ldquo;</div>
+          <div className="text-[20rem] font-serif text-teal-500 pointer-events-none">&rdquo;</div>
+        </div>
+        
+        <Container className="relative z-10">
+          <div className="grid md:grid-cols-3 gap-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
+            >
+              <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-orange-500 transform group-hover:rotate-6 transition-transform">
+                <ShieldCheck className="w-12 h-12" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Safety First</h3>
+              <p className="text-slate-600 leading-relaxed">Verified family-friendly accommodations and 24/7 support during your journey.</p>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
+            >
+              <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-teal-500 transform group-hover:-rotate-6 transition-transform">
+                <Users className="w-12 h-12" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">All Ages Welcome</h3>
+              <p className="text-slate-600 leading-relaxed">Activities designed for toddlers, teens, parents, and grandparents alike.</p>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
+            >
+              <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-pink-500 transform group-hover:rotate-6 transition-transform">
+                <Heart className="w-12 h-12" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Memory Making</h3>
+              <p className="text-slate-600 leading-relaxed">Curated experiences that become stories told at family gatherings for years.</p>
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      <style jsx>{`
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          33% { transform: translateY(-15px) translateX(10px); }
+          66% { transform: translateY(5px) translateX(-10px); }
+        }
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 12s linear infinite;
+        }
+        .animate-float {
+          animation: float 10s ease-in-out infinite;
+        }
+        .animate-float-slow {
+          animation: float-slow 8s ease-in-out infinite;
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 6s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }

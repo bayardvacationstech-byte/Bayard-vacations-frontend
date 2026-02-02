@@ -53,7 +53,7 @@ const ShareableItineraryClient = ({ itineraryData }) => {
       <ShareableHighlights highlights={itineraryData.highlights} />
 
       {/* 3. Pricing Section - NEW */}
-      <ShareablePricing pricing={itineraryData.pricing} />
+      <ShareablePricing pricing={itineraryData.pricing} travelers={itineraryData.travelers} />
 
       {/* 4. Day-by-day itinerary */}
       <ShareableItineraryBook itineraries={itineraryData.itineraries} />

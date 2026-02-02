@@ -15,7 +15,7 @@ const categoryData = [
     title: "Group Departure",
     subtitle: "All things fun",
     iconLight: "/media/theme-icons/group-adventure.svg",
-    slug: "group-adventures?group=true",
+    slug: "group-departure",
     icon: "/img/category-icons/group-adventure.svg",
     img: "/img/category-img/group-adventures.png",
   },
