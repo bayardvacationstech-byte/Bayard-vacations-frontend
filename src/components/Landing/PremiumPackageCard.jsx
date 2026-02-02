@@ -166,16 +166,16 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
           <span className="text-sm font-black text-slate-900">4.9</span>
         </div>
 
-        {/* Floating Middle Badges - Moved higher to avoid content overlap */}
-        <div className="absolute bottom-[160px] left-5 right-5 z-20 flex justify-between items-center">
-          <div className="location-badge inline-flex items-center gap-2 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white font-black text-xs tracking-wider transition-all hover:bg-black/70 hover:scale-105">
-            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
-              <MapPin className="w-3.5 h-3.5" />
+        {/* Floating Middle Badges - Responsive layout to avoid overlap */}
+        <div className="absolute bottom-[160px] left-4 right-4 z-20 flex flex-nowrap items-center justify-between gap-1.5 sm:left-5 sm:right-5 sm:gap-4">
+          <div className="location-badge inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white font-black text-[10px] sm:text-xs tracking-wider transition-all hover:bg-black/70 hover:scale-105 overflow-hidden">
+            <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center border border-white/30 shrink-0">
+              <MapPin className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
             </div>
-            <span className="uppercase">{item.region?.split("-").join(" ")}</span>
+            <span className="uppercase truncate max-w-[80px] sm:max-w-none">{item.region?.split("-").join(" ")}</span>
           </div>
-          <div className="duration-badge px-5 py-2.5 bg-blue-600/95 backdrop-blur-md border border-white/40 rounded-full text-white font-black text-[14px] shadow-[0_10px_20px_rgba(37,99,235,0.4)] transition-all hover:scale-105 hover:shadow-blue-600/60 flex items-center gap-2">
-            <Clock className="w-4 h-4" />
+          <div className="duration-badge px-3 py-1.5 sm:px-5 sm:py-2.5 bg-blue-600/95 backdrop-blur-md border border-white/40 rounded-full text-white font-black text-[11px] sm:text-[14px] shadow-[0_10px_20px_rgba(37,99,235,0.4)] transition-all hover:scale-105 hover:shadow-blue-600/60 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+            <Clock className="w-3.5 h-3.5 sm:w-4 h-4" />
             {item.days}D / {item.nights}N
           </div>
         </div>
@@ -193,7 +193,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
           </h2>
 
           {/* Highlights Section */}
-          <div className="space-y-1.5 mt-3">
+          {/* <div className="space-y-1.5 mt-3">
             {baseHighlights.slice(0, 2).map((highlight, idx) => (
               <div key={idx} className="flex items-center gap-2 group/hl">
                 <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)]" />
@@ -202,7 +202,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
                 </p>
               </div>
             ))}
-          </div>
+          </div> */}
           
           <div className="flex items-center justify-between mt-3">
             <div className="flex flex-col">
