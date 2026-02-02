@@ -107,13 +107,14 @@ export default function ExplorationBundleClient() {
       {/* Hero Section */}
       <section className="relative min-h-screen pt-20 topo-pattern overflow-hidden flex items-center">
         {/* Animated Compass Background */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] compass-rose opacity-20 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] compass-rose opacity-10 pointer-events-none">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+            style={{ willChange: "transform" }}
             className="w-full h-full"
           >
-            <Compass className="w-full h-full text-[#e76f51]/10" />
+            <Compass className="w-full h-full text-[#e76f51]/5" />
           </motion.div>
         </div>
         
@@ -292,15 +293,14 @@ export default function ExplorationBundleClient() {
             {isLoading ? (
               <ThemeLoader theme="exploration" />
             ) : paginatedPackages.length > 0 ? (
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence>
                 {paginatedPackages.map((pkg, idx) => (
                   <motion.div
                     key={pkg.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9, y: 30 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4, delay: idx * 0.05 }}
                   >
                     <ThemedPackageCard
                       theme="exploration"
@@ -449,15 +449,13 @@ export default function ExplorationBundleClient() {
         .topo-pattern {
             background-color: #f7f5f3;
             background-image: 
-                linear-gradient(rgba(231, 111, 111, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(231, 111, 111, 0.03) 1px, transparent 1px),
-                linear-gradient(rgba(42, 157, 143, 0.02) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(42, 157, 143, 0.02) 2px, transparent 2px);
-            background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+                linear-gradient(rgba(231, 111, 111, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(231, 111, 111, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
         
         .map-texture {
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23e76f51' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='11' cy='18' r='7' fill='%23e76f51' fill-opacity='0.03'/%3E%3Ccircle cx='59' cy='43' r='7' fill='%23e76f51' fill-opacity='0.03'/%3E%3C/svg%3E");
         }
 
         .text-shadow-adventure {
