@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Flower, Sparkles, Waves, MapPin, Calendar, Users, Star, Heart, ChevronRight, Leaf, Sun, Wind, Cloud, Moon, Globe } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import { usePackagesByTheme } from "@/hooks/packages";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
@@ -22,6 +23,7 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 // Floating Zen Elements (Lotus Petals)
 const FloatingZenElements = () => {
@@ -127,7 +129,7 @@ export default function RelaxRejuvenateClient() {
   // if (!mounted) return null; // Removed check
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB]">
+    <div className="min-h-screen bg-[#fdfaf6] text-[#2c3e50] font-sans selection:bg-[#7fb3d5] selection:text-white overflow-x-hidden">
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="relax" fullScreen className="bg-[#FDFCFB]" />
@@ -165,12 +167,15 @@ export default function RelaxRejuvenateClient() {
               transition={{ duration: 1.2 }}
               className="space-y-4 md:space-y-8 text-center md:text-left"
             >
-              <div className="inline-flex items-center gap-3 px-6 py-2 bg-white/40 backdrop-blur-xl rounded-full border border-white/60 shadow-sm">
-                <Leaf className="w-5 h-5 text-sage-600 fill-sage-600/20" />
-                <span className="text-[10px] md:text-xs font-bold text-stone-700 uppercase tracking-[0.4em] font-sans">
-                  The Sanctuary Collection
-                </span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Relax & Rejuvenate", href: "/themes/relax-rejuvenate", active: true }
+                ]} 
+                className="bg-transparent border-transparent p-0 mb-4 flex justify-center md:justify-start"
+                omitContainer
+              />
 
               <div className="space-y-1 md:space-y-2">
                 <p className="text-sage-700 font-serif italic text-lg md:text-4xl opacity-80 mb-2">
@@ -220,6 +225,8 @@ export default function RelaxRejuvenateClient() {
            <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-stone-900">Exhale</span>
         </div>
       </div>
+
+
 
       {/* The Three Pillars Section */}
       <section className="py-8 md:py-12 bg-white">
@@ -402,6 +409,10 @@ export default function RelaxRejuvenateClient() {
                </div>
             </div>
          </Container>
+      </section>
+
+      <section>
+        <InspirationSection theme="relax" />
       </section>
     </div>
   );

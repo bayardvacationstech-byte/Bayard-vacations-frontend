@@ -71,14 +71,14 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       icon: <Smile className="w-4 h-4 fill-orange-500 text-white stroke-[3px]" />
     },
     solo: {
-      card: "border-purple-500/10 hover:-translate-y-2 hover:shadow-2xl bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] solo-card",
-      title: "font-display text-white font-bold tracking-tight",
-      featureDot: "bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.4)]",
-      featureText: "text-gray-300 font-medium",
-      price: "text-white font-display",
-      cta: "bg-gradient-to-br from-purple-500 to-purple-800 group-hover:from-aurora-400 group-hover:to-purple-600 rounded-lg",
-      badge: "bg-purple-600 text-white font-bold uppercase tracking-wider px-4 [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)]",
-      icon: <Compass className="w-4 h-4 text-aurora-400" />
+      card: "border-[#667eea]/20 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#667eea]/20 bg-white transition-all duration-500",
+      title: "font-display text-[#1a1a1a] font-bold tracking-tight",
+      featureDot: "bg-[#667eea] shadow-[0_0_8px_rgba(102,126,234,0.4)]",
+      featureText: "text-[#5a5a5a] font-medium",
+      price: "text-transparent bg-clip-text bg-gradient-to-r from-[#667eea] to-[#764ba2] font-display",
+      cta: "bg-gradient-to-br from-[#667eea] to-[#764ba2] hover:shadow-xl hover:shadow-[#667eea]/30 rounded-lg transition-all duration-500",
+      badge: "bg-[#667eea] text-white font-bold uppercase tracking-wider px-4 [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)]",
+      icon: <Compass className="w-4 h-4 text-white" />
     },
     elite: {
       card: "bg-[#0a0a0a] border-white/5 hover:border-amber-500/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_30px_rgba(212,175,55,0.1)] transition-all duration-700 group overflow-hidden",

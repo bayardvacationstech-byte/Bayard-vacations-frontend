@@ -33,6 +33,7 @@ import BookingSidebar from "./BookingSidebar";
 import StickyBottomBar from "./StickyBottomBar";
 import BlogsCarousel from "./Sections/BlogsCarousel";
 import { useBlogs } from "@/hooks";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 const PackagesClient = () => {
   const params = useParams();
@@ -95,12 +96,35 @@ const PackagesClient = () => {
       } else {
         // Handle proper object structure { twostar: ..., threestar: ... }
         const { hotelDetails, baseCategory } = convertAndSortHotels(packageData.hotelDetails);
-        setHotelTiers(hotelDetails);
-        const initialHotel = hotelDetails.find(h => h.type === baseCategory) || hotelDetails[0];
+        
+        // Filter out tiers with no hotels
+        const validHotelDetails = hotelDetails.filter(t => t.hotelIds && t.hotelIds.length > 0);
+        
+        setHotelTiers(validHotelDetails);
+        const initialHotel = validHotelDetails.find(h => h.type === baseCategory) || validHotelDetails[0];
         setSelectedHotel(initialHotel);
       }
     }
   }, [packageData?.id, packageData?.hotelDetails]);
+
+  // Callback to sync available categories from PackageHotels (which validates the IDs)
+  const handleAvailableCategories = (availableCategories) => {
+    console.log("PackagesClient: Received Available Categories:", availableCategories);
+    setHotelTiers(prev => {
+       const filtered = prev.filter(tier => availableCategories.includes(tier.type));
+       console.log("PackagesClient: Filtered Tiers:", filtered);
+       
+       // If currently selected hotel is now invalid, switch to the first valid one
+       setSelectedHotel(current => {
+          if (!current || !availableCategories.includes(current.type)) {
+             return filtered[0] || null;
+          }
+          return current;
+       });
+
+       return filtered;
+    });
+  };
 
   // Fetch related packages from the same region
   const { packages: relatedPackages = [] } = usePackages(packageData?.region);
@@ -108,6 +132,11 @@ const PackagesClient = () => {
   // Filter out current package from related packages
   const filteredRelatedPackages = relatedPackages.filter(
     (item) => item.packageSlug !== packageData?.packageSlug
+  );
+
+  // Deduplicate to ensure unique keys
+  const uniqueRelatedPackages = Array.from(
+    new Map(filteredRelatedPackages.map((item) => [item.id, item])).values()
   );
 
   // Fetch blogs related to this package's region
@@ -295,6 +324,7 @@ const PackagesClient = () => {
       <PackageHero 
         packageData={packageData} 
       />
+
       <Container className="relative flex flex-col c-lg:flex-row gap-[30px] c-lg:gap-8 pt-8 md:pt-4">
         {/* Main Content Column (75%) */}
         <div className="w-full c-lg:w-[75%] space-y-[30px] md:space-y-8">
@@ -338,6 +368,7 @@ const PackagesClient = () => {
                   const tier = hotelTiers.find(t => t.type === type);
                   if (tier) setSelectedHotel(tier);
                 }}
+                onAvailableCategories={handleAvailableCategories}
               />
             </div>
 
@@ -376,8 +407,8 @@ const PackagesClient = () => {
         />
       </div>
     
-      {relatedPackages && relatedPackages.length > 0 && (
-        <RelatedPackages relatedPackages={filteredRelatedPackages} />
+      {uniqueRelatedPackages && uniqueRelatedPackages.length > 0 && (
+        <RelatedPackages relatedPackages={uniqueRelatedPackages} />
       )}
 
   

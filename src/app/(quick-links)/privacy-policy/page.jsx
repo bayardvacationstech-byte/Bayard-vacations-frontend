@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import { ChevronRight, ShieldCheck, Lock, Database, HelpCircle } from "lucide-react";
 
@@ -89,6 +90,13 @@ const PrivacyPolicy = () => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Privacy Policy", href: "/privacy-policy", active: true },
+        ]}
+      />
 
       {/* 2. MAIN CONTENT AREA */}
       <Container className="mt-8 md:-mt-12">

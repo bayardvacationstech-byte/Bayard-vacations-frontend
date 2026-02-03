@@ -2,6 +2,7 @@
 
 import React from "react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { ShieldCheck, CreditCard, RefreshCcw } from "lucide-react";
 
 const RefundPolicy = () => {
@@ -32,6 +33,13 @@ const RefundPolicy = () => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Refund Policy", href: "/refund-policy", active: true },
+        ]}
+      />
 
       {/* 2. MAIN CONTENT AREA */}
       <Container className="mt-8 md:-mt-12">

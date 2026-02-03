@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Star, MapPin, Quote, Filter, ChevronDown, Search } from "lucide-react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -67,10 +68,16 @@ export default function ReviewsPage() {
     <main className="min-h-screen bg-slate-50 pt-32 pb-20">
       <Container>
         {/* Header */}
+        <div className="max-w-3xl mb-8">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Guest Stories", href: "/reviews", active: true },
+            ]}
+          />
+        </div>
+
         <div className="max-w-3xl mb-16">
-          <Link href="/" className="text-blue-600 text-sm font-bold flex items-center gap-2 mb-6 group">
-            <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Main Site
-          </Link>
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-4">
             Guest <span className="text-blue-600">Stories</span>
           </h1>

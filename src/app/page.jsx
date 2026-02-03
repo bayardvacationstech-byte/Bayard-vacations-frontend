@@ -16,7 +16,7 @@ import ThemePackages from "@/components/Landing/Destinations/ThemePackages";
 import GroupDeparture from "@/components/Landing/GroupDeparture";
 import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
 import StartJourney from "@/components/Landing/StartJourney";
-import Newsletter from "@/components/Landing/Newsletter";
+import InspirationSection from "@/components/Landing/InspirationSection";
 import TravelStyle from "@/components/Landing/TravelStyle";
 import MobileAdBanner from "@/components/Landing/MobileAdBanner";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
@@ -171,7 +171,7 @@ const HomePage = async () => {
         <WhyBayard />
       </section>
          <section>
-        <Newsletter />
+        <InspirationSection />
       </section>
 
       {/* <section>

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowLeft, 
   Clock, 
@@ -145,6 +146,15 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
           </div>
         </Container>
       </div>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Activities", href: "/activities" },
+          { label: regionName, href: `/activities/${regionSlug}` },
+          { label: activity.title, href: `/activities/${regionSlug}/${activity.slug}`, active: true },
+        ]}
+      />
 
       {/* Main Content */}
       <Container className="py-12 md:py-20">

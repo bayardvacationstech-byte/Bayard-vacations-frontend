@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Church, Waves, Sun, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Heart, Cloud, Globe, Sunrise, Moon, BookOpen } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import { usePackagesByTheme } from "@/hooks/packages";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
@@ -22,6 +23,7 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 // Floating Spiritual Elements
 const FloatingSpiritualElements = () => {
@@ -166,10 +168,15 @@ export default function ReligiousRetreatClient() {
               transition={{ duration: 1 }}
               className="space-y-8 text-center lg:text-left"
             >
-              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-sacred text-burgundy-700 text-xs uppercase tracking-[0.2em] ornate-border">
-                <Heart className="w-4 h-4 text-gold-600" />
-                <span>Spiritual Theme</span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Religious Retreat", href: "/themes/religious-retreat", active: true }
+                ]} 
+                className="bg-transparent border-transparent p-0 mb-4 flex justify-center lg:justify-start"
+                omitContainer
+              />
               
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-light leading-[1.1]">
                 <span className="block text-gray-900">Sacred</span>
@@ -276,6 +283,8 @@ export default function ReligiousRetreatClient() {
           </div>
         </Container>
       </section>
+
+
 
       {/* Path Selection */}
       <section className="py-6 md:py-8 lg:py-10 bg-white border-y border-gold-400/10">
@@ -492,14 +501,14 @@ export default function ReligiousRetreatClient() {
                 <span className="text-gold-600 italic block mt-4">Sacred Call</span>
               </h2>
             </motion.div>
-            
+
             <p className="text-xl md:text-2xl text-stone-500 font-serif leading-relaxed max-w-3xl mx-auto font-light border-y border-gold-400/20 py-8">
               &quot;Let your next journey be more than a vacation. Let it be a homecoming for your soul.&quot;
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="h-20 px-16 rounded-full bg-burgundy-900 hover:bg-stone-900 text-gold-400 font-serif text-xl tracking-widest shadow-2xl transition-all duration-700 hover:scale-105 active:scale-95 border-none"
               >
                 Book Your Pilgrimage
@@ -511,6 +520,10 @@ export default function ReligiousRetreatClient() {
             </div>
           </div>
         </Container>
+      </section>
+
+      <section className="h-full bg-[#fbf9f4] relative">
+        <InspirationSection theme="religious" />
       </section>
     </div>
   );

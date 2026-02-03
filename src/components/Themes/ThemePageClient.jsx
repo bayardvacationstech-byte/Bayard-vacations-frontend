@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 const ThemePageClient = ({ theme }) => {
   const searchParams = useSearchParams();
@@ -29,18 +30,6 @@ const ThemePageClient = ({ theme }) => {
 
   return (
     <main className="bg-white">
-      {/* Breadcrumbs */}
-      <div className="bg-slate-50 py-4 border-b border-slate-100">
-        <Container>
-          <div className="flex items-center gap-2 text-sm font-medium text-slate-500">
-            <Link href="/" className="hover:text-brand-blue transition-colors">Home</Link>
-            <ChevronRight className="w-4 h-4" />
-            <Link href="/themes" className="hover:text-brand-blue transition-colors">Themes</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-slate-900">{theme.title}</span>
-          </div>
-        </Container>
-      </div>
 
       {/* Hero Section */}
       <section className="relative bg-brand-blue overflow-hidden">
@@ -82,6 +71,15 @@ const ThemePageClient = ({ theme }) => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs 
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Themes", href: "/themes" },
+          { label: theme.title, href: `/themes/${theme.slug}`, active: true }
+        ]} 
+        className="bg-transparent border-transparent"
+      />
 
       {/* Tabs Section */}
       <section className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">

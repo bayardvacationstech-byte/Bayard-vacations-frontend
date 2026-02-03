@@ -40,6 +40,7 @@ import {
   Bus
 } from "lucide-react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import GalleryCarousel from "@/components/ui/GalleryCarousel";
@@ -458,6 +459,15 @@ export default function FactsheetClient({ regionSlug }) {
           </motion.div>
         </Container>
       </div>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Packages", href: "/explore" },
+          { label: regionName, href: `/packages/${regionSlug}` },
+          { label: "Factsheet", href: `/factsheet/${regionSlug}`, active: true },
+        ]}
+      />
 
       {/* Floating Pill Navigation - Positioned after Hero */}
       <div className="sticky top-24 z-50 pointer-events-none mb-6">

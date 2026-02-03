@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { COLLECTIONS } from "@/config";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 // BlogCard Component for related posts
 const RelatedBlogCard = ({ blog }) => {
@@ -248,6 +249,14 @@ const BlogPost = () => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs 
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Blogs", href: "/blogs" },
+          { label: blog.title, href: `/blogs/${blog.slug}`, active: true }
+        ]} 
+      />
 
       {/* Blog Content */}
       <section className="pt-8 pb-4 c-md:pt-12 c-md:pb-6">

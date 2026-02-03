@@ -2,10 +2,15 @@ import React from "react";
 import Image from "next/image";
 import ThemeGrid from "@/components/Themes/ThemeGrid";
 import Container from "@/components/ui/Container";
+import InspirationSection from "@/components/Landing/InspirationSection";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata = {
-  title: "Explore Travel Themes | Bayard Vacations",
+  title: "Explore Travel Themes",
   description: "Discover our curated collection of travel themes, from romantic getaways to elite escapes.",
+  alternates: {
+    canonical: "/themes",
+  },
 };
 
 const ThemesPage = () => {
@@ -48,9 +53,20 @@ const ThemesPage = () => {
         </Container>
       </section>
 
+      <Breadcrumbs 
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Themes", href: "/themes", active: true }
+        ]} 
+      />
+
       {/* Grid Section - Now with White Background */}
       <section className="relative bg-white pt-12 lg:pt-24 pb-24">
         <ThemeGrid />
+      </section>
+
+      <section className="pb-12 bg-white">
+        <InspirationSection />
       </section>
     </main>
   );

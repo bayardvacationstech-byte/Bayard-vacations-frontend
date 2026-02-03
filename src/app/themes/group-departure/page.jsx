@@ -2,14 +2,18 @@ import { getGroupDeparturePackages } from "@/lib/server";
 import Container from "@/components/ui/Container";
 import GroupPackageCard from "@/components/Landing/GroupPackageCard";
 import RegionStats from "@/components/Packages/RegionStats";
-import Newsletter from "@/components/Landing/Newsletter";
+import InspirationSection from "@/components/Landing/InspirationSection";
 import GroupDepartureSlider from "@/components/ui/sliders/GroupDepartureSlider";
 import { Compass, Users, Star, Crown, Headphones, Leaf, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata = {
-  title: "Group Departures | Bayard Vacations",
+  title: "Group Departures",
   description: "Join our curated group departures and explore the world with like-minded travelers. Expert-led tours, seamless planning, and unforgettable memories.",
+  alternates: {
+    canonical: "/themes/group-departure",
+  },
 };
 
 const GroupDeparturePage = async () => {
@@ -42,10 +46,17 @@ const GroupDeparturePage = async () => {
 
         <Container className="relative z-20 text-center pt-40 pb-24 lg:pt-64 lg:pb-40">
           <div className="max-w-4xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full glass-premium text-white text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <Users className="w-4 h-4 text-brand-blue" />
-              Signature Group Departures
-            </div>
+            <Breadcrumbs 
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Themes", href: "/themes" },
+                { label: "Group Departures", href: "/themes/group-departure", active: true }
+              ]} 
+              className="bg-transparent border-transparent p-0 mb-8 flex justify-center"
+              omitContainer
+              colorClasses="text-slate-300"
+              activeColorClasses="text-white"
+            />
             
             <h1 className="text-4xl lg:text-7xl font-bold tracking-tight leading-tight text-white animate-in fade-in slide-in-from-bottom-8 duration-1000">
                <span className="block opacity-90">EXPLORE</span>
@@ -216,9 +227,8 @@ const GroupDeparturePage = async () => {
          </Container>
       </section>
 
-      {/* Newsletter */}
       <section className="pb-12">
-         <Newsletter />
+         <InspirationSection />
       </section>
     </main>
   );

@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Compass, 
@@ -35,6 +36,7 @@ import {
   formatCategoryName,
   filterActivities 
 } from "@/utils/activityUtils";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 export default function ActivitiesListingClient({ regionSlug, initialRegions = [] }) {
   const router = useRouter();
@@ -217,7 +219,28 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
             </p>
           </motion.div>
         </Container>
+
+        {/* Breadcrumbs - Bottom Left Positioned - Fixed Visibility */}
+        <div className="absolute bottom-4 left-0 z-[60] w-full">
+            <Container>
+                <Breadcrumbs
+                    items={regionSlug ? [
+                    { label: "Home", href: "/" },
+                    { label: "Activities", href: "/activities" },
+                    { label: regionName, href: `/activities/${regionSlug}`, active: true },
+                    ] : [
+                    { label: "Home", href: "/" },
+                    { label: "Activities", href: "/activities", active: true },
+                    ]}
+                    className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+                    omitContainer
+                    colorClasses="text-white/80 drop-shadow-md"
+                    activeColorClasses="text-white drop-shadow-md font-bold"
+                />
+            </Container>
+        </div>
       </div>
+
 
       {/* Main Content */}
       <Container className="py-8 md:py-12">
@@ -344,9 +367,10 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
           </div>
         </div>
 
-        <div className="sticky top-[80px] z-[50] bg-white/80 backdrop-blur-md pt-1 pb-1 -mx-4 px-4 mb-6 md:mb-8 rounded-2xl transition-all duration-300 shadow-sm border border-slate-50">
-          {/* Filter Toolbar */}
-          <div className="bg-white p-3 md:p-6 rounded-2xl shadow-lg border border-slate-100">
+        <div className="sticky top-14 md:top-[72px] z-[50] transition-all duration-300 mb-6 md:mb-8">
+          <div className="bg-white/90 backdrop-blur-md px-6 py-2.5 md:py-3 rounded-[2.5rem] shadow-xl border border-slate-200/60">
+            {/* Filter Toolbar */}
+            <div className="bg-transparent">
             {/* Primary Toolbar Wrapper */}
             <div className="flex flex-col gap-4">
               {/* Row 1: Search + Desktop Filters | Mobile Search + Toggle */}
@@ -600,6 +624,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
             </div>
           </div>
         </div>
+      </div>
 
         {/* Activities Grid */}
         {activitiesLoading ? (
@@ -660,7 +685,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
 
         {/* Pagination UI */}
         {!activitiesLoading && filteredActivities.length > itemsPerPage && (
-          <div className="flex flex-col items-center justify-center mt-12 gap-4">
+          <div className="flex flex-col items-center justify-center mt-6 md:mt-8 gap-3">
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -733,6 +758,9 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
           </div>
         )}
       </Container>
+      <section className="pb-8 md:pb-12 bg-white">
+        <InspirationSection />
+      </section>
     </div>
   );
 }

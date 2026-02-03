@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import { usePackagesByTheme } from "@/hooks/packages";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
@@ -46,6 +47,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 export default function ExplorationBundleClient() {
   const [selectedTab, setSelectedTab] = useState("international");
@@ -103,7 +105,6 @@ export default function ExplorationBundleClient() {
 
   return (
     <div className="min-h-screen bg-[#f7f5f3] text-[#1d1d1d] font-sans selection:bg-[#e76f51] selection:text-white overflow-x-hidden">
-
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 topo-pattern overflow-hidden flex items-center">
         {/* Animated Compass Background */}
@@ -128,10 +129,15 @@ export default function ExplorationBundleClient() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-[#e76f51]/10 border-2 border-[#e76f51]/20 rounded-full text-[#c44b34] font-bold text-sm uppercase tracking-wider">
-                <Flame className="w-4 h-4 text-[#e76f51]" />
-                <span>Bundle & Save 25%</span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Exploration Bundle", href: "/themes/exploration-bundle", active: true }
+                ]} 
+                className="bg-transparent border-transparent p-0 mb-4 flex justify-center md:justify-start"
+                omitContainer
+              />
               
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] text-shadow-adventure">
                 <span className="block text-[#1d1d1d]">ADVENTURE</span>
@@ -248,6 +254,8 @@ export default function ExplorationBundleClient() {
           </div>
         </Container>
       </section>
+
+
 
       {/* Filter Tabs Section */}
       <section className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
@@ -443,6 +451,10 @@ export default function ExplorationBundleClient() {
             </button>
           </div>
         </Container>
+      </section>
+
+      <section>
+        <InspirationSection theme="exploration" />
       </section>
 
       <style jsx global>{`
