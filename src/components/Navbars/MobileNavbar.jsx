@@ -546,7 +546,7 @@ export default function MobileNavbar() {
     <>
       {/* ================= HEADER ================= */}
       <header className={cn(
-        "fixed top-0 z-50 w-full c-lg:hidden transition-all duration-500",
+        "fixed top-0 z-50 w-full hidden lg:hidden c-lg:hidden transition-all duration-500",
         forceHide ? "-translate-y-[110%] opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
       )}>
         <Container>
@@ -554,8 +554,8 @@ export default function MobileNavbar() {
             className={cn(
               "relative mx-auto rounded-full overflow-hidden transition-all duration-300",
               showGradient
-                ? "backdrop-blur-xl border border-white/20 mt-4"
-                : "border-transparent mt-0"
+                ? "backdrop-blur-xl mt-4"
+                : "mt-0"
             )}
             style={{
               height: "64px",

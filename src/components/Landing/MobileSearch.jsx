@@ -325,6 +325,7 @@ export default function MobileSearch() {
       {/* ================= TRIGGER ================= */}
       <DialogTrigger asChild>
         <div
+          suppressHydrationWarning
           className="
             sm:hidden
             flex items-center gap-3

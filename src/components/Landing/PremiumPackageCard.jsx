@@ -96,7 +96,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
 
   return (
     <div className={cn(
-      "travel-card group w-full relative overflow-hidden h-[480px] sm:h-[520px] rounded-[28px] bg-black shadow-xl hover:shadow-2xl transition-all duration-500",
+      "travel-card group w-full relative overflow-hidden h-[400px] sm:h-[520px] rounded-[28px] bg-black shadow-xl hover:shadow-2xl transition-all duration-500",
       className
     )}>
       <Link href={href} className="block w-full h-full">
@@ -167,7 +167,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
         </div>
 
         {/* Floating Middle Badges - Responsive layout to avoid overlap */}
-        <div className="absolute bottom-[160px] left-4 right-4 z-20 flex flex-nowrap items-center justify-between gap-1.5 sm:left-5 sm:right-5 sm:gap-4">
+        <div className="absolute bottom-[130px] left-4 right-4 z-30 flex flex-nowrap items-center justify-between gap-1.5 sm:bottom-[160px] sm:left-5 sm:right-5 sm:gap-4">
           <div className="location-badge inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white font-black text-[10px] sm:text-xs tracking-wider transition-all hover:bg-black/70 hover:scale-105 overflow-hidden">
             <div className="w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center border border-white/30 shrink-0">
               <MapPin className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5" />
@@ -180,13 +180,9 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
           </div>
         </div>
         
-        {/* Bottom Content Panel - Darkened Frosted Glass for contrast */}
+        {/* Bottom Content Panel - Smooth Gradient for better text visibility */}
         <div 
-          className="absolute bottom-0 left-0 right-0 p-7 z-20 bg-black/70 backdrop-blur-xl border-t border-white/10"
-          style={{
-            maskImage: "linear-gradient(to bottom, transparent, black 10%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent, black 10%)"
-          }}
+          className="absolute bottom-0 left-0 right-0 px-7 pb-7 pt-28 z-20 bg-gradient-to-t from-black via-black/80 to-transparent"
         >
           <h2 className="text-2xl font-[900] text-white mb-2 leading-tight drop-shadow-lg line-clamp-1 tracking-tight">
             {item.packageTitle}

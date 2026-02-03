@@ -84,7 +84,7 @@ const GroupPackageCard = ({ item, className }) => {
   return (
     <div 
       className={cn(
-        "relative w-full h-[500px] md:h-[550px] rounded-[2.5rem] overflow-hidden bg-white shadow-2xl group cursor-pointer transition-all duration-500 hover:translate-y-[-8px]",
+        "relative w-full h-[420px] md:h-[550px] rounded-[2.5rem] overflow-hidden bg-white shadow-2xl group cursor-pointer transition-all duration-500 hover:translate-y-[-8px]",
         className
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -122,7 +122,7 @@ const GroupPackageCard = ({ item, className }) => {
         </div>
 
         {/* Bottom Content Area */}
-        <div className="absolute inset-x-0 bottom-0 z-10 p-6 flex flex-col gap-3">
+        <div className="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6 flex flex-col gap-3">
           {/* Location & Duration Tags */}
           <div className="flex items-center gap-3 mb-1">
             <div className="flex items-center gap-1.5 text-white text-[11px] font-black uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
@@ -155,14 +155,13 @@ const GroupPackageCard = ({ item, className }) => {
               </div>
             </div>
             
-            <div className="px-5 py-3.5 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center gap-2 text-white font-black text-[11px] uppercase tracking-widest shadow-xl shadow-blue-900/40 hover:scale-105 transition-all">
-              <span>View Details</span>
-              <ChevronRight className="w-4 h-4" />
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white shadow-xl shadow-blue-900/40 hover:scale-110 transition-all">
+              <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
             </div>
           </div>
           
           {/* Trust Badge */}
-          <div className="flex items-center gap-3 pt-5 mt-2 border-t border-white/10 group-hover:border-white/20 transition-colors">
+          <div className="flex items-center gap-3 pt-3 mt-1 md:pt-5 md:mt-2 border-t border-white/10 group-hover:border-white/20 transition-colors">
             <div className="flex -space-x-2">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="w-6 h-6 rounded-full bg-slate-200 border-2 border-slate-900 overflow-hidden relative">

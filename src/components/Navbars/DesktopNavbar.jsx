@@ -200,13 +200,7 @@ const DesktopNavbar = () => {
           `}</style>
 
           <div
-            className={cn(
-              "relative mx-auto overflow-hidden rounded px-4 lg:px-4 xl:px-6 2xl:px-8 transition-all duration-300 ease-in-out",
-              {
-                "border border-solid border-white/30 backdrop-blur-3xl":
-                  !isHeaderFixed,
-              }
-            )}
+            className="relative mx-auto overflow-hidden rounded px-4 lg:px-4 xl:px-6 2xl:px-8 transition-all duration-300 ease-in-out"
             style={{
               height: getCurrentHeight(),
               maxWidth: isSearchActive ? "800px" : "100%",

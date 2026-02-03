@@ -43,7 +43,7 @@ export default function GroupDeparture({ groupDeparturePackages }) {
         </div>
 
         {/* Carousel */}
-        <div className="mb-6">
+        <div className="mb-0 sm:mb-6">
           {groupDeparturePackages && groupDeparturePackages.length > 0 ? (
             <GroupDepartureSlider groupDeparturePackages={groupDeparturePackages} />
           ) : (

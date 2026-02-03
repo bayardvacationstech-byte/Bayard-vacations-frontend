@@ -163,7 +163,7 @@ const TravelStyle = ({
                     {displayPackages.map((item, index) => (
                       <CarouselItem 
                         key={`${item.id}-${index}`} 
-                        className="pl-4 basis-[80%] sm:basis-1/2 lg:basis-1/4"
+                        className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/4"
                       >
                         <PremiumPackageCard item={item} />
                       </CarouselItem>
