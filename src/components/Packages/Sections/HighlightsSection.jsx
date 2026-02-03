@@ -41,6 +41,10 @@ const HighlightsSection = ({ packageData }) => {
     highlightItems = packageData?.highlights || packageData?.major_highlights || [];
   }
 
+  if (highlightItems.length === 0) {
+    return null;
+  }
+
 
   const limit = isMobile ? 4 : 6;
   const visibleItems = isExpanded ? highlightItems : highlightItems.slice(0, limit);

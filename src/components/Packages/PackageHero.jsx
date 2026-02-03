@@ -84,10 +84,10 @@ const PackageHero = ({ packageData }) => {
       {/* Content Container */}
       <div className="relative z-20 h-full w-full">
         <Container className="h-full flex flex-col justify-end lg:justify-center pb-6 lg:pb-0">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-end lg:items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-8 items-end lg:items-center">
             
             {/* Left Section: Title & Badge */}
-            <div className="lg:col-span-12 xl:col-span-8 space-y-4 lg:space-y-8">
+            <div className="lg:col-span-12 xl:col-span-8 space-y-2 lg:space-y-8">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -140,7 +140,7 @@ const PackageHero = ({ packageData }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-2"
               >
                 {/* Desktop Only Stats Card */}
                 <div className="hidden xl:block bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-6 shadow-2xl space-y-6">
@@ -215,6 +215,24 @@ const PackageHero = ({ packageData }) => {
               </motion.div>
             </div>
           </div>
+
+          {/* Breadcrumbs - Integrated into Flow at the Bottom */}
+          <div className="mt-2 xl:mt-0 xl:absolute xl:bottom-6 xl:left-0 z-[60] w-full">
+            <Container>
+                <Breadcrumbs
+                    items={[
+                    { label: "Home", href: "/" },
+                    { label: "Packages", href: "/explore" },
+                    { label: packageData.region, href: `/packages/${packageData.region}` },
+                    { label: packageData.packageName, href: `/packages/${packageData.region}/${packageData.packageSlug}`, active: true }
+                    ]}
+                    className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+                    omitContainer
+                    colorClasses="text-white/80 drop-shadow-md"
+                    activeColorClasses="text-white drop-shadow-md font-bold"
+                />
+            </Container>
+            </div>
         </Container>
       </div>
 
@@ -237,23 +255,6 @@ const PackageHero = ({ packageData }) => {
         ))}
       </div>
 
-        {/* Breadcrumbs - Bottom Left Positioned - Fixed Visibility */}
-        <div className="absolute bottom-4 left-0 z-[60] w-full">
-            <Container>
-                <Breadcrumbs
-                    items={[
-                    { label: "Home", href: "/" },
-                    { label: "Packages", href: "/explore" },
-                    { label: packageData.region, href: `/packages/${packageData.region}` },
-                    { label: packageData.packageName, href: `/packages/${packageData.region}/${packageData.packageSlug}`, active: true }
-                    ]}
-                    className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
-                    omitContainer
-                    colorClasses="text-white/80 drop-shadow-md"
-                    activeColorClasses="text-white drop-shadow-md font-bold"
-                />
-            </Container>
-        </div>
 
 
     </section>
