@@ -147,7 +147,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
             <div 
               key={idx}
               className={cn(
-                "tag inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase text-white backdrop-blur-2xl border transition-all duration-300 hover:translate-y-[-2px] shadow-lg",
+                "tag inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase text-white backdrop-blur-2xl border transition-all duration-300 hover:translate-y-[-2px] shadow-lg whitespace-nowrap",
                 tag.type === "trending" && "bg-orange-500/60 border-orange-400 shadow-orange-500/40",
                 tag.type === "curated" && "bg-rose-600/70 border-rose-400 shadow-rose-600/40",
                 tag.type === "value" && "bg-blue-600/70 border-blue-400 shadow-blue-600/40",

@@ -29,18 +29,18 @@ const Breadcrumbs = ({ items, className, omitContainer, colorClasses, activeColo
       />
       {omitContainer ? (
         <nav aria-label="Breadcrumb">
-          <ol className={cn("flex items-center gap-2 text-sm font-medium list-none p-0 m-0", colorClasses || "text-slate-500")}>
+          <ol className={cn("flex items-center gap-2 text-sm font-medium list-none p-0 m-0 flex-nowrap", colorClasses || "text-slate-500")}>
             {items.map((item, index) => (
-              <li key={index} className="flex items-center gap-2">
+              <li key={index} className="flex items-center gap-2 min-w-0">
                 {index > 0 && <ChevronRight className={cn("w-4 h-4", colorClasses ? "opacity-70" : "text-slate-400")} />}
                 {item.active ? (
-                  <span className={cn(activeColorClasses || "text-slate-900")} aria-current="page">
+                  <span className={cn("truncate", activeColorClasses || "text-slate-900")} aria-current="page">
                     {item.label}
                   </span>
                 ) : (
                   <Link
                     href={item.href}
-                    className="hover:text-brand-blue transition-colors"
+                    className="hover:text-brand-blue transition-colors truncate"
                   >
                     {item.label}
                   </Link>
@@ -52,18 +52,18 @@ const Breadcrumbs = ({ items, className, omitContainer, colorClasses, activeColo
       ) : (
         <Container>
           <nav aria-label="Breadcrumb">
-            <ol className={cn("flex items-center gap-2 text-sm font-medium list-none p-0 m-0", colorClasses || "text-slate-500")}>
+            <ol className={cn("flex items-center gap-2 text-sm font-medium list-none p-0 m-0 flex-nowrap", colorClasses || "text-slate-500")}>
               {items.map((item, index) => (
-                <li key={index} className="flex items-center gap-2">
+                <li key={index} className="flex items-center gap-2 min-w-0">
                   {index > 0 && <ChevronRight className={cn("w-4 h-4", colorClasses ? "opacity-70" : "text-slate-400")} />}
                   {item.active ? (
-                    <span className={cn(activeColorClasses || "text-slate-900")} aria-current="page">
+                    <span className={cn("truncate", activeColorClasses || "text-slate-900")} aria-current="page">
                       {item.label}
                     </span>
                   ) : (
                     <Link
                       href={item.href}
-                      className="hover:text-brand-blue transition-colors"
+                      className="hover:text-brand-blue transition-colors truncate"
                     >
                       {item.label}
                     </Link>
