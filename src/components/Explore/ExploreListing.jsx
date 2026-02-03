@@ -167,20 +167,21 @@ const ExploreListing = ({ initialPackages = [] }) => {
   return (
     <div className="bg-white min-h-screen relative" ref={listingRef}>
       {/* 1. CONTROL CENTER - Sticky Navigation */}
-      <div className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-100/50 shadow-sm transition-all duration-300">
-        <Container className="py-2 sm:py-4">
+      <div className="sticky top-14 md:top-[72px] z-40 transition-all duration-300">
+        <Container className="pt-1 pb-3 md:pt-1.5 md:pb-4">
+          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/60 rounded-[2rem] shadow-lg px-4 py-2 md:px-6 md:py-2.5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Category Toggles */}
-            <div className="flex p-1 bg-slate-100/80 rounded-2xl w-full md:w-fit">
+            <div className="inline-flex p-1.5 bg-white border border-slate-200 rounded-full shadow-sm">
               {["international", "domestic"].map((type) => (
                 <button
                   key={type}
                   onClick={() => { setSelectedType(type); handleReset(); }}
                   className={cn(
-                    "flex-1 md:flex-none px-6 sm:px-10 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500",
-                    selectedType === type 
-                      ? "bg-brand-blue text-white shadow-xl scale-[1.02]" 
-                      : "text-slate-500 hover:text-brand-blue"
+                    "px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 capitalize",
+                    selectedType === type
+                      ? "bg-brand-blue text-white shadow-lg scale-105 ring-4 ring-brand-blue/10"
+                      : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
                   )}
                 >
                   {type}
@@ -285,11 +286,12 @@ const ExploreListing = ({ initialPackages = [] }) => {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
         </Container>
       </div>
 
       {/* 3. MAIN LISTING GRID */}
-      <div className="py-12 md:py-20">
+      <div className="py-4 md:py-6">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
             <AnimatePresence mode="popLayout">
@@ -327,7 +329,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
 
           {/* 4. PREMIUM PAGINATION */}
           {totalPages > 1 && (
-            <div className="mt-20 flex justify-center py-10 border-t border-slate-100/50">
+            <div className="mt-6 flex justify-center py-6 border-t border-slate-100/50">
               <Pagination>
                 <PaginationContent className="gap-3">
                   <PaginationItem>

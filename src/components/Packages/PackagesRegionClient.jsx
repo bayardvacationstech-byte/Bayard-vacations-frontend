@@ -23,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import ExplorationList from "@/components/ui/ExplorationList";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Container from "@/components/ui/Container";
 import { usePackages } from "@/hooks/packages";
 import { useRegion, useWhyChooseRegion } from "@/hooks/regions";
@@ -470,7 +472,25 @@ export default function PackagesRegionClient({ initialRegionData }) {
             ))}
           </div>
         )}
+
+        {/* Breadcrumbs - Bottom Left Positioned - Fixed Visibility */}
+        <div className="absolute bottom-4 md:bottom-8 left-0 z-[60] w-full">
+             <Container>
+                <Breadcrumbs
+                    items={[
+                        { label: "Home", href: "/" },
+                        { label: "Packages", href: "/explore" },
+                        { label: placeName, href: `/packages/${regionSlug}`, active: true },
+                    ]}
+                    className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+                    omitContainer
+                    colorClasses="text-white/80 drop-shadow-md"
+                    activeColorClasses="text-white drop-shadow-md font-bold"
+                />
+             </Container>
+        </div>
       </section>
+
 
       <section className="relative z-30 py-2 md:py-6 bg-gradient-to-br from-orange-50 via-blue-50 to-white">
         <Container>

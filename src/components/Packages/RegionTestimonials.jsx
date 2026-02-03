@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin, ArrowRight, X } from "lucide-react";
 import Container from "../ui/Container";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +11,8 @@ export default function RegionTestimonials() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [selectedReviewImages, setSelectedReviewImages] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const videoRef = useRef(null);
 
   // Curated video reviews for the Vlogger Spotlight - Using authentic vlogger-style clips
@@ -166,7 +168,7 @@ export default function RegionTestimonials() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-8 pb-8 md:pt-16 md:pb-24 lg:min-h-[750px] overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-8 pb-8 md:pt-16 md:pb-24 lg:min-h-[750px] overflow-x-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
         <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-brand-light-cyan/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -313,31 +315,19 @@ export default function RegionTestimonials() {
             </div>
           </div>
 
-          {/* Right Side: Floating Live comment stream (75%) */}
+          {/* Right Side: Scrollable comment stream (75%) */}
           <div className="lg:flex-1 w-full relative">
-            <div className="w-full h-[350px] lg:h-[60vh] relative overflow-hidden mt-6 lg:mt-0">
-            <div className="absolute inset-0 z-20 pointer-events-none pb-2 bg-gradient-to-b from-transparent via-transparent to-transparent"></div>
+            <div className="w-full h-[500px] lg:h-[60vh] relative overflow-y-auto overscroll-y-auto simple-scrollbar mt-6 lg:mt-0 px-4">
             
-            <div className="absolute top-0 left-0 right-0 z-30 pt-4 px-4 bg-gradient-to-b from-[#012a6b] to-transparent">
-               <h2 className="text-white/70 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Real-time Feedback</h2>
-            </div>
 
-            <motion.div
-              className="flex flex-col gap-6 pt-32"
-              animate={{ y: [0, -1500] }}
-              transition={{
-                duration: 60,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              whileHover={{ transition: { duration: 120 } }}
-            >
-              {scrollingReviews.map((review, index) => (
+
+            <div className="flex flex-col gap-6 py-4">
+              {displayReviews.map((review, index) => (
                 <div 
                   key={index}
-                  className="group flex gap-3 md:gap-4 items-start bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 p-4 md:p-5 rounded-[2rem] transition-all duration-300 mx-0 md:mx-4 max-w-full md:max-w-[90%] self-start even:self-end even:flex-row-reverse even:text-right shadow-xl"
+                  className="group flex gap-3 md:gap-4 items-start bg-white p-4 md:p-5 rounded-[2rem] transition-all duration-300 mx-0 md:mx-4 max-w-full md:max-w-[90%] self-start even:self-end even:flex-row-reverse even:text-right border border-slate-100"
                 >
-                  <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-white/30 shadow-lg">
+                  <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 shadow-lg">
                     <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
                        {review.author_name.charAt(0)}
                     </div>
@@ -345,11 +335,11 @@ export default function RegionTestimonials() {
                   
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-2 group-even:flex-row-reverse">
-                      <h4 className="text-white text-[11px] font-black tracking-wider uppercase">{review.author_name}</h4>
-                      <span className="text-[9px] font-bold text-white/40 uppercase">{review.relative_time_description}</span>
+                      <h4 className="text-slate-900 text-[11px] font-black tracking-wider uppercase">{review.author_name}</h4>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase">{review.relative_time_description}</span>
                     </div>
                     
-                    <p className="text-white text-sm md:text-base leading-relaxed font-semibold">
+                    <p className="text-slate-600 text-sm md:text-base leading-relaxed font-semibold">
                        {review.text}
                     </p>
                     
@@ -363,7 +353,14 @@ export default function RegionTestimonials() {
                     {review.images && review.images.length > 0 && (
                       <div className="flex gap-2 mt-2 overflow-x-auto pb-1 no-scrollbar group-even:flex-row-reverse group-even:justify-start">
                         {review.images.map((img, i) => (
-                          <div key={i} className="relative w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden shrink-0 border border-white/20 shadow-sm">
+                          <div 
+                            key={i} 
+                            className="relative w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 shadow-sm cursor-pointer hover:border-blue-400 transition-colors"
+                            onClick={() => {
+                              setSelectedReviewImages(review.images);
+                              setCurrentImageIndex(i);
+                            }}
+                          >
                             <Image
                               src={img}
                               alt={`Review image ${i + 1}`}
@@ -378,7 +375,7 @@ export default function RegionTestimonials() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
 
             </div>
             
@@ -392,9 +389,9 @@ export default function RegionTestimonials() {
                 </div>
                 <Link 
                   href="/reviews"
-                  className="bg-white/20 backdrop-blur-md border border-white/30 text-white text-[11px] font-bold uppercase tracking-widest px-6 py-2.5 rounded-full hover:bg-white/30 hover:border-white/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
+                  className="bg-white text-blue-600 text-[13px] font-bold px-6 py-3 rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg flex items-center gap-2"
                 >
-                  Read All Reviews
+                  Read All Reviews <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
@@ -402,9 +399,9 @@ export default function RegionTestimonials() {
               <div className="md:hidden px-4">
                 <Link 
                   href="/reviews"
-                  className="w-full block bg-white/10 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all duration-300 shadow-lg text-center"
+                  className="w-full bg-white text-blue-600 text-[13px] font-bold px-6 py-3 rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
                 >
-                  Read All Reviews
+                  Read All Reviews <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -412,6 +409,81 @@ export default function RegionTestimonials() {
 
         </div>
       </Container>
+
+      {/* Full Image Preview Modal */}
+      <AnimatePresence>
+        {selectedReviewImages && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-10"
+            onClick={() => setSelectedReviewImages(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-5xl w-full h-[80vh] flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                className="absolute -top-12 right-0 md:top-4 md:right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-[110]"
+                onClick={() => setSelectedReviewImages(null)}
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              {/* Navigation Arrows */}
+              {selectedReviewImages.length > 1 && (
+                <>
+                  <button
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-[110]"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImageIndex((prev) => (prev === 0 ? selectedReviewImages.length - 1 : prev - 1));
+                    }}
+                  >
+                    <ChevronLeft className="w-8 h-8" />
+                  </button>
+                  <button
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all z-[110]"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentImageIndex((prev) => (prev === selectedReviewImages.length - 1 ? 0 : prev + 1));
+                    }}
+                  >
+                    <ChevronRight className="w-8 h-8" />
+                  </button>
+
+                  {/* Dot Indicators */}
+                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
+                    {selectedReviewImages.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          i === currentImageIndex ? "bg-white w-6" : "bg-white/30"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+
+              <div className="relative w-full h-full">
+                <Image
+                  src={selectedReviewImages[currentImageIndex]}
+                  alt="Review preview"
+                  fill
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

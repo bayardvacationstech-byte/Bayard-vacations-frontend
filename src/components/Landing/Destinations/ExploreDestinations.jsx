@@ -137,9 +137,9 @@ export default function ExploreDestinations({ initialRegions }) {
       </div>
 
       <div className="mt-4 md:mt-6 flex justify-center">
-        <Link href="/explore">
+        <Link href="/destinations">
           <Button className="gradient-btn rounded-full px-10 py-6 text-base font-semibold text-white shadow-xl hover:scale-105 transition-transform">
-            Explore Packages
+            Explore Destinations
           </Button>
         </Link>
       </div>

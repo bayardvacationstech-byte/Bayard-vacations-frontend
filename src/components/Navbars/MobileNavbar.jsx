@@ -546,7 +546,7 @@ export default function MobileNavbar() {
     <>
       {/* ================= HEADER ================= */}
       <header className={cn(
-        "fixed top-0 z-50 w-full hidden lg:hidden c-lg:hidden transition-all duration-500",
+        "fixed top-0 z-50 w-full block lg:hidden transition-all duration-500",
         forceHide ? "-translate-y-[110%] opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
       )}>
         <Container>

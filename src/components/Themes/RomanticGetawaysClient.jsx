@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Heart, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Play, Info, Camera, Clock, Utensils, Music, Package } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
 import { usePackagesByTheme } from "@/hooks/packages";
@@ -22,6 +23,7 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 // Floating Hearts Background Component
 const FloatingHearts = () => {
@@ -129,7 +131,7 @@ export default function RomanticGetawaysClient() {
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-rose-50">
+    <div className="min-h-screen bg-[#fffafa] text-[#2d2d2d] font-sans selection:bg-[#ff4d6d] selection:text-white overflow-x-hidden">
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="romantic" fullScreen className="bg-rose-50" />
@@ -169,12 +171,17 @@ export default function RomanticGetawaysClient() {
               className="space-y-6 md:space-y-8"
             >
               {/* Refined Glassmorphism Badge */}
-              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-xl">
-                <Heart className="w-4 h-4 text-rose-400 fill-rose-400" />
-                <span className="text-[10px] md:text-sm font-black text-rose-50 uppercase tracking-[0.3em]">
-                  The Romance Collection
-                </span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Romantic Getaways", href: "/themes/romantic-getaways", active: true }
+                ]} 
+                className="bg-transparent border-transparent p-0 mb-4 flex justify-center md:justify-start"
+                omitContainer
+                colorClasses="text-pink-100/70"
+                activeColorClasses="text-white"
+              />
 
               <div className="space-y-2">
                 <p className="text-rose-500 font-great-vibes text-4xl md:text-6xl tracking-wide ml-1 drop-shadow-sm">
@@ -238,6 +245,7 @@ export default function RomanticGetawaysClient() {
           <div className="w-[1px] h-16 bg-gradient-to-b from-white via-white/50 to-transparent" />
         </div>
       </div>
+
 
       {/* Intro Section */}
       <section className="py-6 md:py-8 relative overflow-hidden bg-white">
@@ -479,6 +487,10 @@ export default function RomanticGetawaysClient() {
             </div>
           </Container>
         </section>
+
+      <section className="h-full bg-white relative">
+        <InspirationSection theme="romantic" />
+      </section>
     </div>
   );
 }

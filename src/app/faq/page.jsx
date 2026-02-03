@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import {
   Accordion,
   AccordionContent,
@@ -8,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/FaqAccordion";
 import Link from "next/link";
-import { PhoneIcon, HelpCircle, Building2, Mail, MessageCircle, Sparkles, CheckCircle, Clock, Headphones } from "lucide-react";
+import { PhoneIcon, HelpCircle, Building2, Mail, MessageCircle, Sparkles, CheckCircle, Clock, Headphones, ChevronDown, Search, Phone, ArrowUpRight } from "lucide-react";
 
 const FaqPage = () => {
   const aboutBayardFaqs = [
@@ -179,6 +180,13 @@ const FaqPage = () => {
           </div>
         </Container>
       </section>
+      
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "FAQ", href: "/faq", active: true },
+        ]}
+      />
 
       {/* Stats Section */}
       <section className="relative bg-white py-12 border-b border-slate-200">

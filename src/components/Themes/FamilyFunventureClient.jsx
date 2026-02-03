@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { usePackagesByTheme } from "@/hooks/packages";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
 import {
@@ -36,6 +37,7 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 export default function FamilyFunventureClient() {
   const [selectedTab, setSelectedTab] = useState("international");
@@ -80,7 +82,7 @@ export default function FamilyFunventureClient() {
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-[#fef9f3] overflow-x-hidden font-sans text-gray-800">
+    <div className="min-h-screen bg-[#fffcf5] text-[#1f2937] font-sans selection:bg-[#ff8a5c] selection:text-white overflow-x-hidden">
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="family" fullScreen className="bg-[#fef9f3]" />
@@ -111,10 +113,15 @@ export default function FamilyFunventureClient() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md text-orange-500 font-semibold text-sm tracking-wider uppercase border border-orange-200">
-                <Compass className="w-4 h-4 animate-spin-slow" />
-                <span>Adventure Theme</span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Family Funventure", href: "/themes/family-funventure", active: true }
+                ]}
+                className="bg-transparent border-transparent p-0 mb-4 flex justify-center md:justify-start"
+                omitContainer
+              />
               
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
                 <span className="block text-slate-900">Family</span>
@@ -236,6 +243,7 @@ export default function FamilyFunventureClient() {
           </svg>
         </div>
       </section>
+
 
       {/* Filter Section */}
       <section className="py-8 bg-[#fef9f3]">
@@ -438,6 +446,10 @@ export default function FamilyFunventureClient() {
             </motion.div>
           </div>
         </Container>
+      </section>
+
+      <section>
+        <InspirationSection theme="family" />
       </section>
 
       <style jsx>{`

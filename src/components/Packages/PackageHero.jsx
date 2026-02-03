@@ -7,6 +7,7 @@ import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import Container from "@/components/ui/Container";
 import { MapPin, Clock, Calendar, IndianRupee, ChevronRight, Star, ExternalLink, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 // Import Swiper styles
 import "swiper/css";
@@ -235,6 +236,24 @@ const PackageHero = ({ packageData }) => {
           </motion.button>
         ))}
       </div>
+
+        {/* Breadcrumbs - Bottom Left Positioned - Fixed Visibility */}
+        <div className="absolute bottom-4 left-0 z-[60] w-full">
+            <Container>
+                <Breadcrumbs
+                    items={[
+                    { label: "Home", href: "/" },
+                    { label: "Packages", href: "/explore" },
+                    { label: packageData.region, href: `/packages/${packageData.region}` },
+                    { label: packageData.packageName, href: `/packages/${packageData.region}/${packageData.packageSlug}`, active: true }
+                    ]}
+                    className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+                    omitContainer
+                    colorClasses="text-white/80 drop-shadow-md"
+                    activeColorClasses="text-white drop-shadow-md font-bold"
+                />
+            </Container>
+        </div>
 
 
     </section>

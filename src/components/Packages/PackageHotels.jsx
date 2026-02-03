@@ -9,7 +9,7 @@ import { Wifi, Utensils, Wind, Car, Building2, Star, MapPin, Bed, CheckCircle2 }
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, FreeMode } from "swiper/modules";
 
-const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange }) => {
+const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvailableCategories }) => {
   const [hotelsByCategory, setHotelsByCategory] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -28,14 +28,27 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange }) => {
             // Fetch hotels for each category
             for (const cat of categories) {
               const hotelDetails = await getHotelsByIds(details[cat].hotelIds);
-              newHotelsByCategory[cat] = hotelDetails.filter(h => h);
+              const validHotels = hotelDetails.filter(h => h);
+              if (validHotels.length > 0) {
+                 newHotelsByCategory[cat] = validHotels;
+              }
             }
             
+            const validCategories = Object.keys(newHotelsByCategory);
+            console.log("PackageHotels: Valid Categories Found:", validCategories);
+            
+            // Notify parent about truly available categories
+            if (onAvailableCategories) {
+               onAvailableCategories(validCategories);
+            }
+
             setHotelsByCategory(newHotelsByCategory);
             
             // Set initial category (baseCategory or first available)
-            const baseCat = details.baseCategory || categories[0];
-            setSelectedCategory(newHotelsByCategory[baseCat] ? baseCat : categories[0]);
+            if (validCategories.length > 0) {
+               const baseCat = details.baseCategory || validCategories[0];
+               setSelectedCategory(newHotelsByCategory[baseCat] ? baseCat : validCategories[0]);
+            }
           } else {
             useDummyFallback();
           }
@@ -44,6 +57,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange }) => {
         }
         setIsLoading(false);
       } catch (error) {
+        console.error("Error fetching hotel details in PackageHotels:", error);
         useDummyFallback();
         setIsLoading(false);
       }

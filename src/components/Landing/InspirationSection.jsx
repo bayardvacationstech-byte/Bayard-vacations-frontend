@@ -3,44 +3,50 @@ import React, { useState, useRef } from "react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
 
 const DESTINATION_CARDS = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
-    title: "Paris",
-    subtitle: "City of Lights",
-    tag: "Romantic",
+    image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
+    title: "Vietnam",
+    subtitle: "Timeless Charm",
+    tag: "Culture",
+    link: "/packages/vietnam"
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
-    title: "Bali",
-    subtitle: "Island Paradise",
+    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
+    title: "Thailand",
+    subtitle: "Land of Smiles",
     tag: "Beach",
+    link: "/packages/thailand"
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800",
-    title: "Italy",
-    subtitle: "La Dolce Vita",
-    tag: "Culture",
+    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
+    title: "Kerala",
+    subtitle: "God's Own Country",
+    tag: "Nature",
+    link: "/packages/kerala"
   },
   {
     id: 4,
-    image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800",
-    title: "Japan",
-    subtitle: "Land of Rising Sun",
-    tag: "Adventure",
+    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
+    title: "Europe",
+    subtitle: "History & Romance",
+    tag: "Luxury",
+    link: "/packages/europe"
   },
   {
     id: 5,
-    image: "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800",
-    title: "Maldives",
-    subtitle: "Tropical Bliss",
-    tag: "Luxury",
+    image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800",
+    title: "Andaman",
+    subtitle: "Emerald Blue",
+    tag: "Beach",
+    link: "/packages/andaman"
   },
 ];
 
@@ -123,23 +129,7 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         
-        {/* Like/Nope Indicators */}
-        {isTop && (
-          <>
-            <motion.div 
-              className="absolute top-6 right-6 px-4 py-2 border-4 border-green-500 text-green-500 font-black text-2xl rounded-lg rotate-12"
-              style={{ opacity: likeOpacity }}
-            >
-              LIKE
-            </motion.div>
-            <motion.div 
-              className="absolute top-6 left-6 px-4 py-2 border-4 border-red-500 text-red-500 font-black text-2xl rounded-lg -rotate-12"
-              style={{ opacity: nopeOpacity }}
-            >
-              NOPE
-            </motion.div>
-          </>
-        )}
+
         
         {/* Tag Badge */}
         <div className="absolute top-4 left-4">
@@ -158,12 +148,12 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
                 {card.subtitle}
               </p>
             </div>
-            <button className="px-4 py-2 rounded-full bg-white/20 backdrop-blur-md flex items-center gap-2 hover:bg-white/30 transition-all text-white text-sm font-semibold group">
+            <Link href={card.link || '#'} className="px-4 py-2 rounded-full bg-white/20 backdrop-blur-md flex items-center gap-2 hover:bg-white/30 transition-all text-white text-sm font-semibold group">
               <span>View Deal</span>
               <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-brand-blue transition-colors">
                 <ArrowRight className="w-3 h-3" />
               </div>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -171,9 +161,75 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
   );
 }
 
-export default function Newsletter() {
+export default function InspirationSection({ theme = "default" }) {
   const [cards, setCards] = useState(DESTINATION_CARDS);
   const [exitDirection, setExitDirection] = useState("left");
+
+  // Theme color configurations
+  const themeColors = {
+    default: {
+      bg: "bg-gradient-to-br from-brand-blue/5 via-slate-50 to-white",
+      orb: "bg-brand-blue/10",
+      button: "gradient-btn",
+      title: "text-brand-blue"
+    },
+    solo: {
+      bg: "bg-gradient-to-br from-[#f5f7fa] to-white",
+      orb: "bg-[#667eea]/10",
+      button: "bg-gradient-to-r from-[#667eea] to-[#764ba2]",
+      title: "text-transparent bg-clip-text bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+    },
+    romantic: {
+      bg: "bg-gradient-to-br from-rose-50 to-white",
+      orb: "bg-rose-500/10",
+      button: "bg-gradient-to-r from-rose-400 to-rose-700",
+      title: "text-rose-600"
+    },
+    elite: {
+      bg: "bg-gradient-to-br from-slate-900 to-black",
+      orb: "bg-amber-500/10",
+      button: "bg-amber-500",
+      title: "text-amber-500"
+    },
+    family: {
+      bg: "bg-gradient-to-br from-orange-50 to-white",
+      orb: "bg-orange-500/10",
+      button: "bg-gradient-to-r from-orange-500 to-pink-500",
+      title: "text-orange-600"
+    },
+    relax: {
+      bg: "bg-gradient-to-br from-green-50 to-white",
+      orb: "bg-green-400/10",
+      button: "bg-gradient-to-r from-green-400 to-green-700",
+      title: "text-green-700"
+    },
+    explore: {
+      bg: "bg-gradient-to-br from-orange-50 to-white",
+      orb: "bg-orange-500/10",
+      button: "bg-gradient-to-r from-orange-400 to-orange-800",
+      title: "text-orange-900"
+    },
+    exploration: {
+      bg: "bg-gradient-to-br from-sand-50 to-white",
+      orb: "bg-terra-500/10",
+      button: "bg-charcoal",
+      title: "text-terra-600"
+    },
+    religious: {
+      bg: "bg-gradient-to-br from-burgundy-50 to-white",
+      orb: "bg-gold-400/10",
+      button: "bg-burgundy-600",
+      title: "text-burgundy-700"
+    },
+    educational: {
+      bg: "bg-gradient-to-br from-indigo-50 to-white",
+      orb: "bg-amber-400/10",
+      button: "bg-gradient-to-r from-indigo-950 to-indigo-800",
+      title: "text-indigo-950"
+    }
+  };
+
+  const colors = themeColors[theme] || themeColors.default;
 
   const handleSwipe = (direction) => {
     setExitDirection(direction);
@@ -189,11 +245,11 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-brand-blue/5 via-slate-50 to-white overflow-hidden py-12 sm:py-16 lg:py-20">
+    <section className={`relative ${colors.bg} overflow-hidden py-8 sm:py-10 lg:py-12`}>
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 right-10 w-72 h-72 bg-brand-blue/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 left-10 w-72 h-72 bg-brand-blue/10 rounded-full blur-3xl"></div>
+        <div className={`absolute top-10 right-10 w-72 h-72 ${colors.orb} rounded-full blur-3xl`}></div>
+        <div className={`absolute bottom-10 left-10 w-72 h-72 ${colors.orb} rounded-full blur-3xl`}></div>
       </div>
 
       <Container className="relative z-10">
@@ -232,7 +288,7 @@ export default function Newsletter() {
               {/* Like Button */}
               <button 
                 onClick={() => handleSwipe("right")}
-                className="w-14 h-14 rounded-full gradient-btn flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg"
+                className={`w-14 h-14 rounded-full ${colors.button} flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg text-white`}
                 title="Like"
               >
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -257,7 +313,7 @@ export default function Newsletter() {
 
             {/* Heading */}
             <h2 className="section-title-light mb-4">
-              <span className="text-brand-blue">Let Us Inspire You</span>
+              <span className={colors.title}>Let Us Inspire You</span>
             </h2>
 
             {/* Description */}
@@ -269,9 +325,10 @@ export default function Newsletter() {
             <div className="max-w-md mx-auto lg:mx-0 mb-4">
               <EnquiryFormFields 
                 formType="potential"
-                variant="newsletter"
+                variant="inspiration"
                 hideFields={["destination"]}
                 onSuccess={() => {}}
+                buttonColor={colors.button}
               />
             </div>
 

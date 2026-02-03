@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, CalendarCheck, Bus, MapPin, Calendar, Star, Shield, ChevronRight, Ticket, Group, Globe } from "lucide-react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { usePackagesByTheme } from "@/hooks/packages";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
@@ -67,7 +68,7 @@ export default function GroupDepartureClient() {
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-blue-50 to-white">
+    <main className="min-h-screen bg-slate-50">
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="family" fullScreen className="bg-indigo-50" />
@@ -92,12 +93,17 @@ export default function GroupDepartureClient() {
               transition={{ duration: 0.8 }}
               className="space-y-6"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30">
-                <Users className="w-4 h-4 text-white" />
-                <span className="text-sm font-bold text-white uppercase tracking-widest">
-                  Travel Theme
-                </span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Group Departures", href: "/themes/group-departure", active: true }
+                ]} 
+                className="bg-transparent border-transparent p-0 mb-4 justify-center lg:justify-start"
+                omitContainer
+                colorClasses="text-white/80"
+                activeColorClasses="text-white"
+              />
 
               <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-tight">
                 Group<br />
@@ -146,6 +152,9 @@ export default function GroupDepartureClient() {
           </div>
         </Container>
       </div>
+
+
+      {/* Packages Section */}
 
       {/* Packages Section */}
       <Container className="py-4 md:py-8">
@@ -288,6 +297,6 @@ export default function GroupDepartureClient() {
           </div>
         </Container>
       </div>
-    </div>
+    </main>
   );
 }

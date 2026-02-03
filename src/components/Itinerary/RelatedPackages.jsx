@@ -12,7 +12,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const RelatedPackages = ({ relatedPackages }) => {
-  if (!relatedPackages || relatedPackages.length === 0) return null;
+  // Defensive deduplication to guarantee uniqueness
+  const uniquePackages = React.useMemo(() => {
+    if (!relatedPackages) return [];
+    const seen = new Set();
+    return relatedPackages.filter(pkg => {
+      const duplicate = seen.has(pkg.id);
+      seen.add(pkg.id);
+      return !duplicate;
+    });
+  }, [relatedPackages]);
+
+  if (!uniquePackages || uniquePackages.length === 0) return null;
 
   return (
     <section className="bg-white py-1 md:py-8 border border-slate-100 shadow-sm rounded-3xl relative overflow-hidden mt-2 md:mt-6" id="related-packages">
@@ -55,7 +66,7 @@ const RelatedPackages = ({ relatedPackages }) => {
             }}
             className="pb-8 md:pb-16"
           >
-            {relatedPackages.map((item) => (
+            {uniquePackages.map((item) => (
               <SwiperSlide key={item.id}>
                 <PackageCard item={item} />
               </SwiperSlide>

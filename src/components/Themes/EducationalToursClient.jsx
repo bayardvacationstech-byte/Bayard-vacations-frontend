@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { usePackagesByTheme } from "@/hooks/packages";
 import ThemedPackageCard from "@/components/ui/ThemedPackageCard";
 import {
@@ -37,6 +38,7 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
+import InspirationSection from "@/components/Landing/InspirationSection";
 
 export default function EducationalToursClient() {
   const [selectedTab, setSelectedTab] = useState("international");
@@ -81,7 +83,7 @@ export default function EducationalToursClient() {
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
-    <div className="min-h-screen bg-[#f9f7f0] overflow-x-hidden font-sans text-slate-800">
+    <div className="min-h-screen bg-[#f8fafc] text-[#1e293b] font-sans selection:bg-[#3b82f6] selection:text-white overflow-x-hidden">
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="educational" fullScreen className="bg-[#f9f7f0]" />
@@ -119,10 +121,15 @@ export default function EducationalToursClient() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-white shadow-sm border border-indigo-900/10 text-indigo-900 font-semibold text-sm tracking-wider uppercase border-l-4 border-amber-500 rounded-sm">
-                <GraduationCap className="w-4 h-4" />
-                <span>Educational Theme</span>
-              </div>
+              <Breadcrumbs 
+                items={[
+                  { label: "Home", href: "/" },
+                  { label: "Themes", href: "/themes" },
+                  { label: "Educational Tours", href: "/themes/educational", active: true }
+                ]} 
+                className="bg-transparent border-transparent p-0 mb-4 flex justify-center md:justify-start"
+                omitContainer
+              />
               
               <h1 className="text-6xl md:text-7xl lg:text-8xl font-serif font-bold leading-[0.9]">
                 <span className="block text-indigo-900">Scholarly</span>
@@ -239,6 +246,8 @@ export default function EducationalToursClient() {
           </div>
         </Container>
       </section>
+
+
 
       {/* Filter Tabs */}
       <section className="py-8 bg-[#f9f7f0] border-b border-indigo-900/10">
@@ -449,6 +458,10 @@ export default function EducationalToursClient() {
             </motion.div>
           </div>
         </Container>
+      </section>
+
+      <section className="h-full bg-white relative">
+        <InspirationSection theme="educational" />
       </section>
 
       <style jsx>{`

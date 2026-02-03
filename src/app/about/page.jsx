@@ -1,4 +1,5 @@
 "use client";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Container from "@/components/ui/Container";
 import { Globe, Heart, Shield, Award, Users, TrendingUp, Check, Sparkles, Compass, Star, MapPin, Plane } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -94,7 +95,24 @@ export default function AboutPage() {
             </div>
           </div>
         </Container>
+
+        {/* Breadcrumbs - Bottom Left Positioned - Fixed Visibility */}
+        <div className="absolute bottom-4 left-0 z-[60] w-full">
+            <Container>
+                <Breadcrumbs
+                    items={[
+                    { label: "Home", href: "/" },
+                    { label: "About Us", href: "/about", active: true },
+                    ]}
+                    className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+                    omitContainer
+                    colorClasses="text-white/80 drop-shadow-md"
+                    activeColorClasses="text-white drop-shadow-md font-bold"
+                />
+            </Container>
+        </div>
       </section>
+
 
       {/* Journey Timeline - Horizontal Scroll */}
       <section className="py-12 md:py-16 bg-white overflow-hidden">

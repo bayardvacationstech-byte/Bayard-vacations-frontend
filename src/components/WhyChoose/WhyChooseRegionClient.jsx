@@ -35,6 +35,7 @@ import { Button } from "@/components/ui/button";
 import ActivityCard from "@/components/ui/ActivityCard";
 import GalleryCarousel from "@/components/ui/GalleryCarousel";
 import WhyBayardVacations from "@/components/Packages/WhyBayardVacations";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import { useRegion } from "@/hooks/regions";
 import { useWhyChooseRegion } from "@/hooks/regions/useWhyChooseRegion";
@@ -272,6 +273,13 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
       {/* Main Content */}
       <Container className="py-8 md:py-12">
+        <Breadcrumbs 
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Region", href: `/destinations/${regionSlug}` },
+            { label: "Why Choose", href: `/why-choose/${regionSlug}`, active: true }
+          ]} 
+        />
         {/* Why Visit Section */}
         <section className="mb-6 md:mb-10">
           <div className="mx-auto">

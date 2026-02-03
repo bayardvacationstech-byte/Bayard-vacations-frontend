@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Container from "@/components/ui/Container";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import { ChevronRight, FileText, Scale, ShieldCheck, HelpCircle } from "lucide-react";
 
@@ -100,6 +101,13 @@ const TermsAndConditions = () => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Terms and Conditions", href: "/terms-and-conditions", active: true },
+        ]}
+      />
 
       {/* 2. MAIN CONTENT AREA */}
       <Container className="mt-8 md:-mt-12">

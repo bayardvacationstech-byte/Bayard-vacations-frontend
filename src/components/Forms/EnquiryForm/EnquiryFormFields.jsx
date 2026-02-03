@@ -25,7 +25,8 @@ export default function EnquiryFormFields({
   buttonText,
   isSubmitting: externalIsSubmitting = false,
   whiteLabels = false,
-  brandYellow = false
+  brandYellow = false,
+  buttonColor = "" // Custom button color class for themed sections
 }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -57,7 +58,7 @@ export default function EnquiryFormFields({
         return !value?.trim() ? "Full name is required" : "";
       case "email":
         if (isFieldHidden("email") && formType === "potential") return "";
-        return !/^\S+@\S+\.\S+$/.test(value) ? "Valid email is required" : "";
+        return !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ? "Valid email is required" : "";
       case "contactNumber":
       case "phone":
         return !/^[0-9]{10}$/.test(value)
@@ -225,29 +226,35 @@ export default function EnquiryFormFields({
     }
   };
 
-  const isInline = variant === "inline" || variant === "section" || variant === "newsletter";
-  const isNewsletter = variant === "newsletter";
+  const isInspiration = variant === "inspiration" || variant === "section";
+  const isNewsletter = variant === "newsletter" || variant === "inspiration";
   const isSection = variant === "section";
+  const isInline = variant === "inline";
 
   const containerPadding = variant === "modal" ? "px-8 pb-6 pt-4" : "p-0";
   const labelClass = isSection 
     ? cn("block text-[10px] font-bold mb-1", whiteLabels ? "text-white/80" : "text-slate-600")
-    : isNewsletter 
+    : isInspiration 
       ? "hidden"
       : isInline 
         ? cn("block text-[11px] font-bold mb-1", whiteLabels ? "text-white" : "text-slate-800") 
         : cn("mb-2 block font-semibold text-sm", whiteLabels ? "text-white" : "text-slate-900");
   
   const inputClass = isNewsletter
-    ? "w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pl-12 pr-6 h-12 shadow-sm text-sm"
+    ? cn("w-full bg-white border border-slate-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 rounded-full pr-6 h-12 shadow-sm text-sm", isInspiration && !isSection ? "pl-12" : "px-6")
     : isSection
       ? "w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/10 outline-none transition-all text-slate-700 text-sm"
       : isInline 
         ? "w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all text-sm h-10"
         : "rounded-2xl border-[#B0B0B0] bg-white !p-4 h-12 text-sm shadow-none w-full";
 
-  const buttonClass = isNewsletter
-    ? "gradient-btn w-full rounded-full text-white h-12 font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+  const getInputClass = (fieldName) => {
+      const hasError = touched[fieldName] && errors[fieldName];
+      return cn(inputClass, hasError && "border-red-500 focus:border-red-500 focus:ring-red-500/20");
+  };
+
+  const buttonClass = isInspiration
+    ? cn("w-full rounded-full text-white h-12 font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]", buttonColor || "gradient-btn")
     : isSection
       ? cn("w-full font-semibold text-base py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm mt-2", brandYellow ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900" : whiteLabels ? "bg-white text-brand-blue" : "bg-brand-blue text-white hover:bg-brand-blue-hovered")
       : isInline 
@@ -256,22 +263,22 @@ export default function EnquiryFormFields({
 
   return (
     <form onSubmit={handleSubmit} className={cn("text-sm", variant === "modal" && "overflow-y-scroll max-h-[70vh]", containerPadding)}>
-      <div className={cn("grid", (isNewsletter || isSection || variant === "inline") ? "gap-3" : "gap-5")}>
+      <div className={cn("grid", (isInspiration || variant === "inline") ? "gap-3" : "gap-5")}>
         
         {/* Name and Email Row */}
-        <div className={cn("grid", (isNewsletter || isSection || variant === "inline" || variant === "modal") ? "grid-cols-1 gap-3" : "c-md:grid-cols-2 gap-5")}>
+        <div className={cn("grid", (isInspiration || variant === "inline" || variant === "modal") ? "grid-cols-1 gap-3" : "c-md:grid-cols-2 gap-5")}>
           {!isFieldHidden("name") && (
             <div className="relative">
-              {isNewsletter && <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />}
+              {isInspiration && !isSection && <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />}
               <span className={labelClass}>Full Name *</span>
               <Input
-                className={inputClass}
+                className={getInputClass("name")}
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder={isNewsletter ? "Your Name" : "John Doe"}
+                placeholder={isInspiration && !isSection ? "Your Name" : "John Doe"}
                 required
               />
               {touched.name && errors.name && (
@@ -283,7 +290,7 @@ export default function EnquiryFormFields({
           )}
           {!isFieldHidden("email") && (
             <div className="relative">
-              {isNewsletter && <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />}
+              {isInspiration && !isSection && <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />}
               <span className={labelClass}>Email *</span>
               <Input
                 className={inputClass}
@@ -292,8 +299,8 @@ export default function EnquiryFormFields({
                 value={formData.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder={isNewsletter ? "Email Address" : "johndoe@example.com"}
-                required={formType === "lead"}
+                placeholder={isInspiration && !isSection ? "Email Address" : "johndoe@example.com"}
+                required={!isFieldHidden("email")}
               />
               {touched.email && errors.email && (
                 <small className="ml-4 mt-1 block text-red-600 text-xs">
@@ -329,16 +336,17 @@ export default function EnquiryFormFields({
 
           {!isFieldHidden("phone") && formType === "potential" && (
             <div className="relative">
-              {!isNewsletter && <span className={labelClass}>Phone Number *</span>}
+              {isInspiration && !isSection && <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />}
+              {!(isInspiration && !isSection) && <span className={labelClass}>Phone Number *</span>}
                 <Input
-                  className={inputClass}
+                  className={getInputClass("phone")}
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   maxLength={10}
-                  placeholder={isNewsletter ? "Phone Number" : "9876543210"}
+                  placeholder={isInspiration && !isSection ? "Phone Number" : "9876543210"}
                   required
                 />
               {touched.phone && errors.phone && (
@@ -587,7 +595,7 @@ export default function EnquiryFormFields({
           type="submit"
           disabled={isSubmitting || externalIsSubmitting}
         >
-          {isSubmitting ? "Submitting..." : buttonText || (isNewsletter ? "Request Call Back" : isSection ? "Get Started" : variant === "inline" ? "Send Enquiry" : "Submit")}
+          {isSubmitting ? "Submitting..." : buttonText || (isInspiration && !isSection ? "Request Call Back" : isSection ? "Get Started" : variant === "inline" ? "Send Enquiry" : "Submit")}
         </Button>
       </div>
     </form>

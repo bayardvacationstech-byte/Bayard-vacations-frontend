@@ -200,7 +200,7 @@ export default function ThemeHighlights({
                     </p>
                     
                     <Link
-                        href={`/themes/${currentTheme?.themeSlug}`}
+                        href={`/themes/${currentTheme?.themeSlug === 'group-adventures' ? 'group-departure' : currentTheme?.themeSlug}`}
                         className="bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-xl text-slate-900 inline-block px-8 py-3 sm:px-10 sm:py-4 font-black rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                     >
                         Explore Packages

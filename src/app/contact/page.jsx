@@ -2,7 +2,8 @@ import React from "react";
 import Container from "@/components/ui/Container";
 import Image from "next/image";
 import ContactForm from "@/components/Forms/LoginForm/ContactForm";
-import { Mail, Phone, MapPin, Globe, Send, MessageCircle, Compass } from "lucide-react";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { Mail, Phone, MapPin, Send, Instagram, Facebook, Linkedin, Twitter, Clock, CheckCircle2 } from "lucide-react";
 
 export const metadata = {
   title: "Contact Bayard Vacations | Start Your Travel Adventure Today",
@@ -39,6 +40,13 @@ const ContactPage = () => {
           </p>
         </Container>
       </section>
+      
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Contact Us", href: "/contact", active: true },
+        ]}
+      />
 
       {/* Dark Themed Main Content */}
       <section className="py-20 md:py-32 bg-[#050505] relative overflow-hidden">

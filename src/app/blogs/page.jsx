@@ -16,6 +16,7 @@ import {
 import { db } from "@/firebase/firebaseConfig";
 import { COLLECTIONS } from "@/config";
 import { sanitizeDocumentData } from "@/utils/firebase";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 // Blog Card Component
 const BlogCard = ({ blog, featured = false }) => {
@@ -190,6 +191,13 @@ const BlogsPage = () => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs 
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Blogs", href: "/blogs", active: true }
+        ]} 
+      />
 
       {/* Featured Blog Posts */}
       <section className="section-padding">

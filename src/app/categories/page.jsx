@@ -2,6 +2,7 @@ import React from "react";
 import Container from "@/components/ui/Container";
 import CategoryCard from "@/components/ui/CategoryCard";
 import categoryData from "@/data/categoryData";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 const CategoriesPage = () => {
   return (
@@ -13,6 +14,13 @@ const CategoriesPage = () => {
           </h1>
         </Container>
       </section>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Categories", href: "/categories", active: true },
+        ]}
+      />
 
       <section className="section-padding">
         <Container>

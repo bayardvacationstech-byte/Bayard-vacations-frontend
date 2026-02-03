@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Container from "@/components/ui/Container";
 import ExplorationList from "@/components/ui/ExplorationList";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
@@ -57,6 +58,14 @@ const CategoryPageClient = ({ category }) => {
           </div>
         </Container>
       </section>
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Categories", href: "/categories" },
+          { label: category.title, href: `/categories/${category.slug}`, active: true },
+        ]}
+      />
 
       {/* Tabs Section */}
       <section className="border-b border-solid border-black bg-white">
