@@ -1,5 +1,5 @@
 "use client";
-import { Search, Star, MoveRight, Phone, Sparkles, Compass, Headphones } from "lucide-react";
+import { Search, Star, MoveRight, Phone, Sparkles, Compass, Headphones, Globe, Plane } from "lucide-react";
 import React from "react";
 import { AnimatedInput } from "../ui/AnimatedInput";
 import { Card, CardContent } from "../ui/card";
@@ -319,7 +319,7 @@ const Hero = () => {
 
 
         {/* Banner Action Buttons - Hidden on mobile */}
-        <div className="hidden sm:flex absolute bottom-32 sm:bottom-44 left-0 right-0 px-6 sm:px-12 z-30 pointer-events-none justify-between items-end">
+        <div className="hidden sm:flex absolute bottom-32 sm:bottom-28 lg:bottom-44 left-0 right-0 px-6 sm:px-12 z-30 pointer-events-none justify-between items-end">
           {/* Left Side: Explore */}
           <Link 
             href="/explore"
@@ -373,7 +373,66 @@ const Hero = () => {
           style={{ background: 'linear-gradient(to bottom, #001233 0%, #0046b8 100%)' }}
           className="text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
         >
-          <div className="grid grid-cols-3 sm:flex sm:flex-row sm:items-center sm:justify-between py-4 sm:py-8 px-3 sm:px-12 max-w-7xl mx-auto gap-3 gap-y-4 sm:gap-6">
+          <div className="max-w-7xl mx-auto">
+            {/* MOBILE LAYOUT */}
+            <div className="sm:hidden flex flex-col py-2 px-4">
+              {/* Top Row: Rating & Stats */}
+              <div className="flex items-center justify-between mb-2 px-2">
+                {/* Google Rating Pill */}
+                <div className="flex items-center gap-2 bg-[#4285F4]/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20 shadow-lg">
+                  <div className="bg-white rounded-full p-0.5">
+                    <Image src={ReviewCompanies} alt="G" className="w-3 h-3 object-contain" />
+                  </div>
+                  <span className="text-sm font-bold text-white">4.9</span>
+                  <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                </div>
+
+                {/* Travelers */}
+                <div className="flex flex-col items-end text-right">
+                  <span className="text-xl font-bold text-white leading-none">15k+</span>
+                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-widest mt-1">TRAVELERS</span>
+                </div>
+
+                {/* Itineraries */}
+                <div className="flex flex-col items-end text-right">
+                  <span className="text-xl font-bold text-white leading-none">1000+</span>
+                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-widest mt-1">ITINERARIES</span>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-2" />
+
+              {/* Bottom Row: Icons */}
+              <div className="grid grid-cols-3 gap-2">
+                {/* AI Assistant */}
+                <div className="flex flex-col items-center">
+                  <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-1 shadow-inner">
+                    <Plane className="w-4 h-4 text-blue-300 fill-blue-300/20" />
+                  </div>
+                  <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center">AI ASSISTANT</span>
+                </div>
+
+                {/* 24/7 Support */}
+                <div className="flex flex-col items-center">
+                  <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-1 shadow-inner">
+                    <Phone className="w-4 h-4 text-gray-300 fill-gray-300/20" />
+                  </div>
+                  <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center">24/7 SUPPORT</span>
+                </div>
+
+                {/* Global Coverage */}
+                <div className="flex flex-col items-center">
+                  <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-1 shadow-inner">
+                    <Globe className="w-4 h-4 text-emerald-300 fill-emerald-300/20" />
+                  </div>
+                  <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center">GLOBAL<br/>COVERAGE</span>
+                </div>
+              </div>
+            </div>
+
+            {/* DESKTOP LAYOUT (Unchanged) */}
+            <div className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between py-4 sm:py-8 px-3 sm:px-12 gap-3 gap-y-4 sm:gap-6">
             
             {/* Review Badge */}
             <a 
@@ -427,6 +486,7 @@ const Hero = () => {
               </div>
             </div>
 
+          </div>
           </div>
         </div>
       </div>

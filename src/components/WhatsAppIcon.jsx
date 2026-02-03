@@ -23,7 +23,7 @@ export default function FloatingIcon() {
     <Link
       href="https://wa.me/+916363117421"
       target="_blank"
-      className="fixed bottom-20 md:bottom-6 right-4 z-50 group"
+      className="fixed bottom-6 md:bottom-6 right-4 z-50 group"
     >
       <div className="relative rounded-full bg-[#25D366] p-4 md:p-4 shadow-[0_10px_25px_-5px_rgba(37,211,102,0.4)] hover:scale-110 transition-all duration-300 animate-floatSlow">
         <Image src={WhatsAppIcon} alt="WhatsApp" width={26} height={26} className="w-[26px] h-[26px] md:w-[28px] md:h-[28px] drop-shadow-sm" />

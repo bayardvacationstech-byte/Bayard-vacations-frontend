@@ -1,0 +1,204 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, MessageCircle, Map, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+const DESTINATIONS = [
+  {
+    image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&auto=format&fit=crop&q=80",
+    name: "Maldives",
+    offer: "30% OFF",
+    bg: "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]" // Deep Blue theme
+  },
+  {
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&auto=format&fit=crop&q=80",
+    name: "Dubai",
+    offer: "25% OFF",
+    bg: "from-[#4a3b00] via-[#b48e1a] to-[#4a3b00]" // Gold theme (variant)
+  },
+  {
+    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&auto=format&fit=crop&q=80",
+    name: "Thailand",
+    offer: "35% OFF",
+    bg: "from-[#004a2f] via-[#1ab470] to-[#004a2f]" // Green theme (variant)
+  }
+];
+
+const FEATURES = [
+  {
+    icon: <MessageCircle className="w-5 h-5" />,
+    title: "AI Bot Support",
+    desc: "24/7 instant assistance for all your travel queries",
+    color: "bg-blue-400/20 text-blue-400"
+  },
+  {
+    icon: <Map className="w-5 h-5" />,
+    title: "Customized Itineraries",
+    desc: "Tailor-made trips designed around your preferences",
+    color: "bg-emerald-400/20 text-emerald-400"
+  }
+];
+
+const MobileAdBanner = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % DESTINATIONS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveFeatureIndex((prev) => (prev + 1) % FEATURES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const activeDestination = DESTINATIONS[activeIndex];
+  const activeFeature = FEATURES[activeFeatureIndex];
+
+  return (
+    <div className="relative w-full max-w-md mx-auto min-h-screen pb-32 overflow-hidden md:hidden transition-colors duration-1000">
+      
+      {/* Dynamic Background */}
+      <div className={cn("absolute inset-0 bg-gradient-to-b transition-colors duration-1000", activeDestination.bg || "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]")} />
+
+      {/* Decorative Elements */}
+      <div className="absolute w-[200px] h-[200px] border border-white/10 rounded-full -top-[100px] -right-[100px] pointer-events-none" />
+      <div className="absolute w-[300px] h-[300px] border border-white/5 rounded-full bottom-[200px] -left-[150px] pointer-events-none" />
+
+      {/* Logo Section */}
+      <div className="relative z-10 p-5 flex items-center gap-2.5">
+        <Image
+          src="/img/logo.svg"
+          alt="Bayard Vacations"
+          width={120}
+          height={40}
+          className="w-auto h-8"
+        />
+      </div>
+
+      {/* Hero Image Section */}
+      <div className="relative z-10 w-[90%] mx-auto rounded-[20px] overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.3)] bg-slate-900">
+        <div className="relative h-[280px] w-full">
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0"
+                >
+                    <Image
+                        src={activeDestination.image}
+                        alt={activeDestination.name}
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                </motion.div>
+            </AnimatePresence>
+            
+            {/* Offer Badge - Floating */}
+            <motion.div 
+                key={`offer-${activeIndex}`}
+                initial={{ scale: 0, rotate: 10 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.3, type: "spring" }}
+                className="absolute top-4 right-4 bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1"
+            >
+                <Sparkles className="w-3 h-3" />
+                {activeDestination.offer}
+            </motion.div>
+        </div>
+
+        <div className="absolute bottom-5 left-5 bg-white/20 backdrop-blur-md px-5 py-3 rounded-xl border border-white/30 truncate max-w-[80%]">
+          <small className="block text-white/90 text-[10px] uppercase tracking-widest mb-0.5">
+            Now Featuring
+          </small>
+          <AnimatePresence mode="wait">
+             <motion.h3 
+                key={activeDestination.name}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                className="text-white text-2xl font-bold shadow-black/10 drop-shadow-md"
+             >
+                {activeDestination.name}
+             </motion.h3>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="relative z-10 px-6 py-8 text-center">
+        <h1 className="text-white text-4xl font-[800] leading-tight mb-2 drop-shadow-lg">
+          Dream<br />
+          <span className="text-[#fcd34d]">Vacations</span><br />
+          Await
+        </h1>
+        <p className="text-white/85 text-[15px] leading-relaxed mb-8 px-2">
+          Exclusive deals on handpicked destinations curated just for you
+        </p>
+
+        <Link href="/explore" className="bg-white text-[#1a5fb4] border-none px-10 py-4 rounded-full text-base font-bold cursor-pointer inline-flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-transform mb-8">
+          Explore
+          <div className="w-6 h-6 bg-[#1a5fb4] rounded-full flex items-center justify-center text-white text-xs">
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </Link>
+
+        {/* Carousel Indicators */}
+        <div className="flex justify-center gap-2 mt-2">
+            {DESTINATIONS.map((_, idx) => (
+                <div 
+                    key={idx}
+                    className={cn(
+                        "h-2 rounded-full transition-all duration-300",
+                        idx === activeIndex ? "w-6 bg-white" : "w-2 bg-white/30"
+                    )} 
+                />
+            ))}
+        </div>
+      </div>
+
+      {/* Feature Card - Floating */}
+      <AnimatePresence mode="wait">
+        <motion.div 
+            key={activeFeatureIndex}
+            initial={{ y: 20, opacity: 0, x: "-50%" }}
+            animate={{ y: 0, opacity: 1, x: "-50%" }}
+            exit={{ y: 20, opacity: 0, x: "-50%" }}
+            transition={{ duration: 0.4 }}
+            className="absolute bottom-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] bg-gradient-to-br from-slate-900 to-slate-800 rounded-[20px] p-5 flex items-center gap-4 shadow-2xl border border-white/10 z-50"
+        >
+            <div className="w-[50px] h-[50px] rounded-full bg-[radial-gradient(circle_at_30%_30%,#60a5fa,#1e40af)] flex items-center justify-center shrink-0 relative">
+                <span className="text-2xl">
+                    {activeFeatureIndex === 0 ? "🤖" : "✨"}
+                </span>
+                <div className={cn("absolute inset-0 rounded-full border-2 animate-pulse", activeFeature.color.split(" ")[1] === "text-blue-400" ? "border-blue-400/50" : "border-emerald-400/50")} />
+            </div>
+            <div className="flex-1 text-left">
+            <h4 className="text-white text-base font-bold mb-0.5">{activeFeature.title}</h4>
+            <p className="text-white/70 text-xs leading-snug line-clamp-2">
+                {activeFeature.desc}
+            </p>
+            </div>
+            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", activeFeature.color)}>
+                {activeFeature.icon}
+            </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default MobileAdBanner;

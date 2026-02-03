@@ -18,7 +18,10 @@ import DestinationSpotlight from "@/components/Landing/Destinations/DestinationS
 import StartJourney from "@/components/Landing/StartJourney";
 import Newsletter from "@/components/Landing/Newsletter";
 import TravelStyle from "@/components/Landing/TravelStyle";
+import MobileAdBanner from "@/components/Landing/MobileAdBanner";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
+
+
 import RegionTestimonials from "@/components/Packages/RegionTestimonials";
 
 // Timeout wrapper to prevent indefinite hanging
@@ -132,9 +135,14 @@ const HomePage = async () => {
         />
       </section>
 
-      {/* Advertisement Banner */}
-      <section className="section-padding px-4 sm:px-6 lg:px-8">
+      {/* Advertisement Banner - Desktop */}
+      <section className="section-padding px-4 sm:px-6 lg:px-8 hidden md:block">
         <AdvertisementBanner />
+      </section>
+
+      {/* Advertisement Banner - Mobile */}
+      <section className="block md:hidden">
+        <MobileAdBanner />
       </section>
 
       <section className="bg-gradient-to-b from-slate-50 to-white blue-section">

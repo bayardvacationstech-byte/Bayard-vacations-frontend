@@ -10,7 +10,7 @@ import GroupPackageCard from "@/components/Landing/GroupPackageCard";
 const GroupDepartureSlider = ({ groupDeparturePackages }) => {
   if (!groupDeparturePackages || !Array.isArray(groupDeparturePackages) || groupDeparturePackages.length === 0) {
     return (
-      <div className="h-[400px] w-full flex items-center justify-center bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200">
+      <div className="mb-0 sm:mb-6 h-[400px] w-full flex items-center justify-center bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200">
          <p className="text-slate-400 font-medium italic">Discovering signature journeys...</p>
       </div>
     );
@@ -43,11 +43,11 @@ const GroupDepartureSlider = ({ groupDeparturePackages }) => {
           1024: { slidesPerView: 3, spaceBetween: 32 },
           1280: { slidesPerView: 4, spaceBetween: 32 },
         }}
-        className="pb-6 md:pb-16 h-[520px] md:h-[600px]"
+        className="pb-4 md:pb-16 h-[460px] md:h-[600px]"
       >
         {groupDeparturePackages.map((item, idx) => (
           <SwiperSlide key={item.id || idx} className="h-full">
-             <div className="h-[500px] md:h-[550px] w-full px-1">
+             <div className="h-[420px] md:h-[550px] w-full px-1">
                 <GroupPackageCard item={item} />
              </div>
           </SwiperSlide>

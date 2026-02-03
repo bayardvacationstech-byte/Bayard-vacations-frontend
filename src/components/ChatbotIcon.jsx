@@ -11,7 +11,7 @@ export default function ChatbotIcon() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-36 md:bottom-24 right-4 z-50 group"
+        className="fixed bottom-24 md:bottom-24 right-4 z-50 group"
       >
         <div className="relative">
           {/* Glow effect */}
