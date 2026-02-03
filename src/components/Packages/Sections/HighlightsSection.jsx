@@ -18,7 +18,7 @@ const HighlightsSection = ({ packageData }) => {
   
   if (!isMounted) return null;
   
-  // Robust data fetching for highlights (handles both array and object structures)
+  
   let highlightItems = [];
   
   // 1. Check sections (can be array or object in different database versions)
