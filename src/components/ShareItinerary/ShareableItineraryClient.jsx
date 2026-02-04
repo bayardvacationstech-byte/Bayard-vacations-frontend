@@ -12,6 +12,7 @@ import ShareableActivitiesCarousel from './ShareableActivitiesCarousel';
 import ShareableFAQ from './ShareableFAQ';
 import ShareableTestimonials from './ShareableTestimonials';
 import ShareableBlogsCarousel from './ShareableBlogsCarousel';
+import ShareableNotes from './ShareableNotes';
 import ShareableFooter from './ShareableFooter';
 
 const ShareableItineraryClient = ({ itineraryData }) => {
@@ -71,7 +72,10 @@ const ShareableItineraryClient = ({ itineraryData }) => {
         exclusions={itineraryData.exclusions} 
       />
 
-      {/* 8. Payment Info & Terms - NEW */}
+      {/* 8. Important Notes - NEW */}
+      <ShareableNotes notes={itineraryData.importantNotes} />
+
+      {/* 9. Payment Info & Terms - NEW */}
       <ShareablePaymentInfo 
         paymentTerms={itineraryData.paymentTerms}
         cancellationPolicy={itineraryData.cancellationPolicy}
@@ -90,7 +94,6 @@ const ShareableItineraryClient = ({ itineraryData }) => {
       {/* 12. Footer with contact info */}
       <ShareableFooter 
         contactInfo={itineraryData.contactInfo} 
-        importantNotes={itineraryData.importantNotes}
       />
 
     </div>

@@ -48,11 +48,14 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function ExplorationBundleClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -105,6 +108,11 @@ export default function ExplorationBundleClient() {
 
   return (
     <div className="min-h-screen bg-[#f7f5f3] text-[#1d1d1d] font-sans selection:bg-[#e76f51] selection:text-white overflow-x-hidden">
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["exploration-bundle"]} 
+      />
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 topo-pattern overflow-hidden flex items-center">
         {/* Animated Compass Background */}
@@ -150,11 +158,16 @@ export default function ExplorationBundleClient() {
               </p>
               
               <div className="flex flex-wrap gap-4 pt-4">
-                <button className="px-8 py-4 bg-[#e76f51] text-white rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#d65a3c] transition-all shadow-xl shadow-[#e76f51]/30 flex items-center space-x-2 group">
-                  <span>Explore Bundles</span>
-                  <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className="px-8 py-4 bg-white border-2 border-[#2a9d8f] text-[#21867a] rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#2a9d8f]/5 transition-all flex items-center space-x-2">
+                <Link href="#packages">
+                  <button className="px-8 py-4 bg-[#e76f51] text-white rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#d65a3c] transition-all shadow-xl shadow-[#e76f51]/30 flex items-center space-x-2 group w-full sm:w-auto">
+                    <span>Explore Bundles</span>
+                    <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="px-8 py-4 bg-white border-2 border-[#2a9d8f] text-[#21867a] rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#2a9d8f]/5 transition-all flex items-center space-x-2"
+                >
                   <Play className="w-5 h-5 fill-[#21867a]" />
                   <span>Watch Reel</span>
                 </button>
@@ -258,7 +271,7 @@ export default function ExplorationBundleClient() {
 
 
       {/* Filter Tabs Section */}
-      <section className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
+      <section id="packages" className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
         <Container>
           <div className="flex flex-wrap gap-4 justify-center">
             <button 
@@ -290,9 +303,9 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Main Content / Grid */}
-      <section id="bundles" className="py-12 md:py-16 lg:py-20 map-texture overflow-hidden" ref={packagesRef}>
+      <section id="bundles" className="section-padding map-texture overflow-hidden" ref={packagesRef}>
         <Container>
-          <div className="text-center mb-10 md:mb-20">
+          <div className="text-center mb-8 md:mb-12">
             <h2 className="text-5xl md:text-7xl font-black text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">Curated combinations of our most popular explorations. Just book and go.</p>
           </div>
@@ -318,7 +331,7 @@ export default function ExplorationBundleClient() {
                 ))}
               </AnimatePresence>
             ) : (
-              <div className="col-span-full py-32 text-center">
+              <div className="col-span-full py-16 text-center">
                 <div className="inline-block p-10 bg-white rounded-3xl border-2 border-dashed border-gray-200">
                   <Wind className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <p className="text-2xl font-serif italic text-gray-500">The map for this region is currently being drawn.</p>
@@ -329,7 +342,7 @@ export default function ExplorationBundleClient() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-20 flex justify-center">
+            <div className="mt-12 flex justify-center">
               <Pagination>
                 <PaginationContent className="gap-3">
                   <PaginationItem>
@@ -389,7 +402,7 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Features Section */}
-      <section className="py-12 md:py-24 bg-[#1d1d1d] text-white relative overflow-hidden">
+      <section className="section-padding bg-[#1d1d1d] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/topography.png')]"></div>
         
         <Container className="relative z-10">
@@ -439,7 +452,7 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-16 md:py-24 bg-stone-50 border-t-4 border-[#e76f51]">
+      <section className="section-padding bg-stone-50 border-t-4 border-[#e76f51]">
         <Container>
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-12">
             <div>

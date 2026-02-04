@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { doc, getDocFromServer } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { COLLECTIONS } from "@/config";
+import { sanitizeDocumentData } from "@/utils/firebase";
 
 /**
  * Custom hook to fetch why_choose_region data from Firestore
@@ -30,7 +31,7 @@ export function useWhyChooseRegion(regionId) {
         const docSnap = await getDocFromServer(docRef);
 
         if (docSnap.exists()) {
-          const data = docSnap.data();
+          const data = sanitizeDocumentData(docSnap);
           setWhyChooseData(data);
         } else {
           setWhyChooseData(null);

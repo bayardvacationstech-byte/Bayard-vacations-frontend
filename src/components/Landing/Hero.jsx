@@ -432,57 +432,57 @@ const Hero = () => {
             </div>
 
             {/* DESKTOP LAYOUT (Unchanged) */}
-            <div className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between py-4 sm:py-8 px-3 sm:px-12 gap-3 gap-y-4 sm:gap-6">
+            <div className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between py-3 sm:py-5 px-3 sm:px-12 gap-3 gap-y-4 sm:gap-6">
             
             {/* Review Badge */}
             <a 
               href="https://www.google.com/search?sca_esv=bfc79b9b44160e7b&sxsrf=ANbL-n6D9k58mEqPkUW7KDcYQUSUWWZaFw:1768213761642&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOdIhnvGyPmjx2iWMPrXQmOMDb7y8i0hQYnbD65r7JPZU7-dfoSXAN8GKo3S4xUILSWr5tzKc1Yf8_4j7sf887yPWbseRs4slYUwZZga9TnZ773fENw%3D%3D&q=Bayard+Vacations+Reviews&sa=X&ved=2ahUKEwjX75jJ5YWSAxXKa2wGHdDwF7YQQ0bkNegQIPhAE&biw=1792&bih=913&dpr=2&aic=0"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-row items-center justify-center gap-1 sm:gap-3 shrink-0 bg-white/5 px-2 sm:px-4 py-1 sm:py-3 rounded-lg sm:rounded-2xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group/badge col-span-1 sm:col-auto"
+              className="flex flex-row items-center justify-center gap-1 sm:gap-3 shrink-0 bg-white/5 px-2 sm:px-4 py-1 sm:py-2.5 rounded-lg sm:rounded-2xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group/badge col-span-1 sm:col-auto"
             >
               <Image
                 src={ReviewCompanies}
                 alt="Google"
-                className="h-5 sm:h-12 w-auto group-hover/badge:scale-105 transition-transform duration-300"
+                className="h-5 sm:h-10 w-auto group-hover/badge:scale-105 transition-transform duration-300"
               />
               <div className="flex items-center gap-0.5 sm:gap-1.5 font-black group-hover/badge:translate-x-0.5 transition-transform duration-300">
-                <span className="text-sm sm:text-3xl font-black text-white leading-none">4.9</span>
-                <Star className="size-2.5 sm:size-6 fill-[#FBBC05] stroke-[#FBBC05]" />
+                <span className="text-sm sm:text-2xl font-black text-white leading-none">4.9</span>
+                <Star className="size-2.5 sm:size-5 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
             </a>
 
             {/* Travelers */}
             <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
-              <span className="text-sm sm:text-3xl font-black text-white leading-none">15k+</span>
-              <span className="text-[8px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Travelers</span>
+              <span className="text-sm sm:text-2xl font-black text-white leading-none">15k+</span>
+              <span className="text-[8px] sm:text-xs font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Travelers</span>
             </div>
 
             {/* Itineraries */}
             <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
-              <span className="text-sm sm:text-3xl font-black text-white leading-none">1000+</span>
-              <span className="text-[8px] sm:text-sm font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
+              <span className="text-sm sm:text-2xl font-black text-white leading-none">1000+</span>
+              <span className="text-[8px] sm:text-xs font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
             </div>
 
             {/* AI Assistant */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-3 shrink-0 col-span-1 sm:col-auto">
-              <div className="h-6 w-6 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
-                <Sparkles className="w-3 h-3 sm:w-6 sm:h-6 text-white" />
+              <div className="h-6 w-6 sm:h-10 sm:w-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
+                <Sparkles className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
               </div>
               <div className="leading-tight text-center sm:text-left">
-                <span className="block text-[8px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
-                <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white/90 tracking-wider mt-1">Instant Ideas</span>
+                <span className="block text-[8px] sm:text-base font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
+                <span className="hidden sm:block text-[10px] sm:text-xs font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Instant Ideas</span>
               </div>
             </div>
 
             {/* 24/7 Support */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-3 shrink-0 col-span-1 sm:col-auto">
-              <div className="h-6 w-6 sm:h-12 sm:w-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
-                <Phone className="w-3 h-3 sm:w-6 sm:h-6 text-white" />
+              <div className="h-6 w-6 sm:h-10 sm:w-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
+                <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
               </div>
               <div className="leading-tight text-center sm:text-left">
-                <span className="block text-[8px] sm:text-lg font-black text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
-                <span className="hidden sm:block text-[10px] sm:text-sm font-bold text-white/90 uppercase tracking-tighter mt-1 whitespace-nowrap">Assistance</span>
+                <span className="block text-[8px] sm:text-base font-black text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
+                <span className="hidden sm:block text-[10px] sm:text-xs font-bold text-white/90 uppercase tracking-tighter mt-0.5 sm:mt-1 whitespace-nowrap">Assistance</span>
               </div>
             </div>
 

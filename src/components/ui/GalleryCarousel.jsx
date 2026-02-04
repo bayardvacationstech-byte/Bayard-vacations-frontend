@@ -79,13 +79,20 @@ const GalleryCarousel = ({
                 transition={{ duration: 0.3 }}
                 className="relative w-full h-full max-w-6xl max-h-[80vh] rounded-2xl overflow-hidden shadow-2xl"
               >
-                <Image
-                  src={images[currentIndex].url}
-                  alt={images[currentIndex].caption || `Image ${currentIndex + 1}`}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+                {images[currentIndex]?.url ? (
+                  <Image
+                    src={images[currentIndex].url}
+                    alt={images[currentIndex].caption || `Image ${currentIndex + 1}`}
+                    fill
+                    className="object-contain"
+                    priority
+                    unoptimized
+                  />
+                ) : (
+                  <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+                    <p className="text-slate-400 text-lg font-medium">Image not available</p>
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -133,12 +140,19 @@ const GalleryCarousel = ({
                         : "ring-2 ring-white/30 opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <Image
-                      src={image.url}
-                      alt={`Thumbnail ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+                    {image.url ? (
+                      <Image
+                        src={image.url}
+                        alt={`Thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-slate-200 flex items-center justify-center">
+                        <span className="text-slate-400 text-xs">N/A</span>
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>

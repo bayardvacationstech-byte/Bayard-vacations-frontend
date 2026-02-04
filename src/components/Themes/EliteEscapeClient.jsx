@@ -40,11 +40,14 @@ import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
 import ThemeLoader from "@/components/ui/ThemeLoader";
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [selectionType, setSelectionType] = useState("International");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -109,6 +112,12 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
         )}
       </AnimatePresence>
 
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["elite-escape"]} 
+      />
+
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 overflow-hidden flex items-center bg-gradient-to-br from-[#faf9f7] via-[#f5f3f0] to-[#faf9f7]">
         {/* Elegant Background Pattern */}
@@ -160,11 +169,16 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4">
-              <button className="px-8 py-4 bg-[#d4af37] text-white rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#c9a961] transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 group">
-                <span>Explore Collection</span>
-                <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="px-8 py-4 bg-white border-2 border-[#d4af37] text-[#d4af37] rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#d4af37]/5 transition-all flex items-center space-x-2">
+              <Link href="#packages">
+                <button className="px-8 py-4 bg-[#d4af37] text-white rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#c9a961] transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 group w-full sm:w-auto">
+                  <span>Explore Collection</span>
+                  <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                </button>
+              </Link>
+              <button 
+                onClick={() => setIsVideoModalOpen(true)}
+                className="px-8 py-4 bg-white border-2 border-[#d4af37] text-[#d4af37] rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#d4af37]/5 transition-all flex items-center space-x-2"
+              >
                 <PlayCircle className="w-5 h-5" />
                 <span>Watch Reel</span>
               </button>
@@ -272,7 +286,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
 
       {/* Filter and Selection Section */}
-      <section className="py-12 md:py-16 bg-white border-b border-[#d4af37]/10" ref={packagesRef}>
+      <section id="packages" className="section-padding bg-white border-b border-[#d4af37]/10" ref={packagesRef}>
         <Container>
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 border-b border-[#d4af37]/20 pb-6 md:pb-10">
             <div className="mb-8 md:mb-0">
@@ -366,7 +380,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                 ))}
               </AnimatePresence>
             ) : (
-              <div className="col-span-full py-32 text-center text-[#8b7355] font-serif italic text-2xl">
+              <div className="col-span-full py-16 text-center text-[#8b7355] font-serif italic text-2xl">
                 The collection for this selection is currently being curated.
               </div>
             )}
@@ -374,7 +388,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-20 flex justify-center">
+            <div className="mt-12 flex justify-center">
               <Pagination>
                 <PaginationContent className="gap-3">
                   <PaginationItem>
@@ -431,7 +445,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             </div>
           )}
 
-          <div className="mt-24 text-center">
+          <div className="mt-12 text-center">
             <button className="px-16 py-5 border-2 border-[#d4af37]/30 text-xs uppercase tracking-[0.4em] text-[#8b7355] font-black hover:bg-[#d4af37] hover:text-white hover:border-[#d4af37] transition-all duration-500 group rounded-lg">
               <span>View All Elite Properties</span>
             </button>
@@ -440,7 +454,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
       </section>
 
       {/* Services Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-[#f5f3f0] to-[#faf9f7] relative overflow-hidden">
+      <section className="section-padding bg-gradient-to-br from-[#f5f3f0] to-[#faf9f7] relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{
             backgroundImage: `repeating-linear-gradient(45deg, #d4af37 0, #d4af37 1px, transparent 0, transparent 50%)`,

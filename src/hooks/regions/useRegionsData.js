@@ -8,7 +8,14 @@ import {
 } from "@/config";
 
 export function useRegionsData(initialRegions = []) {
-  const { regions, isLoading, error, refetch } = useRegions(initialRegions);
+  const { regions: rawRegions, isLoading, error, refetch } = useRegions(initialRegions);
+
+  // Ensure Bali is always treated as international
+  const regions = useMemo(() => {
+    return rawRegions?.map(item => 
+      item.slug === 'bali' ? { ...item, isDomestic: false } : item
+    ) || [];
+  }, [rawRegions]);
 
   // Filter domestic regions
   const domesticRegions = useMemo(() => {

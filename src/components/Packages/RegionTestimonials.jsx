@@ -1,58 +1,67 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin, ArrowRight, X } from "lucide-react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin, ArrowRight, X, Volume2, VolumeX, Maximize2 } from "lucide-react";
 import Container from "../ui/Container";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function RegionTestimonials() {
-  const [reviews, setReviews] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+const EMPTY_ARRAY = [];
+
+export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regionName = "" }) {
+  const [reviews, setReviews] = useState(initialReviews);
+  const [isLoading, setIsLoading] = useState(initialReviews.length === 0);
+  const hasFetched = useRef(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [selectedReviewImages, setSelectedReviewImages] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const videoRef = useRef(null);
+  const [showVideoPopup, setShowVideoPopup] = useState(false);
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { amount: 0.5, once: false });
 
   // Curated video reviews for the Vlogger Spotlight - Using authentic vlogger-style clips
   const videoReviews = [
     {
-      author_name: "@TravelWithSarah",
-      location: "Maiden Tower, Baku",
-      video: "https://assets.mixkit.co/videos/preview/mixkit-woman-filming-herself-while-walking-in-the-city-43285-large.mp4",
-      avatar: "https://i.pravatar.cc/150?u=sarah",
-      quote: "Baku is a hidden gem! The history here at Maiden Tower is just incredible. Definitely add this to your bucket list! 🇦🇿✨",
-      likes: "4.8k",
-      type: "Vlogger Review",
-      rating: 5
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.02.47.mp4"
     },
     {
-      author_name: "@MarcusExplores",
-      location: "Sheki Khan's Palace",
-      video: "https://assets.mixkit.co/videos/preview/mixkit-travel-to-the-mountain-range-4074-large.mp4",
-      avatar: "https://i.pravatar.cc/150?u=marcus",
-      quote: "Checking out the Palace in Sheki. The stained glass (Shebeke) here is mind-blowing. No nails used at all! 🏰🙌",
-      likes: "2.1k",
-      type: "Tourist Spot Review",
-      rating: 5
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.02.56.mp4"
     },
     {
-      author_name: "@ElenaTravels",
-      location: "Gabala Cable Car",
-      video: "https://assets.mixkit.co/videos/preview/mixkit-girl-looking-at-landscape-from-a-balcony-4029-large.mp4",
-      avatar: "https://i.pravatar.cc/150?u=elena",
-      quote: "Look at this view from the Tufandag peaks! Gabala is definitely the 'Switzerland of Azerbaijan'. So peaceful. 🏔️🚠",
-      likes: "3.5k",
-      type: "Spot Highlights",
-      rating: 5
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.06.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.28.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.43.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.58.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.04.15.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.04.25.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.05.32.mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.11.18_(1).mp4"
+    },
+    {
+      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.11.18.mp4"
     }
   ];
 
   const fallbackReviews = [
     {
       author_name: "Sarah Mitchell",
-      text: "Our trip to Azerbaijan was absolutely flawless. The itinerary was perfectly balanced between culture and adventure.",
+      text: `Our trip ${regionName ? `to ${regionName} ` : ""}was absolutely flawless. The itinerary was perfectly balanced between culture and adventure.`,
       relative_time_description: "2m ago",
       rating: 5,
       images: [
@@ -68,7 +77,7 @@ export default function RegionTestimonials() {
     },
     {
       author_name: "Elena Rodriguez",
-      text: "The 'Land of Fire' took our breath away. Walking through the Old City of Baku felt like stepping back in time!",
+      text: "Bayard Vacations truly understands luxury travel. Every detail was handled with precision and care.",
       relative_time_description: "12m ago",
       rating: 5,
       images: [
@@ -115,6 +124,8 @@ export default function RegionTestimonials() {
     }
   ];
 
+  const videoRef = useRef(null);
+  
   const togglePlay = () => {
     if (videoRef.current) {
       if (videoRef.current.paused) {
@@ -129,16 +140,48 @@ export default function RegionTestimonials() {
     }
   };
 
+  const toggleMute = (e) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  // Auto-advance logic
   useEffect(() => {
+    // Only auto-advance if not manually playing (user interaction) OR if in view 
+    // Actually, usually rotation happens unless user is interacting.
+    // Let's say: auto-advance every 8s if in view.
+    if (!isInView) return;
+
     const timer = setInterval(() => {
-      // Auto-advance only if playing or if we want to advance anyway
-      // For a better UX, we'll advance every 12s even if muted/starting
       nextVideo();
-    }, 12000);
+    }, 8000); // 8 seconds per video
+
     return () => clearInterval(timer);
-  }, [activeVideoIndex]); // Advance whenever index exists, regardless of isPlaying to keep flow
+  }, [activeVideoIndex, isInView]);
+
+  // Handle Play/Pause based on viewport visibility
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isInView) {
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => setIsPlaying(false));
+          setIsPlaying(true);
+        }
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [isInView, activeVideoIndex]); // Trigger when view changes or video changes
 
   useEffect(() => {
+    if (initialReviews.length > 0 || hasFetched.current) return;
+
+    hasFetched.current = true;
     const fetchReviews = async () => {
       try {
         const response = await fetch("/api/reviews");
@@ -154,7 +197,7 @@ export default function RegionTestimonials() {
       }
     };
     fetchReviews();
-  }, []);
+  }, [initialReviews]);
 
   const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
   const scrollingReviews = [...displayReviews, ...displayReviews, ...displayReviews];
@@ -168,7 +211,10 @@ export default function RegionTestimonials() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-8 pb-8 md:pt-16 md:pb-24 lg:min-h-[750px] overflow-x-hidden">
+    <section 
+      ref={containerRef}
+      className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-8 pb-8 md:pt-16 md:pb-24 lg:min-h-[750px] overflow-x-hidden"
+    >
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
         <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-brand-light-cyan/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -218,21 +264,37 @@ export default function RegionTestimonials() {
                   <video
                     ref={videoRef}
                     className="w-full h-full object-cover"
-                    autoPlay
-                    muted
+                    muted={isMuted}
                     loop
                     playsInline
                     onPlay={() => setIsPlaying(true)}
                     onPause={() => setIsPlaying(false)}
-                    onLoadedData={(e) => {
-                      const playPromise = e.target.play();
-                      if (playPromise !== undefined) {
-                        playPromise.catch(() => setIsPlaying(false));
-                      }
-                    }}
                   >
                     <source src={videoReviews[activeVideoIndex].video} type="video/mp4" />
                   </video>
+                  
+                  {/* Video Controls Overlay */}
+                  <div className="absolute bottom-20 right-4 z-50 flex flex-col gap-2 pointer-events-auto">
+                    {/* Full Screen Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowVideoPopup(true);
+                      }}
+                      className="p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-black/60 transition-colors"
+                      title="Full Screen"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+
+                    {/* Mute/Unmute Button */}
+                    <button
+                      onClick={toggleMute}
+                      className="p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-black/60 transition-colors"
+                    >
+                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                    </button>
+                  </div>
                   
                   {/* Play/Pause Indicator Overlay */}
                   {!isPlaying && (
@@ -249,63 +311,7 @@ export default function RegionTestimonials() {
                     </div>
                   )}
 
-                  {/* Social Vlogger Overlay UI - Compacted for 30% width */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-transparent to-black/30 p-4 md:p-6 flex flex-col justify-between z-30 pointer-events-none">
-                    <div className="flex justify-between items-start pt-6">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/80 p-0.5 overflow-hidden">
-                          <Image
-                            src={videoReviews[activeVideoIndex].avatar}
-                            alt={videoReviews[activeVideoIndex].author_name}
-                            width={40}
-                            height={40}
-                            className="w-full h-full rounded-full object-cover"
-                            unoptimized
-                          />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-1">
-                            <h4 className="text-white font-bold text-xs tracking-tight">{videoReviews[activeVideoIndex].author_name}</h4>
-                            <button className="bg-blue-600 hover:bg-blue-700 text-[8px] font-black uppercase text-white px-1.5 py-0.5 rounded transition-colors pointer-events-auto">Follow</button>
-                          </div>
-                          <div className="flex items-center gap-1 text-white/60 text-[8px] uppercase tracking-wider font-bold">
-                             <MapPin className="w-2 h-2 text-blue-500" />
-                             {videoReviews[activeVideoIndex].location}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="px-2 py-0.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-md">
-                           <span className="text-blue-400 text-[8px] font-black uppercase tracking-widest leading-none">{videoReviews[activeVideoIndex].type}</span>
-                        </div>
-                        <div className="flex gap-0.5 bg-black/40 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={`w-2.5 h-2.5 ${i < videoReviews[activeVideoIndex].rating ? "text-yellow-400 fill-yellow-400" : "text-white/20"}`} />
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <h3 className="text-sm md:text-lg font-bold text-white leading-[1.3] drop-shadow-lg">
-                        {videoReviews[activeVideoIndex].quote}
-                      </h3>
-
-                      <div className="flex items-center justify-between pt-2 border-t border-white/10">
-                         <div className="flex items-center gap-3 text-white/40 text-[8px] font-bold tracking-[0.2em] uppercase">
-                            <span>#Azerbaijan</span>
-                         </div>
-                         <div className="flex items-center gap-3">
-                           <div className="flex flex-col items-center gap-0.5 pointer-events-auto cursor-pointer">
-                              <Heart className="w-4 h-4 text-white/80 hover:text-red-500 transition-colors" />
-                              <span className="text-[8px] text-white/60 font-black">{videoReviews[activeVideoIndex].likes}</span>
-                           </div>
-                           <Share2 className="w-4 h-4 text-white/80 pointer-events-auto cursor-pointer hover:text-blue-500 transition-colors" />
-                         </div>
-                      </div>
-                    </div>
-                  </div>
                 </motion.div>
               </AnimatePresence>
 
@@ -322,20 +328,32 @@ export default function RegionTestimonials() {
 
 
             <div className="flex flex-col gap-6 py-4">
-              {displayReviews.map((review, index) => (
+              {displayReviews.map((review, index) => {
+                const authorName = review.author || review.author_name || "Guest";
+                return (
                 <div 
                   key={index}
                   className="group flex gap-3 md:gap-4 items-start bg-white p-4 md:p-5 rounded-[2rem] transition-all duration-300 mx-0 md:mx-4 max-w-full md:max-w-[90%] self-start even:self-end even:flex-row-reverse even:text-right border border-slate-100"
                 >
                   <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 shadow-lg">
-                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
-                       {review.author_name.charAt(0)}
-                    </div>
+                    {review.profile_photo_url ? (
+                      <Image
+                        src={review.profile_photo_url}
+                        alt={authorName}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
+                        {authorName.charAt(0)}
+                      </div>
+                    )}
                   </div>
                   
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-2 group-even:flex-row-reverse">
-                      <h4 className="text-slate-900 text-[11px] font-black tracking-wider uppercase">{review.author_name}</h4>
+                      <h4 className="text-slate-900 text-[11px] font-black tracking-wider uppercase">{authorName}</h4>
                       <span className="text-[9px] font-bold text-slate-400 uppercase">{review.relative_time_description}</span>
                     </div>
                     
@@ -374,7 +392,8 @@ export default function RegionTestimonials() {
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             </div>
@@ -385,7 +404,7 @@ export default function RegionTestimonials() {
               <div className="hidden md:flex bg-blue-600/90 backdrop-blur-md rounded-full px-8 py-4 items-center justify-between gap-4 shadow-2xl shadow-blue-900/40 border border-white/10 max-w-4xl mx-auto">
                 <div className="text-center md:text-left">
                   <span className="text-white text-[10px] font-bold uppercase tracking-[0.35em] block mb-0.5">Authentic Experiences</span>
-                  <p className="text-white/80 text-sm font-medium leading-snug">Join 5,000+ happy travelers who explored Azerbaijan with us.</p>
+                  <p className="text-white/80 text-sm font-medium leading-snug">Join 5,000+ happy travelers who explored {regionName || "the world"} with us.</p>
                 </div>
                 <Link 
                   href="/reviews"
@@ -480,6 +499,44 @@ export default function RegionTestimonials() {
                   unoptimized
                 />
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Full Screen Video Modal */}
+      <AnimatePresence>
+        {showVideoPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-black p-0 md:p-10"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full h-full max-w-4xl mx-auto flex items-center justify-center"
+            >
+              <button
+                className="absolute top-4 right-4 z-[120] p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-colors"
+                onClick={() => setShowVideoPopup(false)}
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <video
+                key={`popup-${activeVideoIndex}`}
+                className="w-full h-full object-contain md:rounded-2xl shadow-2xl"
+                autoPlay
+                controls
+                playsInline
+                loop
+                muted={false} // Popups are usually meant for listening
+              >
+                <source src={videoReviews[activeVideoIndex].video} type="video/mp4" />
+              </video>
             </motion.div>
           </motion.div>
         )}

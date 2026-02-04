@@ -179,7 +179,10 @@ const HomePage = async () => {
       </section> */}
 
       <section className="relative overflow-hidden">
-        <RegionTestimonials regionName="Our Travelers" />
+        <RegionTestimonials 
+          regionName="Our Travelers" 
+          initialReviews={reviews}
+        />
       </section>
 
 

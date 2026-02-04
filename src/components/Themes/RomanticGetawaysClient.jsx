@@ -24,6 +24,8 @@ import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
 import ThemeLoader from "@/components/ui/ThemeLoader";
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 // Floating Hearts Background Component
 const FloatingHearts = () => {
@@ -83,10 +85,11 @@ const FloatingHearts = () => {
   );
 };
 
-export default function RomanticGetawaysClient() {
+export default function RomanticGetawaysClient({ initialPackages = [] }) {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -103,7 +106,7 @@ export default function RomanticGetawaysClient() {
     packages: allThemePackages, 
     isLoading, 
     error 
-  } = usePackagesByTheme("romantic-getaways");
+  } = usePackagesByTheme("romantic-getaways", initialPackages);
 
   const romanticPackages = useMemo(() => {
     if (!allThemePackages) return { international: [], domestic: [] };
@@ -132,6 +135,11 @@ export default function RomanticGetawaysClient() {
 
   return (
     <div className="min-h-screen bg-[#fffafa] text-[#2d2d2d] font-sans selection:bg-[#ff4d6d] selection:text-white overflow-x-hidden">
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["romantic-getaways"]} 
+      />
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="romantic" fullScreen className="bg-rose-50" />
@@ -198,12 +206,20 @@ export default function RomanticGetawaysClient() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <Button size="lg" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl bg-white text-[#FF3366] hover:bg-rose-50 shadow-lg border-none font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all">
-                  Book Your Escape
-                  <ChevronRight className="ml-1 w-4 h-4 md:w-5 md:h-5" />
-                </Button>
-                <Button size="lg" variant="outline" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl border-2 border-white/60 text-white hover:bg-white/10 backdrop-blur-md font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all">
-                  Customize Love
+                <Link href="#packages">
+                  <Button size="lg" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl bg-white text-[#FF3366] hover:bg-rose-50 shadow-lg border-none font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all w-full sm:w-auto">
+                    Book Your Escape
+                    <ChevronRight className="ml-1 w-4 h-4 md:w-5 md:h-5" />
+                  </Button>
+                </Link>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl border-2 border-white/60 text-white hover:bg-white/10 backdrop-blur-md font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all flex items-center gap-2"
+                >
+                  <Play className="w-5 h-5 fill-white" />
+                  Watch Reel
                 </Button>
               </div>
             </motion.div>
@@ -211,14 +227,15 @@ export default function RomanticGetawaysClient() {
         </Container>
         
         {/* Floating "Couples Card" */}
-        <Container className="absolute bottom-12 right-0 hidden lg:block z-30">
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="ml-auto w-[380px] group"
-          >
-            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.3)] hover:bg-white/15 transition-all duration-500">
+        <div className="absolute bottom-12 right-0 hidden lg:block z-30 pointer-events-none w-full">
+          <Container className="flex justify-end">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="w-[380px] group pointer-events-auto"
+            >
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.3)] hover:bg-white/15 transition-all duration-500">
               <div className="flex items-start gap-6">
                 <div className="w-16 h-16 rounded-2xl bg-rose-500/20 flex items-center justify-center border border-rose-400/30 group-hover:scale-110 transition-transform duration-500">
                   <Star className="w-8 h-8 text-rose-300 fill-rose-300" />
@@ -238,6 +255,7 @@ export default function RomanticGetawaysClient() {
             </div>
           </motion.div>
         </Container>
+      </div>
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3 opacity-60">
@@ -248,7 +266,7 @@ export default function RomanticGetawaysClient() {
 
 
       {/* Intro Section */}
-      <section className="py-6 md:py-8 relative overflow-hidden bg-white">
+      <section className="section-padding relative overflow-hidden bg-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-rose-50 rounded-full blur-[120px] -mr-48 -mt-48" />
         <Container className="relative">
           <div className="max-w-4xl mx-auto text-center space-y-4">
@@ -275,7 +293,7 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Packages Section */}
-      <section className="pb-8">
+      <section id="packages" className="section-padding pt-0">
         <Container>
           {/* Tab Switcher */}
           <div className="flex justify-center mb-8 px-4">
@@ -384,7 +402,7 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Why Choose Section - Redesigned */}
-      <section className="relative py-6 md:py-10 overflow-hidden">
+      <section className="relative section-padding overflow-hidden">
         <div className="absolute inset-0 bg-slate-950" />
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] opacity-30 pointer-events-none" />
         
@@ -461,7 +479,7 @@ export default function RomanticGetawaysClient() {
       </section>
 
       {/* Final Premium CTA */}
-      <section className="py-6 bg-white relative overflow-hidden">
+      <section className="section-padding bg-white relative overflow-hidden">
         <Container className="text-center">
             <div className="max-w-3xl mx-auto space-y-10">
               <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter leading-tight">
@@ -469,9 +487,11 @@ export default function RomanticGetawaysClient() {
                 <span className="text-rose-500">Chapter Together?</span>
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-black text-lg uppercase tracking-widest transition-all">
-                  Talk to a Specialist
-                </Button>
+                <Link href="/contact">
+                  <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-black text-lg uppercase tracking-widest transition-all">
+                    Talk to a Specialist
+                  </Button>
+                </Link>
                 <div className="flex -space-x-4">
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="w-12 h-12 rounded-full border-4 border-white overflow-hidden bg-slate-100">

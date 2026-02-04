@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Church, Waves, Sun, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Heart, Cloud, Globe, Sunrise, Moon, BookOpen } from "lucide-react";
+import { Church, Waves, Sun, MapPin, Calendar, Users, Star, Sparkles, ChevronRight, Heart, Cloud, Globe, Sunrise, Moon, BookOpen, Play } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -24,6 +24,8 @@ import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
 import ThemeLoader from "@/components/ui/ThemeLoader";
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 // Floating Spiritual Elements
 const FloatingSpiritualElements = () => {
@@ -84,6 +86,7 @@ export default function ReligiousRetreatClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -132,6 +135,11 @@ export default function ReligiousRetreatClient() {
 
   return (
     <div className="min-h-screen bg-[#FFFDF9]">
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["religious-retreat"]} 
+      />
       <AnimatePresence>
         {isLoading && (
           <ThemeLoader theme="religious" fullScreen className="bg-divine-50" />
@@ -190,18 +198,22 @@ export default function ReligiousRetreatClient() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-                <Button 
-                  size="lg" 
-                  className="px-8 py-7 rounded-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-medium tracking-wide shadow-lg shadow-burgundy-600/20 flex items-center justify-center gap-2 group border-none"
-                >
-                  <span>Explore Retreats</span>
-                  <Sparkles className="w-5 h-5 transform group-hover:rotate-12 transition-transform" />
-                </Button>
+                <Link href="#destinations">
+                  <Button 
+                    size="lg" 
+                    className="px-8 py-7 rounded-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-medium tracking-wide shadow-lg shadow-burgundy-600/20 flex items-center justify-center gap-2 group border-none w-full sm:w-auto"
+                  >
+                    <span>Explore Retreats</span>
+                    <Sparkles className="w-5 h-5 transform group-hover:rotate-12 transition-transform" />
+                  </Button>
+                </Link>
                 <Button 
                   variant="outline"
                   size="lg" 
-                  className="px-8 py-7 rounded-full border border-gold-400 text-burgundy-700 font-medium tracking-wide hover:bg-gold-400/10 transition-all"
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="px-8 py-7 rounded-full border border-gold-400 text-burgundy-700 font-medium tracking-wide hover:bg-gold-400/10 transition-all flex items-center gap-2"
                 >
+                  <Play className="w-5 h-5" />
                   View Sacred Sites
                 </Button>
               </div>
@@ -287,7 +299,7 @@ export default function ReligiousRetreatClient() {
 
 
       {/* Path Selection */}
-      <section className="py-6 md:py-8 lg:py-10 bg-white border-y border-gold-400/10">
+      <section className="section-padding bg-white border-y border-gold-400/10">
         <Container>
           <div className="flex justify-center gap-4 flex-wrap">
             <button 
@@ -323,7 +335,7 @@ export default function ReligiousRetreatClient() {
       </section>
 
       {/* Sacred Features */}
-      <section className="py-12 md:py-16 bg-burgundy-50 relative overflow-hidden">
+      <section className="section-padding bg-burgundy-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')]" />
         
         <Container className="relative z-10">
@@ -364,7 +376,7 @@ export default function ReligiousRetreatClient() {
       </section>
 
       {/* Heritage Units (Packages Grid) */}
-      <section id="destinations" className="py-5 md:py-6 bg-[#FBF9F4]">
+      <section id="destinations" className="section-padding bg-[#FBF9F4]">
         <Container>
           <div className="text-center mb-8 md:mb-16">
             <h2 className="text-4xl md:text-5xl font-serif text-burgundy-700 mb-4">Holy Destinations</h2>
@@ -477,7 +489,7 @@ export default function ReligiousRetreatClient() {
       </section>
 
       {/* Divine Call to Action */}
-      <section className="py-12 md:py-16 bg-white relative overflow-hidden">
+      <section className="section-padding bg-white relative overflow-hidden">
         {/* Subtle Mandala Background */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center z-0">
           <motion.div 
@@ -507,12 +519,14 @@ export default function ReligiousRetreatClient() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-4">
-              <Button
-                size="lg"
-                className="h-20 px-16 rounded-full bg-burgundy-900 hover:bg-stone-900 text-gold-400 font-serif text-xl tracking-widest shadow-2xl transition-all duration-700 hover:scale-105 active:scale-95 border-none"
-              >
-                Book Your Pilgrimage
-              </Button>
+              <Link href="#destinations">
+                <Button
+                  size="lg"
+                  className="h-20 px-16 rounded-full bg-burgundy-900 hover:bg-stone-900 text-gold-400 font-serif text-xl tracking-widest shadow-2xl transition-all duration-700 hover:scale-105 active:scale-95 border-none"
+                >
+                  Book Your Pilgrimage
+                </Button>
+              </Link>
               <Link href="/contact" className="group flex items-center gap-4 text-burgundy-900 font-serif text-sm tracking-widest uppercase border-b border-gold-400 pb-2 hover:text-gold-600 transition-all">
                 Sacred Consultation
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />

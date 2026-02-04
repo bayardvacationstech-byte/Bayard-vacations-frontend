@@ -5,69 +5,34 @@ import Container from "../ui/Container";
 import { InfiniteMovingCardsDemo } from "../InfiniteMovingCardsDemo";
 import { Sparkles, MapPin } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 
 export default function Testimonials({ reviews }) {
-  const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
-  const isHovering = useRef(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
   // Stunning background image
   const bgImage = "/img/package-img/swiss-alps.jpg";
 
   const handleMouseMove = (event) => {
     if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    setSpotlightPos({
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-    });
+    const { left, top } = containerRef.current.getBoundingClientRect();
+    
+    mouseX.set(event.clientX - left);
+    mouseY.set(event.clientY - top);
   };
 
-  const handleMouseEnter = () => {
-    isHovering.current = true;
-  };
-
-  const handleMouseLeave = () => {
-    isHovering.current = false;
-  };
-
-  useEffect(() => {
-    let animationFrameId;
-    const startTime = Date.now();
-
-    const animate = () => {
-      if (!isHovering.current && containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect();
-        const time = (Date.now() - startTime) / 1000;
-
-        // Smooth floating movement for idle state
-        const rx = width * 0.25;
-        const ry = height * 0.2;
-        const cx = width / 2;
-        const cy = height / 2;
-
-        const x = cx + rx * Math.sin(time * 0.5);
-        const y = cy + ry * Math.cos(time * 0.7);
-
-        setSpotlightPos({ x, y });
-      }
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
+  // Create dynamic mask image template based on motion values
+  const maskImage = useMotionTemplate`radial-gradient(450px circle at ${mouseX}px ${mouseY}px, black, transparent 100%)`;
+  
+  // Create dynamic glow background template
+  const glowCheck = useMotionTemplate`radial-gradient(600px circle at ${mouseX}px ${mouseY}px, rgba(34, 211, 238, 0.08), transparent 80%)`;
 
   return (
     <section 
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className="relative overflow-hidden bg-[#020617] py-24 lg:py-40"
     >
       {/* 1. Base Background: Deeply Blurred & Darkened */}
@@ -82,11 +47,11 @@ export default function Testimonials({ reviews }) {
       </div>
 
       {/* 2. Reveal Background: Sharp & Vibrant (Masked by Spotlight) */}
-      <div 
+      <motion.div 
         className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-1000"
         style={{
-          maskImage: `radial-gradient(450px circle at ${spotlightPos.x}px ${spotlightPos.y}px, black, transparent 100%)`,
-          WebkitMaskImage: `radial-gradient(450px circle at ${spotlightPos.x}px ${spotlightPos.y}px, black, transparent 100%)`,
+          maskImage: maskImage,
+          WebkitMaskImage: maskImage,
         }}
       >
         <Image
@@ -96,13 +61,13 @@ export default function Testimonials({ reviews }) {
           className="object-cover scale-105"
         />
         <div className="absolute inset-0 bg-brand-blue/10 backdrop-brightness-110" />
-      </div>
+      </motion.div>
 
       {/* 3. Ambient Light Glow following mouse */}
-      <div 
+      <motion.div 
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
-          background: `radial-gradient(600px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(34, 211, 238, 0.08), transparent 80%)`
+          background: glowCheck
         }}
       />
 

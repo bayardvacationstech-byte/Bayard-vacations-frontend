@@ -10,7 +10,8 @@ import {
   MapPin,
   Navigation as NavigationIcon,
   Camera,
-  Package
+  Package,
+  Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -74,11 +75,17 @@ const ActivityCard = ({
     >
       {/* Background Image - Full Card */}
       <div className="absolute inset-0">
-        <img
-          src={data.image || "https://images.unsplash.com/photo-1523438097201-512ae7d59c44?w=800&q=80"}
-          alt={data.title || data.name}
-          className="w-full h-full object-cover transition-transform duration-700 scale-105"
-        />
+        {data.image ? (
+          <img
+            src={data.image}
+            alt={data.title || data.name}
+            className="w-full h-full object-cover transition-transform duration-700 scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center">
+            <Sparkles className="w-16 h-16 text-slate-300" />
+          </div>
+        )}
       </div>
 
       {/* Simple Gradient Overlay */}

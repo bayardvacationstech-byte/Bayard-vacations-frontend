@@ -123,17 +123,9 @@ export default function PackagesRegionClient({ initialRegionData }) {
   }, [refetch, fetchPackages]);
 
   useEffect(() => {
-    if (regionName?.toLowerCase() === "azerbaijan") {
-      if (allPackages.length > 0) {
-        console.log("Azerbaijan Packages Data:", allPackages);
-      }
-      if (regionData) {
-        console.log("Azerbaijan Region Data:", regionData);
-      }
-    }
     // Fetch blogs for the region
     fetchBlogs({ region: regionName, limitCount: 6 });
-  }, [regionName, allPackages, regionData, fetchBlogs]);
+  }, [regionName, fetchBlogs]);
 
   useEffect(() => {
     const handleScroll = () => {

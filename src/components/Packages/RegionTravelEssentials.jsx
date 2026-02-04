@@ -37,7 +37,7 @@ import Container from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 import { useRegionFactSheet } from "@/hooks/regions/useRegionFactSheet";
 
-const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }) => {
+const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
   const [activeTab, setActiveTab] = useState("history");
 
   // Fetch dynamic factsheet data
@@ -145,7 +145,7 @@ const RegionTravelEssentials = ({ regionName = "Azerbaijan", regionData = null }
                       {dynamicData?.history?.title || "A Journey Through Time"}
                     </h3>
                     <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed">
-                      {dynamicData?.history?.description || (regionName?.toLowerCase().includes('azerbaijan') ? "Azerbaijan, known as the \"Land of Fire\" for its ancient fire-worshipping sites and natural gas flames, stands proudly at the crossroads of Europe and Asia. This land of contrasts has witnessed empires rise and fall, from ancient Persian rule to Soviet dominance, and now thrives as a modern, independent nation." : `Discover the rich history and unique culture of ${regionName}.`)}
+                      {dynamicData?.history?.description || (regionName ? `Discover the rich history and unique culture of ${regionName}.` : "Discover the rich history and unique culture of this region.") }
                     </p>
                   </div>
 

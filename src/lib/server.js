@@ -299,6 +299,20 @@ export const getElitePackages = unstableCache(
   { revalidate: 60 }
 );
 
+export const getRomanticPackages = unstableCache(
+  async () => {
+    try {
+      const packages = await getPackagesByTheme("romantic-getaways", [], []);
+      return serializeData(packages);
+    } catch (error) {
+      console.error("Error getting romantic packages:", error);
+      return [];
+    }
+  },
+  ["romantic-packages"],
+  { revalidate: 60 }
+);
+
 export const getWhyChooseRegionData = unstableCache(
   async (regionId) => {
     try {

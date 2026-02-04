@@ -85,7 +85,7 @@ export const mapSavedItineraryToShareable = (savedData) => {
   const pricing = {
     basePrice,
     totalPrice,
-    currency: pricingPageData.domestic ? 'INR' : 'USD',
+    currency: 'INR',
     hotelCategory: baseCategory.replace('star', ' Star').toUpperCase(),
     adultsRate,
     childrenRate,
@@ -131,7 +131,7 @@ export const mapSavedItineraryToShareable = (savedData) => {
     hotelDetails,
     inclusions: (summaryPageData.includes || []).map(item => typeof item === 'object' ? (item.title || item.description || '') : item),
     exclusions: (summaryPageData.excludes || []).map(item => typeof item === 'object' ? (item.title || item.description || '') : item),
-    importantNotes: (summaryPageData.notes || []).map(item => typeof item === 'object' ? (item.title || item.description || '') : item),
+    importantNotes: (summaryPageData.notes || []).map(item => typeof item === 'object' ? (item.content || item.title || item.description || '') : item),
     contactInfo,
     faqs: [], // Not found in this structure
     testimonials: [] // Not found in this structure

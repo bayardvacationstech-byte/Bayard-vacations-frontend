@@ -124,17 +124,32 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
 
   // Process highlights: replace first two with destinations if available
   const baseHighlights = useMemo(() => {
-    const rawHighlights = item.highlights || ["Premium Accommodation", "Expert Guided Tours", "Curated Experiences"];
-    const destinations = item.citiesList || item.location || "";
+    // Check for length > 0 because minimizer returns [] which is truthy
+    const rawHighlights = (item.highlights && item.highlights.length > 0) 
+      ? item.highlights 
+      : ["Premium Accommodation", "Curated Experiences", "Seamless Travel"];
+    
+    // Formatting helper for region fallback
+    const formatRegion = (slug) => {
+      if (!slug) return "";
+      return slug
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    };
+
+    const destinations = item.citiesList || item.location || formatRegion(item.region) || "";
     
     if (destinations) {
       return [
         `Covering: ${destinations}`,
-        ...rawHighlights.slice(2)
-      ];
+        // If we pulled from default highlights (length 3), we only want the last 2 to make total 3
+        // If we have real highlights, we just prepend (or take appropriate slice)
+        ...(item.highlights && item.highlights.length > 0 ? item.highlights.slice(0, 2) : rawHighlights.slice(1))
+      ].slice(0, 3);
     }
     return rawHighlights;
-  }, [item.highlights, item.citiesList, item.location]);
+  }, [item.highlights, item.citiesList, item.location, item.region]);
 
 
   return (
@@ -275,7 +290,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                   "text-xl sm:text-2xl font-black text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
                   theme.textHover
                 )}>
-                  {item.packageTitle}
+                  {item.packageTitle?.replace(/^["']|["']$/g, '')}
                 </h3>
               </div>
               

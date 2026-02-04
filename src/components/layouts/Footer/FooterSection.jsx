@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const FooterSection = ({ title, links, basePath = "packages" }) => {
+const FooterSection = ({ title, links, basePath = "packages", hoverColor = "hover:text-brand-green" }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldShowButton, setShouldShowButton] = useState(false);
   const contentRef = useRef(null);
@@ -47,7 +47,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
               <div key={link.id || link.slug || i} className="flex items-center gap-2">
                 <Link
                   href={`/${basePath}/${link.slug.split("?")[0]}`}
-                  className="hover:text-brand-green hover:translate-x-1 transition-all duration-300 whitespace-nowrap"
+                  className={cn("hover:translate-x-1 transition-all duration-300 whitespace-nowrap", hoverColor)}
                 >
                   {link.name || link.title}
                 </Link>

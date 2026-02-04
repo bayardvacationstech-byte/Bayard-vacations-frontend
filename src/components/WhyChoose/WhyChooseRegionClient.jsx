@@ -78,6 +78,13 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     CloudSun,
   };
 
+  // Helper function to resolve image URL from various potential properties
+  const getImageUrl = (img) => {
+    if (!img) return null;
+    if (typeof img === 'string') return img;
+    return img.url || img.image || img.imageUrl;
+  };
+
   // Helper function to get icon component from string name
   const getIcon = (iconName) => {
     return iconMap[iconName] || Sparkles;
@@ -89,40 +96,52 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     
     return {
       ...data,
-      highlights: data.highlights?.map(highlight => ({
-        ...highlight,
-        icon: getIcon(highlight.icon)
-      })),
-      activities: data.activities?.map(activity => ({
+      highlights: data.highlights?.map(highlight => {
+        if (!highlight) return null;
+        return {
+          ...highlight,
+          icon: getIcon(highlight.icon),
+          gallery: highlight.gallery?.map(img => {
+            const url = getImageUrl(img);
+            return { ...(typeof img === 'object' ? img : {}), url };
+          })
+        };
+      }).filter(Boolean),
+      activities: data.activities?.map(activity => activity ? ({
         ...activity,
-        icon: getIcon(activity.icon)
-      })),
-      travelStyles: data.travelStyles?.map(style => ({
+        icon: getIcon(activity.icon),
+        image: getImageUrl(activity.image || activity.imageUrl || activity.url)
+      }) : null).filter(Boolean),
+      travelStyles: data.travelStyles?.map(style => style ? ({
         ...style,
         icon: getIcon(style.icon)
-      })),
-      secrets: data.secrets?.map(secret => ({
+      }) : null).filter(Boolean),
+      secrets: data.secrets?.map(secret => secret ? ({
         ...secret,
         icon: getIcon(secret.icon)
-      })),
+      }) : null).filter(Boolean),
       whyVisitSection: data.whyVisitSection ? {
         ...data.whyVisitSection,
-        reasons: data.whyVisitSection.reasons?.map(reason => ({
+        reasons: data.whyVisitSection.reasons?.map(reason => reason ? ({
           ...reason,
           icon: getIcon(reason.icon)
-        }))
+        }) : null).filter(Boolean)
       } : null
     };
   };
 
-  // Use dynamic data from whyChooseData
-  const rawRegionData = whyChooseData?.details;
-  const regionDataProcessed = processRegionData(rawRegionData) || {
-    featuredImage: "/img/default-region.jpg",
-    overview: `${regionName} is a captivating destination that offers an unforgettable blend of culture, natural beauty, and unique experiences.`,
-    whyVisit: `Discover the magic of ${regionName}, where every corner tells a story and every experience creates lasting memories.`,
-    activities: []
-  };
+  // Merge top-level and details data from whyChooseData
+  // Top-level fields (like highlights with CDN URLs) take precedence over nested details
+  const rawRegionData = whyChooseData ? {
+    // Only use details as a fallback if top-level fields are missing
+    ...(whyChooseData.details || {}),
+    ...whyChooseData,
+    // Explicitly prioritize top-level highlights and activities if they exist
+    highlights: whyChooseData.highlights || whyChooseData.details?.highlights || [],
+    activities: whyChooseData.activities || whyChooseData.details?.activities || [],
+  } : null;
+  
+  const regionDataProcessed = processRegionData(rawRegionData);
   
   const highlights = regionDataProcessed?.highlights || [];
   const activities = regionDataProcessed?.activities || [];
@@ -145,8 +164,8 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     }
   }, [isLoading]);
 
-  const mobileHeroImage = whyChooseData?.mobileHeroImage || regionDataProcessed?.mobileHeroImage || regionData?.mobileHeroImage;
-  const desktopHeroImage = whyChooseData?.heroImage || regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage || "/img/default-region.jpg";
+  const mobileHeroImage = getImageUrl(whyChooseData?.mobileHeroImage || regionDataProcessed?.mobileHeroImage || regionData?.mobileHeroImage);
+  const desktopHeroImage = getImageUrl(whyChooseData?.heroImage || regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage);
 
   // Show loading state
   if (isLoading) {
@@ -178,25 +197,40 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         <div className="absolute inset-0 w-full h-full">
           {/* Desktop Hero Image */}
           <div className={cn("absolute inset-0 z-0", mobileHeroImage ? "hidden lg:block" : "block")}>
-            <Image
-              src={desktopHeroImage}
-              alt={regionName || "Region Gallery"}
-              fill
-              className="object-cover object-center"
-              priority
-            />
+            {desktopHeroImage ? (
+              <Image
+                src={desktopHeroImage}
+                alt={regionName}
+                fill
+                priority
+                className="object-cover"
+                unoptimized
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse flex items-center justify-center">
+                <Sparkles className="w-32 h-32 text-slate-300" />
+              </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
           </div>
 
           {/* Mobile Hero Image */}
-          {mobileHeroImage && (
+          {mobileHeroImage ? (
             <div className="absolute inset-0 z-0 lg:hidden">
               <Image
                 src={mobileHeroImage?.url || mobileHeroImage}
-                alt={regionName || "Region Gallery"}
+                alt={regionName}
                 fill
-                className="object-cover object-center"
                 priority
+                className="object-cover"
+                unoptimized
               />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
+            </div>
+          ) : (
+            <div className="lg:hidden absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse flex items-center justify-center z-0">
+              <Sparkles className="w-16 h-16 text-slate-300" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60 opacity-30" />
             </div>
           )}
           
@@ -243,7 +277,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                   "text-lg md:text-xl text-slate-200 leading-relaxed font-light border-l-4 border-amber-400 pl-6 mb-6",
                   !isDescExpanded && "line-clamp-3 lg:line-clamp-none"
                 )}>
-                  {regionDataProcessed?.overview || `Azerbaijan is a captivating destination nestled between Europe and Asia in the Caucasus region. Known as the 'Land of Fire' for its natural burning mountains, Azerbaijan offers a unique blend of ancient Silk Road heritage, modern futuristic architecture, and rich cultural traditions.`}
+                  {regionDataProcessed?.overview}
                 </div>
 
                  {/* Mobile View More */}
@@ -263,8 +297,33 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           </div>
         </div>
 
+        {/* Breadcrumbs & Region Badge - Integrated into Flow at the Bottom */}
+        <div className="absolute bottom-6 left-0 right-0 z-[30] w-full">
+          <Container className="flex flex-row items-center justify-between gap-4">
+            <Breadcrumbs 
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Region", href: `/destinations/${regionSlug}` },
+                { label: "Why Choose", href: `/why-choose/${regionSlug}`, active: true }
+              ]} 
+              className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+              omitContainer
+              colorClasses="text-white/80 drop-shadow-md"
+              activeColorClasses="text-white drop-shadow-md font-bold"
+            />
+            {/* Region Nickname Badge - e.g., "The Land of Fire" */}
+            {whyChooseData?.nickname && (
+              <div className="hidden sm:flex px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg">
+                <span className="text-white text-[10px] font-black uppercase tracking-widest leading-none">
+                  {whyChooseData.nickname}
+                </span>
+              </div>
+            )}
+          </Container>
+        </div>
+
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/50 animate-bounce hidden lg:block">
+        <div className="absolute bottom-12 right-12 text-white/50 animate-bounce hidden lg:block z-30">
             <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
                 <div className="w-1 h-3 bg-white/50 rounded-full animate-scroll"></div>
             </div>
@@ -273,31 +332,24 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
       {/* Main Content */}
       <Container className="py-8 md:py-12">
-        <Breadcrumbs 
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Region", href: `/destinations/${regionSlug}` },
-            { label: "Why Choose", href: `/why-choose/${regionSlug}`, active: true }
-          ]} 
-        />
         {/* Why Visit Section */}
         <section className="mb-6 md:mb-10">
           <div className="mx-auto">
             <div className="text-center mb-4 md:mb-6">
               <span className="inline-block px-4 py-2 bg-brand-blue/10 text-brand-blue rounded-full text-sm font-black uppercase tracking-widest mb-3 md:mb-4">
-                 {regionDataProcessed.whyVisitSection?.subTitle || "Discovery"}
+                 {regionDataProcessed?.whyVisitSection?.subTitle}
               </span>
               <h2 className="text-3xl md:text-5xl font-serif text-slate-900 mb-4 tracking-tight leading-tight">
-                {regionDataProcessed.whyVisitSection?.mainTitle || `Why Visit ${regionName}?`}
+                {regionDataProcessed?.whyVisitSection?.mainTitle}
               </h2>
               <p className="text-lg md:text-xl text-slate-600 max-w-5xl mx-auto leading-relaxed mb-8">
-                {regionDataProcessed.whyVisitSection?.mainDescription || `Discover the magic of ${regionName}, where every corner tells a story and every experience creates lasting memories.`}
+                {regionDataProcessed?.whyVisitSection?.mainDescription}
               </p>
             </div>
 
             {/* Reasons List - Responsive Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-12 md:gap-y-10">
-              {(regionDataProcessed.whyVisitSection?.reasons || []).map((reason, idx) => (
+              {(regionDataProcessed?.whyVisitSection?.reasons || []).map((reason, idx) => (
                 <div key={idx} className="flex flex-row gap-4 md:gap-5 items-start">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-brand-blue to-blue-700 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg border border-white/10 mt-0.5 md:mt-0">
@@ -323,14 +375,13 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               ))}
             </div>
 
-            {/* Summary Quote */}
-            {regionDataProcessed.whyVisitSection?.quote && (
+            {regionDataProcessed?.whyVisitSection?.quote && (
               <div className="mt-6 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 md:p-8 text-center">
                 <blockquote className="text-xl md:text-2xl font-bold text-white leading-relaxed mb-2">
-                  "{regionDataProcessed.whyVisitSection.quote}"
+                  "{regionDataProcessed?.whyVisitSection?.quote}"
                 </blockquote>
-                {regionDataProcessed.whyVisitSection.quoteAuthor && (
-                  <p className="text-slate-300 font-medium">— {regionDataProcessed.whyVisitSection.quoteAuthor}</p>
+                {regionDataProcessed?.whyVisitSection?.quoteAuthor && (
+                  <p className="text-slate-300 font-medium">— {regionDataProcessed?.whyVisitSection?.quoteAuthor}</p>
                 )}
               </div>
             )}
@@ -348,9 +399,9 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         )}
 
         {/* Detailed Highlight Sections */}
-        {regionDataProcessed.highlights && (
+        {regionDataProcessed?.highlights && (
           <section className="mb-10 md:mb-16 space-y-12 md:space-y-16">
-            {regionDataProcessed.highlights.map((highlight, index) => (
+            {(regionDataProcessed?.highlights || []).map((highlight, index) => (
               <div 
                 key={index} 
                 id={highlight.slug || highlight.title.toLowerCase().replace(/ /g, "-")}
@@ -371,18 +422,26 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                       >
                         {/* Main Image */}
                         <div 
-                          className="relative w-full aspect-[4/5] lg:aspect-[21/9] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10 group cursor-pointer"
+                          className="relative w-full aspect-[5/4] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl z-10 group cursor-pointer"
                           onClick={() => {
                             setSelectedGallery({ title: highlight.title, images: highlight.gallery || [] });
                             setGalleryOpen(true);
                           }}
                         >
-                          <Image
-                            src={highlight.gallery?.[1]?.url || highlight.gallery?.[0]?.url || "https://images.unsplash.com/photo-1541810271221-23d612fc27df?w=1200"}
-                            alt={highlight.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-1000"
-                          />
+                          {highlight.gallery?.[0]?.url ? (
+                            <Image
+                              src={highlight.gallery[0].url}
+                              alt={highlight.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              unoptimized
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center">
+                              <Sparkles className="w-20 h-20 text-slate-300" />
+                            </div>
+                          )}
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500 flex items-center justify-center">
                             <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-white/20 backdrop-blur-md px-6 py-3 rounded-full border border-white/30 flex items-center gap-2">
                                <Camera className="w-5 h-5 text-white" />
@@ -432,7 +491,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                             "text-sm md:text-base text-slate-600 leading-relaxed transition-all duration-300",
                             !expandedHighlights[index] && "line-clamp-3"
                          )}>
-                            {highlight.detailedContent || "Explore the profound beauty and cultural depth of this region through its most iconic landmarks and natural wonders."}
+                            {highlight.detailedContent}
                          </p>
                          <button
                             onClick={() => setExpandedHighlights(prev => ({ ...prev, [index]: !prev[index] }))}
@@ -486,7 +545,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tighter">Perfect For...</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {regionDataProcessed.travelStyles?.map((style, i) => (
+              {regionDataProcessed?.travelStyles?.map((style, i) => (
                 <div key={i} className="bg-white border border-slate-100 p-8 rounded-3xl flex flex-col gap-6 hover:shadow-xl hover:border-brand-green/20 transition-all group">
                   <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 shadow-sm group-hover:bg-brand-green group-hover:text-white transition-all transform group-hover:rotate-6">
                     <style.icon className="w-6 h-6" />
@@ -510,7 +569,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
             <div className="bg-slate-900 rounded-[3rem] p-10 text-white space-y-8 shadow-2xl relative overflow-hidden group">
                <div className="absolute top-0 right-0 w-80 h-80 bg-brand-blue/20 rounded-full blur-[100px] group-hover:bg-brand-blue/30 transition-colors duration-1000" />
-               {regionDataProcessed.seasonalGuide?.map((s, i) => (
+               {regionDataProcessed?.seasonalGuide?.map((s, i) => (
                  <motion.div 
                     key={i} 
                     initial={{ opacity: 0, x: 20 }}
@@ -531,7 +590,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         </section>
 
         {/* Regional Secrets */}
-        {regionDataProcessed.secrets && (
+        {regionDataProcessed?.secrets && (
            <section className="mb-12 md:mb-16">
               <div className="max-w-5xl mx-auto">
                 <div className="text-center mb-10">
@@ -543,7 +602,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                  {regionDataProcessed.secrets.map((secret, i) => (
+                  {regionDataProcessed?.secrets.map((secret, i) => (
                     <div key={i} className="text-center">
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-blue to-blue-600 flex items-center justify-center mx-auto mb-6 shadow-lg">
                         <secret.icon className="w-8 h-8 text-white" />
@@ -577,11 +636,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     icon: activity.icon,
                     isPopular: activity.difficulty === "Easy",
                     highlightsTitle: "Visit Highlights:",
-                    highlights: [
-                      "Expert local guides included",
-                      "Skip-the-line access available",
-                      "Photo opportunities guaranteed"
-                    ],
+                    highlights: activity.highlights || [],
                     regionName: regionName,
                     regionSlug: regionSlug
                   }}

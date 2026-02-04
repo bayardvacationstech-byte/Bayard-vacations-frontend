@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Star, Quote, X } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 
-const Card = ({ item }) => {
+const Card = React.memo(({ item }) => {
   const [showFullText, setShowFullText] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -177,7 +177,7 @@ const Card = ({ item }) => {
       </AnimatePresence>
     </>
   );
-};
+});
 
 export const InfiniteMovingCards = ({
   items,
