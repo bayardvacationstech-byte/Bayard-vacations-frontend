@@ -1,7 +1,9 @@
-import WebsiteLoader from "@/components/ui/WebsiteLoader";
+import GlobalTravelLoader from "@/components/ui/GlobalTravelLoader";
 
-const RootLoader = () => {
-  return <WebsiteLoader />;
-};
-
-export default RootLoader;
+export default function Loading() {
+  return (
+    <div className="flex h-screen w-full items-center justify-center bg-white">
+      <GlobalTravelLoader />
+    </div>
+  );
+}

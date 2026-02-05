@@ -8,6 +8,9 @@ export const metadata = {
   },
 };
 
-export default function RomanticGetawaysPage() {
-  return <RomanticGetawaysClient />;
+import { getRomanticPackages } from "@/lib/server";
+
+export default async function RomanticGetawaysPage() {
+  const initialPackages = await getRomanticPackages();
+  return <RomanticGetawaysClient initialPackages={initialPackages} />;
 }

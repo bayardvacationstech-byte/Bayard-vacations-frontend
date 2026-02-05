@@ -37,7 +37,8 @@ import {
   Camera,
   Heart,
   Train,
-  Bus
+  Bus,
+  Sparkles
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -68,180 +69,6 @@ export default function FactsheetClient({ regionSlug }) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-  // Static region data lookup
-  const REGION_DATA = {
-    azerbaijan: {
-      heroTitle: "Azerbaijan",
-      heroSubtitle: "Where East meets West in a blaze of fire, ancient history, and cutting-edge modernity.",
-      heroImage: "https://images.unsplash.com/photo-1541810271221-23d612fc27df?q=80&w=2070",
-      essentials: [
-        { icon: Calendar, label: "Best Time", value: "Apr - Oct", color: "amber" },
-        { icon: Wallet, label: "Currency", value: "AZN (₼)", color: "emerald" },
-        { icon: ThermometerSun, label: "Climate", value: "9/11 Zones", color: "orange" },
-        { icon: Clock, label: "Time Zone", value: "UTC+4", color: "blue" },
-        { icon: Globe, label: "Language", value: "Azeri", color: "indigo" },
-        { icon: FileCheck, label: "Visa", value: "ASAN E-Visa", color: "teal" },
-        { icon: Building2, label: "Capital", value: "Baku", color: "violet" },
-        { icon: Users, label: "Population", value: "10M+", color: "pink" }
-      ],
-      fastFacts: [
-        { label: "Calling Code", value: "+994" },
-        { label: "Power Plug", value: "Type C & F (220V)" },
-        { label: "Tipping", value: "10% is standard" },
-        { label: "Emergency", value: "112" }
-      ],
-      history: {
-        title: "A Journey Through Time",
-        description: "Azerbaijan, known as the 'Land of Fire' for its ancient fire-worshipping sites and natural gas flames, stands proudly at the crossroads of Europe and Asia. From the Sasanid Empire to Soviet rule, it has emerged as a beacon of modern independence.",
-        milestones: [
-          { title: "Stone Age (8th-5th Millennia BC)", content: "Gobustan petroglyphs testify to early human settlement, depicting hunting, farming, and the Yalli dance." },
-          { title: "Caucasian Albania (4th Century BC)", content: "One of the earliest Christian states in the region, leaving behind architectural marvels like the Kish Church." },
-          { title: "Safavid Empire (1501-1736)", content: "The Golden Age of Azerbaijani culture, where the Safavid dynasty unified the region and made Persian culture flourish." },
-          { title: "Oil Boom (19th Century)", content: "Baku became the world's leading oil producer, sparking an architectural renaissance and European influence." },
-          { title: "Independence (1991)", content: "Regained sovereignty on August 30, 1991, blending medieval charm with futuristic architecture." },
-          { title: "Modern Prosperity", content: "The 21st century saw a surge in development, from the Flame Towers to hosting world-class events like Formula 1." }
-        ],
-        spotlight: {
-          title: "The Maiden Tower",
-          content: "A 12th-century monument in Baku's Old City, shrouded in mystery and legends. It's a UNESCO World Heritage site and an iconic symbol of Azerbaijani heritage.",
-          icon: Building2
-        },
-        tags: ["Stone Age Roots", "Silk Road Hub", "Zoroastrian Heritage"],
-        stats: [
-          { label: "Independence", value: "1991", desc: "Modern sovereignty regained" },
-          { label: "Capital", value: "Baku", desc: "The City of Winds" }
-        ]
-      },
-      climate: {
-        title: "Time Zone & Climate",
-        timeZone: "UTC+4 (AZT)",
-        difference: "30 minutes behind IST",
-        bestMonths: "April, May, June, September & October",
-        seasons: [
-          { name: "Spring", emoji: "🌸", months: "Apr – Jun", temp: "15–25°C", highlight: "Best for sightseeing. Mild weather and blooming landscape." },
-          { name: "Summer", emoji: "☀️", months: "Jul – Aug", temp: "25–32°C", highlight: "Ideal for Caspian beaches and outdoor festivals." },
-          { name: "Autumn", emoji: "🍂", months: "Sep – Oct", temp: "15–22°C", highlight: "Ideal travel time. Golden landscapes and pleasant harvest." },
-          { name: "Winter", emoji: "❄️", months: "Nov – Mar", temp: "5–10°C", highlight: "Cool and calm. Budget-friendly streets and cozy charm." }
-        ],
-        packing: [
-          "Layered clothing for varying altitudes",
-          "Comfortable walking shoes for Old City cobbles",
-          "Sunscreen and sunglasses for mountain treks",
-          "Modest attire for religious site visits"
-        ]
-      },
-      language: {
-        official: "Azerbaijani (Azəri)",
-        context: "A Turkic language written in Latin script. Russian is widely understood, and English is growing fast in tourism.",
-        phrases: [
-          { label: "Hello", phrase: "Salam" },
-          { label: "Thank you", phrase: "Təşəkkür edirəm" },
-          { label: "Goodbye", phrase: "Sağ olun" },
-          { label: "Please", phrase: "Xahiş edirəm" },
-          { label: "How much?", phrase: "Nə qədərdir?" },
-          { label: "Where is...?", phrase: "...haradadır?" }
-        ],
-        signage: [
-          { label: "Entrance", value: "Giriş" },
-          { label: "Exit", value: "Çıxış" },
-          { label: "Open", value: "Açıq" },
-          { label: "Closed", value: "Bağlı" }
-        ]
-      },
-      culture: {
-        vibe: "Elite Hospitality",
-        description: "A modern secular society with deep roots in religious tolerance and 'Novruz' traditions. Guests are treated as sacred.",
-        rules: [
-          { icon: "🤝", label: "Greetings", desc: "Handshake is standard; men wait for women to offer hand first." },
-          { icon: "🕌", label: "Religious Sites", desc: "Dress modestly; cover shoulders and knees." },
-          { icon: "☕", label: "The Golden Rule", desc: "Never refuse Tea; it's a cornerstone of social life." }
-        ],
-        dos: [
-          "Remove shoes when entering a local home",
-          "Ask for permission before photographing people",
-          "Offer seats to elders in public transport"
-        ],
-        donts: [
-          "Don't discuss sensitive regional politics",
-          "Don't be overly loud or affectionate in public",
-          "Don't point your feet at people while sitting"
-        ],
-        etiquette: {
-          dining: "Wait for the eldest to start eating. Bread is sacred; never place it face down.",
-          gifting: "Odd numbers of flowers are for joy; even numbers are for mourning."
-        }
-      },
-      food: {
-        title: "The Saffron Flavors",
-        description: "Azerbaijani cuisine is a ritual of fresh herbs, succulent meats, and the legendary Saffron Plov.",
-        featuredImage: "https://images.unsplash.com/photo-1541810271221-23d612fc27df?q=80&w=2070",
-        items: [
-          { name: "Plov", desc: "National saffron rice dish", image: "https://images.unsplash.com/photo-1633910309485-df87f3b60f1b?q=80&w=2070" },
-          { name: "Dolma", desc: "Stuffed grape leaves", image: "https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=2070" },
-          { name: "Qutab", desc: "Crispy filled flatbreads", image: "https://images.unsplash.com/photo-1541014741259-df529411b96a?q=80&w=2070" },
-          { name: "Tea Culture", desc: "Served in Armudu glasses with jam", image: "https://images.unsplash.com/photo-1512075135822-67cdd9dd7314?q=80&w=2070" },
-          { name: "Kebab", desc: "Grilled succulent meats", image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2070" },
-          { name: "Pakhlava", desc: "Sweet layered baklava", image: "https://images.unsplash.com/photo-1519676867240-f03562e64548?q=80&w=2070" }
-        ],
-        drinks: [
-          { name: "Sherbet", value: "Fruit & flower infused water" },
-          { name: "Ayran", value: "Salted yogurt drink" }
-        ]
-      },
-      transport: {
-        title: "Move with Ease",
-        bakuCard: "BakıKart: Your universal pass for Metro and Modern Buses. Refill at any station.",
-        arrival: "Heydar Aliyev Int'l Airport (GYD) is your main gateway, 20km from Baku center.",
-        apps: ["Bolt", "Uber (Azerbaijan version)"],
-        stats: [
-          { icon: Plane, label: "Airport", value: "GYD", desc: "20 mins from center" },
-          { icon: Smartphone, label: "Taxi", value: "Bolt/Uber", desc: "Safe and affordable" },
-          { icon: Car, label: "Inter-city", value: "Fast Trains", desc: "Baku to Ganja/Sheki" }
-        ]
-      },
-      visa: {
-        title: "ASAN VISA",
-        description: "Azerbaijan offers a seamless E-Visa process for over 90 countries through the official portal.",
-        process: [
-          "Apply online at the official ASAN portal.",
-          "Pay the processing fee (~$26 USD).",
-          "Receive your E-Visa via email within 3 business days.",
-          "Standard validity is 30 days for a single entry."
-        ],
-        requirements: "Passport must be valid for at least 6 months beyond your stay. If staying over 15 days, registration with the State Migration Service is mandatory."
-      },
-      shopping: {
-        title: "Treasures of Azerbaijan",
-        description: "From intricate hand-woven carpets to aromatic spices, Azerbaijan's bazaars and boutiques offer unique treasures for every traveler.",
-        categories: [
-          { name: "Silk & Textiles", icon: "🧣", items: ["Kelaghayi (Silk Headscarf)", "Hand-woven Carpets", "Embroidered Fabrics"] },
-          { name: "Gifts & Crafts", icon: "🏺", items: ["Armudu Glasses", "Copperware from Lahij", "Backgammon Sets"] },
-          { name: "Flavors", icon: "🍯", items: ["Saffron", "Pomegranate Syrup", "Black Tea", "Azeri Jam (Rose, Walnut)"] }
-        ],
-        hubs: [
-          { name: "Yashil Bazar", type: "Food & Spices", highlight: "Best for fresh produce and local treats." },
-          { name: "Icherisheher", type: "Souvenirs", highlight: "Antiques, carpets, and traditional crafts." },
-          { name: "Taza Bazar", type: "Authentic", highlight: "A glimpse into local daily life and exotic spices." }
-        ]
-      },
-      highlights: [
-        { icon: Star, title: "Flame Towers Visit", description: "Panoramic views of the Baku bay from the iconic tri-towers", iconColor: "text-yellow-500" },
-        { icon: Flame, title: "Yanar Dag Experience", description: "Witness the natural eternal flame that never goes out", iconColor: "text-orange-500" },
-        { icon: Landmark, title: "Old City Expedition", description: "Explore Icherisheher's ancient streets and Maiden Tower", iconColor: "text-amber-600" },
-        { icon: Plane, title: "Luxury Airport Pickup", description: "VIP arrival with premium chauffeur services to your hotel", iconColor: "text-blue-500" },
-        { icon: Building2, title: "Heydar Aliyev Center", description: "Modern architectural masterpiece by Zaha Hadid", iconColor: "text-indigo-500" },
-        { icon: ShieldCheck, title: "Golden Hospitality", description: "Hand-picked premium hotels for maximum comfort", iconColor: "text-emerald-500" },
-      ],
-      attractions: [
-        { icon: Flame, title: "Eternal Baku Fire", iconColor: "text-orange-500" },
-        { icon: Building2, title: "Futuristic Baku City", iconColor: "text-indigo-500" },
-        { icon: Mountain, title: "Scenic Caucasian Alps", iconColor: "text-blue-500" },
-        { icon: Landmark, title: "UNESCO Heritage Sites", iconColor: "text-amber-600" },
-        { icon: Camera, title: "Photo-ready Baku Bay", iconColor: "text-purple-500" },
-        { icon: MapPin, title: "Signature Tea Culture", iconColor: "text-rose-500" },
-      ]
-    }
-  };
 
   // Icon map for dynamic lookup
   const iconMap = {
@@ -251,18 +78,25 @@ export default function FactsheetClient({ regionSlug }) {
     Landmark, Banknote, ShieldCheck, Mountain, Camera, Heart, Train, Bus
   };
 
+  // Helper function to resolve image URL from various potential properties
+  const getImageUrl = (img) => {
+    if (!img) return null;
+    if (typeof img === 'string') return img;
+    return img.url || img.image || img.imageUrl;
+  };
+
   // Map dynamic data if available
   const dynamicData = factSheetData?.details;
 
   const currentData = dynamicData ? {
-    heroTitle: dynamicData.hero?.title || regionName,
-    heroSubtitle: dynamicData.hero?.subtitle || `Essential information and insider tips for your perfect ${regionName} adventure.`,
-    heroImage: dynamicData.hero?.image || REGION_DATA[regionSlug?.toLowerCase()]?.heroImage,
+    heroTitle: dynamicData.hero?.title,
+    heroSubtitle: dynamicData.hero?.subtitle,
+    heroImage: getImageUrl(dynamicData.hero?.image),
     essentials: dynamicData.essentials?.map(item => ({
       ...item,
       icon: iconMap[item.icon] || Info
-    })) || REGION_DATA[regionSlug?.toLowerCase()]?.essentials || [],
-    fastFacts: dynamicData.fastFacts || REGION_DATA[regionSlug?.toLowerCase()]?.fastFacts,
+    })) || [],
+    fastFacts: dynamicData.fastFacts || [],
     history: {
       ...dynamicData.history,
       spotlight: dynamicData.history?.spotlight ? {
@@ -283,7 +117,10 @@ export default function FactsheetClient({ regionSlug }) {
     } : undefined,
     food: dynamicData.food ? {
       ...dynamicData.food,
-      items: dynamicData.food.items || [],
+      items: dynamicData.food.items?.map(item => ({
+        ...item,
+        image: getImageUrl(item.image)
+      })) || [],
       drinks: dynamicData.food.beverages || dynamicData.food.drinks || []
     } : undefined,
     shopping: dynamicData.shopping ? {
@@ -311,24 +148,14 @@ export default function FactsheetClient({ regionSlug }) {
       ...a,
       icon: iconMap[a.icon] || MapPin
     })) || []
-  } : REGION_DATA[regionSlug?.toLowerCase()] || {
+  } : {
     heroTitle: regionName,
     heroSubtitle: `Essential information and insider tips for your perfect ${regionName} adventure.`,
-    essentials: [
-      { icon: Calendar, label: "Best Time", value: "Sep - Apr", color: "amber" },
-      { icon: Wallet, label: "Currency", value: "Local", color: "emerald" },
-      { icon: ThermometerSun, label: "Climate", value: "Pleasant", color: "orange" },
-      { icon: Clock, label: "Time Zone", value: "Local Time", color: "blue" },
-      { icon: Globe, label: "Language", value: "Various", color: "indigo" },
-      { icon: FileCheck, label: "Visa", value: "Varies", color: "teal" },
-      { icon: Building2, label: "Capital", value: "Main City", color: "violet" },
-      { icon: Users, label: "Population", value: "Varies", color: "pink" }
-    ],
+    essentials: [],
+    highlights: [],
     history: {
-      title: "Ancient Heritage",
-      description: `${regionName} boasts a rich history stretching back centuries, with a unique cultural blend.`,
-      tags: ["Historical", "Cultural", "Ancient"],
-      stats: [{ label: "Capital", value: "Main City", desc: "Economic and cultural hub" }]
+      tags: [],
+      stats: []
     }
   };
 
@@ -420,29 +247,40 @@ export default function FactsheetClient({ regionSlug }) {
       {/* Hero Section */}
       <div ref={heroRef} className="relative min-h-[60vh] md:min-h-[80vh] flex flex-col justify-end overflow-hidden">
         {/* Cinematic Background Image */}
-        {currentData.heroImage && (
+        {currentData.heroImage ? (
           <div className="absolute inset-0 z-0">
              <Image 
                 src={currentData.heroImage} 
                 alt={currentData.heroTitle}
                 fill
                 priority
-                className="object-cover scale-105"
+                className="object-cover"
+                unoptimized
              />
-             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent z-10" />
+             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
           </div>
-        )}
-        {!currentData.heroImage && (
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-green/20 to-brand-blue/20 z-0" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse flex items-center justify-center z-0">
+            <Sparkles className="w-24 h-24 text-slate-300" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60 opacity-30" />
+          </div>
         )}
         
         <Container className="relative z-20 pb-8 md:pb-16 pt-24 md:pt-32">
-          <Link href={`/packages/${regionSlug}`}>
-            <Button variant="ghost" className="text-white hover:bg-white/10 gap-2 mb-8 -ml-4 group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              Back to {regionName}
-            </Button>
-          </Link>
+          <div className="mb-8">
+            <Breadcrumbs 
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Packages", href: "/explore" },
+                { label: regionName, href: `/packages/${regionSlug}` },
+                { label: "Factsheet", href: `/factsheet/${regionSlug}`, active: true },
+              ]} 
+              className="!bg-transparent !border-none !p-0 flex justify-start w-auto"
+              omitContainer
+              colorClasses="text-white/80 drop-shadow-md"
+              activeColorClasses="text-white drop-shadow-md font-bold"
+            />
+          </div>
 
           <motion.div 
             initial={{ opacity: 0, y: 30 }} 
@@ -458,16 +296,21 @@ export default function FactsheetClient({ regionSlug }) {
             </p>
           </motion.div>
         </Container>
+
+        {/* Region Badge - Integrated into Flow at the Bottom */}
+        <div className="absolute bottom-6 left-0 right-0 z-[30] w-full">
+          <Container className="flex flex-row items-center justify-end gap-4">
+            {factSheetData?.nickname && (
+              <div className="hidden sm:flex px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg">
+                <span className="text-white text-[10px] font-black uppercase tracking-widest leading-none">
+                  {factSheetData.nickname}
+                </span>
+              </div>
+            )}
+          </Container>
+        </div>
       </div>
 
-      <Breadcrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Packages", href: "/explore" },
-          { label: regionName, href: `/packages/${regionSlug}` },
-          { label: "Factsheet", href: `/factsheet/${regionSlug}`, active: true },
-        ]}
-      />
 
       {/* Floating Pill Navigation - Positioned after Hero */}
       <div className="sticky top-24 z-50 pointer-events-none mb-6">
@@ -668,7 +511,7 @@ export default function FactsheetClient({ regionSlug }) {
                            <h4 className="text-xl font-black text-slate-900 uppercase">Climate</h4>
                         </div>
                         <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                           Featuring nine of the world's eleven climate zones, Azerbijan's weather varies from subtropical at the coast to continental in the mountains.
+                           {currentData.climate.description || `The climate in ${regionName} varies significantly by region, offering a diverse range of weather conditions from coastal areas to mountain peaks.`}
                         </p>
                       </div>
                    </div>
@@ -840,12 +683,19 @@ export default function FactsheetClient({ regionSlug }) {
                         className="group relative aspect-square rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
                       >
                         {/* Food Image */}
-                        <Image 
-                          src={food.image} 
-                          alt={food.name}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
+                        {food.image ? (
+                          <Image 
+                            src={food.image} 
+                            alt={food.name}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-slate-100 animate-pulse flex items-center justify-center">
+                            <Sparkles className="w-12 h-12 text-slate-300" />
+                          </div>
+                        )}
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                         

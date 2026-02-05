@@ -1,4 +1,9 @@
 "use client";
+/**
+ * @deprecated This loader uses heavy Framer Motion animations that delay perceived performance.
+ * Use route-level loading.jsx with skeleton screens instead for instant navigation feedback.
+ * Only use this for small inline loading states, NOT fullscreen={true}.
+ */
 
 import React from 'react';
 import { motion } from 'framer-motion';

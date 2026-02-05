@@ -19,10 +19,10 @@ export function useRegion(regionSlug, initialData) {
     },
     initialData: initialData,
     enabled: !!regionSlug, // Only run when regionSlug is provided
-    staleTime: 0, // Always refetch on mount to ensure data is fresh, even with initialData
-    gcTime: 1000, 
-    refetchOnWindowFocus: true, // Refetch when window is focused
-    refetchOnMount: true, // Always refetch on mount to get latest data
+    staleTime: 60000, // 1 minute
+    gcTime: 300000, // 5 minutes
+    refetchOnWindowFocus: false, // Refetch when window is focused
+    refetchOnMount: false, // Always refetch on mount to get latest data
   });
 
   return {

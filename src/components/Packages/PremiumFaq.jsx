@@ -10,7 +10,7 @@ import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
 const FaqItem = ({ item, index, openIndex, toggleItem }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
+    initial={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ delay: index * 0.05 }}
     className="group"
@@ -168,7 +168,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-3"
         >
@@ -220,7 +220,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         {/* Help Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="mt-4 md:mt-8"
         >

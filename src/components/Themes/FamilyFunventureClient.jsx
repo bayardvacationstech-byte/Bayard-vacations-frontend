@@ -36,12 +36,15 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function FamilyFunventureClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -83,11 +86,12 @@ export default function FamilyFunventureClient() {
 
   return (
     <div className="min-h-screen bg-[#fffcf5] text-[#1f2937] font-sans selection:bg-[#ff8a5c] selection:text-white overflow-x-hidden">
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="family" fullScreen className="bg-[#fef9f3]" />
-        )}
-      </AnimatePresence>
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["family-funventure"]} 
+      />
+
 
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 overflow-hidden bg-gradient-to-br from-[#fef9f3] to-[#fff8f0]">
@@ -108,7 +112,6 @@ export default function FamilyFunventureClient() {
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center min-h-[60vh] py-12">
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
@@ -136,11 +139,17 @@ export default function FamilyFunventureClient() {
               </p>
               
               <div className="flex flex-wrap gap-4 pt-4">
-                <Button className="h-14 px-8 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 border-none">
-                  <span>Start Exploring</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-                <Button variant="outline" className="h-14 px-8 rounded-full border-2 border-slate-200 text-slate-900 font-semibold text-lg hover:border-orange-400 hover:text-orange-500 transition-all duration-300 flex items-center space-x-2 group bg-white/50 backdrop-blur-sm">
+                <Link href="#packages">
+                  <Button className="h-14 px-8 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 border-none w-full sm:w-auto">
+                    <span>Start Exploring</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="h-14 px-8 rounded-full border-2 border-slate-200 text-slate-900 font-semibold text-lg hover:border-orange-400 hover:text-orange-500 transition-all duration-300 flex items-center space-x-2 group bg-white/50 backdrop-blur-sm"
+                >
                   <PlayCircle className="w-6 h-6 text-orange-500 group-hover:scale-110 transition-transform" />
                   <span>Watch Stories</span>
                 </Button>
@@ -165,7 +174,6 @@ export default function FamilyFunventureClient() {
             
             {/* Right Content - Artistic Composition */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
@@ -246,7 +254,7 @@ export default function FamilyFunventureClient() {
 
 
       {/* Filter Section */}
-      <section className="py-8 bg-[#fef9f3]">
+      <section id="packages" className="section-padding bg-[#fef9f3]">
         <Container>
           <div className="flex justify-center">
             <div className="bg-white p-2 rounded-full shadow-xl inline-flex border border-orange-100">
@@ -278,12 +286,9 @@ export default function FamilyFunventureClient() {
       </section>
 
       {/* Packages Grid Section */}
-      <section className="py-12 md:py-16 bg-[#fef9f3]" ref={packagesRef}>
+      <section className="section-padding bg-[#fef9f3]" ref={packagesRef}>
         <Container>
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
             className="text-center mb-10 md:mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Curated Adventures</h2>
@@ -307,7 +312,6 @@ export default function FamilyFunventureClient() {
                     <motion.div
                       key={pkg.id}
                       layout
-                      initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -319,7 +323,7 @@ export default function FamilyFunventureClient() {
                     </motion.div>
                   ))
                 ) : (
-                  <div className="col-span-full py-20 text-center">
+                  <div className="col-span-full py-12 text-center">
                     <p className="text-slate-500 text-lg">No packages found for this selection.</p>
                   </div>
                 )}
@@ -329,7 +333,7 @@ export default function FamilyFunventureClient() {
           
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-16 flex justify-center">
+            <div className="mt-10 flex justify-center">
               <Pagination>
                 <PaginationContent className="gap-2">
                   <PaginationItem>
@@ -386,7 +390,7 @@ export default function FamilyFunventureClient() {
             </div>
           )}
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-8">
             <Button variant="outline" className="px-10 py-6 border-2 border-slate-200 text-slate-700 rounded-full font-bold hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300">
               View All Family Packages
             </Button>
@@ -395,7 +399,7 @@ export default function FamilyFunventureClient() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-white relative overflow-hidden">
+      <section className="section-padding bg-white relative overflow-hidden">
         {/* Decorative background characters */}
         <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none flex items-center justify-between px-10">
           <div className="text-[20rem] font-serif text-orange-500 pointer-events-none">&ldquo;</div>
@@ -405,9 +409,6 @@ export default function FamilyFunventureClient() {
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-6 md:gap-12">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="text-center p-6 md:p-8 lg:p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
               <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-orange-500 transform group-hover:rotate-6 transition-transform">
@@ -418,9 +419,6 @@ export default function FamilyFunventureClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="text-center p-6 md:p-8 lg:p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
@@ -432,9 +430,6 @@ export default function FamilyFunventureClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >

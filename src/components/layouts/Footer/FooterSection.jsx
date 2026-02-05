@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const FooterSection = ({ title, links, basePath = "packages" }) => {
+const FooterSection = ({ title, links, basePath = "packages", hoverColor = "hover:text-brand-green" }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [shouldShowButton, setShouldShowButton] = useState(false);
   const contentRef = useRef(null);
@@ -36,7 +36,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
             overflow: "hidden",
             transition: "max-height 0.4s ease-in-out",
           }}
-          className={cn("relative", !isExpanded && "max-md:!max-h-none")}
+          className={cn("relative", "md:!max-h-none")}
         >
           <div
             ref={contentRef}
@@ -47,7 +47,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
               <div key={link.id || link.slug || i} className="flex items-center gap-2">
                 <Link
                   href={`/${basePath}/${link.slug.split("?")[0]}`}
-                  className="hover:text-brand-green hover:translate-x-1 transition-all duration-300 whitespace-nowrap"
+                  className={cn("hover:translate-x-1 transition-all duration-300 whitespace-nowrap", hoverColor)}
                 >
                   {link.name || link.title}
                 </Link>
@@ -62,7 +62,7 @@ const FooterSection = ({ title, links, basePath = "packages" }) => {
         {shouldShowButton && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="hidden md:flex mt-3 items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent hover:from-yellow-300 hover:to-yellow-500 transition-all group"
+            className="flex md:hidden mt-3 items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent hover:from-yellow-300 hover:to-yellow-500 transition-all group"
             style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}
           >
             {isExpanded ? (

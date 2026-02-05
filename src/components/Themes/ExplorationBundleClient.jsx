@@ -46,13 +46,16 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function ExplorationBundleClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -105,6 +108,11 @@ export default function ExplorationBundleClient() {
 
   return (
     <div className="min-h-screen bg-[#f7f5f3] text-[#1d1d1d] font-sans selection:bg-[#e76f51] selection:text-white overflow-x-hidden">
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["exploration-bundle"]} 
+      />
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 topo-pattern overflow-hidden flex items-center">
         {/* Animated Compass Background */}
@@ -124,7 +132,6 @@ export default function ExplorationBundleClient() {
             
             {/* Left Content */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
@@ -150,11 +157,16 @@ export default function ExplorationBundleClient() {
               </p>
               
               <div className="flex flex-wrap gap-4 pt-4">
-                <button className="px-8 py-4 bg-[#e76f51] text-white rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#d65a3c] transition-all shadow-xl shadow-[#e76f51]/30 flex items-center space-x-2 group">
-                  <span>Explore Bundles</span>
-                  <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button className="px-8 py-4 bg-white border-2 border-[#2a9d8f] text-[#21867a] rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#2a9d8f]/5 transition-all flex items-center space-x-2">
+                <Link href="#packages">
+                  <button className="px-8 py-4 bg-[#e76f51] text-white rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#d65a3c] transition-all shadow-xl shadow-[#e76f51]/30 flex items-center space-x-2 group w-full sm:w-auto">
+                    <span>Explore Bundles</span>
+                    <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="px-8 py-4 bg-white border-2 border-[#2a9d8f] text-[#21867a] rounded-lg font-bold text-lg uppercase tracking-wide hover:bg-[#2a9d8f]/5 transition-all flex items-center space-x-2"
+                >
                   <Play className="w-5 h-5 fill-[#21867a]" />
                   <span>Watch Reel</span>
                 </button>
@@ -181,7 +193,6 @@ export default function ExplorationBundleClient() {
             <div className="relative h-[500px] md:h-[600px] perspective-1000">
               {/* Main Image */}
               <motion.div 
-                initial={{ opacity: 0, x: 50, rotate: 5 }}
                 animate={{ opacity: 1, x: 0, rotate: 3 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="absolute top-0 right-0 w-4/5 h-4/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-0"
@@ -199,7 +210,6 @@ export default function ExplorationBundleClient() {
               
               {/* Secondary Image */}
               <motion.div 
-                initial={{ opacity: 0, x: -50, rotate: -5 }}
                 animate={{ opacity: 1, x: 0, rotate: -2 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="absolute bottom-0 left-0 w-3/5 h-3/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-10"
@@ -258,7 +268,7 @@ export default function ExplorationBundleClient() {
 
 
       {/* Filter Tabs Section */}
-      <section className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
+      <section id="packages" className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
         <Container>
           <div className="flex flex-wrap gap-4 justify-center">
             <button 
@@ -290,22 +300,23 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Main Content / Grid */}
-      <section id="bundles" className="py-12 md:py-16 lg:py-20 map-texture overflow-hidden" ref={packagesRef}>
+      <section id="bundles" className="section-padding map-texture overflow-hidden" ref={packagesRef}>
         <Container>
-          <div className="text-center mb-10 md:mb-20">
+          <div className="text-center mb-8 md:mb-12">
             <h2 className="text-5xl md:text-7xl font-black text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">Curated combinations of our most popular explorations. Just book and go.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
             {isLoading ? (
-              <ThemeLoader theme="exploration" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+              </div>
             ) : paginatedPackages.length > 0 ? (
               <AnimatePresence>
                 {paginatedPackages.map((pkg, idx) => (
                   <motion.div
                     key={pkg.id}
-                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
@@ -318,7 +329,7 @@ export default function ExplorationBundleClient() {
                 ))}
               </AnimatePresence>
             ) : (
-              <div className="col-span-full py-32 text-center">
+              <div className="col-span-full py-16 text-center">
                 <div className="inline-block p-10 bg-white rounded-3xl border-2 border-dashed border-gray-200">
                   <Wind className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <p className="text-2xl font-serif italic text-gray-500">The map for this region is currently being drawn.</p>
@@ -329,7 +340,7 @@ export default function ExplorationBundleClient() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-20 flex justify-center">
+            <div className="mt-12 flex justify-center">
               <Pagination>
                 <PaginationContent className="gap-3">
                   <PaginationItem>
@@ -389,15 +400,12 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Features Section */}
-      <section className="py-12 md:py-24 bg-[#1d1d1d] text-white relative overflow-hidden">
+      <section className="section-padding bg-[#1d1d1d] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/topography.png')]"></div>
         
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-8 md:gap-16 text-center">
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="group"
             >
               <div className="w-20 h-20 mx-auto mb-8 bg-[#e76f51] rounded-2xl rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:rotate-6 transition-transform">
@@ -408,9 +416,6 @@ export default function ExplorationBundleClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="group"
             >
@@ -422,9 +427,6 @@ export default function ExplorationBundleClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="group"
             >
@@ -439,7 +441,7 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-16 md:py-24 bg-stone-50 border-t-4 border-[#e76f51]">
+      <section className="section-padding bg-stone-50 border-t-4 border-[#e76f51]">
         <Container>
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-12">
             <div>

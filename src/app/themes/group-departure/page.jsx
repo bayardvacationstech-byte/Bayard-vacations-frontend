@@ -77,7 +77,7 @@ const GroupDeparturePage = async () => {
       </section>
 
       {/* Brand Section / Stats */}
-      <section className="py-10 relative">
+      <section className="section-padding relative">
          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[120px] -z-10" />
          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-brand-green/5 rounded-full blur-[100px] -z-10" />
          
@@ -146,7 +146,7 @@ const GroupDeparturePage = async () => {
       </section>
 
       {/* Experience Magic Section: The Packages Grid */}
-      <section className="py-10 bg-slate-50 relative overflow-hidden">
+      <section className="section-padding bg-slate-50 relative overflow-hidden">
          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
          
          <Container>
@@ -190,7 +190,7 @@ const GroupDeparturePage = async () => {
       </section>
 
       {/* Features Grid */}
-      <section className="py-10 relative bg-white">
+      <section className="section-padding relative bg-white">
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-brand-blue/5 blur-[120px] -z-10" />
          <Container>
             <div className="grid md:grid-cols-3 gap-6">
@@ -227,7 +227,7 @@ const GroupDeparturePage = async () => {
          </Container>
       </section>
 
-      <section className="pb-12">
+      <section className="section-padding pt-0">
          <InspirationSection />
       </section>
     </main>

@@ -15,10 +15,9 @@ export function usePackagesByTheme(theme, initialPackages = []) {
     queryKey: [COLLECTIONS.PACKAGES, "theme", theme],
     queryFn: () => getPackagesByTheme(theme, initialPackages),
     enabled: !!theme,
-    staleTime: 0, // Truly immediate updates
-    gcTime: 1000,
-    refetchOnWindowFocus: true,
-    refetchOnMount: 'always',
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 10, // 10 minutes
+    refetchOnWindowFocus: false,
   });
 
   const isLoading = useMinimumLoading(isQueryLoading, 1500);

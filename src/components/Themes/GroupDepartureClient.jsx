@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, CalendarCheck, Bus, MapPin, Calendar, Star, Shield, ChevronRight, Ticket, Group, Globe } from "lucide-react";
+import { Users, CalendarCheck, Bus, MapPin, Calendar, Star, Shield, ChevronRight, Ticket, Group, Globe, PlayCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/button";
@@ -22,11 +22,14 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function GroupDepartureClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -69,11 +72,12 @@ export default function GroupDepartureClient() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="family" fullScreen className="bg-indigo-50" />
-        )}
-      </AnimatePresence>
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["group-adventures"]} 
+      />
+
       {/* Hero Section */}
       <div className="relative min-h-[70vh] md:h-[75vh] lg:h-[80vh] overflow-hidden bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-600">
         {/* Group Background Pattern */}
@@ -88,7 +92,6 @@ export default function GroupDepartureClient() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center w-full">
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-6"
@@ -115,18 +118,25 @@ export default function GroupDepartureClient() {
               </p>
 
               <div className="flex gap-4">
-                <Button size="lg" className="bg-white text-indigo-700 hover:bg-cyan-50 font-black px-8 py-6 rounded-2xl shadow-xl">
-                  View Departures
-                </Button>
-                <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm">
-                  Join a Group
+                <Link href="#packages">
+                  <Button size="lg" className="bg-white text-indigo-700 hover:bg-cyan-50 font-black px-8 py-6 rounded-2xl shadow-xl w-full sm:w-auto">
+                    View Departures
+                  </Button>
+                </Link>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                   onClick={() => setIsVideoModalOpen(true)}
+                  className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm flex items-center gap-2"
+                >
+                  <PlayCircle className="w-5 h-5" />
+                  Watch Reel
                 </Button>
               </div>
             </motion.div>
 
             {/* Right Image */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
@@ -157,7 +167,8 @@ export default function GroupDepartureClient() {
       {/* Packages Section */}
 
       {/* Packages Section */}
-      <Container className="py-4 md:py-8">
+      <section id="packages">
+        <Container className="section-padding">
         {/* Tab Switcher */}
         <div className="flex justify-center mb-8">
           <div className="inline-flex bg-slate-100 rounded-full p-1.5">
@@ -187,7 +198,9 @@ export default function GroupDepartureClient() {
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" ref={packagesRef}>
           {isLoading ? (
-            <ThemeLoader theme="group" />
+            <div className="col-span-full flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            </div>
           ) : (
             <AnimatePresence mode="wait">
               {paginatedPackages.map((pkg, index) => (
@@ -260,9 +273,10 @@ export default function GroupDepartureClient() {
           </div>
         )}
       </Container>
+    </section>
 
       {/* Why Group Departure Section */}
-      <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 py-8 md:py-10">
+      <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 section-padding">
         <Container>
           <div className="text-center mb-8">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4">
@@ -281,9 +295,6 @@ export default function GroupDepartureClient() {
             ].map((feature, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 className="text-center p-8"
               >

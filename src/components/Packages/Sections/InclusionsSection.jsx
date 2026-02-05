@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 
 const InclusionsSection = ({ packageData }) => {
+  const regionName = packageData?.regionName || packageData?.region || "the destination";
   // Full Static Data from User Request
   // Dynamically derive TRAVEL_GUIDE_DATA from packageData.sections
   const getDynamicTravelGuideData = () => {
@@ -85,8 +86,8 @@ const InclusionsSection = ({ packageData }) => {
         items: [
           "Visa: E-visa required for Indian passport holders (process separately; not included in package)",
           "Passport Validity: Minimum 6 months validity required at time of travel",
-          "Vaccination: As per Azerbaijan government requirements at time of travel",
-          "Currency: Azerbaijani Manat is official currency; USD also accepted in major establishments",
+          "Vaccination: As per local government requirements at time of travel",
+          "Currency: Local currency is preferred; USD also accepted in major establishments",
           "Travel Insurance: Strongly recommended but not mandatory",
           "Show Money: Visitors should carry minimum USD 250-500 equivalent in cash or card"
         ]
@@ -109,7 +110,7 @@ const InclusionsSection = ({ packageData }) => {
     const dynamicPointsToRemember = pointsSection?.items?.map(item => item.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()) || [
       "Dress Code: Wear comfortable walking shoes; modest clothing recommended for religious sites",
       "Weather Preparation: Pack light clothing for summer (April-October); warm layers for early mornings/evenings in mountain areas",
-      "Sun Protection: Carry sunscreen, hat, and sunglasses – UV exposure is high in Azerbaijan",
+      `Sun Protection: Carry sunscreen, hat, and sunglasses – UV exposure is high in ${regionName}`,
       "Hydration: Drink bottled water regularly; one bottle provided daily but buy extras for activities",
       "Cash & Cards: Carry cash (Manat or USD) for small purchases; major hotels accept credit cards",
       "Language: English spoken in tourist areas; learn basic phrases for local interactions",
@@ -147,10 +148,10 @@ const InclusionsSection = ({ packageData }) => {
       beforeDeparture: {
         title: "Before Departure",
         sections: [
-          { subtitle: "Documentation", items: ["Ensure passport validity of minimum 6 months beyond travel dates", "Apply for Azerbaijan E-visa (processing takes 5-7 working days)", "Make two copies of passport bio-page; keep one separately", "Check email for visa confirmation", "Print flight itinerary and hotel booking confirmation"] },
-          { subtitle: "Health & Vaccinations", items: ["Consult doctor 4-6 weeks before travel for recommended vaccinations", "Carry prescription medications in original containers with pharmacy label", "Purchase travel insurance covering medical emergencies and trip cancellations", "Pack small medical kit: pain reliever, cold medicine, antacid, first-aid supplies", "Check if any vaccinations are currently required for Azerbaijan entry"] },
-          { subtitle: "Packing Essentials", items: ["Comfortable walking shoes (broken in before travel)", "Lightweight, breathable clothing for daytime", "Warm jacket or sweater for evenings and mountains", "Sturdy backpack for day trips", "Sunscreen SPF 50+, sunglasses, wide-brimmed hat", "Toiletries, personal hygiene items, and medications", "Phone charger and universal power adapter (Type C & F plugs used in Azerbaijan)", "Small notebook and pen for notes"] },
-          { subtitle: "Financial Preparation", items: ["Notify bank of travel dates to avoid card blocks", "Exchange some currency to Azerbaijani Manat before departure", "Carry mix of cash (USD/Manat) and credit/debit cards", "Keep financial documents in separate secure location", "Budget for meals, shopping, and tips: approximately USD 300-500 for 6 days"] }
+          { subtitle: "Documentation", items: ["Ensure passport validity of minimum 6 months beyond travel dates", "Apply for E-visa or check visa requirements for your nationality", "Make two copies of passport bio-page; keep one separately", "Check email for visa confirmation", "Print flight itinerary and hotel booking confirmation"] },
+          { subtitle: "Health & Vaccinations", items: ["Consult doctor 4-6 weeks before travel for recommended vaccinations", "Carry prescription medications in original containers with pharmacy label", "Purchase travel insurance covering medical emergencies and trip cancellations", "Pack small medical kit: pain reliever, cold medicine, antacid, first-aid supplies", `Check if any vaccinations are currently required for ${regionName} entry`] },
+          { subtitle: "Packing Essentials", items: ["Comfortable walking shoes (broken in before travel)", "Lightweight, breathable clothing for daytime", "Warm jacket or sweater for evenings and mountains", "Sturdy backpack for day trips", "Sunscreen SPF 50+, sunglasses, wide-brimmed hat", "Toiletries, personal hygiene items, and medications", "Phone charger and universal power adapter", "Small notebook and pen for notes"] },
+          { subtitle: "Financial Preparation", items: ["Notify bank of travel dates to avoid card blocks", "Exchange some local currency before departure", "Carry mix of cash (USD/Local) and credit/debit cards", "Keep financial documents in separate secure location", "Budget for meals, shopping, and tips accordingly"] }
         ]
       },
       uponArrival: {
@@ -174,10 +175,10 @@ const InclusionsSection = ({ packageData }) => {
         title: "Useful Information",
         sections: [
           { subtitle: "Currency & Money", items: ["1 USD ≈ 1.7 AZN (rates change; check current rate)", "ATMs widely available; withdraw cash with passport copy", "Credit cards accepted in restaurants, hotels, and shops", "Avoid exchanging money on streets"] },
-          { subtitle: "Communication", items: ["Local SIM cards available at airport (Azercell, Bakcell, Nar)", "Internet cafes present in major cities", "Hotel provides free Wi-Fi", "International dialing code: +994"] },
-          { subtitle: "Time & Climate", items: ["Timezone: Azerbaijan Standard Time (UTC+4), no daylight saving", "Best season: April-May (spring) and September-October (autumn)", "Summer (June-August): Hot and dry; winter (December-February): Cold and occasionally snowy"] },
-          { subtitle: "Cultural Etiquette", items: ["Azerbaijan is Muslim majority; dress respectfully", "Ramadan customs respected; restaurants may have limited hours", "Public displays of affection not appreciated", "Loud conversations discouraged in public spaces", "Hospitality highly valued; refuse initial offers politely but graciously"] },
-          { subtitle: "Emergency Contacts", items: ["Police: 102", "Ambulance: 103", "Fire: 101", "Tourist Police: +994 12 490 20 26", "Your Embassy Contact: Save in phone immediately after arrival"] }
+          { subtitle: "Communication", items: ["Local SIM cards available at airport", "Internet cafes present in major cities", "Hotel provides free Wi-Fi"] },
+          { subtitle: "Time & Climate", items: [`Timezone: Check current timezone for ${regionName}`, "Best seasons usually include spring and autumn", "Check local weather forecast before travel"] },
+          { subtitle: "Cultural Etiquette", items: [`Respect local traditions and dress codes in ${regionName}`, "Public displays of affection may not be appreciated in some areas", "Loud conversations discouraged in public spaces", "Hospitality highly valued; respect local customs", "Refuse initial offers politely but graciously"] },
+          { subtitle: "Emergency Contacts", items: ["Note local police and ambulance numbers", "Tourist Police: Contact local authorities", "Your Embassy Contact: Save in phone immediately after arrival"] }
         ]
       }
     };

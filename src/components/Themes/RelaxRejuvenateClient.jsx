@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flower, Sparkles, Waves, MapPin, Calendar, Users, Star, Heart, ChevronRight, Leaf, Sun, Wind, Cloud, Moon, Globe } from "lucide-react";
+import { Flower, Sparkles, Waves, MapPin, Calendar, Users, Star, Heart, ChevronRight, Leaf, Sun, Wind, Cloud, Moon, Globe, PlayCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -22,8 +22,10 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 // Floating Zen Elements (Lotus Petals)
 const FloatingZenElements = () => {
@@ -82,6 +84,7 @@ export default function RelaxRejuvenateClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -130,11 +133,12 @@ export default function RelaxRejuvenateClient() {
 
   return (
     <div className="min-h-screen bg-[#fdfaf6] text-[#2c3e50] font-sans selection:bg-[#7fb3d5] selection:text-white overflow-x-hidden">
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="relax" fullScreen className="bg-[#FDFCFB]" />
-        )}
-      </AnimatePresence>
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["relax-rejuvenate"]} 
+      />
+
       {/* Immersive Serenity Hero */}
       <div className="relative min-h-[75vh] md:h-[85vh] overflow-hidden flex items-center bg-[#E5E1DA]">
         {/* Ken Burns Effect */}
@@ -162,7 +166,6 @@ export default function RelaxRejuvenateClient() {
         <Container className="relative z-20 pt-24 md:pt-40">
           <div className="max-w-4xl space-y-4 md:space-y-10">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2 }}
               className="space-y-4 md:space-y-8 text-center md:text-left"
@@ -192,15 +195,20 @@ export default function RelaxRejuvenateClient() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 md:gap-6 pt-2 md:pt-6">
-                <Button size="lg" className="h-14 md:h-16 px-10 md:px-12 rounded-full bg-stone-900 hover:bg-stone-800 text-white shadow-xl border-none font-medium text-base md:text-lg tracking-wide transition-all duration-300">
-                  Find Your Peace
-                </Button>
                 <Link href="#packages">
-                  <Button size="lg" variant="ghost" className="h-12 md:h-auto text-stone-700 hover:bg-stone-100/50 font-medium text-base md:text-lg tracking-wide flex items-center gap-2 group">
-                    Wellness Programs
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <Button size="lg" className="h-14 md:h-16 px-10 md:px-12 rounded-full bg-stone-900 hover:bg-stone-800 text-white shadow-xl border-none font-medium text-base md:text-lg tracking-wide transition-all duration-300">
+                    Find Your Peace
                   </Button>
                 </Link>
+                <Button 
+                  size="lg" 
+                  variant="ghost" 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="h-12 md:h-auto text-stone-700 hover:bg-stone-100/50 font-medium text-base md:text-lg tracking-wide flex items-center gap-2 group"
+                >
+                  <PlayCircle className="w-6 h-6 text-[#B5A48B] group-hover:scale-110 transition-transform" />
+                  <span>Watch Story</span>
+                </Button>
               </div>
             </motion.div>
           </div>
@@ -229,7 +237,7 @@ export default function RelaxRejuvenateClient() {
 
 
       {/* The Three Pillars Section */}
-      <section className="py-8 md:py-12 bg-white">
+      <section className="section-padding bg-white">
          <Container>
             <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16 space-y-4">
               <div className="w-16 h-[2px] bg-sage-400 mx-auto" />
@@ -247,9 +255,6 @@ export default function RelaxRejuvenateClient() {
               ].map((pillar, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
                   transition={{ delay: idx * 0.2 }}
                   className="text-center space-y-8 group"
                 >
@@ -268,7 +273,7 @@ export default function RelaxRejuvenateClient() {
       </section>
 
       {/* Sanctuary Units (Packages Grid) */}
-      <section id="packages" className="py-8 md:py-10 bg-[#F9F7F5]">
+      <section id="packages" className="section-padding bg-[#F9F7F5]">
         <Container>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
             <div className="space-y-4 max-w-xl">
@@ -304,7 +309,9 @@ export default function RelaxRejuvenateClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10" ref={packagesRef}>
             {isLoading ? (
-              <ThemeLoader theme="relax" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-600"></div>
+              </div>
             ) : (
               <AnimatePresence mode="wait">
                 {paginatedPackages.map((pkg, index) => (
@@ -380,14 +387,11 @@ export default function RelaxRejuvenateClient() {
       </section>
 
       {/* The Sanctuary Experience CTA */}
-      <section className="py-10 md:py-16 bg-[#E5E1DA] overflow-hidden relative">
+      <section className="section-padding bg-[#E5E1DA] overflow-hidden relative">
          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
          <Container className="relative">
             <div className="max-w-4xl mx-auto text-center space-y-12">
                <motion.div
-                 initial={{ opacity: 0, scale: 0.9 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: true }}
                  className="space-y-6"
                >
                    <Flower className="w-12 h-12 text-sage-600 mx-auto" />

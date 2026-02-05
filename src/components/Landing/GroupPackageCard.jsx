@@ -6,12 +6,11 @@ import Link from "next/link";
 import { 
   MapPin, 
   Clock, 
-  Share2, 
   ChevronRight, 
-  Users, 
   Star,
   Compass
 } from "lucide-react";
+import BadgeSection from "@/components/BadgeSection";
 import { cn } from "@/lib/utils";
 import { formatPrice } from "@/utils/offerUtils";
 
@@ -56,11 +55,7 @@ const GroupPackageCard = ({ item, className }) => {
   const displayImage = validImages[0]?.url || "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&auto=format&fit=crop&q=80";
   const href = `/packages/${item.region}/${item.packageSlug}?group=true`;
 
-  // Mock "Joined by" count based on ID to keep it consistent
-  const joinedCount = useMemo(() => {
-    const idNum = parseInt(item.id?.replace(/[^0-9]/g, '') || '0') % 900 + 1000;
-    return idNum.toLocaleString();
-  }, [item.id]);
+
 
   // Split title if it contains "Group" for the blue accent
   const RenderTitle = () => {
@@ -68,14 +63,14 @@ const GroupPackageCard = ({ item, className }) => {
     if (title.toLowerCase().includes("group")) {
       const parts = title.split(/(Group)/i);
       return (
-        <h2 className="text-xl md:text-2xl font-black text-white drop-shadow-md leading-tight tracking-tight">
-          {parts[0]}<br />
+        <h2 className="text-xl md:text-2xl font-black text-white drop-shadow-md leading-tight tracking-tight line-clamp-2">
+          {parts[0]}<br className="hidden md:block" />
           <span className="text-blue-400">{parts[1]} {parts.slice(2).join("")}</span>
         </h2>
       );
     }
     return (
-      <h2 className="text-xl md:text-2xl font-black text-white drop-shadow-md leading-tight tracking-tight">
+      <h2 className="text-xl md:text-2xl font-black text-white drop-shadow-md leading-tight tracking-tight line-clamp-2">
         {title}
       </h2>
     );
@@ -100,29 +95,17 @@ const GroupPackageCard = ({ item, className }) => {
             className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
           />
           {/* Subtle Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 z-0" />
-          <div className="absolute inset-x-0 bottom-0 h-[40%] bg-gradient-to-t from-black/90 via-transparent to-transparent z-0" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 z-0" />
+          <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/95 via-black/40 to-transparent z-0" />
         </div>
 
         {/* Top Badge Section */}
-        <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-10">
-          <div className="animate-pulse-slow flex items-center gap-2 bg-blue-600 px-4 py-2 rounded-full border border-blue-400/30 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
-            <Users className="w-4 h-4 text-white" />
-            <span className="text-white text-[10px] font-black tracking-widest uppercase">Group Departure</span>
-          </div>
-          
-          <div className="flex flex-col items-end">
-             <button 
-               className="p-2.5 bg-black/40 backdrop-blur-md rounded-full border border-white/20 hover:bg-white hover:text-black transition-all duration-300 transform hover:rotate-12 shadow-md"
-               onClick={(e) => { e.preventDefault(); /* Share logic */ }}
-             >
-               <Share2 className="w-4 h-4 text-white" />
-             </button>
-          </div>
+        <div className="absolute top-6 left-6 z-10">
+          <BadgeSection item={item} />
         </div>
 
         {/* Bottom Content Area */}
-        <div className="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6 flex flex-col gap-3">
+        <div className="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6 flex flex-col gap-2 md:gap-3">
           {/* Location & Duration Tags */}
           <div className="flex items-center gap-3 mb-1">
             <div className="flex items-center gap-1.5 text-white text-[11px] font-black uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
@@ -146,8 +129,8 @@ const GroupPackageCard = ({ item, className }) => {
 
           {/* Price & CTA Section */}
           <div className="flex items-end justify-between pt-2">
-            <div className="flex flex-col gap-1">
-              <p className="text-white/80 text-[9px] font-black tracking-[0.3em] uppercase drop-shadow-md">Starting from</p>
+            <div className="flex flex-col">
+              <p className="text-white/90 text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-md">Starting from</p>
               <div className="flex items-baseline gap-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
                 <span className="text-2xl md:text-3xl font-black text-white tracking-tighter">
                   ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
@@ -160,17 +143,7 @@ const GroupPackageCard = ({ item, className }) => {
             </div>
           </div>
           
-          {/* Trust Badge */}
-          <div className="flex items-center gap-3 pt-3 mt-1 md:pt-5 md:mt-2 border-t border-white/10 group-hover:border-white/20 transition-colors">
-            <div className="flex -space-x-2">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-6 h-6 rounded-full bg-slate-200 border-2 border-slate-900 overflow-hidden relative">
-                   <div className="absolute inset-0 bg-gradient-to-br from-slate-400 to-slate-600" />
-                </div>
-              ))}
-            </div>
-            <span className="text-white/70 text-[10px] font-bold uppercase tracking-wider">Joined by {joinedCount}+ travelers</span>
-          </div>
+
         </div>
 
         {/* Hover Reveal Extra Info */}

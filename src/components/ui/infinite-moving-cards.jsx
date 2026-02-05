@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Star, Quote, X } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 
-const Card = ({ item }) => {
+const Card = React.memo(({ item }) => {
   const [showFullText, setShowFullText] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -48,7 +48,7 @@ const Card = ({ item }) => {
       >
         {/* Dynamic Border Spotlight */}
         <motion.div
-          className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100 z-10"
+          className="hidden md:block pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100 z-10"
           style={{
             background: useTransform(
                 [mouseX, mouseY],
@@ -62,8 +62,8 @@ const Card = ({ item }) => {
           style={{ transform: "translateZ(30px)" }}
           className="relative h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-slate-950/90 p-6 shadow-2xl transition-all duration-500 group-hover:bg-slate-900 group-hover:border-white/20"
         >
-          {/* Animated background glow */}
-          <div className="absolute -top-16 -right-16 w-32 h-32 bg-cyan-500/10 blur-[40px] group-hover:bg-cyan-500/20 transition-colors duration-700" />
+          {/* Animated background glow - Desktop Only */}
+          <div className="hidden md:block absolute -top-16 -right-16 w-32 h-32 bg-cyan-500/10 blur-[40px] group-hover:bg-cyan-500/20 transition-colors duration-700" />
 
           <div className="relative flex flex-col h-full justify-between gap-4">
             <div className="space-y-4">
@@ -128,7 +128,7 @@ const Card = ({ item }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/90 md:bg-slate-950/80 backdrop-blur-none md:backdrop-blur-md"
             onClick={() => setShowFullText(false)}
           >
             <motion.div 
@@ -177,7 +177,7 @@ const Card = ({ item }) => {
       </AnimatePresence>
     </>
   );
-};
+});
 
 export const InfiniteMovingCards = ({
   items,

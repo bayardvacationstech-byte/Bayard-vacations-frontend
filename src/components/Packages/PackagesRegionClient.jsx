@@ -123,17 +123,9 @@ export default function PackagesRegionClient({ initialRegionData }) {
   }, [refetch, fetchPackages]);
 
   useEffect(() => {
-    if (regionName?.toLowerCase() === "azerbaijan") {
-      if (allPackages.length > 0) {
-        console.log("Azerbaijan Packages Data:", allPackages);
-      }
-      if (regionData) {
-        console.log("Azerbaijan Region Data:", regionData);
-      }
-    }
     // Fetch blogs for the region
     fetchBlogs({ region: regionName, limitCount: 6 });
-  }, [regionName, allPackages, regionData, fetchBlogs]);
+  }, [regionName, fetchBlogs]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -373,7 +365,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
             x: { type: "spring", stiffness: 300, damping: 30 },
             opacity: { duration: 0.5 }
           }}
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 bg-slate-200"
         >
             {heroBanners?.[currentBannerIndex]?.url ? (
               <Image
@@ -383,6 +375,8 @@ export default function PackagesRegionClient({ initialRegionData }) {
                 priority
                 className="object-cover"
                 sizes="100vw"
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmMWY1ZjkiLz48L3N2Zz4="
               />
             ) : (
               <div 

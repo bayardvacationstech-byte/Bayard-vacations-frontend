@@ -1,4 +1,9 @@
 "use client";
+/**
+ * @deprecated This loader is too heavy (Lottie animation) and slow to initialize.
+ * Use route-level loading.jsx with skeleton screens instead for instant feedback.
+ * This component should only be used for legacy compatibility if absolutely necessary.
+ */
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 

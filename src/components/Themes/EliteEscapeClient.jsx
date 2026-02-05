@@ -38,13 +38,16 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function EliteEscapeClient({ initialRegions = [], initialPackages = [] }) {
   const [selectedRegion, setSelectedRegion] = useState("All");
   const [selectionType, setSelectionType] = useState("International");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -103,11 +106,13 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
   return (
     <div className="min-h-screen bg-[#faf9f7] text-[#1a1a1a] font-sans selection:bg-[#d4af37] selection:text-white">
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="elite" fullScreen className="bg-[#faf9f7]" />
-        )}
-      </AnimatePresence>
+
+
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["elite-escape"]} 
+      />
 
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 overflow-hidden flex items-center bg-gradient-to-br from-[#faf9f7] via-[#f5f3f0] to-[#faf9f7]">
@@ -130,7 +135,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           
           {/* Left Content */}
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             className="lg:col-span-6 space-y-6"
@@ -160,11 +164,16 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4">
-              <button className="px-8 py-4 bg-[#d4af37] text-white rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#c9a961] transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 group">
-                <span>Explore Collection</span>
-                <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="px-8 py-4 bg-white border-2 border-[#d4af37] text-[#d4af37] rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#d4af37]/5 transition-all flex items-center space-x-2">
+              <Link href="#packages">
+                <button className="px-8 py-4 bg-[#d4af37] text-white rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#c9a961] transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 group w-full sm:w-auto">
+                  <span>Explore Collection</span>
+                  <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                </button>
+              </Link>
+              <button 
+                onClick={() => setIsVideoModalOpen(true)}
+                className="px-8 py-4 bg-white border-2 border-[#d4af37] text-[#d4af37] rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#d4af37]/5 transition-all flex items-center space-x-2"
+              >
                 <PlayCircle className="w-5 h-5" />
                 <span>Watch Reel</span>
               </button>
@@ -192,7 +201,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             <div className="grid grid-cols-2 gap-4">
               {/* Large Featured Image - Top Left */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="col-span-2 relative h-64 md:h-80 rounded-xl overflow-hidden group"
@@ -215,7 +223,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
               
               {/* Small Image - Bottom Left */}
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="relative h-40 md:h-48 rounded-xl overflow-hidden group"
@@ -234,7 +241,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
               
               {/* Small Image - Bottom Right */}
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="relative h-40 md:h-48 rounded-xl overflow-hidden group"
@@ -254,7 +260,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             
             {/* Floating Quality Badge */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.7 }}
               className="absolute -top-4 -right-4 bg-white rounded-full p-4 shadow-2xl border-4 border-[#d4af37]/20"
@@ -272,7 +277,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
 
       {/* Filter and Selection Section */}
-      <section className="py-12 md:py-16 bg-white border-b border-[#d4af37]/10" ref={packagesRef}>
+      <section id="packages" className="section-padding bg-white border-b border-[#d4af37]/10" ref={packagesRef}>
         <Container>
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 border-b border-[#d4af37]/20 pb-6 md:pb-10">
             <div className="mb-8 md:mb-0">
@@ -353,7 +358,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                   <motion.div
                     key={pkg.id}
                     layout
-                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.6, delay: idx * 0.1 }}
@@ -366,7 +370,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                 ))}
               </AnimatePresence>
             ) : (
-              <div className="col-span-full py-32 text-center text-[#8b7355] font-serif italic text-2xl">
+              <div className="col-span-full py-16 text-center text-[#8b7355] font-serif italic text-2xl">
                 The collection for this selection is currently being curated.
               </div>
             )}
@@ -374,7 +378,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-20 flex justify-center">
+            <div className="mt-12 flex justify-center">
               <Pagination>
                 <PaginationContent className="gap-3">
                   <PaginationItem>
@@ -431,7 +435,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             </div>
           )}
 
-          <div className="mt-24 text-center">
+          <div className="mt-12 text-center">
             <button className="px-16 py-5 border-2 border-[#d4af37]/30 text-xs uppercase tracking-[0.4em] text-[#8b7355] font-black hover:bg-[#d4af37] hover:text-white hover:border-[#d4af37] transition-all duration-500 group rounded-lg">
               <span>View All Elite Properties</span>
             </button>
@@ -440,7 +444,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
       </section>
 
       {/* Services Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-[#f5f3f0] to-[#faf9f7] relative overflow-hidden">
+      <section className="section-padding bg-gradient-to-br from-[#f5f3f0] to-[#faf9f7] relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{
             backgroundImage: `repeating-linear-gradient(45deg, #d4af37 0, #d4af37 1px, transparent 0, transparent 50%)`,
@@ -451,9 +455,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-8 md:gap-16 text-center">
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="group"
             >
               <div className="w-24 h-24 mx-auto mb-8 border-2 border-[#d4af37]/30 rounded-full flex items-center justify-center text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-white transition-all duration-700 shadow-lg">
@@ -464,9 +465,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="group"
             >
@@ -478,9 +476,6 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="group"
             >

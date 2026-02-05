@@ -1,4 +1,5 @@
-import { db } from "@/firebase/firebaseConfig";
+import { db as firestoreDb } from "@/firebase/firebaseConfig";
+export const db = firestoreDb;
 import { minimizePackageData, minimizeRegionData, minimizeReviewData } from "@/utils/dataMinimizers";
 import {
   collection,
@@ -900,10 +901,10 @@ export const getPlace = async (id) => {
 
 export const getSavedItinerary = async (id) => {
   try {
-    console.log(`[getSavedItinerary] Attempting to fetch ID: ${id} from ${COLLECTIONS.SAVED_PDF}`);
+    console.log(`[getSavedItinerary] Attempting to fetch ID: ${id} from ${COLLECTIONS.SAVED_PDFS}`);
 
     // 1. Try fetching by Document Key (ID)
-    const docRef = doc(db, COLLECTIONS.SAVED_PDF, id);
+    const docRef = doc(db, COLLECTIONS.SAVED_PDFS, id);
     const docSnap = await getDocFromServer(docRef);
 
     if (docSnap.exists()) {
@@ -914,7 +915,7 @@ export const getSavedItinerary = async (id) => {
     // 2. Fallback: Try fetching by field "documentID"
     console.log(`[getSavedItinerary] Document key not found. Querying field 'documentID' == ${id}`);
     const q = query(
-      collection(db, COLLECTIONS.SAVED_PDF),
+      collection(db, COLLECTIONS.SAVED_PDFS),
       where("documentID", "==", id)
     );
     const querySnapshot = await getDocsFromServer(q);

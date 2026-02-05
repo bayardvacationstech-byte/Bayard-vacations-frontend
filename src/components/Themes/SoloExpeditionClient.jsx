@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Backpack, Compass, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Coffee, Tent, Zap, Wind, Shield, Rocket, Globe } from "lucide-react";
+import { User, Backpack, Compass, MapPin, Calendar, Users, Star, Mountain, ChevronRight, Coffee, Tent, Zap, Wind, Shield, Rocket, Globe, PlayCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -22,8 +22,10 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 // Floating Explorer Elements (Maps, Compasses)
 const FloatingExplorerElements = () => {
@@ -84,6 +86,7 @@ export default function SoloExpeditionClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -132,6 +135,11 @@ export default function SoloExpeditionClient() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f0f4f8] via-[#e8f0f7] to-[#f0f4f8]">
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["solo-expedition"]} 
+      />
       <AnimatePresence mode="wait">
         {isLoading && (
           <ThemeLoader theme="solo" fullScreen className="bg-[#f0f4f8]" />
@@ -156,7 +164,6 @@ export default function SoloExpeditionClient() {
             
             {/* Left Content */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="lg:col-span-5 space-y-6"
@@ -185,12 +192,18 @@ export default function SoloExpeditionClient() {
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <button className="px-8 py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-lg font-bold text-sm uppercase tracking-wide hover:shadow-xl transition-all shadow-lg flex items-center space-x-2 group">
-                  <span>Start Journey</span>
-                  <Rocket className="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </button>
-                <button className="px-8 py-4 bg-white border-2 border-[#667eea] text-[#667eea] rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#667eea]/5 transition-all">
-                  Browse Expeditions
+                <Link href="#packages">
+                  <button className="px-8 py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white rounded-lg font-bold text-sm uppercase tracking-wide hover:shadow-xl transition-all shadow-lg flex items-center space-x-2 group w-full sm:w-auto">
+                    <span>Start Journey</span>
+                    <Rocket className="w-5 h-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </button>
+                </Link>
+                <button 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="px-8 py-4 bg-white border-2 border-[#667eea] text-[#667eea] rounded-lg font-bold text-sm uppercase tracking-wide hover:bg-[#667eea]/5 transition-all flex items-center space-x-2"
+                >
+                  <PlayCircle className="w-5 h-5" />
+                  <span>Watch Reel</span>
                 </button>
               </div>
               
@@ -211,7 +224,6 @@ export default function SoloExpeditionClient() {
             <div className="lg:col-span-7 relative">
               {/* Main Large Image */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative h-[450px] rounded-3xl overflow-hidden shadow-2xl"
@@ -241,7 +253,6 @@ export default function SoloExpeditionClient() {
               {/* Small Overlapping Cards */}
               <div className="absolute -bottom-6 -right-6 flex gap-4 z-10">
                 <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                   className="w-40 h-40 bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center border border-[#667eea]/10"
@@ -252,7 +263,6 @@ export default function SoloExpeditionClient() {
                 </motion.div>
                 
                 <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
                   className="w-40 h-40 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center"
@@ -270,7 +280,7 @@ export default function SoloExpeditionClient() {
 
 
       {/* Filters */}
-      <section className="py-8 bg-white border-y border-[#667eea]/10">
+      <section id="packages" className="section-padding bg-white border-y border-[#667eea]/10">
         <Container>
           <div className="flex flex-wrap gap-4 md:gap-6 justify-center items-center">
             <span className="text-[#5a5a5a] text-sm font-bold uppercase tracking-wider">Mission Scope:</span>
@@ -304,7 +314,7 @@ export default function SoloExpeditionClient() {
       </section>
 
       {/* Why Choose Solo Expedition - Inspired by Romantic Theme */}
-      <section className="relative py-12 md:py-16 overflow-hidden">
+      <section className="relative section-padding overflow-hidden">
         <div className="absolute inset-0 bg-white" />
         
         {/* Animated Background Orbs */}
@@ -332,9 +342,6 @@ export default function SoloExpeditionClient() {
                 ].map((feature, idx) => (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
                     className="flex gap-8 group"
                   >
@@ -352,9 +359,6 @@ export default function SoloExpeditionClient() {
 
             <div className="flex-1 relative hidden lg:block">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                viewport={{ once: true }}
                 className="relative z-10 w-full aspect-square rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(102,126,234,0.3)]"
               >
                 <Image
@@ -380,7 +384,7 @@ export default function SoloExpeditionClient() {
       </section>
 
       {/* Packages Exploration */}
-      <section className="py-20 bg-gradient-to-br from-white to-[#f5f7fa]" id="assignments">
+      <section className="section-padding bg-gradient-to-br from-white to-[#f5f7fa]" id="assignments">
         <Container>
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-7xl font-display font-bold text-[#1a1a1a] mb-6 uppercase tracking-tight">
@@ -393,7 +397,9 @@ export default function SoloExpeditionClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8" ref={packagesRef}>
             {isLoading ? (
-              <ThemeLoader theme="solo" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+              </div>
             ) : (
               <AnimatePresence mode="wait">
                 {paginatedPackages.map((pkg, index) => (
@@ -469,7 +475,7 @@ export default function SoloExpeditionClient() {
       </section>
 
       {/* Final Premium CTA */}
-      <section className="py-12 bg-white relative overflow-hidden">
+      <section className="section-padding bg-white relative overflow-hidden">
         <Container className="text-center">
             <div className="max-w-3xl mx-auto space-y-10">
               <h2 className="text-4xl md:text-6xl font-black text-[#1a1a1a] tracking-tighter leading-tight">
@@ -477,9 +483,11 @@ export default function SoloExpeditionClient() {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#667eea] to-[#764ba2]">Solo Adventure?</span>
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <Button size="lg" className="h-16 px-12 rounded-2xl bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:shadow-2xl text-white shadow-xl shadow-[#667eea]/30 border-none font-black text-lg uppercase tracking-widest transition-all">
-                  Talk to a Specialist
-                </Button>
+                <Link href="/contact">
+                  <Button size="lg" className="h-16 px-12 rounded-2xl bg-gradient-to-r from-[#667eea] to-[#764ba2] hover:shadow-2xl text-white shadow-xl shadow-[#667eea]/30 border-none font-black text-lg uppercase tracking-widest transition-all">
+                    Talk to a Specialist
+                  </Button>
+                </Link>
                 <div className="flex -space-x-4">
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="w-12 h-12 rounded-full border-4 border-white overflow-hidden bg-slate-100">

@@ -5,26 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
-import { 
-  Heart, 
-  MapPin, 
-  Clock, 
-  ChevronRight, 
-  ChevronLeft,
-  Sparkles,
+import {
+  Heart,
+  MapPin,
+  Clock,
+  ChevronRight,
   Star,
   Users,
   Compass,
-  Info,
   Crown,
-  CheckCircle,
-  Tent,
-  Landmark,
-  Waves,
-  Mountain,
   Smile,
+  Church,
   University,
-  Church
+  Mountain,
+  Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -38,266 +32,300 @@ import "swiper/css/pagination";
 const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = false }) => {
   const cardRef = useRef(null);
 
-  // Theme Styles Configuration
   const themeStyles = {
     romantic: {
-      card: "border-rose-100 hover:rotate-1 hover:-translate-y-2 hover:shadow-rose-100/50",
-      title: "font-playfair text-rose-600 italic font-bold",
-      featureDot: "bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.4)]",
-      featureText: "text-rose-800 italic",
-      price: "text-rose-600 font-playfair",
-      cta: "bg-gradient-to-br from-rose-400 to-rose-700 rounded-[50%_50%_50%_12px] shadow-rose-200",
-      badge: "bg-rose-50 text-rose-600",
-      icon: <Heart className="w-4 h-4 fill-rose-500" />
+      // Elegant pink overlap – Playfair Display + soft gradients
+      card: "bg-gradient-to-br from-[#fff5f7] to-[#ffe8ec] rounded-[30px] shadow-[0_20px_60px_rgba(255,105,135,0.25)] hover:-translate-y-2 transition-transform duration-400",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-[#333] font-semibold text-xs",
+      heart: "text-[#ff6b9d] text-base",
+      locationBadge: "bg-[#3c3c3c]/85 backdrop-blur-lg text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-[13px] font-medium bottom-5 left-5",
+      durationBadge: "bg-[#ff6b9d] text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-xs font-semibold bottom-5 right-5",
+      title: "font-['Playfair_Display'] text-xl sm:text-2xl text-[#2d1b1b] font-semibold leading-tight mb-2",
+      highlightBullet: "text-[#ff6b9d] text-lg leading-none",
+      highlightText: "text-[#666] italic text-sm sm:text-xs",
+      priceLabel: "text-[10px] sm:text-[11px] text-[#999] uppercase tracking-widest mb-0.5",
+      price: "font-['Playfair_Display'] text-2xl sm:text-3xl text-[#c44569] font-bold",
+      cta: "bg-gradient-to-br from-[#ff6b9d] to-[#c44569] text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-[0_8px_20px_rgba(255,107,157,0.3)] hover:shadow-[0_12px_30px_rgba(255,107,157,0.4)] hover:-translate-y-0.5 transition-all text-lg",
     },
+
     group: {
-      card: "border-emerald-100 hover:scale-[1.02] hover:-translate-y-2 hover:shadow-emerald-100/50 -rotate-1 hover:rotate-0",
-      title: "font-space-grotesk text-emerald-800 uppercase tracking-tight",
-      featureDot: "bg-emerald-500 rounded-sm rotate-45",
-      featureText: "text-emerald-700 font-medium",
-      price: "text-emerald-800 font-space-grotesk",
-      cta: "bg-gradient-to-br from-emerald-500 to-emerald-800 rounded-xl rotate-3",
-      badge: "bg-emerald-100 text-emerald-800",
-      icon: <Users className="w-4 h-4 fill-emerald-600" />
+      // Bold geometric – Bebas Neue + orange energy
+      card: "bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] hover:scale-[1.02] transition-transform duration-400 overflow-hidden",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded-lg shadow-[4px_4px_0_rgba(0,0,0,0.1)] flex items-center gap-1.5 text-xs",
+      locationBadge: "bg-[#2d3142]/90 backdrop-blur-lg text-white px-3 py-1.5 rounded-lg font-['Bebas_Neue'] text-sm tracking-wide bottom-5 left-5",
+      durationBadge: "bg-[#FF6B35] text-white px-3 py-1.5 rounded-lg font-['Bebas_Neue'] text-sm tracking-wide bottom-5 right-5",
+      title: "font-['Bebas_Neue'] text-2xl sm:text-3xl text-[#2D3142] leading-none mb-2 tracking-wide",
+      highlightBullet: "text-[#FF6B35] text-lg leading-none",
+      highlightText: "text-[#666] text-sm sm:text-xs",
+      priceLabel: "font-['Bebas_Neue'] text-[10px] sm:text-[11px] text-[#999] tracking-widest mb-0.5",
+      price: "font-['Bebas_Neue'] text-2xl sm:text-3xl text-[#2D3142] tracking-wide",
+      cta: "bg-[#FF6B35] text-white rounded-[10px] w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,0.1)] hover:shadow-[6px_6px_0_rgba(0,0,0,0.15)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all text-lg",
     },
+
     family: {
-      card: "border-orange-100 hover:rotate-1 hover:shadow-orange-200/40 rounded-[40px_15px_40px_15px] bg-gradient-to-br from-white to-orange-50/20 transition-all duration-500",
-      title: "font-sans text-slate-900 font-black tracking-tight",
-      featureDot: "bg-orange-500 ring-4 ring-orange-100",
-      featureText: "text-slate-700 font-medium",
-      price: "text-orange-600 font-black",
-      cta: "bg-gradient-to-br from-orange-500 to-pink-500 rounded-[15px_30px_15px_30px] shadow-lg shadow-orange-200/50",
-      badge: "bg-white/80 backdrop-blur-md text-orange-600 rounded-full border border-orange-100",
-      icon: <Smile className="w-4 h-4 fill-orange-500 text-white stroke-[3px]" />
+      // Playful asymmetric – Righteous + bright colors
+      card: "bg-gradient-to-br from-[#FEF9E7] to-[#FCF3CF] rounded-[40px_10px_40px_10px] border-4 border-[#F39C12] shadow-[0_15px_50px_rgba(243,156,18,0.2)] hover:rotate-[-1deg] hover:scale-[1.02] transition-transform duration-400",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded-[20px_5px_20px_5px] border-2 border-[#F39C12] shadow-lg flex items-center gap-1.5 text-xs",
+      locationBadge: "bg-[#27ae60]/90 backdrop-blur-lg text-white px-3 py-1.5 rounded-[25px_5px_25px_5px] font-['Righteous'] text-[13px] -rotate-2 bottom-5 left-5",
+      durationBadge: "bg-[#E74C3C] text-white px-3 py-1.5 rounded-[5px_25px_5px_25px] font-['Righteous'] text-xs rotate-2 bottom-5 right-5",
+      title: "font-['Righteous'] text-xl sm:text-2xl text-[#2C3E50] mb-2 leading-tight drop-shadow-[1px_1px_0_rgba(243,156,18,0.2)]",
+      highlightBullet: "text-[#F39C12] text-lg leading-none",
+      highlightText: "text-[#666] text-sm sm:text-xs",
+      priceLabel: "font-['Righteous'] text-[10px] sm:text-[11px] text-[#999] mb-0.5",
+      price: "font-['Righteous'] text-2xl sm:text-3xl text-[#27AE60]",
+      cta: "bg-gradient-to-br from-[#E74C3C] to-[#C0392B] text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-[0_6px_20px_rgba(231,76,60,0.3)] hover:shadow-[0_10px_30px_rgba(231,76,60,0.4)] hover:rotate-90 hover:-translate-y-1 transition-all text-lg",
     },
-    solo: {
-      card: "border-[#667eea]/20 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#667eea]/20 bg-white transition-all duration-500",
-      title: "font-display text-[#1a1a1a] font-bold tracking-tight",
-      featureDot: "bg-[#667eea] shadow-[0_0_8px_rgba(102,126,234,0.4)]",
-      featureText: "text-[#5a5a5a] font-medium",
-      price: "text-transparent bg-clip-text bg-gradient-to-r from-[#667eea] to-[#764ba2] font-display",
-      cta: "bg-gradient-to-br from-[#667eea] to-[#764ba2] hover:shadow-xl hover:shadow-[#667eea]/30 rounded-lg transition-all duration-500",
-      badge: "bg-[#667eea] text-white font-bold uppercase tracking-wider px-4 [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)]",
-      icon: <Compass className="w-4 h-4 text-white" />
-    },
-    elite: {
-      card: "bg-[#0a0a0a] border-white/5 hover:border-amber-500/30 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_30px_rgba(212,175,55,0.1)] transition-all duration-700 group overflow-hidden",
-      title: "font-serif text-white group-hover:text-amber-500 transition-colors tracking-tight",
-      featureDot: "bg-amber-500 rounded-none h-1 w-1",
-      featureText: "text-gray-400 font-light",
-      price: "text-amber-500 font-serif font-bold",
-      cta: "bg-amber-500 text-black hover:bg-white hover:text-black transition-all duration-500 rounded-none h-12 w-12 flex items-center justify-center p-0",
-      badge: "bg-amber-500/10 border border-amber-500/30 text-amber-500 font-bold tracking-[0.2em] px-4",
-      icon: <Crown className="w-4 h-4 text-amber-500" />
-    },
-    relax: {
-      card: "border-green-100 hover:-translate-y-2 hover:shadow-green-100/50 bg-gradient-to-b from-white to-green-50/30",
-      title: "font-montserrat text-green-700 font-light tracking-wider",
-      featureDot: "bg-green-300",
-      featureText: "text-green-800 font-light",
-      price: "text-green-700 font-light",
-      cta: "bg-gradient-to-br from-green-400 to-green-700 rounded-full shadow-green-200",
-      badge: "bg-green-100/60 backdrop-blur-md text-green-800",
-      icon: <Sparkles className="w-4 h-4 fill-green-400" />
-    },
-    explore: {
-      card: "border-orange-100/50 hover:rotate-1 hover:-translate-y-2 hover:shadow-orange-100/50 bg-gradient-to-br from-[#fffaf0] to-white [clip-path:polygon(0_0,100%_0,100%_95%,95%_100%,0_100%)]",
-      title: "font-space-grotesk text-orange-900 uppercase font-bold tracking-wider",
-      featureDot: "bg-orange-500 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)] h-2.5 w-2.5",
-      featureText: "text-orange-900 font-medium",
-      price: "text-orange-800 font-space-grotesk",
-      cta: "bg-gradient-to-br from-orange-400 to-orange-800 [clip-path:polygon(20%_0,100%_0,100%_100%,0_100%)]",
-      badge: "bg-yellow-100 text-orange-900 [clip-path:polygon(10%_0,100%_0,90%_100%,0%_100%)] px-5",
-      icon: <Compass className="w-4 h-4 text-orange-600" />
-    },
-    exploration: {
-      card: "bg-white border-2 border-transparent hover:border-terra-500/20 hover:-translate-y-2 hover:rotate-1 hover:shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden",
-      title: "font-sans text-charcoal font-bold tracking-tight",
-      featureDot: "bg-sand-500 rounded-full h-1.5 w-1.5 shadow-[0_0_8px_rgba(233,196,106,0.6)]",
-      featureText: "text-gray-600 font-medium",
-      price: "text-terra-600 font-bold",
-      cta: "bg-charcoal text-white hover:bg-terra-500 transition-colors rounded-full h-12 w-12 flex items-center justify-center p-0",
-      badge: "bg-gradient-to-br from-terra-500 to-terra-600 text-white font-bold tracking-wider px-4 [clip-path:polygon(0_0,100%_0,100%_85%,50%_100%,0_85%)] py-2 pb-4",
-      icon: <Mountain className="w-4 h-4 text-white" />
-    },
-    religious: {
-      card: "border-burgundy-500/10 hover:-translate-y-2 hover:shadow-2xl bg-white card-sacred",
-      title: "font-serif text-burgundy-700 font-bold tracking-tight",
-      featureDot: "bg-gold-400 shadow-[0_0_8px_rgba(212,175,55,0.4)]",
-      featureText: "text-stone-600 font-medium italic font-serif",
-      price: "text-burgundy-700 font-serif",
-      cta: "bg-burgundy-600 hover:bg-burgundy-700 rounded-full",
-      badge: "glass-sacred text-burgundy-700 font-bold uppercase tracking-wider px-4",
-      icon: <Church className="w-4 h-4 text-gold-600" />
-    },
+
     educational: {
-      card: "border-indigo-900/10 hover:-translate-y-2 hover:shadow-indigo-950/10 bg-white rounded-sm architect-border transition-all duration-500",
-      title: "font-serif text-indigo-950 font-bold tracking-tight",
-      featureDot: "bg-amber-400 rounded-none h-1.5 w-1.5",
-      featureText: "text-slate-600 font-serif",
-      price: "text-indigo-900 font-serif font-bold",
-      cta: "bg-gradient-to-br from-indigo-950 to-indigo-800 rounded-sm shadow-indigo-900/10",
-      badge: "bg-amber-50 border border-amber-200 text-amber-700 font-bold tracking-widest px-3",
-      icon: <University className="w-4 h-4 text-amber-600" />
-    }
+      // Clean academic look
+      card: "bg-white rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.08)] border-l-8 border-[#3498DB] hover:translate-x-1 transition-transform duration-400",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded flex items-center gap-1.5 text-xs",
+      locationBadge: "bg-[#2c3e50]/90 backdrop-blur-lg text-white px-4 py-2 rounded font-['Questrial'] uppercase tracking-wide text-[11px] bottom-5 left-5",
+      durationBadge: "bg-[#3498DB] text-white px-4 py-2 rounded font-['Questrial'] text-[11px] bottom-5 right-5",
+      title: "font-['Libre_Baskerville'] text-xl sm:text-2xl text-[#2C3E50] mb-2 leading-tight",
+      highlightBullet: "text-[#3498DB] text-lg leading-none",
+      highlightText: "text-[#666] text-sm sm:text-xs",
+      priceLabel: "font-['Questrial'] text-[10px] sm:text-[11px] text-[#95A5A6] uppercase tracking-wide mb-0.5",
+      price: "font-['Libre_Baskerville'] text-2xl sm:text-3xl text-[#2C3E50] font-bold",
+      cta: "bg-[#3498DB] text-white rounded w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#2980B9] hover:shadow-[0_6px_20px_rgba(52,152,219,0.3)] hover:-translate-y-0.5 transition-all text-lg",
+    },
+
+    religious: {
+      // Serene spiritual – Cinzel + gold-brown
+      card: "bg-gradient-to-b from-[#F8F9FA] to-[#E9ECEF] rounded shadow-[0_20px_60px_rgba(0,0,0,0.12)] border-t-8 border-[#8B7355] hover:-translate-y-1 transition-transform duration-400",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded flex items-center gap-1.5 text-xs",
+      locationBadge: "bg-[#3e2723]/85 backdrop-blur-lg text-[#D7CCC8] px-4 py-2 rounded font-['Cinzel'] uppercase tracking-wider text-[11px] bottom-5 left-5",
+      durationBadge: "bg-[#8B7355] text-white px-4 py-2 rounded font-['Cinzel'] uppercase tracking-wider text-[11px] bottom-5 right-5",
+      title: "font-['Cinzel'] text-2xl sm:text-3xl text-[#3E2723] mb-3 text-center leading-tight",
+      highlightBullet: "text-[#8B7355] text-lg leading-none",
+      highlightText: "text-[#666] text-sm sm:text-xs",
+      priceLabel: "font-['Cinzel'] text-[10px] sm:text-[11px] text-[#999] uppercase tracking-widest mb-0.5",
+      price: "font-['Cinzel'] text-2xl sm:text-3xl text-[#3E2723]",
+      cta: "bg-[#8B7355] text-white rounded w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#6D4C41] hover:shadow-[0_8px_25px_rgba(139,115,85,0.3)] transition-all text-lg",
+    },
+
+
+    exploration: {
+      items: "bg-white border-2 border-transparent hover:border-terra-500/20 hover:-translate-y-2 hover:rotate-1 hover:shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden",
+      card: "bg-white border-2 border-transparent hover:border-[#E07A5F]/20 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-xs",
+      locationBadge: "bg-[#3D405B]/90 backdrop-blur-lg text-[#F4F1DE] px-4 py-2 rounded-lg font-['Questrial'] uppercase tracking-wider text-[11px] bottom-5 left-5",
+      durationBadge: "bg-[#E07A5F] text-white px-4 py-2 rounded-lg font-['Questrial'] uppercase tracking-wider text-[11px] bottom-5 right-5",
+      title: "font-['Montserrat'] text-xl sm:text-2xl text-[#3D405B] font-bold tracking-tight mb-2",
+      highlightBullet: "text-[#E07A5F] text-lg leading-none",
+      highlightText: "text-[#666] font-medium text-sm sm:text-xs",
+      priceLabel: "font-['Questrial'] text-[10px] sm:text-[11px] text-[#81B29A] font-bold uppercase tracking-widest mb-0.5",
+      price: "font-['Montserrat'] text-2xl sm:text-3xl text-[#E07A5F] font-bold",
+      cta: "bg-[#3D405B] text-white hover:bg-[#E07A5F] transition-colors rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center p-0 text-lg",
+    },
+
+    // Add solo, elite, relax, exploration... similarly following the reference
+    // (shortened here for brevity — follow same pattern: font family, colors, badge shape, cta style)
+
+    solo: {
+      card: "bg-[#1A1A1A] rounded-none shadow-[0_25px_70px_rgba(0,0,0,0.4)] hover:scale-[1.03] transition-transform duration-400 relative",
+      verticalAccent: <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-[#FFD700] to-[#FFA500] z-10" />,
+      imageOverlay: "bg-gradient-to-b from-black/30 to-transparent",
+      ratingBadge: "bg-white px-3 py-1.5 rounded flex items-center gap-2 text-xs",
+      locationBadge: "bg-[#1a1a1a]/90 backdrop-blur-lg text-[#FFD700] px-4 py-2 rounded font-['Archivo_Black'] uppercase tracking-wider text-[11px] bottom-5 left-5",
+      durationBadge: "bg-[#FFD700] text-[#1A1A1A] px-4 py-2 rounded font-['Archivo_Black'] uppercase tracking-wider text-[11px] bottom-5 right-5",
+      title: "font-['Archivo_Black'] text-2xl sm:text-3xl text-white mb-2 tracking-[-1px] leading-none",
+      highlightBullet: "text-[#FFD700] text-lg leading-none",
+      price: "font-['Archivo_Black'] text-2xl sm:text-3xl text-white tracking-[-1px]",
+      cta: "bg-[#FFD700] text-[#1A1A1A] rounded w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-white hover:translate-x-1 transition-all text-lg",
+    },
+
+    // ... continue for elite, relax, exploration with matching fonts/colors/shapes from reference
+    elite: {
+      card: "bg-gradient-to-br from-[#faf9f7] to-[#f5f3f0] rounded-xl shadow-[0_20px_60px_rgba(212,175,55,0.15)] hover:-translate-y-2 transition-transform duration-500 border border-[#d4af37]/20",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-[#1a1a1a] px-3 py-1.5 rounded-none border border-[#d4af37] shadow-lg flex items-center gap-1.5 text-white font-serif text-xs",
+      locationBadge: "bg-[#faf9f7]/90 backdrop-blur-lg text-[#1a1a1a] px-4 py-2 rounded-none border-l-2 border-[#d4af37] font-serif uppercase tracking-widest text-[10px] bottom-5 left-5",
+      durationBadge: "bg-[#d4af37] text-white px-4 py-2 rounded-none font-serif uppercase tracking-widest text-[10px] bottom-5 right-5",
+      title: "font-serif text-xl sm:text-2xl text-[#1a1a1a] font-medium leading-tight mb-2 italic",
+      highlightBullet: "text-[#d4af37] text-lg leading-none",
+      highlightText: "text-[#5a5a5a] font-serif text-sm italic",
+      priceLabel: "font-serif text-[10px] sm:text-[11px] text-[#8b7355] uppercase tracking-[0.2em] mb-0.5",
+      price: "font-serif text-2xl sm:text-3xl text-[#1a1a1a]",
+      cta: "bg-[#1a1a1a] text-[#d4af37] border border-[#d4af37] rounded-none w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a1a1a] transition-all duration-500 text-lg",
+    },
+
+    relax: {
+      card: "bg-[#fdfaf6] rounded-[2rem] shadow-[0_15px_40px_rgba(120,113,108,0.1)] hover:shadow-[0_20px_50px_rgba(120,113,108,0.15)] hover:-translate-y-1 transition-all duration-700",
+      imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
+      ratingBadge: "bg-white/90 backdrop-blur px-3 py-1.5 rounded-full text-[#57534e] flex items-center gap-1.5 text-xs shadow-sm",
+      locationBadge: "bg-[#e7e5e4]/80 backdrop-blur-md text-[#44403c] px-4 py-2 rounded-full font-sans text-[11px] tracking-wide bottom-5 left-5",
+      durationBadge: "bg-[#78716c] text-[#f5f5f4] px-4 py-2 rounded-full font-sans text-[11px] tracking-wide bottom-5 right-5",
+      title: "font-serif text-xl sm:text-2xl text-[#292524] mb-2 leading-relaxed tracking-tight",
+      highlightBullet: "text-[#a8a29e] text-lg leading-none",
+      highlightText: "text-[#78716c] font-light text-sm",
+      priceLabel: "font-sans text-[10px] sm:text-[11px] text-[#a8a29e] uppercase tracking-widest mb-0.5",
+      price: "font-serif text-2xl sm:text-3xl text-[#44403c] font-light",
+      cta: "bg-[#e7e5e4] text-[#44403c] rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#d6d3d1] transition-colors duration-500 text-lg",
+    },
   };
 
   const style = themeStyles[theme] || themeStyles.romantic;
 
-  // Image Scavenger logic
+  // ────────────────────────────────────────────────
+  // Image logic (unchanged)
   const validImages = useMemo(() => {
-    const scavenger = (val) => {
-      if (!val) return [];
-      if (Array.isArray(val)) return val;
-      return [val];
-    };
-
-    const rawImages = [
-      ...scavenger(item.cardImages),
-      ...(item.cardImage ? [item.cardImage] : []),
-      ...(item.cardImageRef ? [item.cardImageRef] : []),
-    ];
-
+    const scavenger = (val) => (!val ? [] : Array.isArray(val) ? val : [val]);
+    const raw = [...scavenger(item.cardImages), item.cardImage, item.cardImageRef].filter(Boolean);
     const seen = new Set();
-    return rawImages
-      .map(img => {
-        if (!img) return null;
-        const url = typeof img === "string" ? img : img.url;
-        return url ? { url } : null;
-      })
-      .filter(img => {
-        if (!img?.url || seen.has(img.url)) return false;
-        seen.add(img.url);
-        return true;
-      });
+    return raw
+      .map((img) => (typeof img === "string" ? img : img?.url))
+      .filter((url) => url && !seen.has(url) && seen.add(url));
   }, [item.cardImages, item.cardImage, item.cardImageRef]);
 
   const regionSlug = useMemo(() => {
     if (item.regionSlug) return item.regionSlug;
     if (!item.region) return "unknown";
-    return item.region.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+    return item.region.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
   }, [item.region, item.regionSlug]);
 
   const href = isGroup
     ? `/packages/${regionSlug}/${item.packageSlug}?group=true`
     : `/packages/${regionSlug}/${item.packageSlug}`;
 
+  // Process highlights: replace first two with destinations if available
+  const baseHighlights = useMemo(() => {
+    // Check for length > 0 because minimizer returns [] which is truthy
+    const rawHighlights = (item.highlights && item.highlights.length > 0) 
+      ? item.highlights 
+      : ["Premium Accommodation", "Curated Experiences", "Seamless Travel"];
+    
+    // Formatting helper for region fallback
+    const formatRegion = (slug) => {
+      if (!slug) return "";
+      return slug
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    };
+
+    const destinations = item.citiesList || item.location || formatRegion(item.region) || "";
+    
+    if (destinations) {
+      return [
+        `Covering: ${destinations}`,
+        // If we pulled from default highlights (length 3), we only want the last 2 to make total 3
+        // If we have real highlights, we just prepend
+        ...(item.highlights && item.highlights.length > 0 ? item.highlights.slice(0, 2) : rawHighlights.slice(1))
+      ].slice(0, 3);
+    }
+    return rawHighlights;
+  }, [item.highlights, item.citiesList, item.location, item.region]);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
       transition={{ duration: 0.6 }}
       className="h-full"
     >
       <Link href={href} className="block h-full group">
-        <div className={cn(
-          "relative bg-white rounded-[30px] overflow-hidden transition-all duration-500 h-full flex flex-col border shadow-xl bg-white",
-          style.card,
-          className
-        )}>
-          {/* Card Image Area */}
-          <div className="relative h-[240px] sm:h-[320px] overflow-hidden group/img">
+        <div className={cn("relative overflow-hidden h-full flex flex-col", style.card, className)}>
+          {/* Image Area */}
+          <div className="relative h-[340px] overflow-hidden">
+            {style.verticalAccent}
+
             <Swiper
               modules={[Navigation, Autoplay, Pagination]}
               loop={validImages.length > 1}
-              autoplay={{ delay: 5000 }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
               navigation={{
-                nextEl: `.swiper-next-${item.id}`,
-                prevEl: `.swiper-prev-${item.id}`,
+                nextEl: `.next-${item.id}`,
+                prevEl: `.prev-${item.id}`,
               }}
-              className="h-full w-full"
+              className="h-full"
             >
               {validImages.length > 0 ? (
-                validImages.map((img, i) => (
+                validImages.map((url, i) => (
                   <SwiperSlide key={i}>
                     <Image
-                      src={img.url}
+                      src={url}
                       alt={item.packageTitle}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover/img:scale-110"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </SwiperSlide>
                 ))
               ) : (
-                <div className="h-full w-full bg-slate-100 flex items-center justify-center">
-                  <Sparkles className="w-12 h-12 text-slate-300" />
+                <div className="h-full bg-slate-100 flex items-center justify-center">
+                  <Sparkles className="w-16 h-16 text-slate-300" />
                 </div>
               )}
             </Swiper>
 
-            {/* Image Overlay Controls */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10 pointer-events-none" />
-            
-            {/* Top Overlays */}
-            <div className="absolute inset-x-5 top-5 flex justify-between items-start z-20">
-              <BadgeSection item={item} />
-              
-              <div className={cn(
-                "px-3 py-1.5 flex items-center gap-1.5 rounded-full font-black text-[10px] shadow-xl backdrop-blur-md border border-white/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3",
-                style.badge
-              )}>
-                {style.icon}
+            <div className={cn("absolute inset-0 z-10 pointer-events-none", style.imageOverlay)} />
+
+            {/* Badges & Controls */}
+            <div className="absolute top-5 right-5 z-20">
+              <div className={style.ratingBadge}>
+                {theme === "romantic" ? (
+                  <Heart className={style.heart || "w-6 h-6 fill-current"} />
+                ) : (
+                  <Star className="w-5 h-5" fill="currentColor" />
+                )}
                 <span>4.9</span>
               </div>
             </div>
 
-            {/* Slider Navigation Buttons */}
-            {validImages.length > 1 && (
-              <>
-                <button className={cn(
-                  `swiper-prev-${item.id} absolute left-4 top-1/2 -translate-y-1/2 z-30`,
-                  "w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white hover:text-black transition-all duration-300",
-                  "opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100"
-                )}>
-                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-                </button>
-                <button className={cn(
-                  `swiper-next-${item.id} absolute right-4 top-1/2 -translate-y-1/2 z-30`,
-                  "w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white hover:text-black transition-all duration-300",
-                  "opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100"
-                )}>
-                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                </button>
-              </>
-            )}
-
-            <div className="absolute inset-x-5 bottom-5 flex justify-between items-center z-20">
-              <div className="flex items-center gap-2 text-white font-bold drop-shadow-md">
-                <MapPin className="w-4 h-4" />
-                <span className="capitalize">{item.location || regionSlug.split("-").join(" ")}</span>
+            <div className={cn("absolute z-20 flex justify-between w-full px-5", style.locationBadge?.includes("bottom") ? "bottom-5" : "")}>
+              <div className={cn("flex items-center gap-3", style.locationBadge)}>
+                <MapPin className="w-5 h-5" />
+                <span className="capitalize">{item.location || regionSlug.replace(/-/g, " ")}</span>
               </div>
-              <div className="px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                <Clock className="w-3.5 h-3.5" />
-                <span>{item.days}D / {item.nights}N</span>
+
+              <div className={cn("flex items-center gap-3", style.durationBadge)}>
+                <Clock className="w-5 h-5" />
+                <span>
+                  {item.days}D / {item.nights}N
+                </span>
               </div>
             </div>
+
+            {validImages.length > 1 && (
+              <>
+                <button className={`prev-${item.id} absolute left-4 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 ...`}>←</button>
+                <button className={`next-${item.id} absolute right-4 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 ...`}>→</button>
+              </>
+            )}
           </div>
 
-          {/* Card Content Area */}
-          <div className="p-8 flex-1 flex flex-col">
-            <h3 className={cn("text-2xl mb-6 leading-tight", style.title)}>
-              "{item.packageTitle}"
+          {/* Content */}
+          <div className="pt-1.5 sm:pt-2 px-5 sm:px-8 pb-3 sm:pb-5 flex-1 flex flex-col">
+            <h3 
+              className={cn(style.title, "line-clamp-2")} 
+              title={item.packageTitle}
+            >
+              {item.packageTitle?.replace(/^["']|["']$/g, '')}
             </h3>
 
             <div className="space-y-3 mb-8">
-              {(item.highlights || ["Bespoke Experiences", "Luxury Accommodations", "Private Transfers"]).slice(0, 3).map((hl, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div className={cn("h-2 w-2 rounded-full shrink-0", style.featureDot)} />
-                  <span className={cn("text-sm transition-colors", style.featureText)}>{hl}</span>
+              {baseHighlights.slice(0, 3).map((hl, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className={style.highlightBullet}>●</span>
+                  <span className={style.highlightText}>{hl}</span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-auto pt-5 border-t border-slate-100 flex items-center justify-between">
+            <div className="mt-auto pt-6 border-t flex items-center justify-between border-opacity-20">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Curated Price</p>
-                <p className={cn("text-2xl font-black", style.price)}>
-                  {item.offerPrice || item.basePrice ? `₹${formatPrice(item.offerPrice || item.basePrice)}` : "Contact for Pricing"}
+                <p className={style.priceLabel}>CURATED PRICE</p>
+                <p className={style.price}>
+                  {item.offerPrice || item.basePrice ? `₹${formatPrice(item.offerPrice || item.basePrice)}` : "Contact Us"}
                 </p>
               </div>
-              <button className={cn("w-14 h-14 flex items-center justify-center text-white transition-all transform group-hover:scale-110", style.cta)}>
-                <ChevronRight className="w-7 h-7 stroke-[3px]" />
+
+              <button className={cn("transform group-hover:scale-110 transition-transform", style.cta)}>
+                <ChevronRight className="w-8 h-8 stroke-[3px]" />
               </button>
             </div>
           </div>

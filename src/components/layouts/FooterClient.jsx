@@ -16,7 +16,96 @@ import Container from "@/components/ui/Container";
 import FooterSection from "./Footer/FooterSection";
 import SwipeableContactCard from "./Footer/SwipeableContactCard";
 
+import { usePathname } from 'next/navigation';
+
 export default function FooterClient({ domesticRegions, internationalRegions }) {
+  const pathname = usePathname();
+  
+  // Detect theme from pathname
+  const themeSlug = pathname?.startsWith('/themes/') ? pathname.split('/')[2] : 'default';
+  
+  const THEME_CONFIGS = {
+    "romantic-getaways": {
+      bgGradient: "from-rose-900 to-rose-950",
+      hoverColor: "hover:text-rose-400",
+      dividerColor: "bg-rose-500/20",
+      borderColor: "border-rose-500/20",
+      glowColor: "via-rose-500/30"
+    },
+    "solo-expedition": {
+      bgGradient: "from-indigo-900 to-indigo-950",
+      hoverColor: "hover:text-indigo-400",
+      dividerColor: "bg-indigo-500/20",
+      borderColor: "border-indigo-500/20",
+      glowColor: "via-indigo-500/30"
+    },
+    "elite-escape": {
+      bgGradient: "from-[#2b251e] to-[#1a1a1a]",
+      hoverColor: "hover:text-[#c5a059]",
+      dividerColor: "bg-[#c5a059]/10",
+      borderColor: "border-[#c5a059]/10",
+      glowColor: "via-[#c5a059]/20"
+    },
+    "family-funventure": {
+      bgGradient: "from-blue-900 to-blue-950",
+      hoverColor: "hover:text-blue-400",
+      dividerColor: "bg-blue-500/20",
+      borderColor: "border-blue-500/20",
+      glowColor: "via-blue-500/30"
+    },
+    "group-departure": {
+      bgGradient: "from-emerald-900 to-emerald-950",
+      hoverColor: "hover:text-emerald-400",
+      dividerColor: "bg-emerald-500/20",
+      borderColor: "border-emerald-500/20",
+      glowColor: "via-emerald-500/30"
+    },
+    "group-adventures": {
+      bgGradient: "from-emerald-900 to-emerald-950",
+      hoverColor: "hover:text-emerald-400",
+      dividerColor: "bg-emerald-500/20",
+      borderColor: "border-emerald-500/20",
+      glowColor: "via-emerald-500/30"
+    },
+    "religious-retreat": {
+      bgGradient: "from-amber-900 to-amber-950",
+      hoverColor: "hover:text-amber-400",
+      dividerColor: "bg-amber-500/20",
+      borderColor: "border-amber-500/20",
+      glowColor: "via-amber-500/30"
+    },
+    "relax-rejuvenate": {
+      bgGradient: "from-teal-900 to-teal-950",
+      hoverColor: "hover:text-teal-400",
+      dividerColor: "bg-teal-500/20",
+      borderColor: "border-teal-500/20",
+      glowColor: "via-teal-500/30"
+    },
+    "exploration-bundle": {
+      bgGradient: "from-slate-900 to-slate-950",
+      hoverColor: "hover:text-slate-400",
+      dividerColor: "bg-slate-500/20",
+      borderColor: "border-slate-500/20",
+      glowColor: "via-slate-500/30"
+    },
+    "educational": {
+      bgGradient: "from-indigo-950 to-black",
+      hoverColor: "hover:text-indigo-400",
+      dividerColor: "bg-indigo-500/20",
+      borderColor: "border-indigo-500/20",
+      glowColor: "via-indigo-500/30"
+    },
+    "default": {
+      bgGradient: "from-brand-blue to-[#020617]",
+      hoverColor: "hover:text-brand-green",
+      dividerColor: "bg-white/20",
+      borderColor: "border-white/10",
+      glowColor: "via-white/30"
+    }
+  };
+
+  const config = THEME_CONFIGS[themeSlug] || THEME_CONFIGS.default;
+
   // Contact card data
   const contactCards = [
     {
@@ -55,9 +144,9 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
   ];
 
   return (
-    <footer className="relative bg-gradient-to-b from-brand-blue to-[#020617] text-white">
+    <footer className={cn("relative text-white transition-colors duration-700", "bg-gradient-to-b", config.bgGradient)}>
       {/* subtle top glow */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <div className={cn("absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent transition-colors duration-700", config.glowColor)} />
 
       <Container className="py-12 sm:py-16">
         {/* TOP */}
@@ -127,21 +216,24 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
             title="International" 
             links={internationalRegions} 
             basePath="packages" 
+            hoverColor={config.hoverColor}
           />
           <FooterSection 
             title="Domestic" 
             links={domesticRegions} 
             basePath="packages" 
+            hoverColor={config.hoverColor}
           />
           <FooterSection 
             title="Themes" 
             links={categoryData} 
             basePath="themes" 
+            hoverColor={config.hoverColor}
           />
         </div>
 
         {/* Contact Info - Swipeable Cards */}
-        <div className="mt-10 pt-8 border-t border-white/10">
+        <div className={cn("mt-10 pt-8 border-t transition-colors duration-700", config.borderColor)}>
           <div className="flex items-center justify-between mb-6">
             <h5 className="font-bold text-xl text-white">Get In Touch</h5>
             <p className="text-xs text-white/40 md:hidden">← Swipe cards</p>
@@ -172,14 +264,14 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
         </div>
 
         {/* DIVIDER */}
-        <div className="my-10 h-px bg-white/20" />
+        <div className={cn("my-10 h-px transition-colors duration-700", config.dividerColor)} />
 
         {/* BOTTOM */}
         <div className="flex flex-col gap-6 text-sm text-white/90 xl:flex-row xl:items-center xl:justify-between font-medium">
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-3">
             {quickLinksData.map((item, i, arr) => (
               <li key={item.id} className="flex items-center gap-6">
-                <Link href={item.href} className="hover:text-brand-green transition-all underline-offset-4 hover:underline whitespace-nowrap">
+                <Link href={item.href} className={cn("transition-all underline-offset-4 hover:underline whitespace-nowrap", config.hoverColor)}>
                   {item.title}
                 </Link>
                 {i !== arr.length - 1 && (

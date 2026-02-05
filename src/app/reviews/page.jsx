@@ -16,9 +16,9 @@ export default function ReviewsPage() {
     {
       id: 1,
       author_name: "Sarah Mitchell",
-      location: "Baku, Azerbaijan",
+      location: "Global Traveler",
       avatar: "https://i.pravatar.cc/150?u=sarah",
-      text: "Our trip to Azerbaijan was absolutely flawless. The itinerary was perfectly balanced between culture and adventure. The team went above and beyond to ensure every detail was perfect.",
+      text: "Our trip with Bayard Vacations was absolutely flawless. The itinerary was perfectly balanced between culture and adventure. The team went above and beyond to ensure every detail was perfect.",
       relative_time_description: "2 months ago",
       rating: 5,
       type: "Cultural Tour"
@@ -26,7 +26,7 @@ export default function ReviewsPage() {
     {
       id: 2,
       author_name: "James Wilson",
-      location: "Sheki",
+      location: "Adventure Enthusiast",
       avatar: "https://i.pravatar.cc/150?u=james",
       text: "Bayard Vacations truly understands luxury travel. Every detail was handled with precision and care. The hotel selections were top-notch and the local guides were incredibly knowledgeable.",
       relative_time_description: "5 months ago",
@@ -36,9 +36,9 @@ export default function ReviewsPage() {
     {
       id: 3,
       author_name: "Elena Rodriguez",
-      location: "Baku Old City",
+      location: "Culture Seeker",
       avatar: "https://i.pravatar.cc/150?u=elena",
-      text: "The 'Land of Fire' took our breath away. Walking through the Old City of Baku felt like stepping back in time! The hospitality of the Azerbaijani people is something I'll never forget.",
+      text: "Our getaway took our breath away. Every moment felt like stepping into a storybook! The hospitality and attention to detail is something I'll never forget.",
       relative_time_description: "1 year ago",
       rating: 5,
       type: "Heritage Tour"
@@ -46,9 +46,9 @@ export default function ReviewsPage() {
     {
       id: 4,
       author_name: "David Chen",
-      location: "Gabala",
+      location: "Nature Lover",
       avatar: "https://i.pravatar.cc/150?u=david",
-      text: "Professional service from start to finish. The booking process was simple, and the support teammate was always available. The mountain views in Gabala were the highlight of my trip.",
+      text: "Professional service from start to finish. The booking process was simple, and the support teammate was always available. The stunning views were the highlight of my trip.",
       relative_time_description: "1 year ago",
       rating: 5,
       type: "Nature Adventure"
@@ -82,7 +82,7 @@ export default function ReviewsPage() {
             Guest <span className="text-blue-600">Stories</span>
           </h1>
           <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl">
-            Read authentic experiences from travelers who explored the wonders of Azerbaijan with Bayard Vacations.
+            Read authentic experiences from travelers who explored the wonders of the world with Bayard Vacations.
           </p>
         </div>
 
@@ -176,7 +176,7 @@ export default function ReviewsPage() {
         {/* CTA Footer */}
         <div className="mt-20 bg-blue-600 rounded-[3.5rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-blue-200">
            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_30%,white_0%,transparent_70%)]"></div>
-           <h2 className="text-white text-3xl md:text-5xl font-black mb-6 relative z-10 leading-tight">Ready to create your own <br/> Azerbaijani story?</h2>
+           <h2 className="text-white text-3xl md:text-5xl font-black mb-6 relative z-10 leading-tight">Ready to create your own <br/> memorable story?</h2>
            <Link 
              href="/#packages"
              className="inline-block bg-white text-blue-600 px-10 py-5 rounded-full text-sm font-black uppercase tracking-widest shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative z-10"

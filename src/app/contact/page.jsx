@@ -39,14 +39,23 @@ const ContactPage = () => {
             Elevating travel into art. Tell us your vision.
           </p>
         </Container>
+
+        {/* Breadcrumb Bar at Banner Bottom - Matching Activities Page style */}
+        <div className="absolute bottom-6 left-0 w-full z-20">
+          <Container>
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Contact Us", href: "/contact", active: true },
+              ]}
+              className="bg-transparent border-none p-0"
+              omitContainer
+              colorClasses="text-white/80 drop-shadow-sm font-medium"
+              activeColorClasses="text-white drop-shadow-md font-bold"
+            />
+          </Container>
+        </div>
       </section>
-      
-      <Breadcrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Contact Us", href: "/contact", active: true },
-        ]}
-      />
 
       {/* Dark Themed Main Content */}
       <section className="py-20 md:py-32 bg-[#050505] relative overflow-hidden">

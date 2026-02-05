@@ -37,12 +37,15 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
+import VideoReelModal from "@/components/ui/VideoReelModal";
+import { VIDEO_MAP } from "@/config/themePackages";
 
 export default function EducationalToursClient() {
   const [selectedTab, setSelectedTab] = useState("international");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const itemsPerPage = 8;
   const packagesRef = useRef(null);
 
@@ -84,11 +87,12 @@ export default function EducationalToursClient() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#1e293b] font-sans selection:bg-[#3b82f6] selection:text-white overflow-x-hidden">
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="educational" fullScreen className="bg-[#f9f7f0]" />
-        )}
-      </AnimatePresence>
+      <VideoReelModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+        videoUrl={VIDEO_MAP["educational"]} 
+      />
+
 
       {/* Hero Section */}
       <section className="relative min-h-[70vh] lg:min-h-[85vh] pt-20 overflow-hidden bg-[#f9f7f0]">
@@ -116,7 +120,6 @@ export default function EducationalToursClient() {
             
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
@@ -144,11 +147,17 @@ export default function EducationalToursClient() {
               </p>
               
               <div className="flex flex-wrap gap-4 pt-4">
-                <Button className="h-14 px-8 rounded-sm bg-gradient-to-br from-indigo-950 to-indigo-800 text-white font-semibold text-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3 group border-none">
-                  <span>Browse Curricula</span>
-                  <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button variant="outline" className="h-14 px-8 rounded-sm border-2 border-indigo-900/20 text-indigo-900 font-semibold text-lg hover:border-indigo-900 hover:bg-white transition-all duration-300 flex items-center space-x-2 group">
+                <Link href="#packages">
+                  <Button className="h-14 px-8 rounded-sm bg-gradient-to-br from-indigo-950 to-indigo-800 text-white font-semibold text-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3 group border-none w-full sm:w-auto">
+                    <span>Browse Curricula</span>
+                    <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="h-14 px-8 rounded-sm border-2 border-indigo-900/20 text-indigo-900 font-semibold text-lg hover:border-indigo-900 hover:bg-white transition-all duration-300 flex items-center space-x-2 group"
+                >
                   <BookOpen className="w-6 h-6 text-amber-600 group-hover:scale-110 transition-transform" />
                   <span>View Syllabus</span>
                 </Button>
@@ -176,7 +185,6 @@ export default function EducationalToursClient() {
             
             {/* Right Content - Composition */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
@@ -250,7 +258,7 @@ export default function EducationalToursClient() {
 
 
       {/* Filter Tabs */}
-      <section className="py-8 bg-[#f9f7f0] border-b border-indigo-900/10">
+      <section id="packages" className="section-padding bg-[#f9f7f0] border-b border-indigo-900/10">
         <Container>
           <div className="flex justify-center">
             <div className="bg-white p-1.5 rounded-sm shadow-xl inline-flex border border-indigo-900/10">
@@ -284,7 +292,7 @@ export default function EducationalToursClient() {
       </section>
 
       {/* Programs Grid Section */}
-      <section className="py-12 md:py-16 bg-[#f9f7f0] relative" ref={packagesRef}>
+      <section className="section-padding bg-[#f9f7f0] relative" ref={packagesRef}>
         {/* Diagonal Stripes Background */}
         <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" style={{
           backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(251, 191, 36, 1) 10px, rgba(251, 191, 36, 1) 20px)`
@@ -292,10 +300,7 @@ export default function EducationalToursClient() {
 
         <Container className="relative z-10">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-10 md:mb-16"
+            className="text-center mb-8 md:mb-10"
           >
             <div className="inline-block mb-4">
               <span className="text-amber-600 font-bold tracking-widest uppercase text-xs px-4 py-1.5 bg-amber-50 border border-amber-200 rounded-full">Curriculum 2026/27</span>
@@ -316,7 +321,6 @@ export default function EducationalToursClient() {
                     <motion.div
                       key={`${selectedTab}-${pkg.id}`}
                       layout
-                      initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -329,7 +333,7 @@ export default function EducationalToursClient() {
                     </motion.div>
                   ))
                 ) : (
-                  <div className="col-span-full py-32 text-center bg-white/50 backdrop-blur-sm rounded-sm border border-indigo-900/10">
+                  <div className="col-span-full py-16 text-center bg-white/50 backdrop-blur-sm rounded-sm border border-indigo-900/10">
                     <p className="text-slate-500 text-xl font-serif italic">The curriculum for this region is currently being curated.</p>
                   </div>
                 )}
@@ -339,7 +343,7 @@ export default function EducationalToursClient() {
           
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-20 flex justify-center">
+            <div className="mt-12 flex justify-center">
               <Pagination>
                 <PaginationContent className="gap-3">
                   <PaginationItem>
@@ -396,7 +400,7 @@ export default function EducationalToursClient() {
             </div>
           )}
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-8">
             <Button variant="outline" className="px-10 py-7 border-2 border-indigo-950/20 text-indigo-950 rounded-sm font-bold hover:bg-indigo-950 hover:text-white hover:border-indigo-950 transition-all duration-300 gap-3 group">
               <BookOpen className="w-5 h-5 group-hover:scale-110 transition-transform" />
               <span>Download Academic Catalog</span>
@@ -406,7 +410,7 @@ export default function EducationalToursClient() {
       </section>
 
       {/* Why Choose Section */}
-      <section className="py-16 md:py-24 bg-indigo-950 relative overflow-hidden">
+      <section className="section-padding bg-indigo-950 relative overflow-hidden">
         {/* Pattern */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute inset-0" style={{ 
@@ -417,9 +421,6 @@ export default function EducationalToursClient() {
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-6 md:gap-12 text-center">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="p-10 rounded-sm border border-white/10 hover:border-amber-400/50 transition-all duration-500 bg-white/5 backdrop-blur-md"
             >
               <div className="w-20 h-20 mx-auto mb-8 bg-amber-400/10 rounded-full flex items-center justify-center text-3xl text-amber-400 border border-amber-400/30 shadow-[0_0_30px_rgba(251,191,36,0.1)]">
@@ -430,9 +431,6 @@ export default function EducationalToursClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="p-10 rounded-sm border border-white/10 hover:border-amber-400/50 transition-all duration-500 bg-white/5 backdrop-blur-md"
             >
@@ -444,9 +442,6 @@ export default function EducationalToursClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="p-10 rounded-sm border border-white/10 hover:border-amber-400/50 transition-all duration-500 bg-white/5 backdrop-blur-md"
             >
