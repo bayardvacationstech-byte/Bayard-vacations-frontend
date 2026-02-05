@@ -258,6 +258,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       recognitionRef.current.onerror = (event) => {
         console.error("Speech recognition error", event.error);
         setIsListening(false);
+        // Add visual feedback for mobile users
+        if (event.error === 'not-allowed') {
+          alert("Please enable microphone access to use voice input.");
+        }
       };
 
       recognitionRef.current.onend = () => {
@@ -267,6 +271,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   }, []);
 
   const toggleListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice input is not supported in this browser.");
+      return;
+    }
+
     if (!recognitionRef.current) return;
 
     if (isListening) {
@@ -278,6 +288,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         setIsListening(true);
       } catch (error) {
         console.error("Failed to start speech recognition:", error);
+        setIsListening(false);
       }
     }
   };
@@ -395,6 +406,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     const botMessageId = Date.now() + 1;
     let botResponseText = "";
 
+    // Add 15s Timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -405,7 +420,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           message: messageText,
           history: chatHistory
         }),
+        signal: controller.signal // Attach signal
       });
+
+      clearTimeout(timeoutId); // Clear timeout on response
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -415,7 +433,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       // Handle streaming response
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      setIsTyping(false); // Stop typing animation once we start receiving chunks
+      // Keep isTyping true while streaming to show we are processing, 
+      // OR set to false if you want the user to be able to type immediately.
+      // Usually users wait for response, so keeping it true or false depends on UX preference.
+      // Since we want to ensure input is enabled, we rely on the component prop change,
+      // but logically we can stop "typing" animation once stream starts.
+      setIsTyping(false); 
 
       // Initial bot response state
       setMessages((prev) => [
@@ -475,11 +498,16 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         }
       }
     } catch (error) {
+      clearTimeout(timeoutId);
       setIsTyping(false);
       
+      const errorMessage = error.name === 'AbortError' 
+        ? "I'm taking a bit too long to respond. Please try again or ask a simpler question! 🐌"
+        : "I'm having trouble connecting right now. Please call us at +91 6363117421 or try again in a moment! 🙏";
+
       const fallbackResponse = {
         id: Date.now() + 2,
-        text: "I'm having trouble connecting right now. Please call us at +91 6363117421 or try again in a moment! 🙏",
+        text: errorMessage,
         sender: "bot",
         timestamp: new Date(),
       };
@@ -813,7 +841,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                   backgroundOrigin: 'border-box',
                   backgroundClip: 'padding-box, border-box',
                 }}
-                disabled={isTyping}
+                disabled={false} // Always enabled to prevent keyboard stuck issues
               />
               <div className="absolute right-1.5 flex items-center gap-1">
                 {recognitionRef.current && (

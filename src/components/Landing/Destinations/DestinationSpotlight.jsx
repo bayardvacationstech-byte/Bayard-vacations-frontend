@@ -112,10 +112,19 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
 
   const scrollToItem = (index) => {
     if (carouselRef.current && carouselRef.current.children[index]) {
-      carouselRef.current.children[index].scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
+      const container = carouselRef.current;
+      const child = container.children[index];
+      
+      // Calculate center position
+      const childLeft = child.offsetLeft;
+      const childWidth = child.offsetWidth;
+      const containerWidth = container.offsetWidth;
+      
+      const targetScroll = childLeft - (containerWidth / 2) + (childWidth / 2);
+      
+      container.scrollTo({
+        left: targetScroll,
+        behavior: "smooth"
       });
     }
   };

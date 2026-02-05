@@ -35,7 +35,6 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
             }
             
             const validCategories = Object.keys(newHotelsByCategory);
-            console.log("PackageHotels: Valid Categories Found:", validCategories);
             
             // Notify parent about truly available categories
             if (onAvailableCategories) {

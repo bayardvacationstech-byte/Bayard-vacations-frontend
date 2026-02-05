@@ -6,23 +6,27 @@ import {
   getThemePackagesForHome,
 } from "@/lib/server";
 import Hero from "@/components/Landing/Hero";
-import BrandIntro from "@/components/Landing/BrandIntro";
+// import BrandIntro from "@/components/Landing/BrandIntro";
 import Holidays from "@/components/Landing/Holidays";
 import ThemeHighlights from "@/components/Landing/ThemeHighlights";
-import WhyBayard from "@/components/Landing/WhyBayard";
-import Testimonials from "@/components/Landing/Testimonials";
+// import WhyBayard from "@/components/Landing/WhyBayard";
+// import Testimonials from "@/components/Landing/Testimonials";
 import ExploreDestinations from "@/components/Landing/Destinations/ExploreDestinations";
 import ThemePackages from "@/components/Landing/Destinations/ThemePackages";
-import GroupDeparture from "@/components/Landing/GroupDeparture";
+// import GroupDeparture from "@/components/Landing/GroupDeparture";
 import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
 import StartJourney from "@/components/Landing/StartJourney";
-import InspirationSection from "@/components/Landing/InspirationSection";
+// import InspirationSection from "@/components/Landing/InspirationSection";
 import TravelStyle from "@/components/Landing/TravelStyle";
 import MobileAdBanner from "@/components/Landing/MobileAdBanner";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
+import dynamic from "next/dynamic";
 
-
-import RegionTestimonials from "@/components/Packages/RegionTestimonials";
+const WhyBayard = dynamic(() => import("@/components/Landing/WhyBayard"));
+const Testimonials = dynamic(() => import("@/components/Landing/Testimonials"));
+const GroupDeparture = dynamic(() => import("@/components/Landing/GroupDeparture"));
+const InspirationSection = dynamic(() => import("@/components/Landing/InspirationSection"));
+const RegionTestimonials = dynamic(() => import("@/components/Packages/RegionTestimonials"));
 
 // Timeout wrapper to prevent indefinite hanging
 const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {

@@ -39,6 +39,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [videoDuration, setVideoDuration] = useState(15); // Default estimate
   const [selectedReviewImages, setSelectedReviewImages] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
@@ -172,19 +173,13 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
     }
   };
 
-  // Auto-advance logic
+  // Auto-advance logic - REMOVED fixed timer
+  // Now relying on onEnded event on the video element
+  // keeping this cleaner
   useEffect(() => {
-    // Only auto-advance if not manually playing (user interaction) OR if in view 
-    // Actually, usually rotation happens unless user is interacting.
-    // Let's say: auto-advance every 8s if in view.
-    if (!isInView) return;
-
-    const timer = setInterval(() => {
-      nextVideo();
-    }, 8000); // 8 seconds per video
-
-    return () => clearInterval(timer);
-  }, [activeVideoIndex, isInView]);
+     // Reset duration estimate when changing videos if needed, 
+     // but usually onLoadedMetadata fires quickly enough.
+  }, [activeVideoIndex]);
 
   // Handle Play/Pause based on viewport visibility
   useEffect(() => {
@@ -270,7 +265,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                       className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"
                       initial={{ width: "0%" }}
                       animate={{ width: i === activeVideoIndex ? "100%" : i < activeVideoIndex ? "100%" : "0%" }}
-                      transition={{ duration: i === activeVideoIndex ? 12 : 0, ease: "linear" }}
+                      transition={{ duration: i === activeVideoIndex ? videoDuration : 0, ease: "linear" }}
                     />
                   </div>
                 ))}
@@ -289,10 +284,12 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                     ref={videoRef}
                     className="w-full h-full object-cover"
                     muted={isMuted}
-                    loop
+                    autoPlay
                     playsInline
                     onPlay={() => setIsPlaying(true)}
                     onPause={() => setIsPlaying(false)}
+                    onEnded={nextVideo}
+                    onLoadedMetadata={(e) => setVideoDuration(e.currentTarget.duration)}
                   >
                     <source src={videoReviews[activeVideoIndex].video} type="video/mp4" />
                   </video>

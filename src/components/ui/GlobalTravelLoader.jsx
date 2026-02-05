@@ -48,20 +48,23 @@ const GlobalTravelLoader = ({ className, text = "Curating your experience..." })
          {/* ORBITAL RING */}
          <motion.div 
             className="absolute w-[120%] h-[120%] rounded-full border border-dashed border-[#BF9106]/40"
-            animate={{ rotate: 360 }}
+            initial={{ rotate: 0 }}
+            animate={{ rotate: [0, 360] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
          />
 
          {/* GOLDEN PLANE */}
          <motion.div
             className="absolute w-[140%] h-[140%]"
-            animate={{ rotate: 360 }}
+            initial={{ rotate: 0 }}
+            animate={{ rotate: [0, 360] }}
             transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
          >
              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
                  <motion.div
+                     initial={{ scale: 1 }}
                      animate={{ scale: [1, 1.1, 1] }}
-                     transition={{ duration: 2, repeat: Infinity }}
+                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                      className="relative"
                  >
                      {/* Plane Icon */}

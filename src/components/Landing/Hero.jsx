@@ -7,6 +7,7 @@ import { Skeleton } from "../Skeleton";
 import Link from "next/link";
 import Image from "next/image";
 import ReviewCompanies from "@/assets/reviewCompanies.png";
+import heroPoster from "@/assets/hero.jpg"; // Imported hero image for poster
 import MobileSearch from "./MobileSearch";
 import { SEARCH_API, TRENDING_PACKAGES } from "@/config";
 
@@ -67,6 +68,7 @@ const Hero = () => {
       <div className="relative flex flex-col justify-center min-h-[90vh] sm:min-h-[100dvh] w-full bg-brand-deep">
         <video
           className="absolute inset-0 z-0 h-full w-full object-cover"
+          poster={heroPoster.src}
           autoPlay
           loop
           muted
@@ -291,7 +293,7 @@ const Hero = () => {
 
         </div>
       {/* MODERN OVERLAY FOOTER (Marquee + Stats) */}
-      <div className="absolute bottom-0 w-full z-30 border-t border-white/10">
+      <div className="absolute bottom-0 w-full z-30">
         
         {/* Highlight Marquee - High Visibility Terracotta Ribbon */}
         {/* <div className="relative w-full overflow-hidden bg-brand-blue shadow-[0_-4px_20px_rgba(0,0,0,0.1)] border-b border-brand-dark/5 z-20">
@@ -350,7 +352,7 @@ const Hero = () => {
         </div>
 
         {/* Mobile Action Buttons - Below Stats */}
-        <div className="sm:hidden relative z-40 flex gap-3 w-full px-4 mt-8 pb-6">
+        <div className="sm:hidden relative z-40 flex gap-3 w-full px-4 mt-16 pb-4">
           <Link 
             href="/explore"
             className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 backdrop-blur-md px-5 py-3.5 rounded-2xl text-white hover:from-blue-500 hover:to-blue-600 transition-all shadow-[0_8px_30px_rgba(37,99,235,0.4)] hover:shadow-[0_8px_40px_rgba(37,99,235,0.6)] hover:scale-[1.02]"
@@ -371,7 +373,7 @@ const Hero = () => {
         {/* Quick Stats - Enhanced Design */}
         <div 
           style={{ background: 'linear-gradient(to bottom, #001233 0%, #0046b8 100%)' }}
-          className="text-white border-t border-white/20 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
+          className="text-white shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
         >
           <div className="max-w-7xl mx-auto">
             {/* MOBILE LAYOUT */}
@@ -400,8 +402,7 @@ const Hero = () => {
                 </div>
               </div>
 
-              {/* Divider */}
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-2" />
+
 
               {/* Bottom Row: Icons */}
               <div className="grid grid-cols-3 gap-2">

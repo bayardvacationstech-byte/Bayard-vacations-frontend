@@ -34,7 +34,7 @@ const AccountLayout = ({ children }) => {
           <div className="absolute inset-0 bg-brand-deep/30" />
         </div>
 
-        <div className="relative z-20">
+        <div className="relative z-10">
           <Container>
             <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-700">
               <span className="text-white/50 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Personal Dashboard</span>

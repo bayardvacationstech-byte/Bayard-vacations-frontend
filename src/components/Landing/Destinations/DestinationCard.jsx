@@ -67,7 +67,7 @@ export default function DestinationCard({
         w-full
         cursor-pointer transition-all duration-500 ease-out shadow-lg flex-shrink-0
         ${shouldAnimate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-        ${isHovered ? "scale-[1.03] shadow-2xl" : "scale-100 shadow-lg"}
+        ${isHovered ? "scale-[1.01] shadow-2xl" : "scale-100 shadow-lg"}
         `}
         style={{
           willChange: "transform",
@@ -140,7 +140,7 @@ export default function DestinationCard({
               </div>
 
               {regionData?.name && (
-                <div className="absolute bottom-0 left-0 right-0 z-30 p-4 sm:p-5 md:p-6 pb-6 sm:pb-8">
+                <div className="absolute top-0 left-0 right-0 z-30 p-4 sm:p-5 md:p-6 pt-6 sm:pt-8">
                   <div className="relative flex flex-col items-center">
                     <div
                       className="absolute -inset-4 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-all duration-500"
@@ -166,52 +166,45 @@ export default function DestinationCard({
                         />
                       </span>
                     </h3>
-                    
-                    {/* Marketing Subtitle */}
-                     <p 
-                      className="text-white/80 text-[10px] sm:text-xs font-medium tracking-[0.2em] uppercase mt-2 transition-all duration-500 transform"
-                      style={{
-                        opacity: isHovered ? 1 : 0.7,
-                        transform: isHovered ? "translateY(-2px)" : "translateY(0)"
-                      }}
-                    >
-                      Explore Packages
-                    </p>
-
-                    <div
-                      className="mt-4 transition-all duration-500"
-                      style={{
-                        opacity: isHovered ? 1 : 0,
-                        transform: isHovered
-                          ? "translateY(0) scale(1)"
-                          : "translateY(10px) scale(0.95)",
-                      }}
-                    >
-                        {/* Glassmorphism Button */}
-                        <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/30 rounded-full group transition-all hover:bg-white/20 hover:border-white/50">
-                          <span className="text-white text-xs font-bold tracking-wider uppercase">
-                            View Details
-                          </span>
-                          <div className="w-4 h-4 text-white transform group-hover:translate-x-1 transition-transform">
-                             <svg
-                              className="w-full h-full"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2.5}
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                              />
-                            </svg>
-                          </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}
+
+
+              {/* View Details Button - Bottom */}
+              <div className="absolute bottom-0 left-0 right-0 z-30 p-4 sm:p-5 md:p-6 pb-6 sm:pb-8 flex justify-center">
+                <div
+                  className="transition-all duration-500"
+                  style={{
+                    opacity: isHovered ? 1 : 0,
+                    transform: isHovered
+                      ? "translateY(0) scale(1)"
+                      : "translateY(10px) scale(0.95)",
+                  }}
+                >
+                  {/* Glassmorphism Button */}
+                  <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/30 rounded-full group transition-all hover:bg-white/20 hover:border-white/50 w-fit">
+                    <span className="text-white text-xs font-bold tracking-wider uppercase">
+                      View Details
+                    </span>
+                    <div className="w-4 h-4 text-white transform group-hover:translate-x-1 transition-transform">
+                      <svg
+                        className="w-full h-full"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div
                 className="absolute inset-0 z-25 rounded-xl md:rounded-2xl border-2 border-white/0 transition-all duration-500"

@@ -56,6 +56,13 @@ export const useBlogs = () => {
         fetchedBlogs.push(data);
       });
 
+      console.log('[useBlogs] Fetched blogs:', {
+        region,
+        category,
+        totalFetched: fetchedBlogs.length,
+        blogs: fetchedBlogs.map(b => ({ id: b.id, title: b.title, region: b.region, tags: b.tags }))
+      });
+
       setBlogs(fetchedBlogs.slice(0, limitCount));
     } catch (err) {
       console.warn("Firestore query failed, attempting in-memory fallback:", err.message);
@@ -71,6 +78,17 @@ export const useBlogs = () => {
         fallbackSnapshot.forEach((doc) => {
           allBlogs.push(sanitizeDocumentData(doc));
         });
+        
+        console.log('[useBlogs] Fallback - All published blogs fetched:', {
+          total: allBlogs.length,
+          blogs: allBlogs.map(b => ({ 
+            id: b.id, 
+            title: b.title, 
+            region: b.region, 
+            tags: b.tags,
+            categories: b.categories 
+          }))
+        });
 
         // Robust Memory filtering
         let filtered = allBlogs;
@@ -80,8 +98,36 @@ export const useBlogs = () => {
         }
         
         if (region) {
-          // Case insensitive or flexible region matching if needed
-          filtered = filtered.filter(b => b.region === region);
+          // Filter by region field OR tags containing the region name
+          // This allows more flexible matching - blogs can be tagged with region-related keywords
+          const regionLower = region.toLowerCase().replace(/-/g, ' ');
+          console.log('[useBlogs] Filtering by region:', { region, regionLower });
+          
+          filtered = filtered.filter(b => {
+            // Check if blog has a region field that matches
+            if (b.region === region) {
+              console.log('[useBlogs] ✓ Blog matched by region field:', b.title);
+              return true;
+            }
+            
+            // Check if any tag contains the region name
+            if (b.tags && Array.isArray(b.tags)) {
+              const hasMatchingTag = b.tags.some(tag => 
+                tag.toLowerCase().includes(regionLower)
+              );
+              if (hasMatchingTag) {
+                console.log('[useBlogs] ✓ Blog matched by tags:', b.title, b.tags);
+              }
+              return hasMatchingTag;
+            }
+            
+            return false;
+          });
+          
+          console.log('[useBlogs] After region filtering:', {
+            filteredCount: filtered.length,
+            filteredBlogs: filtered.map(b => ({ id: b.id, title: b.title }))
+          });
         } else if (category) {
           filtered = filtered.filter(b => b.categories && b.categories.includes(category));
         }

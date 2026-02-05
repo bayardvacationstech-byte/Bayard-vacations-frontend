@@ -479,6 +479,9 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useAuth } from "@/contexts/AuthContext";
+import { auth } from "@/firebase/firebaseConfig";
+import { signOut } from "firebase/auth";
 
 export default function MobileNavbar() {
   const inputRef = useRef(null);
@@ -492,6 +495,7 @@ export default function MobileNavbar() {
 
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { user } = useAuth();
 
   /* ================= SCROLL DETECTION ================= */
   useEffect(() => {
@@ -546,7 +550,7 @@ export default function MobileNavbar() {
     <>
       {/* ================= HEADER ================= */}
       <header className={cn(
-        "fixed top-0 z-50 w-full block lg:hidden transition-all duration-500",
+        "fixed top-0 z-[9999] w-full block lg:hidden transition-all duration-500",
         forceHide ? "-translate-y-[110%] opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
       )}>
         <Container>
@@ -636,8 +640,8 @@ export default function MobileNavbar() {
       {/* ================= MENU DRAWER ================= */}
       <ul
         className={cn(
-          "fixed inset-0 z-40 flex flex-col pt-28 px-6 text-white transition-transform duration-300",
-          isMenuActive ? "translate-y-0" : "-translate-y-full"
+          "fixed inset-0 z-[98] flex flex-col pt-28 px-6 pb-20 text-white transition-all duration-300",
+          isMenuActive ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none invisible"
         )}
         style={{
           backgroundColor: "rgba(0, 0, 0, 0.85)",
@@ -669,13 +673,40 @@ export default function MobileNavbar() {
         ))}
 
         <div className="mt-auto space-y-4">
-          <Link
-            href="/login"
-            onClick={handleMenuToggle}
-            className="flex justify-center gap-2 rounded-full bg-white py-3 text-brand-blue"
-          >
-            <CircleUserRound /> Login
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href="/account/profile"
+                onClick={handleMenuToggle}
+                className="flex justify-center gap-2 rounded-full bg-white py-3 text-brand-blue"
+              >
+                <CircleUserRound /> View Profile
+              </Link>
+
+              <button
+                onClick={async () => {
+                  try {
+                    await signOut(auth);
+                    handleMenuToggle();
+                    window.location.href = "/login";
+                  } catch (error) {
+                    console.error("Logout failed:", error);
+                  }
+                }}
+                className="w-full text-center rounded-full border border-white py-3 hover:bg-white/10 transition-colors"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              onClick={handleMenuToggle}
+              className="flex justify-center gap-2 rounded-full bg-white py-3 text-brand-blue"
+            >
+              <CircleUserRound /> Login
+            </Link>
+          )}
 
           <Link
             href="/contact"
@@ -690,7 +721,7 @@ export default function MobileNavbar() {
       {/* ================= DROPDOWN ================= */}
       <ul
         className={cn(
-          "fixed inset-0 z-[45] text-white transition-transform duration-300 pt-24 px-6 overflow-y-auto",
+          "fixed inset-0 z-[99] text-white transition-transform duration-300 pt-24 px-6 overflow-y-auto",
           isDropdownActive ? "translate-x-0" : "translate-x-full"
         )}
         style={{

@@ -24,11 +24,6 @@ export default function ThemeHighlights({
 }) {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // Hook Calls ---------------------------------------------------------------
   const eliteEscapeData = usePackagesByTheme("elite-escape", initialEliteEscapePackages);
@@ -245,16 +240,6 @@ export default function ThemeHighlights({
 
              {/* RIGHT COLUMN - GRID */}
           <div className="lg:col-span-7 overflow-hidden">
-            {!isMounted ? (
-              <div className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-52 sm:h-64 lg:h-72 rounded-2xl bg-slate-100 animate-pulse"
-                  />
-                ))}
-              </div>
-            ) : (
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentThemeIndex}
@@ -319,9 +304,8 @@ export default function ThemeHighlights({
                   )}
                 </motion.div>
               </AnimatePresence>
-            )}
 
-             <div className="mt-8 flex justify-end">
+              <div className="mt-8 flex justify-end">
                  <Link 
                     href="/themes"
                     className="group inline-flex items-center gap-2 text-slate-500 hover:text-brand-blue font-semibold transition-colors text-sm sm:text-base"
