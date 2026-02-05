@@ -184,7 +184,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
         <div 
           className="absolute bottom-0 left-0 right-0 px-7 pb-7 pt-28 z-20 bg-gradient-to-t from-black via-black/80 to-transparent"
         >
-          <h2 className="text-2xl font-[900] text-white mb-2 leading-tight drop-shadow-lg line-clamp-1 tracking-tight">
+          <h2 className="text-lg sm:text-2xl font-[900] text-white mb-2 leading-tight drop-shadow-lg line-clamp-1 tracking-tight">
             {item.packageTitle}
           </h2>
 
@@ -202,8 +202,8 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
           
           <div className="flex items-center justify-between mt-3">
             <div className="flex flex-col">
-              <div className="text-3xl font-[900] text-white drop-shadow-lg flex items-baseline gap-1">
-                <span className="text-xl font-bold">₹</span>
+              <div className="text-2xl sm:text-3xl font-[900] text-white drop-shadow-lg flex items-baseline gap-1">
+                <span className="text-base sm:text-xl font-bold">₹</span>
                 {formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
               </div>
               {item.offerPrice > 0 && (

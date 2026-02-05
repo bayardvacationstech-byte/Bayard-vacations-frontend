@@ -30,11 +30,7 @@ const TravelStyle = ({
 }) => {
   const [activeTab, setActiveTab] = useState("international");
   const [activeStyle, setActiveStyle] = useState("all");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  /* Logic Restored - SSR Enabled */
   
   const currentTabPackages = useMemo(() => 
     activeTab === "international" ? initialInternationalPackages : initialDomesticPackages,
@@ -84,7 +80,6 @@ const TravelStyle = ({
     });
   }, [currentTabPackages, activeStyle]);
 
-  if (!mounted) return null;
 
   return (
     <Container className="sm:px-5">

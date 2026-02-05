@@ -45,12 +45,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
   const dynamicData = factSheetData?.details;
 
   // Console log for debugging
-  console.log("=== FACTSHEET DATA ===");
-  console.log("Region Name:", regionName);
-  console.log("Region Data:", regionData);
-  console.log("FactSheet Data:", factSheetData);
-  console.log("Dynamic Data (details):", dynamicData);
-  console.log("Is Loading:", isLoading);
+
 
   // Icon mapping for dynamic IDs
   const lucideIconMap = {

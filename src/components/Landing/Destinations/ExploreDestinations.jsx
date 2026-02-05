@@ -19,11 +19,6 @@ import Link from "next/link";
 export default function ExploreDestinations({ initialRegions }) {
   const [activeTab, setActiveTab] = useState("international");
   const { internationalRegions, domesticRegions, regionIsLoading, error } = useRegionsData(initialRegions);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   // Get first 8 international regions
   const displayInternationalRegions = useMemo(() => {
@@ -77,13 +72,6 @@ export default function ExploreDestinations({ initialRegions }) {
       </div>
 
       <div className="relative min-h-[350px] md:min-h-[450px] pb-4 px-0">
-        {!isMounted ? (
-          <div className="mt-4 flex gap-4 overflow-hidden">
-             {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-gray-100 rounded-xl md:rounded-2xl aspect-[5/6] w-[80%] sm:w-1/4 flex-shrink-0 animate-pulse" />
-             ))}
-          </div>
-        ) : (
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -133,7 +121,6 @@ export default function ExploreDestinations({ initialRegions }) {
               </Carousel>
             </motion.div>
           </AnimatePresence>
-        )}
       </div>
 
       <div className="mt-4 md:mt-6 flex justify-center">

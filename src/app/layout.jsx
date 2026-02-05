@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "./globals.css";
-import { Outfit, Damion, Playfair_Display, Great_Vibes, Montserrat, Space_Grotesk, Crimson_Text, Syne, Cormorant_Garamond, Lato } from "next/font/google";
+import { Outfit, Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import localFont from "next/font/local";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster as RadixToaster } from "@/components/ui/toaster";
@@ -59,56 +59,15 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-const damion = Damion({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-damion",
-});
-
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
-});
-
-const greatVibes = Great_Vibes({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-great-vibes",
-});
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-montserrat",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-});
-
-const crimsonText = Crimson_Text({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-crimson",
-});
-
-const syne = Syne({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-syne",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-cormorant",
-});
-
-const lato = Lato({
-  subsets: ["latin"],
-  weight: ["100", "300", "400", "700", "900"],
-  variable: "--font-lato",
 });
 
 export const metadata = {
@@ -163,10 +122,11 @@ export default async function RootLayout({ children }) {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link rel="preconnect" href="https://o4509820841295872.ingest.de.sentry.io" />
       </head>
       <Metrics />
       <body
-        className={`${outfit.variable} ${nord.variable} ${damion.variable} ${playfair.variable} ${greatVibes.variable} ${montserrat.variable} ${spaceGrotesk.variable} ${crimsonText.variable} ${syne.variable} ${cormorant.variable} ${lato.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${nord.variable} ${playfair.variable} ${cormorant.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ClientProviders>

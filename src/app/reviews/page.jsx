@@ -6,6 +6,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import ReviewGallery from "@/components/Reviews/ReviewGallery";
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
@@ -56,12 +57,35 @@ export default function ReviewsPage() {
   ];
 
   useEffect(() => {
-    // Mimic API fetch
-    const timer = setTimeout(() => {
-      setReviews(fallbackReviews);
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch('/api/reviews');
+        const data = await response.json();
+        
+        if (data.success && data.reviews.length > 0) {
+          const mappedReviews = data.reviews.map(review => ({
+            id: review.id || Math.random(),
+            author_name: review.author || "Guest Traveler",
+            location: review.location || "Verified Traveler", // Fallback as API might not have this
+            avatar: review.profile_photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.author || "Guest")}&background=random`,
+            text: review.text,
+            relative_time_description: review.relative_time_description,
+            rating: review.rating || 5,
+            type: review.type || "Verified Review" // Fallback
+          }));
+          setReviews(mappedReviews);
+        } else {
+          setReviews(fallbackReviews);
+        }
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+        setReviews(fallbackReviews);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReviews();
   }, []);
 
   return (
@@ -173,17 +197,12 @@ export default function ReviewsPage() {
           )}
         </div>
 
-        {/* CTA Footer */}
-        <div className="mt-20 bg-blue-600 rounded-[3.5rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-blue-200">
-           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_30%,white_0%,transparent_70%)]"></div>
-           <h2 className="text-white text-3xl md:text-5xl font-black mb-6 relative z-10 leading-tight">Ready to create your own <br/> memorable story?</h2>
-           <Link 
-             href="/#packages"
-             className="inline-block bg-white text-blue-600 px-10 py-5 rounded-full text-sm font-black uppercase tracking-widest shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 relative z-10"
-           >
-             Start Your Journey
-           </Link>
+        {/* Client Gallery */}
+        <div className="mt-20">
+          <ReviewGallery />
         </div>
+
+
       </Container>
     </main>
   );

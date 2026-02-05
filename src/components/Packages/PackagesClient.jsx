@@ -71,11 +71,7 @@ const PackagesClient = () => {
     error: packageError,
   } = usePackage(slug);
 
-  useEffect(() => {
-    if (packageData && packageData.packageSlug === "hong-kong-5n6d") {
-      console.log("Package Data loaded:", packageData);
-    }
-  }, [packageData]);
+
 
   // Hotel Selection State
   const [selectedHotel, setSelectedHotel] = useState(null);
@@ -107,12 +103,10 @@ const PackagesClient = () => {
     }
   }, [packageData?.id, packageData?.hotelDetails]);
 
-  // Callback to sync available categories from PackageHotels (which validates the IDs)
   const handleAvailableCategories = (availableCategories) => {
-    console.log("PackagesClient: Received Available Categories:", availableCategories);
     setHotelTiers(prev => {
        const filtered = prev.filter(tier => availableCategories.includes(tier.type));
-       console.log("PackagesClient: Filtered Tiers:", filtered);
+       
        
        // If currently selected hotel is now invalid, switch to the first valid one
        setSelectedHotel(current => {

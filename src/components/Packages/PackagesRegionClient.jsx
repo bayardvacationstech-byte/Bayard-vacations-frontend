@@ -676,7 +676,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
               </motion.div>
             </div>
             {/* Package Cards Grid */}
-            {!isMounted || packagesLoading || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
+            {packagesLoading || isLoading || (allPackages.length > 0 && packagesWithOffers.length === 0) ? (
               // Loading State - Show skeleton cards
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
@@ -846,7 +846,8 @@ export default function PackagesRegionClient({ initialRegionData }) {
       />
     </div>
 
-    {/* Related Blogs Carousel */}
+    {/* Related Blogs Carousel - Only show if there are relevant blogs */}
+    {regionBlogs && regionBlogs.length > 0 && (
       <section className="bg-slate-50 py-2 md:py-4" id="blogs">
         <Container>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-3 md:mb-12">
@@ -904,6 +905,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
           </div>
         </Container>
       </section>
+    )}
 
       {/* Reviews/Testimonials Section */}
       <div id="testimonials">

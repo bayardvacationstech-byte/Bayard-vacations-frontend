@@ -39,7 +39,7 @@ const Holidays = ({
   initialInternationalPackages = [],
   initialDomesticPackages = [],
 }) => {
-  const [mounted, setMounted] = useState(false);
+
   const [activeTab, setActiveTab] = useState("international");
   const [filterType, setFilterType] = useState("curated");
 
@@ -121,26 +121,22 @@ const Holidays = ({
     return curatedPackages.filter(p => hasTag(p, filterType));
   }, [curatedPackages, filterType]);
 
-  // Mount fix
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Auto-select filter when tab or packages change
   useEffect(() => {
-    if (!mounted || !availableFilters.length) return;
+    // Logic for auto-selecting filters
+    if (!availableFilters.length) return;
     
     // If current filter is not available in new data, switch to first available
     if (!availableFilters.find(f => f.id === filterType)) {
       setFilterType(availableFilters[0].id);
     }
-  }, [activeTab, mounted, availableFilters, filterType]);
+  }, [activeTab, availableFilters, filterType]);
 
   const currentLoading = intlLoading || domLoading;
   const hasData = curatedPackages.length > 0;
 
   // Show skeleton if we're loading AND have no data
-  if (!mounted || (currentLoading && !hasData)) {
+  if (currentLoading && !hasData) {
     return (
       <Container className="space-y-4 px-0 sm:px-5">
         <div className="flex justify-between">
