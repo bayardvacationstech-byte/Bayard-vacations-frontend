@@ -250,7 +250,6 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             {/* Left Content */}
             <div className="space-y-6 text-white max-w-2xl">
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
@@ -268,7 +267,6 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
@@ -415,9 +413,6 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     {/* Visual content (Higher priority for mobile mobile) */}
                     <div className="flex-1 order-1 lg:order-none">
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
                         className="relative"
                       >
                         {/* Main Image */}
@@ -470,9 +465,6 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     {/* Text content */}
                     <div className="flex-1 space-y-4 md:space-y-6 order-2 lg:order-none">
                       <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
                       >
                           <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-gold/10 text-brand-gold rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-2 md:mb-3 border border-brand-gold/20">
                             <Sparkles className="w-3 md:w-3.5 h-3 md:h-3.5" />
@@ -572,9 +564,6 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                {regionDataProcessed?.seasonalGuide?.map((s, i) => (
                  <motion.div 
                     key={i} 
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                     className="relative z-10 flex justify-between items-start gap-4 border-b border-white/10 pb-6 last:border-0 last:pb-0"
                   >

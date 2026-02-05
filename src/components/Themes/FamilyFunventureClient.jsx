@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -91,11 +91,7 @@ export default function FamilyFunventureClient() {
         onClose={() => setIsVideoModalOpen(false)} 
         videoUrl={VIDEO_MAP["family-funventure"]} 
       />
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="family" fullScreen className="bg-[#fef9f3]" />
-        )}
-      </AnimatePresence>
+
 
       {/* Hero Section */}
       <section className="relative min-h-[75vh] lg:min-h-[85vh] pt-20 overflow-hidden bg-gradient-to-br from-[#fef9f3] to-[#fff8f0]">
@@ -116,7 +112,6 @@ export default function FamilyFunventureClient() {
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center min-h-[60vh] py-12">
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
@@ -179,7 +174,6 @@ export default function FamilyFunventureClient() {
             
             {/* Right Content - Artistic Composition */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
@@ -295,9 +289,6 @@ export default function FamilyFunventureClient() {
       <section className="section-padding bg-[#fef9f3]" ref={packagesRef}>
         <Container>
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
             className="text-center mb-10 md:mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Curated Adventures</h2>
@@ -321,7 +312,6 @@ export default function FamilyFunventureClient() {
                     <motion.div
                       key={pkg.id}
                       layout
-                      initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -419,9 +409,6 @@ export default function FamilyFunventureClient() {
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-6 md:gap-12">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="text-center p-6 md:p-8 lg:p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
               <div className="w-24 h-24 mx-auto mb-8 bg-white rounded-3xl shadow-lg flex items-center justify-center text-4xl text-orange-500 transform group-hover:rotate-6 transition-transform">
@@ -432,9 +419,6 @@ export default function FamilyFunventureClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="text-center p-6 md:p-8 lg:p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
@@ -446,9 +430,6 @@ export default function FamilyFunventureClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="text-center p-10 rounded-[2.5rem] bg-[#fef9f3] hover:bg-orange-50 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >

@@ -22,7 +22,7 @@ import {
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
 
@@ -77,11 +77,7 @@ export default function GroupDepartureClient() {
         onClose={() => setIsVideoModalOpen(false)} 
         videoUrl={VIDEO_MAP["group-adventures"]} 
       />
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="family" fullScreen className="bg-indigo-50" />
-        )}
-      </AnimatePresence>
+
       {/* Hero Section */}
       <div className="relative min-h-[70vh] md:h-[75vh] lg:h-[80vh] overflow-hidden bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-600">
         {/* Group Background Pattern */}
@@ -96,7 +92,6 @@ export default function GroupDepartureClient() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center w-full">
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-6"
@@ -142,7 +137,6 @@ export default function GroupDepartureClient() {
 
             {/* Right Image */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
@@ -204,7 +198,9 @@ export default function GroupDepartureClient() {
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" ref={packagesRef}>
           {isLoading ? (
-            <ThemeLoader theme="group" />
+            <div className="col-span-full flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            </div>
           ) : (
             <AnimatePresence mode="wait">
               {paginatedPackages.map((pkg, index) => (
@@ -299,9 +295,6 @@ export default function GroupDepartureClient() {
             ].map((feature, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 className="text-center p-8"
               >

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -164,7 +164,6 @@ export default function SoloExpeditionClient() {
             
             {/* Left Content */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="lg:col-span-5 space-y-6"
@@ -225,7 +224,6 @@ export default function SoloExpeditionClient() {
             <div className="lg:col-span-7 relative">
               {/* Main Large Image */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative h-[450px] rounded-3xl overflow-hidden shadow-2xl"
@@ -255,7 +253,6 @@ export default function SoloExpeditionClient() {
               {/* Small Overlapping Cards */}
               <div className="absolute -bottom-6 -right-6 flex gap-4 z-10">
                 <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                   className="w-40 h-40 bg-white rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center border border-[#667eea]/10"
@@ -266,7 +263,6 @@ export default function SoloExpeditionClient() {
                 </motion.div>
                 
                 <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
                   className="w-40 h-40 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-2xl shadow-xl p-4 flex flex-col items-center justify-center text-center"
@@ -346,9 +342,6 @@ export default function SoloExpeditionClient() {
                 ].map((feature, idx) => (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
                     className="flex gap-8 group"
                   >
@@ -366,9 +359,6 @@ export default function SoloExpeditionClient() {
 
             <div className="flex-1 relative hidden lg:block">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                viewport={{ once: true }}
                 className="relative z-10 w-full aspect-square rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(102,126,234,0.3)]"
               >
                 <Image
@@ -407,7 +397,9 @@ export default function SoloExpeditionClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8" ref={packagesRef}>
             {isLoading ? (
-              <ThemeLoader theme="solo" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+              </div>
             ) : (
               <AnimatePresence mode="wait">
                 {paginatedPackages.map((pkg, index) => (

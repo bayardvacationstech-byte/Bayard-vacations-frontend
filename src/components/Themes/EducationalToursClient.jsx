@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { cn } from "@/lib/utils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -92,11 +92,7 @@ export default function EducationalToursClient() {
         onClose={() => setIsVideoModalOpen(false)} 
         videoUrl={VIDEO_MAP["educational"]} 
       />
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="educational" fullScreen className="bg-[#f9f7f0]" />
-        )}
-      </AnimatePresence>
+
 
       {/* Hero Section */}
       <section className="relative min-h-[70vh] lg:min-h-[85vh] pt-20 overflow-hidden bg-[#f9f7f0]">
@@ -124,7 +120,6 @@ export default function EducationalToursClient() {
             
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
@@ -190,7 +185,6 @@ export default function EducationalToursClient() {
             
             {/* Right Content - Composition */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative hidden lg:block"
@@ -306,9 +300,6 @@ export default function EducationalToursClient() {
 
         <Container className="relative z-10">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
             className="text-center mb-8 md:mb-10"
           >
             <div className="inline-block mb-4">
@@ -330,7 +321,6 @@ export default function EducationalToursClient() {
                     <motion.div
                       key={`${selectedTab}-${pkg.id}`}
                       layout
-                      initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -431,9 +421,6 @@ export default function EducationalToursClient() {
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-6 md:gap-12 text-center">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="p-10 rounded-sm border border-white/10 hover:border-amber-400/50 transition-all duration-500 bg-white/5 backdrop-blur-md"
             >
               <div className="w-20 h-20 mx-auto mb-8 bg-amber-400/10 rounded-full flex items-center justify-center text-3xl text-amber-400 border border-amber-400/30 shadow-[0_0_30px_rgba(251,191,36,0.1)]">
@@ -444,9 +431,6 @@ export default function EducationalToursClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="p-10 rounded-sm border border-white/10 hover:border-amber-400/50 transition-all duration-500 bg-white/5 backdrop-blur-md"
             >
@@ -458,9 +442,6 @@ export default function EducationalToursClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="p-10 rounded-sm border border-white/10 hover:border-amber-400/50 transition-all duration-500 bg-white/5 backdrop-blur-md"
             >

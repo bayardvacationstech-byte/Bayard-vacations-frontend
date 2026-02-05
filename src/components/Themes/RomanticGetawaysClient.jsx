@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -140,11 +140,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
         onClose={() => setIsVideoModalOpen(false)} 
         videoUrl={VIDEO_MAP["romantic-getaways"]} 
       />
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="romantic" fullScreen className="bg-rose-50" />
-        )}
-      </AnimatePresence>
+
       
       {/* Hero Section */}
       <div className="relative min-h-[75vh] lg:min-h-[85vh] overflow-hidden bg-rose-950 flex items-center">
@@ -173,7 +169,6 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
         <Container className="relative z-20 pt-20 pb-10 md:pt-28">
           <div className="max-w-4xl">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-6 md:space-y-8"
@@ -230,7 +225,6 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
         <div className="absolute bottom-12 right-0 hidden lg:block z-30 pointer-events-none w-full">
           <Container className="flex justify-end">
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
               className="w-[380px] group pointer-events-auto"
@@ -271,9 +265,6 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
         <Container className="relative">
           <div className="max-w-4xl mx-auto text-center space-y-4">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
                   className="space-y-8"
                 >
                    <Heart className="w-16 h-16 text-rose-500 fill-rose-500 mx-auto" />
@@ -326,7 +317,9 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
           {/* Packages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8" ref={packagesRef}>
             {isLoading ? (
-              <ThemeLoader theme="romantic" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600"></div>
+              </div>
             ) : (
               <AnimatePresence mode="wait">
                 {paginatedPackages.map((pkg, index) => (
@@ -431,9 +424,6 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                 ].map((feature, idx) => (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
                     className="flex gap-8 group"
                   >
@@ -451,9 +441,6 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
 
             <div className="flex-1 relative hidden lg:block">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                viewport={{ once: true }}
                 className="relative z-10 w-full aspect-square rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)]"
               >
                 <Image

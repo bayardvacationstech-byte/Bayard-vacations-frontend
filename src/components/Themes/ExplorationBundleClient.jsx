@@ -46,7 +46,7 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -132,7 +132,6 @@ export default function ExplorationBundleClient() {
             
             {/* Left Content */}
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="space-y-8"
@@ -194,7 +193,6 @@ export default function ExplorationBundleClient() {
             <div className="relative h-[500px] md:h-[600px] perspective-1000">
               {/* Main Image */}
               <motion.div 
-                initial={{ opacity: 0, x: 50, rotate: 5 }}
                 animate={{ opacity: 1, x: 0, rotate: 3 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="absolute top-0 right-0 w-4/5 h-4/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-0"
@@ -212,7 +210,6 @@ export default function ExplorationBundleClient() {
               
               {/* Secondary Image */}
               <motion.div 
-                initial={{ opacity: 0, x: -50, rotate: -5 }}
                 animate={{ opacity: 1, x: 0, rotate: -2 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="absolute bottom-0 left-0 w-3/5 h-3/5 rounded-3xl overflow-hidden shadow-2xl border-4 border-white z-10"
@@ -312,13 +309,14 @@ export default function ExplorationBundleClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
             {isLoading ? (
-              <ThemeLoader theme="exploration" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+              </div>
             ) : paginatedPackages.length > 0 ? (
               <AnimatePresence>
                 {paginatedPackages.map((pkg, idx) => (
                   <motion.div
                     key={pkg.id}
-                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
@@ -408,9 +406,6 @@ export default function ExplorationBundleClient() {
         <Container className="relative z-10">
           <div className="grid md:grid-cols-3 gap-8 md:gap-16 text-center">
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="group"
             >
               <div className="w-20 h-20 mx-auto mb-8 bg-[#e76f51] rounded-2xl rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:rotate-6 transition-transform">
@@ -421,9 +416,6 @@ export default function ExplorationBundleClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="group"
             >
@@ -435,9 +427,6 @@ export default function ExplorationBundleClient() {
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="group"
             >

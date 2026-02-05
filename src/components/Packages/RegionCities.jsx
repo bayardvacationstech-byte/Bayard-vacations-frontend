@@ -129,8 +129,8 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
             {/* Explore More Button */}
             <Link href="/packages">
               <motion.button
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+
+                initial={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap"

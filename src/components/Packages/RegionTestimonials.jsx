@@ -8,6 +8,30 @@ import Link from "next/link";
 
 const EMPTY_ARRAY = [];
 
+const ExpandableText = ({ text }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const shouldTruncate = text.length > 150;
+
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <p className={`text-slate-600 text-sm md:text-base leading-relaxed font-semibold transition-all ${!isExpanded ? "line-clamp-3 md:line-clamp-none" : ""}`}>
+        {text}
+      </p>
+      {shouldTruncate && (
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(!isExpanded);
+          }}
+          className="text-blue-500 text-xs font-bold uppercase tracking-wider md:hidden hover:text-blue-600 mt-1"
+        >
+          {isExpanded ? "READ LESS" : "READ MORE"}
+        </button>
+      )}
+    </div>
+  );
+};
+
 export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regionName = "" }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [isLoading, setIsLoading] = useState(initialReviews.length === 0);
@@ -357,9 +381,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                       <span className="text-[9px] font-bold text-slate-400 uppercase">{review.relative_time_description}</span>
                     </div>
                     
-                    <p className="text-slate-600 text-sm md:text-base leading-relaxed font-semibold">
-                       {review.text}
-                    </p>
+                    <ExpandableText text={review.text} />
                     
                     <div className="flex gap-0.5 group-even:justify-end">
                       {[...Array(5)].map((_, i) => (

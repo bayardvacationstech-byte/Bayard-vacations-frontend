@@ -47,8 +47,9 @@ export default function Testimonials({ reviews }) {
       </div>
 
       {/* 2. Reveal Background: Sharp & Vibrant (Masked by Spotlight) */}
+      {/* 2. Reveal Background: Sharp & Vibrant (Masked by Spotlight) - DESKTOP ONLY */}
       <motion.div 
-        className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-1000"
+        className="hidden lg:block absolute inset-0 z-10 pointer-events-none transition-opacity duration-1000"
         style={{
           maskImage: maskImage,
           WebkitMaskImage: maskImage,
@@ -63,9 +64,20 @@ export default function Testimonials({ reviews }) {
         <div className="absolute inset-0 bg-brand-blue/10 backdrop-brightness-110" />
       </motion.div>
 
+      {/* 2b. Static Background for Mobile - Optimized to avoid mask composite cost */}
+      <div className="block lg:hidden absolute inset-0 z-10 pointer-events-none">
+        <Image
+          src={bgImage}
+          alt="Background Focus"
+          fill
+          className="object-cover scale-105 opacity-80"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
+      </div>
+
       {/* 3. Ambient Light Glow following mouse */}
       <motion.div 
-        className="absolute inset-0 z-20 pointer-events-none"
+        className="hidden lg:block absolute inset-0 z-20 pointer-events-none"
         style={{
           background: glowCheck
         }}
@@ -76,44 +88,34 @@ export default function Testimonials({ reviews }) {
         <div className="flex flex-col items-center justify-center text-center gap-10 mb-24">
           
           {/* Elegant Badge */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+          {/* Elegant Badge */}
+          <div 
             className="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-3xl shadow-2xl"
           >
             <MapPin className="w-4 h-4 text-cyan-400" />
             <span className="text-xs font-bold uppercase tracking-[0.4em] text-cyan-50/80">
               Global Explorer Stories
             </span>
-          </motion.div>
+          </div>
 
           <div className="space-y-6">
-            <motion.h2 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+            <h2 
               className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[0.9] flex flex-col items-center"
             >
               <span className="opacity-50 text-3xl md:text-4xl lg:text-5xl font-medium tracking-normal mb-2">Trusted and</span>
               <span className="relative">
                 Loved Worldwide
-                <motion.div 
+                <div 
                   className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 1, delay: 0.5 }}
                 />
               </span>
-            </motion.h2>
+            </h2>
             
-            <motion.p 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+            <p 
               className="text-white/50 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light font-outfit"
             >
               Discover why thousands of adventurers trust us to craft their perfect journey.
-            </motion.p>
+            </p>
           </div>
         </div>
 

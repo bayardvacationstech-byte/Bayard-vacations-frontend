@@ -54,7 +54,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
             <div className="flex-1">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-6"
               >
@@ -66,7 +66,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="text-3xl sm:text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
               >
@@ -77,7 +77,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               
               <motion.p
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
                 viewport={{ once: true }}
                 className="hidden sm:block text-xl text-slate-500 max-w-2xl font-medium truncate md:whitespace-normal"
               >
@@ -89,7 +89,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
             <Link href={`/why-choose/${regionSlug}`}>
               <motion.button
                 initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap shadow-lg shadow-blue-500/20 active:scale-95"
@@ -111,7 +111,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
             >
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="relative h-full w-full rounded-[2rem] overflow-hidden group shadow-lg cursor-pointer"

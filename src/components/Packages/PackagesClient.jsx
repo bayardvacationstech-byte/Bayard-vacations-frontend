@@ -7,7 +7,7 @@ import PackageHero from "./PackageHero";
 import PackageExperiences from "./PackageExperiences";
 import PackageHotels from "./PackageHotels";
 import { usePackages, usePackage } from "@/hooks/packages";
-import WebsiteLoader from "@/components/ui/WebsiteLoader";
+
 import PremiumFaq from "./PremiumFaq";
 import PremiumBookNowForm from "@/components/Forms/BookNowForm/PremiumBookNowForm";
 import OverviewSection from "./Sections/OverviewSection";
@@ -268,9 +268,50 @@ const PackagesClient = () => {
     }
   };
 
-  // Show loader only after component has mounted to prevent hydration mismatch
+  // Route-level loading.jsx handles initial navigation, but we need a skeleton here
+  // to prevent footer flash when component is mounting/loading
   if (!mounted || isLoading || !packageData) {
-    return <WebsiteLoader />;
+    return (
+      <div className="min-h-screen bg-white">
+        {/* Hero Skeleton */}
+        <div className="relative h-[70vh] min-h-[500px] w-full bg-slate-200 animate-pulse">
+          <Container className="h-full flex flex-col justify-end pb-12 relative z-10">
+            <div className="h-4 w-48 bg-slate-300 rounded mb-6" />
+            <div className="h-12 md:h-16 w-full max-w-2xl bg-slate-300 rounded-xl mb-4" />
+            <div className="flex gap-4 mb-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-6 w-24 bg-slate-300 rounded" />
+              ))}
+            </div>
+          </Container>
+        </div>
+
+        {/* Content Area */}
+        <Container className="relative flex flex-col lg:flex-row gap-8 pt-8">
+          <div className="w-full lg:w-[75%] space-y-8">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <div className="h-6 w-40 bg-slate-200 rounded mb-4 animate-pulse" />
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="h-10 w-10 bg-slate-200 rounded-lg animate-pulse" />
+                    <div className="h-4 w-24 bg-slate-200 rounded animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <div className="w-full lg:w-[25%]">
+            <div className="sticky top-24 bg-white rounded-2xl border border-slate-200 p-6">
+              <div className="h-10 w-32 bg-slate-200 rounded-lg mb-4 animate-pulse" />
+              <div className="h-12 w-full bg-slate-200 rounded-lg mb-3 animate-pulse" />
+              <div className="h-12 w-full bg-slate-200 rounded-lg animate-pulse" />
+            </div>
+          </div>
+        </Container>
+      </div>
+    );
   }
 
   if (packageError && slug !== "azerbaijan-5n-6d-1") {

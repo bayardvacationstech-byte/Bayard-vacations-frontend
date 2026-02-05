@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -138,11 +138,7 @@ export default function RelaxRejuvenateClient() {
         onClose={() => setIsVideoModalOpen(false)} 
         videoUrl={VIDEO_MAP["relax-rejuvenate"]} 
       />
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="relax" fullScreen className="bg-[#FDFCFB]" />
-        )}
-      </AnimatePresence>
+
       {/* Immersive Serenity Hero */}
       <div className="relative min-h-[75vh] md:h-[85vh] overflow-hidden flex items-center bg-[#E5E1DA]">
         {/* Ken Burns Effect */}
@@ -170,7 +166,6 @@ export default function RelaxRejuvenateClient() {
         <Container className="relative z-20 pt-24 md:pt-40">
           <div className="max-w-4xl space-y-4 md:space-y-10">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2 }}
               className="space-y-4 md:space-y-8 text-center md:text-left"
@@ -260,9 +255,6 @@ export default function RelaxRejuvenateClient() {
               ].map((pillar, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
                   transition={{ delay: idx * 0.2 }}
                   className="text-center space-y-8 group"
                 >
@@ -317,7 +309,9 @@ export default function RelaxRejuvenateClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10" ref={packagesRef}>
             {isLoading ? (
-              <ThemeLoader theme="relax" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-600"></div>
+              </div>
             ) : (
               <AnimatePresence mode="wait">
                 {paginatedPackages.map((pkg, index) => (
@@ -398,9 +392,6 @@ export default function RelaxRejuvenateClient() {
          <Container className="relative">
             <div className="max-w-4xl mx-auto text-center space-y-12">
                <motion.div
-                 initial={{ opacity: 0, scale: 0.9 }}
-                 whileInView={{ opacity: 1, scale: 1 }}
-                 viewport={{ once: true }}
                  className="space-y-6"
                >
                    <Flower className="w-12 h-12 text-sage-600 mx-auto" />

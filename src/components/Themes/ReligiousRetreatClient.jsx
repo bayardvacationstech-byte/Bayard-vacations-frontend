@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import { getPaginationPages } from "@/utils/paginationUtils";
 import { useRef } from "react";
-import ThemeLoader from "@/components/ui/ThemeLoader";
+
 import InspirationSection from "@/components/Landing/InspirationSection";
 import VideoReelModal from "@/components/ui/VideoReelModal";
 import { VIDEO_MAP } from "@/config/themePackages";
@@ -140,11 +140,7 @@ export default function ReligiousRetreatClient() {
         onClose={() => setIsVideoModalOpen(false)} 
         videoUrl={VIDEO_MAP["religious-retreat"]} 
       />
-      <AnimatePresence>
-        {isLoading && (
-          <ThemeLoader theme="religious" fullScreen className="bg-divine-50" />
-        )}
-      </AnimatePresence>
+
       {/* Hero Section */}
       <section className="relative min-h-[70vh] lg:min-h-[80vh] pt-20 overflow-hidden divine-light flex items-center">
         {/* Decorative Background Elements */}
@@ -171,7 +167,6 @@ export default function ReligiousRetreatClient() {
           <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-center py-6 md:py-8 lg:py-12">
             {/* Left Content */}
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
               className="space-y-8 text-center lg:text-left"
@@ -237,7 +232,6 @@ export default function ReligiousRetreatClient() {
             
             {/* Right Content */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.5 }}
               className="relative"
@@ -359,9 +353,6 @@ export default function ReligiousRetreatClient() {
             ].map((feature, idx) => (
               <motion.div 
                 key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               className="text-center p-6 md:p-8 lg:p-10 rounded-2xl bg-white/40 backdrop-blur-sm border border-gold-400/10 hover:bg-white/60 transition-all duration-500 group shadow-sm hover:shadow-xl"
             >
               <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-8 bg-gold-50 rounded-full flex items-center justify-center text-2xl md:text-3xl text-gold-600 border border-gold-400/20 shadow-[0_0_30px_rgba(212,175,55,0.05)]">
@@ -413,7 +404,9 @@ export default function ReligiousRetreatClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7" ref={packagesRef}>
             {isLoading ? (
-              <ThemeLoader theme="religious" />
+              <div className="col-span-full flex justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+              </div>
             ) : (
             <AnimatePresence mode="wait">
                 {paginatedPackages.map((pkg, index) => (
@@ -502,9 +495,6 @@ export default function ReligiousRetreatClient() {
         <Container className="relative z-10">
           <div className="max-w-5xl mx-auto text-center space-y-12">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
               className="space-y-6"
             >
               <Church className="w-16 h-16 text-gold-600 mx-auto" />
