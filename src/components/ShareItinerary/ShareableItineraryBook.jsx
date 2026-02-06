@@ -260,7 +260,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                        </div>
                        
                        <div className="relative pt-8">
-                          <span className="block text-[10px] lg:text-xs font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">Final Chapter</span>
+                          <span className="block text-[10px] lg:text-xs font-playfair font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">Final Chapter</span>
                           <h1 className="font-playfair text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
                             A Lifetime <br/>
                             <span className="font-great-vibes text-brand-blue text-5xl lg:text-6xl xl:text-7x relative -top-3 -right-1">Of Memories</span>
