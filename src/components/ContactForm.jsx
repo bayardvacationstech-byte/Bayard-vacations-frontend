@@ -8,7 +8,7 @@ export const ContactSection = () => {
   return (
     <>
       <div className="hidden rounded bg-brand-blue p-8 c-xl:mt-6 c-xl:block">
-        <div className="relative mb-8 inline-block border-b-2 border-solid border-brand-green text-sm font-medium text-white">
+        <div className="relative mb-8 inline-block border-b-2 border-solid border-brand-blue text-sm font-medium text-white">
           Get in touch
         </div>
 

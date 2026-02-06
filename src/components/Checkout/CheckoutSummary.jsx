@@ -138,7 +138,7 @@ const CheckoutSummary = ({
           </div>
         </div>
       </div>
-      <div className="rounded-2xl bg-brand-green px-8 py-3 text-white">
+      <div className="rounded-2xl bg-brand-blue px-8 py-3 text-white">
         <div className="grid items-center gap-4 text-xl c-sm:grid-cols-2">
           <span className="font-semibold">Grand Total:</span>
           <span className="inline-block justify-self-start rounded-full bg-white px-6 py-3 text-2xl font-semibold text-brand-blue">

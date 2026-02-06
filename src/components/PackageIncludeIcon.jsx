@@ -5,12 +5,12 @@ const PackageIncludeIcon = ({ icon = "plus", className }) => {
     return (
       <div
         className={cn(
-          "size-4 border-[2px] border-solid border-brand-green rounded relative rotate-45 flex-shrink-0",
+          "size-4 border-[2px] border-solid border-brand-blue rounded relative rotate-45 flex-shrink-0",
           className
         )}
       >
-        <span className="absolute left-1/2 top-1/2 inline-block h-[1.5px] w-2 -translate-x-1/2 -translate-y-1/2 -rotate-45 rounded-full bg-brand-green"></span>
-        <span className="absolute left-1/2 top-1/2 inline-block h-[1.5px] w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-full bg-brand-green"></span>
+        <span className="absolute left-1/2 top-1/2 inline-block h-[1.5px] w-2 -translate-x-1/2 -translate-y-1/2 -rotate-45 rounded-full bg-brand-blue"></span>
+        <span className="absolute left-1/2 top-1/2 inline-block h-[1.5px] w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-full bg-brand-blue"></span>
       </div>
     );
   }

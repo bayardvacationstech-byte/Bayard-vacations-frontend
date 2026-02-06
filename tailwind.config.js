@@ -20,8 +20,6 @@ module.exports = {
       colors: {
         "brand-blue": "#0146b3",
         "brand-blue-hovered": "#003488",
-        "brand-green": "#a4d33a",
-        "brand-green-hovered": "#8cb631",
         "brand-accent": "#0146b3",
         "brand-deep": "#0146b3",
         "brand-dark": "#0146b3",

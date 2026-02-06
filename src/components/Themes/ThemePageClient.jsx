@@ -35,7 +35,7 @@ const ThemePageClient = ({ theme }) => {
       <section className="relative bg-brand-blue overflow-hidden">
         {/* Animated Background Circles */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl -mr-64 -mt-64"></div>
-        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-green/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand-blue/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
         
         <Container className="relative z-10">
           <div className="py-10 lg:py-16 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">

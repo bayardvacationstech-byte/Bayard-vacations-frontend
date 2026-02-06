@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
  */
 const ActivityCard = ({ 
   data, 
-  hoverGradient = "from-brand-green/95 to-brand-green",
+  hoverGradient = "from-brand-blue/95 to-brand-blue",
   ctaLabel = "View Packages",
   onCtaClick,
   secondaryCtaLabel,

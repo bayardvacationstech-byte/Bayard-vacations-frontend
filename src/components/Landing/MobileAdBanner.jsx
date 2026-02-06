@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle, Map, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, normalizeImageUrl } from "@/lib/utils";
 
 const MobileAdBanner = ({ bannerData }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -104,7 +104,7 @@ const MobileAdBanner = ({ bannerData }) => {
                     className="absolute inset-0"
                 >
                     <Image
-                        src={activeDestination.image}
+                        src={normalizeImageUrl(activeDestination.image)}
                         alt={activeDestination.name}
                         fill
                         className="object-cover"

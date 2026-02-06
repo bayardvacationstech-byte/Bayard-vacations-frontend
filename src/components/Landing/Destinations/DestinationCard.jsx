@@ -8,6 +8,7 @@ import { useRegion } from "@/hooks/regions";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { normalizeImageUrl } from "@/lib/utils";
 
 export default function DestinationCard({
   regionSlug,
@@ -72,8 +73,8 @@ export default function DestinationCard({
                   className="absolute inset-0 transition-transform duration-700 ease-out"
                   style={{ transform: isHovered ? "scale(1.1)" : "scale(1)" }}
                 >
-                  <Image
-                    src={image.url}
+                   <Image
+                    src={normalizeImageUrl(image.url)}
                     alt={image.title || regionData?.name || regionSlug}
                     fill
                     className="object-cover"

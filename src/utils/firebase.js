@@ -448,15 +448,15 @@ export const searchPackages = async (searchTerm) => {
   try {
     const searchTermLower = searchTerm.toLowerCase().trim();
 
-    const PACKAGE_LIMIT = 300;
+    // const PACKAGE_LIMIT = 300;
 
-    // Get all packages
-    const packagesRef = query(
-      collection(db, COLLECTIONS.PACKAGES),
-      where("status", "==", PACKAGE_STATUS.PUBLISHED),
-      limit(PACKAGE_LIMIT)
-    );
-    const querySnapshot = await getDocsFromServer(packagesRef);
+    // // Get all packages
+    // const packagesRef = query(
+    //   collection(db, COLLECTIONS.PACKAGES),
+    //   where("status", "==", PACKAGE_STATUS.PUBLISHED),
+    //   limit(PACKAGE_LIMIT)
+    // );
+    // const querySnapshot = await getDocsFromServer(packagesRef);
     const packages = [];
 
     // Get all regions
@@ -478,64 +478,59 @@ export const searchPackages = async (searchTerm) => {
       }
     });
 
-    // Filter packages
-    for (const doc of querySnapshot.docs) {
-      const data = doc.data();
+    // // Filter packages
+    // for (const doc of querySnapshot.docs) {
+    //   const data = doc.data();
 
-      if (data.bannerImages) {
-        for (const bannerImage of data.bannerImages) {
-          const imageData = await getReferencedData(bannerImage);
-          if (imageData) {
-            data.bannerImages = [imageData];
-            break; // This will break out of the bannerImages loop only
-          }
-        }
-        if (!data.bannerImages[0]) {
-          data.bannerImages = [];
-        }
-      }
+    //   if (data.bannerImages) {
+    //     for (const bannerImage of data.bannerImages) {
+    //       const imageData = await getReferencedData(bannerImage);
+    //       if (imageData) {
+    //         data.bannerImages = [imageData];
+    //         break; // This will break out of the bannerImages loop only
+    //       }
+    //     }
+    //     if (!data.bannerImages[0]) {
+    //       data.bannerImages = [];
+    //     }
+    //   }
 
-      if (
-        doc.id?.toLowerCase().includes(searchTermLower) ||
-        data.titleSlug?.toLowerCase().includes(searchTermLower) ||
-        data.packageSlug?.toLowerCase().includes(searchTermLower) ||
-        data.packageName?.toLowerCase().includes(searchTermLower) ||
-        data.packageTitle?.toLowerCase().includes(searchTermLower) ||
-        data.region?.toLowerCase().includes(searchTermLower)
-      ) {
-        packages.push({
-          id: doc.id,
-          packageName: data.packageTitle || data.packageName,
-          packageSlug: data.packageSlug,
-          region: data.region,
-          bannerImages: data.bannerImages,
-          image: data.image || "",
-          imageUrl: data.imageUrl || "",
-          imageRefs: data.imageRefs || [],
-          cardImageRef: data.cardImageRef || null,
-          packageTags: data.packageTags || [],
-        });
-      }
-    }
+    //   if (
+    //     doc.id?.toLowerCase().includes(searchTermLower) ||
+    //     data.titleSlug?.toLowerCase().includes(searchTermLower) ||
+    //     data.packageSlug?.toLowerCase().includes(searchTermLower) ||
+    //     data.packageName?.toLowerCase().includes(searchTermLower) ||
+    //     data.packageTitle?.toLowerCase().includes(searchTermLower) ||
+    //     data.region?.toLowerCase().includes(searchTermLower)
+    //   ) {
+    //     packages.push({
+    //       id: doc.id,
+    //       packageName: data.packageTitle || data.packageName,
+    //       packageSlug: data.packageSlug,
+    //       region: data.region,
+    //       bannerImages: data.bannerImages,
+    //       image: data.image || "",
+    //       imageUrl: data.imageUrl || "",
+    //       imageRefs: data.imageRefs || [],
+    //       cardImageRef: data.cardImageRef || null,
+    //       packageTags: data.packageTags || [],
+    //     });
+    //   }
+    // }
 
-    // Group packages by region
-    const packagesByRegion = packages.reduce((acc, pkg) => {
-      if (!acc[pkg.region]) {
-        acc[pkg.region] = [];
-      }
-      acc[pkg.region].push(pkg);
-      return acc;
-    }, {});
+    // // Group packages by region
+    // const packagesByRegion = packages.reduce((acc, pkg) => {
+    //   if (!acc[pkg.region]) {
+    //     acc[pkg.region] = [];
+    //   }
+    //   acc[pkg.region].push(pkg);
+    //   return acc;
+    // }, {});
 
     const data = {
       regions,
-      packages: packages.slice(0, 25),
-      packagesByRegion: Object.entries(packagesByRegion).map(
-        ([region, pkgs]) => ({
-          region,
-          packages: pkgs,
-        })
-      ),
+      packages: [],
+      packagesByRegion: [],
     };
 
     return data;
@@ -994,5 +989,34 @@ export const getSavedItineraryById = async (id) => {
   } catch (error) {
     console.error("Error fetching saved itinerary:", error);
     return null;
+  }
+};
+
+export const getEmployees = async () => {
+  try {
+    const employeesRef = collection(db, COLLECTIONS.EMPLOYEES);
+    const q = query(employeesRef, orderBy("name", "asc"));
+    
+    const querySnapshot = await getDocsFromServer(q);
+    
+    const employees = querySnapshot.docs.map(doc => {
+      const data = sanitizeDocumentData(doc);
+      return {
+        id: doc.id,
+        name: data.name || "",
+        role: data.role || "",
+        // Map photoUrl (from DB) to image (expected by UI)
+        image: data.photoUrl || data.image || "", 
+        // Preserve other potential fields or defaults
+        dept: data.department || data.dept || "Team",
+        size: data.size || "small",
+        quote: data.quote || ""
+      };
+    });
+
+    return employees;
+  } catch (error) {
+    console.error("Error fetching employees:", error);
+    return [];
   }
 };

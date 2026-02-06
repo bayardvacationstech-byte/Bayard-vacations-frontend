@@ -33,7 +33,7 @@ function LeadFormComponent() {
             </AlertDialogTitle>
             <span className="flex items-center justify-center">
               <AlertDialogCancel type="button" onClick={closeAllModals}>
-                <X className="!size-5 text-brand-green c-md:!size-7" />
+                <X className="!size-5 text-brand-blue c-md:!size-7" />
               </AlertDialogCancel>
             </span>
           </div>

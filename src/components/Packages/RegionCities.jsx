@@ -110,7 +110,7 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
             <div className="flex-1">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-4">
                 <NavigationIcon className="w-4 h-4 text-brand-blue" />
                 <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
                   Cities to Explore
@@ -205,7 +205,7 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                   cityName: activity.cityName,
                   regionName: activity.regionName
                 }}
-                hoverGradient="from-brand-green/95 to-brand-green"
+                hoverGradient="from-brand-blue/95 to-brand-blue"
                 ctaLabel="Learn More"
                 onCtaClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}
                 onCardClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}

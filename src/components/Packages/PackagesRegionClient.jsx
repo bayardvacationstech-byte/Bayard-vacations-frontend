@@ -71,9 +71,9 @@ const allThemes = [
 const navSections = [
   { id: "packages", label: "Packages" },
   { id: "recommended", label: "Signature" },
-  { id: "why-choose", label: "Why Choose" },
-  { id: "activities", label: "Activities" },
-  { id: "experiences", label: "Experiences" },
+  // { id: "why-choose", label: "Why Choose" },
+  // { id: "activities", label: "Activities" },
+  // { id: "experiences", label: "Experiences" },
   { id: "blogs", label: "Blogs" },
   { id: "testimonials", label: "Reviews" },
   { id: "faq", label: "FAQ" },
@@ -511,10 +511,13 @@ export default function PackagesRegionClient({ initialRegionData }) {
       <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white pt-2 md:pt-6 relative">
         {/* Sticky Glassy Filter Card / Nav - Responsive */}
         <div className={cn(
-          "sticky top-24 c-md:top-28 z-50 mb-4 w-full max-w-4xl mx-auto px-4 transition-all duration-300",
-          !showSectionNav && "hidden c-md:block" // Hide on mobile if not showing nav
+          "sticky top-24 c-md:top-28 z-50 mb-4 px-4 transition-all duration-300",
+          !showSectionNav && "hidden c-md:block"
         )}>
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 overflow-hidden">
+          <div className={cn(
+            "bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 overflow-hidden transition-all duration-500 mx-auto",
+            showSectionNav ? "w-fit" : "w-fit max-w-4xl"
+          )}>
               <AnimatePresence mode="popLayout">
                 {isMounted && (
                   !showSectionNav ? (
@@ -846,12 +849,12 @@ export default function PackagesRegionClient({ initialRegionData }) {
     </section>
 
     {/* Why Choose Section */}
-    <div id="why-choose">
+    {/* <div id="why-choose">
       <RegionWhyChoose 
         regionName={placeName} 
         data={regionData?.whyChoose} 
       />
-    </div>
+    </div> */}
 
     {/* Activities Section - Commented out temporarily per user request */}
     {/* <div id="activities">

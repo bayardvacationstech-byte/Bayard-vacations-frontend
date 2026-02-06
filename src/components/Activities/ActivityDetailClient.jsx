@@ -68,7 +68,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
               {error || "The activity you're looking for doesn't exist."}
             </p>
             <Link href={`/activities/${regionSlug}`}>
-              <Button className="bg-brand-green hover:bg-green-700">
+              <Button className="bg-brand-blue hover:bg-green-700">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Activities
               </Button>
@@ -107,7 +107,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/20 backdrop-blur-md rounded-full border border-brand-green/30 mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-blue/20 backdrop-blur-md rounded-full border border-brand-blue/30 mb-4">
                 <Compass className="w-4 h-4 text-brand-blue" />
                 <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
                   {activity.badge || formatCategoryName(activity.category)}
@@ -175,7 +175,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
               <ul className="space-y-3">
                 {activity.highlights.map((highlight, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-brand-green rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 bg-brand-blue rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <Star className="w-3.5 h-3.5 text-white" />
                     </div>
                     <span className="text-lg text-slate-700">{highlight}</span>
@@ -269,7 +269,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
 
                 <Button 
                   size="lg"
-                  className="w-full bg-brand-green hover:bg-green-700 text-white font-bold py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="w-full bg-brand-blue hover:bg-green-700 text-white font-bold py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Book This Activity
                   <ChevronRight className="w-5 h-5 ml-2" />

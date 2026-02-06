@@ -110,7 +110,7 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
       <Container>
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-4">
             <Sparkles className="w-4 h-4 text-brand-blue" />
             <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
               Must-Do Experiences
@@ -204,7 +204,7 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
                   onClick={() => setCurrentSlide(index)}
                   className={`transition-all duration-300 rounded-full ${
                     index === currentSlide
-                      ? "w-8 h-3 bg-brand-green"
+                      ? "w-8 h-3 bg-brand-blue"
                       : "w-3 h-3 bg-slate-300 hover:bg-slate-400"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}

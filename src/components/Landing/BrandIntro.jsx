@@ -18,7 +18,7 @@ const BrandIntro = () => {
               About Bayard Vacations
             </div>
             <h2 className="section-title-light mb-6">
-              Discover the <span className="text-brand-blue">World</span>, One <span className="text-brand-green">Unforgettable Journey</span> at a Time
+              Discover the <span className="text-brand-blue">World</span>, One <span className="text-brand-blue">Unforgettable Journey</span> at a Time
               {/* Crafting Unforgettable Travel Experiences Since{' '}
               <span className="text-brand-blue">2010</span> */}
             </h2>
@@ -30,11 +30,11 @@ const BrandIntro = () => {
             </p>
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3">
               <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg shadow-sm border border-slate-200">
-                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-brand-green shrink-0" />
+                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue shrink-0" />
                 <span className="font-semibold text-slate-700 text-xs sm:text-sm">100% Secure</span>
               </div>
               <div className="flex items-center gap-1.5 sm:gap-2 bg-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg shadow-sm border border-slate-200">
-                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-brand-green shrink-0" />
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-brand-blue shrink-0" />
                 <span className="font-semibold text-slate-700 text-xs sm:text-sm">Industry Leader</span>
               </div>
             </div>

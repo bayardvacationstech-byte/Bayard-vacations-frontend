@@ -25,7 +25,7 @@ const ItineraryHeroDesktop = ({ packageData }) => {
           <h1 className="max-w-screen-c-md text-2xl  font-semibold leading-[130%] text-white c-xl:text-[38px]">
             {packageData?.packageTitle}
           </h1>
-          <div className="shrink-0 rounded bg-brand-green px-4 py-2 text-white">
+          <div className="shrink-0 rounded bg-brand-blue px-4 py-2 text-white">
             <h4 className="text-xl font-semibold ">
               {packageData?.days} Days & <br /> {packageData?.nights} Nights
             </h4>

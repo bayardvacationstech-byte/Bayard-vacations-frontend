@@ -28,7 +28,7 @@ const StickyBottomBar = ({
       
       {/* Expanded Form Panel */}
       <div 
-        className={`absolute bottom-full left-0 right-0 bg-white border-t border-brand-green/20 shadow-2xl transition-all duration-300 z-50 ${
+        className={`absolute bottom-full left-0 right-0 bg-white border-t border-brand-blue/20 shadow-2xl transition-all duration-300 z-50 ${
           showFullForm ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
       >

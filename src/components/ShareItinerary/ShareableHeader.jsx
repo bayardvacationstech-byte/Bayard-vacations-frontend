@@ -21,7 +21,7 @@ const ShareableHeader = ({ itineraryData }) => {
   return (
     <>
       {/* Hero Section - Full Height on Mobile */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-brand-blue via-blue-600 to-brand-green min-h-screen flex items-center justify-center print:min-h-0 print:bg-white">
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-blue via-blue-600 to-brand-blue min-h-screen flex items-center justify-center print:min-h-0 print:bg-white">
         {/* Hero Background Image */}
         <div className="absolute inset-0 print:hidden">
           <img

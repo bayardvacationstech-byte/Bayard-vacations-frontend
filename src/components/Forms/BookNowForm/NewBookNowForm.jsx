@@ -178,7 +178,7 @@ const NewBookNowForm = ({ packageData, offerData }) => {
           <Button
             onClick={openModal}
             variant="outline"
-            className="mb-4 w-full rounded border border-white py-6 text-base hover:bg-white hover:text-brand-green"
+            className="mb-4 w-full rounded border border-white py-6 text-base hover:bg-white hover:text-brand-blue"
             size="lg"
           >
             Request a Call back
@@ -188,7 +188,7 @@ const NewBookNowForm = ({ packageData, offerData }) => {
             : packageData.basePrice + selectedHotel.additionalCharge) > 0 && (
             <Button
               variant="success"
-              className="mb-2 w-full rounded bg-brand-green py-8 text-lg font-bold c-md:text-xl"
+              className="mb-2 w-full rounded bg-brand-blue py-8 text-lg font-bold c-md:text-xl"
               size="lg"
               asChild
             >

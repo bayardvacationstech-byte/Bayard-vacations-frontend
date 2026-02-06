@@ -186,7 +186,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-brand-green to-green-900 text-white pt-32 pb-16 lg:pt-48 lg:pb-24 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-brand-blue to-green-900 text-white pt-32 pb-16 lg:pt-48 lg:pb-24 relative overflow-hidden">
         <Container>
           <Link href={regionSlug ? `/packages/${regionSlug}` : "/packages"}>
             <Button 
@@ -249,7 +249,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
             {/* Left Column: Header Area (60% width on desktop) */}
             <div className="lg:col-span-3">
-              <div className="relative pl-6 border-l-4 border-brand-green py-2 mb-6">
+              <div className="relative pl-6 border-l-4 border-brand-blue py-2 mb-6">
                 <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
                   {selectedRegion !== "all" ? `Experience ${regionName}` : "Curated Experiences"}
                 </h2>
@@ -690,7 +690,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                 size="icon"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-green disabled:opacity-50"
+                className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-blue disabled:opacity-50"
               >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
@@ -712,7 +712,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         className={cn(
                           "w-10 h-10 rounded-xl font-bold transition-all duration-200",
                           currentPage === pageNumber 
-                            ? "bg-brand-green hover:bg-brand-green/90 text-white shadow-md scale-105" 
+                            ? "bg-brand-blue hover:bg-brand-blue/90 text-white shadow-md scale-105" 
                             : "border-slate-200 text-slate-500 hover:border-brand-blue/30 hover:text-brand-blue bg-white"
                         )}
                       >
@@ -734,7 +734,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                 size="icon"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-green disabled:opacity-50"
+                className="rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-brand-blue disabled:opacity-50"
               >
                 <ChevronRight className="w-5 h-5" />
               </Button>

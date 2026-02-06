@@ -178,12 +178,12 @@ const BlogsPage = () => {
         <Container className="relative z-10">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
-              <BookOpen className="w-4 h-4 text-brand-green" />
+              <BookOpen className="w-4 h-4 text-brand-blue" />
               <span className="text-sm font-bold uppercase tracking-wider text-white">Travel Stories</span>
             </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
               Explore Our<br />
-              <span className="text-brand-green">Blog</span>
+              <span className="text-brand-blue">Blog</span>
             </h1>
             <p className="text-xl text-white/80 leading-relaxed drop-shadow-md">
               Discover travel tips, destination guides, and inspiring stories to fuel your wanderlust and plan your next adventure.

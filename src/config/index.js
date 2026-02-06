@@ -53,6 +53,7 @@ export const COLLECTIONS = {
   REGION_FACTS_SHEET: "region_facts_sheet",
   REGION_ACTIVITY: "region_activity",
   SAVED_PDFS: "savedPDFs",
+  EMPLOYEES: "employee_photos",
 };
 
 export const REVIEWS_CACHE_DURATION = 90 * 24 * 60 * 60 * 1000; // 90 days in milliseconds

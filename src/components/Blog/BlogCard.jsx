@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Calendar, User, Clock } from "lucide-react";
+import { normalizeImageUrl } from "@/lib/utils";
 
 const BlogCard = ({ blog }) => {
   // Simple date formatter if it's a string
@@ -12,7 +13,7 @@ const BlogCard = ({ blog }) => {
       {/* Image Container */}
       <div className="relative h-56 overflow-hidden">
         <Image
-          src={blog.image || blog.featuredImage || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80"}
+          src={normalizeImageUrl(blog.image || blog.featuredImage || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80")}
           alt={blog.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

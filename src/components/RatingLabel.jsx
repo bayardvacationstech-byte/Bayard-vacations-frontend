@@ -7,7 +7,7 @@ const RatingLabel = ({ rating, value, selectedHotel }) => {
       className={cn(
         "flex border border-white border-solid p-1 rounded-lg gap-1",
         {
-          "bg-brand-green": selectedHotel.type === value,
+          "bg-brand-blue": selectedHotel.type === value,
         }
       )}
     >

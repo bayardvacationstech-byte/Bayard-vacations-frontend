@@ -64,7 +64,7 @@ export default function Categories() {
         </h2>
         <Link
           href="/categories"
-          className="hidden items-center gap-2 rounded-full bg-brand-green px-4 py-3 text-lg text-white transition-all duration-300 hover:scale-105 lg:inline-flex"
+          className="hidden items-center gap-2 rounded-full bg-brand-blue px-4 py-3 text-lg text-white transition-all duration-300 hover:scale-105 lg:inline-flex"
         >
           <span>Explore All</span>
           <Image
@@ -88,7 +88,7 @@ export default function Categories() {
 
       <Link
         href="/categories"
-        className="mt-6 flex items-center gap-2 rounded-md bg-brand-green px-4 py-3 text-lg text-white transition-all duration-300 hover:scale-105 lg:hidden "
+        className="mt-6 flex items-center gap-2 rounded-md bg-brand-blue px-4 py-3 text-lg text-white transition-all duration-300 hover:scale-105 lg:hidden "
       >
         <span>Explore All Themes</span>
         <Image

@@ -73,8 +73,8 @@ const ConfirmationDialog = ({ controls, closeModal }) => {
           meantime, feel free to explore our available tour packages.
         </p>
         <div className="absolute inset-x-10 bottom-8 flex h-1 overflow-hidden rounded-full bg-gray-100">
-          <div className="h-full w-1/2 origin-right animate-[progressBarLeft_5s_linear_forwards] rounded-l-full bg-brand-green" />
-          <div className="h-full w-1/2 origin-left animate-[progressBarRight_5s_linear_forwards] rounded-r-full bg-brand-green" />
+          <div className="h-full w-1/2 origin-right animate-[progressBarLeft_5s_linear_forwards] rounded-l-full bg-brand-blue" />
+          <div className="h-full w-1/2 origin-left animate-[progressBarRight_5s_linear_forwards] rounded-r-full bg-brand-blue" />
         </div>
         <style jsx>{`
           @keyframes progressBarLeft {
