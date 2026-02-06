@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, memo } from "react";
 import { useRouter } from "next/navigation";
 import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil, Trash2, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -212,18 +212,197 @@ const ChatItineraryView = ({ itineraries }) => {
   );
 };
 
+const ChatMessage = memo(({ 
+  message, 
+  index, 
+  isMounted, 
+  handleCopy, 
+  handleEdit, 
+  handleSendMessage, 
+  handleViewItinerary, 
+  messages 
+}) => {
+  return (
+    <div
+      className={`flex animate-fadeIn ${
+        message.sender === "user" ? "flex-row-reverse" : "flex-row"
+      }`}
+      style={{ animationDelay: index < messages.length - 1 ? "0s" : "0.1s" }}
+    >
+      <div
+        className={`${(message.type === 'itinerary' || (message.packages && message.packages.length > 0)) ? 'w-full' : 'max-w-[85%]'} rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
+          message.sender === "user"
+            ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-tr-none"
+            : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
+        }`}
+      >
+        {message.isHtml && message.sender === "bot" ? (
+          <div className="space-y-3">
+            <div 
+              className="text-sm leading-relaxed prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: message.formattedText || message.text }}
+            />
+            
+            {message.packages && message.packages.length > 0 && (
+              <div className="relative mt-3">
+                <Swiper
+                  modules={[Navigation, SwiperPagination]}
+                  spaceBetween={16}
+                  slidesPerView={1}
+                  grabCursor={true}
+                  navigation={{
+                    nextEl: `.chat-next-${message.id}`,
+                    prevEl: `.chat-prev-${message.id}`,
+                  }}
+                  className="rounded-xl overflow-hidden"
+                >
+                  {message.packages.map((pkg) => (
+                    <SwiperSlide key={pkg.id}>
+                      <ChatPackageCard item={pkg} onViewItinerary={handleViewItinerary} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                
+                <div className="flex justify-end gap-2 mt-3">
+                  <button className={`chat-prev-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button className={`chat-next-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {message.type === 'itinerary' && (
+              <ChatItineraryView itineraries={message.itineraries} />
+            )}
+          </div>
+        ) : (
+          <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
+        )}
+        <p
+          className={`text-xs mt-1.5 ${
+            message.sender === "user"
+              ? "text-blue-100"
+              : "text-gray-400"
+          }`}
+        >
+          {isMounted && message.timestamp.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+
+        {message.sender === "user" && (
+          <div className="flex items-center gap-1 mt-2 -mr-1 justify-end">
+            <button 
+              onClick={() => handleCopy(message.text)}
+              className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
+              title="Copy"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
+            <button 
+              onClick={() => handleEdit(message.text)}
+              className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
+              title="Edit"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {message.sender === "bot" && (
+          <div className="flex items-center gap-1 mt-2 -ml-1">
+            <button 
+              onClick={() => {
+                const lastUserMessage = [...messages].reverse().find(m => m.sender === "user");
+                if (lastUserMessage) {
+                  handleSendMessage(null, lastUserMessage.text, true);
+                }
+              }} 
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
+              title="Regenerate"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+            <button 
+              onClick={() => handleCopy(message.text)}
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
+              title="Copy"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
+            <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Good response">
+              <ThumbsUp className="w-3.5 h-3.5" />
+            </button>
+            <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Bad response">
+              <ThumbsDown className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
+const formatMarkdownToHTML = (text) => {
+  if (!text) return '';
+
+  let html = text;
+
+  // Convert **bold** to <strong>
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // Convert *italic* to <em>
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Convert ### headers
+  html = html.replace(/^##### (.+)$/gm, '<h5 class="font-bold text-sm mt-2 mb-1">$1</h5>');
+  html = html.replace(/^#### (.+)$/gm, '<h4 class="font-bold text-base mt-2 mb-1">$1</h4>');
+  html = html.replace(/^### (.+)$/gm, '<h3 class="font-bold text-lg mt-2 mb-1">$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2 class="font-bold text-xl mt-3 mb-2">$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h2 class="font-bold text-2xl mt-3 mb-2">$1</h2>');
+
+  // Convert bullet points (• or -)
+  html = html.replace(/^\s*[•\-]\s+(.+)$/gm, '<li>$1</li>');
+
+  // Wrap consecutive <li> items in <ul>
+  html = html.replace(/(<li>.*?<\/li>\n?)+/g, (match) => {
+    return '<ul class="list-disc pl-5 space-y-1.5 my-3 marker:text-blue-400">' + match.trim() + '</ul>';
+  });
+
+  // Convert markdown links [text](url)
+  html = html.replace(/\[([^\]]+)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">$1</a>');
+
+  // Convert line breaks, but skip if they are inside <ul> to avoid extra spacing
+  html = html.replace(/\n/g, '<br>');
+  html = html.replace(/(<ul.*?>.*?<\/ul>)<br>/g, '$1'); // Clean up trailing br after ul
+
+  return html;
+};
+
+const quickReplies = [
+  { icon: MapPin, text: "Popular Destinations", emoji: "🌍" },
+  { icon: Calendar, text: "Plan a Trip", emoji: "✈️" },
+  { icon: Users, text: "Group Packages", emoji: "👥" },
+  { icon: Sparkles, text: "Special Offers", emoji: "✨" },
+];
+
 export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-  const INITIAL_MESSAGES = [
+  const INITIAL_MESSAGES = useMemo(() => [
     {
       id: 1,
       text: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
+      formattedText: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
       sender: "bot",
       timestamp: new Date(),
     },
-  ];
+  ], []);
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -255,38 +434,60 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       }));
   }, [allRegions]);
 
+  // Separate effect for body scroll lock
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      // Added for iOS to prevent scrolling even with overflow hidden
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [isOpen]);
+
+  // Separate effect for mounting and speech recognition
   useEffect(() => {
     setIsMounted(true);
 
-    // Initialize Speech Recognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = true;
-      recognitionRef.current.interimResults = true;
+    const timer = setTimeout(() => {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition && !recognitionRef.current) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
 
-      recognitionRef.current.onresult = (event) => {
-        let transcript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        setInputMessage(transcript);
-      };
+        recognitionRef.current.onresult = (event) => {
+          let transcript = "";
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+          }
+          setInputMessage(transcript);
+        };
 
-      recognitionRef.current.onerror = (event) => {
-        console.error("Speech recognition error", event.error);
-        setIsListening(false);
-        // Add visual feedback for mobile users
-        if (event.error === 'not-allowed') {
-          alert("Please enable microphone access to use voice input.");
-        }
-      };
+        recognitionRef.current.onerror = (event) => {
+          console.error("Speech recognition error", event.error);
+          setIsListening(false);
+          if (event.error === 'not-allowed') {
+            alert("Please enable microphone access to use voice input.");
+          }
+        };
 
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
-    }
-  }, []);
+        recognitionRef.current.onend = () => {
+          setIsListening(false);
+        };
+      }
+    }, 1500); // Increased delay for better initialization
+
+    return () => clearTimeout(timer);
+  }, []); // Static dependency array to fix React error
 
   const toggleListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -315,44 +516,33 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const quickReplies = [
-    { icon: MapPin, text: "Popular Destinations", emoji: "🌍" },
-    { icon: Calendar, text: "Plan a Trip", emoji: "✈️" },
-    { icon: Users, text: "Group Packages", emoji: "👥" },
-    { icon: Sparkles, text: "Special Offers", emoji: "✨" },
-  ];
-
   const handleDestinationClick = async (slug, name) => {
-    // Set Context
     setSelectedContext({ type: 'region', slug, name });
-
-    // User message removed as per request
     setShowDestinations(false);
-    setShowQuickReplies(true); // Re-show main quick options
+    setShowQuickReplies(true);
     setIsTyping(true);
 
     try {
       const regionPackages = await getPackagesByRegion(slug);
+      const text = `Here are some amazing tour packages for **${name}**! 🌴\n\nI've also noted that you're interested in ${name}. Feel free to ask specific questions about it!`;
       
       const botResponse = {
         id: Date.now() + 1,
-        text: `Here are some amazing tour packages for **${name}**! 🌴\n\nI've also noted that you're interested in ${name}. Feel free to ask specific questions about it!`,
+        text,
+        formattedText: formatMarkdownToHTML(text),
         sender: "bot",
         timestamp: new Date(),
         isHtml: true,
-        packages: regionPackages.slice(0, 5), // Only show top 5 for brevity
+        packages: regionPackages.slice(0, 5),
       };
       
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
-      // Fallback: If fetch fails, keep context but treat as general chat (or error msg)
+       const text = `I couldn't load specific packages for ${name} right now, but I'm ready to answer your questions about it!`;
        const botResponse = {
         id: Date.now() + 1,
-        text: `I couldn't load specific packages for ${name} right now, but I'm ready to answer your questions about it!`,
+        text,
+        formattedText: formatMarkdownToHTML(text),
         sender: "bot",
         timestamp: new Date(),
         isHtml: true,
@@ -364,9 +554,11 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   };
 
   const handleViewItinerary = (pkg) => {
+    const text = `Opening the itinerary for **${pkg.packageTitle}**...`;
     const botResponse = {
       id: Date.now(),
-      text: `Opening the itinerary for **${pkg.packageTitle}**...`,
+      text,
+      formattedText: formatMarkdownToHTML(text),
       sender: "bot",
       timestamp: new Date(),
       isHtml: true,
@@ -378,12 +570,11 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
   const handleQuickReply = async (text) => {
     if (text === "Popular Destinations") {
-      setShowQuickReplies(false); // Hide main options to show destinations
+      setShowQuickReplies(false);
       setShowDestinations(true);
-      return; // Do not send message yet
+      return;
     }
 
-    // INTERNAL HANDLING: Do not call API, just set context and show fake dialog
     let contextData = null;
     let botReplyText = "";
     let packagesToDisplay = null;
@@ -399,7 +590,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           packagesToDisplay = results.slice(0, 5);
           botReplyText = "I can certainly help with **Group Adventures**! 🚌\n\nHere are some of our most popular curated group trips. What would you like to know about them?";
         } else {
-          // No packages found, fall back to AI
           handleSendMessage(null, text);
           return;
         }
@@ -416,16 +606,15 @@ export default function ChatbotPopup({ isOpen, onClose }) {
        botReplyText = "Exciting! Let's plan your dream trip. ✈️\n\nTo get started, could you tell me **where** you'd like to go, or what kind of experience you're looking for?";
     }
 
-    // Set Context (redundant for Group Packages but kept for others)
     if (contextData) {
       setSelectedContext(contextData);
     }
 
-    // If we have a bot reply text (internal handling), show it
     if (botReplyText) {
         const botResponse = {
             id: Date.now() + 1,
             text: botReplyText,
+            formattedText: formatMarkdownToHTML(botReplyText),
             sender: "bot",
             timestamp: new Date(),
             isHtml: true,
@@ -433,7 +622,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         };
         setMessages((prev) => [...prev, botResponse]);
     } else {
-        // Fallback for any other quick replies
         handleSendMessage(null, text);
     }
   };
@@ -530,6 +718,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         {
           id: botMessageId,
           text: "",
+          formattedText: "",
           sender: "bot",
           timestamp: new Date(),
           isHtml: true,
@@ -544,9 +733,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         const chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
 
-        // Split buffer by newlines to process complete lines
         const lines = buffer.split("\n");
-        // Keep the last (potentially incomplete) line in the buffer
         buffer = lines.pop() || "";
 
         for (const line of lines) {
@@ -554,30 +741,31 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           if (trimmedLine.startsWith("data: ")) {
             try {
               const dataStr = trimmedLine.slice(6);
-              if (dataStr === "[DONE]") continue; // Handle end of stream if applicable
+              if (dataStr === "[DONE]") continue;
               
               const data = JSON.parse(dataStr);
               if (data.token) {
                 botResponseText += data.token;
+                const formatted = formatMarkdownToHTML(botResponseText);
 
-                // Update the bot message in real-time
                 setMessages((prev) =>
                   prev.map((msg) =>
-                    msg.id === botMessageId ? { ...msg, text: botResponseText } : msg
+                    msg.id === botMessageId ? { ...msg, text: botResponseText, formattedText: formatted } : msg
                   )
                 );
               } else if (data.full_response && !botResponseText) {
-                // Fallback for non-streaming or final response if tokens were missed
                 botResponseText = data.full_response;
                 setMessages((prev) =>
                   prev.map((msg) =>
-                    msg.id === botMessageId ? { ...msg, text: botResponseText } : msg
+                    msg.id === botMessageId ? { 
+                      ...msg, 
+                      text: botResponseText, 
+                      formattedText: formatMarkdownToHTML(botResponseText) 
+                    } : msg
                   )
                 );
               }
-            } catch (e) {
-              // Silently ignore parsing errors for partial lines or non-JSON data
-            }
+            } catch (e) {}
           }
         }
       }
@@ -627,48 +815,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     }
   };
 
-  // Format markdown to HTML
-  const formatMarkdownToHTML = (text) => {
-    if (!text) return '';
-
-    let html = text;
-
-    // Convert **bold** to <strong>
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-    // Convert *italic* to <em>
-    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-    // Convert ### headers
-    html = html.replace(/^##### (.+)$/gm, '<h5 class="font-bold text-sm mt-2 mb-1">$1</h5>');
-    html = html.replace(/^#### (.+)$/gm, '<h4 class="font-bold text-base mt-2 mb-1">$1</h4>');
-    html = html.replace(/^### (.+)$/gm, '<h3 class="font-bold text-lg mt-2 mb-1">$1</h3>');
-    html = html.replace(/^## (.+)$/gm, '<h2 class="font-bold text-xl mt-3 mb-2">$1</h2>');
-    html = html.replace(/^# (.+)$/gm, '<h2 class="font-bold text-2xl mt-3 mb-2">$1</h2>');
-
-    // Convert bullet points (• or -)
-    html = html.replace(/^\s*[•\-]\s+(.+)$/gm, '<li>$1</li>');
-
-        // Wrap consecutive <li> items in <ul>
-    html = html.replace(/(<li>.*?<\/li>\n?)+/g, (match) => {
-      return '<ul class="list-disc pl-5 space-y-1.5 my-3 marker:text-blue-400">' + match.trim() + '</ul>';
-    });
-
-    // Convert markdown links [text](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">$1</a>');
-
-    // Convert line breaks, but skip if they are inside <ul> to avoid extra spacing
-    html = html.replace(/\n/g, '<br>');
-    html = html.replace(/(<ul.*?>.*?<\/ul>)<br>/g, '$1'); // Clean up trailing br after ul
-
-    return html;
-  };
 
   return (
     <>
       {/* Backdrop Overlay */}
       <div
-        className={`fixed inset-0 bg-gradient-to-br from-black/40 via-black/60 to-black/80 backdrop-blur-[2px] z-[998] transition-all duration-500 ease-in-out ${
+        className={`fixed inset-0 bg-gradient-to-br from-black/40 via-black/60 to-black/80 backdrop-blur-[2px] z-[10000] transition-all duration-500 ease-in-out ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -676,7 +828,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
       {/* Chat Panel - Enhanced Design */}
       <div
-        className={`fixed inset-0 sm:inset-auto sm:top-[100px] sm:bottom-4 sm:right-4 sm:left-auto sm:w-[450px] bg-white rounded-none sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-[999] transform transition-all duration-500 ease-out overflow-hidden flex flex-col ${
+        className={`fixed inset-0 sm:inset-auto sm:top-[100px] sm:bottom-4 sm:right-4 sm:left-auto sm:w-[450px] bg-white rounded-none sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-[10001] transform transition-all duration-500 ease-out overflow-hidden flex flex-col h-[100dvh] sm:h-auto ${
           isOpen ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95 pointer-events-none"
         }`}
       >
@@ -729,129 +881,17 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         {/* Messages Container with Custom Scrollbar */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white custom-scrollbar">
           {messages.map((message, index) => (
-            <div
+            <ChatMessage
               key={message.id}
-              className={`flex animate-fadeIn ${
-                message.sender === "user" ? "flex-row-reverse" : "flex-row"
-              }`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div
-                className={`${(message.type === 'itinerary' || (message.packages && message.packages.length > 0)) ? 'w-full' : 'max-w-[85%]'} rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
-                  message.sender === "user"
-                    ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-tr-none"
-                    : "bg-white text-gray-800 rounded-tl-none border border-gray-100"
-                }`}
-              >
-                {message.isHtml && message.sender === "bot" ? (
-                  <div className="space-y-3">
-                    <div 
-                      className="text-sm leading-relaxed prose prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: formatMarkdownToHTML(message.text) }}
-                    />
-                    
-                    {message.packages && message.packages.length > 0 && (
-                      <div className="relative mt-3">
-                        <Swiper
-                          modules={[Navigation, SwiperPagination]}
-                          spaceBetween={16}
-                          slidesPerView={1}
-                          grabCursor={true}
-                          navigation={{
-                            nextEl: `.chat-next-${message.id}`,
-                            prevEl: `.chat-prev-${message.id}`,
-                          }}
-                          className="rounded-xl overflow-hidden"
-                        >
-                          {message.packages.map((pkg) => (
-                            <SwiperSlide key={pkg.id}>
-                              <ChatPackageCard item={pkg} onViewItinerary={handleViewItinerary} />
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                        
-                        <div className="flex justify-end gap-2 mt-3">
-                          <button className={`chat-prev-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
-                            <ChevronLeft className="w-4 h-4" />
-                          </button>
-                          <button className={`chat-next-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
-                            <ChevronRight className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {message.type === 'itinerary' && (
-                      <ChatItineraryView itineraries={message.itineraries} />
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
-                )}
-                <p
-                  className={`text-xs mt-1.5 ${
-                    message.sender === "user"
-                      ? "text-blue-100"
-                      : "text-gray-400"
-                  }`}
-                >
-                  {isMounted && message.timestamp.toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-
-                {message.sender === "user" && (
-                  <div className="flex items-center gap-1 mt-2 -mr-1 justify-end">
-                    <button 
-                      onClick={() => handleCopy(message.text)}
-                      className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
-                      title="Copy"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                    </button>
-                    <button 
-                      onClick={() => handleEdit(message.text)}
-                      className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
-                      title="Edit"
-                    >
-                      <Pencil className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                )}
-
-                {message.sender === "bot" && (
-                  <div className="flex items-center gap-1 mt-2 -ml-1">
-                    <button 
-                      onClick={() => {
-                        // Find the last user message text to regenerate
-                        const lastUserMessage = [...messages].reverse().find(m => m.sender === "user");
-                        if (lastUserMessage) {
-                          handleSendMessage(null, lastUserMessage.text, true);
-                        }
-                      }} 
-                      className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
-                      title="Regenerate"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                    </button>
-                    <button 
-                      onClick={() => handleCopy(message.text)}
-                      className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
-                      title="Copy"
-                    >
-                      <Copy className="w-3.5 h-3.5" />
-                    </button>
-                    <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Good response">
-                      <ThumbsUp className="w-3.5 h-3.5" />
-                    </button>
-                    <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Bad response">
-                      <ThumbsDown className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+              message={message}
+              index={index}
+              isMounted={isMounted}
+              handleCopy={handleCopy}
+              handleEdit={handleEdit}
+              handleSendMessage={handleSendMessage}
+              handleViewItinerary={handleViewItinerary}
+              messages={messages}
+            />
           ))}
 
           {isTyping && (
@@ -944,14 +984,9 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask anything about your plan"
-                className="flex-1 min-h-[42px] max-h-[120px] rounded-full border-[1.5px] border-transparent bg-white px-5 py-2.5 pr-12 transition-all duration-300 resize-none h-auto scrollbar-none text-sm placeholder:text-gray-400 focus:outline-none"
-                style={{
-                  backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #0146b3, #4a8dd9)',
-                  backgroundOrigin: 'border-box',
-                  backgroundClip: 'padding-box, border-box',
-                }}
-                disabled={false} // Always enabled to prevent keyboard stuck issues
+                placeholder="Ask anything..."
+                className="flex-1 min-h-[42px] max-h-[120px] rounded-full border-[1.5px] border-slate-200 sm:border-transparent bg-white px-5 py-2.5 pr-12 sm:transition-all sm:duration-300 resize-none h-auto scrollbar-none text-sm placeholder:text-gray-400 focus:outline-none focus:border-blue-400 sm:focus:border-transparent chat-input-area"
+                disabled={false}
               />
               <div className="absolute right-1.5 flex items-center gap-1">
                 {recognitionRef.current && (
@@ -1042,6 +1077,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
         .animate-pulse-slow {
           animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @media (min-width: 640px) {
+          .chat-input-area {
+            background-image: linear-gradient(white, white), linear-gradient(to right, #0146b3, #4a8dd9);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+          }
         }
       `}</style>
     </>

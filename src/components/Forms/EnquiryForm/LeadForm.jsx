@@ -25,8 +25,8 @@ function LeadFormComponent() {
 
   return (
     <AlertDialog open={isOpen} onOpenChange={closeAllModals}>
-      <AlertDialogContent className="h-auto max-h-[calc(100dvh-40px)] w-[calc(100vw-40px)] max-w-[500px] !rounded-3xl bg-[#F8F8F8] p-0">
-        <AlertDialogHeader>
+      <AlertDialogContent className="flex flex-col h-auto max-h-[calc(100dvh-40px)] w-[calc(100vw-40px)] max-w-[500px] !rounded-3xl bg-[#F8F8F8] p-0 overflow-hidden">
+        <AlertDialogHeader className="shrink-0">
           <div className="flex items-center justify-between pt-4">
             <AlertDialogTitle className="text-left text-lg font-medium text-brand-blue c-md:text-2xl px-8 uppercase tracking-widest">
               Get in touch
@@ -39,7 +39,7 @@ function LeadFormComponent() {
           </div>
         </AlertDialogHeader>
         
-        <div className="overflow-y-scroll">
+        <div className="flex-1 overflow-y-auto min-h-0 bg-[#F8F8F8]">
           <ConfirmationDialog
             controls={confirmationDialogControls}
             closeModal={closeAllModals}

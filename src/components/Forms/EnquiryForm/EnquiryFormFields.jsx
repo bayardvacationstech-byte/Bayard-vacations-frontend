@@ -263,7 +263,7 @@ export default function EnquiryFormFields({
         : cn("rounded-full px-10 py-5 text-base font-bold transition-all uppercase tracking-widest mt-4 shadow-lg", brandYellow ? "bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900" : whiteLabels ? "bg-white text-brand-blue" : "bg-brand-blue text-white hover:bg-brand-blue-hovered");
 
   return (
-    <form onSubmit={handleSubmit} className={cn("text-sm", variant === "modal" && "overflow-y-scroll max-h-[70vh]", containerPadding)}>
+    <form onSubmit={handleSubmit} className={cn("text-sm", containerPadding)}>
       <div className={cn("grid", (isInspiration || variant === "inline") ? "gap-3" : "gap-5")}>
         
         {/* Name and Email Row */}
