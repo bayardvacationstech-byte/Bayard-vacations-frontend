@@ -9,47 +9,24 @@ import localFont from "next/font/local";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster as RadixToaster } from "@/components/ui/toaster";
 import ScrollReset from "@/components/ScrollReset";
+import { Suspense } from "react";
 
 import Metrics from "@/components/Metrics";
 import ClientProviders from "@/components/ClientProviders";
 import { DEFAULT_URL } from "@/config";
 import { TailwindIndicator } from "@/components/TailwindIndicator";
 import LayoutWrapper from "@/components/LayoutWrapper";
-import { fetchRegions } from "@/lib/server";
+import FooterWrapper from "@/components/layouts/FooterWrapper";
 import TaboolaPixel from "@/components/TaboolaPixel";
 
 const nord = localFont({
   src: [
-    {
-      path: "fonts/nord-thin.woff2",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "fonts/nord-light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "fonts/nord-regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "fonts/nord-medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "fonts/nord-bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "fonts/nord-black.woff2",
-      weight: "900",
-      style: "normal",
-    },
+    { path: "fonts/nord-thin.woff2", weight: "100", style: "normal" },
+    { path: "fonts/nord-light.woff2", weight: "300", style: "normal" },
+    { path: "fonts/nord-regular.woff2", weight: "400", style: "normal" },
+    { path: "fonts/nord-medium.woff2", weight: "500", style: "normal" },
+    { path: "fonts/nord-bold.woff2", weight: "700", style: "normal" },
+    { path: "fonts/nord-black.woff2", weight: "900", style: "normal" },
   ],
   variable: "--font-nord",
   display: "swap",
@@ -113,10 +90,7 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({ children }) {
-  // Fetch footer data on the server
-  const { domesticRegions, internationalRegions } = await fetchRegions();
-  
+export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -211,15 +185,29 @@ export default async function RootLayout({ children }) {
           </div>
           <div className="splash-text">Bayard Vacations</div>
           <div className="splash-sub">Initialising Journeys...</div>
+
+          <script dangerouslySetInnerHTML={{ __html: `
+            setTimeout(function() {
+              var s = document.getElementById("bayard-splash-screen");
+              if (s) {
+                s.style.opacity = "0";
+                s.style.visibility = "hidden";
+              }
+            }, 5000);
+          `}} />
         </div>
 
         <ClientProviders>
           <ScrollReset />
-          
-          <LayoutWrapper footerData={{ domesticRegions, internationalRegions }}>
+          <LayoutWrapper 
+            footer={
+              <Suspense fallback={<div className="h-64 bg-slate-900 animate-pulse" />}>
+                <FooterWrapper />
+              </Suspense>
+            }
+          >
             {children}
           </LayoutWrapper>
-          
           <SonnerToaster />
           <RadixToaster />
         </ClientProviders>
@@ -229,4 +217,3 @@ export default async function RootLayout({ children }) {
     </html>
   );
 }
-

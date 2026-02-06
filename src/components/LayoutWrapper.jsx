@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import DesktopNavbar from '@/components/Navbars/DesktopNavbar';
 import MobileNavbar from '@/components/Navbars/MobileNavbar';
@@ -10,9 +11,18 @@ import ChatbotIcon from '@/components/ChatbotIcon';
 import FooterClient from '@/components/layouts/FooterClient';
 import AuthModal from '@/components/Forms/LoginForm/AuthModal';
 
-export default function LayoutWrapper({ children, footerData }) {
+export default function LayoutWrapper({ children, footer }) {
   const pathname = usePathname();
   const isShareRoute = pathname?.startsWith('/share');
+
+  useEffect(() => {
+    // Smoothly hide the static HTML splash screen once React takes over
+    const splash = document.getElementById("bayard-splash-screen");
+    if (splash) {
+      splash.style.opacity = "0";
+      splash.style.visibility = "hidden";
+    }
+  }, []);
 
   return (
     <>
@@ -33,7 +43,7 @@ export default function LayoutWrapper({ children, footerData }) {
           <LeadGenerationTrigger />
           <WhatsAppIcon />
           <ChatbotIcon />
-          <FooterClient {...footerData} />
+          {footer}
           <AuthModal />
         </>
       )}

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   fetchReviews,
   getRegionsForHome,
@@ -32,137 +33,120 @@ const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
   });
 };
 
-const trackPerformance = async (name, operation, fallbackValue) => {
-  const start = Date.now();
-  try {
-    const result = await operation();
-    return result;
-  } catch (error) {
-    console.error(`Performance tracking failed for ${name}:`, error);
-    return fallbackValue;
-  }
-};
+const TIMEOUT_MS = 10000; // 10 seconds timeout
 
+// --- DATA WRAPPERS (SERVER COMPONENTS) ---
 
-const HomePage = async () => {
-  const TIMEOUT_MS = 15000; // 15 seconds timeout per operation
-  
-  const [
-    regionData,
-    internationalPackages,
-    domesticPackages,
-    themePackages,
-    groupDeparturePackages,
-    reviews,
-    marketingBanner
-  ] = await Promise.all([
-    trackPerformance(
-      "getRegionsForHome",
-      () => withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome"),
-      []
-    ),
-    trackPerformance(
-      "getCuratedPackagesForHome (international)",
-      () => withTimeout(getCuratedPackagesForHome("international"), TIMEOUT_MS, [], "getCuratedPackagesForHome (international)"),
-      []
-    ),
-    trackPerformance(
-      "getCuratedPackagesForHome (domestic)",
-      () => withTimeout(getCuratedPackagesForHome("domestic"), TIMEOUT_MS, [], "getCuratedPackagesForHome (domestic)"),
-      []
-    ),
-    trackPerformance(
-      "getThemePackagesForHome",
-      () => withTimeout(getThemePackagesForHome(), TIMEOUT_MS, {}, "getThemePackagesForHome"),
-      {}
-    ),
-    trackPerformance(
-      "getGroupDeparturePackagesForHome",
-      () => withTimeout(getGroupDeparturePackagesForHome(), TIMEOUT_MS, [], "getGroupDeparturePackagesForHome"),
-      []
-    ),
-    trackPerformance(
-      "fetchReviews",
-      () => withTimeout(fetchReviews(), TIMEOUT_MS, [], "fetchReviews"),
-      []
-    ),
-    trackPerformance(
-      "getMarketingBanners",
-      () => withTimeout(getMarketingBanners(), TIMEOUT_MS, null, "getMarketingBanners"),
-      null
-    ),
+async function ExploreDestinationsSection() {
+  const regions = await withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome");
+  return <ExploreDestinations initialRegions={regions} />;
+}
+
+async function HolidaysSection() {
+  const [international, domestic] = await Promise.all([
+    withTimeout(getCuratedPackagesForHome("international"), TIMEOUT_MS, [], "getCuratedPackagesForHome (intl)"),
+    withTimeout(getCuratedPackagesForHome("domestic"), TIMEOUT_MS, [], "getCuratedPackagesForHome (dom)"),
   ]);
+  return (
+    <>
+      <section className="bg-gradient-to-b from-white to-slate-50 section-padding blue-section scroll-optimize">
+        <Holidays initialInternationalPackages={international} initialDomesticPackages={domestic} />
+      </section>
+      <section className="bg-white section-padding">
+        <TravelStyle initialInternationalPackages={international} initialDomesticPackages={domestic} />
+      </section>
+    </>
+  );
+}
 
-  const regions = regionData || [];
+async function AdBannerSection() {
+  const banner = await withTimeout(getMarketingBanners(), TIMEOUT_MS, null, "getMarketingBanners");
+  return (
+    <>
+      <section className="section-padding px-4 sm:px-6 lg:px-8 hidden md:block">
+        <AdvertisementBanner bannerData={banner} />
+      </section>
+      <section className="block md:hidden">
+        <MobileAdBanner bannerData={banner} />
+      </section>
+    </>
+  );
+}
 
-  const {
-    eliteEscapePackages,
-    soloExpeditionPackages,
-    familyFunventurePackages,
-    groupAdventuresPackages,
-    religiousRetreatPackages,
-    relaxRejuvenatePackages,
-    explorationBundlePackages,
-    educationalPackages,
-    romanticGetawaysPackages,
-  } = themePackages || {};
+async function ThemeHighlightsSection() {
+  const themePackages = await withTimeout(getThemePackagesForHome(), TIMEOUT_MS, {}, "getThemePackagesForHome");
+  const regions = await withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome");
+  
+  return (
+    <>
+      <section className="bg-gradient-to-b from-slate-50 to-white blue-section scroll-optimize">
+        <ThemeHighlights
+          initialEliteEscapePackages={themePackages.eliteEscapePackages}
+          initialSoloExpeditionPackages={themePackages.soloExpeditionPackages}
+          initialFamilyFunventurePackages={themePackages.familyFunventurePackages}
+          initialGroupAdventuresPackages={themePackages.groupAdventuresPackages}
+          initialReligiousRetreatPackages={themePackages.religiousRetreatPackages}
+          initialRelaxRejuvenatePackages={themePackages.relaxRejuvenatePackages}
+          initialExplorationBundlePackages={themePackages.explorationBundlePackages}
+          initialEducationalPackages={themePackages.educationalPackages}
+          initialRomanticGetawaysPackages={themePackages.romanticGetawaysPackages}
+        />
+      </section>
+      <section className="bg-white overflow-hidden relative py-4 md:py-6 pb-2 md:pb-3 px-4 sm:px-6 lg:px-8">
+        <DestinationSpotlight initialRegions={regions} eliteEscapePackages={themePackages.eliteEscapePackages} />
+      </section>
+    </>
+  );
+}
 
+async function GroupDepartureSection() {
+  const packages = await withTimeout(getGroupDeparturePackagesForHome(), TIMEOUT_MS, [], "getGroupDeparturePackagesForHome");
+  return (
+    <section className="bg-white relative overflow-hidden section-padding">
+      <GroupDeparture groupDeparturePackages={packages} />
+    </section>
+  );
+}
+
+async function TestimonialsSection() {
+  const reviews = await withTimeout(fetchReviews(), TIMEOUT_MS, [], "fetchReviews");
+  return (
+    <section className="relative overflow-hidden">
+      <RegionTestimonials regionName="Our Travelers" initialReviews={reviews} />
+    </section>
+  );
+}
+
+// --- MAIN PAGE ---
+
+const HomePage = () => {
   return (
     <>
       <section>
         <Hero />
       </section>
 
-      <section className="bg-white section-padding blue-section scroll-optimize">
-        <ExploreDestinations initialRegions={regions} />
-      </section>
+      <Suspense fallback={<div className="h-96 bg-slate-50 animate-pulse" />}>
+        <section className="bg-white section-padding blue-section scroll-optimize">
+          <ExploreDestinationsSection />
+        </section>
+      </Suspense>
 
-      <section className="bg-gradient-to-b from-white to-slate-50 section-padding blue-section scroll-optimize">
-        <Holidays
-          initialInternationalPackages={internationalPackages}
-          initialDomesticPackages={domesticPackages}
-        />
-      </section>
+      <Suspense fallback={<div className="h-96 bg-slate-100 animate-pulse" />}>
+        <HolidaysSection />
+      </Suspense>
 
-      <section className="bg-white section-padding">
-        <TravelStyle
-          initialInternationalPackages={internationalPackages}
-          initialDomesticPackages={domesticPackages}
-        />
-      </section>
+      <Suspense fallback={<div className="h-64 bg-slate-50 animate-pulse m-8 rounded-3xl" />}>
+        <AdBannerSection />
+      </Suspense>
 
-      {/* Advertisement Banner - Desktop */}
-      <section className="section-padding px-4 sm:px-6 lg:px-8 hidden md:block">
-        <AdvertisementBanner bannerData={marketingBanner} />
-      </section>
+      <Suspense fallback={<div className="h-screen bg-slate-50 animate-pulse" />}>
+        <ThemeHighlightsSection />
+      </Suspense>
 
-      {/* Advertisement Banner - Mobile */}
-      <section className="block md:hidden">
-        <MobileAdBanner bannerData={marketingBanner} />
-      </section>
-
-      <section className="bg-gradient-to-b from-slate-50 to-white blue-section scroll-optimize">
-        <ThemeHighlights
-          initialEliteEscapePackages={eliteEscapePackages}
-          initialSoloExpeditionPackages={soloExpeditionPackages}
-          initialFamilyFunventurePackages={familyFunventurePackages}
-          initialGroupAdventuresPackages={groupAdventuresPackages}
-          initialReligiousRetreatPackages={religiousRetreatPackages}
-          initialRelaxRejuvenatePackages={relaxRejuvenatePackages}
-          initialExplorationBundlePackages={explorationBundlePackages}
-          initialEducationalPackages={educationalPackages}
-          initialRomanticGetawaysPackages={romanticGetawaysPackages}
-        />
-      </section>
-
-      {/* Moved Destination Spotlight */}
-      <section className="bg-white overflow-hidden relative py-4 md:py-6 pb-2 md:pb-3 px-4 sm:px-6 lg:px-8">
-        <DestinationSpotlight initialRegions={regions} eliteEscapePackages={eliteEscapePackages} />
-      </section>
-
-      <section className="bg-white relative overflow-hidden section-padding">
-        <GroupDeparture groupDeparturePackages={groupDeparturePackages} />
-      </section>
+      <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+        <GroupDepartureSection />
+      </Suspense>
       
       <section className="bg-gradient-to-br from-[#0146b3] to-[#020617] section-padding text-white relative overflow-hidden">
         <WhyBayard />
@@ -172,12 +156,9 @@ const HomePage = async () => {
         <InspirationSection />
       </section>
 
-      <section className="relative overflow-hidden">
-        <RegionTestimonials 
-          regionName="Our Travelers" 
-          initialReviews={reviews}
-        />
-      </section>
+      <Suspense fallback={<div className="h-80 bg-slate-50 animate-pulse" />}>
+        <TestimonialsSection />
+      </Suspense>
     </>
   );
 };
