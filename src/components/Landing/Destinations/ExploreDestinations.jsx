@@ -49,7 +49,7 @@ export default function ExploreDestinations({ initialRegions }) {
           <button
             onClick={() => setActiveTab("international")}
             className={cn(
-              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
+              "px-4 sm:px-7 py-1.5 sm:py-2.5 rounded-full text-[13px] sm:text-base font-bold transition-all duration-300",
               activeTab === "international" 
                 ? "gradient-btn text-white shadow-md" 
                 : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
@@ -60,7 +60,7 @@ export default function ExploreDestinations({ initialRegions }) {
           <button
             onClick={() => setActiveTab("domestic")}
             className={cn(
-              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
+              "px-4 sm:px-7 py-1.5 sm:py-2.5 rounded-full text-[13px] sm:text-base font-bold transition-all duration-300",
               activeTab === "domestic" 
                 ? "gradient-btn text-white shadow-md" 
                 : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"

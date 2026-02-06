@@ -18,7 +18,7 @@ const SEARCH_URL = process.env.NEXT_PUBLIC_SEARCH_URL || "/api/search";
 
 export const SEARCH_API = axios.create({
   baseURL: SEARCH_URL,
-  timeout: 5000,
+  timeout: 3500,
 });
 
 export const TRENDING_PACKAGES = [

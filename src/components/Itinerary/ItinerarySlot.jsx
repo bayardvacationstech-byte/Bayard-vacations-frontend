@@ -106,7 +106,7 @@ const ItinerarySlot = ({ itinerary }) => {
             ))}
 
           {results.hasMore && (
-            <span className="flex size-10 items-center justify-center rounded-full border border-solid border-brand-green bg-slate-200 font-medium text-brand-green">
+            <span className="flex size-10 items-center justify-center rounded-full border border-solid border-brand-blue bg-slate-200 font-medium text-brand-blue">
               +{results.remaining.length}
             </span>
           )}

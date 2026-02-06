@@ -47,7 +47,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-brand-green animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-brand-blue animate-spin mx-auto mb-4" />
           <p className="text-lg text-slate-600 font-medium">Loading activity details...</p>
         </div>
       </div>
@@ -108,8 +108,8 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
               transition={{ duration: 0.6 }}
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/20 backdrop-blur-md rounded-full border border-brand-green/30 mb-4">
-                <Compass className="w-4 h-4 text-brand-green" />
-                <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
+                <Compass className="w-4 h-4 text-brand-blue" />
+                <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
                   {activity.badge || formatCategoryName(activity.category)}
                 </span>
               </div>
@@ -190,7 +190,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {activity.included.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-brand-green flex-shrink-0 mt-0.5" />
+                    <Check className="w-5 h-5 text-brand-blue flex-shrink-0 mt-0.5" />
                     <span className="text-slate-700">{item}</span>
                   </li>
                 ))}
@@ -237,7 +237,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
                   <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
                     Price From
                   </div>
-                  <div className="text-4xl font-black text-brand-green">
+                  <div className="text-4xl font-black text-brand-blue">
                     {activity.priceRange.split('-')[0]}
                     <span className="text-lg text-slate-600 font-medium"> /person</span>
                   </div>

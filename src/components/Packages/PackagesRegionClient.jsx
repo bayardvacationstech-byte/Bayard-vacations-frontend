@@ -4,7 +4,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersVertical, X, MapPin, Calendar, Package, ChevronDown, ChevronLeft, ChevronRight, ArrowUpRight, Info, CircleDollarSign, Clock, Compass, Filter, Sparkles } from "lucide-react";
+import { SlidersVertical, X, MapPin, Calendar, Package, ChevronDown, ChevronLeft, ChevronRight, ArrowUpRight, Info, CircleDollarSign, Clock, Compass, Filter, Sparkles, Search } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -88,6 +88,7 @@ const durations = [
 
 export default function PackagesRegionClient({ initialRegionData }) {
   const [range, setRange] = useState([0, 1000000]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -98,8 +99,9 @@ export default function PackagesRegionClient({ initialRegionData }) {
   const [isMounted, setIsMounted] = useState(false);
   const [showSectionNav, setShowSectionNav] = useState(false);
   const [activeSection, setActiveSection] = useState("packages");
+  const [isNearFooter, setIsNearFooter] = useState(false);
   const packagesRef = useRef(null);
-  const itemsPerPage = 9;
+  const itemsPerPage = 8;
   const { region: regionName } = useParams();
   const searchParams = useSearchParams();
   const isGroupPackage = searchParams.get("group") === "true";
@@ -161,6 +163,11 @@ export default function PackagesRegionClient({ initialRegionData }) {
       if (currentActive !== activeSection) {
         setActiveSection(currentActive);
       }
+
+      // 3. Detect Footer Proximity
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = document.documentElement.scrollHeight - 400; // 400px from bottom
+      setIsNearFooter(scrollPosition > threshold);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -219,7 +226,9 @@ export default function PackagesRegionClient({ initialRegionData }) {
 
       const isThemeSelected = !selectedTheme || item.theme.includes(selectedTheme);
 
-      return matchesRegion && isPriceInRange && isDurationSelected && isThemeSelected;
+      const matchesSearch = !searchTerm || item.title?.toLowerCase().includes(searchTerm.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return matchesRegion && isPriceInRange && isDurationSelected && isThemeSelected && matchesSearch;
     });
 
     if (sortOption) {
@@ -329,6 +338,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
     setSelectedTheme("");
     setCurrentPage(1);
     setSortOption("");
+    setSearchTerm("");
   };
 
   const handleOpenFilterMenu = () => setFilterMenu(true);
@@ -501,7 +511,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
       <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white pt-2 md:pt-6 relative">
         {/* Sticky Glassy Filter Card / Nav - Responsive */}
         <div className={cn(
-          "sticky top-20 c-md:top-24 z-50 mb-4 w-full max-w-4xl mx-auto px-4 transition-all duration-300",
+          "sticky top-24 c-md:top-28 z-50 mb-4 w-full max-w-4xl mx-auto px-4 transition-all duration-300",
           !showSectionNav && "hidden c-md:block" // Hide on mobile if not showing nav
         )}>
           <div className="bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 overflow-hidden">
@@ -519,6 +529,23 @@ export default function PackagesRegionClient({ initialRegionData }) {
                       }}
                       className="flex items-center justify-between gap-4"
                     >
+                      {/* Search Bar */}
+                      <div className="flex flex-col gap-0.5 flex-[1.5] min-w-[200px]">
+                        <div className="flex items-center gap-1.5 px-0.5">
+                          <Search className="w-3.5 h-3.5 text-brand-blue" />
+                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                            Search
+                          </label>
+                        </div>
+                        <Input
+                          type="text"
+                          placeholder="Search packages..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full h-9 text-xs !bg-white/50 border-slate-200 rounded-xl focus:!border-brand-blue focus:!ring-4 focus:!ring-brand-blue/10 transition-all font-bold placeholder:font-medium"
+                        />
+                      </div>
+
                       {/* Price Range */}
                       <div className="flex flex-col gap-0.5 min-w-[140px]">
                         <div className="flex items-center gap-1.5 px-0.5">
@@ -650,7 +677,10 @@ export default function PackagesRegionClient({ initialRegionData }) {
 
         <Container>
           {/* Mobile Filter Button - Sticky FAB Style */}
-          <div className="c-md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[280px] px-4 pointer-events-none">
+          <div className={cn(
+            "c-md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[280px] px-4 pointer-events-none transition-all duration-300",
+            isNearFooter ? "opacity-0 translate-y-10" : "opacity-100 translate-y-0"
+          )}>
             <Button
               onClick={handleOpenFilterMenu}
               className="w-4/5 pointer-events-auto flex items-center justify-center gap-2 h-12 text-xs font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 mx-auto"
@@ -768,7 +798,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
                   Signature Collections
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
-                  Handpicked signatures and top-rated escapes in <span className="text-brand-green font-bold capitalize">{placeName}</span>
+                  Handpicked signatures and top-rated escapes in <span className="text-brand-blue font-bold capitalize">{placeName}</span>
                 </p>
               </div>
             </div>
@@ -823,15 +853,15 @@ export default function PackagesRegionClient({ initialRegionData }) {
       />
     </div>
 
-    {/* Activities Section */}
-    <div id="activities">
+    {/* Activities Section - Commented out temporarily per user request */}
+    {/* <div id="activities">
       <RegionActivities regionName={placeName} regionData={regionData} />
-    </div>
+    </div> */}
 
-    {/* Cities Section */}
-    <div id="cities">
+    {/* Cities Section - Commented out temporarily per user request */}
+    {/* <div id="cities">
       <RegionCities regionName={placeName} regionData={regionData} />
-    </div>
+    </div> */}
 
     {/* Food, Culture & Experiences Section - Commented out per user request */}
     {/* <div id="experiences">
@@ -857,7 +887,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
               </h2>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
                 Get inspired for your next adventure to{" "}
-                <span className="text-brand-green font-bold capitalize">{placeName}</span>
+                <span className="text-brand-blue font-bold capitalize">{placeName}</span>
               </p>
             </div>
             
@@ -999,7 +1029,7 @@ export default function PackagesRegionClient({ initialRegionData }) {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed inset-x-0 bottom-0 bg-white rounded-t-[2.5rem] z-[101] shadow-2xl p-6 c-md:hidden max-h-[90vh] overflow-y-auto"
+              className="fixed inset-x-0 bottom-0 bg-white rounded-t-[2.5rem] z-[101] shadow-2xl p-6 c-md:hidden max-h-[80vh] overflow-y-auto"
             >
               <div className="flex flex-col gap-8 pb-10">
                 <div className="flex items-center justify-between">

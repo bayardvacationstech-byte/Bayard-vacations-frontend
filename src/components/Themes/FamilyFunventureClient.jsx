@@ -60,19 +60,39 @@ export default function FamilyFunventureClient() {
   } = usePackagesByTheme("family-funventure");
 
   const familyPackages = useMemo(() => {
-    if (!allThemePackages) return { international: [], domestic: [] };
+    let pkgSource = [];
+    if (Array.isArray(allThemePackages) && allThemePackages.length > 0) {
+      pkgSource = allThemePackages;
+    }
+
+    // Safeguard
+    if (!Array.isArray(pkgSource)) return { international: [], domestic: [] };
     
     const uniqueMap = new Map();
-    allThemePackages.forEach(pkg => {
-      if (pkg.id && !uniqueMap.has(pkg.id)) {
-        uniqueMap.set(pkg.id, pkg);
-      }
-    });
+    try {
+      pkgSource.forEach(pkg => {
+        if (pkg && pkg.id && !uniqueMap.has(pkg.id)) {
+          uniqueMap.set(pkg.id, pkg);
+        }
+      });
+    } catch (e) {
+      console.error("Error processing packages map:", e);
+      return { international: [], domestic: [] };
+    }
     const uniquePackages = Array.from(uniqueMap.values());
     
+    // Sorting: Non-zero prices first
+    const sorted = [...uniquePackages].sort((a, b) => {
+      const priceA = (a.offerPrice > 0 ? a.offerPrice : a.basePrice) || 0;
+      const priceB = (b.offerPrice > 0 ? b.offerPrice : b.basePrice) || 0;
+      if (priceA > 0 && priceB === 0) return -1;
+      if (priceA === 0 && priceB > 0) return 1;
+      return 0;
+    });
+
     return {
-      international: uniquePackages.filter(pkg => !pkg.domestic),
-      domestic: uniquePackages.filter(pkg => pkg.domestic)
+      international: sorted.filter(pkg => !pkg.domestic),
+      domestic: sorted.filter(pkg => pkg.domestic)
     };
   }, [allThemePackages]);
 
@@ -81,7 +101,16 @@ export default function FamilyFunventureClient() {
   
   const paginatedPackages = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return currentPackages.slice(start, start + itemsPerPage);
+    const paginated = currentPackages.slice(start, start + itemsPerPage);
+
+    // Logic: First page should not show 0 price packages
+    if (currentPage === 1) {
+      return paginated.filter(pkg => {
+        const price = (pkg.offerPrice > 0 ? pkg.offerPrice : pkg.basePrice) || 0;
+        return price > 0;
+      });
+    }
+    return paginated;
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (
@@ -183,23 +212,13 @@ export default function FamilyFunventureClient() {
                 <div className="relative w-full h-[500px] overflow-hidden shadow-2xl border-8 border-white/50 transform group-hover:scale-[1.02] transition-transform duration-500"
                   style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }}>
                   <Image
-                    src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000"
-                    alt="Family Adventure"
+                    src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200&q=90"
+                    alt="Family Funventure"
                     fill
                     className="object-cover"
                     priority
                   />
                   
-                  {/* Floating Badge */}
-                  <div className="absolute bottom-6 left-6 right-6 bg-white/80 backdrop-blur-lg rounded-2xl p-4 flex items-center space-x-4 border border-white/30">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full flex items-center justify-center text-white shadow-lg">
-                      <Mountain className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-slate-900">Adventure for All Ages</div>
-                      <div className="text-sm text-slate-600 font-medium">Safe & exciting experiences</div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Decorative Elements */}

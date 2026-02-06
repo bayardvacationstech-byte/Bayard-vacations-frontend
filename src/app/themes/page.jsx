@@ -42,7 +42,7 @@ const ThemesPage = () => {
             
             <h1 className="text-6xl lg:text-9xl font-black text-white mb-8 leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-bottom-8 duration-1000">
               TRAVEL <br />
-              <span className="text-brand-green">THEMES</span>
+              <span className="text-brand-blue">THEMES</span>
             </h1>
             
             <p className="text-lg lg:text-2xl text-white/90 font-medium leading-relaxed max-w-2xl animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200">

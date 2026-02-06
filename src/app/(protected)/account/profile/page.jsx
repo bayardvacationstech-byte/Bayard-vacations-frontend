@@ -20,7 +20,7 @@ const ProfilePage = () => {
               <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue/60">Registry details</span>
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-nord font-black text-slate-900 uppercase tracking-tight">Profile Information</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tight">Profile Information</h2>
               <p className="text-slate-500 font-medium text-sm mt-1">Review and manage your personal travel identification.</p>
             </div>
           </div>
@@ -45,7 +45,7 @@ const ProfilePage = () => {
                     <LogOut className="size-6" /> 
                   </div>
                   <div>
-                    <h5 className="font-nord font-bold uppercase tracking-[0.3em] text-red-500/40 text-[10px] mb-1">Authorization</h5>
+                    <h5 className="font-bold uppercase tracking-[0.3em] text-red-500/40 text-[10px] mb-1">Authorization</h5>
                     <h3 className="text-2xl font-black text-slate-900 tracking-tight">Security & Access</h3>
                     <p className="text-slate-500 text-xs font-medium mt-1">Safeguard your travel data and session</p>
                   </div>

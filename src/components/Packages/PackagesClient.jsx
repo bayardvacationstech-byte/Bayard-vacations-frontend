@@ -103,10 +103,9 @@ const PackagesClient = () => {
     }
   }, [packageData?.id, packageData?.hotelDetails]);
 
-  const handleAvailableCategories = (availableCategories) => {
+  const handleAvailableCategories = React.useCallback((availableCategories) => {
     setHotelTiers(prev => {
        const filtered = prev.filter(tier => availableCategories.includes(tier.type));
-       
        
        // If currently selected hotel is now invalid, switch to the first valid one
        setSelectedHotel(current => {
@@ -118,7 +117,7 @@ const PackagesClient = () => {
 
        return filtered;
     });
-  };
+  }, []);
 
   // Fetch related packages from the same region
   const { packages: relatedPackages = [] } = usePackages(packageData?.region);
@@ -358,6 +357,7 @@ const PackagesClient = () => {
       {/* 1. Hero Section - First Impression */}
       <PackageHero 
         packageData={packageData} 
+        price={finalPrice}
       />
 
       <Container className="relative flex flex-col c-lg:flex-row gap-[30px] c-lg:gap-8 pt-8 md:pt-4">

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin, ArrowRight, X, Volume2, VolumeX, Maximize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Heart, Share2, MapPin, ArrowRight, X, Volume2, VolumeX, Maximize2, SkipForward } from "lucide-react";
 import Container from "../ui/Container";
 import Image from "next/image";
 import Link from "next/link";
@@ -177,14 +177,19 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
   // Now relying on onEnded event on the video element
   // keeping this cleaner
   useEffect(() => {
-     // Reset duration estimate when changing videos if needed, 
-     // but usually onLoadedMetadata fires quickly enough.
+    if (videoRef.current) {
+      videoRef.current.load();
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => setIsPlaying(false));
+      }
+    }
   }, [activeVideoIndex]);
 
-  // Handle Play/Pause based on viewport visibility
+  // Handle Play/Pause based on viewport visibility and popup state
   useEffect(() => {
     if (videoRef.current) {
-      if (isInView) {
+      if (isInView && !showVideoPopup) {
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => setIsPlaying(false));
@@ -195,7 +200,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
         setIsPlaying(false);
       }
     }
-  }, [isInView, activeVideoIndex]); // Trigger when view changes or video changes
+  }, [isInView, activeVideoIndex, showVideoPopup]); // Trigger when view changes or video changes
 
   useEffect(() => {
     if (initialReviews.length > 0 || hasFetched.current) return;
@@ -288,6 +293,18 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                   
                   {/* Video Controls Overlay */}
                   <div className="absolute bottom-20 right-4 z-50 flex flex-col gap-2 pointer-events-auto">
+                    {/* Next Video Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        nextVideo();
+                      }}
+                      className="p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white hover:bg-black/60 transition-colors"
+                      title="Next Video"
+                    >
+                      <SkipForward className="w-4 h-4" />
+                    </button>
+
                     {/* Full Screen Button */}
                     <button
                       onClick={(e) => {
@@ -414,7 +431,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
               <div className="hidden md:flex bg-blue-600/90 backdrop-blur-md rounded-full px-8 py-4 items-center justify-between gap-4 shadow-2xl shadow-blue-900/40 border border-white/10 max-w-4xl mx-auto">
                 <div className="text-center md:text-left">
                   <span className="text-white text-[10px] font-bold uppercase tracking-[0.35em] block mb-0.5">Authentic Experiences</span>
-                  <p className="text-white/80 text-sm font-medium leading-snug">Join 5,000+ happy travelers who explored {regionName || "the world"} with us.</p>
+                  <p className="text-white/80 text-sm font-medium leading-snug">Join 25,000+ happy travelers who explored {regionName || "the world"} with us.</p>
                 </div>
                 <Link 
                   href="/reviews"
@@ -534,6 +551,27 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                 onClick={() => setShowVideoPopup(false)}
               >
                 <X className="w-6 h-6" />
+              </button>
+
+              {/* Navigation Buttons */}
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-[120] p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevVideo();
+                }}
+              >
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-[120] p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextVideo();
+                }}
+              >
+                <ChevronRight className="w-8 h-8" />
               </button>
 
               <video

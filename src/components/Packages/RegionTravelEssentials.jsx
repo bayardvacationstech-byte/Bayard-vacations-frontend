@@ -75,14 +75,14 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
             {/* Left: Title Section */}
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
-                <Compass className="w-4 h-4 text-brand-green" />
-                <span className="text-sm font-bold text-brand-green uppercase tracking-wider">KNOWLEDGE HUB</span>
+                <Compass className="w-4 h-4 text-brand-blue" />
+                <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">KNOWLEDGE HUB</span>
               </div>
               
               <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
                 <span className="hidden sm:inline">Things to Know in </span>
                 <span className="inline sm:hidden">Tips for </span>
-                <span className="text-brand-green capitalize">{regionName}</span>
+                <span className="text-brand-blue capitalize">{regionName}</span>
               </h2>
               
               <p className="text-lg md:text-xl text-slate-600 font-medium max-w-2xl truncate md:whitespace-normal">
@@ -430,7 +430,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                              ]).map((opt, i) => (
                                <div key={i} className="flex justify-between items-center py-2 border-b border-slate-100">
                                  <span className="text-sm font-black text-slate-900">{opt.label}</span>
-                                 <span className="text-sm font-black text-brand-green">{opt.value}</span>
+                                 <span className="text-sm font-black text-brand-blue">{opt.value}</span>
                                </div>
                              ))}
                           </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ShieldCheck,
   LayoutDashboard,
@@ -6,7 +8,10 @@ import {
   ArrowRight,
   Crown,
   Headphones,
+  Bot,
+  Users,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import Container from "../ui/Container";
 import Image from "next/image";
 import Link from "next/link";
@@ -89,15 +94,44 @@ export default function WhyBayard() {
             Your travel dreams are unique, and We offer customized itineraries, reliable support, and exceptional experiences designed around your needs.
           </p>
 
+          <div className="flex flex-col gap-6 mb-8 mt-2">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="flex items-center gap-4 group cursor-default"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all duration-300 border border-white/10 shadow-xl">
+                <Bot className="w-6 h-6 text-yellow-400" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-base md:text-lg leading-tight flex items-center gap-2">
+                  AI-Powered
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-yellow-400 text-brand-blue text-[8px] font-black uppercase tracking-tighter">New</span>
+                </span>
+                <span className="text-slate-400 text-xs md:text-sm font-medium">Plan trips by just talking to us</span>
+              </div>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center gap-4 group cursor-default"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all duration-300 border border-white/10 shadow-xl">
+                <Users className="w-6 h-6 text-yellow-400" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-base md:text-lg leading-tight">25,000+ Happy travelers</span>
+                <span className="text-slate-400 text-xs md:text-sm font-medium">Worldwide trust in Bayard adventures</span>
+              </div>
+            </motion.div>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-2 md:mt-4 w-auto">
-             <div className="flex items-center gap-4 bg-white/5 p-3 rounded-2xl border border-white/10 pr-6">
-                <Image src={PeopleReviews} alt="Reviews" className="h-10 w-auto" />
-                <div className="flex flex-col">
-                  <span className="font-bold text-xl text-white">20K+</span>
-                  <span className="text-xs text-slate-400 uppercase tracking-wider">Happy Travelers</span>
-                </div>
-             </div>
-             
              <Link 
                href="/explore" 
                className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-brand-blue flex items-center justify-center gap-2 px-6 py-3 md:px-10 md:py-4 rounded-full font-black text-sm md:text-lg transition-all transform hover:scale-105 shadow-[0_10px_30px_rgba(234,179,8,0.4)]"

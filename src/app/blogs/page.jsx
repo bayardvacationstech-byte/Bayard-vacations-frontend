@@ -203,7 +203,7 @@ const BlogsPage = () => {
       <section className="section-padding">
         <Container>
           <h2 className="section-header-margin items-center gap-8 text-2xl uppercase !leading-[150%] text-brand-blue before:hidden before:h-px before:w-10 before:flex-1 before:bg-[#9E9E9E] before:content-[''] after:hidden after:h-px after:w-10 after:flex-1 after:bg-[#9E9E9E] after:content-[''] c-md:flex c-md:before:inline-block c-md:after:inline-block c-lg:text-4xl c-lg:!leading-[130%]">
-            <div className="flex flex-col text-center font-nord">
+            <div className="flex flex-col text-center">
               <span className="text-xl font-light text-[#798290]">
                 editor&apos;s choice
               </span>
@@ -242,7 +242,7 @@ const BlogsPage = () => {
       <section className="section-padding bg-[#F1F5FC]">
         <Container>
           <h2 className="section-header-margin items-center gap-8 text-2xl uppercase !leading-[150%] text-brand-blue before:hidden before:h-px before:w-10 before:flex-1 before:bg-[#798290] before:content-[''] after:hidden after:h-px after:w-10 after:flex-1 after:bg-[#798290] after:content-[''] c-md:flex c-md:before:inline-block c-md:after:inline-block c-lg:text-4xl c-lg:!leading-[130%]">
-            <div className="text-center font-nord">
+            <div className="text-center">
               <span className="text-4xl font-light text-[#798290]">Latest</span>{" "}
               <span className="text-4xl font-bold">articles</span>
             </div>
@@ -285,7 +285,7 @@ const BlogsPage = () => {
       <section className="section-padding bg-white">
         <Container>
           <div className="rounded-2xl bg-brand-blue p-8 text-white">
-            <h3 className="mb-2 font-nord text-3xl font-bold">
+            <h3 className="mb-2 text-3xl font-bold">
               Subscribe to Our Newsletter
             </h3>
             <p className="mb-6">

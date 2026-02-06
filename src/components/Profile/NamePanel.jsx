@@ -80,7 +80,7 @@ const NamePanel = () => {
                 <User className="size-5" />
               </div>
               <div>
-                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Identity
                 </h5>
                 <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Full Name</h4>
@@ -101,7 +101,7 @@ const NamePanel = () => {
               <form onSubmit={handleUpdateProfile} className="space-y-8 animate-in fade-in slide-in-from-top-2 duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">First Name</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">First Name</label>
                     <Input
                       type="text"
                       value={firstName}
@@ -113,7 +113,7 @@ const NamePanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Last Name</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Last Name</label>
                     <Input
                       type="text"
                       value={lastName}

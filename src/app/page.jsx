@@ -7,6 +7,8 @@ import {
   getThemePackagesForHome,
   getMarketingBanners,
 } from "@/lib/server";
+import { SITE_DATA } from "@/config";
+import JsonLd from "@/components/Seo/JsonLd";
 import Hero from "@/components/Landing/Hero";
 import Holidays from "@/components/Landing/Holidays";
 import ExploreDestinations from "@/components/Landing/Destinations/ExploreDestinations";
@@ -15,10 +17,13 @@ import ThemeHighlights from "@/components/Landing/ThemeHighlights";
 import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
 import GroupDeparture from "@/components/Landing/GroupDeparture";
 import WhyBayard from "@/components/Landing/WhyBayard";
-import InspirationSection from "@/components/Landing/InspirationSection";
+import dynamic from "next/dynamic";
+// import InspirationSection from "@/components/Landing/InspirationSection";
 import RegionTestimonials from "@/components/Packages/RegionTestimonials";
 import MobileAdBanner from "@/components/Landing/MobileAdBanner";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
+
+const InspirationSection = dynamic(() => import("@/components/Landing/InspirationSection"));
 
 // Timeout wrapper to prevent indefinite hanging
 const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
@@ -159,6 +164,44 @@ const HomePage = () => {
       <Suspense fallback={<div className="h-80 bg-slate-50 animate-pulse" />}>
         <TestimonialsSection />
       </Suspense>
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE_DATA.name,
+          url: SITE_DATA.url,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${SITE_DATA.url}/search?q={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: SITE_DATA.name,
+          url: SITE_DATA.url,
+          logo: `${SITE_DATA.url}${SITE_DATA.image}`,
+          contactPoint: {
+            "@type": "ContactPoint",
+            telephone: "+91-9187563136",
+            contactType: "customer service",
+            areaServed: "IN",
+            availableLanguage: "en",
+          },
+          sameAs: [
+            "https://www.instagram.com/bayardvacations",
+            "https://www.facebook.com/bayardvacations",
+            "https://www.linkedin.com/company/bayard-vacations",
+          ],
+        }}
+      />
     </>
   );
 };

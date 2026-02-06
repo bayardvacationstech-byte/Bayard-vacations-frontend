@@ -29,7 +29,7 @@ const SliderCard = ({ data }) => {
         fetchPriority="high"
         className="absolute size-full rounded-2xl object-cover"
       />
-      <motion.div className="absolute z-10 flex size-full items-end font-nord">
+      <motion.div className="absolute z-10 flex size-full items-end">
         <motion.div className="w-full bg-gradient-to-b from-black/0 to-black/60 p-4">
           <motion.p className=" text-xs font-medium uppercase text-[#d5d5d6]">
             {data.location}

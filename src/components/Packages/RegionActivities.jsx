@@ -69,15 +69,15 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
             {/* Left: Title Section */}
             <div className="flex-1 max-w-3xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
-                <Compass className="w-4 h-4 text-brand-green" />
-                <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
+                <Compass className="w-4 h-4 text-brand-blue" />
+                <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
                   Things To Do
                 </span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
                 <span className="hidden sm:inline">Top Activities in </span>
                 <span className="inline sm:hidden">Activities in </span>
-                <span className="text-brand-green capitalize">{regionName}</span>
+                <span className="text-brand-blue capitalize">{regionName}</span>
               </h2>
               <p className="hidden sm:block text-xl text-slate-600 truncate md:whitespace-normal">
                 Adventure awaits! Discover exciting activities and unforgettable experiences

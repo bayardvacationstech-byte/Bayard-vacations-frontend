@@ -73,7 +73,7 @@ export default function TeamGallery() {
 
       <Container className="relative z-10">
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-brand-green bg-brand-green/20 rounded-full mb-4">
+          <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-brand-blue bg-brand-blue/20 rounded-full mb-4">
             Our Amazing Team
           </span>
           <h2 className="text-4xl md:text-5xl font-black text-white mb-4">30 People, One Dream</h2>

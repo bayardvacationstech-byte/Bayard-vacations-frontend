@@ -14,6 +14,7 @@ function SpotlightImage({ src, name, className }) {
       src={displayImage}
       alt={name}
       className={className}
+      suppressHydrationWarning
     />
   );
 }
@@ -102,8 +103,9 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
       id: item.name,
       slug: item.name.toLowerCase().replace(/ /g, "-"),
       image: item.image,
-      days: 5 + Math.floor(Math.random() * 4),
-      price: `₹1,${Math.floor(Math.random() * 9)}9,000`,
+      // Use deterministic values based on name length to avoid hydration mismatch
+      days: 5 + (item.name.length % 4),
+      price: `₹1,${(item.name.length % 9)}9,000`,
       isPackage: false
     }));
   }, [initialRegions]);

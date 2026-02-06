@@ -74,7 +74,7 @@ export default function DestinationCard({
                 >
                   <Image
                     src={image.url}
-                    alt={image.title || regionSlug}
+                    alt={image.title || regionData?.name || regionSlug}
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"

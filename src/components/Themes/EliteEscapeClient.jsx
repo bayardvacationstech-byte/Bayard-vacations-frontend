@@ -63,14 +63,27 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
   } = usePackagesByTheme("elite-escape");
 
   const elitePackages = useMemo(() => {
-    const pkgSource = allThemePackages?.length > 0 ? allThemePackages : initialPackages;
+    let pkgSource = [];
+    if (Array.isArray(allThemePackages) && allThemePackages.length > 0) {
+      pkgSource = allThemePackages;
+    } else if (Array.isArray(initialPackages)) {
+      pkgSource = initialPackages;
+    }
     
+    // Safeguard: Ensure pkgSource is a valid array
+    if (!Array.isArray(pkgSource)) return [];
+
     const uniqueMap = new Map();
-    pkgSource.forEach(pkg => {
-      if (pkg.id && !uniqueMap.has(pkg.id)) {
-        uniqueMap.set(pkg.id, pkg);
-      }
-    });
+    try {
+      pkgSource.forEach(pkg => {
+        if (pkg && pkg.id && !uniqueMap.has(pkg.id)) {
+          uniqueMap.set(pkg.id, pkg);
+        }
+      });
+    } catch (e) {
+      console.error("Error processing packages map:", e);
+      return pkgSource.slice(0, 50); // Fallback to raw slice if Map fails
+    }
     return Array.from(uniqueMap.values());
   }, [allThemePackages, initialPackages]);
 
@@ -90,18 +103,38 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
 
   const displayRegions = selectionType === "Domestic" ? domesticRegions : internationalRegions;
 
-  const filteredPackages = useMemo(() => elitePackages.filter(pkg => {
-    const isLevelMatch = selectedRegion === "All" || pkg.region === selectedRegion;
-    const regionData = initialRegions.find(r => r.name === pkg.region || r.slug === pkg.region.toLowerCase().replace(/\s+/g, '-'));
-    const isTypeMatch = selectionType === "Domestic" ? regionData?.isDomestic : !regionData?.isDomestic;
-    return isLevelMatch && isTypeMatch;
-  }), [elitePackages, selectedRegion, selectionType, initialRegions]);
+  const filteredPackages = useMemo(() => {
+    const filtered = elitePackages.filter(pkg => {
+      const isLevelMatch = selectedRegion === "All" || pkg.region === selectedRegion;
+      const regionData = initialRegions.find(r => r.name === pkg.region || r.slug === pkg.region.toLowerCase().replace(/\s+/g, '-'));
+      const isTypeMatch = selectionType === "Domestic" ? regionData?.isDomestic : !regionData?.isDomestic;
+      return isLevelMatch && isTypeMatch;
+    });
+
+    // Sort: Non-zero prices first
+    return [...filtered].sort((a, b) => {
+      const priceA = (a.offerPrice > 0 ? a.offerPrice : a.basePrice) || 0;
+      const priceB = (b.offerPrice > 0 ? b.offerPrice : b.basePrice) || 0;
+      if (priceA > 0 && priceB === 0) return -1;
+      if (priceA === 0 && priceB > 0) return 1;
+      return 0;
+    });
+  }, [elitePackages, selectedRegion, selectionType, initialRegions]);
 
   const totalPages = Math.ceil(filteredPackages.length / itemsPerPage);
   
   const paginatedPackages = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return filteredPackages.slice(start, start + itemsPerPage);
+    const paginated = filteredPackages.slice(start, start + itemsPerPage);
+    
+    // Logic: First page should not show 0 price packages
+    if (currentPage === 1) {
+      return paginated.filter(pkg => {
+        const price = (pkg.offerPrice > 0 ? pkg.offerPrice : pkg.basePrice) || 0;
+        return price > 0;
+      });
+    }
+    return paginated;
   }, [filteredPackages, currentPage, itemsPerPage]);
 
   return (

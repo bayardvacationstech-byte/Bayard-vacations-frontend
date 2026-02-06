@@ -1,15 +1,18 @@
 "use client";
 import { Search, Star, MoveRight, Phone, Sparkles, Compass, Headphones, Globe, Plane } from "lucide-react";
 import React from "react";
+import { searchPackages } from "@/utils/firebase";
 import { AnimatedInput } from "../ui/AnimatedInput";
 import { Card, CardContent } from "../ui/card";
 import { Skeleton } from "../Skeleton";
 import Link from "next/link";
 import Image from "next/image";
 import ReviewCompanies from "@/assets/reviewCompanies.png";
-import heroPoster from "@/assets/hero.jpg"; // Imported hero image for poster
-import MobileSearch from "./MobileSearch";
+// import heroPoster from "@/assets/hero.jpg"; // Imported hero image for poster
+import dynamic from "next/dynamic";
 import { SEARCH_API, TRENDING_PACKAGES } from "@/config";
+
+const MobileSearch = dynamic(() => import("./MobileSearch"), { ssr: false });
 
 const Hero = () => {
   // Search state
@@ -32,12 +35,16 @@ const Hero = () => {
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     debounceTimeout.current = setTimeout(async () => {
       try {
-        const response = await SEARCH_API.get("/", {
-          params: { q: searchTerm },
+        // Switching to internal search exclusively due to external API timeouts
+        const data = await searchPackages(searchTerm);
+        setSearchResults({
+          packages: data.packages || [],
+          regions: data.regions || [],
+          packagesByRegion: data.packagesByRegion || []
         });
-        setSearchResults(response.data || []);
       } catch (e) {
-        setSearchResults([]);
+        console.error("Internal Search Error:", e);
+        setSearchResults({ packages: [], regions: [], packagesByRegion: [] });
       } finally {
         setLoading(false);
       }
@@ -68,23 +75,19 @@ const Hero = () => {
       <div className="relative flex flex-col justify-center min-h-[90vh] sm:min-h-[100dvh] w-full bg-brand-deep">
         <video
           className="absolute inset-0 z-0 h-full w-full object-cover"
-          poster={heroPoster.src}
+          poster="https://cdn.bayardvacations.com/images/1770397299555-Screenshot_2026-02-06_195709_copy.jpg"
           autoPlay
           loop
           muted
           playsInline
         >
           <source
-            src="https://cdn.bayardvacations.com/videos/hero_section.webm"
-            type="video/webm"
-          />
-          <source
-            src="https://cdn.bayardvacations.com/videos/hero_section.mp4"
+            src="https://cdn.bayardvacations.com/images/1770397237699-0206__1__1_.mp4"
             type="video/mp4"
           />
         </video>
         <div
-          className="absolute inset-0 z-10 top-0 left-0 h-full w-full bg-black/60"
+          className="absolute inset-0 z-10 top-0 left-0 h-full w-full bg-black/40"
         />
 
         <div className="max-w-4xl mx-auto flex flex-col gap-8 sm:gap-16 relative z-20 pb-32 sm:pb-0">
@@ -101,13 +104,12 @@ const Hero = () => {
       tracking-tight
       text-white
       drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]
-      font-nord
       max-w-6xl mx-auto
       leading-tight sm:leading-[1.1]
       px-2
     "
             >
-              Every journey deserves to feel <span className="from-yellow-400 to-yellow-500">personal</span>.   
+              Every journey deserves to feel <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent">personal</span>.   
             </h1>
             <p 
               style={{ color: '#fbfbfbff' }}
@@ -119,11 +121,9 @@ const Hero = () => {
 
           {/* Search Bar */}
           {/* ================= SEARCH BAR ================= */}
-          <div className="relative w-4/5 sm:w-3/4 mx-auto z-20 px-2 sm:px-0">
+          <div className="relative w-4/5 sm:w-3/4 mx-auto z-50 px-2 sm:px-0">
             {/* -------- MOBILE SEARCH -------- */}
-            <div className="sm:hidden">
-              <MobileSearch />
-            </div>
+            <MobileSearch />
 
             {/* -------- DESKTOP SEARCH -------- */}
             <div
@@ -203,16 +203,16 @@ const Hero = () => {
                               Regions
                             </p>
                           <ul className="text-brand-blue mb-4">
-                            {searchResults.regions.map((region, index) => (
-                              <li key={index}>
+                            {searchResults.regions.map((region) => (
+                              <li key={region.id || region.slug}>
                                 <Link
-                                  href={`/packages/${region}`}
+                                  href={`/packages/${region.slug}`}
                                   className="flex items-center gap-3 hover:bg-brand-blue/10 p-2 rounded"
                                   onClick={() => setShowDropdown(false)}
                                 >
                                   <MoveRight className="size-4" />
                                   <span className="capitalize">
-                                    {region.split("-").join(" ")}
+                                    {region.name}
                                   </span>
                                 </Link>
                               </li>
@@ -308,7 +308,7 @@ const Hero = () => {
               <Star className="size-3 fill-brand-accent text-brand-accent" /> Personalized Travel Experiences
             </span>
             <span className="mx-8 sm:mx-10 text-white font-bold tracking-wide text-xs sm:text-sm uppercase flex items-center gap-2">
-              <Star className="size-3 fill-brand-accent text-brand-accent" /> Trusted by 5000+ Happy Travelers
+              <Star className="size-3 fill-brand-accent text-brand-accent" /> Trusted by 25,000+ Happy Travelers
             </span>
              <span className="mx-8 sm:mx-10 text-white font-bold tracking-wide text-xs sm:text-sm uppercase flex items-center gap-2">
               <Star className="size-3 fill-brand-accent text-brand-accent" /> Curated Luxury Holidays
@@ -321,170 +321,174 @@ const Hero = () => {
 
 
         {/* Banner Action Buttons - Hidden on mobile */}
-        <div className="hidden sm:flex absolute bottom-32 sm:bottom-28 lg:bottom-44 left-0 right-0 px-6 sm:px-12 z-30 pointer-events-none justify-between items-end">
+        <div className="hidden sm:flex absolute bottom-20 sm:bottom-16 lg:bottom-20 left-0 right-0 px-6 sm:px-12 z-30 pointer-events-none justify-between items-end">
           {/* Left Side: Explore */}
           <Link 
             href="/explore"
-            className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-blue/20 hover:-translate-y-1"
+            className="pointer-events-auto group flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-blue/20 hover:-translate-y-1"
           >
-            <div className="bg-brand-blue/80 p-1.5 sm:p-2 rounded-full">
-              <Compass className="size-4 sm:size-5 group-hover:rotate-45 transition-transform duration-500" />
+            <div className="bg-brand-blue/80 p-1 sm:p-1.5 rounded-full">
+              <Compass className="size-3.5 sm:size-4 group-hover:rotate-45 transition-transform duration-500" />
             </div>
             <div className="flex flex-col items-start leading-none">
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/70 mb-1">Adventure Awaits</span>
-              <span className="text-xs sm:text-lg font-black">Discover Journeys</span>
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/70 mb-0.5">Adventure Awaits</span>
+              <span className="text-xs sm:text-base font-black">Discover Journeys</span>
             </div>
           </Link>
 
           {/* Right Side: Contact */}
           <Link 
             href="/contact"
-            className="pointer-events-auto group flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 sm:px-6 sm:py-3 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-green/20 hover:-translate-y-1"
+            className="pointer-events-auto group flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-green/20 hover:-translate-y-1"
           >
             <div className="flex flex-col items-end leading-none">
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/70 mb-1">Questions?</span>
-              <span className="text-xs sm:text-lg font-black">Consult Expert</span>
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/70 mb-0.5">Questions?</span>
+              <span className="text-xs sm:text-base font-black">Consult Expert</span>
             </div>
-            <div className="bg-brand-green/80 p-1.5 sm:p-2 rounded-full">
-              <Headphones className="size-4 sm:size-5 group-hover:scale-110 transition-transform duration-300" />
+            <div className="bg-brand-green/80 p-1 sm:p-1.5 rounded-full">
+              <Headphones className="size-3.5 sm:size-4 group-hover:scale-110 transition-transform duration-300" />
             </div>
           </Link>
         </div>
 
         {/* Mobile Action Buttons - Below Stats */}
-        <div className="sm:hidden relative z-40 flex gap-3 w-full px-4 mt-16 pb-4">
+        <div className="sm:hidden relative z-40 flex gap-3 w-full px-4 mt-6 pb-4">
           <Link 
             href="/explore"
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 backdrop-blur-md px-5 py-3.5 rounded-2xl text-white hover:from-blue-500 hover:to-blue-600 transition-all shadow-[0_8px_30px_rgba(37,99,235,0.4)] hover:shadow-[0_8px_40px_rgba(37,99,235,0.6)] hover:scale-[1.02]"
+            className="flex-1 flex items-center justify-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2.5 rounded-xl text-white hover:bg-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)] active:scale-95"
           >
-            <Compass className="size-5" />
-            <span className="text-sm font-black">Explore</span>
+            <div className="bg-brand-blue/80 p-1 rounded-full">
+              <Compass className="size-3.5" />
+            </div>
+            <span className="text-xs font-black tracking-tight">Explore</span>
           </Link>
 
           <Link 
             href="/contact"
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-md px-5 py-3.5 rounded-2xl text-white hover:from-green-500 hover:to-green-600 transition-all shadow-[0_8px_30px_rgba(34,197,94,0.4)] hover:shadow-[0_8px_40px_rgba(34,197,94,0.6)] hover:scale-[1.02]"
+            className="flex-1 flex items-center justify-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2.5 rounded-xl text-white hover:bg-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)] active:scale-95"
           >
-            <Headphones className="size-5" />
-            <span className="text-sm font-black">Contact</span>
+            <span className="text-xs font-black tracking-tight">Contact</span>
+            <div className="bg-brand-blue/80 p-1 rounded-full">
+              <Headphones className="size-3.5" />
+            </div>
           </Link>
         </div>
 
         {/* Quick Stats - Enhanced Design */}
         <div 
-          style={{ background: 'linear-gradient(to bottom, #001233 0%, #0046b8 100%)' }}
-          className="text-white shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30"
+          style={{ background: 'linear-gradient(to bottom, #001233CC 0%, #0046b8CC 100%)' }}
+          className="text-white shadow-[0_-10px_40px_rgba(0,0,0,0.6)] relative z-30 backdrop-blur-sm"
         >
           <div className="max-w-7xl mx-auto">
             {/* MOBILE LAYOUT */}
-            <div className="sm:hidden flex flex-col py-2 px-4">
+            <div className="sm:hidden flex flex-col py-1.5 px-4">
               {/* Top Row: Rating & Stats */}
-              <div className="flex items-center justify-between mb-2 px-2">
+              <div className="flex items-center justify-between mb-1.5 px-2">
                 {/* Google Rating Pill */}
-                <div className="flex items-center gap-2 bg-[#4285F4]/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20 shadow-lg">
+                <div className="flex items-center gap-1.5 bg-[#4285F4]/90 backdrop-blur-sm px-2 py-0.5 rounded-full border border-white/20 shadow-lg">
                   <div className="bg-white rounded-full p-0.5">
-                    <Image src={ReviewCompanies} alt="G" className="w-3 h-3 object-contain" />
+                    <Image src={ReviewCompanies} alt="G" className="w-2.5 h-2.5 object-contain" />
                   </div>
-                  <span className="text-sm font-bold text-white">4.9</span>
-                  <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                  <span className="text-xs font-bold text-white">4.9</span>
+                  <Star className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
                 </div>
 
                 {/* Travelers */}
                 <div className="flex flex-col items-end text-right">
-                  <span className="text-xl font-bold text-white leading-none">15k+</span>
-                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-widest mt-1">TRAVELERS</span>
+                  <span className="text-lg font-bold text-white leading-none">25,000+</span>
+                  <span className="text-[8px] font-bold text-white/80 uppercase tracking-widest mt-0.5">TRAVELERS</span>
                 </div>
 
                 {/* Itineraries */}
                 <div className="flex flex-col items-end text-right">
-                  <span className="text-xl font-bold text-white leading-none">1000+</span>
-                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-widest mt-1">ITINERARIES</span>
+                  <span className="text-lg font-bold text-white leading-none">1000+</span>
+                  <span className="text-[8px] font-bold text-white/80 uppercase tracking-widest mt-0.5">ITINERARIES</span>
                 </div>
               </div>
 
 
 
               {/* Bottom Row: Icons */}
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1">
                 {/* AI Assistant */}
                 <div className="flex flex-col items-center">
-                  <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-1 shadow-inner">
-                    <Plane className="w-4 h-4 text-blue-300 fill-blue-300/20" />
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-0.5 shadow-inner">
+                    <Plane className="w-3.5 h-3.5 text-blue-300 fill-blue-300/20" />
                   </div>
-                  <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center">AI ASSISTANT</span>
+                  <span className="text-[7px] font-bold text-white uppercase tracking-wider text-center leading-tight">AI ASSISTANT</span>
                 </div>
 
                 {/* 24/7 Support */}
                 <div className="flex flex-col items-center">
-                  <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-1 shadow-inner">
-                    <Phone className="w-4 h-4 text-gray-300 fill-gray-300/20" />
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-0.5 shadow-inner">
+                    <Phone className="w-3.5 h-3.5 text-gray-300 fill-gray-300/20" />
                   </div>
-                  <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center">24/7 SUPPORT</span>
+                  <span className="text-[7px] font-bold text-white uppercase tracking-wider text-center leading-tight">24/7 SUPPORT</span>
                 </div>
 
                 {/* Global Coverage */}
                 <div className="flex flex-col items-center">
-                  <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-1 shadow-inner">
-                    <Globe className="w-4 h-4 text-emerald-300 fill-emerald-300/20" />
+                  <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-white/10 flex items-center justify-center mb-0.5 shadow-inner">
+                    <Globe className="w-3.5 h-3.5 text-emerald-300 fill-emerald-300/20" />
                   </div>
-                  <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center">GLOBAL<br/>COVERAGE</span>
+                  <span className="text-[7px] font-bold text-white uppercase tracking-wider text-center leading-tight">GLOBAL COVERAGE</span>
                 </div>
               </div>
             </div>
 
             {/* DESKTOP LAYOUT (Unchanged) */}
-            <div className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between py-3 sm:py-5 px-3 sm:px-12 gap-3 gap-y-4 sm:gap-6">
+            <div className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between py-2 sm:py-3 px-3 sm:px-12 gap-3 gap-y-4 sm:gap-6">
             
             {/* Review Badge */}
             <a 
               href="https://www.google.com/search?sca_esv=bfc79b9b44160e7b&sxsrf=ANbL-n6D9k58mEqPkUW7KDcYQUSUWWZaFw:1768213761642&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOdIhnvGyPmjx2iWMPrXQmOMDb7y8i0hQYnbD65r7JPZU7-dfoSXAN8GKo3S4xUILSWr5tzKc1Yf8_4j7sf887yPWbseRs4slYUwZZga9TnZ773fENw%3D%3D&q=Bayard+Vacations+Reviews&sa=X&ved=2ahUKEwjX75jJ5YWSAxXKa2wGHdDwF7YQQ0bkNegQIPhAE&biw=1792&bih=913&dpr=2&aic=0"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-row items-center justify-center gap-1 sm:gap-3 shrink-0 bg-white/5 px-2 sm:px-4 py-1 sm:py-2.5 rounded-lg sm:rounded-2xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group/badge col-span-1 sm:col-auto"
+              className="flex flex-row items-center justify-center gap-1 sm:gap-2.5 shrink-0 bg-white/5 px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-2xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group/badge col-span-1 sm:col-auto"
             >
               <Image
                 src={ReviewCompanies}
                 alt="Google"
                 priority
-                className="h-5 sm:h-10 w-auto group-hover/badge:scale-105 transition-transform duration-300"
+                className="h-4 sm:h-8 w-auto group-hover/badge:scale-105 transition-transform duration-300"
               />
-              <div className="flex items-center gap-0.5 sm:gap-1.5 font-black group-hover/badge:translate-x-0.5 transition-transform duration-300">
-                <span className="text-sm sm:text-2xl font-black text-white leading-none">4.9</span>
-                <Star className="size-2.5 sm:size-5 fill-[#FBBC05] stroke-[#FBBC05]" />
+              <div className="flex items-center gap-0.5 sm:gap-1 font-black group-hover/badge:translate-x-0.5 transition-transform duration-300">
+                <span className="text-xs sm:text-xl font-black text-white leading-none">4.9</span>
+                <Star className="size-2 sm:size-4 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
             </a>
 
             {/* Travelers */}
             <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
-              <span className="text-sm sm:text-2xl font-black text-white leading-none">15k+</span>
-              <span className="text-[8px] sm:text-xs font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Travelers</span>
+              <span className="text-xs sm:text-lg font-black text-white leading-none">25,000+</span>
+              <span className="text-[7px] sm:text-[10px] font-bold text-white/90 tracking-wider mt-0.5">Travelers</span>
             </div>
 
             {/* Itineraries */}
             <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
-              <span className="text-sm sm:text-2xl font-black text-white leading-none">1000+</span>
-              <span className="text-[8px] sm:text-xs font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Itineraries</span>
+              <span className="text-xs sm:text-lg font-black text-white leading-none">1000+</span>
+              <span className="text-[7px] sm:text-[10px] font-bold text-white/90 tracking-wider mt-0.5">Itineraries</span>
             </div>
 
             {/* AI Assistant */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-3 shrink-0 col-span-1 sm:col-auto">
-              <div className="h-6 w-6 sm:h-10 sm:w-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
-                <Sparkles className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-2 shrink-0 col-span-1 sm:col-auto">
+              <div className="h-5 w-5 sm:h-8 sm:w-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
+                <Sparkles className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-white" />
               </div>
               <div className="leading-tight text-center sm:text-left">
-                <span className="block text-[8px] sm:text-base font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
-                <span className="hidden sm:block text-[10px] sm:text-xs font-bold text-white/90 tracking-wider mt-0.5 sm:mt-1">Instant Ideas</span>
+                <span className="block text-[7px] sm:text-sm font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
+                <span className="hidden sm:block text-[9px] sm:text-[10px] font-bold text-white/90 tracking-wider mt-0.5">Instant Ideas</span>
               </div>
             </div>
 
             {/* 24/7 Support */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-3 shrink-0 col-span-1 sm:col-auto">
-              <div className="h-6 w-6 sm:h-10 sm:w-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
-                <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-1 sm:gap-2 shrink-0 col-span-1 sm:col-auto">
+              <div className="h-5 w-5 sm:h-8 sm:w-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 border border-white/10 mx-auto sm:mx-0">
+                <Phone className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-white" />
               </div>
               <div className="leading-tight text-center sm:text-left">
-                <span className="block text-[8px] sm:text-base font-black text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
-                <span className="hidden sm:block text-[10px] sm:text-xs font-bold text-white/90 uppercase tracking-tighter mt-0.5 sm:mt-1 whitespace-nowrap">Assistance</span>
+                <span className="block text-[7px] sm:text-sm font-black text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
+                <span className="hidden sm:block text-[9px] sm:text-[10px] font-bold text-white/90 uppercase tracking-tighter mt-0.5 whitespace-nowrap">Assistance</span>
               </div>
             </div>
 

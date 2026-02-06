@@ -67,17 +67,6 @@ const EmailPanel = () => {
     setError("");
     setLoading(true);
 
-    // Mock bypass for localhost
-    const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-    if (isLocal) {
-      setTimeout(() => {
-        setStep("completed");
-        setLoading(false);
-        toast({ title: "Mock Email Sent", description: "Verification link sent to " + email });
-      }, 800);
-      return;
-    }
-
     try {
       const lastSignIn = new Date(user.metadata.lastSignInTime).getTime();
       const now = Date.now();
@@ -247,7 +236,7 @@ const EmailPanel = () => {
                 <Mail className="size-5" />
               </div>
               <div>
-                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Communication
                 </h5>
                 <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Email Address</h4>
@@ -279,7 +268,7 @@ const EmailPanel = () => {
             ) : (
               <form onSubmit={handleEmailUpdate} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-500">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Email Address</label>
+                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Email Address</label>
                   <Input
                     type="email"
                     value={email}

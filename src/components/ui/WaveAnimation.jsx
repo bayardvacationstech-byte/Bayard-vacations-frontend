@@ -23,7 +23,7 @@ const WaveAnimation = ({ packageData }) => {
   return (
     <div className="relative rounded bg-gradient-to-r from-[#0146B3] via-[#01317E] to-[#0146B3] p-6 c-xl:p-12">
       <div className="relative z-20">
-        <h3 className="mb-4 font-nord text-base font-medium uppercase text-white sm:text-lg">
+        <h3 className="mb-4 text-base font-medium uppercase text-white sm:text-lg">
           Book Your <span>{packageData.region}</span> Adventure Today!
         </h3>
         {packageData?.footer_description && (

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Flower, Sparkles, Waves, MapPin, Calendar, Users, Star, Heart, ChevronRight, Leaf, Sun, Wind, Cloud, Moon, Globe, PlayCircle } from "lucide-react";
+import { Flower, Sparkles, Waves, MapPin, Calendar, Users, Star, Heart, ChevronRight, Leaf, Sun, Wind, Cloud, Moon, Globe, PlayCircle, Compass } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
@@ -104,20 +104,40 @@ export default function RelaxRejuvenateClient() {
   } = usePackagesByTheme("relax-rejuvenate");
 
   const wellnessPackages = useMemo(() => {
-    if (!allThemePackages) return { international: [], domestic: [] };
+    let pkgSource = [];
+    if (Array.isArray(allThemePackages) && allThemePackages.length > 0) {
+      pkgSource = allThemePackages;
+    }
+
+    // Safeguard
+    if (!Array.isArray(pkgSource)) return { international: [], domestic: [] };
     
     // Deduplicate by package ID
     const uniqueMap = new Map();
-    allThemePackages.forEach(pkg => {
-      if (pkg.id && !uniqueMap.has(pkg.id)) {
-        uniqueMap.set(pkg.id, pkg);
-      }
-    });
+    try {
+      pkgSource.forEach(pkg => {
+        if (pkg && pkg.id && !uniqueMap.has(pkg.id)) {
+          uniqueMap.set(pkg.id, pkg);
+        }
+      });
+    } catch (e) {
+      console.error("Error processing packages map:", e);
+      return { international: [], domestic: [] };
+    }
     const uniquePackages = Array.from(uniqueMap.values());
     
+    // Sort: Non-zero prices first
+    const sorted = [...uniquePackages].sort((a, b) => {
+      const priceA = (a.offerPrice > 0 ? a.offerPrice : a.basePrice) || 0;
+      const priceB = (b.offerPrice > 0 ? b.offerPrice : b.basePrice) || 0;
+      if (priceA > 0 && priceB === 0) return -1;
+      if (priceA === 0 && priceB > 0) return 1;
+      return 0;
+    });
+
     return {
-      international: uniquePackages.filter(pkg => !pkg.domestic),
-      domestic: uniquePackages.filter(pkg => pkg.domestic)
+      international: sorted.filter(pkg => !pkg.domestic),
+      domestic: sorted.filter(pkg => pkg.domestic)
     };
   }, [allThemePackages]);
 
@@ -126,7 +146,16 @@ export default function RelaxRejuvenateClient() {
   
   const paginatedPackages = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return currentPackages.slice(start, start + itemsPerPage);
+    const paginated = currentPackages.slice(start, start + itemsPerPage);
+
+    // Logic: First page should not show 0 price packages
+    if (currentPage === 1) {
+      return paginated.filter(pkg => {
+        const price = (pkg.offerPrice > 0 ? pkg.offerPrice : pkg.basePrice) || 0;
+        return price > 0;
+      });
+    }
+    return paginated;
   }, [currentPackages, currentPage, itemsPerPage]);
 
   // if (!mounted) return null; // Removed check
@@ -139,36 +168,30 @@ export default function RelaxRejuvenateClient() {
         videoUrl={VIDEO_MAP["relax-rejuvenate"]} 
       />
 
-      {/* Immersive Serenity Hero */}
-      <div className="relative min-h-[75vh] md:h-[85vh] overflow-hidden flex items-center bg-[#E5E1DA]">
-        {/* Ken Burns Effect */}
-        <motion.div 
-          initial={{ scale: 1, x: "-1%" }}
-          animate={{ scale: 1.1, x: "1%" }}
-          transition={{ duration: 30, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-          className="absolute inset-0"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1920&q=80"
-            alt="Serene wellness background"
-            fill
-            className="object-cover opacity-90"
-            priority
-          />
-        </motion.div>
+      {/* Immersive Serenity Hero - Redesigned Grid Layout */}
+      <section className="relative min-h-[85vh] pt-20 overflow-hidden flex items-center bg-[#fdfaf6]">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(#8fb39c 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
         
-        {/* Soft Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-100/60 via-stone-50/20 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-200/80 via-transparent to-stone-100/30 z-10" />
+        {/* Decorative Background Accents */}
+        <div className="absolute top-20 right-20 w-80 h-80 bg-stone-200/40 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-sage-50 rounded-full blur-[120px]"></div>
         
         {mounted && <FloatingZenElements />}
 
-        <Container className="relative z-20 pt-24 md:pt-40">
-          <div className="max-w-4xl space-y-4 md:space-y-10">
-            <motion.div
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2 }}
-              className="space-y-4 md:space-y-8 text-center md:text-left"
+        <Container className="relative z-20 w-full">
+          <div className="grid lg:grid-cols-12 gap-8 md:gap-16 items-center py-8 md:py-12">
+            
+            {/* Left Content - Zen & Bold */}
+            <motion.div 
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="lg:col-span-12 xl:col-span-5 space-y-8 text-center lg:text-left"
             >
               <Breadcrumbs 
                 items={[
@@ -176,27 +199,31 @@ export default function RelaxRejuvenateClient() {
                   { label: "Themes", href: "/themes" },
                   { label: "Relax & Rejuvenate", href: "/themes/relax-rejuvenate", active: true }
                 ]} 
-                className="bg-transparent border-transparent p-0 mb-4 flex justify-center md:justify-start"
+                className="bg-transparent border-transparent p-0 mb-4 justify-center lg:justify-start"
                 omitContainer
+                colorClasses="text-stone-400"
+                activeColorClasses="text-stone-900 font-bold"
               />
-
-              <div className="space-y-1 md:space-y-2">
-                <p className="text-sage-700 font-serif italic text-lg md:text-4xl opacity-80 mb-2">
+              
+              <div className="space-y-4">
+                <span className="inline-block text-sage-600 font-serif italic text-lg md:text-2xl opacity-80">
                   Inner peace starts here
-                </p>
-                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[9rem] font-serif text-stone-900 leading-[0.9] tracking-tight lowercase">
-                  Relax &<br />
-                  <span className="text-sage-600 font-light translate-x-2 md:translate-x-12 block">Rejuvenate</span>
+                </span>
+                <h1 className="text-5xl md:text-7xl xl:text-8xl font-serif text-stone-900 leading-[0.85] tracking-tight lowercase">
+                  relax &<br />
+                  <span className="text-sage-600 font-light italic lg:translate-x-12 block mt-2">rejuvenate</span>
+                  <span className="block text-stone-400 text-2xl md:text-3xl lg:text-4xl mt-6 font-light not-italic font-sans tracking-normal">at your own pace.</span>
                 </h1>
               </div>
-
-              <p className="text-base md:text-xl text-stone-600 font-light leading-relaxed max-w-2xl mx-auto md:mx-0 px-4 md:px-0">
-                Shed the weight of the world. Rediscover stillness in earth’s most tranquil sanctuaries, curated for the modern soul.
+              
+              <p className="text-base md:text-lg text-stone-600 font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Shed the weight of the world. Rediscover stillness in earth’s most tranquil sanctuaries, 
+                curated for the modern soul seeking absolute restoration.
               </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 md:gap-6 pt-2 md:pt-6">
-                <Link href="#packages">
-                  <Button size="lg" className="h-14 md:h-16 px-10 md:px-12 rounded-full bg-stone-900 hover:bg-stone-800 text-white shadow-xl border-none font-medium text-base md:text-lg tracking-wide transition-all duration-300">
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 md:gap-6">
+                <Link href="#packages" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto h-16 px-12 rounded-full bg-stone-900 hover:bg-stone-800 text-white shadow-xl hover:shadow-stone-900/20 border-none font-medium text-lg tracking-wide transition-all duration-500">
                     Find Your Peace
                   </Button>
                 </Link>
@@ -204,35 +231,93 @@ export default function RelaxRejuvenateClient() {
                   size="lg" 
                   variant="ghost" 
                   onClick={() => setIsVideoModalOpen(true)}
-                  className="h-12 md:h-auto text-stone-700 hover:bg-stone-100/50 font-medium text-base md:text-lg tracking-wide flex items-center gap-2 group"
+                  className="h-16 px-8 text-stone-800 hover:bg-stone-100/50 font-medium text-lg tracking-wide flex items-center gap-3 group"
                 >
-                  <PlayCircle className="w-6 h-6 text-[#B5A48B] group-hover:scale-110 transition-transform" />
+                  <PlayCircle className="w-7 h-7 text-sage-600 group-hover:scale-110 transition-transform" />
                   <span>Watch Story</span>
                 </Button>
               </div>
+              
+              {/* Zen Stats */}
+              <div className="grid grid-cols-2 gap-4 md:gap-6 pt-6 max-w-lg mx-auto lg:mx-0">
+                <div className="p-5 bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="text-3xl font-serif italic text-sage-600">98%</div>
+                  <div className="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-1">Stress Reduction</div>
+                </div>
+                <div className="p-5 bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="text-3xl font-serif italic text-stone-900">24/7</div>
+                  <div className="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-1">Holistic Support</div>
+                </div>
+              </div>
             </motion.div>
+            
+            {/* Right Content - Asymmetric Image Collage */}
+            <div className="lg:col-span-12 xl:col-span-7 relative h-[450px] md:h-[600px] mt-12 lg:mt-0">
+              {/* Main Immersive Image */}
+              <motion.div 
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
+                className="absolute top-0 right-0 w-full lg:w-11/12 h-[350px] md:h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white z-0"
+              >
+                <Image 
+                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=90" 
+                  alt="Luxury Wellness Destination" 
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 via-transparent to-transparent" />
+                
+                {/* Overlay Badge - Adjusted for less overlay */}
+                <div className="absolute top-6 right-6">
+                  <div className="p-4 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md">
+                      <Globe className="w-5 h-5 text-sage-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-serif italic text-lg leading-tight">Global Sanctuaries</h3>
+                      <p className="text-white/70 text-[10px] font-light uppercase tracking-wider">Restoration Awaits</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+              
+              {/* Floating Aesthetic Cards */}
+              <div className="absolute -bottom-6 left-0 lg:left-12 flex gap-4 md:gap-6 z-10 scale-90 md:scale-100">
+                <motion.div 
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  className="w-36 h-36 md:w-48 md:h-48 bg-white rounded-[2.5rem] shadow-2xl p-6 flex flex-col items-center justify-center text-center border border-stone-50"
+                >
+                  <div className="w-12 h-12 rounded-full bg-sage-50 flex items-center justify-center mb-3">
+                    <Compass className="w-6 h-6 text-sage-600" />
+                  </div>
+                  <div className="text-sm font-medium text-stone-800 uppercase tracking-wider">Explore</div>
+                  <div className="text-[10px] text-stone-400 mt-1 uppercase font-bold tracking-widest leading-tight">Your Stillness</div>
+                </motion.div>
+                
+                <motion.div 
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7 }}
+                  className="w-36 h-36 md:w-48 md:h-48 bg-stone-900 rounded-[2.5rem] shadow-2xl p-6 flex flex-col items-center justify-center text-center"
+                >
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-3">
+                    <MapPin className="w-6 h-6 text-sage-400" />
+                  </div>
+                  <div className="text-sm font-medium text-white uppercase tracking-wider">Locate</div>
+                  <div className="text-[10px] text-stone-300 mt-1 uppercase font-bold tracking-widest leading-tight">Pure Revival</div>
+                </motion.div>
+              </div>
+
+              {/* Decorative Scroll Hint */}
+              <div className="absolute -right-8 bottom-24 hidden xl:flex flex-col items-center gap-4 opacity-30 origin-right rotate-90 translate-x-12">
+                 <div className="w-12 h-[1px] bg-stone-900" />
+                 <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-stone-900">Scroll to Explore</span>
+              </div>
+            </div>
           </div>
         </Container>
-        
-        {/* Side Accents */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-24 opacity-20">
-           <Waves className="w-8 h-8 text-stone-900" />
-           <Sun className="w-8 h-8 text-stone-900" />
-           <Moon className="w-8 h-8 text-stone-900" />
-        </div>
-
-        {/* Breath Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
-           <div className="w-10 h-10 rounded-full border border-stone-900 flex items-center justify-center">
-              <motion.div 
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="w-4 h-4 rounded-full bg-stone-900"
-              />
-           </div>
-           <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-stone-900">Exhale</span>
-        </div>
-      </div>
+      </section>
 
 
 
@@ -403,14 +488,28 @@ export default function RelaxRejuvenateClient() {
                <p className="text-xl md:text-2xl text-stone-600 font-light max-w-2xl mx-auto leading-relaxed italic">
                   "Your journey to tranquility isn't a destination, it's a decision. Let us find your stillness."
                </p>
-               <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
-                  <Button size="lg" className="h-16 px-14 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-medium text-xl shadow-2xl transition-all duration-500 hover:scale-105">
-                     Book Your Sanctuary
-                  </Button>
-                  <Link href="/contact" className="text-stone-900 font-bold uppercase tracking-[0.3em] text-xs border-b-2 border-stone-900/20 pb-1 hover:border-sage-600 transition-colors">
-                     Consult a Wellness Architect
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+                  <Link href="/contact" className="w-full sm:w-auto">
+                    <Button size="lg" className="w-full h-16 px-14 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-medium text-xl shadow-2xl transition-all duration-500 hover:scale-105">
+                       Book Your Sanctuary
+                    </Button>
                   </Link>
-               </div>
+                  <div className="flex items-center gap-6">
+                    <div className="flex -space-x-4">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="w-12 h-12 rounded-full border-4 border-[#E5E1DA] overflow-hidden bg-white">
+                          <Image src={`https://i.pravatar.cc/150?u=${i + 130}`} alt="Wellness Architect" width={48} height={48} />
+                        </div>
+                      ))}
+                      <div className="w-12 h-12 rounded-full border-4 border-[#E5E1DA] bg-sage-600 flex items-center justify-center text-white text-xs font-bold">
+                        +12
+                      </div>
+                    </div>
+                    <Link href="/contact" className="text-stone-900 font-bold uppercase tracking-[0.3em] text-[10px] border-b-2 border-stone-900/20 pb-1 hover:border-sage-600 transition-colors hidden sm:block">
+                       Consult a Wellness Architect
+                    </Link>
+                  </div>
+                </div>
             </div>
          </Container>
       </section>

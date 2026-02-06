@@ -20,7 +20,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
       {/* Section Header */}
       <div className="mb-6 md:mb-10 print:mb-4">
         <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight">
-          Your <span className="text-brand-green">Day-by-Day</span> Itinerary
+          Your <span className="text-brand-blue">Day-by-Day</span> Itinerary
         </h2>
         <p className="text-slate-600 text-sm md:text-lg font-medium">
           A carefully crafted journey designed just for you
@@ -65,7 +65,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
                         </div>
                         
                         {/* Title */}
-                        <h5 className={`text-base md:text-xl font-bold transition-colors leading-tight print:text-lg ${isExpanded ? 'text-brand-green' : 'text-slate-900'}`}>
+                        <h5 className={`text-base md:text-xl font-bold transition-colors leading-tight print:text-lg ${isExpanded ? 'text-brand-blue' : 'text-slate-900'}`}>
                           {day.title}
                         </h5>
                       </div>

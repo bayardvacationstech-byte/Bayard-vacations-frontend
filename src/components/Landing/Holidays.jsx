@@ -42,6 +42,11 @@ const Holidays = ({
 
   const [activeTab, setActiveTab] = useState("international");
   const [filterType, setFilterType] = useState("curated");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Data
   const { packages: internationalPackages, isLoading: intlLoading } =
@@ -160,7 +165,7 @@ const Holidays = ({
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="flex-1">
-          <h2 className="section-title-light mb-1 md:mb-2 text-2xl md:text-3xl lg:text-4xl font-bold text-brand-blue">
+          <h2 className="section-title-light mb-1 md:mb-2 text-brand-blue">
             Signature Collections
           </h2>
           <p className="section-subtitle-light hidden sm:block text-xs sm:text-sm md:text-base text-gray-600">
@@ -173,10 +178,10 @@ const Holidays = ({
           <button
             onClick={() => setActiveTab("international")}
             className={cn(
-              "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
+              "px-4 sm:px-7 py-1.5 sm:py-2.5 rounded-full text-[13px] sm:text-base font-bold transition-all duration-300",
               activeTab === "international" 
-                ? "bg-brand-blue text-white shadow-md" 
-                : "text-gray-500 hover:text-brand-blue"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             International
@@ -184,10 +189,10 @@ const Holidays = ({
           <button
             onClick={() => setActiveTab("domestic")}
             className={cn(
-              "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
+              "px-4 sm:px-7 py-1.5 sm:py-2.5 rounded-full text-[13px] sm:text-base font-bold transition-all duration-300",
               activeTab === "domestic" 
-                ? "bg-brand-blue text-white shadow-md" 
-                : "text-gray-500 hover:text-brand-blue"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             Domestic
@@ -196,25 +201,27 @@ const Holidays = ({
       </div>
 
       {/* DYNAMIC FILTERS */}
-      <div className="mb-6 flex gap-2 overflow-x-auto pb-4 scrollbar-hide relative z-50">
-        {availableFilters.map((filter) => (
-          <Button
-            key={filter.id}
-            variant={filterType === filter.id ? "default" : "outline"}
-            onClick={() => setFilterType(filter.id)}
-            className={cn(
-              "rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-semibold px-6 py-2 flex-shrink-0 transition-all",
-              filterType === filter.id && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-md text-slate-900 border-transparent hover:opacity-90"
-            )}
-          >
-            {filter.label}
-          </Button>
-        ))}
-      </div>
+      {isMounted && (
+        <div className="mb-6 flex flex-wrap sm:flex-nowrap gap-2 sm:overflow-x-auto pb-4 scrollbar-hide relative z-50">
+          {availableFilters.map((filter) => (
+            <Button
+              key={filter.id}
+              variant={filterType === filter.id ? "default" : "outline"}
+              onClick={() => setFilterType(filter.id)}
+              className={cn(
+                "rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 text-[11px] sm:text-sm font-bold sm:font-semibold px-3.5 sm:px-6 py-1.5 sm:py-2 flex-shrink-0 transition-all",
+                filterType === filter.id && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-md sm:shadow-lg text-slate-900 border-transparent hover:opacity-90"
+              )}
+            >
+              {filter.label}
+            </Button>
+          ))}
+        </div>
+      )}
 
       <div className="relative min-h-[400px]">
         <div className="relative w-full">
-          {filteredPackages.length > 0 ? (
+          {isMounted && filteredPackages.length > 0 ? (
             <Carousel
               opts={{ align: "start" }}
               className="w-full"
@@ -233,6 +240,13 @@ const Holidays = ({
               <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
               <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
             </Carousel>
+          ) : !isMounted && hasData ? (
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Skeletons.Card.LG />
+              <Skeletons.Card.LG />
+              <Skeletons.Card.LG />
+              <Skeletons.Card.LG />
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-gray-100 rounded-3xl w-full">
               <p className="text-gray-400 font-medium text-lg">No packages found for this selection</p>

@@ -41,7 +41,7 @@ const ThemePageClient = ({ theme }) => {
           <div className="py-10 lg:py-16 flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
             {/* Text Content */}
             <div className="flex-1 max-w-2xl">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-brand-green text-xs font-bold tracking-[0.2em] uppercase mb-6">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-brand-blue text-xs font-bold tracking-[0.2em] uppercase mb-6">
                 Travel Theme
               </div>
               <h1 className="mb-6 text-4xl font-bold text-white lg:text-7xl leading-tight">
@@ -82,7 +82,7 @@ const ThemePageClient = ({ theme }) => {
       />
 
       {/* Tabs Section */}
-      <section className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">
+      <section className="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm">
         <Container>
           <div className="flex items-center justify-center gap-4 py-4">
             <button

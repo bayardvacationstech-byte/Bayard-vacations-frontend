@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Mail, MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { cn } from "@/lib/utils";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
 
 const DESTINATION_CARDS = [
@@ -168,10 +169,10 @@ export default function InspirationSection({ theme = "default" }) {
       title: "text-brand-blue"
     },
     solo: {
-      bg: "bg-gradient-to-br from-[#f5f7fa] to-white",
-      orb: "bg-[#667eea]/10",
-      button: "bg-gradient-to-r from-[#667eea] to-[#764ba2]",
-      title: "text-transparent bg-clip-text bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+      bg: "bg-[#0a0a0a] border-t border-[#222]",
+      orb: "bg-[#FFD700]/10",
+      button: "bg-[#FFD700] text-black hover:bg-white",
+      title: "text-white"
     },
     romantic: {
       bg: "bg-gradient-to-br from-rose-50 to-white",
@@ -192,10 +193,11 @@ export default function InspirationSection({ theme = "default" }) {
       title: "text-orange-600"
     },
     relax: {
-      bg: "bg-gradient-to-br from-green-50 to-white",
-      orb: "bg-green-400/10",
-      button: "bg-gradient-to-r from-green-400 to-green-700",
-      title: "text-green-700"
+      bg: "bg-gradient-to-br from-sage-50 to-white",
+      orb: "bg-sage-400/10",
+      button: "bg-stone-900 text-white hover:bg-stone-800",
+      title: "text-stone-900",
+      icon: "text-sage-600"
     },
     explore: {
       bg: "bg-gradient-to-br from-orange-50 to-white",
@@ -328,7 +330,7 @@ export default function InspirationSection({ theme = "default" }) {
 
             {/* Trust Text */}
             <p className="text-sm text-slate-500 flex items-center gap-1.5 justify-center lg:justify-start">
-              <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className={cn("w-4 h-4", colors.icon || "text-green-500")} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               No spam, unsubscribe anytime.

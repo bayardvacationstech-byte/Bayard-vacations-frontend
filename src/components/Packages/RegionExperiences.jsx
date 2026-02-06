@@ -111,15 +111,15 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
-            <Sparkles className="w-4 h-4 text-brand-green" />
-            <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
+            <Sparkles className="w-4 h-4 text-brand-blue" />
+            <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
               Must-Do Experiences
             </span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
             <span className="hidden sm:inline">Experience </span>
             <span className="inline sm:hidden">Highlights of </span>
-            <span className="text-brand-green capitalize">{regionName}</span>
+            <span className="text-brand-blue capitalize">{regionName}</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto truncate md:whitespace-normal">
             Discover unique experiences that make {regionName} unforgettable

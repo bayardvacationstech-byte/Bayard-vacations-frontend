@@ -82,7 +82,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
   const getImageUrl = (img) => {
     if (!img) return null;
     if (typeof img === 'string') return img;
-    return img.url || img.image || img.imageUrl;
+    return img.recommendedPhotoImage || img.url || img.image || img.imageUrl;
   };
 
   // Helper function to get icon component from string name
@@ -98,13 +98,24 @@ export default function WhyChooseRegionClient({ regionSlug }) {
       ...data,
       highlights: data.highlights?.map(highlight => {
         if (!highlight) return null;
+        
+        // Prioritize gallery array if available
+        const hasGallery = Array.isArray(highlight.gallery) && highlight.gallery.length > 0;
+        const mainImage = hasGallery ? getImageUrl(highlight.gallery[0]) : getImageUrl(highlight.recommendedPhotoImage);
+        const mainCaption = hasGallery ? (highlight.gallery[0].caption || highlight.gallery[0].title) : highlight.recommendedPhotoContent;
+        
         return {
           ...highlight,
           icon: getIcon(highlight.icon),
-          gallery: highlight.gallery?.map(img => {
-            const url = getImageUrl(img);
-            return { ...(typeof img === 'object' ? img : {}), url };
-          })
+          gallery: hasGallery ? highlight.gallery.map(img => ({
+            url: getImageUrl(img),
+            caption: img.caption || img.title || highlight.title
+          })) : (highlight.recommendedPhotoImage ? [{
+            url: getImageUrl(highlight.recommendedPhotoImage),
+            caption: highlight.recommendedPhotoContent
+          }] : []),
+          recommendedPhotoContent: mainCaption,
+          recommendedPhotoImage: mainImage
         };
       }).filter(Boolean),
       activities: data.activities?.map(activity => activity ? ({
@@ -137,14 +148,17 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     ...(whyChooseData.details || {}),
     ...whyChooseData,
     // Explicitly prioritize top-level highlights and activities if they exist
-    highlights: whyChooseData.highlights || whyChooseData.details?.highlights || [],
-    activities: whyChooseData.activities || whyChooseData.details?.activities || [],
+    highlights: whyChooseData?.highlights || whyChooseData?.["Key Highlights"] || whyChooseData?.keyHighlights || whyChooseData?.details?.highlights || [],
+    activities: whyChooseData?.activities || whyChooseData?.details?.activities || [],
   } : null;
+  
   
   const regionDataProcessed = processRegionData(rawRegionData);
   
   const highlights = regionDataProcessed?.highlights || [];
   const activities = regionDataProcessed?.activities || [];
+  
+
   
   // Handle scrolling to hash after data is loaded
   useEffect(() => {
@@ -164,9 +178,16 @@ export default function WhyChooseRegionClient({ regionSlug }) {
     }
   }, [isLoading]);
 
-  const mobileHeroImage = getImageUrl(whyChooseData?.mobileHeroImage || regionDataProcessed?.mobileHeroImage || regionData?.mobileHeroImage);
-  const desktopHeroImage = getImageUrl(whyChooseData?.heroImage || regionDataProcessed?.featuredImage || regionDataProcessed?.heroImage);
+  const mobileHeroImageSrc = getImageUrl(whyChooseData?.mobileHeroImage || whyChooseData?.mobileBannerImage);
+  const desktopHeroImageSrc = getImageUrl(whyChooseData?.heroImage || whyChooseData?.desktopBannerImage);
 
+  if (regionSlug === "egypt" && regionDataProcessed) {
+    console.log("🇪🇬 EGYPT DATA DEBUG:", {
+      hero: { desktop: desktopHeroImageSrc, mobile: mobileHeroImageSrc },
+      highlights: highlights.map(h => ({ title: h.title, image: h.recommendedPhotoImage, gallery: h.gallery }))
+    });
+  }
+  
   // Show loading state
   if (isLoading) {
     return (
@@ -196,10 +217,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
           {/* Desktop Hero Image */}
-          <div className={cn("absolute inset-0 z-0", mobileHeroImage ? "hidden lg:block" : "block")}>
-            {desktopHeroImage ? (
+          <div className={cn("absolute inset-0 z-0", mobileHeroImageSrc ? "hidden lg:block" : "block")}>
+            {desktopHeroImageSrc ? (
               <Image
-                src={desktopHeroImage}
+                src={desktopHeroImageSrc}
                 alt={regionName}
                 fill
                 priority
@@ -215,10 +236,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           </div>
 
           {/* Mobile Hero Image */}
-          {mobileHeroImage ? (
+          {mobileHeroImageSrc ? (
             <div className="absolute inset-0 z-0 lg:hidden">
               <Image
-                src={mobileHeroImage?.url || mobileHeroImage}
+                src={mobileHeroImageSrc}
                 alt={regionName}
                 fill
                 priority
@@ -260,7 +281,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </div>
 
                 {/* Main Heading */}
-                <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-tight drop-shadow-lg">
+                <h1 className="font-black text-5xl md:text-6xl lg:text-7xl font-bold leading-tight drop-shadow-lg">
                   Why Choose <br className="lg:hidden"/>
                   <span className="text-amber-400 italic mt-2 lg:inline block">{regionName}?</span>
                 </h1>
@@ -273,15 +294,15 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 {/* Description */}
                 <div className={cn(
                   "text-lg md:text-xl text-slate-200 leading-relaxed font-light border-l-4 border-amber-400 pl-6 mb-6",
-                  !isDescExpanded && "line-clamp-3 lg:line-clamp-none"
+                  !isDescExpanded && "line-clamp-3"
                 )}>
                   {regionDataProcessed?.overview}
                 </div>
 
-                 {/* Mobile View More */}
+                 {/* View More Button */}
                  <button
                   onClick={() => setIsDescExpanded(!isDescExpanded)}
-                  className="lg:hidden text-amber-400 text-sm font-bold uppercase tracking-wider mb-6 hover:text-amber-300 transition-colors inline-flex items-center gap-2"
+                  className="text-amber-400 text-sm font-bold uppercase tracking-wider mb-6 hover:text-amber-300 transition-colors inline-flex items-center gap-2"
                 >
                   <span>{isDescExpanded ? "View Less" : "Read More"}</span>
                   <ChevronRight className="w-4 h-4" />
@@ -337,7 +358,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               <span className="inline-block px-4 py-2 bg-brand-blue/10 text-brand-blue rounded-full text-sm font-black uppercase tracking-widest mb-3 md:mb-4">
                  {regionDataProcessed?.whyVisitSection?.subTitle}
               </span>
-              <h2 className="text-3xl md:text-5xl font-serif text-slate-900 mb-4 tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
                 {regionDataProcessed?.whyVisitSection?.mainTitle}
               </h2>
               <p className="text-lg md:text-xl text-slate-600 max-w-5xl mx-auto leading-relaxed mb-8">
@@ -374,7 +395,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
 
             {regionDataProcessed?.whyVisitSection?.quote && (
-              <div className="mt-6 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 md:p-8 text-center">
+              <div className="mt-6 bg-gradient-to-br from-brand-blue to-blue-900 rounded-3xl p-6 md:p-8 text-center shadow-xl shadow-brand-blue/10">
                 <blockquote className="text-xl md:text-2xl font-bold text-white leading-relaxed mb-2">
                   "{regionDataProcessed?.whyVisitSection?.quote}"
                 </blockquote>
@@ -389,7 +410,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         {/* Highlights Section Header */}
         {highlights.length > 0 && (
           <div className="text-center mb-6 md:mb-8">
-             <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-2 tracking-tight">Key Highlights</h2>
+             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-2 tracking-tight">Key Highlights</h2>
              <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto">
                Deep dive into the unique experiences that define {regionName}.
              </p>
@@ -423,10 +444,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                             setGalleryOpen(true);
                           }}
                         >
-                          {highlight.gallery?.[0]?.url ? (
+                          {highlight.recommendedPhotoImage ? (
                             <Image
-                              src={highlight.gallery[0].url}
-                              alt={highlight.title}
+                              src={highlight.recommendedPhotoImage}
+                              alt={highlight.recommendedPhotoContent || highlight.title}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-1000"
                               sizes="(max-width: 768px) 100vw, 50vw"
@@ -470,8 +491,8 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                             <Sparkles className="w-3 md:w-3.5 h-3 md:h-3.5" />
                             Highlight No. 0{index + 1}
                          </div>
-                         <h2 className="text-3xl md:text-4xl font-serif text-slate-900 mb-1 tracking-tight leading-tight">
-                            {highlight.title}
+                         <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-1 tracking-tight leading-tight">
+                            {highlight.recommendedPhotoContent || highlight.title}
                          </h2>
                          <p className="text-lg md:text-xl font-bold text-slate-500 mb-2 leading-tight">
                             {highlight.description}
@@ -532,7 +553,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           <div>
             <div className="flex items-center gap-4 mb-10">
                <div className="w-12 h-12 bg-brand-green/10 rounded-2xl flex items-center justify-center">
-                  <Users className="w-6 h-6 text-brand-green" />
+                  <Users className="w-6 h-6 text-brand-blue" />
                </div>
                <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tighter">Perfect For...</h3>
             </div>
@@ -586,7 +607,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                   <span className="inline-block px-4 py-2 bg-amber-500/10 text-amber-600 rounded-full text-sm font-black uppercase tracking-widest mb-6">
                     Hidden Gems
                   </span>
-                  <h2 className="text-3xl md:text-5xl font-serif text-slate-900 mb-4 tracking-tight">Regional Secrets</h2>
+                  <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">Regional Secrets</h2>
                   <p className="text-xl text-slate-600 font-medium">The hidden dimensions of {regionName}'s majesty.</p>
                 </div>
 
@@ -609,7 +630,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
         {activities.length > 0 && (
           <section className="mb-10 md:mb-16">
             <div className="text-center mb-8">
-               <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-3 tracking-tight">Top Activities</h2>
+               <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-3 tracking-tight">Top Activities</h2>
                <p className="text-lg text-slate-500 font-medium">Iconic experiences you simply cannot miss.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

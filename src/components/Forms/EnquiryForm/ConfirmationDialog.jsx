@@ -64,7 +64,7 @@ const ConfirmationDialog = ({ controls, closeModal }) => {
           </div>
         </div>
 
-        <h2 className="font-nord text-xl font-bold text-brand-blue">
+        <h2 className="text-xl font-bold text-brand-blue">
           THANK YOU FOR YOUR ENQUIRY!
         </h2>
 

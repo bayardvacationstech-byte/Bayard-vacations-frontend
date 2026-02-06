@@ -115,7 +115,7 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       card: "bg-white border-2 border-transparent hover:border-[#E07A5F]/20 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 rounded-3xl overflow-hidden",
       imageOverlay: "bg-gradient-to-b from-black/20 to-transparent",
       ratingBadge: "bg-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-xs",
-      locationBadge: "bg-[#3D405B]/90 backdrop-blur-lg text-[#F4F1DE] px-4 py-2 rounded-lg font-['Questrial'] uppercase tracking-wider text-[11px] bottom-5 left-5",
+      locationBadge: "bg-[#3D405B]/90 backdrop-blur-sm text-[#F4F1DE] px-4 py-2 rounded-lg font-['Questrial'] uppercase tracking-wider text-[11px] bottom-5 left-5",
       durationBadge: "bg-[#E07A5F] text-white px-4 py-2 rounded-lg font-['Questrial'] uppercase tracking-wider text-[11px] bottom-5 right-5",
       title: "font-['Montserrat'] text-xl sm:text-2xl text-[#3D405B] font-bold tracking-tight mb-2",
       highlightBullet: "text-[#E07A5F] text-lg leading-none",
@@ -137,6 +137,8 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       durationBadge: "bg-[#FFD700] text-[#1A1A1A] px-4 py-2 rounded font-['Archivo_Black'] uppercase tracking-wider text-[11px] bottom-5 right-5",
       title: "font-['Archivo_Black'] text-2xl sm:text-3xl text-white mb-2 tracking-[-1px] leading-none",
       highlightBullet: "text-[#FFD700] text-lg leading-none",
+      highlightText: "text-white/80 text-sm font-light",
+      priceLabel: "font-['Archivo_Black'] text-[10px] sm:text-[11px] text-white/60 uppercase tracking-widest mb-0.5",
       price: "font-['Archivo_Black'] text-2xl sm:text-3xl text-white tracking-[-1px]",
       cta: "bg-[#FFD700] text-[#1A1A1A] rounded w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-white hover:translate-x-1 transition-all text-lg",
     },
@@ -251,6 +253,7 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
                       src={url}
                       alt={item.packageTitle}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </SwiperSlide>
@@ -308,19 +311,38 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
             </h3>
 
             <div className="space-y-3 mb-8">
-              {baseHighlights.slice(0, 3).map((hl, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <span className={style.highlightBullet}>●</span>
-                  <span className={style.highlightText}>{hl}</span>
-                </div>
-              ))}
+              {baseHighlights.slice(0, 3).map((hl, i) => {
+                const isCovering = hl.startsWith("Covering:");
+                return (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className={style.highlightBullet}>●</span>
+                    <span className={cn(
+                      style.highlightText,
+                      "not-italic"
+                    )}>
+                      {isCovering ? (
+                        <>
+                          <span className={cn("font-black mr-1", style.highlightBullet.includes("text-") ? style.highlightBullet : "")}>Covering:</span>
+                          <span className={style.highlightText}>
+                            {hl.replace("Covering:", "").trim()}
+                          </span>
+                        </>
+                      ) : (
+                        hl
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="mt-auto pt-6 border-t flex items-center justify-between border-opacity-20">
               <div>
                 <p className={style.priceLabel}>CURATED PRICE</p>
                 <p className={style.price}>
-                  {item.offerPrice || item.basePrice ? `₹${formatPrice(item.offerPrice || item.basePrice)}` : "Contact Us"}
+                  {item.offerPrice > 0 || item.basePrice > 0 
+                    ? `₹${formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}` 
+                    : "On Request"}
                 </p>
               </div>
 

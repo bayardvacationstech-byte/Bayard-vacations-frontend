@@ -32,13 +32,6 @@ const GenderPanel = () => {
   // Fetch existing gender when component mounts and user is authenticated
   useEffect(() => {
     const fetchGender = async () => {
-      // If we're on localhost use mock data
-      const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-      if (isLocal) {
-        setGender("male");
-        return;
-      }
-      
       if (!user) return;
 
       setLoading(true);
@@ -131,7 +124,7 @@ const GenderPanel = () => {
                 <UserCircle2 className="size-5" />
               </div>
               <div>
-                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Preference
                 </h5>
                 <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Gender Identity</h4>

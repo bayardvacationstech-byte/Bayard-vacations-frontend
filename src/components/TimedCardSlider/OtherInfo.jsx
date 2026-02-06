@@ -33,12 +33,12 @@ const OtherInfo = ({ data }) => {
   return (
     <motion.div initial="hidden" animate={"visible"} className="flex flex-col">
       <AnimatedText
-        className="overflow-hidden font-nord text-xs font-medium uppercase text-[#d5d5d6] md:text-base"
+        className="overflow-hidden text-xs font-medium uppercase text-[#d5d5d6] md:text-base"
         data={data?.location}
         index="location"
       />
       <AnimatedText
-        className="my-1 font-nord text-2xl font-semibold uppercase tracking-tighter md:my-3 md:leading-[56px] c-lg:text-5xl"
+        className="my-1 text-2xl font-semibold uppercase tracking-tighter md:my-3 md:leading-[56px] c-lg:text-5xl"
         data={data?.title}
         index="title"
       />

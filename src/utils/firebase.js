@@ -15,6 +15,7 @@ import {
   limit,
   orderBy,
   Timestamp,
+  documentId,
 } from "firebase/firestore";
 import { COLLECTIONS, PACKAGE_STATUS } from "@/config";
 
@@ -163,48 +164,74 @@ const resolveCardReferences = async (packageData) => {
 export const batchResolveCardReferences = async (packages) => {
   if (!packages || !packages.length) return packages;
 
-  // 1. Collect all unique references
-  const refMap = new Map(); // key: collection/id, value: ref object
+  // 1. Collect all unique references grouped by collection
+  const collectionRefsMap = new Map(); // key: collectionName, value: Set of ids
   
   packages.forEach(pkg => {
-    if (pkg.cardImages) {
-      pkg.cardImages.forEach(ref => {
-        if (ref && (ref.id && ref.collection)) {
-          refMap.set(`${ref.collection}/${ref.id}`, ref);
-        } else if (ref && ref._key) {
-          // Direct firestore ref
-          const segments = ref._key.path.segments;
-          const id = segments[segments.length - 1];
-          const col = segments[segments.length - 2];
-          refMap.set(`${col}/${id}`, ref);
+    const refs = pkg.cardImages || pkg.bannerImages || [];
+    refs.forEach(ref => {
+      let documentId, collectionName;
+      
+      if (ref && (ref.id && ref.collection)) {
+        collectionName = ref.collection;
+        documentId = ref.id;
+      } else if (ref && ref._key) {
+        const segments = ref._key.path.segments;
+        documentId = segments[segments.length - 1];
+        collectionName = segments[segments.length - 2];
+      }
+
+      if (collectionName && documentId) {
+        if (!collectionRefsMap.has(collectionName)) {
+          collectionRefsMap.set(collectionName, new Set());
         }
+        collectionRefsMap.get(collectionName).add(documentId);
+      }
+    });
+  });
+
+  if (collectionRefsMap.size === 0) return packages;
+
+  // 2. Fetch all unique references in batches using 'in' queries
+  const dataLookup = new Map(); // key: collection/id, value: data
+
+  const fetchPromises = Array.from(collectionRefsMap.entries()).map(async ([collectionName, idSet]) => {
+    const ids = Array.from(idSet);
+    const colRef = collection(db, collectionName);
+    
+    // Firestore 'in' query supports up to 30 elements
+    const batchSize = 30;
+    for (let i = 0; i < ids.length; i += batchSize) {
+      const batchIds = ids.slice(i, i + batchSize);
+      const q = query(colRef, where("__name__", "in", batchIds));
+      const snapshot = await getDocsFromServer(q);
+      snapshot.docs.forEach(docSnap => {
+        dataLookup.set(`${collectionName}/${docSnap.id}`, sanitizeDocumentData(docSnap));
       });
     }
   });
 
-  if (refMap.size === 0) return packages;
-
-  // 2. Fetch all unique references in parallel
-  const uniqueRefs = Array.from(refMap.values());
-  const resolvedData = await Promise.all(uniqueRefs.map(getReferencedData));
+  await Promise.all(fetchPromises);
   
-  // 3. Create a lookup map for resolved data
-  const dataLookup = new Map();
-  uniqueRefs.forEach((ref, i) => {
-    if (resolvedData[i]) {
-      const key = ref.id ? `${ref.collection}/${ref.id}` : `${ref._key.path.segments[ref._key.path.segments.length-2]}/${ref._key.path.segments[ref._key.path.segments.length-1]}`;
-      dataLookup.set(key, resolvedData[i]);
-    }
-  });
-
-  // 4. Map resolved data back to packages
+  // 3. Map resolved data back to packages
   return packages.map(pkg => {
-    if (pkg.cardImages) {
-      pkg.cardImages = pkg.cardImages.map(ref => {
-        const key = ref.id ? `${ref.collection}/${ref.id}` : (ref._key ? `${ref._key.path.segments[ref._key.path.segments.length-2]}/${ref._key.path.segments[ref._key.path.segments.length-1]}` : null);
-        return dataLookup.get(key) || null;
+    const processRefs = (refs) => {
+      if (!refs) return null;
+      return refs.map(ref => {
+        let key = null;
+        if (ref.id && ref.collection) {
+          key = `${ref.collection}/${ref.id}`;
+        } else if (ref._key) {
+          const s = ref._key.path.segments;
+          key = `${s[s.length - 2]}/${s[s.length - 1]}`;
+        }
+        return key ? dataLookup.get(key) : ref;
       }).filter(Boolean);
-    }
+    };
+
+    if (pkg.cardImages) pkg.cardImages = processRefs(pkg.cardImages);
+    if (pkg.bannerImages) pkg.bannerImages = processRefs(pkg.bannerImages);
+    
     return pkg;
   });
 };
@@ -421,7 +448,7 @@ export const searchPackages = async (searchTerm) => {
   try {
     const searchTermLower = searchTerm.toLowerCase().trim();
 
-    const PACKAGE_LIMIT = 20;
+    const PACKAGE_LIMIT = 300;
 
     // Get all packages
     const packagesRef = query(
@@ -637,7 +664,10 @@ export const getCuratedPackages = async (
     if (isHomePage) {
       // Optimize for Homepage: batch resolve card images
       const packages = await batchResolveCardReferences(initialPackages);
-      return packages.map(minimizePackageData).sort((a, b) => a.basePrice - b.basePrice);
+      return packages.map(minimizePackageData).sort((a, b) => {
+        const priceDiff = a.basePrice - b.basePrice;
+        return priceDiff !== 0 ? priceDiff : a.id.localeCompare(b.id);
+      });
     }
 
     // Full resolution for non-homepage calls
@@ -646,7 +676,10 @@ export const getCuratedPackages = async (
         return await resolveAllPackageReferences(packageData);
       })
     );
-    return packages.sort((a, b) => a.basePrice - b.basePrice);
+    return packages.sort((a, b) => {
+      const priceDiff = a.basePrice - b.basePrice;
+      return priceDiff !== 0 ? priceDiff : a.id.localeCompare(b.id);
+    });
   } catch (error) {
     console.error("Error fetching curated packages:", error);
     throw error;
@@ -667,7 +700,10 @@ export const getAllPublishedPackages = async (packageType) => {
     
     // Use optimized batch resolver
     const packages = await batchResolveCardReferences(initialPackages);
-    return packages.sort((a, b) => a.basePrice - b.basePrice);
+    return packages.sort((a, b) => {
+      const priceDiff = a.basePrice - b.basePrice;
+      return priceDiff !== 0 ? priceDiff : a.id.localeCompare(b.id);
+    });
   } catch (error) {
     console.error("Error fetching all published packages:", error);
     return [];
@@ -709,7 +745,10 @@ export const getPackagesByRegion = async (regionName) => {
         return await resolveAllPackageReferences(packageData);
       })
     );
-    return packages.sort((a, b) => a.basePrice - b.basePrice);
+    return packages.sort((a, b) => {
+      const priceDiff = a.basePrice - b.basePrice;
+      return priceDiff !== 0 ? priceDiff : a.id.localeCompare(b.id);
+    });
   } catch (error) {
     throw error;
   }
@@ -718,13 +757,15 @@ export const getPackagesByRegion = async (regionName) => {
 export const getPackagesByTheme = async (
   themeType,
   initialPackages = [],
-  conditions = []
+  conditions = [],
+  resolveReferences = true
 ) => {
   try {
     const packagesRef = collection(db, COLLECTIONS.PACKAGES);
     let queryConstraints = [
       where("theme", "array-contains", themeType),
       where("status", "==", PACKAGE_STATUS.PUBLISHED),
+      orderBy(documentId()), // Ensure deterministic order without filtering by basePrice
     ];
 
     if (Array.isArray(conditions)) {
@@ -736,7 +777,7 @@ export const getPackagesByTheme = async (
       ...queryConstraints
     );
 
-    if (initialPackages.length > 0) {
+    if (initialPackages && initialPackages.length > 0) {
       return initialPackages;
     }
 
@@ -744,10 +785,16 @@ export const getPackagesByTheme = async (
     const initialPackagesData = querySnapshot.docs.map(sanitizeDocumentData);
     
     // Use batch resolution for themes
-    const resolvedPackages = await batchResolveCardReferences(initialPackagesData);
+    let resolvedPackages = initialPackagesData;
+    if (resolveReferences) {
+        resolvedPackages = await batchResolveCardReferences(initialPackagesData);
+    }
     const packages = resolvedPackages.map(minimizePackageData);
     
-    return packages.sort((a, b) => a.basePrice - b.basePrice);
+    return packages.sort((a, b) => {
+      const priceDiff = a.basePrice - b.basePrice;
+      return priceDiff !== 0 ? priceDiff : a.id.localeCompare(b.id);
+    });
   } catch (error) {
     throw error;
   }

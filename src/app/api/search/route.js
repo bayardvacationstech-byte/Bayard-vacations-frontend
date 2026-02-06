@@ -28,12 +28,8 @@ export async function GET(request) {
   }
 
   try {
-    // Ensure collection exists and is populated
-    try {
-      await ensureCollectionExists();
-    } catch (error) {
-      // Continue with search attempt - collection might already exist
-    }
+    // We assume the collection exists and is synced via a separate process or initial setup.
+    // Syncing on every request causes timeouts.
 
     const searchParams = {
       q,

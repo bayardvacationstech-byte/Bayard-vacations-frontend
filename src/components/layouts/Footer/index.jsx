@@ -181,12 +181,12 @@ const Footer = async () => {
   // Contact card data
   const contactCards = [
     {
-      href: "tel:+918069668484",
+      href: "tel:+916363117421",
       iconType: "phone",
       title: "Call Us",
-      description: "+91 80696 68484",
+      description: "063631 17421",
       subtext: "Available 24/7",
-      color: "text-brand-green",
+      color: "text-brand-blue",
       bgColor: "bg-brand-green",
       actionLabel: "Call",
       external: false
@@ -228,7 +228,7 @@ const Footer = async () => {
             alt="Bayard Vacations"
             width={420}
             height={90}
-            className="w-48 sm:w-64"
+            className="w-48 sm:w-64 h-auto"
             priority
           />
 
@@ -288,16 +288,19 @@ const Footer = async () => {
             title="International" 
             links={internationalRegions} 
             basePath="packages" 
+            viewAllLink="/destinations"
           />
           <FooterSection 
             title="Domestic" 
             links={domesticRegions} 
             basePath="packages" 
+            viewAllLink="/destinations"
           />
           <FooterSection 
             title="Themes" 
             links={categoryData} 
             basePath="themes" 
+            viewAllLink="/explore"
           />
         </div>
 
@@ -324,7 +327,7 @@ const Footer = async () => {
                 </div>
                 <div className="flex-1">
                   <h6 className="font-semibold text-white text-sm mb-1">Visit Us</h6>
-                  <p className="text-white/80 text-sm font-medium leading-snug">123 Travel Hub, MG Road<br/>Bangalore, KA</p>
+                  <p className="text-white/80 text-sm font-medium leading-snug">144, 9th Main Rd, 4th Block, Kanteerava Nagar,<br/>Nandini Layout, Bengaluru, KA 560096</p>
                   <p className="text-white/50 text-xs mt-0.5">Mon-Sat: 9AM-7PM</p>
                 </div>
               </div>
@@ -340,7 +343,7 @@ const Footer = async () => {
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-3">
             {quickLinksData.map((item, i, arr) => (
               <li key={item.id} className="flex items-center gap-6">
-                <Link href={item.href} className="hover:text-brand-green transition-all underline-offset-4 hover:underline whitespace-nowrap">
+                <Link href={item.href} className="hover:text-brand-blue transition-all underline-offset-4 hover:underline whitespace-nowrap">
                   {item.title}
                 </Link>
                 {i !== arr.length - 1 && (

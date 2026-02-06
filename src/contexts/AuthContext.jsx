@@ -17,29 +17,6 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-    
-    // Check if we should use mock data
-    if (isLocal) {
-      // Small delay to simulate auth check
-      const timer = setTimeout(() => {
-        const mockUser = {
-          uid: "mock-uid-123",
-          displayName: "John Doe",
-          email: "johndoe@example.com",
-          photoURL: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-          emailVerified: true,
-          phoneNumber: "+91 9991110000",
-        };
-        
-        setUser(mockUser);
-        setUserInfo(mockUser);
-        setLoading(false);
-      }, 500);
-      
-      return () => clearTimeout(timer);
-    }
-
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       if (user) {

@@ -87,7 +87,7 @@ const GroupDeparturePage = async () => {
                   <div className="space-y-3">
                      <h2 className="text-3xl md:text-5xl font-black tracking-tight leading-tight">
                         Crafting <span className="text-brand-blue">Legacies</span> <br />
-                        Through <span className="text-brand-green">Shared Discovery</span>
+                        Through <span className="text-brand-blue">Shared Discovery</span>
                      </h2>
                      <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-xl">
                         Since 2010, Bayard Vacations has been the gold standard for premium group travel. We don't just book trips; we architect experiences that foster connection, discovery, and absolute luxury.
@@ -102,8 +102,8 @@ const GroupDeparturePage = async () => {
                         <h4 className="font-nord font-bold text-xl mb-3 text-slate-900 line-clamp-1">Exclusive Access</h4>
                         <p className="text-sm text-slate-600 leading-relaxed">Curated experiences reserved exclusively for Bayard members and discerning travelers.</p>
                      </div>
-                     <div className="p-8 rounded-[2rem] bg-white border border-slate-200 hover:border-brand-green/50 shadow-xl shadow-slate-200/50 transition-all duration-500 group/card text-brand-green">
-                        <div className="w-12 h-12 rounded-2xl bg-brand-green/5 flex items-center justify-center mb-6 group-hover/card:scale-110 transition-transform text-brand-green">
+                     <div className="p-8 rounded-[2rem] bg-white border border-slate-200 hover:border-brand-blue/50 shadow-xl shadow-slate-200/50 transition-all duration-500 group/card text-brand-blue">
+                        <div className="w-12 h-12 rounded-2xl bg-brand-blue/5 flex items-center justify-center mb-6 group-hover/card:scale-110 transition-transform text-brand-blue">
                           <Headphones className="w-6 h-6" />
                         </div>
                         <h4 className="font-nord font-bold text-xl mb-3 text-slate-900 line-clamp-1">24/7 Concierge</h4>
@@ -205,7 +205,7 @@ const GroupDeparturePage = async () => {
                </div>
                
                <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 group hover:bg-white hover:shadow-2xl hover:shadow-slate-200 transition-all duration-500">
-                  <div className="w-14 h-14 rounded-2xl bg-brand-green/10 flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white group-hover:scale-110 transition-all duration-500 mb-6 shadow-lg shadow-brand-green/10">
+                  <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white group-hover:scale-110 transition-all duration-500 mb-6 shadow-lg shadow-brand-blue/10">
                      <Leaf className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-black mb-3 tracking-tight text-slate-900">Expert Curation</h3>

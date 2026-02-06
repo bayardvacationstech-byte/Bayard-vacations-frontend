@@ -6,7 +6,8 @@ import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, Chev
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getPackagesByRegion } from "@/utils/firebase";
+import { getPackagesByRegion, getPackagesByTheme } from "@/utils/firebase";
+import { useRegionsData } from "@/hooks/regions/useRegionsData";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination as SwiperPagination } from "swiper/modules";
 import PackageCard from "@/components/ui/PackageCard";
@@ -215,7 +216,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-  const INITIAL_MESSAGES = [];
+  const INITIAL_MESSAGES = [
+    {
+      id: 1,
+      text: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
+      sender: "bot",
+      timestamp: new Date(),
+    },
+  ];
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -223,19 +231,29 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [showDestinations, setShowDestinations] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [selectedContext, setSelectedContext] = useState(null);
+  const [destPage, setDestPage] = useState(0);
+  const ITEMS_PER_PAGE = 6;
   const recognitionRef = useRef(null);
 
-  // Popular destinations data
-  const popularDestinations = [
-    { name: "Bali", slug: "bali", emoji: "🌴", description: "Tropical paradise" },
-    { name: "Dubai", slug: "dubai", emoji: "🏙️", description: "Modern marvels" },
-    { name: "Maldives", slug: "maldives", emoji: "🏖️", description: "Luxury resorts" },
-    { name: "Paris", slug: "paris", emoji: "🗼", description: "Romantic getaway" },
-    { name: "Switzerland", slug: "switzerland", emoji: "🏔️", description: "Alpine beauty" },
-    { name: "Thailand", slug: "thailand", emoji: "🛕", description: "Cultural wonders" },
-    { name: "Singapore", slug: "singapore", emoji: "🌆", description: "Urban paradise" },
-    { name: "Goa", slug: "goa", emoji: "🏝️", description: "Beach vibes" },
-  ];
+  // Fetch dynamic regions
+  const { regions: allRegions } = useRegionsData();
+
+  // Sort and filter regions for "Popular Destinations"
+  const popularDestinations = useMemo(() => {
+    if (!allRegions) return [];
+    
+    // Combine international and domestic, prioritize visible ones
+    return allRegions
+      .filter(r => r.visible !== false)
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+      .map(r => ({
+        name: r.name,
+        slug: r.slug,
+        emoji: r.isDomestic ? "🇮🇳" : "🌍", // Simple distinction
+        description: r.isDomestic ? "Domestic Gem" : "International"
+      }));
+  }, [allRegions]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -309,15 +327,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   ];
 
   const handleDestinationClick = async (slug, name) => {
-    // Add user message for destination selection
-    const userMessage = {
-      id: Date.now(),
-      text: `Tell me about ${name} packages`,
-      sender: "user",
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, userMessage]);
+    // Set Context
+    setSelectedContext({ type: 'region', slug, name });
+
+    // User message removed as per request
     setShowDestinations(false);
+    setShowQuickReplies(true); // Re-show main quick options
     setIsTyping(true);
 
     try {
@@ -325,7 +340,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       
       const botResponse = {
         id: Date.now() + 1,
-        text: `Here are some amazing tour packages for **${name}**! 🌴`,
+        text: `Here are some amazing tour packages for **${name}**! 🌴\n\nI've also noted that you're interested in ${name}. Feel free to ask specific questions about it!`,
         sender: "bot",
         timestamp: new Date(),
         isHtml: true,
@@ -334,7 +349,15 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
-      handleSendMessage(null, `Tell me about Bali packages`); // Fallback to normal chat if fetch fails
+      // Fallback: If fetch fails, keep context but treat as general chat (or error msg)
+       const botResponse = {
+        id: Date.now() + 1,
+        text: `I couldn't load specific packages for ${name} right now, but I'm ready to answer your questions about it!`,
+        sender: "bot",
+        timestamp: new Date(),
+        isHtml: true,
+      };
+      setMessages((prev) => [...prev, botResponse]);
     } finally {
       setIsTyping(false);
     }
@@ -353,12 +376,66 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     setMessages((prev) => [...prev.filter(m => m.type !== 'itinerary'), botResponse]);
   };
 
-  const handleQuickReply = (text) => {
-    setShowQuickReplies(false);
+  const handleQuickReply = async (text) => {
     if (text === "Popular Destinations") {
+      setShowQuickReplies(false); // Hide main options to show destinations
       setShowDestinations(true);
+      return; // Do not send message yet
     }
-    handleSendMessage(null, text);
+
+    // INTERNAL HANDLING: Do not call API, just set context and show fake dialog
+    let contextData = null;
+    let botReplyText = "";
+    let packagesToDisplay = null;
+
+    if (text === "Group Packages") {
+      contextData = { type: 'theme', slug: 'group-adventures', name: 'Group Adventures' };
+      setSelectedContext(contextData);
+      setIsTyping(true);
+
+      try {
+        const results = await getPackagesByTheme("group-adventures");
+        if (results && results.length > 0) {
+          packagesToDisplay = results.slice(0, 5);
+          botReplyText = "I can certainly help with **Group Adventures**! 🚌\n\nHere are some of our most popular curated group trips. What would you like to know about them?";
+        } else {
+          // No packages found, fall back to AI
+          handleSendMessage(null, text);
+          return;
+        }
+      } catch (error) {
+        handleSendMessage(null, text);
+        return;
+      } finally {
+        setIsTyping(false);
+      }
+    } else if (text === "Special Offers") {
+      botReplyText = "Looking for a deal? ✨\n\nI can check our latest **Special Offers** for you. Are you looking for a specific destination or just the best deals available right now?";
+    } else if (text === "Plan a Trip") {
+       contextData = { type: 'intent', slug: 'plan-trip', name: 'Plan a Trip' };
+       botReplyText = "Exciting! Let's plan your dream trip. ✈️\n\nTo get started, could you tell me **where** you'd like to go, or what kind of experience you're looking for?";
+    }
+
+    // Set Context (redundant for Group Packages but kept for others)
+    if (contextData) {
+      setSelectedContext(contextData);
+    }
+
+    // If we have a bot reply text (internal handling), show it
+    if (botReplyText) {
+        const botResponse = {
+            id: Date.now() + 1,
+            text: botReplyText,
+            sender: "bot",
+            timestamp: new Date(),
+            isHtml: true,
+            packages: packagesToDisplay,
+        };
+        setMessages((prev) => [...prev, botResponse]);
+    } else {
+        // Fallback for any other quick replies
+        handleSendMessage(null, text);
+    }
   };
 
   const handleSendMessage = async (e, text = null, isRegenerate = false) => {
@@ -366,7 +443,8 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     const messageText = text || inputMessage;
     if (!messageText.trim()) return;
 
-    // Filter and format history for API
+    setShowQuickReplies(false); // Hide quick options when user starts manual chat
+    setShowDestinations(false);
     // If regenerating, we want to exclude the last bot message from history
     let historyToProcess = messages;
     if (isRegenerate) {
@@ -410,6 +488,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
+    // INJECT CONTEXT
+    let payloadMessage = messageText;
+    if (selectedContext) {
+        payloadMessage = `${messageText}\n\n[System Context: The user is currently interested in ${selectedContext.name} (Slug: ${selectedContext.slug}). Prioritize this context in your response.]`;
+    }
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -417,7 +501,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          message: messageText,
+          message: payloadMessage,
           history: chatHistory
         }),
         signal: controller.signal // Attach signal
@@ -503,7 +587,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       
       const errorMessage = error.name === 'AbortError' 
         ? "I'm taking a bit too long to respond. Please try again or ask a simpler question! 🐌"
-        : "I'm having trouble connecting right now. Please call us at +91 6363117421 or try again in a moment! 🙏";
+        : "I'm having trouble connecting right now. Please call us at +91 91875 63136 or try again in a moment! 🙏";
 
       const fallbackResponse = {
         id: Date.now() + 2,
@@ -521,6 +605,8 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     setShowQuickReplies(true);
     setShowDestinations(false);
     setInputMessage("");
+    setSelectedContext(null);
+    setDestPage(0);
   };
 
   const handleCopy = (text) => {
@@ -558,15 +644,18 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     html = html.replace(/^#### (.+)$/gm, '<h4 class="font-bold text-base mt-2 mb-1">$1</h4>');
     html = html.replace(/^### (.+)$/gm, '<h3 class="font-bold text-lg mt-2 mb-1">$1</h3>');
     html = html.replace(/^## (.+)$/gm, '<h2 class="font-bold text-xl mt-3 mb-2">$1</h2>');
-    html = html.replace(/^# (.+)$/gm, '<h1 class="font-bold text-2xl mt-3 mb-2">$1</h1>');
+    html = html.replace(/^# (.+)$/gm, '<h2 class="font-bold text-2xl mt-3 mb-2">$1</h2>');
 
     // Convert bullet points (• or -)
     html = html.replace(/^\s*[•\-]\s+(.+)$/gm, '<li>$1</li>');
 
-    // Wrap consecutive <li> items in <ul>
+        // Wrap consecutive <li> items in <ul>
     html = html.replace(/(<li>.*?<\/li>\n?)+/g, (match) => {
       return '<ul class="list-disc pl-5 space-y-1.5 my-3 marker:text-blue-400">' + match.trim() + '</ul>';
     });
+
+    // Convert markdown links [text](url)
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800">$1</a>');
 
     // Convert line breaks, but skip if they are inside <ul> to avoid extra spacing
     html = html.replace(/\n/g, '<br>');
@@ -592,7 +681,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         }`}
       >
         {/* Animated Header with Gradient */}
-        <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white py-3 px-6 overflow-hidden flex-shrink-0">
+        <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 sm:py-3 px-6 overflow-hidden flex-shrink-0">
           {/* Animated background circles */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse" />
           <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-xl animate-pulse [animation-delay:0.5s]" />
@@ -617,13 +706,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               </div>
             </div>
             <div className="flex items-center gap-1">
-              {messages.length > 1 && (
+              {messages.length > 0 && (
                 <button
                   onClick={handleClearChat}
-                  className="hover:bg-white/20 p-2 rounded-full transition-all duration-300 group/clear"
+                  className="hover:bg-white/20 px-3 py-1.5 rounded-full transition-all duration-300 group/clear flex items-center gap-1.5 bg-white/10 border border-white/20"
                   title="Clear conversation"
                 >
-                  <Trash2 className="w-5 h-5 group-hover/clear:scale-110 transition-transform" />
+                  <Trash2 className="w-4 h-4 group-hover/clear:scale-110 transition-transform" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Clear</span>
                 </button>
               )}
               <button
@@ -777,7 +867,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           )}
 
           {/* Quick Reply Buttons */}
-          {showQuickReplies && messages.length === 0 && (
+          {showQuickReplies && messages.length <= INITIAL_MESSAGES.length && (
             <div className="space-y-2 animate-fadeIn pt-2">
               <p className="text-xs text-gray-500 font-medium px-1">Quick options:</p>
               <div className="grid grid-cols-2 gap-2">
@@ -800,9 +890,29 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           {/* Destination Buttons */}
           {showDestinations && (
             <div className="space-y-2 animate-fadeIn pt-2">
-              <p className="text-xs text-gray-500 font-medium px-1">Click to explore:</p>
+              <div className="flex items-center justify-between px-1">
+                <p className="text-xs text-gray-500 font-medium">Click to explore:</p>
+                {(popularDestinations.length > ITEMS_PER_PAGE) && (
+                  <div className="flex gap-1">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setDestPage(p => Math.max(0, p - 1)); }}
+                      disabled={destPage === 0}
+                      className={`p-1 rounded-full ${destPage === 0 ? 'text-gray-300' : 'text-blue-600 hover:bg-blue-50'} transition-colors`}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setDestPage(p => (p + 1) * ITEMS_PER_PAGE < popularDestinations.length ? p + 1 : p); }}
+                      disabled={(destPage + 1) * ITEMS_PER_PAGE >= popularDestinations.length}
+                      className={`p-1 rounded-full ${(destPage + 1) * ITEMS_PER_PAGE >= popularDestinations.length ? 'text-gray-300' : 'text-blue-600 hover:bg-blue-50'} transition-colors`}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
               <div className="grid grid-cols-2 gap-2">
-                {popularDestinations.map((destination, index) => (
+                {popularDestinations.slice(destPage * ITEMS_PER_PAGE, (destPage + 1) * ITEMS_PER_PAGE).map((destination, index) => (
                   <button
                     key={index}
                     onClick={() => handleDestinationClick(destination.slug, destination.name)}
@@ -810,12 +920,12 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{destination.emoji}</span>
-                      <div className="text-left">
-                        <p className="text-xs font-bold text-gray-800">{destination.name}</p>
-                        <p className="text-[10px] text-gray-500">{destination.description}</p>
+                      <div className="text-left w-[110px] sm:w-auto">
+                        <p className="text-xs font-bold text-gray-800 line-clamp-1">{destination.name}</p>
+                        <p className="text-[10px] text-gray-500 line-clamp-1">{destination.description}</p>
                       </div>
                     </div>
-                    <ArrowRight className="w-3 h-3 text-blue-500 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-3 h-3 text-blue-500 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                   </button>
                 ))}
               </div>

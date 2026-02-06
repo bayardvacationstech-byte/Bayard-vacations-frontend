@@ -33,7 +33,7 @@ const RelatedPackages = ({ relatedPackages }) => {
       <Container>
         <div className="mb-2 md:mb-8">
           <h2 className="text-xl md:text-4xl font-black text-slate-900 mb-1 md:mb-2 tracking-tight">
-            More <span className="text-brand-green">Adventures</span>
+            More <span className="text-brand-blue">Adventures</span>
           </h2>
           <p className="text-xs md:text-base text-slate-600 font-medium max-w-2xl">
             Explore other handpicked signatures and top-rated escapes in this region.

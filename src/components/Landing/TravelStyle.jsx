@@ -86,7 +86,7 @@ const TravelStyle = ({
       {/* HEADER with Tab Switcher */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6 md:mb-8">
         <div className="flex-1">
-          <h2 className="section-title-light mb-1 md:mb-2 text-2xl md:text-3xl lg:text-4xl font-bold text-brand-blue">
+          <h2 className="section-title-light mb-1 md:mb-2 text-brand-blue">
             Trips Tailored to Your Travel Style
           </h2>
           <p className="section-subtitle-light hidden sm:block text-xs sm:text-sm md:text-base text-gray-600">
@@ -99,10 +99,10 @@ const TravelStyle = ({
           <button
             onClick={() => setActiveTab("international")}
             className={cn(
-              "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
+              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
               activeTab === "international" 
-                ? "bg-brand-blue text-white shadow-md" 
-                : "text-gray-500 hover:text-brand-blue"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             International
@@ -110,10 +110,10 @@ const TravelStyle = ({
           <button
             onClick={() => setActiveTab("domestic")}
             className={cn(
-              "px-6 py-2 rounded-full text-sm font-bold transition-all duration-300",
+              "px-7 py-2.5 rounded-full text-base font-bold transition-all duration-300",
               activeTab === "domestic" 
-                ? "bg-brand-blue text-white shadow-md" 
-                : "text-gray-500 hover:text-brand-blue"
+                ? "gradient-btn text-white shadow-md" 
+                : "text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
             )}
           >
             Domestic
@@ -122,15 +122,15 @@ const TravelStyle = ({
       </div>
 
       {/* DYNAMIC STYLE FILTERS */}
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
+      <div className="mb-4 flex flex-wrap sm:flex-nowrap gap-2 sm:overflow-x-auto pb-4 scrollbar-hide">
         {stylesList.map((style) => (
           <Button
             key={style.id}
             variant={activeStyle === style.id ? "default" : "outline"}
             onClick={() => setActiveStyle(style.id)}
             className={cn(
-              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold px-6 py-2.5 flex-shrink-0 transition-all",
-              activeStyle === style.id && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+              "rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50 text-[11px] sm:text-sm font-bold sm:font-semibold px-3.5 sm:px-6 py-1.5 sm:py-2.5 flex-shrink-0 transition-all",
+              activeStyle === style.id && "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-md sm:shadow-lg text-slate-900 border-transparent hover:opacity-90"
             )}
           >
             {style.label}
