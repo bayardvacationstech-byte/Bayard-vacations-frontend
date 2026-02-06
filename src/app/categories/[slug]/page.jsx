@@ -1,6 +1,7 @@
 import CategoryPageClient from "@/components/Categories/CategoryPageClient";
 import categoryData from "@/data/categoryData";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 // Enable static export by disabling dynamic params
 export const dynamicParams = false;
@@ -53,5 +54,9 @@ export default async function CategoryPage({ params }) {
     notFound();
   }
 
-  return <CategoryPageClient category={category} />;
+  return (
+    <Suspense fallback={<div>Loading category...</div>}>
+      <CategoryPageClient category={category} />
+    </Suspense>
+  );
 }

@@ -181,8 +181,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
   const mobileHeroImageSrc = getImageUrl(whyChooseData?.mobileHeroImage || whyChooseData?.mobileBannerImage);
   const desktopHeroImageSrc = getImageUrl(whyChooseData?.heroImage || whyChooseData?.desktopBannerImage);
 
-  if (regionSlug === "egypt" && regionDataProcessed) {
-    console.log("🇪🇬 EGYPT DATA DEBUG:", {
+  if (regionDataProcessed) {
+    console.log(`🌍 WHY CHOOSE DATA for ${regionSlug}:`, {
+      raw: whyChooseData,
+      processed: regionDataProcessed,
       hero: { desktop: desktopHeroImageSrc, mobile: mobileHeroImageSrc },
       highlights: highlights.map(h => ({ title: h.title, image: h.recommendedPhotoImage, gallery: h.gallery }))
     });

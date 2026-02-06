@@ -1,9 +1,11 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
-export default function ProtectedLayout({ children }) {
+function AuthGuard({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -42,4 +44,18 @@ export default function ProtectedLayout({ children }) {
 
   // If we have a user, show the protected content
   return <>{children}</>;
+}
+
+export default function ProtectedLayout({ children }) {
+  return (
+    <Suspense 
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-lg">Loading...</div>
+        </div>
+      }
+    >
+      <AuthGuard>{children}</AuthGuard>
+    </Suspense>
+  );
 }

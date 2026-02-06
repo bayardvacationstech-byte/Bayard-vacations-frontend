@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   applyActionCode,
@@ -22,7 +22,7 @@ import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { useAuth } from "@/contexts/AuthContext";
 
-const EmailVerificationPage = () => {
+const EmailVerificationContent = () => {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -190,4 +190,23 @@ const EmailVerificationPage = () => {
   );
 };
 
-export default EmailVerificationPage;
+export default function EmailVerificationPage() {
+  return (
+    <Suspense 
+      fallback={
+        <section className="pb-24 pt-48">
+          <Container>
+            <div className="container mx-auto mt-10 max-w-md">
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <Loader2 className="size-8 animate-spin text-primary" />
+                <p className="text-sm text-muted-foreground">Initializing...</p>
+              </div>
+            </div>
+          </Container>
+        </section>
+      }
+    >
+      <EmailVerificationContent />
+    </Suspense>
+  );
+}
