@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, normalizeImageUrl } from "@/lib/utils";
 import { formatPrice } from "@/utils/offerUtils";
 import BadgeSection from "@/components/BadgeSection";
 
@@ -83,7 +83,7 @@ const LandingPackageCard = ({ item, className, isGroup = false }) => {
               validImages.map((img, i) => (
                 <SwiperSlide key={i}>
                   <Image
-                    src={img.url}
+                    src={normalizeImageUrl(img.url)}
                     alt={item.packageTitle || "Package"}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"

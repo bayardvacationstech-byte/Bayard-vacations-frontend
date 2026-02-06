@@ -24,7 +24,7 @@ const GroupDeparturePage = async () => {
       {/* Dynamic Background Texture */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-green/5 rounded-full blur-[130px]" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[130px]" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20" />
       </div>
 
@@ -79,7 +79,7 @@ const GroupDeparturePage = async () => {
       {/* Brand Section / Stats */}
       <section className="section-padding relative">
          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[120px] -z-10" />
-         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-brand-green/5 rounded-full blur-[100px] -z-10" />
+         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-brand-blue/5 rounded-full blur-[100px] -z-10" />
          
          <Container>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -156,7 +156,7 @@ const GroupDeparturePage = async () => {
                     <div className="h-px w-10 bg-brand-blue" />
                     <div className="text-brand-blue font-black tracking-[0.4em] uppercase text-[10px]">Curated Selection</div>
                   </div>
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900">Experience <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-emerald-600 italic">Magic</span></h2>
+                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900">Experience <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-emerald-600 italic">Magic</span></h2>
                </div>
                <p className="text-slate-600 max-w-sm md:text-right font-medium leading-relaxed text-sm md:text-base">
                   Each departure is a masterpiece of precision and luxury, featuring hand-picked sanctuaries and exclusive itineraries.

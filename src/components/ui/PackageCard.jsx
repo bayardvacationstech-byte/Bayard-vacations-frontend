@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { cn } from "@/lib/utils";
+import { cn, normalizeImageUrl } from "@/lib/utils";
 import { formatPrice } from "@/utils/offerUtils";
 import BadgeSection from "@/components/BadgeSection";
 
@@ -191,7 +191,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                 validImages.map((img, i) => (
                   <SwiperSlide key={i}>
                     <Image
-                      src={img.url}
+                      src={normalizeImageUrl(img.url)}
                       alt={item.packageTitle || "Package Image"}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -536,7 +536,7 @@ const OldPackageCard = ({ item, className, isGroup = false }) => {
               {!isGroup && (
                 <button
                   onClick={handleContactExpert}
-                  className="flex-shrink-0 rounded-xl bg-brand-green hover:bg-brand-green/90 px-3 sm:px-3 py-2 sm:py-2 text-[11px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
+                  className="flex-shrink-0 rounded-xl bg-brand-blue hover:bg-brand-blue/90 px-3 sm:px-3 py-2 sm:py-2 text-[11px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
                 >
                   Call
                 </button>

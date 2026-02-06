@@ -58,7 +58,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
             {/* Left: Title Section */}
             <div className="flex-1">
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-6"
               >
                 <span className="text-sm font-black text-brand-blue uppercase tracking-[0.2em] flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
@@ -135,7 +135,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
                 </div>
                 
                 {/* Aesthetic Border Glow on Hover */}
-                <div className="absolute inset-0 border-2 border-brand-green/0 group-hover:border-brand-green/20 transition-colors duration-500 rounded-[2rem]" />
+                <div className="absolute inset-0 border-2 border-brand-blue/0 group-hover:border-brand-blue/20 transition-colors duration-500 rounded-[2rem]" />
               </motion.div>
             </Link>
           ))}

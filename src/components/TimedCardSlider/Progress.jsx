@@ -26,7 +26,7 @@ const Progress = ({ curIndex, length }) => {
       <div className="flex h-[3px] flex-1 rounded-full bg-white/50 c-xl:max-w-[300px]">
         <div
           style={{ width: (((curIndex + 1) / length) * 100).toString() + "%" }}
-          className={`h-[3-px] rounded-full bg-brand-green`}
+          className={`h-[3-px] rounded-full bg-brand-blue`}
         ></div>
       </div>
     </>

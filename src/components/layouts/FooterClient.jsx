@@ -119,7 +119,7 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
       description: "063631 17421",
       subtext: "Available 24/7",
       color: config.accentColor || "text-brand-blue",
-      bgColor: config.accentBg || "bg-brand-green",
+      bgColor: config.accentBg || "bg-brand-blue",
       actionLabel: "Call",
       external: false
     },

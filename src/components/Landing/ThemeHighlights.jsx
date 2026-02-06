@@ -280,7 +280,7 @@ export default function ThemeHighlights({
                             <p className="text-white/80 text-[10px] sm:text-sm line-clamp-1">
                               {pkg.packageTitle}
                             </p>
-                            <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto uppercase tracking-tighter">
+                            <span className="text-white font-bold bg-brand-blue/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto uppercase tracking-tighter">
                               {pkg.basePrice > 0 ? `₹${formatPrice(pkg.basePrice)}` : "On Request"}
                             </span>
                           </div>

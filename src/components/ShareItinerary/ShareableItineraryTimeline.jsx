@@ -50,7 +50,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
               
               {/* Content Card */}
               <div className="group relative">
-                <div className={`relative bg-white border rounded-3xl overflow-hidden transition-all duration-500 print:rounded-2xl print:shadow-none ${isExpanded ? 'border-brand-green/30 shadow-lg shadow-brand-green/5' : 'border-slate-200'}`}>
+                <div className={`relative bg-white border rounded-3xl overflow-hidden transition-all duration-500 print:rounded-2xl print:shadow-none ${isExpanded ? 'border-brand-blue/30 shadow-lg shadow-brand-blue/5' : 'border-slate-200'}`}>
                   {/* Clickable Card Header */}
                   <button 
                     onClick={() => toggleDay(index)}
@@ -72,7 +72,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
                     </div>
                     
                     {/* Expand/Collapse Icon */}
-                    <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 print:hidden ${isExpanded ? 'bg-brand-green rotate-180' : 'bg-slate-100'}`}>
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 print:hidden ${isExpanded ? 'bg-brand-blue rotate-180' : 'bg-slate-100'}`}>
                       <svg 
                         className={`w-5 h-5 transition-colors ${isExpanded ? 'text-white' : 'text-slate-400'}`}
                         fill="none" 

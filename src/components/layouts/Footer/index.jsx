@@ -187,7 +187,7 @@ const Footer = async () => {
       description: "063631 17421",
       subtext: "Available 24/7",
       color: "text-brand-blue",
-      bgColor: "bg-brand-green",
+      bgColor: "bg-brand-blue",
       actionLabel: "Call",
       external: false
     },

@@ -103,7 +103,7 @@ const ItinerarySection = ({ packageData }) => {
               
               {/* Content Card - Accordion Style */}
               <div className="group relative">
-                <div className={`relative bg-white/80 backdrop-blur-xl border rounded-3xl overflow-hidden transition-all duration-500 ${expandedDays.includes(index) ? 'border-brand-green/30' : 'border-slate-200 hover:border-slate-300'}`}>
+                <div className={`relative bg-white/80 backdrop-blur-xl border rounded-3xl overflow-hidden transition-all duration-500 ${expandedDays.includes(index) ? 'border-brand-blue/30' : 'border-slate-200 hover:border-slate-300'}`}>
                   {/* Clickable Card Header */}
                   <button 
                     onClick={() => toggleDay(index)}
@@ -124,7 +124,7 @@ const ItinerarySection = ({ packageData }) => {
                     </div>
                     
                     {/* Expand/Collapse Icon */}
-                    <div className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all duration-300 ${expandedDays.includes(index) ? 'bg-brand-green rotate-180' : 'bg-slate-100'}`}>
+                    <div className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all duration-300 ${expandedDays.includes(index) ? 'bg-brand-blue rotate-180' : 'bg-slate-100'}`}>
                       <svg 
                         className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${expandedDays.includes(index) ? 'text-white' : 'text-slate-400'}`}
                         fill="none" 

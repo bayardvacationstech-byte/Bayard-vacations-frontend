@@ -68,7 +68,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6">
             {/* Left: Title Section */}
             <div className="flex-1 max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-4">
                 <Compass className="w-4 h-4 text-brand-blue" />
                 <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
                   Things To Do
@@ -171,7 +171,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                   regionName: activity.regionName,
                   regionSlug: activity.regionSlug
                 }}
-                hoverGradient="from-brand-green/95 to-emerald-900"
+                hoverGradient="from-brand-blue/95 to-emerald-900"
                 ctaLabel="Learn More"
                 onCtaClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}
                 onCardClick={() => router.push(`/activities/${regionSlug}/${activity.slug}`)}

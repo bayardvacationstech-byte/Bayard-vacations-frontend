@@ -152,7 +152,7 @@ export default function WhyBayard() {
       
       {/* Background Decor Elements */}
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-blue rounded-full mix-blend-multiply filter blur-[128px] opacity-40" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-brand-green rounded-full mix-blend-multiply filter blur-[128px] opacity-40" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-brand-blue rounded-full mix-blend-multiply filter blur-[128px] opacity-40" />
     </Container>
   );
 }

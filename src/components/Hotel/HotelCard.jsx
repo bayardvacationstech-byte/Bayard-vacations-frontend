@@ -190,7 +190,7 @@ export default function HotelCard() {
                               />
                             )}
                             <div className="absolute left-2 top-2">
-                              <div className="flex gap-0.5 rounded border-white bg-brand-green px-2 py-0.5 text-xs text-white">
+                              <div className="flex gap-0.5 rounded border-white bg-brand-blue px-2 py-0.5 text-xs text-white">
                                 {getStarRating(hotel.type)}
                               </div>
                             </div>

@@ -25,7 +25,7 @@ export default function AboutPage() {
       {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 bg-slate-200 z-50">
         <div 
-          className="h-full bg-gradient-to-r from-brand-blue via-purple-500 to-brand-green transition-all duration-300"
+          className="h-full bg-gradient-to-r from-brand-blue via-purple-500 to-brand-blue transition-all duration-300"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
@@ -36,7 +36,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           <div className="absolute top-20 right-20 w-96 h-96 bg-brand-blue/20 rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-20 left-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-green/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-blue/10 rounded-full blur-3xl" />
         </div>
 
         {/* Large Decorative Text */}
@@ -48,14 +48,14 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/20 backdrop-blur-sm border border-brand-green/30 mb-4 md:mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/20 backdrop-blur-sm border border-brand-blue/30 mb-4 md:mb-6">
                 <Sparkles className="w-4 h-4 text-brand-blue" />
                 <span className="text-xs md:text-sm font-bold text-brand-blue uppercase tracking-wider">Est. 2017</span>
               </div>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6 leading-tight">
                 We Are <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-green via-emerald-400 to-brand-green">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-emerald-400 to-brand-blue">
                   Bayard Vacations
                 </span>
               </h1>
@@ -116,18 +116,18 @@ export default function AboutPage() {
 
 
       {/* Journey Timeline - Horizontal Scroll */}
-      <section className="py-12 md:py-16 bg-white overflow-hidden">
+      <section className="py-8 md:py-10 bg-white overflow-hidden">
         <Container>
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-brand-blue bg-brand-blue/10 rounded-full mb-4">
               Our Journey
             </span>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900">Timeline of Excellence</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900">Timeline of Excellence</h2>
           </div>
 
           <div className="relative">
-            <div ref={timelineRef} className="overflow-x-auto pb-8 scrollbar-hide">
-              <div className="flex gap-8 min-w-max px-4">
+            <div ref={timelineRef} className="overflow-x-auto pb-6 scrollbar-hide">
+              <div className="flex gap-6 min-w-max px-4">
                 {[
                   { year: '2017', title: 'The Beginning', desc: 'Founded with a dream to transform travel', icon: Compass },
                   { year: '2019', title: '25K+ Travelers', desc: 'Milestone of happy customers reached', icon: Users },
@@ -137,23 +137,23 @@ export default function AboutPage() {
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="flex-shrink-0 w-80 group">
+                    <div key={i} className="flex-shrink-0 w-72 group">
                       <div className="relative">
                         {/* Year Badge */}
-                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                           <span className={cn(
-                            "font-black text-white text-center px-2",
-                            item.year.length > 5 ? "text-lg leading-tight" : "text-2xl"
+                            "font-black text-white text-center px-1",
+                            item.year.length > 5 ? "text-base leading-tight" : "text-xl"
                           )}>{item.year}</span>
                         </div>
 
                         {/* Card */}
-                        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 shadow-lg group-hover:shadow-2xl transition-all">
-                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-green/20 to-brand-blue/20 flex items-center justify-center mb-4">
-                            <Icon className="w-8 h-8 text-brand-blue" />
+                        <div className="mt-14 p-6 rounded-3xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 shadow-lg group-hover:shadow-2xl transition-all">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-blue/20 to-brand-blue/20 flex items-center justify-center mb-3">
+                            <Icon className="w-6 h-6 text-brand-blue" />
                           </div>
-                          <h3 className="text-2xl font-bold text-slate-900 mb-2">{item.title}</h3>
-                          <p className="text-slate-600">{item.desc}</p>
+                          <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                          <p className="text-sm text-slate-600">{item.desc}</p>
                         </div>
                       </div>
                     </div>
@@ -163,7 +163,7 @@ export default function AboutPage() {
             </div>
             
             {/* Scroll hint */}
-            <div className="text-center mt-4 text-sm text-slate-400 flex items-center justify-center gap-2">
+            <div className="text-center mt-2 text-sm text-slate-400 flex items-center justify-center gap-2">
               <span>Scroll horizontally</span>
               <div className="flex gap-1">
                 <div className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" />
@@ -176,30 +176,30 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision - Modern Cards */}
-      <section className="py-12 md:py-16 bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      <section className="py-8 md:py-10 bg-gradient-to-br from-slate-50 via-white to-slate-50">
         <Container>
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-6">
             {/* Mission Card */}
             <div className="group relative">
               {/* Decorative background */}
               <div className="absolute inset-0 bg-gradient-to-br from-brand-blue to-blue-700 rounded-3xl transform group-hover:scale-105 transition-transform duration-300" />
               
-              <div className="relative p-8 md:p-10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <Heart className="w-8 h-8 text-white" />
+              <div className="relative p-6 md:p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <Heart className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-white">Our Mission</h2>
+                  <h2 className="text-3xl md:text-4xl font-black text-white">Our Mission</h2>
                 </div>
                 
-                <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-6">
+                <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4">
                   To inspire wanderlust and create transformative travel experiences that connect cultures, 
                   broaden horizons, and craft memories that last forever.
                 </p>
                 
                 <div className="flex flex-wrap gap-2">
                   {['Connection', 'Transformation', 'Memories'].map((tag, i) => (
-                    <span key={i} className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-semibold border border-white/30">
+                    <span key={i} className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-semibold border border-white/30">
                       {tag}
                     </span>
                   ))}
@@ -212,22 +212,22 @@ export default function AboutPage() {
               {/* Decorative background */}
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-800 rounded-3xl transform group-hover:scale-105 transition-transform duration-300" />
               
-              <div className="relative p-8 md:p-10">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <Globe className="w-8 h-8 text-white" />
+              <div className="relative p-6 md:p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <Globe className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-white">Our Vision</h2>
+                  <h2 className="text-3xl md:text-4xl font-black text-white">Our Vision</h2>
                 </div>
                 
-                <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-6">
+                <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4">
                   To be the world's most trusted travel partner, pioneering sustainable tourism 
                   and creating journeys that change lives.
                 </p>
                 
                 <div className="flex flex-wrap gap-2">
                   {['Trust', 'Sustainability', 'Innovation'].map((tag, i) => (
-                    <span key={i} className="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-semibold border border-white/30">
+                    <span key={i} className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-semibold border border-white/30">
                       {tag}
                     </span>
                   ))}
@@ -239,16 +239,16 @@ export default function AboutPage() {
       </section>
 
       {/* Values - Hexagon Grid */}
-      <section className="py-12 md:py-16 bg-slate-50">
+      <section className="py-8 md:py-10 bg-slate-50">
         <Container>
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-purple-600 bg-purple-100 rounded-full mb-4">
               Our DNA
             </span>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900">Core Values</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900">Core Values</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {[
               { icon: Shield, title: 'Trust & Integrity', desc: 'Transparent, honest relationships built to last', color: 'blue' },
               { icon: Heart, title: 'Passion for Travel', desc: 'Genuine love for exploration drives everything', color: 'red' },
@@ -270,12 +270,12 @@ export default function AboutPage() {
               return (
                 <div key={i} className="group relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-100 rounded-3xl rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-                  <div className="relative bg-white rounded-3xl p-8 shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${gradients[value.color]} flex items-center justify-center mb-4 shadow-lg`}>
-                      <Icon className="w-8 h-8 text-white" />
+                  <div className="relative bg-white rounded-3xl p-6 shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-2">
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${gradients[value.color]} flex items-center justify-center mb-4 shadow-lg`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">{value.title}</h3>
-                    <p className="text-slate-600 leading-relaxed">{value.desc}</p>
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">{value.title}</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">{value.desc}</p>
                   </div>
                 </div>
               );
@@ -285,17 +285,17 @@ export default function AboutPage() {
       </section>
 
       {/* Team - Bento Grid */}
-      <TeamBento />
+      {/* <TeamBento /> */}
 
       {/* Why Choose Us - Split Design */}
-      <section className="py-12 md:py-16 bg-gradient-to-br from-slate-50 to-white">
+      <section className="py-8 md:py-10 bg-gradient-to-br from-slate-50 to-white">
         <Container>
-          <div className="text-center mb-10">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Why Bayard?</h2>
-            <p className="text-xl text-slate-600">Because ordinary just isn't our style</p>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Why Bayard?</h2>
+            <p className="text-lg text-slate-600">Because ordinary just isn't our style</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {[
               'Expert consultants with firsthand destination knowledge',
               '24/7 support throughout your entire journey',
@@ -306,11 +306,11 @@ export default function AboutPage() {
               'Comprehensive travel insurance options',
               'Eco-friendly and sustainable choices'
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-4 p-6 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-all group">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-green to-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                  <Check className="w-5 h-5 text-white" />
+              <div key={i} className="flex items-start gap-3 p-4 rounded-2xl bg-white shadow-sm hover:shadow-lg transition-all group">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-brand-blue to-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Check className="w-3 h-3 text-white" />
                 </div>
-                <p className="text-lg text-slate-700 font-medium">{item}</p>
+                <p className="text-base text-slate-700 font-medium">{item}</p>
               </div>
             ))}
           </div>
@@ -318,10 +318,10 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section - Redesigned with Light Background */}
-      <section className="relative py-20 md:py-32 overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white">
+      <section className="relative py-12 md:py-20 overflow-hidden bg-gradient-to-br from-white via-slate-50 to-white">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-brand-green rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-brand-blue rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-brand-blue rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
 
@@ -330,12 +330,12 @@ export default function AboutPage() {
             {/* Left Side - Creative Content */}
             <div className="space-y-8">
               <div>
-                <div className="inline-block px-4 py-2 bg-brand-green/10 rounded-full mb-6 border border-brand-green/20">
+                <div className="inline-block px-4 py-2 bg-brand-blue/10 rounded-full mb-6 border border-brand-blue/20">
                   <span className="text-brand-blue font-bold uppercase tracking-wider text-sm">Start Your Journey</span>
                 </div>
                 <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-6">
                   Your Next 
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-brand-green via-yellow-400 to-brand-green bg-size-200 animate-gradient">
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-yellow-400 to-brand-blue bg-size-200 animate-gradient">
                     Adventure Awaits
                   </span>
                 </h2>
@@ -361,7 +361,7 @@ export default function AboutPage() {
 
             {/* Right Side - CTA Card with Dark Background */}
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-brand-blue via-purple-600 to-brand-green rounded-3xl blur-xl opacity-30" />
+              <div className="absolute -inset-4 bg-gradient-to-r from-brand-blue via-purple-600 to-brand-blue rounded-3xl blur-xl opacity-30" />
               <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-slate-700">
                 <div className="text-center mb-8">
                   <div className="text-6xl mb-4">✈️</div>

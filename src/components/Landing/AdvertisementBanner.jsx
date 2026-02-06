@@ -6,6 +6,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
+import { normalizeImageUrl } from "@/lib/utils";
 
 // Fallback data in case Firebase fetch fails
 const FALLBACK_DESTINATIONS = [
@@ -179,7 +180,7 @@ export default function AdvertisementBanner({ bannerData }) {
                   className="block w-full h-full cursor-pointer group"
                 >
                   <img
-                    src={media.src}
+                    src={normalizeImageUrl(media.src)}
                     alt={media.title || media.featuredText || 'Banner Image'}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -302,7 +303,7 @@ export default function AdvertisementBanner({ bannerData }) {
                   className="absolute inset-0 rounded-3xl lg:rounded-none overflow-hidden"
                 >
                   <Image
-                    src={promoCards[activeFeatureIndex]?.imageUrl || promoCards[activeFeatureIndex]?.image || '/img/ai-bot-banner.png'}
+                    src={normalizeImageUrl(promoCards[activeFeatureIndex]?.imageUrl || promoCards[activeFeatureIndex]?.image || '/img/ai-bot-banner.png')}
                     alt={promoCards[activeFeatureIndex]?.title || 'Feature'}
                     fill
                     sizes="(max-width: 1024px) 100vw, 20vw"

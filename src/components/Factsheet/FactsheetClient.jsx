@@ -308,7 +308,7 @@ export default function FactsheetClient({ regionSlug }) {
           >
             <h1 className="text-3xl sm:text-6xl md:text-7xl font-black mb-6 tracking-tighter leading-none uppercase text-white">
               {currentData.heroTitle}<br />
-              <span className="text-brand-green italic lowercase drop-shadow-sm">Factsheet</span>
+              <span className="text-brand-blue italic lowercase drop-shadow-sm">Factsheet</span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-slate-200 max-w-2xl font-medium leading-relaxed drop-shadow-lg">
               {currentData.heroSubtitle}
@@ -375,7 +375,7 @@ export default function FactsheetClient({ regionSlug }) {
               {/* Fast Facts Block */}
               {currentData.fastFacts && (
                 <div className="bg-slate-900 rounded-[2.5rem] p-6 md:p-10 text-white flex flex-col md:flex-row items-center gap-8">
-                   <div className="w-14 h-14 md:w-16 md:h-16 bg-brand-green rounded-full flex items-center justify-center shrink-0">
+                   <div className="w-14 h-14 md:w-16 md:h-16 bg-brand-blue rounded-full flex items-center justify-center shrink-0">
                       <Lightbulb className="w-6 h-6 md:w-8 md:h-8 text-white" />
                    </div>
                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
@@ -441,7 +441,7 @@ export default function FactsheetClient({ regionSlug }) {
                     {isHistoryTextClamped && (
                       <button
                         onClick={() => setHistoryExpanded(!historyExpanded)}
-                        className="mt-3 text-brand-green hover:text-brand-green/80 font-bold text-sm flex items-center gap-1 transition-colors"
+                        className="mt-3 text-brand-blue hover:text-brand-blue/80 font-bold text-sm flex items-center gap-1 transition-colors"
                       >
                         {historyExpanded ? (
                           <>
@@ -467,12 +467,12 @@ export default function FactsheetClient({ regionSlug }) {
 
                   {/* Spotlight Block */}
                   {currentData.history.spotlight && (
-                    <div className="bg-brand-green/5 border border-brand-green/10 p-8 rounded-[2.5rem] mb-8 flex flex-col md:flex-row gap-8 items-center">
+                    <div className="bg-brand-blue/5 border border-brand-blue/10 p-8 rounded-[2.5rem] mb-8 flex flex-col md:flex-row gap-8 items-center">
                        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm shrink-0">
-                          {React.createElement(currentData.history.spotlight.icon, { className: "w-8 h-8 text-brand-green" })}
+                          {React.createElement(currentData.history.spotlight.icon, { className: "w-8 h-8 text-brand-blue" })}
                        </div>
                        <div>
-                          <h4 className="font-black text-brand-green uppercase text-xs tracking-widest mb-2">Spotlight: {currentData.history.spotlight.title}</h4>
+                          <h4 className="font-black text-brand-blue uppercase text-xs tracking-widest mb-2">Spotlight: {currentData.history.spotlight.title}</h4>
                           <p className="text-slate-700 font-medium leading-relaxed italic">{currentData.history.spotlight.content}</p>
                        </div>
                     </div>
@@ -488,7 +488,7 @@ export default function FactsheetClient({ regionSlug }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {currentData.history.stats?.map((stat, i) => (
                       <div key={i} className="bg-slate-50 border border-slate-100 p-8 rounded-[2.5rem]">
-                        <p className="text-xs font-black text-brand-green uppercase tracking-[0.3em] mb-4">{stat.label}</p>
+                        <p className="text-xs font-black text-brand-blue uppercase tracking-[0.3em] mb-4">{stat.label}</p>
                         <h4 className="text-3xl font-black text-slate-900 mb-1">{stat.value}</h4>
                         <p className="text-slate-500 font-medium">{stat.desc}</p>
                       </div>
@@ -541,7 +541,7 @@ export default function FactsheetClient({ regionSlug }) {
                            <span className="text-3xl block mb-2">{s.emoji}</span>
                            <h5 className="font-black text-slate-900 text-sm mb-1">{s.name}</h5>
                            <p className="text-[10px] font-black text-slate-400 uppercase mb-2">{s.months}</p>
-                           <p className="text-lg font-black text-brand-green mb-2">{s.temp}</p>
+                           <p className="text-lg font-black text-brand-blue mb-2">{s.temp}</p>
                            <p className="text-[11px] text-slate-500 font-medium leading-tight">{s.highlight}</p>
                         </div>
                       ))}
@@ -575,7 +575,7 @@ export default function FactsheetClient({ regionSlug }) {
                              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Official Language</h4>
                              <p className="text-2xl md:text-3xl font-black text-slate-900 italic">{currentData.language.official}</p>
                           </div>
-                          <p className="text-base text-slate-600 font-medium leading-relaxed italic border-l-4 border-brand-green/30 pl-4">
+                          <p className="text-base text-slate-600 font-medium leading-relaxed italic border-l-4 border-brand-blue/30 pl-4">
                              {currentData.language.context}
                           </p>
 
@@ -598,7 +598,7 @@ export default function FactsheetClient({ regionSlug }) {
                              {currentData.language.phrases?.map((p, i) => (
                                <div key={i} className="bg-slate-50/50 p-4 rounded-xl flex justify-between items-center group hover:bg-white transition-colors border border-transparent hover:border-slate-100">
                                   <p className="text-[10px] font-black text-slate-400 uppercase">{p.label}</p>
-                                  <p className="text-lg font-black text-slate-900 group-hover:text-brand-green transition-colors">{p.phrase}</p>
+                                  <p className="text-lg font-black text-slate-900 group-hover:text-brand-blue transition-colors">{p.phrase}</p>
                                </div>
                              ))}
                           </div>
@@ -614,7 +614,7 @@ export default function FactsheetClient({ regionSlug }) {
                 <SectionHeader title="Culture & Vibes" badge="Local Spirit" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-slate-900 rounded-[3rem] px-6 py-10 md:p-10 text-white flex flex-col justify-center">
-                    <Users className="w-10 h-10 md:w-12 md:h-12 text-brand-green mb-8" />
+                    <Users className="w-10 h-10 md:w-12 md:h-12 text-brand-blue mb-8" />
                     <h3 className="text-3xl md:text-4xl font-black mb-6">{currentData.culture.vibe}</h3>
                     <p className="text-slate-300 font-medium leading-relaxed italic text-base md:text-lg">
                       "{currentData.culture.description}"
@@ -767,7 +767,7 @@ export default function FactsheetClient({ regionSlug }) {
                            <ul className="space-y-2">
                               {cat.items?.map((item, idx) => (
                                 <li key={idx} className="text-sm text-slate-500 font-medium flex items-center gap-2">
-                                   <div className="w-1.5 h-1.5 rounded-full bg-brand-green" /> {item}
+                                   <div className="w-1.5 h-1.5 rounded-full bg-brand-blue" /> {item}
                                 </li>
                               ))}
                            </ul>
@@ -776,12 +776,12 @@ export default function FactsheetClient({ regionSlug }) {
                    </div>
 
                    <div className="bg-slate-900 text-white rounded-[2.5rem] p-8">
-                      <h4 className="text-brand-green font-black uppercase text-xs tracking-[0.2em] mb-6">Where to Shop (Local Hubs)</h4>
+                      <h4 className="text-brand-blue font-black uppercase text-xs tracking-[0.2em] mb-6">Where to Shop (Local Hubs)</h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                          {currentData.shopping.hubs?.map((hub, i) => (
                            <div key={i}>
                               <p className="text-lg font-black mb-1">{hub.name}</p>
-                              <p className="text-brand-green font-bold text-[10px] uppercase tracking-widest mb-2">{hub.type}</p>
+                              <p className="text-brand-blue font-bold text-[10px] uppercase tracking-widest mb-2">{hub.type}</p>
                               <p className="text-slate-400 text-xs font-medium italic">"{hub.highlight}"</p>
                            </div>
                          ))}
@@ -890,9 +890,9 @@ export default function FactsheetClient({ regionSlug }) {
           <div className="lg:col-span-4 space-y-8">
             <div className="sticky top-24">
               <div className="bg-slate-900 rounded-[3rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 
-                <h3 className="text-2xl md:text-3xl font-black mb-6 leading-tight">Plan Your Trip <br/>to <span className="text-brand-green">{regionName}</span></h3>
+                <h3 className="text-2xl md:text-3xl font-black mb-6 leading-tight">Plan Your Trip <br/>to <span className="text-brand-blue">{regionName}</span></h3>
                 <p className="text-slate-400 font-medium mb-10 leading-relaxed">
                   Ready to experience it all? Our local experts have crafted the perfect itineraries just for you.
                 </p>
@@ -904,7 +904,7 @@ export default function FactsheetClient({ regionSlug }) {
                 </div>
 
                 <Link href={`/packages/${regionSlug}`}>
-                  <Button className="w-full bg-brand-green hover:bg-green-600 text-white font-black rounded-full py-8 text-lg shadow-xl shadow-brand-green/20 group">
+                  <Button className="w-full bg-brand-blue hover:bg-green-600 text-white font-black rounded-full py-8 text-lg shadow-xl shadow-brand-blue/20 group">
                     View Packages
                     <ArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </Button>
@@ -918,7 +918,7 @@ export default function FactsheetClient({ regionSlug }) {
                  <h4 className="font-black text-slate-900 mb-2">Need Assistance?</h4>
                  <p className="text-slate-500 text-sm font-medium mb-6">Talk to our travel advisor for personalized recommendations.</p>
                  <Link href="/contact">
-                   <Button variant="outline" className="rounded-full border-slate-200 font-bold text-slate-600 hover:text-brand-green hover:border-brand-green">Contact Us</Button>
+                   <Button variant="outline" className="rounded-full border-slate-200 font-bold text-slate-600 hover:text-brand-blue hover:border-brand-blue">Contact Us</Button>
                  </Link>
               </div>
             </div>
@@ -991,7 +991,7 @@ const MilestoneCard = ({ milestone, index }) => {
       {isTextClamped && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-2 text-brand-green hover:text-brand-green/80 font-bold text-xs flex items-center gap-1 transition-colors"
+          className="mt-2 text-brand-blue hover:text-brand-blue/80 font-bold text-xs flex items-center gap-1 transition-colors"
         >
           {isExpanded ? (
             <>
@@ -1013,7 +1013,7 @@ const MilestoneCard = ({ milestone, index }) => {
 const SidebarBenefit = ({ icon: Icon, text }) => (
   <div className="flex items-center gap-4 text-sm font-bold text-slate-300">
     <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
-      <Icon className="w-4 h-4 text-brand-green" />
+      <Icon className="w-4 h-4 text-brand-blue" />
     </div>
     {text}
   </div>

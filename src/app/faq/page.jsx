@@ -193,7 +193,7 @@ const FaqPage = () => {
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden opacity-5">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-green rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-blue rounded-full blur-3xl" />
         </div>
 
         <Container className="relative z-10">
@@ -210,7 +210,7 @@ const FaqPage = () => {
               >
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${
                   stat.color === 'blue' ? 'from-brand-blue to-blue-600' :
-                  stat.color === 'green' ? 'from-brand-green to-emerald-600' :
+                  stat.color === 'green' ? 'from-brand-blue to-emerald-600' :
                   'from-purple-600 to-purple-700'
                 } flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                   <stat.icon className="w-7 h-7 text-white" />

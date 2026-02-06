@@ -126,3 +126,23 @@ export const formatFirebaseTimestamp = (timestamp) => {
   const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp);
   return date;
 };
+
+/**
+ * Normalizes an image URL by fixing common typos like 'ttps://' instead of 'https://'
+ * or 'ttp://' instead of 'http://'.
+ * @param {string} url - The URL to normalize
+ * @returns {string} The normalized URL
+ */
+export const normalizeImageUrl = (url) => {
+  if (!url || typeof url !== "string") return url;
+  
+  // Fix common typos at the start of the URL
+  if (url.startsWith("ttps://")) {
+    return url.replace("ttps://", "https://");
+  }
+  if (url.startsWith("ttp://")) {
+    return url.replace("ttp://", "http://");
+  }
+  
+  return url;
+};

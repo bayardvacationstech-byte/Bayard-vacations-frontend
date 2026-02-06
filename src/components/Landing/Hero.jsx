@@ -11,6 +11,7 @@ import ReviewCompanies from "@/assets/reviewCompanies.png";
 // import heroPoster from "@/assets/hero.jpg"; // Imported hero image for poster
 import dynamic from "next/dynamic";
 import { SEARCH_API, TRENDING_PACKAGES } from "@/config";
+import { normalizeImageUrl } from "@/lib/utils";
 
 const MobileSearch = dynamic(() => import("./MobileSearch"), { ssr: false });
 
@@ -90,7 +91,7 @@ const Hero = () => {
           className="absolute inset-0 z-10 top-0 left-0 h-full w-full bg-black/40"
         />
 
-        <div className="max-w-4xl mx-auto flex flex-col gap-8 sm:gap-16 relative z-20 pb-32 sm:pb-0">
+        <div className="max-w-4xl mx-auto flex flex-col gap-8 sm:gap-16 relative z-40 pb-32 sm:pb-0">
           {/* <div className="text-center font-bold text-xl sm:text-3xl text-white px-10 pt-10 font-nord">
             DISCOVER. EXPLORE. EXPERIENCE.
           </div> */}
@@ -178,7 +179,8 @@ const Hero = () => {
                 className="
         absolute left-0 right-0 mt-2 z-50
         border shadow-lg bg-white
-        max-h-80 overflow-y-auto rounded
+        max-h-[250px] overflow-y-auto rounded
+        scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent
       "
               >
                 <CardContent className="p-0">
@@ -238,7 +240,7 @@ const Hero = () => {
                                 >
                                   {pkg.bannerImage && (
                                     <Image
-                                      src={pkg.bannerImage}
+                                      src={normalizeImageUrl(pkg.bannerImage)}
                                       alt={pkg.name}
                                       width={55}
                                       height={55}
@@ -339,13 +341,13 @@ const Hero = () => {
           {/* Right Side: Contact */}
           <Link 
             href="/contact"
-            className="pointer-events-auto group flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-green/20 hover:-translate-y-1"
+            className="pointer-events-auto group flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-white hover:bg-white/20 transition-all duration-300 shadow-xl hover:shadow-brand-blue/20 hover:-translate-y-1"
           >
             <div className="flex flex-col items-end leading-none">
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/70 mb-0.5">Questions?</span>
               <span className="text-xs sm:text-base font-black">Consult Expert</span>
             </div>
-            <div className="bg-brand-green/80 p-1 sm:p-1.5 rounded-full">
+            <div className="bg-brand-blue/80 p-1 sm:p-1.5 rounded-full">
               <Headphones className="size-3.5 sm:size-4 group-hover:scale-110 transition-transform duration-300" />
             </div>
           </Link>

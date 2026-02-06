@@ -432,7 +432,7 @@ export default function EnquiryFormFields({
               <div className="flex items-start">
                 <Button
                   className={cn(
-                    "bg-brand-green hover:bg-brand-green-hovered px-3",
+                    "bg-brand-blue hover:bg-brand-blue-hovered px-3",
                     variant === "modal" ? "h-[45.6px] c-md:rounded-l-2xl" : "h-[45.6px] rounded-l-lg",
                     "rounded-r-none"
                   )}
@@ -456,7 +456,7 @@ export default function EnquiryFormFields({
                 />
                 <Button
                   className={cn(
-                    "bg-brand-green hover:bg-brand-green-hovered px-3",
+                    "bg-brand-blue hover:bg-brand-blue-hovered px-3",
                     variant === "modal" ? "h-[45.6px] c-md:rounded-r-2xl" : "h-[45.6px] rounded-r-lg",
                     "rounded-l-none"
                   )}
@@ -472,7 +472,7 @@ export default function EnquiryFormFields({
                 <div className={labelClass}>Number of Days</div>
                 <div className="flex">
                   <Button
-                    className="h-[45.6px] rounded-l-2xl rounded-r-none bg-brand-green hover:bg-brand-green-hovered px-3"
+                    className="h-[45.6px] rounded-l-2xl rounded-r-none bg-brand-blue hover:bg-brand-blue-hovered px-3"
                     type="button"
                     onClick={() => handleDecrement("numDays")}
                   >
@@ -490,7 +490,7 @@ export default function EnquiryFormFields({
                     max="25"
                   />
                   <Button
-                    className="h-[45.6px] rounded-l-none rounded-r-2xl bg-brand-green hover:bg-brand-green-hovered px-3"
+                    className="h-[45.6px] rounded-l-none rounded-r-2xl bg-brand-blue hover:bg-brand-blue-hovered px-3"
                     type="button"
                     onClick={() => handleIncrement("numDays")}
                   >

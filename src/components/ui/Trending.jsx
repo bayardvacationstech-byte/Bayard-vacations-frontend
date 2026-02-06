@@ -155,7 +155,7 @@ const Trending = () => {
                 animate="animate"
                 exit="exit"
                 transition={{ duration: 0.35 }}
-                className="relative mb-4 inline-block text-2xl font-bold uppercase after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-[70%] after:translate-y-1 after:bg-brand-green after:content-['']"
+                className="relative mb-4 inline-block text-2xl font-bold uppercase after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-[70%] after:translate-y-1 after:bg-brand-blue after:content-['']"
               >
                 {activeItem.destination}
               </motion.h4>
@@ -182,7 +182,7 @@ const Trending = () => {
             >
               <Button
                 asChild
-                className="mb-5 rounded-full bg-brand-green px-8 py-7 text-white hover:bg-brand-green-hovered"
+                className="mb-5 rounded-full bg-brand-blue px-8 py-7 text-white hover:bg-brand-blue-hovered"
               >
                 <Link
                   href={activeItem.href}
@@ -196,13 +196,13 @@ const Trending = () => {
           </AnimatePresence>
           <div className="flex w-full justify-end gap-4">
             <Button
-              className="aspect-square h-[36px] rounded-full border border-white bg-transparent p-0 text-white hover:bg-white hover:text-brand-green"
+              className="aspect-square h-[36px] rounded-full border border-white bg-transparent p-0 text-white hover:bg-white hover:text-brand-blue"
               onClick={handlePrev}
             >
               <MoveLeft />
             </Button>
             <Button
-              className="aspect-square h-[36px] rounded-full border border-white bg-transparent p-0 text-white hover:bg-white hover:text-brand-green"
+              className="aspect-square h-[36px] rounded-full border border-white bg-transparent p-0 text-white hover:bg-white hover:text-brand-blue"
               onClick={handleNext}
             >
               <MoveRight />

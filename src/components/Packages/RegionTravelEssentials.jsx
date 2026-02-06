@@ -74,7 +74,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
             {/* Left: Title Section */}
             <div className="flex-1">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-4">
                 <Compass className="w-4 h-4 text-brand-blue" />
                 <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">KNOWLEDGE HUB</span>
               </div>
@@ -576,7 +576,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                              "Return Ticket"
                            ]).map((item, i) => (
                              <li key={i} className="flex items-center gap-3 text-sm text-slate-600 font-medium">
-                               <div className="w-1 h-1 rounded-full bg-brand-green"></div>
+                               <div className="w-1 h-1 rounded-full bg-brand-blue"></div>
                                {item}
                              </li>
                            ))}
@@ -748,7 +748,7 @@ const HistoryCard = ({ title, content, color }) => {
 
 const LanguageItem = ({ label, desc }) => (
   <li className="flex items-start gap-3">
-    <div className="w-1.5 h-1.5 rounded-full bg-brand-green mt-2 flex-shrink-0" />
+    <div className="w-1.5 h-1.5 rounded-full bg-brand-blue mt-2 flex-shrink-0" />
     <p className="text-sm md:text-base text-slate-600 font-medium">
       <span className="font-black text-slate-900">{label}</span> - {desc}
     </p>

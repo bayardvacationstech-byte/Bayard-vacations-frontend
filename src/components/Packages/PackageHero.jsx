@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import Container from "@/components/ui/Container";
 import { MapPin, Clock, Calendar, IndianRupee, ChevronRight, Star, ExternalLink, Users } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, normalizeImageUrl } from "@/lib/utils";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 // Import Swiper styles
@@ -66,7 +66,7 @@ const PackageHero = ({ packageData, price }) => {
                 className="w-full h-full"
               >
                 <Image
-                  src={image.url}
+                  src={normalizeImageUrl(image.url)}
                   alt={title}
                   fill
                   priority={index === 0}
@@ -115,7 +115,7 @@ const PackageHero = ({ packageData, price }) => {
                     {[1, 2, 3].map((i) => (
                       <div key={i} className="w-7 h-7 lg:w-10 lg:h-10 rounded-full border-2 border-white/20 bg-slate-800 overflow-hidden">
                         <Image 
-                          src={`https://i.pravatar.cc/100?img=${i + 15}`} 
+                          src={normalizeImageUrl(`https://i.pravatar.cc/100?img=${i + 15}`)} 
                           alt="User" 
                           width={40} 
                           height={40} 
@@ -210,7 +210,7 @@ const PackageHero = ({ packageData, price }) => {
                       )}
                     >
                       <Image 
-                        src={image.url} 
+                        src={normalizeImageUrl(image.url)} 
                         alt={`Gallery ${index}`} 
                         fill 
                         sizes="112px" 
@@ -258,7 +258,7 @@ const PackageHero = ({ packageData, price }) => {
             )}
           >
             <Image 
-              src={image.url} 
+              src={normalizeImageUrl(image.url)} 
               alt={`Gallery ${index}`} 
               fill 
               sizes="112px" 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo, memo } from "react";
+import { useState, useRef, useEffect, useMemo, memo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { X, Send, Bot, User, Sparkles, MapPin, Calendar, Users, ArrowRight, ChevronLeft, ChevronRight, RotateCcw, Copy, ThumbsUp, ThumbsDown, Pencil, Trash2, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -216,7 +216,7 @@ const ChatMessage = memo(({
 }) => {
   return (
     <div
-      className={`flex animate-fadeIn ${
+      className={`flex ${isLast ? "animate-fadeIn" : ""} ${
         message.sender === "user" ? "flex-row-reverse" : "flex-row"
       }`}
       style={{ animationDelay: isLast ? "0.1s" : "0s" }}
@@ -363,20 +363,28 @@ const quickReplies = [
   { icon: Sparkles, text: "Special Offers", emoji: "✨" },
 ];
 
+const INITIAL_MESSAGES = [
+  {
+    id: 1,
+    text: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
+    formattedText: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
+    sender: "bot",
+    timestamp: new Date(),
+  },
+];
+
 export default function ChatbotPopup({ isOpen, onClose }) {
   const router = useRouter();
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
-  const INITIAL_MESSAGES = useMemo(() => [
-    {
-      id: 1,
-      text: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
-      formattedText: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ], []);
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const messagesRef = useRef(messages);
+
+  // Sync ref with state for logic access without re-render dependency
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -488,11 +496,29 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (instant = false) => {
+    if (!messagesEndRef.current) return;
+    
+    // Performance: Use 'auto' behavior on mobile or if instant is requested
+    const isMobile = window.innerWidth < 640;
+    messagesEndRef.current.scrollIntoView({ 
+      behavior: (instant || isMobile) ? "auto" : "smooth",
+      block: "end" 
+    });
   };
 
-  const handleDestinationClick = async (slug, name) => {
+  const handleCopy = useCallback((text) => {
+    navigator.clipboard.writeText(text);
+  }, []);
+
+  const handleEdit = useCallback((text) => {
+    setInputMessage(text);
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
+
+  const handleDestinationClick = useCallback(async (slug, name) => {
     setSelectedContext({ type: 'region', slug, name });
     setShowDestinations(false);
     setShowQuickReplies(true);
@@ -527,9 +553,9 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     } finally {
       setIsTyping(false);
     }
-  };
+  }, []);
 
-  const handleViewItinerary = (pkg) => {
+  const handleViewItinerary = useCallback((pkg) => {
     const text = `Opening the itinerary for **${pkg.packageTitle}**...`;
     const botResponse = {
       id: Date.now(),
@@ -542,9 +568,9 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       itineraries: pkg.itineraries,
     };
     setMessages((prev) => [...prev.filter(m => m.type !== 'itinerary'), botResponse]);
-  };
+  }, []);
 
-  const handleQuickReply = async (text) => {
+  const handleQuickReply = useCallback(async (text) => {
     if (text === "Popular Destinations") {
       setShowQuickReplies(false);
       setShowDestinations(true);
@@ -600,41 +626,42 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     } else {
         handleSendMessage(null, text);
     }
-  };
+  }, []);
 
-  const handleRegenerate = (messageId) => {
-    // Find the message index
-    const messageIndex = messages.findIndex(m => m.id === messageId);
-    if (messageIndex === -1) return;
-    
-    // Find the last user message BEFORE this bot message
-    const lastUserMessage = [...messages.slice(0, messageIndex)].reverse().find(m => m.sender === "user");
-    if (lastUserMessage) {
-        handleSendMessage(null, lastUserMessage.text, true);
-    }
-  };
+  const handleRegenerate = useCallback((messageId) => {
+    setMessages(prev => {
+      const messageIndex = prev.findIndex(m => m.id === messageId);
+      if (messageIndex === -1) return prev;
+      
+      const lastUserMessage = [...prev.slice(0, messageIndex)].reverse().find(m => m.sender === "user");
+      if (lastUserMessage) {
+          // Delay call to avoid state update during render
+          setTimeout(() => handleSendMessage(null, lastUserMessage.text, true), 0);
+      }
+      return prev;
+    });
+  }, []);
 
-  const handleSendMessage = async (e, text = null, isRegenerate = false) => {
+  const handleSendMessage = useCallback(async (e, text = null, isRegenerate = false) => {
     if (e) e.preventDefault();
-    const messageText = text || inputMessage;
+    const messageText = text || inputMessage; // Note: inputMessage dependency is needed
     if (!messageText.trim()) return;
 
-    setShowQuickReplies(false); // Hide quick options when user starts manual chat
+    setShowQuickReplies(false);
     setShowDestinations(false);
-    // If regenerating, we want to exclude the last bot message from history
-    let historyToProcess = messages;
+    
     if (isRegenerate) {
-      // Find the last bot message index
-      const lastBotIndex = [...messages].reverse().findIndex(m => m.sender === "bot");
-      if (lastBotIndex !== -1) {
-        // Remove the existing bot response being regenerated
-        const actualIndex = messages.length - 1 - lastBotIndex;
-        historyToProcess = messages.slice(0, actualIndex);
-        setMessages(historyToProcess); // Clean UI for fresh generation
-      }
+        setMessages(prev => {
+            const lastBotIndex = [...prev].reverse().findIndex(m => m.sender === "bot");
+            if (lastBotIndex !== -1) {
+                const actualIndex = prev.length - 1 - lastBotIndex;
+                return prev.slice(0, actualIndex);
+            }
+            return prev;
+        });
     }
 
-    const chatHistory = historyToProcess
+    const chatHistory = messagesRef.current
       .filter(msg => msg.id !== 1)
       .slice(-10)
       .map((msg) => ({
@@ -642,7 +669,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         content: msg.text,
       }));
 
-    // Add user message if not regenerating
     if (!isRegenerate) {
       const userMessage = {
         id: Date.now(),
@@ -656,15 +682,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     setInputMessage("");
     setIsTyping(true);
 
-    // Prepare a placeholder for the bot response
     const botMessageId = Date.now() + 1;
-    let botResponseText = "";
-
-    // Add 15s Timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    // INJECT CONTEXT
     let payloadMessage = messageText;
     if (selectedContext) {
         payloadMessage = `${messageText}\n\n[System Context: The user is currently interested in ${selectedContext.name} (Slug: ${selectedContext.slug}). Prioritize this context in your response.]`;
@@ -673,31 +694,20 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          message: payloadMessage,
-          history: chatHistory
-        }),
-        signal: controller.signal // Attach signal
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: payloadMessage, history: chatHistory }),
+        signal: controller.signal
       });
 
-      clearTimeout(timeoutId); // Clear timeout on response
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Failed to get response from AI");
       }
 
-      // Handle streaming response
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      // Keep isTyping true while streaming to show we are processing, 
-      // OR set to false if you want the user to be able to type immediately.
-      // Usually users wait for response, so keeping it true or false depends on UX preference.
-      // Since we want to ensure input is enabled, we rely on the component prop change,
-      // but logically we can stop "typing" animation once stream starts.
       setIsTyping(false); 
 
       setStreamingMessage({
@@ -730,8 +740,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               const data = JSON.parse(dataStr);
               if (data.token) {
                 streamingBufferRef.current += data.token;
-                
-                // Throttled UI update (every 100ms)
                 const now = Date.now();
                 if (now - lastRenderTimeRef.current > 100) {
                   const currentText = streamingBufferRef.current;
@@ -755,7 +763,6 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         }
       }
 
-      // Final update and merge into messages
       const finalBotResponse = {
         id: botMessageId,
         text: streamingBufferRef.current,
@@ -769,51 +776,34 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       setStreamingMessage(null);
       streamingBufferRef.current = "";
       lastRenderTimeRef.current = 0;
+      
+      setTimeout(() => scrollToBottom(false), 100);
+
     } catch (error) {
       clearTimeout(timeoutId);
       setIsTyping(false);
-      
       const errorMessage = error.name === 'AbortError' 
-        ? "I'm taking a bit too long to respond. Please try again or ask a simpler question! 🐌"
-        : "I'm having trouble connecting right now. Please call us at +91 91875 63136 or try again in a moment! 🙏";
-
-      const fallbackResponse = {
-        id: Date.now() + 2,
-        text: errorMessage,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      
-      setMessages((prev) => [...prev, fallbackResponse]);
+        ? "I'm taking a bit too long to respond. Please try again or ask a simpler question!" 
+        : "I'm having trouble connecting right now. Please call us at +91 91875 63136 or try again in a moment!";
+      setMessages((prev) => [...prev, { id: Date.now() + 2, text: errorMessage, sender: "bot", timestamp: new Date() }]);
     }
-  };
+  }, [inputMessage, selectedContext]);
 
-  const handleClearChat = () => {
+  const handleClearChat = useCallback(() => {
     setMessages(INITIAL_MESSAGES);
     setShowQuickReplies(true);
     setShowDestinations(false);
     setInputMessage("");
     setSelectedContext(null);
     setDestPage(0);
-  };
+  }, []);
 
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
-  };
-
-  const handleEdit = (text) => {
-    setInputMessage(text);
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
-
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage(e);
     }
-  };
+  }, [handleSendMessage]);
 
 
   return (
@@ -909,10 +899,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
           {isTyping && (
             <div className="flex animate-fadeIn">
               <div className="bg-white rounded-2xl rounded-tl-none px-5 py-3 shadow-sm border border-gray-100">
-                <div className="flex gap-1.5">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0.2s]" />
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0.4s]" />
+                <div className="flex gap-1.5 py-1">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse [animation-delay:0.2s]" />
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse [animation-delay:0.4s]" />
                 </div>
               </div>
             </div>

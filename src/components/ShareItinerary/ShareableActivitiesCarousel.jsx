@@ -90,7 +90,7 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-blue/10 rounded-full mb-4">
             <MapPin className="w-5 h-5 text-brand-blue" />
             <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">Explore More</span>
           </div>
@@ -141,7 +141,7 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
                       </div>
                     </div>
                     <div className="absolute bottom-4 left-4">
-                      <span className="px-3 py-1 bg-brand-green text-white text-sm font-bold rounded-full">
+                      <span className="px-3 py-1 bg-brand-blue text-white text-sm font-bold rounded-full">
                         {activity.price}
                       </span>
                     </div>
@@ -186,7 +186,7 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
                       <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 md:gap-x-4 md:gap-y-2.5">
                         {activity.highlights.slice(0, 4).map((highlight, idx) => (
                           <div key={idx} className="flex items-center gap-2.5 group/item overflow-hidden">
-                            <div className="w-1.5 h-1.5 rounded-full bg-brand-green/40 group-hover/item:bg-brand-green transition-colors shrink-0" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-brand-blue/40 group-hover/item:bg-brand-blue transition-colors shrink-0" />
                             <span className="text-[11px] font-bold text-slate-600 group-hover/item:text-slate-900 transition-colors truncate">
                               {highlight}
                             </span>

@@ -241,17 +241,17 @@ const InclusionsSection = ({ packageData }) => {
   //   const displayPoints = isPointsExpanded ? points : points.slice(0, 6);
 
   //   return (
-  //     <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-green/20 hover:shadow-md transition-all duration-300 h-full">
+  //     <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300 h-full">
   //       <div className="flex items-center gap-3 mb-4">
-  //         <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center">
-  //           <ListChecks className="w-5 h-5 text-brand-green" />
+  //         <div className="w-10 h-10 bg-brand-blue/10 rounded-xl flex items-center justify-center">
+  //           <ListChecks className="w-5 h-5 text-brand-blue" />
   //         </div>
   //         <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-blue">Remember</span></h4>
   //       </div>
   //       <ul className="space-y-3">
   //         {displayPoints.map((point, idx) => (
   //           <li key={idx} className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/point text-left">
-  //             <CheckCircle2 className="w-4 h-4 text-brand-green/50 mt-0.5 group-hover/point:text-brand-green transition-colors flex-shrink-0" />
+  //             <CheckCircle2 className="w-4 h-4 text-brand-blue/50 mt-0.5 group-hover/point:text-brand-blue transition-colors flex-shrink-0" />
   //             <span>{point}</span>
   //           </li>
   //         ))}
