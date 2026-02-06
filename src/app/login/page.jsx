@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import Container from "@/components/ui/Container";
 import Image from "next/image";
 import LoginForm from "@/components/Forms/LoginForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
-const LoginPage = () => {
+const LoginContent = () => {
   const { user, userInfo } = useAuth();
   const router = useRouter();
 
@@ -112,6 +112,14 @@ const LoginPage = () => {
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-brand-blue/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
     </main>
+  );
+};
+
+const LoginPage = () => {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+      <LoginContent />
+    </Suspense>
   );
 };
 

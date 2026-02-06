@@ -1,6 +1,7 @@
 import PackagesRegionClient from "@/components/Packages/PackagesRegionClient";
 import { getAllDocuments, getRegionDocumentBySlug } from "@/utils/firebase";
 import { COLLECTIONS } from "@/config";
+import { Suspense } from "react";
 
 export const dynamic = 'force-dynamic'; // Bypass server-side cache entirely for this page
 
@@ -106,5 +107,9 @@ export default async function PackagesRegionPage({ params }) {
     console.error("Error fetching initial region data:", error);
   }
 
-  return <PackagesRegionClient initialRegionData={initialRegionData} />;
+  return (
+    <Suspense fallback={<div>Loading packages...</div>}>
+      <PackagesRegionClient initialRegionData={initialRegionData} />
+    </Suspense>
+  );
 }

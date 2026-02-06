@@ -92,6 +92,8 @@ export default function FactsheetClient({ regionSlug }) {
     heroTitle: dynamicData.hero?.title,
     heroSubtitle: dynamicData.hero?.subtitle,
     heroImage: getImageUrl(dynamicData.hero?.image),
+    desktopBanner: getImageUrl(dynamicData.hero?.desktopBannerImage),
+    mobileBanner: getImageUrl(dynamicData.hero?.mobileBannerImage),
     essentials: dynamicData.essentials?.map(item => ({
       ...item,
       icon: iconMap[item.icon] || Info
@@ -247,16 +249,33 @@ export default function FactsheetClient({ regionSlug }) {
       {/* Hero Section */}
       <div ref={heroRef} className="relative min-h-[60vh] md:min-h-[80vh] flex flex-col justify-end overflow-hidden">
         {/* Cinematic Background Image */}
-        {currentData.heroImage ? (
+        {(currentData.desktopBanner || currentData.mobileBanner || currentData.heroImage) ? (
           <div className="absolute inset-0 z-0">
-             <Image 
-                src={currentData.heroImage} 
-                alt={currentData.heroTitle}
-                fill
-                priority
-                className="object-cover"
-                unoptimized
-             />
+             {/* Desktop Banner */}
+             <div className={cn("absolute inset-0", currentData.mobileBanner ? "hidden md:block" : "block")}>
+               <Image 
+                  src={currentData.desktopBanner || currentData.heroImage} 
+                  alt={currentData.heroTitle}
+                  fill
+                  priority
+                  className="object-cover"
+                  unoptimized
+               />
+             </div>
+             
+             {/* Mobile Banner */}
+             {currentData.mobileBanner && (
+               <div className="absolute inset-0 md:hidden block">
+                 <Image 
+                    src={currentData.mobileBanner} 
+                    alt={currentData.heroTitle}
+                    fill
+                    priority
+                    className="object-cover"
+                    unoptimized
+                 />
+               </div>
+             )}
              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
           </div>
         ) : (
@@ -704,9 +723,9 @@ export default function FactsheetClient({ regionSlug }) {
                           <h4 className="font-black text-white text-lg md:text-xl mb-1 drop-shadow-lg">
                             {food.name}
                           </h4>
-                          <p className="text-white/80 text-xs md:text-sm font-medium leading-tight">
+                          {/* <p className="text-white/80 text-xs md:text-sm font-medium leading-tight">
                             {food.desc}
-                          </p>
+                          </p> */}
                         </div>
                       </div>
                     ))}
