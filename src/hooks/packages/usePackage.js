@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getOfferByPackageId,
@@ -44,34 +45,40 @@ export function usePackage(slugOrId, options = {}) {
     enabled: !!packageData?.id,
   });
 
-  let enrichedPackageData = packageData;
+  const enrichedPackageData = React.useMemo(() => {
+    if (!packageData) return null;
 
-  if (regionData?.faq) {
-    enrichedPackageData = {
-      ...enrichedPackageData,
-      faq: regionData.faq, // Use region FAQ if available, fallback to package FAQ
-    };
-  }
+    let enriched = { ...packageData };
 
-  if (offerData) {
-    const offerPrice =
-      offerData.discountType === "fixed"
-        ? Math.round(enrichedPackageData.basePrice - offerData.discountValue)
-        : Math.round(
-            enrichedPackageData.basePrice -
-              enrichedPackageData.basePrice * (offerData.discountValue / 100)
-          );
+    if (regionData?.faq) {
+      enriched = {
+        ...enriched,
+        faq: regionData.faq,
+      };
+    }
 
-    const savingsAmount = enrichedPackageData.basePrice - offerPrice;
+    if (offerData) {
+      const offerPrice =
+        offerData.discountType === "fixed"
+          ? Math.round(enriched.basePrice - offerData.discountValue)
+          : Math.round(
+              enriched.basePrice -
+                enriched.basePrice * (offerData.discountValue / 100)
+            );
 
-    enrichedPackageData = {
-      ...enrichedPackageData,
-      offer: {
-        offerPrice,
-        savingsAmount,
-      },
-    };
-  }
+      const savingsAmount = enriched.basePrice - offerPrice;
+
+      enriched = {
+        ...enriched,
+        offer: {
+          offerPrice,
+          savingsAmount,
+        },
+      };
+    }
+
+    return enriched;
+  }, [packageData, regionData?.faq, offerData]);
 
   return {
     packageData: enrichedPackageData,

@@ -26,7 +26,7 @@ const WhyBayardVacations = () => {
     },
     {
       icon: Users,
-      value: "15K+",
+      value: "25K+",
       label: "Happy Travelers",
     },
     {

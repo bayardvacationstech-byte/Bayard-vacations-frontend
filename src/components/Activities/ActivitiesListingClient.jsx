@@ -367,7 +367,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
           </div>
         </div>
 
-        <div className="sticky top-14 md:top-[72px] z-[50] transition-all duration-300 mb-6 md:mb-8">
+        <div className="sticky top-24 md:top-[72px] z-[50] transition-all duration-300 mb-6 md:mb-8">
           <div className="bg-white/90 backdrop-blur-md px-6 py-2.5 md:py-3 rounded-[2.5rem] shadow-xl border border-slate-200/60">
             {/* Filter Toolbar */}
             <div className="bg-transparent">
@@ -595,11 +595,9 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                       <span className="px-2 py-0.5 md:px-3 md:py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedLocationType}</span>
                     )}
                     {selectedCategory !== "all" && (
-                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-green/10 text-brand-green rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCategory}</span>
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue/10 text-brand-blue rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCategory}</span>
                     )}
-                    {selectedRegion !== "all" && (
                       <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-800 text-white rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedRegion}</span>
-                    )}
                     {selectedCity !== "all" && (
                       <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue text-white rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCity}</span>
                     )}
@@ -630,7 +628,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
         {activitiesLoading ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <Loader2 className="w-12 h-12 text-brand-green animate-spin mx-auto mb-4" />
+              <Loader2 className="w-12 h-12 text-brand-blue animate-spin mx-auto mb-4" />
               <p className="text-lg text-slate-600 font-medium">Loading activities...</p>
             </div>
           </div>
@@ -662,7 +660,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                     regionName: activity.regionName,
                     regionSlug: activity.regionSlug
                   }}
-                  hoverGradient="from-brand-green/95 to-emerald-900"
+                  hoverGradient="from-brand-blue/95 to-blue-900"
                   ctaLabel="Learn More"
                   onCtaClick={() => {
                     const rSlug = resolveRegionSlug(activity);
@@ -715,7 +713,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                           "w-10 h-10 rounded-xl font-bold transition-all duration-200",
                           currentPage === pageNumber 
                             ? "bg-brand-green hover:bg-brand-green/90 text-white shadow-md scale-105" 
-                            : "border-slate-200 text-slate-500 hover:border-brand-green/30 hover:text-brand-green bg-white"
+                            : "border-slate-200 text-slate-500 hover:border-brand-blue/30 hover:text-brand-blue bg-white"
                         )}
                       >
                         {pageNumber}

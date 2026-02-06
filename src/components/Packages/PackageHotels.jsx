@@ -105,7 +105,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
     };
 
     fetchHotelDetails();
-  }, [packageData]);
+  }, [packageData?.id, packageData?.hotelDetails]);
 
   // Sync with external selection
   useEffect(() => {
@@ -150,6 +150,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
           src={hotel.images?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800"}
           alt={hotel.name}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition-transform duration-1000 group-hover:scale-110"
         />
         {/* Premium Badge */}

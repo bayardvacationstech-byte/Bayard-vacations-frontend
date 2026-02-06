@@ -4,6 +4,7 @@ import Container from "@/components/ui/Container";
 import { Globe, Heart, Shield, Award, Users, TrendingUp, Check, Sparkles, Compass, Star, MapPin, Plane } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import TeamBento from "@/components/TeamBento";
+import { cn } from "@/lib/utils";
 
 export default function AboutPage() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -48,8 +49,8 @@ export default function AboutPage() {
             {/* Left Content */}
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/20 backdrop-blur-sm border border-brand-green/30 mb-4 md:mb-6">
-                <Sparkles className="w-4 h-4 text-brand-green" />
-                <span className="text-xs md:text-sm font-bold text-brand-green uppercase tracking-wider">Est. 2010</span>
+                <Sparkles className="w-4 h-4 text-brand-blue" />
+                <span className="text-xs md:text-sm font-bold text-brand-blue uppercase tracking-wider">Est. 2017</span>
               </div>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6 leading-tight">
@@ -66,15 +67,15 @@ export default function AboutPage() {
               {/* Quick Stats - Responsive */}
               <div className="flex flex-wrap gap-3 md:gap-4">
                 {[
-                  { label: '15+ Years', icon: Star },
+                  { label: '8+ Years', icon: Star },
                   { label: '100+ Destinations', icon: Globe },
-                  { label: '5000+ Travelers', icon: Users }
+                  { label: '25K+ Travelers', icon: Users }
                 ].map((stat, i) => (
                   <div 
                     key={i} 
                     className="flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all group"
                   >
-                    <stat.icon className="w-4 h-4 md:w-5 md:h-5 text-brand-green group-hover:scale-110 transition-transform" />
+                    <stat.icon className="w-4 h-4 md:w-5 md:h-5 text-brand-blue group-hover:scale-110 transition-transform" />
                     <span className="text-xs md:text-sm font-bold text-white">{stat.label}</span>
                   </div>
                 ))}
@@ -128,12 +129,11 @@ export default function AboutPage() {
             <div ref={timelineRef} className="overflow-x-auto pb-8 scrollbar-hide">
               <div className="flex gap-8 min-w-max px-4">
                 {[
-                  { year: '2010', title: 'The Beginning', desc: 'Founded with a dream to transform travel', icon: Compass },
-                  { year: '2013', title: 'Going Global', desc: 'Expanded to 50+ destinations worldwide', icon: Globe },
-                  { year: '2016', title: 'Award Winner', desc: 'Best Travel Company recognition', icon: Award },
-                  { year: '2019', title: '1000 Travelers', desc: 'Milestone of happy customers reached', icon: Users },
+                  { year: '2017', title: 'The Beginning', desc: 'Founded with a dream to transform travel', icon: Compass },
+                  { year: '2019', title: '25K+ Travelers', desc: 'Milestone of happy customers reached', icon: Users },
+                  { year: '2020', title: 'Going Global', desc: 'Expanded to 50+ destinations worldwide', icon: Globe },
                   { year: '2022', title: 'Tech Innovation', desc: 'Launched AI-powered trip planner', icon: Sparkles },
-                  { year: '2024', title: 'Today', desc: 'Leading the future of travel', icon: Star }
+                  { year: '2026', title: 'AI-First Future', desc: 'Pioneering the next generation of AI-powered travel experiences', icon: Sparkles }
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -141,7 +141,10 @@ export default function AboutPage() {
                       <div className="relative">
                         {/* Year Badge */}
                         <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                          <span className="text-2xl font-black text-white">{item.year}</span>
+                          <span className={cn(
+                            "font-black text-white text-center px-2",
+                            item.year.length > 5 ? "text-lg leading-tight" : "text-2xl"
+                          )}>{item.year}</span>
                         </div>
 
                         {/* Card */}
@@ -328,7 +331,7 @@ export default function AboutPage() {
             <div className="space-y-8">
               <div>
                 <div className="inline-block px-4 py-2 bg-brand-green/10 rounded-full mb-6 border border-brand-green/20">
-                  <span className="text-brand-green font-bold uppercase tracking-wider text-sm">Start Your Journey</span>
+                  <span className="text-brand-blue font-bold uppercase tracking-wider text-sm">Start Your Journey</span>
                 </div>
                 <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-6">
                   Your Next 
@@ -344,12 +347,12 @@ export default function AboutPage() {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { value: '10K+', label: 'Happy Travelers' },
+                  { value: '25K+', label: 'Happy Travelers' },
                   { value: '50+', label: 'Destinations' },
-                  { value: '15+', label: 'Years Experience' }
+                  { value: '8+', label: 'Years Experience' }
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="text-2xl md:text-3xl font-black text-brand-green mb-1">{stat.value}</div>
+                    <div className="text-2xl md:text-3xl font-black text-brand-blue mb-1">{stat.value}</div>
                     <div className="text-xs text-slate-600 font-semibold">{stat.label}</div>
                   </div>
                 ))}
@@ -370,7 +373,7 @@ export default function AboutPage() {
 
                 <div className="space-y-4">
                   <a
-                    href="/packages"
+                    href="/explore"
                     className="group w-full px-8 py-4 bg-gradient-to-r from-brand-blue to-purple-600 text-white font-bold rounded-full hover:shadow-xl hover:shadow-brand-blue/50 transition-all flex items-center justify-center gap-3"
                   >
                     <Plane className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -387,7 +390,7 @@ export default function AboutPage() {
 
                 <div className="mt-6 pt-6 border-t border-slate-700 text-center">
                   <p className="text-sm text-slate-400">
-                    📞 <span className="font-semibold text-white">+1 (555) 123-4567</span> • Available 24/7
+                    📞 <span className="font-semibold text-white">063631 17421</span> • Available 24/7
                   </p>
                 </div>
               </div>

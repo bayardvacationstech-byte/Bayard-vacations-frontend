@@ -13,6 +13,8 @@ const nextConfig = {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
 
+  productionBrowserSourceMaps: true,
+
   images: {
     // ✅ Netlify supports optimized images with dynamic hosting
     formats: ["image/webp", "image/avif"],

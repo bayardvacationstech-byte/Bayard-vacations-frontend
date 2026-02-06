@@ -111,15 +111,15 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-4">
-                <NavigationIcon className="w-4 h-4 text-brand-green" />
-                <span className="text-sm font-bold text-brand-green uppercase tracking-wider">
+                <NavigationIcon className="w-4 h-4 text-brand-blue" />
+                <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">
                   Cities to Explore
                 </span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
                 <span className="hidden sm:inline">Iconic Cities in </span>
                 <span className="inline sm:hidden">Cities in </span>
-                <span className="text-brand-green capitalize">{regionName}</span>
+                <span className="text-brand-blue capitalize">{regionName}</span>
               </h2>
               <p className="hidden sm:block text-xl text-slate-600 truncate md:whitespace-normal">
                 Adventure awaits! Discover exciting cities and unforgettable experiences

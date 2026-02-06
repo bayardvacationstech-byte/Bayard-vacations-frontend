@@ -172,7 +172,7 @@ const EmailUpdate = ({ callbackUrl }) => {
               className="rounded-xl border-[#424242] p-4"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="johndoe@example.com"
+              placeholder="Enter your email"
               required
             />
           </div>

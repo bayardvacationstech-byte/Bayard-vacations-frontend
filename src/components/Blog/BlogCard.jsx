@@ -15,6 +15,7 @@ const BlogCard = ({ blog }) => {
           src={blog.image || blog.featuredImage || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80"}
           alt={blog.title}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute top-4 left-4">

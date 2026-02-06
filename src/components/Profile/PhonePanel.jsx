@@ -75,17 +75,6 @@ const PhonePanel = () => {
     setError("");
     setLoading(true);
 
-    // Mock bypass for localhost
-    const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-    if (isLocal) {
-      setTimeout(() => {
-        setStep("new-otp");
-        setLoading(false);
-        toast({ title: "Mock OTP Sent", description: "Verification code sent to " + phoneNumber });
-      }, 800);
-      return;
-    }
-
     try {
       const lastSignIn = new Date(user.metadata.lastSignInTime).getTime();
       const now = Date.now();
@@ -192,16 +181,6 @@ const PhonePanel = () => {
     setError("");
     setLoading(true);
 
-    // Mock bypass
-    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-      setTimeout(() => {
-        setStep("completed");
-        setLoading(false);
-        toast({ title: "Success", description: "Phone number updated (Mock)" });
-      }, 800);
-      return;
-    }
-
     try {
       const credential = PhoneAuthProvider.credential(
         newVerificationId,
@@ -266,7 +245,7 @@ const PhonePanel = () => {
                 <Phone className="size-5" />
               </div>
               <div>
-                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Contact
                 </h5>
                 <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Phone Number</h4>
@@ -307,7 +286,7 @@ const PhonePanel = () => {
             {step === "phone" && (
               <form onSubmit={handlePhoneSubmit} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Phone Number</label>
+                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Phone Number</label>
                   <div className="flex items-center gap-3">
                     <div className="bg-slate-50 border border-slate-100 rounded-2xl px-4 h-14 flex items-center text-sm font-black text-slate-400">+91</div>
                     <Input
@@ -340,7 +319,7 @@ const PhonePanel = () => {
             {(step === "old-otp" || step === "new-otp") && (
               <form onSubmit={step === "old-otp" ? handleOldOtpSubmit : handleNewOtpSubmit} className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Verification Code</label>
+                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Verification Code</label>
                   <Input
                     type="text"
                     className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all text-center text-2xl tracking-[0.5em] font-black"

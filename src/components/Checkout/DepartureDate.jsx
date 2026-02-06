@@ -71,7 +71,7 @@ const DepartureDate = () => {
 
   return (
     <div className="relative grid min-h-10 gap-4 rounded-2xl border border-solid border-[#D9D9D9] p-6 pt-10">
-      <h5 className="absolute left-6 top-0 inline-block -translate-y-1/2 bg-white px-3 font-nord font-bold uppercase text-brand-blue">
+      <h5 className="absolute left-6 top-0 inline-block -translate-y-1/2 bg-white px-3 font-bold uppercase text-brand-blue">
         departure date
       </h5>
       <div className="flex gap-5">

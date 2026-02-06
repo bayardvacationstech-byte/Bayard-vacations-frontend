@@ -27,12 +27,12 @@ const navbarData = [
     hasDropdown: true,
     dropdownContent: (props) => <ExplorePackagesContent {...props} />,
   },
-  {
+  /* {
     id: "nav-activities",
     title: "Activities",
     hasDropdown: false,
     href: "/activities",
-  },
+  }, */
   {
     id: "nav-about-us",
     title: "About Us",

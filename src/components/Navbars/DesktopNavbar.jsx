@@ -19,6 +19,7 @@ import { Input } from "../ui/input";
 
 import { useDebounce } from "@/hooks/useDebounce";
 import { TRENDING_PACKAGES, SEARCH_API } from "@/config";
+import { searchPackages } from "@/utils/firebase";
 
 const DesktopNavbar = () => {
   const inputRef = useRef(null);
@@ -28,7 +29,11 @@ const DesktopNavbar = () => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isHoverDisabled, setIsHoverDisabled] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({
+    packages: [],
+    regions: [],
+    packagesByRegion: []
+  });
   const [isLoading, setIsLoading] = useState(false);
   const debouncedSearch = useDebounce(searchTerm, 500);
   const pathname = usePathname();
@@ -70,16 +75,20 @@ const DesktopNavbar = () => {
       if (debouncedSearch.trim() && debouncedSearch.length > 1) {
         setIsLoading(true);
         try {
-          const response = await SEARCH_API.get("/", {
-            params: { q: debouncedSearch },
+          // Switching to internal search exclusively due to external API timeouts
+          const data = await searchPackages(debouncedSearch);
+          setSearchResults({
+            packages: data.packages || [],
+            regions: data.regions || [],
+            packagesByRegion: data.packagesByRegion || []
           });
-          setSearchResults(response.data || []);
         } catch (error) {
-          setSearchResults([]);
+          console.error("Internal Search Error in Header:", error);
+          setSearchResults({ packages: [], regions: [], packagesByRegion: [] });
         }
         setIsLoading(false);
       } else {
-        setSearchResults([]);
+        setSearchResults({ packages: [], regions: [], packagesByRegion: [] });
       }
     };
 
@@ -258,7 +267,7 @@ const DesktopNavbar = () => {
                   height={36}
                   alt="Bayard Vacations Logo"
                   src={isHeaderFixed ? "/img/logo.svg" : "/media/logo.svg"}
-                  className="w-28 lg:w-32 xl:w-36 2xl:w-40 transition-all duration-300"
+                  className="w-28 lg:w-32 xl:w-36 2xl:w-40 h-auto transition-all duration-300"
                 />
               </Link>
               <ul className="mx-auto flex items-center gap-2 lg:gap-3 xl:gap-5 2xl:gap-8 transition-all duration-300">

@@ -167,7 +167,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
   return (
     <div className="bg-white min-h-screen relative" ref={listingRef}>
       {/* 1. CONTROL CENTER - Sticky Navigation */}
-      <div className="sticky top-14 md:top-[72px] z-40 transition-all duration-300">
+      <div className="sticky top-24 md:top-[72px] z-40 transition-all duration-300">
         <Container className="pt-1 pb-3 md:pt-1.5 md:pb-4">
           <div className="bg-white/95 backdrop-blur-xl border border-slate-200/60 rounded-[2rem] shadow-lg px-4 py-2 md:px-6 md:py-2.5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">

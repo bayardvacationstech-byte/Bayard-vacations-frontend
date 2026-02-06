@@ -40,7 +40,7 @@ const LoginSlider = () => {
       {loginSliderData.map((item) => (
         <SwiperSlide key={item.id}>
           <div className="text-white">
-            <h4 className="mb-4 font-nord text-3xl font-bold uppercase">
+            <h4 className="mb-4 text-3xl font-bold uppercase">
               {item.title}
             </h4>
             <p>{item.description}</p>

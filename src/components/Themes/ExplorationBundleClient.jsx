@@ -75,20 +75,40 @@ export default function ExplorationBundleClient() {
   } = usePackagesByTheme("exploration-bundle");
 
   const adventurePackages = useMemo(() => {
-    if (!allThemePackages) return { international: [], domestic: [] };
+    let pkgSource = [];
+    if (Array.isArray(allThemePackages) && allThemePackages.length > 0) {
+      pkgSource = allThemePackages;
+    }
+
+    // Safeguard
+    if (!Array.isArray(pkgSource)) return { international: [], domestic: [] };
     
     // Deduplicate by package ID
     const uniqueMap = new Map();
-    allThemePackages.forEach(pkg => {
-      if (pkg.id && !uniqueMap.has(pkg.id)) {
-        uniqueMap.set(pkg.id, pkg);
-      }
-    });
+    try {
+      pkgSource.forEach(pkg => {
+        if (pkg && pkg.id && !uniqueMap.has(pkg.id)) {
+          uniqueMap.set(pkg.id, pkg);
+        }
+      });
+    } catch (e) {
+      console.error("Error processing packages map:", e);
+      return { international: [], domestic: [] };
+    }
     const uniquePackages = Array.from(uniqueMap.values());
     
+    // Sort: Non-zero prices first
+    const sorted = [...uniquePackages].sort((a, b) => {
+      const priceA = (a.offerPrice > 0 ? a.offerPrice : a.basePrice) || 0;
+      const priceB = (b.offerPrice > 0 ? b.offerPrice : b.basePrice) || 0;
+      if (priceA > 0 && priceB === 0) return -1;
+      if (priceA === 0 && priceB > 0) return 1;
+      return 0;
+    });
+
     return {
-      international: uniquePackages.filter(pkg => !pkg.domestic),
-      domestic: uniquePackages.filter(pkg => pkg.domestic)
+      international: sorted.filter(pkg => !pkg.domestic),
+      domestic: sorted.filter(pkg => pkg.domestic)
     };
   }, [allThemePackages]);
 
@@ -97,7 +117,16 @@ export default function ExplorationBundleClient() {
   
   const paginatedPackages = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return currentPackages.slice(start, start + itemsPerPage);
+    const paginated = currentPackages.slice(start, start + itemsPerPage);
+
+    // Logic: First page should not show 0 price packages
+    if (currentPage === 1) {
+      return paginated.filter(pkg => {
+        const price = (pkg.offerPrice > 0 ? pkg.offerPrice : pkg.basePrice) || 0;
+        return price > 0;
+      });
+    }
+    return paginated;
   }, [currentPackages, currentPage, itemsPerPage]);
 
   if (!mounted) return null;
@@ -120,7 +149,7 @@ export default function ExplorationBundleClient() {
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
-            style={{ willChange: "transform" }}
+            style={{ willChange: "transform", backfaceVisibility: "hidden" }}
             className="w-full h-full"
           >
             <Compass className="w-full h-full text-[#e76f51]/5" />
@@ -268,7 +297,7 @@ export default function ExplorationBundleClient() {
 
 
       {/* Filter Tabs Section */}
-      <section id="packages" className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-20 z-40 shadow-sm">
+      <section id="packages" className="py-4 md:py-6 bg-white border-b-2 border-stone-100 sticky top-24 z-40 shadow-sm gpu-accelerated">
         <Container>
           <div className="flex flex-wrap gap-4 justify-center">
             <button 
@@ -300,7 +329,7 @@ export default function ExplorationBundleClient() {
       </section>
 
       {/* Main Content / Grid */}
-      <section id="bundles" className="section-padding map-texture overflow-hidden" ref={packagesRef}>
+      <section id="bundles" className="section-padding map-texture overflow-hidden gpu-accelerated" ref={packagesRef}>
         <Container>
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-5xl md:text-7xl font-black text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
@@ -320,6 +349,7 @@ export default function ExplorationBundleClient() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    style={{ backfaceVisibility: "hidden", transform: "translateZ(0)" }}
                   >
                     <ThemedPackageCard
                       theme="exploration"
@@ -466,10 +496,12 @@ export default function ExplorationBundleClient() {
                 linear-gradient(rgba(231, 111, 111, 0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(231, 111, 111, 0.02) 1px, transparent 1px);
             background-size: 40px 40px;
+            transform: translateZ(0);
         }
         
         .map-texture {
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='11' cy='18' r='7' fill='%23e76f51' fill-opacity='0.03'/%3E%3Ccircle cx='59' cy='43' r='7' fill='%23e76f51' fill-opacity='0.03'/%3E%3C/svg%3E");
+            transform: translateZ(0);
         }
 
         .text-shadow-adventure {
@@ -478,6 +510,7 @@ export default function ExplorationBundleClient() {
 
         .perspective-1000 {
             perspective: 1000px;
+            transform-style: preserve-3d;
         }
       `}</style>
     </div>

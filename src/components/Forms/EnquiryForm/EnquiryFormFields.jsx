@@ -279,7 +279,7 @@ export default function EnquiryFormFields({
                 value={formData.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder={isInspiration && !isSection ? "Your Name" : "John Doe"}
+                placeholder={isInspiration && !isSection ? "Your Name" : "Enter your name"}
                 required
               />
               {touched.name && errors.name && (
@@ -300,7 +300,7 @@ export default function EnquiryFormFields({
                 value={formData.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder={isInspiration && !isSection ? "Email Address" : "johndoe@example.com"}
+                placeholder={isInspiration && !isSection ? "Email Address" : "Enter your email"}
                 required={!isFieldHidden("email")}
               />
               {touched.email && errors.email && (
@@ -324,7 +324,7 @@ export default function EnquiryFormFields({
                   value={formData.contactNumber}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="+91 9991110000"
+                  placeholder="Enter your number"
                   required
                 />
               {touched.contactNumber && errors.contactNumber && (
@@ -347,7 +347,7 @@ export default function EnquiryFormFields({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   maxLength={10}
-                  placeholder={isInspiration && !isSection ? "Phone Number" : "9876543210"}
+                  placeholder={isInspiration && !isSection ? "Phone Number" : "Enter your number"}
                   required
                 />
               {touched.phone && errors.phone && (
@@ -561,7 +561,7 @@ export default function EnquiryFormFields({
               name={formType === "lead" ? "message" : "description"}
               value={formType === "lead" ? formData.message : formData.description}
               onChange={handleChange}
-              placeholder={isSection ? "Tell us about your dream destination..." : isInline ? "Any specific requirements or comments?" : "Let us know more about what you want?"}
+              placeholder={isSection ? "Tell us about your dream destination..." : isInline ? "Any specific requirements or comments?" : "Enter your message"}
               required={variant === "inline" && formType === "lead"}
             />
           </div>
@@ -583,7 +583,7 @@ export default function EnquiryFormFields({
 
       {isNewsletter && (
          <p className="text-[10px] text-slate-500 flex items-center gap-1.5 justify-center lg:justify-start mt-3">
-         <svg className="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+         <svg className="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
          </svg>
          No spam, unsubscribe anytime.

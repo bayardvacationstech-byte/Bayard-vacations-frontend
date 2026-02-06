@@ -58,7 +58,7 @@ export default function Categories() {
     <Container>
       {/* Header section */}
       <div className="section-header-margin flex items-center justify-between">
-        <h2 className="font-nord text-4xl font-black text-brand-blue">
+        <h2 className="text-4xl font-black text-brand-blue">
           <span className="font-black">Themed Escapes </span>{" "}
           <span className="font-light text-[#798290]">Based Exploration</span>
         </h2>

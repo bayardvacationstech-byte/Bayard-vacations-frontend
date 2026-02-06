@@ -146,7 +146,7 @@ const MobileAdBanner = ({ bannerData }) => {
 
       {/* Content Section */}
       <div className="relative z-10 px-6 py-8 text-center">
-        <h1 className="text-white text-4xl font-[800] leading-tight mb-2 drop-shadow-lg">
+        <h2 className="text-white text-4xl font-[800] leading-tight mb-2 drop-shadow-lg">
           {content.title.split(' ').map((word, i) => (
             <React.Fragment key={i}>
               {word === 'Vacations' ? <span className="text-[#fcd34d]">{word}</span> : word}
@@ -154,7 +154,7 @@ const MobileAdBanner = ({ bannerData }) => {
               {i === 1 ? <br /> : ''}
             </React.Fragment>
           ))}
-        </h1>
+        </h2>
         <p className="text-white/85 text-[15px] leading-relaxed mb-8 px-2">
           {content.subtitle}
         </p>

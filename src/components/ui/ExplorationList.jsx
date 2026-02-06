@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import { usePackagesByTheme } from "@/hooks/packages";
 import { useSearchParams } from "next/navigation";
 import PackageCard from "./PackageCard";
@@ -28,8 +28,24 @@ const ExplorationList = ({ theme }) => {
   const searchParams = useSearchParams();
   const isDomestic = searchParams.get("domestic") === "true";
 
-  const themePackages = (packages || [])
-    .filter((pkg) => pkg.domestic === isDomestic);
+  const sortedPackages = useMemo(() => {
+    if (!packages) return [];
+    
+    // Filter by region first
+    const filtered = packages.filter((pkg) => pkg.domestic === isDomestic);
+    
+    // Logic: Non-zero prices first, then 0 prices
+    return [...filtered].sort((a, b) => {
+      const priceA = (a.offerPrice > 0 ? a.offerPrice : a.basePrice) || 0;
+      const priceB = (b.offerPrice > 0 ? b.offerPrice : b.basePrice) || 0;
+      
+      if (priceA > 0 && priceB === 0) return -1;
+      if (priceA === 0 && priceB > 0) return 1;
+      return 0; // Maintain relative order if both or neither have prices
+    });
+  }, [packages, isDomestic]);
+
+  const themePackages = sortedPackages;
 
   // Map slug to theme loader key
   const getThemeLoaderKey = (slug) => {

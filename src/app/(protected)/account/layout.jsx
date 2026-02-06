@@ -38,7 +38,7 @@ const AccountLayout = ({ children }) => {
           <Container>
             <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-700">
               <span className="text-white/50 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Personal Dashboard</span>
-              <h1 className="text-4xl md:text-6xl font-nord font-black text-white uppercase tracking-tight leading-none">
+              <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight leading-none">
                 Hi, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">{userInfo.displayName || "Traveler"}</span>
               </h1>
             </div>

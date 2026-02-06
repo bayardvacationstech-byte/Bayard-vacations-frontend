@@ -24,17 +24,22 @@ export default function ThemeHighlights({
 }) {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Hook Calls ---------------------------------------------------------------
-  const eliteEscapeData = usePackagesByTheme("elite-escape", initialEliteEscapePackages);
-  const soloExpeditionData = usePackagesByTheme("solo-expedition", initialSoloExpeditionPackages);
-  const familyFunventureData = usePackagesByTheme("family-funventure", initialFamilyFunventurePackages);
-  const groupAdventuresData = usePackagesByTheme("group-adventures", initialGroupAdventuresPackages);
-  const religiousRetreatData = usePackagesByTheme("religious-retreat", initialReligiousRetreatPackages);
-  const relaxRejuvenateData = usePackagesByTheme("relax-rejuvenate", initialRelaxRejuvenatePackages);
-  const explorationBundleData = usePackagesByTheme("exploration-bundle", initialExplorationBundlePackages);
-  const educationalData = usePackagesByTheme("educational", initialEducationalPackages);
-  const romanticGetawaysData = usePackagesByTheme("romantic-getaways", initialRomanticGetawaysPackages);
+  const eliteEscapeData = usePackagesByTheme("elite-escape", initialEliteEscapePackages, 20);
+  const soloExpeditionData = usePackagesByTheme("solo-expedition", initialSoloExpeditionPackages, 20);
+  const familyFunventureData = usePackagesByTheme("family-funventure", initialFamilyFunventurePackages, 20);
+  const groupAdventuresData = usePackagesByTheme("group-adventures", initialGroupAdventuresPackages, 20);
+  const religiousRetreatData = usePackagesByTheme("religious-retreat", initialReligiousRetreatPackages, 20);
+  const relaxRejuvenateData = usePackagesByTheme("relax-rejuvenate", initialRelaxRejuvenatePackages, 20);
+  const explorationBundleData = usePackagesByTheme("exploration-bundle", initialExplorationBundlePackages, 20);
+  const educationalData = usePackagesByTheme("educational", initialEducationalPackages, 20);
+  const romanticGetawaysData = usePackagesByTheme("romantic-getaways", initialRomanticGetawaysPackages, 20);
 
   const themePackagesMap = {
     "elite-escape": eliteEscapeData,
@@ -124,7 +129,7 @@ export default function ThemeHighlights({
         </div>
 
         {/* Theme Filter Buttons */}
-        <div className="mb-8 flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="mb-8 flex flex-wrap sm:flex-nowrap gap-2 sm:overflow-x-auto pb-4 scrollbar-hide">
           {themeMapData.map((theme, index) => (
             <button
               key={theme.themeSlug}
@@ -133,9 +138,9 @@ export default function ThemeHighlights({
                 setIsAutoPlay(false);
               }}
               className={cn(
-                "rounded-full border text-sm font-bold px-6 py-2.5 flex-shrink-0 transition-all duration-300 whitespace-nowrap",
+                "rounded-full border text-[11px] sm:text-sm font-black sm:font-bold px-3.5 sm:px-6 py-1.5 sm:py-2.5 flex-shrink-0 transition-all duration-300 whitespace-nowrap",
                 currentThemeIndex === index
-                  ? "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 border-transparent hover:opacity-90"
+                  ? "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-md sm:shadow-lg text-slate-900 border-transparent hover:opacity-90"
                   : "border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
               )}
             >
@@ -178,7 +183,7 @@ export default function ThemeHighlights({
                   <div
                     key={`text-${currentThemeIndex}`}
                   >
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold font-nord text-white mb-3 sm:mb-4 drop-shadow-lg leading-tight">
+                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 drop-shadow-lg leading-tight">
                         {themeData?.title || currentTheme?.themeText}
                     </h3>
                     <p className="text-base sm:text-lg md:text-xl font-damion text-slate-100 drop-shadow-md mb-6 sm:mb-8">
@@ -235,7 +240,7 @@ export default function ThemeHighlights({
                 key={currentThemeIndex}
                 className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start"
               >
-                {(currentThemeLoading && packages.length === 0) ? (
+                {(!isMounted || (currentThemeLoading && packages.length === 0)) ? (
                   Array.from({ length: 4 }).map((_, i) => (
                     <div
                       key={`skeleton-${i}`}
@@ -275,8 +280,8 @@ export default function ThemeHighlights({
                             <p className="text-white/80 text-[10px] sm:text-sm line-clamp-1">
                               {pkg.packageTitle}
                             </p>
-                            <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto">
-                              ₹{formatPrice(pkg.basePrice)}
+                            <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto uppercase tracking-tighter">
+                              {pkg.basePrice > 0 ? `₹${formatPrice(pkg.basePrice)}` : "On Request"}
                             </span>
                           </div>
                         </div>

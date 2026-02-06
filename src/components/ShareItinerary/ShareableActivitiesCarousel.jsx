@@ -91,11 +91,11 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
         {/* Section Header */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 rounded-full mb-4">
-            <MapPin className="w-5 h-5 text-brand-green" />
-            <span className="text-sm font-bold text-brand-green uppercase tracking-wider">Explore More</span>
+            <MapPin className="w-5 h-5 text-brand-blue" />
+            <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">Explore More</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
-            Recommended <span className="text-brand-green">Activities</span>
+            Recommended <span className="text-brand-blue">Activities</span>
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto">
             Enhance your trip with these hand-picked experiences and adventures
@@ -150,11 +150,11 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
                   {/* Activity Content */}
                   <div className="p-4 md:p-6">
                     <div className="flex items-start gap-2 mb-1.5 md:mb-3">
-                      <MapPin className="w-4 h-4 text-brand-green shrink-0 mt-1" />
+                      <MapPin className="w-4 h-4 text-brand-blue shrink-0 mt-1" />
                       <span className="text-xs text-slate-500 font-medium">{activity.location}</span>
                     </div>
 
-                    <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-brand-green transition-colors line-clamp-2">
+                    <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2 md:mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">
                       {activity.title}
                     </h3>
 
@@ -195,7 +195,7 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
                       </div>
                     </div>
 
-                    <button className="hidden md:block w-full px-4 py-2.5 bg-brand-green/10 hover:bg-brand-green text-brand-green hover:text-white rounded-xl font-bold transition-all duration-300 text-sm">
+                    <button className="hidden md:block w-full px-4 py-2.5 bg-brand-blue/10 hover:bg-brand-blue text-brand-blue hover:text-white rounded-xl font-bold transition-all duration-300 text-sm">
                       Learn More
                     </button>
                   </div>
@@ -205,10 +205,10 @@ const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
           </Swiper>
 
           {/* Custom Navigation Buttons */}
-          <button className="activities-swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          <button className="activities-swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-blue hover:bg-brand-blue hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
             <ChevronLeft className="w-6 h-6" />
           </button>
-          <button className="activities-swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          <button className="activities-swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-blue hover:bg-brand-blue hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
             <ChevronRight className="w-6 h-6" />
           </button>
         </div>

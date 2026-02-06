@@ -14,6 +14,7 @@ import {
   getAllDocuments,
   sanitizeDocumentData,
   getCuratedPackages,
+  batchResolveCardReferences,
 } from "@/utils/firebase";
 import { doc, getDocFromServer, getDocsFromServer, limit, collection, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
@@ -115,8 +116,9 @@ export const getGroupDeparturePackages = async () => {
     // Use all published group adventure packages
     const groupDeparturePackages = groupAdventuresPackages
       .filter((item) => {
-        const images = Array.isArray(item.cardImages) ? item.cardImages : [];
-        return images.length > 0;
+        // const images = Array.isArray(item.cardImages) ? item.cardImages : [];
+        // return images.length > 0;
+        return true;
       })
       .map((pkg) => {
         const filteredPkg = {
@@ -182,7 +184,7 @@ export const getGroupDeparturePackages = async () => {
 
 const getAllPackagesByTheme = async () => {
   try {
-    const conditions = [limit(5)];
+    const conditions = [limit(20)];
     const [
       eliteEscapePackages,
       soloExpeditionPackages,
@@ -194,27 +196,50 @@ const getAllPackagesByTheme = async () => {
       educationalPackages,
       relaxRejuvenatePackages,
     ] = await Promise.all([
-      getPackagesByTheme("elite-escape", [], conditions),
-      getPackagesByTheme("solo-expedition", [], conditions),
-      getPackagesByTheme("family-funventure", [], conditions),
-      getPackagesByTheme("group-adventures", [], conditions),
-      getPackagesByTheme("religious-retreat", [], conditions),
-      getPackagesByTheme("romantic-getaways", [], conditions),
-      getPackagesByTheme("exploration-bundle", [], conditions),
-      getPackagesByTheme("educational", [], conditions),
-      getPackagesByTheme("relax-rejuvenate", [], conditions),
+      getPackagesByTheme("elite-escape", [], conditions, false),
+      getPackagesByTheme("solo-expedition", [], conditions, false),
+      getPackagesByTheme("family-funventure", [], conditions, false),
+      getPackagesByTheme("group-adventures", [], conditions, false),
+      getPackagesByTheme("religious-retreat", [], conditions, false),
+      getPackagesByTheme("romantic-getaways", [], conditions, false),
+      getPackagesByTheme("exploration-bundle", [], conditions, false),
+      getPackagesByTheme("educational", [], conditions, false),
+      getPackagesByTheme("relax-rejuvenate", [], conditions, false),
     ]);
 
+    // Flatten all packages to resolve references in one big batch
+    const allPackages = [
+      ...eliteEscapePackages,
+      ...soloExpeditionPackages,
+      ...familyFunventurePackages,
+      ...groupAdventuresPackages,
+      ...religiousRetreatPackages,
+      ...romanticGetawaysPackages,
+      ...explorationBundlePackages,
+      ...educationalPackages,
+      ...relaxRejuvenatePackages,
+    ];
+
+    // Optimize: Resolve all unique references across all themes in ONE batch call
+    const resolvedPackages = await batchResolveCardReferences(allPackages);
+    
+    // Helper to find and minimize resolved packages for each theme
+    const pickByTheme = (themeType) => {
+      return resolvedPackages
+        .filter(pkg => pkg.theme?.includes(themeType))
+        .map(minimizePackageData);
+    };
+
     return {
-      eliteEscapePackages: eliteEscapePackages.map(minimizePackageData),
-      soloExpeditionPackages: soloExpeditionPackages.map(minimizePackageData),
-      familyFunventurePackages: familyFunventurePackages.map(minimizePackageData),
-      groupAdventuresPackages: groupAdventuresPackages.map(minimizePackageData),
-      religiousRetreatPackages: religiousRetreatPackages.map(minimizePackageData),
-      romanticGetawaysPackages: romanticGetawaysPackages.map(minimizePackageData),
-      explorationBundlePackages: explorationBundlePackages.map(minimizePackageData),
-      educationalPackages: educationalPackages.map(minimizePackageData),
-      relaxRejuvenatePackages: relaxRejuvenatePackages.map(minimizePackageData),
+      eliteEscapePackages: pickByTheme("elite-escape"),
+      soloExpeditionPackages: pickByTheme("solo-expedition"),
+      familyFunventurePackages: pickByTheme("family-funventure"),
+      groupAdventuresPackages: pickByTheme("group-adventures"),
+      religiousRetreatPackages: pickByTheme("religious-retreat"),
+      romanticGetawaysPackages: pickByTheme("romantic-getaways"),
+      explorationBundlePackages: pickByTheme("exploration-bundle"),
+      educationalPackages: pickByTheme("educational"),
+      relaxRejuvenatePackages: pickByTheme("relax-rejuvenate"),
     };
   } catch (error) {
     console.error("Error getting all packages by theme:", error);
@@ -256,8 +281,12 @@ export const getRegionsForHome = unstableCache(
         if (!minimized.featuredImage) {
           const matchingImages = imageMap[region.slug?.toLowerCase()];
           if (matchingImages?.length > 0) {
-            const randomImage = matchingImages[Math.floor(Math.random() * matchingImages.length)];
-            minimized.featuredImage = { url: randomImage.url || randomImage.imageUrl };
+            // ✅ Use deterministic selection (first image) instead of random to avoid hydration mismatch
+            const selectedImage = matchingImages[0];
+            minimized.featuredImage = { 
+              url: selectedImage.url || selectedImage.imageUrl,
+              title: selectedImage.title || region.name // Ensure title is set for consistent alt tags
+            };
           }
         }
         return minimized;

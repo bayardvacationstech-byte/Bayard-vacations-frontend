@@ -194,6 +194,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                       src={img.url}
                       alt={item.packageTitle || "Package Image"}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                     />
                   </SwiperSlide>
@@ -293,14 +294,32 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
               
               {/* Highlights Section */}
               <div className="space-y-1.5 sm:space-y-2 min-h-[3rem] sm:min-h-[3.5rem]">
-                {baseHighlights.slice(0, 3).map((highlight, idx) => (
-                  <div key={idx} className="flex items-center gap-2 sm:gap-3 group/hl">
-                    <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.4)] group-hover/hl:scale-125 transition-transform" />
-                    <p className="text-sm sm:text-xs text-slate-600 italic font-medium leading-tight tracking-tight line-clamp-1">
-                      {highlight}
-                    </p>
-                  </div>
-                ))}
+                {baseHighlights.slice(0, 3).map((highlight, idx) => {
+                  const isCovering = highlight.startsWith("Covering:");
+                  return (
+                    <div key={idx} className="flex items-center gap-2 sm:gap-3 group/hl">
+                      <div className={cn(
+                        "w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(250,204,21,0.4)] group-hover/hl:scale-125 transition-transform",
+                        isCovering ? theme.badge : "bg-yellow-400"
+                      )} />
+                      <p className={cn(
+                        "text-sm sm:text-xs leading-tight tracking-tight line-clamp-1",
+                        isCovering ? "" : "text-slate-600 font-medium"
+                      )}>
+                        {isCovering ? (
+                          <>
+                            <span className={cn("font-black mr-1", theme.accentText)}>Covering:</span>
+                            <span className="text-slate-600 font-medium">
+                              {highlight.replace("Covering:", "").trim()}
+                            </span>
+                          </>
+                        ) : (
+                          highlight
+                        )}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -322,7 +341,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                     </>
                   ) : (
                     <p className={cn("text-xs sm:text-lg font-black tracking-tight", theme.text)}>
-                      Contact for Pricing
+                      On Request
                     </p>
                   )}
                 </div>

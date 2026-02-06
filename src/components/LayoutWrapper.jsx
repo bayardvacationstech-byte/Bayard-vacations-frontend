@@ -6,8 +6,7 @@ import DesktopNavbar from '@/components/Navbars/DesktopNavbar';
 import MobileNavbar from '@/components/Navbars/MobileNavbar';
 import LeadForm from '@/components/Forms/EnquiryForm/LeadForm';
 import LeadGenerationTrigger from '@/components/Forms/EnquiryForm/LeadGenerationTrigger';
-import WhatsAppIcon from '@/components/WhatsAppIcon';
-import ChatbotIcon from '@/components/ChatbotIcon';
+import UnifiedContactButtons from '@/components/UnifiedContactButtons';
 import FooterClient from '@/components/layouts/FooterClient';
 import AuthModal from '@/components/Forms/LoginForm/AuthModal';
 
@@ -41,8 +40,7 @@ export default function LayoutWrapper({ children, footer }) {
         <>
           <LeadForm />
           <LeadGenerationTrigger />
-          <WhatsAppIcon />
-          <ChatbotIcon />
+          <UnifiedContactButtons />
           {footer}
           <AuthModal />
         </>

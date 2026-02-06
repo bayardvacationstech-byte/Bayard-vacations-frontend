@@ -51,7 +51,7 @@ const ItinerarySection = ({ packageData }) => {
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6 md:mb-8">
         <div className="flex-1 max-w-3xl">
           <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
-            Your <span className="text-brand-green">Daily Itinerary</span>
+            Your <span className="text-brand-blue">Daily Itinerary</span>
           </h2>
           <p className="text-slate-500 text-sm md:text-xl font-medium">
             A carefully curated day-wise plan for your perfect adventure
@@ -117,7 +117,7 @@ const ItinerarySection = ({ packageData }) => {
                         </div>
                         
                         {/* Title */}
-                        <h5 className={`text-[15px] md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-green' : 'text-slate-900'}`}>
+                        <h5 className={`text-[15px] md:text-xl font-bold transition-colors leading-tight ${expandedDays.includes(index) ? 'text-brand-blue' : 'text-slate-900'}`}>
                           {day.title.includes(":") ? day.title.split(":").slice(1).join(":").trim() : day.title}
                         </h5>
                       </div>

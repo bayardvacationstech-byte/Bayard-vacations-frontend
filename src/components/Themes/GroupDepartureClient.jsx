@@ -45,20 +45,40 @@ export default function GroupDepartureClient() {
   } = usePackagesByTheme("group-departure");
 
   const groupPackages = useMemo(() => {
-    if (!allThemePackages) return { international: [], domestic: [] };
+    let pkgSource = [];
+    if (Array.isArray(allThemePackages) && allThemePackages.length > 0) {
+      pkgSource = allThemePackages;
+    }
+
+    // Safeguard
+    if (!Array.isArray(pkgSource)) return { international: [], domestic: [] };
     
     // Deduplicate by package ID
     const uniqueMap = new Map();
-    allThemePackages.forEach(pkg => {
-      if (pkg.id && !uniqueMap.has(pkg.id)) {
-        uniqueMap.set(pkg.id, pkg);
-      }
-    });
+    try {
+      pkgSource.forEach(pkg => {
+        if (pkg && pkg.id && !uniqueMap.has(pkg.id)) {
+          uniqueMap.set(pkg.id, pkg);
+        }
+      });
+    } catch (e) {
+      console.error("Error processing packages map:", e);
+      return { international: [], domestic: [] };
+    }
     const uniquePackages = Array.from(uniqueMap.values());
     
+    // Sort: Non-zero prices first
+    const sorted = [...uniquePackages].sort((a, b) => {
+      const priceA = (a.offerPrice > 0 ? a.offerPrice : a.basePrice) || 0;
+      const priceB = (b.offerPrice > 0 ? b.offerPrice : b.basePrice) || 0;
+      if (priceA > 0 && priceB === 0) return -1;
+      if (priceA === 0 && priceB > 0) return 1;
+      return 0;
+    });
+
     return {
-      international: uniquePackages.filter(pkg => !pkg.domestic),
-      domestic: uniquePackages.filter(pkg => pkg.domestic)
+      international: sorted.filter(pkg => !pkg.domestic),
+      domestic: sorted.filter(pkg => pkg.domestic)
     };
   }, [allThemePackages]);
 
@@ -67,7 +87,16 @@ export default function GroupDepartureClient() {
   
   const paginatedPackages = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    return currentPackages.slice(start, start + itemsPerPage);
+    const paginated = currentPackages.slice(start, start + itemsPerPage);
+
+    // Logic: First page should not show 0 price packages
+    if (currentPage === 1) {
+      return paginated.filter(pkg => {
+        const price = (pkg.offerPrice > 0 ? pkg.offerPrice : pkg.basePrice) || 0;
+        return price > 0;
+      });
+    }
+    return paginated;
   }, [currentPackages, currentPage, itemsPerPage]);
 
   return (

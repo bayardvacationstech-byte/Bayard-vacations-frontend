@@ -246,7 +246,7 @@ const InclusionsSection = ({ packageData }) => {
   //         <div className="w-10 h-10 bg-brand-green/10 rounded-xl flex items-center justify-center">
   //           <ListChecks className="w-5 h-5 text-brand-green" />
   //         </div>
-  //         <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-green">Remember</span></h4>
+  //         <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-blue">Remember</span></h4>
   //       </div>
   //       <ul className="space-y-3">
   //         {displayPoints.map((point, idx) => (
@@ -259,7 +259,7 @@ const InclusionsSection = ({ packageData }) => {
   //       {points.length > 6 && (
   //         <button
   //           onClick={() => setIsPointsExpanded(!isPointsExpanded)}
-  //           className="w-full mt-4 py-2 text-xs font-bold text-brand-green hover:text-emerald-700 transition-colors flex items-center justify-center gap-1 group/btn"
+  //           className="w-full mt-4 py-2 text-xs font-bold text-brand-blue hover:text-blue-700 transition-colors flex items-center justify-center gap-1 group/btn"
   //         >
   //           {isPointsExpanded ? 'Show Less' : `Read More (${points.length - 6} more)`}
   //           <svg 

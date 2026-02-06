@@ -14,7 +14,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
-const PackageHero = ({ packageData }) => {
+const PackageHero = ({ packageData, price }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const swiperRef = useRef(null);
 
@@ -70,6 +70,7 @@ const PackageHero = ({ packageData }) => {
                   alt={title}
                   fill
                   priority={index === 0}
+                  sizes="100vw"
                   className="object-cover"
                 />
               </motion.div>
@@ -148,7 +149,7 @@ const PackageHero = ({ packageData }) => {
                     <div className="space-y-1">
                       <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">Starting from</p>
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-black text-white">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</span>
+                        <span className="text-3xl font-black text-white">₹{new Intl.NumberFormat('en-IN').format(price || packageData?.offer?.offerPrice || packageData?.basePrice || packageData?.price || 0)}</span>
                       </div>
                     </div>
                     <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(250,204,21,0.3)]">
@@ -183,7 +184,7 @@ const PackageHero = ({ packageData }) => {
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <span className="text-white/40 text-[8px] uppercase font-black tracking-widest">Starts from</span>
-                      <span className="text-white font-black text-lg">₹{Math.floor((packageData?.basePrice || packageData?.price || 0) / 1000)}K</span>
+                      <span className="text-white font-black text-lg">₹{new Intl.NumberFormat('en-IN').format(price || packageData?.offer?.offerPrice || packageData?.basePrice || packageData?.price || 0)}</span>
                     </div>
                     <div className="w-[1px] h-6 bg-white/10" />
                     <div className="flex flex-col">
@@ -208,7 +209,13 @@ const PackageHero = ({ packageData }) => {
                         currentImageIndex === index ? "border-yellow-400 scale-105 shadow-lg" : "border-white/20"
                       )}
                     >
-                      <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover" />
+                      <Image 
+                        src={image.url} 
+                        alt={`Gallery ${index}`} 
+                        fill 
+                        sizes="112px" 
+                        className="object-cover" 
+                      />
                     </motion.button>
                   ))}
                 </div>
@@ -250,7 +257,13 @@ const PackageHero = ({ packageData }) => {
               currentImageIndex === index ? "border-yellow-400 scale-110 shadow-[0_0_20px_rgba(250,204,21,0.3)]" : "border-white/20 hover:border-white/40"
             )}
           >
-            <Image src={image.url} alt={`Gallery ${index}`} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+            <Image 
+              src={image.url} 
+              alt={`Gallery ${index}`} 
+              fill 
+              sizes="112px" 
+              className="object-cover transition-transform duration-500 group-hover:scale-110" 
+            />
           </motion.button>
         ))}
       </div>

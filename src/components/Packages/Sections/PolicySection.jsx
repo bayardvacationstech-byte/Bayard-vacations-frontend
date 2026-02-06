@@ -16,35 +16,51 @@ const PolicySection = () => {
         <div className="relative z-10">
 
           {/* Two Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {/* Domestic Column */}
             <div className="space-y-4">
-              <h4 className="text-lg md:text-xl font-black text-rose-600 mb-4">
+              <h4 className="text-lg md:text-xl font-black text-rose-600 mb-4 flex items-center gap-2">
                 Domestic Packages
               </h4>
               <div className="space-y-3">
-                <div className="bg-white p-4 md:p-5 rounded-xl border border-rose-100 shadow-sm">
-                  <span className="text-rose-500 font-bold text-xs uppercase tracking-widest block mb-2">
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
                     30+ Days Before Departure
                   </span>
-                  <p className="text-slate-800 font-bold text-sm md:text-base leading-relaxed">
-                    Full refund minus minimal transaction fee (approx 2%).
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    Deposit only, or 10% of total package cost, whichever is higher. Balance is refundable.
                   </p>
                 </div>
-                <div className="bg-white p-4 md:p-5 rounded-xl border border-rose-100 shadow-sm">
-                  <span className="text-rose-500 font-bold text-xs uppercase tracking-widest block mb-2">
-                    15-30 Days Before Departure
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    30 to 15 Days Before Departure
                   </span>
-                  <p className="text-slate-800 font-semibold text-sm leading-relaxed">
-                    50% refund of the total package cost.
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    30% of the total package cost.
                   </p>
                 </div>
-                <div className="bg-white p-4 md:p-5 rounded-xl border border-rose-100 shadow-sm">
-                  <span className="text-rose-500 font-bold text-xs uppercase tracking-widest block mb-2">
-                    Less Than 15 Days Before Departure
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    15 to 7 Days Before Departure
                   </span>
-                  <p className="text-slate-800 font-semibold text-sm leading-relaxed">
-                    No refund possible due to non-refundable vendor commitments.
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    60% of the total package cost.
+                  </p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    7 to 3 Days Before Departure
+                  </span>
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    90% of the total package cost.
+                  </p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    Less Than 3 Days / No Show
+                  </span>
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    100% of the total package cost (no refund).
                   </p>
                 </div>
               </div>
@@ -56,28 +72,44 @@ const PolicySection = () => {
                 International Packages
               </h4>
               <div className="space-y-3">
-                <div className="bg-white p-4 md:p-5 rounded-xl border border-rose-100 shadow-sm">
-                  <span className="text-rose-500 font-bold text-xs uppercase tracking-widest block mb-2">
-                    30+ Days Before Departure
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    45+ Days Before Departure
                   </span>
-                  <p className="text-slate-800 font-bold text-sm md:text-base leading-relaxed">
-                    Full refund minus minimal transaction fee (approx 2%).
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    Deposit only, or 10% of total package cost, whichever is higher.
                   </p>
                 </div>
-                <div className="bg-white p-4 md:p-5 rounded-xl border border-rose-100 shadow-sm">
-                  <span className="text-rose-500 font-bold text-xs uppercase tracking-widest block mb-2">
-                    15-30 Days Before Departure
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    45 to 30 Days Before Departure
                   </span>
-                  <p className="text-slate-800 font-semibold text-sm leading-relaxed">
-                    50% refund of the total package cost.
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    30% of the total package cost.
                   </p>
                 </div>
-                <div className="bg-white p-4 md:p-5 rounded-xl border border-rose-100 shadow-sm">
-                  <span className="text-rose-500 font-bold text-xs uppercase tracking-widest block mb-2">
-                    Less Than 15 Days Before Departure
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    30 to 15 Days Before Departure
                   </span>
-                  <p className="text-slate-800 font-semibold text-sm leading-relaxed">
-                    No refund possible due to non-refundable vendor commitments.
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    60% of the total package cost.
+                  </p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    15 to 3 Days Before Departure
+                  </span>
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    90% of the total package cost.
+                  </p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-rose-100 shadow-sm">
+                  <span className="text-rose-500 font-bold text-[10px] uppercase tracking-widest block mb-1">
+                    Less Than 3 Days / No Show
+                  </span>
+                  <p className="text-slate-800 font-bold text-sm leading-relaxed">
+                    100% of the total package cost (no refund).
                   </p>
                 </div>
               </div>

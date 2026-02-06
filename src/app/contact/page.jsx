@@ -72,12 +72,12 @@ const ContactPage = () => {
               {[
                 { 
                   title: "Address", 
-                  content: "144, 9th Main Rd, 4th Block, Kanteerava Nagar, Nandini Layout, Bengaluru", 
+                  content: "144, 9th Main Rd, 4th Block, Kanteerava Nagar, Nandini Layout, Bengaluru, KA 560096", 
                   icon: <MapPin className="w-5 h-5 text-slate-900" />,
                 },
                 { 
                   title: "Phone", 
-                  content: "+91 63631 98911", 
+                  content: "063631 17421", 
                   icon: <Phone className="w-5 h-5 text-slate-900" />,
                 },
                 { 

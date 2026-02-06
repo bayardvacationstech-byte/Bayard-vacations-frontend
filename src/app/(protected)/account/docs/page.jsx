@@ -188,7 +188,7 @@ const DocsPage = () => {
       <Container>
         <div className="space-y-10">
           <div className="relative rounded-2xl border border-solid border-[#D9D9D9] px-6 py-8">
-            <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-nord font-bold uppercase text-brand-blue">
+            <h5 className="absolute left-8 top-0 -translate-y-1/2 bg-white px-2 font-bold uppercase text-brand-blue">
               Travellers Documents
             </h5>
 

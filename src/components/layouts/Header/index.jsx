@@ -145,6 +145,7 @@ const Header = () => {
                         height={30}
                         alt="Bayard Vacations Logo"
                         src="/img/logo.svg"
+                        className="h-auto"
                       />
                     </Link>
                   </div>

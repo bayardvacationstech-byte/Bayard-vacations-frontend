@@ -61,7 +61,7 @@ const ThemeGrid = () => {
         {/* Simple Header */}
         <div className="mb-12">
           <h2 className="text-3xl lg:text-5xl font-bold text-slate-900 tracking-tight mb-4">
-            Curated <span className="text-brand-green">Travel Themes</span>
+            Curated <span className="text-brand-blue">Travel Themes</span>
           </h2>
           <p className="text-slate-500 text-base lg:text-lg font-medium">
             Explore our hand-crafted themes designed to match your specific style and desire for adventure.

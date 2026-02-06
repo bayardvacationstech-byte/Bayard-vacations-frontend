@@ -305,6 +305,7 @@ export default function AdvertisementBanner({ bannerData }) {
                     src={promoCards[activeFeatureIndex]?.imageUrl || promoCards[activeFeatureIndex]?.image || '/img/ai-bot-banner.png'}
                     alt={promoCards[activeFeatureIndex]?.title || 'Feature'}
                     fill
+                    sizes="(max-width: 1024px) 100vw, 20vw"
                     className="object-contain lg:object-cover"
                   />
                 </motion.div>

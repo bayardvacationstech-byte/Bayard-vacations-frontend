@@ -9,7 +9,7 @@ const MobilePackageNavigation = ({ activeSection, onScrollToSection, sections = 
       {/* Mobile Sticky Navigation: Thrillophilia-style Pill Navigation */}
       <div className={cn(
         "md:hidden sticky left-0 right-0 z-[40] bg-white border-b border-slate-200 shadow-sm h-[60px] flex items-center w-[calc(100%+2rem)] -mx-4 transition-all duration-300",
-        isHeaderHidden ? "top-0" : "top-[80px]"
+        isHeaderHidden ? "top-0" : "top-[96px]"
       )}>
           <div className="flex overflow-x-auto no-scrollbar py-2 px-4 gap-2 items-center w-full">
             {sections.map((section) => {

@@ -33,7 +33,7 @@ const RegionStats = ({ regionData }) => {
     { label: "History", value: "5k+", color: "text-amber-400" },
     { label: "Climates", value: "09", color: "text-emerald-400" },
     { label: "Rating", value: "4.9", color: "text-purple-400" },
-    { label: "Travelers", value: "10k+", color: "text-rose-400" }
+    { label: "Travelers", value: "25K+", color: "text-rose-400" }
   ];
 
   if (!mounted) {

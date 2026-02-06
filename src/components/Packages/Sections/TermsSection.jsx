@@ -1,5 +1,5 @@
-import React from "react";
-import { FileText } from "lucide-react";
+import React, { useState } from "react";
+import { FileText, ChevronDown, ChevronUp } from "lucide-react";
 
 const TermsSection = () => {
   const termsData = [
@@ -75,6 +75,9 @@ const TermsSection = () => {
     }
   ];
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const displayTerms = isExpanded ? termsData : termsData.slice(0, 5);
+
   return (
     <div id="terms-section" className="scroll-mt-48 pt-4">
       {/* Standard Header */}
@@ -91,7 +94,7 @@ const TermsSection = () => {
         <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -mr-32 -mt-32 opacity-50" />
         <div className="relative z-10">
           <div className="space-y-6 md:space-y-8">
-            {termsData.map((section, index) => (
+            {displayTerms.map((section, index) => (
               <div key={index} className="group">
                 <h3 className="font-black text-slate-900 text-base md:text-lg mb-3 flex items-start gap-3">
                   <span className="flex-shrink-0 w-7 h-7 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm font-bold mt-0.5">
@@ -113,6 +116,25 @@ const TermsSection = () => {
               </div>
             ))}
           </div>
+
+          {termsData.length > 5 && (
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="flex items-center gap-2 px-8 py-3 bg-slate-50 hover:bg-slate-100 text-brand-blue font-black text-xs uppercase tracking-[0.2em] rounded-full border border-slate-200 transition-all active:scale-95 group"
+              >
+                {isExpanded ? (
+                  <>
+                    Show Less <ChevronUp className="w-4 h-4 transition-transform group-hover:-translate-y-0.5" />
+                  </>
+                ) : (
+                  <>
+                    Read More <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
 
           {/* Footer Note */}
           <div className="mt-8 pt-6 border-t border-slate-100">

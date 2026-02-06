@@ -33,11 +33,11 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
       glowColor: "via-rose-500/30"
     },
     "solo-expedition": {
-      bgGradient: "from-indigo-900 to-indigo-950",
-      hoverColor: "hover:text-indigo-400",
-      dividerColor: "bg-indigo-500/20",
-      borderColor: "border-indigo-500/20",
-      glowColor: "via-indigo-500/30"
+      bgGradient: "from-[#0a0a0a] to-black",
+      hoverColor: "hover:text-[#FFD700]",
+      dividerColor: "bg-[#FFD700]/20",
+      borderColor: "border-[#FFD700]/20",
+      glowColor: "via-[#FFD700]/30"
     },
     "elite-escape": {
       bgGradient: "from-[#2b251e] to-[#1a1a1a]",
@@ -47,11 +47,13 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
       glowColor: "via-[#c5a059]/20"
     },
     "family-funventure": {
-      bgGradient: "from-blue-900 to-blue-950",
-      hoverColor: "hover:text-blue-400",
-      dividerColor: "bg-blue-500/20",
-      borderColor: "border-blue-500/20",
-      glowColor: "via-blue-500/30"
+      bgGradient: "from-[#1a1c1e] to-[#0f1113]",
+      hoverColor: "hover:text-orange-400",
+      dividerColor: "bg-orange-500/20",
+      borderColor: "border-orange-500/20",
+      glowColor: "via-orange-500/30",
+      accentColor: "text-orange-400",
+      accentBg: "bg-orange-500"
     },
     "group-departure": {
       bgGradient: "from-emerald-900 to-emerald-950",
@@ -75,11 +77,13 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
       glowColor: "via-amber-500/30"
     },
     "relax-rejuvenate": {
-      bgGradient: "from-teal-900 to-teal-950",
-      hoverColor: "hover:text-teal-400",
-      dividerColor: "bg-teal-500/20",
-      borderColor: "border-teal-500/20",
-      glowColor: "via-teal-500/30"
+      bgGradient: "from-stone-900 to-black",
+      hoverColor: "hover:text-sage-400",
+      dividerColor: "bg-sage-500/20",
+      borderColor: "border-sage-500/20",
+      glowColor: "via-sage-500/30",
+      accentColor: "text-sage-400",
+      accentBg: "bg-sage-600"
     },
     "exploration-bundle": {
       bgGradient: "from-slate-900 to-slate-950",
@@ -97,7 +101,7 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
     },
     "default": {
       bgGradient: "from-brand-blue to-[#020617]",
-      hoverColor: "hover:text-brand-green",
+      hoverColor: "hover:text-brand-blue",
       dividerColor: "bg-white/20",
       borderColor: "border-white/10",
       glowColor: "via-white/30"
@@ -109,13 +113,13 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
   // Contact card data
   const contactCards = [
     {
-      href: "tel:+918069668484",
+      href: "tel:+916363117421",
       iconType: "phone",
       title: "Call Us",
-      description: "+91 80696 68484",
+      description: "063631 17421",
       subtext: "Available 24/7",
-      color: "text-brand-green",
-      bgColor: "bg-brand-green",
+      color: config.accentColor || "text-brand-blue",
+      bgColor: config.accentBg || "bg-brand-green",
       actionLabel: "Call",
       external: false
     },
@@ -156,7 +160,7 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
             alt="Bayard Vacations"
             width={420}
             height={90}
-            className="w-48 sm:w-64"
+            className="w-48 sm:w-64 h-auto"
             priority
           />
 
@@ -217,18 +221,21 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
             links={internationalRegions} 
             basePath="packages" 
             hoverColor={config.hoverColor}
+            viewAllLink="/destinations"
           />
           <FooterSection 
             title="Domestic" 
             links={domesticRegions} 
             basePath="packages" 
             hoverColor={config.hoverColor}
+            viewAllLink="/destinations"
           />
           <FooterSection 
             title="Themes" 
             links={categoryData} 
             basePath="themes" 
             hoverColor={config.hoverColor}
+            viewAllLink="/themes"
           />
         </div>
 
@@ -255,7 +262,7 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
                 </div>
                 <div className="flex-1">
                   <h6 className="font-semibold text-white text-sm mb-1">Visit Us</h6>
-                  <p className="text-white/80 text-sm font-medium leading-snug">123 Travel Hub, MG Road<br/>Bangalore, KA</p>
+                  <p className="text-white/80 text-sm font-medium leading-snug">144, 9th Main Rd, 4th Block, Kanteerava Nagar,<br/>Nandini Layout, Bengaluru, KA 560096</p>
                   <p className="text-white/50 text-xs mt-0.5">Mon-Sat: 9AM-7PM</p>
                 </div>
               </div>

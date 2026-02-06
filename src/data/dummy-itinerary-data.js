@@ -574,11 +574,11 @@ Special Requests: Dietary requirements, special occasions, accessibility needs -
 
     contactInfo: {
       companyName: "Bayard Vacations",
-      phone: "+91 6363117421",
-      whatsapp: "+91 6363117421",
+      phone: "+91 91875 63136",
+      whatsapp: "+91 91875 63136",
       email: "info@bayardvacations.com",
       website: "www.bayardvacations.com",
-      emergencyContact: "+91 6363117421",
+      emergencyContact: "+91 91875 63136",
       operatingHours: "24/7 Support Available",
       officeAddress: "144, 9th Main Rd, 4th Block, Kanteerava Nagar, Nandini Layout, Bengaluru, Karnataka 560096",
       destinationExpert: {

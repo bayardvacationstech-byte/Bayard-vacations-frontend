@@ -32,7 +32,7 @@ const TravellerCount = ({ packageData }) => {
 
   return (
     <div className="relative col-span-full grid grid-cols-2 gap-5 rounded-2xl border border-solid border-[#D9D9D9] p-6 pt-10 c-xxl:grid-cols-3 c-xxl:items-start">
-      <h5 className="absolute left-6 top-0 inline-block -translate-y-1/2 bg-white px-3 font-nord font-bold uppercase text-brand-blue">
+      <h5 className="absolute left-6 top-0 inline-block -translate-y-1/2 bg-white px-3 font-bold uppercase text-brand-blue">
         Traveller count
       </h5>
 

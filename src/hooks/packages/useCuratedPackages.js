@@ -49,7 +49,10 @@ export function useCuratedPackages(packageType, initialPackages = []) {
             .sort((a, b) => a.basePrice - b.basePrice);
 
           if (curatedPackages.length > 0) {
-            return curatedPackages.sort((a, b) => a.basePrice - b.basePrice);
+            return curatedPackages.sort((a, b) => {
+              const priceDiff = a.basePrice - b.basePrice;
+              return priceDiff !== 0 ? priceDiff : a.id.localeCompare(b.id);
+            });
           }
         }
       }

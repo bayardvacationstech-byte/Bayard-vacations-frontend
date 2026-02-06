@@ -63,8 +63,8 @@ export default function ReviewsPage() {
         const data = await response.json();
         
         if (data.success && data.reviews.length > 0) {
-          const mappedReviews = data.reviews.map(review => ({
-            id: review.id || Math.random(),
+          const mappedReviews = data.reviews.map((review, idx) => ({
+            id: review.id || `verified-${idx}`,
             author_name: review.author || "Guest Traveler",
             location: review.location || "Verified Traveler", // Fallback as API might not have this
             avatar: review.profile_photo_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.author || "Guest")}&background=random`,
@@ -114,7 +114,7 @@ export default function ReviewsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {[
             { label: "Overall Rating", value: "4.9/5", detail: "Based on 1,200+ reviews" },
-            { label: "Happy Travelers", value: "5,000+", detail: "Across 45+ countries" },
+            { label: "Happy Travelers", value: "25,000+", detail: "Across 45+ countries" },
             { label: "Repeat Customers", value: "94%", detail: "High satisfaction rate" }
           ].map((stat, i) => (
             <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">

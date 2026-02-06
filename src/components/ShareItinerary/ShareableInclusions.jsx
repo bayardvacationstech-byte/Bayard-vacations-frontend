@@ -7,7 +7,7 @@ const ShareableInclusions = ({ inclusions = [], exclusions = [] }) => {
         {/* Section Header */}
         <div className="mb-3 md:mb-4 print:mb-4">
           <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-1 tracking-tight">
-            What's <span className="text-brand-green">Included</span>
+            What's <span className="text-brand-blue">Included</span>
           </h2>
           <p className="text-slate-600 text-sm md:text-lg font-medium">
             Everything you need for a worry-free vacation

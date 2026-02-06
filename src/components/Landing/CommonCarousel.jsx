@@ -152,7 +152,7 @@ const CommonCarousel = ({
               </div>
             ) : (
               <div className="flex items-center justify-center h-64 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                <p className="text-slate-400 font-medium font-nord">Coming Soon</p>
+                <p className="text-slate-400 font-medium">Coming Soon</p>
               </div>
             )}
           </motion.div>

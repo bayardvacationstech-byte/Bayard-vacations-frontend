@@ -167,12 +167,12 @@ const FaqPage = () => {
         <Container className="relative z-10">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
-              <HelpCircle className="w-4 h-4 text-brand-green" />
+              <HelpCircle className="w-4 h-4 text-brand-blue" />
               <span className="text-sm font-bold uppercase tracking-wider text-white">Support Center</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
               Frequently Asked<br />
-              <span className="text-brand-green">Questions</span>
+              <span className="text-brand-blue">Questions</span>
             </h1>
             <p className="text-lg text-white/80">
               Find answers to common questions about our travel packages, booking process, and services
@@ -300,7 +300,7 @@ const FaqPage = () => {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6">
-              <Sparkles className="w-4 h-4 text-brand-green" />
+              <Sparkles className="w-4 h-4 text-brand-blue" />
               <span className="text-sm font-bold text-white">We're Here To Help</span>
             </div>
             <h3 className="section-title-dark mb-4">

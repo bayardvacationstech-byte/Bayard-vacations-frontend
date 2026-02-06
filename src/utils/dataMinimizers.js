@@ -2,7 +2,7 @@ export const minimizePackageData = (pkg) => {
   if (!pkg) return null;
   return {
     id: pkg.id,
-    packageTitle: pkg.packageTitle || "",
+    packageTitle: (pkg.packageTitle || "").trim().replace(/^["']|["']$/g, ""),
     packageSlug: pkg.packageSlug || "",
     region: pkg.region || "",
     basePrice: pkg.basePrice || 0,

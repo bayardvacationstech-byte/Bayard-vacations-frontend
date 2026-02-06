@@ -34,21 +34,6 @@ const AddressPanel = () => {
   // Fetch existing address when component mounts and user is authenticated
   useEffect(() => {
     const fetchAddress = async () => {
-      // Mock for localhost
-      const isLocal = typeof window !== "undefined" && window.location.hostname === "localhost";
-      if (isLocal) {
-        setAddress({
-          street: "123 Luxury Villa Lane",
-          city: "Mumbai",
-          state: "Maharashtra",
-          pincode: "400001",
-          landmark: "Near Gateway of India",
-          country: "India",
-        });
-        setIsEditing(false);
-        return;
-      }
-
       if (!user) return;
 
       setLoading(true);
@@ -153,7 +138,7 @@ const AddressPanel = () => {
                 <MapPin className="size-5" />
               </div>
               <div>
-                <h5 className="font-nord font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
+                <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Location
                 </h5>
                 <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Primary Residence</h4>
@@ -183,7 +168,7 @@ const AddressPanel = () => {
               <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in slide-in-from-top-2 duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2 md:col-span-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Street Address</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Street Address</label>
                     <Input
                       name="street"
                       value={address.street}
@@ -194,7 +179,7 @@ const AddressPanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">City</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">City</label>
                     <Input
                       name="city"
                       value={address.city}
@@ -205,7 +190,7 @@ const AddressPanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">State / Province</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">State / Province</label>
                     <Input
                       name="state"
                       value={address.state}
@@ -216,7 +201,7 @@ const AddressPanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Postal Code</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Postal Code</label>
                     <Input
                       name="pincode"
                       value={address.pincode}
@@ -227,7 +212,7 @@ const AddressPanel = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-nord font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Country</label>
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Country</label>
                     <Input
                       name="country"
                       value={address.country}

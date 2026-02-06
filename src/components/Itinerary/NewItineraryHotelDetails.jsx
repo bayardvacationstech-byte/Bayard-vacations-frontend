@@ -129,7 +129,7 @@ const NewItineraryHotelDetails = ({ details }) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full justify-between whitespace-normal rounded bg-gradient-to-tr from-[#348901] to-[#46B301] p-6">
+        <Button className="w-full justify-between whitespace-normal rounded bg-gradient-to-tr from-brand-blue to-blue-500 p-6">
           <span className="text-left text-xs sm:text-center sm:text-sm">
             Click here to see hotel name and location details
           </span>
@@ -153,7 +153,7 @@ const NewItineraryHotelDetails = ({ details }) => {
             "absolute right-4 top-4 size-8 rounded-full bg-white opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           }
         >
-          <X className="size-4 text-brand-green" />
+          <X className="size-4 text-brand-blue" />
         </Button>
 
         <HotelProvider hotels={hotels}>
