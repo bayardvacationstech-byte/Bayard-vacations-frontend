@@ -4,7 +4,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "./globals.css";
-import { Outfit, Playfair_Display, Cormorant_Garamond, Sora } from "next/font/google";
+import { Outfit, Playfair_Display, Cormorant_Garamond, Sora, Great_Vibes } from "next/font/google";
 import localFont from "next/font/local";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster as RadixToaster } from "@/components/ui/toaster";
@@ -42,6 +42,13 @@ const outfit = Outfit({
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
+  display: "swap",
+});
+
+const greatVibes = Great_Vibes({
+  weight: ["400"],
+  subsets: ["latin"],
+  variable: "--font-great-vibes",
   display: "swap",
 });
 
@@ -106,7 +113,7 @@ export default function RootLayout({ children }) {
       </head>
       <Metrics />
       <body
-        className={`${outfit.variable} ${nord.variable} ${playfair.variable} ${cormorant.variable} ${sora.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${nord.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${sora.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         {/* Instant CSS-only Splash Screen */}
