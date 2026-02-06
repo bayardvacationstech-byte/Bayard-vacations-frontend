@@ -8,15 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getPackagesByRegion, getPackagesByTheme } from "@/utils/firebase";
 import { useRegionsData } from "@/hooks/regions/useRegionsData";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination as SwiperPagination } from "swiper/modules";
 import PackageCard from "@/components/ui/PackageCard";
 import BadgeSection from "@/components/BadgeSection";
-
-// Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 const ChatPackageCard = ({ item, onViewItinerary }) => {
   const [showAllHighlights, setShowAllHighlights] = useState(false);
@@ -214,20 +207,19 @@ const ChatItineraryView = ({ itineraries }) => {
 
 const ChatMessage = memo(({ 
   message, 
-  index, 
+  isLast,
   isMounted, 
   handleCopy, 
   handleEdit, 
-  handleSendMessage, 
-  handleViewItinerary, 
-  messages 
+  onRegenerate,
+  handleViewItinerary
 }) => {
   return (
     <div
       className={`flex animate-fadeIn ${
         message.sender === "user" ? "flex-row-reverse" : "flex-row"
       }`}
-      style={{ animationDelay: index < messages.length - 1 ? "0s" : "0.1s" }}
+      style={{ animationDelay: isLast ? "0.1s" : "0s" }}
     >
       <div
         className={`${(message.type === 'itinerary' || (message.packages && message.packages.length > 0)) ? 'w-full' : 'max-w-[85%]'} rounded-2xl px-4 py-3 shadow-sm transition-all duration-300 hover:shadow-md ${
@@ -245,31 +237,17 @@ const ChatMessage = memo(({
             
             {message.packages && message.packages.length > 0 && (
               <div className="relative mt-3">
-                <Swiper
-                  modules={[Navigation, SwiperPagination]}
-                  spaceBetween={16}
-                  slidesPerView={1}
-                  grabCursor={true}
-                  navigation={{
-                    nextEl: `.chat-next-${message.id}`,
-                    prevEl: `.chat-prev-${message.id}`,
-                  }}
-                  className="rounded-xl overflow-hidden"
-                >
+                <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory custom-scrollbar-hide">
                   {message.packages.map((pkg) => (
-                    <SwiperSlide key={pkg.id}>
+                    <div key={pkg.id} className="min-w-[280px] sm:min-w-[320px] snap-start">
                       <ChatPackageCard item={pkg} onViewItinerary={handleViewItinerary} />
-                    </SwiperSlide>
+                    </div>
                   ))}
-                </Swiper>
+                </div>
                 
-                <div className="flex justify-end gap-2 mt-3">
-                  <button className={`chat-prev-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button className={`chat-next-${message.id} p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors shadow-sm`}>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-400 font-medium">
+                  <ArrowRight className="w-3 h-3" />
+                  <span>Scroll for more packages</span>
                 </div>
               </div>
             )}
@@ -316,12 +294,7 @@ const ChatMessage = memo(({
         {message.sender === "bot" && (
           <div className="flex items-center gap-1 mt-2 -ml-1">
             <button 
-              onClick={() => {
-                const lastUserMessage = [...messages].reverse().find(m => m.sender === "user");
-                if (lastUserMessage) {
-                  handleSendMessage(null, lastUserMessage.text, true);
-                }
-              }} 
+              onClick={() => onRegenerate(message.id)} 
               className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
               title="Regenerate"
             >
@@ -412,6 +385,9 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   const [isListening, setIsListening] = useState(false);
   const [selectedContext, setSelectedContext] = useState(null);
   const [destPage, setDestPage] = useState(0);
+  const [streamingMessage, setStreamingMessage] = useState(null);
+  const streamingBufferRef = useRef("");
+  const lastRenderTimeRef = useRef(0);
   const ITEMS_PER_PAGE = 6;
   const recognitionRef = useRef(null);
 
@@ -626,6 +602,18 @@ export default function ChatbotPopup({ isOpen, onClose }) {
     }
   };
 
+  const handleRegenerate = (messageId) => {
+    // Find the message index
+    const messageIndex = messages.findIndex(m => m.id === messageId);
+    if (messageIndex === -1) return;
+    
+    // Find the last user message BEFORE this bot message
+    const lastUserMessage = [...messages.slice(0, messageIndex)].reverse().find(m => m.sender === "user");
+    if (lastUserMessage) {
+        handleSendMessage(null, lastUserMessage.text, true);
+    }
+  };
+
   const handleSendMessage = async (e, text = null, isRegenerate = false) => {
     if (e) e.preventDefault();
     const messageText = text || inputMessage;
@@ -712,18 +700,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       // but logically we can stop "typing" animation once stream starts.
       setIsTyping(false); 
 
-      // Initial bot response state
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: botMessageId,
-          text: "",
-          formattedText: "",
-          sender: "bot",
-          timestamp: new Date(),
-          isHtml: true,
-        },
-      ]);
+      setStreamingMessage({
+        id: botMessageId,
+        text: "",
+        formattedText: "",
+        sender: "bot",
+        timestamp: new Date(),
+        isHtml: true,
+      });
 
       let buffer = "";
       while (true) {
@@ -745,30 +729,46 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               
               const data = JSON.parse(dataStr);
               if (data.token) {
-                botResponseText += data.token;
-                const formatted = formatMarkdownToHTML(botResponseText);
-
-                setMessages((prev) =>
-                  prev.map((msg) =>
-                    msg.id === botMessageId ? { ...msg, text: botResponseText, formattedText: formatted } : msg
-                  )
-                );
-              } else if (data.full_response && !botResponseText) {
-                botResponseText = data.full_response;
-                setMessages((prev) =>
-                  prev.map((msg) =>
-                    msg.id === botMessageId ? { 
-                      ...msg, 
-                      text: botResponseText, 
-                      formattedText: formatMarkdownToHTML(botResponseText) 
-                    } : msg
-                  )
-                );
+                streamingBufferRef.current += data.token;
+                
+                // Throttled UI update (every 100ms)
+                const now = Date.now();
+                if (now - lastRenderTimeRef.current > 100) {
+                  const currentText = streamingBufferRef.current;
+                  setStreamingMessage(prev => ({
+                    ...prev,
+                    text: currentText,
+                    formattedText: formatMarkdownToHTML(currentText)
+                  }));
+                  lastRenderTimeRef.current = now;
+                }
+              } else if (data.full_response && !streamingBufferRef.current) {
+                streamingBufferRef.current = data.full_response;
+                setStreamingMessage(prev => ({
+                    ...prev,
+                    text: streamingBufferRef.current,
+                    formattedText: formatMarkdownToHTML(streamingBufferRef.current)
+                }));
               }
             } catch (e) {}
           }
         }
       }
+
+      // Final update and merge into messages
+      const finalBotResponse = {
+        id: botMessageId,
+        text: streamingBufferRef.current,
+        formattedText: formatMarkdownToHTML(streamingBufferRef.current),
+        sender: "bot",
+        timestamp: new Date(),
+        isHtml: true,
+      };
+      
+      setMessages(prev => [...prev, finalBotResponse]);
+      setStreamingMessage(null);
+      streamingBufferRef.current = "";
+      lastRenderTimeRef.current = 0;
     } catch (error) {
       clearTimeout(timeoutId);
       setIsTyping(false);
@@ -884,15 +884,27 @@ export default function ChatbotPopup({ isOpen, onClose }) {
             <ChatMessage
               key={message.id}
               message={message}
-              index={index}
+              isLast={index === messages.length - 1}
               isMounted={isMounted}
               handleCopy={handleCopy}
               handleEdit={handleEdit}
-              handleSendMessage={handleSendMessage}
+              onRegenerate={handleRegenerate}
               handleViewItinerary={handleViewItinerary}
-              messages={messages}
             />
           ))}
+
+          {streamingMessage && (
+            <ChatMessage
+              key={streamingMessage.id}
+              message={streamingMessage}
+              isLast={true}
+              isMounted={isMounted}
+              handleCopy={handleCopy}
+              handleEdit={handleEdit}
+              onRegenerate={handleRegenerate}
+              handleViewItinerary={handleViewItinerary}
+            />
+          )}
 
           {isTyping && (
             <div className="flex animate-fadeIn">
@@ -1085,6 +1097,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
             background-origin: border-box;
             background-clip: padding-box, border-box;
           }
+        }
+
+        .custom-scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .custom-scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </>
