@@ -357,9 +357,15 @@ body {
   overflow-x: hidden !important; /* Prevent horizontal scroll on mobile */
 }
 
-/* Disable smooth scrolling initially to prevent auto-scroll on page load */
+/* Enable smooth scrolling by default */
 html {
-  scroll-behavior: auto !important;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Splash screen - prevent scroll */
@@ -1131,3 +1137,23 @@ html.no-scroll {
     border-radius: 1rem !important;
   }
 }
+
+/* Scroll & Performance Optimizations */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Optimization for heavy sections */
+.scroll-optimize {
+  content-visibility: auto;
+  contain-intrinsic-size: 500px 1000px;
+}
+
+/* Optimize painting for high-end feel */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+

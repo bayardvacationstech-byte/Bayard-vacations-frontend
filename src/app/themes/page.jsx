@@ -6,8 +6,8 @@ import InspirationSection from "@/components/Landing/InspirationSection";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 export const metadata = {
-  title: "Explore Travel Themes",
-  description: "Discover our curated collection of travel themes, from romantic getaways to elite escapes.",
+  title: "Explore Travel Themes | Bayard Vacations | Curated Holiday Collections",
+  description: "Discover our curated collection of travel themes. From romantic getaways and family funventures to elite escapes and solo expeditions, find your perfect travel style.",
   alternates: {
     canonical: "/themes",
   },

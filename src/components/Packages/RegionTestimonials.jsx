@@ -235,8 +235,8 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
       className="relative bg-gradient-to-br from-[#012a6b] via-[#001b4d] to-[#012a6b] pt-8 pb-8 md:pt-16 md:pb-24 lg:min-h-[750px] overflow-x-hidden"
     >
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
-        <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-brand-light-cyan/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-brand-blue/20 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-brand-light-cyan/20 rounded-full blur-[120px]"></div>
       </div>
 
       <Container className="relative z-10 h-full flex flex-col lg:justify-center">
@@ -271,15 +271,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                 ))}
               </div>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeVideoIndex}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="absolute inset-0"
-                >
+                  <div className="absolute inset-0">
                   <video
                     ref={videoRef}
                     className="w-full h-full object-cover"
@@ -333,8 +325,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                   )}
 
 
-                </motion.div>
-              </AnimatePresence>
+                  </div>
 
               {/* Navigation Zones */}
               <div className="absolute inset-y-0 left-0 w-16 z-40 cursor-pointer pointer-events-auto" onClick={(e) => { e.stopPropagation(); prevVideo(); }}></div>

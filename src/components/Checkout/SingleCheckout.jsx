@@ -14,6 +14,7 @@ import { useCheckout } from "@/contexts/CheckoutContext";
 import { toast } from "@/hooks/use-toast";
 import { formatDateTime } from "@/utils/itinerary";
 import { storeLead } from "@/utils/firebase";
+import { trackLeadFormConversion } from "@/utils/conversion";
 
 const SingleCheckout = ({ isOpen, setIsOpen, region, days }) => {
   const { userInfo } = useAuth();
@@ -41,6 +42,7 @@ const SingleCheckout = ({ isOpen, setIsOpen, region, days }) => {
       });
 
       if (response) {
+        trackLeadFormConversion();
         toast("Success", {
           description:
             "Form submitted, Our team will get in touch with you soon",

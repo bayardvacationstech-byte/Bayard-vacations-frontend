@@ -135,8 +135,10 @@ const Holidays = ({
   const currentLoading = intlLoading || domLoading;
   const hasData = curatedPackages.length > 0;
 
-  // Show skeleton if we're loading AND have no data
-  if (currentLoading && !hasData) {
+  // Ensure we don't show skeleton if we have initial data
+  const showSkeleton = currentLoading && !hasData;
+
+  if (showSkeleton) {
     return (
       <Container className="space-y-4 px-0 sm:px-5">
         <div className="flex justify-between">
@@ -224,7 +226,7 @@ const Holidays = ({
                     key={`${item.id}-${index}`} 
                     className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/4"
                   >
-                    <PremiumPackageCard item={item} />
+                    <PremiumPackageCard item={item} index={index} />
                   </CarouselItem>
                 ))}
               </CarouselContent>

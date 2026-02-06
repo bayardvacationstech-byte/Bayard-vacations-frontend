@@ -150,26 +150,20 @@ export default function ThemeHighlights({
           <div className="lg:col-span-5">
             <div className="relative h-[450px] sm:h-[500px] lg:h-[600px] rounded-3xl overflow-hidden group shadow-2xl">
               {/* Background Media */}
-              <AnimatePresence>
-                <motion.div
-                  key={currentThemeIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="absolute inset-0"
-                >
-                  <video
-                    src={VIDEO_MAP[currentTheme?.themeSlug]}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80" />
-                </motion.div>
-              </AnimatePresence>
+              <div
+                key={currentThemeIndex}
+                className="absolute inset-0"
+              >
+                <video
+                  src={VIDEO_MAP[currentTheme?.themeSlug]}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80" />
+              </div>
 
               {/* Play/Pause Toggle */}
               <button
@@ -181,11 +175,8 @@ export default function ThemeHighlights({
               
               {/* Center Content */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-20 px-6 sm:px-8 mt-12">
-                  <motion.div
+                  <div
                     key={`text-${currentThemeIndex}`}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
                   >
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold font-nord text-white mb-3 sm:mb-4 drop-shadow-lg leading-tight">
                         {themeData?.title || currentTheme?.themeText}
@@ -200,7 +191,7 @@ export default function ThemeHighlights({
                     >
                         Explore Packages
                     </Link>
-                  </motion.div>
+                  </div>
               </div>
 
               {/* Navigation Controls */}
@@ -240,70 +231,64 @@ export default function ThemeHighlights({
 
              {/* RIGHT COLUMN - GRID */}
           <div className="lg:col-span-7 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentThemeIndex}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start"
-                >
-                  {currentThemeLoading && packages.length === 0 ? (
-                    Array.from({ length: 4 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-48 sm:h-64 rounded-2xl bg-slate-100 animate-pulse"
-                      />
-                    ))
-                  ) : packages.length > 0 ? (
-                    packages.map((pkg, index) => (
-                      <div
-                        key={pkg.id || index}
-                        className="group cursor-pointer relative h-52 sm:h-64 lg:h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              <div
+                key={currentThemeIndex}
+                className="grid grid-cols-2 gap-3 sm:gap-6 h-full content-start"
+              >
+                {(currentThemeLoading && packages.length === 0) ? (
+                  Array.from({ length: 4 }).map((_, i) => (
+                    <div
+                      key={`skeleton-${i}`}
+                      className="h-48 sm:h-64 rounded-2xl bg-slate-100 animate-pulse"
+                    />
+                  ))
+                ) : packages.length > 0 ? (
+                  packages.map((pkg, index) => (
+                    <div
+                      key={pkg.id || index}
+                      className="group cursor-pointer relative h-52 sm:h-64 lg:h-72 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                    >
+                      <Link
+                        href={`/packages/${pkg.region}/${pkg.packageSlug}`}
+                        className="block w-full h-full"
                       >
-                        <Link
-                          href={`/packages/${pkg.region}/${pkg.packageSlug}`}
-                          className="block w-full h-full"
-                        >
-                          <div className="absolute inset-0 bg-slate-200">
-                            <Image
-                              src={
-                                pkg.cardImages?.[0]?.url ||
-                                pkg.image ||
-                                pkg.imageUrl ||
-                                "/img/package-img/default.jpg"
-                              }
-                              alt={pkg.packageTitle}
-                              fill
-                              className="object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                        <div className="absolute inset-0 bg-slate-200">
+                          <Image
+                            src={
+                              pkg.cardImages?.[0]?.url ||
+                              pkg.image ||
+                              pkg.imageUrl ||
+                              "/img/package-img/default.jpg"
+                            }
+                            alt={pkg.packageTitle}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
 
-                          <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end">
-                            <h3 className="text-sm sm:text-xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md capitalize leading-tight">
-                              {pkg.region.split("-").join(" ")}
-                            </h3>
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
-                              <p className="text-white/80 text-[10px] sm:text-sm line-clamp-1">
-                                {pkg.packageTitle}
-                              </p>
-                              <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto">
-                                ₹{formatPrice(pkg.basePrice)}
-                              </span>
-                            </div>
+                        <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end">
+                          <h3 className="text-sm sm:text-xl font-bold text-white mb-0.5 sm:mb-1 drop-shadow-md capitalize leading-tight">
+                            {pkg.region.split("-").join(" ")}
+                          </h3>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
+                            <p className="text-white/80 text-[10px] sm:text-sm line-clamp-1">
+                              {pkg.packageTitle}
+                            </p>
+                            <span className="text-white font-bold bg-brand-green/90 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded backdrop-blur-sm text-[10px] sm:text-sm whitespace-nowrap self-start sm:self-auto">
+                              ₹{formatPrice(pkg.basePrice)}
+                            </span>
                           </div>
-                        </Link>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="col-span-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                      <p className="text-slate-400 font-medium">Coming Soon</p>
+                        </div>
+                      </Link>
                     </div>
-                  )}
-                </motion.div>
-              </AnimatePresence>
+                  ))
+                ) : (
+                  <div className="col-span-full h-64 flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                    <p className="text-slate-400 font-medium">Coming Soon</p>
+                  </div>
+                )}
+              </div>
 
               <div className="mt-8 flex justify-end">
                  <Link 

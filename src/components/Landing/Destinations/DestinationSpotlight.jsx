@@ -151,7 +151,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-16">
           
           {/* Left Side - Content */}
-          <div className="lg:max-w-xxl animate-fadeIn text-center lg:text-left">
+          <div className="lg:max-w-xxl text-center lg:text-left">
             <div className="inline-block mb-3 md:mb-4">
               <h2 className="text-brand-peach font-black tracking-[0.05em] md:tracking-[0.08em] uppercase text-2xl md:text-4xl lg:text-5xl drop-shadow-[0_0_20px_rgba(242,194,136,0.5)]">
                 Bayard Luxury Escapes
@@ -165,7 +165,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
           </div>
 
           {/* Right Side - Buttons */}
-          <div className="flex flex-row lg:flex-col items-center lg:items-end gap-2 md:gap-4 animate-fadeInUp">
+          <div className="flex flex-row lg:flex-col items-center lg:items-end gap-2 md:gap-4">
             <Link
               href="/themes/elite-escape"
               className="group flex items-center gap-2 px-4 py-2 md:px-8 md:py-4 bg-brand-peach text-black text-sm md:text-base font-bold rounded-full shadow-xl hover:shadow-brand-peach/30 hover:scale-105 transition-all"
@@ -189,7 +189,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
       </div>
 
       {/* Full-Width Large Carousel Navigation */}
-      <div className="relative w-full max-w-[95%] mx-auto pb-8 animate-fadeInUp delay-500">
+      <div className="relative w-full max-w-[95%] mx-auto pb-8">
         <div className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 z-20">
           <button
             onClick={() => setActiveBanner((prev) => (prev - 1 + displays.length) % displays.length)}
@@ -239,7 +239,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
               </div>
               
               {activeBanner === index && (
-                <div className="absolute top-5 right-5 w-4 h-4 bg-brand-peach rounded-full ring-4 ring-white/20 animate-pulse"></div>
+                <div className="absolute top-5 right-5 w-4 h-4 bg-brand-peach rounded-full ring-4 ring-white/20"></div>
               )}
             </button>
           ))}

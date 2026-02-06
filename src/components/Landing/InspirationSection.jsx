@@ -102,13 +102,7 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
-      initial={{ 
-        scale: stackScale, 
-        x: isTop ? 0 : stackOffsetX,
-        y: isTop ? 0 : stackOffset, 
-        rotate: isTop ? 0 : stackRotate,
-        zIndex: 10 - index 
-      }}
+      initial={false}
       animate={{ 
         scale: stackScale, 
         x: isTop ? 0 : stackOffsetX,

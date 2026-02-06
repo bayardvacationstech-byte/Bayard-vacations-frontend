@@ -129,30 +129,7 @@ export default function Testimonials({ reviews }) {
         </div>
       </Container>
 
-      {/* Floating Background Sparkles */}
-      <div className="absolute inset-0 z-20 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute size-1 bg-cyan-400/30 rounded-full blur-[1px]"
-            initial={{ 
-              x: `${Math.random() * 100}%`, 
-              y: `${Math.random() * 100}%`,
-              opacity: 0 
-            }}
-            animate={{ 
-              y: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
-              opacity: [0, 0.4, 0],
-              scale: [0, 1.5, 0]
-            }}
-            transition={{ 
-              duration: 10 + Math.random() * 20, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
+      {/* Floating Background Sparkles - Removed for performance and instant reveal */}
     </section>
   );
 }

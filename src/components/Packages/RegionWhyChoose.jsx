@@ -53,9 +53,6 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
             {/* Left: Title Section */}
             <div className="flex-1">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 border border-brand-green/20 mb-6"
               >
                 <span className="text-sm font-black text-brand-green uppercase tracking-[0.2em] flex items-center gap-2">
@@ -65,9 +62,6 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               </motion.div>
               
               <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
                 className="text-3xl sm:text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
               >
                 <span className="hidden sm:inline">Why Choose </span>
@@ -76,9 +70,6 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               </motion.h2>
               
               <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                viewport={{ once: true }}
                 className="hidden sm:block text-xl text-slate-500 max-w-2xl font-medium truncate md:whitespace-normal"
               >
                 Explore the beauty, culture, and unforgettable signature experiences that await you
@@ -88,10 +79,6 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
             {/* Right: Button */}
             <Link href={`/why-choose/${regionSlug}`}>
               <motion.button
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 whitespace-nowrap shadow-lg shadow-blue-500/20 active:scale-95"
               >
                 Explore More
@@ -110,10 +97,6 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               className={gridConfigs[index] || "md:col-span-3"}
             >
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="relative h-full w-full rounded-[2rem] overflow-hidden group shadow-lg cursor-pointer"
               >
                 <Image 

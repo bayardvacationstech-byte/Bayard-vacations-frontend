@@ -13,7 +13,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const PremiumPackageCard = ({ item, className, isGroup = false }) => {
+const PremiumPackageCard = ({ item, className, isGroup = false, index = 0 }) => {
   const [swiper, setSwiper] = useState(null);
 
   // Robust image scavenging logic (consistent with LandingPackageCard)
@@ -96,7 +96,7 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
 
   return (
     <div className={cn(
-      "travel-card group w-full relative overflow-hidden h-[400px] sm:h-[520px] rounded-[28px] bg-black shadow-xl hover:shadow-2xl transition-all duration-500",
+      "travel-card group w-full relative overflow-hidden h-[400px] sm:h-[520px] rounded-[28px] bg-black shadow-xl hover:shadow-2xl transition-all duration-500 gpu-accelerated",
       className
     )}>
       <Link href={href} className="block w-full h-full">
@@ -124,7 +124,8 @@ const PremiumPackageCard = ({ item, className, isGroup = false }) => {
                     src={img.url}
                     alt={item.packageTitle || "Package"}
                     fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                    className="object-cover"
+                    priority={index < 4 && i === 0}
                   />
                 </SwiperSlide>
               ))

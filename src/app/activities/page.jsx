@@ -4,6 +4,9 @@ import { getRegions } from "@/utils/firebase";
 export const metadata = {
   title: "Explore Activities | Bayard Vacations",
   description: "Discover exciting activities and experiences across all our destinations. From adventure sports to cultural tours, find the perfect activity for your trip.",
+  alternates: {
+    canonical: "/activities",
+  },
 };
 
 export default async function GlobalActivitiesPage() {

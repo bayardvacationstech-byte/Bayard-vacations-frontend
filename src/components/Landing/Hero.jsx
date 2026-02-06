@@ -445,6 +445,7 @@ const Hero = () => {
               <Image
                 src={ReviewCompanies}
                 alt="Google"
+                priority
                 className="h-5 sm:h-10 w-auto group-hover/badge:scale-105 transition-transform duration-300"
               />
               <div className="flex items-center gap-0.5 sm:gap-1.5 font-black group-hover/badge:translate-x-0.5 transition-transform duration-300">

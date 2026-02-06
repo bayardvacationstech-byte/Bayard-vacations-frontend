@@ -11,6 +11,9 @@ export const metadata = {
     "Have questions or need assistance planning your trip? Contact Bayard Vacations! Our travel experts are here to help you design the perfect getaway. Reach out today!",
   keywords:
     "Bayard Vacations contact, travel planning assistance, vacation support, customized travel queries, contact travel experts, plan your trip",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 const ContactPage = () => {

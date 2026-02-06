@@ -4,29 +4,20 @@ import {
   getCuratedPackagesForHome,
   getGroupDeparturePackagesForHome,
   getThemePackagesForHome,
+  getMarketingBanners,
 } from "@/lib/server";
 import Hero from "@/components/Landing/Hero";
-// import BrandIntro from "@/components/Landing/BrandIntro";
 import Holidays from "@/components/Landing/Holidays";
-import ThemeHighlights from "@/components/Landing/ThemeHighlights";
-// import WhyBayard from "@/components/Landing/WhyBayard";
-// import Testimonials from "@/components/Landing/Testimonials";
 import ExploreDestinations from "@/components/Landing/Destinations/ExploreDestinations";
-import ThemePackages from "@/components/Landing/Destinations/ThemePackages";
-// import GroupDeparture from "@/components/Landing/GroupDeparture";
-import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
-import StartJourney from "@/components/Landing/StartJourney";
-// import InspirationSection from "@/components/Landing/InspirationSection";
 import TravelStyle from "@/components/Landing/TravelStyle";
+import ThemeHighlights from "@/components/Landing/ThemeHighlights";
+import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
+import GroupDeparture from "@/components/Landing/GroupDeparture";
+import WhyBayard from "@/components/Landing/WhyBayard";
+import InspirationSection from "@/components/Landing/InspirationSection";
+import RegionTestimonials from "@/components/Packages/RegionTestimonials";
 import MobileAdBanner from "@/components/Landing/MobileAdBanner";
 import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
-import dynamic from "next/dynamic";
-
-const WhyBayard = dynamic(() => import("@/components/Landing/WhyBayard"));
-const Testimonials = dynamic(() => import("@/components/Landing/Testimonials"));
-const GroupDeparture = dynamic(() => import("@/components/Landing/GroupDeparture"));
-const InspirationSection = dynamic(() => import("@/components/Landing/InspirationSection"));
-const RegionTestimonials = dynamic(() => import("@/components/Packages/RegionTestimonials"));
 
 // Timeout wrapper to prevent indefinite hanging
 const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
@@ -62,7 +53,8 @@ const HomePage = async () => {
     domesticPackages,
     themePackages,
     groupDeparturePackages,
-    reviews
+    reviews,
+    marketingBanner
   ] = await Promise.all([
     trackPerformance(
       "getRegionsForHome",
@@ -94,6 +86,11 @@ const HomePage = async () => {
       () => withTimeout(fetchReviews(), TIMEOUT_MS, [], "fetchReviews"),
       []
     ),
+    trackPerformance(
+      "getMarketingBanners",
+      () => withTimeout(getMarketingBanners(), TIMEOUT_MS, null, "getMarketingBanners"),
+      null
+    ),
   ]);
 
   const regions = regionData || [];
@@ -115,17 +112,12 @@ const HomePage = async () => {
       <section>
         <Hero />
       </section>
-      {/* <BrandIntro /> */}
 
-      {/* <section className="bg-gradient-to-b from-[#0146b3] to-[#003488] sm:py-2 text-white relative overflow-hidden">
-        <ThemePackages />
-      </section> */}
-
-      <section className="bg-white section-padding blue-section">
+      <section className="bg-white section-padding blue-section scroll-optimize">
         <ExploreDestinations initialRegions={regions} />
       </section>
 
-      <section className="bg-gradient-to-b from-white to-slate-50 section-padding blue-section">
+      <section className="bg-gradient-to-b from-white to-slate-50 section-padding blue-section scroll-optimize">
         <Holidays
           initialInternationalPackages={internationalPackages}
           initialDomesticPackages={domesticPackages}
@@ -141,15 +133,15 @@ const HomePage = async () => {
 
       {/* Advertisement Banner - Desktop */}
       <section className="section-padding px-4 sm:px-6 lg:px-8 hidden md:block">
-        <AdvertisementBanner />
+        <AdvertisementBanner bannerData={marketingBanner} />
       </section>
 
       {/* Advertisement Banner - Mobile */}
       <section className="block md:hidden">
-        <MobileAdBanner />
+        <MobileAdBanner bannerData={marketingBanner} />
       </section>
 
-      <section className="bg-gradient-to-b from-slate-50 to-white blue-section">
+      <section className="bg-gradient-to-b from-slate-50 to-white blue-section scroll-optimize">
         <ThemeHighlights
           initialEliteEscapePackages={eliteEscapePackages}
           initialSoloExpeditionPackages={soloExpeditionPackages}
@@ -171,16 +163,14 @@ const HomePage = async () => {
       <section className="bg-white relative overflow-hidden section-padding">
         <GroupDeparture groupDeparturePackages={groupDeparturePackages} />
       </section>
+      
       <section className="bg-gradient-to-br from-[#0146b3] to-[#020617] section-padding text-white relative overflow-hidden">
         <WhyBayard />
       </section>
-         <section>
+      
+      <section>
         <InspirationSection />
       </section>
-
-      {/* <section>
-        <StartJourney />
-      </section> */}
 
       <section className="relative overflow-hidden">
         <RegionTestimonials 
@@ -188,10 +178,6 @@ const HomePage = async () => {
           initialReviews={reviews}
         />
       </section>
-
-
-
-   
     </>
   );
 };
