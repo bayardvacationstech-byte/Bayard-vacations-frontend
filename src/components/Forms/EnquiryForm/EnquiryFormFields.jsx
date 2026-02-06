@@ -201,6 +201,7 @@ export default function EnquiryFormFields({
           description: formData.description || formData.message || "Potential lead from website",
           destination: formData.destination,
         });
+        if (response) trackLeadFormConversion();
       }
 
       if (response) {

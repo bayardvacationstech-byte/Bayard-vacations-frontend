@@ -293,7 +293,7 @@ const DesktopNavbar = () => {
                   </Button>
                 )}
                 <Button
-                  className={cn("rounded-full text-white hover:text-brand-blue", {
+                  className={cn("rounded-full text-white hover:bg-white/10 hover:text-brand-blue", {
                     "text-brand-blue": !isHeaderFixed,
                   })}
                   variant="ghost"

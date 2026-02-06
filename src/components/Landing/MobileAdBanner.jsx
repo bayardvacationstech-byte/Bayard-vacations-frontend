@@ -7,68 +7,74 @@ import { ArrowRight, MessageCircle, Map, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const DESTINATIONS = [
-  {
-    image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&auto=format&fit=crop&q=80",
-    name: "Maldives",
-    offer: "30% OFF",
-    bg: "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]" // Deep Blue theme
-  },
-  {
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&auto=format&fit=crop&q=80",
-    name: "Dubai",
-    offer: "25% OFF",
-    bg: "from-[#4a3b00] via-[#b48e1a] to-[#4a3b00]" // Gold theme (variant)
-  },
-  {
-    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&auto=format&fit=crop&q=80",
-    name: "Thailand",
-    offer: "35% OFF",
-    bg: "from-[#004a2f] via-[#1ab470] to-[#004a2f]" // Green theme (variant)
-  }
-];
-
-const FEATURES = [
-  {
-    icon: <MessageCircle className="w-5 h-5" />,
-    title: "AI Bot Support",
-    desc: "24/7 instant assistance for all your travel queries",
-    color: "bg-blue-400/20 text-blue-400"
-  },
-  {
-    icon: <Map className="w-5 h-5" />,
-    title: "Customized Itineraries",
-    desc: "Tailor-made trips designed around your preferences",
-    color: "bg-emerald-400/20 text-emerald-400"
-  }
-];
-
-const MobileAdBanner = () => {
+const MobileAdBanner = ({ bannerData }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % DESTINATIONS.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+  // Fallback data
+  const FALLBACK_DESTINATIONS = [
+    {
+      image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
+      name: "Maldives",
+      offer: "30% OFF",
+      bg: "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]"
+    }
+  ];
+
+  const FALLBACK_FEATURES = [
+    {
+      icon: <MessageCircle className="w-5 h-5" />,
+      title: "AI Bot Support",
+      desc: "24/7 instant assistance for all your travel queries",
+      color: "bg-blue-400/20 text-blue-400"
+    }
+  ];
+
+  // Map dynamic data or use fallbacks
+  const destinations = bannerData?.mediaCarousel?.items?.map(item => ({
+    image: item.src || item.imageUrl || item.image,
+    name: item.featuredText || item.title || "Exclusive Destination",
+    offer: bannerData?.mediaCarousel?.floatingDeal?.discount || "SPECIAL OFFER",
+    bg: item.bgColor || "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]"
+  })) || FALLBACK_DESTINATIONS;
+
+  const features = bannerData?.promotionSection?.cards?.map((card, idx) => ({
+    icon: idx === 0 ? <MessageCircle className="w-5 h-5" /> : <Map className="w-5 h-5" />,
+    title: card.title || "Premium Service",
+    desc: card.description || card.subtitle || "Tailored travel experiences",
+    color: idx === 0 ? "bg-blue-400/20 text-blue-400" : "bg-emerald-400/20 text-emerald-400"
+  })) || FALLBACK_FEATURES;
+
+  const content = bannerData?.contentSection || {
+    title: "Dream Vacations Await",
+    subtitle: "Exclusive deals on handpicked destinations curated just for you"
+  };
 
   useEffect(() => {
+    if (destinations.length <= 1) return;
+    const interval = bannerData?.mediaCarousel?.config?.interval || 4000;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % destinations.length);
+    }, interval);
+    return () => clearInterval(timer);
+  }, [destinations.length, bannerData]);
+
+  useEffect(() => {
+    if (features.length <= 1) return;
     const interval = setInterval(() => {
-      setActiveFeatureIndex((prev) => (prev + 1) % FEATURES.length);
+      setActiveFeatureIndex((prev) => (prev + 1) % features.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [features.length]);
 
-  const activeDestination = DESTINATIONS[activeIndex];
-  const activeFeature = FEATURES[activeFeatureIndex];
+  const activeDestination = destinations[activeIndex] || destinations[0];
+  const activeFeature = features[activeFeatureIndex] || features[0];
 
   return (
     <div className="relative w-full max-w-md mx-auto min-h-screen pb-32 overflow-hidden md:hidden transition-colors duration-1000">
       
       {/* Dynamic Background */}
-      <div className={cn("absolute inset-0 bg-gradient-to-b transition-colors duration-1000", activeDestination.bg || "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]")} />
+      <div className={cn("absolute inset-0 bg-gradient-to-b transition-colors duration-1000", activeDestination.bg)} />
 
       {/* Decorative Elements */}
       <div className="absolute w-[200px] h-[200px] border border-white/10 rounded-full -top-[100px] -right-[100px] pointer-events-none" />
@@ -141,12 +147,16 @@ const MobileAdBanner = () => {
       {/* Content Section */}
       <div className="relative z-10 px-6 py-8 text-center">
         <h1 className="text-white text-4xl font-[800] leading-tight mb-2 drop-shadow-lg">
-          Dream<br />
-          <span className="text-[#fcd34d]">Vacations</span><br />
-          Await
+          {content.title.split(' ').map((word, i) => (
+            <React.Fragment key={i}>
+              {word === 'Vacations' ? <span className="text-[#fcd34d]">{word}</span> : word}
+              {i === 0 ? <br /> : ' '}
+              {i === 1 ? <br /> : ''}
+            </React.Fragment>
+          ))}
         </h1>
         <p className="text-white/85 text-[15px] leading-relaxed mb-8 px-2">
-          Exclusive deals on handpicked destinations curated just for you
+          {content.subtitle}
         </p>
 
         <Link href="/explore" className="bg-white text-[#1a5fb4] border-none px-10 py-4 rounded-full text-base font-bold cursor-pointer inline-flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-transform mb-8">
@@ -158,7 +168,7 @@ const MobileAdBanner = () => {
 
         {/* Carousel Indicators */}
         <div className="flex justify-center gap-2 mt-2">
-            {DESTINATIONS.map((_, idx) => (
+            {destinations.map((_, idx) => (
                 <div 
                     key={idx}
                     className={cn(

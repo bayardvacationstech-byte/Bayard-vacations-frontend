@@ -15,7 +15,7 @@ import {
   sanitizeDocumentData,
   getCuratedPackages,
 } from "@/utils/firebase";
-import { doc, getDocFromServer, getDocsFromServer, limit } from "firebase/firestore";
+import { doc, getDocFromServer, getDocsFromServer, limit, collection, query, where } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { minimizePackageData, minimizeRegionData, minimizeReviewData } from "@/utils/dataMinimizers";
 
@@ -226,18 +226,75 @@ export const getRegionsForHome = unstableCache(
   async () => {
     try {
       const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
-      const querySnapshot = await getDocsFromServer(regionsQuery);
-      const regions = querySnapshot.docs
-        .map(sanitizeDocumentData)
-        .map(minimizeRegionData);
+      const regionsSnapshot = await getDocsFromServer(regionsQuery);
+      let regions = regionsSnapshot.docs.map(sanitizeDocumentData);
 
-      return serializeData(regions);
+      // Batch fetch frontPage card images to enrich regions that lack featuredImage
+      const imagesRef = collection(db, COLLECTIONS.IMAGES);
+      const q = query(
+        imagesRef,
+        where("type", "==", "card"),
+        where("frontPage", "==", true)
+      );
+      const imagesSnapshot = await getDocsFromServer(q);
+      const frontPageImages = imagesSnapshot.docs.map(sanitizeDocumentData);
+
+      // Create a map of region -> image for quick lookup
+      const imageMap = {};
+      frontPageImages.forEach(img => {
+        const reg = img.region?.toLowerCase();
+        if (reg) {
+          if (!imageMap[reg]) imageMap[reg] = [];
+          imageMap[reg].push(img);
+        }
+      });
+
+      // Enrich regions
+      const enrichedRegions = regions.map(region => {
+        const minimized = minimizeRegionData(region);
+        // If image is missing, try to find one from our batch
+        if (!minimized.featuredImage) {
+          const matchingImages = imageMap[region.slug?.toLowerCase()];
+          if (matchingImages?.length > 0) {
+            const randomImage = matchingImages[Math.floor(Math.random() * matchingImages.length)];
+            minimized.featuredImage = { url: randomImage.url || randomImage.imageUrl };
+          }
+        }
+        return minimized;
+      });
+
+      return serializeData(enrichedRegions);
     } catch (error) {
       console.error("Error getting regions for home:", error);
       return [];
     }
   },
   ["regions-home"],
+  { revalidate: 60 }
+);
+
+export const getMarketingBanners = unstableCache(
+  async () => {
+    try {
+      const bannersCollection = collection(db, "marketing_banners");
+      const bannersQuery = query(
+        bannersCollection,
+        where("isActive", "==", true)
+      );
+      
+      const bannersSnapshot = await getDocsFromServer(bannersQuery);
+      const banners = bannersSnapshot.docs
+        .map(sanitizeDocumentData)
+        .filter(data => !data.isExpired);
+
+      // Return the first active banner if available
+      return serializeData(banners.length > 0 ? banners[0] : null);
+    } catch (error) {
+      console.error("Error fetching marketing banners:", error);
+      return null;
+    }
+  },
+  ["marketing-banners"],
   { revalidate: 60 }
 );
 

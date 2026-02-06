@@ -139,42 +139,34 @@ const TravelStyle = ({
       </div>
 
       <div className="relative min-h-[400px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${activeTab}-${activeStyle}`}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          >
-            {/* CAROUSEL */}
-            <div className="relative">
-              {displayPackages.length > 0 ? (
-                <Carousel
-                  opts={{ align: "start" }}
-                  className="w-full mt-4"
-                >
-                  <CarouselContent className="-ml-4">
-                    {displayPackages.map((item, index) => (
-                      <CarouselItem 
-                        key={`${item.id}-${index}`} 
-                        className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/4"
-                      >
-                        <PremiumPackageCard item={item} />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
-                  <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
-                </Carousel>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-gray-100 rounded-3xl w-full">
-                  <p className="text-gray-400 font-medium text-lg">No packages found for this style</p>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+        <div key={`${activeTab}-${activeStyle}`}>
+          {/* CAROUSEL */}
+          <div className="relative">
+            {displayPackages.length > 0 ? (
+              <Carousel
+                opts={{ align: "start" }}
+                className="w-full mt-4"
+              >
+                <CarouselContent className="-ml-4">
+                  {displayPackages.map((item, index) => (
+                    <CarouselItem 
+                      key={`${item.id}-${index}`} 
+                      className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/4"
+                    >
+                      <PremiumPackageCard item={item} index={index} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
+                <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition border border-gray-100" />
+              </Carousel>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-gray-100 rounded-3xl w-full">
+                <p className="text-gray-400 font-medium text-lg">No packages found for this style</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </Container>
   );

@@ -28,61 +28,9 @@ const FALLBACK_FEATURES = [
   }
 ];
 
-export default function AdvertisementBanner() {
+export default function AdvertisementBanner({ bannerData }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
-  const [bannerData, setBannerData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch marketing_banners collection from Firestore
-  useEffect(() => {
-    const fetchMarketingBanners = async () => {
-      try {
-        console.log("=== FETCHING MARKETING BANNERS ===");
-        const bannersCollection = collection(db, "marketing_banners");
-        
-        // Query for active banners only
-        const bannersQuery = query(
-          bannersCollection,
-          where("isActive", "==", true)
-        );
-        
-        const bannersSnapshot = await getDocs(bannersQuery);
-        
-        const banners = [];
-        bannersSnapshot.forEach((doc) => {
-          const data = doc.data();
-          // Check if banner is not expired
-          if (!data.isExpired) {
-            banners.push({
-              id: doc.id,
-              ...data
-            });
-          }
-        });
-
-        console.log("=== MARKETING BANNERS DATA ===");
-        console.log("Total Active Banners:", banners.length);
-        console.log("All Banners:", banners);
-
-        // Use the first active banner
-        if (banners.length > 0) {
-          const activeBanner = banners[0];
-          console.log("Using Banner:", activeBanner);
-          setBannerData(activeBanner);
-        } else {
-          console.log("No active banners found, using fallback data");
-        }
-
-      } catch (error) {
-        console.error("Error fetching marketing_banners:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMarketingBanners();
-  }, []);
 
   // Get media carousel items or fallback to static data
   const mediaItems = bannerData?.mediaCarousel?.items || FALLBACK_DESTINATIONS.map(dest => ({
@@ -134,19 +82,6 @@ export default function AdvertisementBanner() {
   }, [promoCards.length]);
 
   const activeMedia = mediaItems[activeIndex] || mediaItems[0];
-
-  // Show loading skeleton while fetching
-  if (isLoading) {
-    return (
-      <section className="relative h-auto lg:h-[50vh] overflow-hidden bg-slate-200 animate-pulse sm:rounded-[80px_12px_80px_12px] rounded-none">
-        <div className="flex flex-col lg:flex-row h-full">
-          <div className="w-full lg:w-[20%] bg-slate-300" />
-          <div className="w-full lg:w-[60%] bg-slate-400 h-[300px] lg:h-auto" />
-          <div className="w-full lg:w-[20%] bg-slate-300" />
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="relative h-auto lg:h-[50vh] overflow-hidden bg-slate-950 sm:rounded-[80px_12px_80px_12px] rounded-none">

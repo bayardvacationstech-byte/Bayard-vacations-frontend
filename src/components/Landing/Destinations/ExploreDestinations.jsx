@@ -72,55 +72,49 @@ export default function ExploreDestinations({ initialRegions }) {
       </div>
 
       <div className="relative min-h-[350px] md:min-h-[450px] pb-4 px-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
+          <div
+            key={activeTab}
+          >
+            {/* Carousel Content */}
+            <Carousel
+              opts={{ align: "start" }}
+              className="mt-4"
             >
-              {/* Carousel Content */}
-              <Carousel
-                opts={{ align: "start" }}
-                className="mt-4"
-              >
-                <CarouselContent>
-                  {activeTab === "international" ? (    
-                    displayInternationalRegions.length > 0 ? (
-                      displayInternationalRegions.map((region, index) => (
-                        <CarouselItem key={region.slug || index} className="basis-[80%] sm:basis-1/2 lg:basis-1/4">
-                          <DestinationCard regionSlug={region.slug} index={index} />
-                        </CarouselItem>
-                      ))
-                    ) : (
-                      <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
-                        {regionIsLoading ? "Loading International Destinations..." : 
-                        error ? "Error loading destinations. Please refresh the page." :
-                        "No international regions available."}
-                      </div>
-                    )
+              <CarouselContent>
+                {activeTab === "international" ? (    
+                  displayInternationalRegions.length > 0 ? (
+                    displayInternationalRegions.map((region, index) => (
+                      <CarouselItem key={region.slug || index} className="basis-[80%] sm:basis-1/2 lg:basis-1/4">
+                        <DestinationCard regionSlug={region.slug} index={index} region={region} />
+                      </CarouselItem>
+                    ))
                   ) : (
-                    displayDomesticRegions.length > 0 ? (
-                      displayDomesticRegions.map((region, index) => (
-                        <CarouselItem key={region.slug || index} className="basis-[80%] sm:basis-1/2 lg:basis-1/4">
-                          <DestinationCard regionSlug={region.slug} index={index} />
-                        </CarouselItem>
-                      ))
-                    ) : (
-                      <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
-                        {regionIsLoading ? "Loading Domestic Destinations..." : 
-                        error ? "Error loading destinations. Please refresh the page." :
-                        "No domestic regions available."}
-                      </div>
-                    )
-                  )}
-                </CarouselContent>
-                <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
-                <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
-              </Carousel>
-            </motion.div>
-          </AnimatePresence>
+                    <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
+                      {regionIsLoading ? "Loading International Destinations..." : 
+                      error ? "Error loading destinations. Please refresh the page." :
+                      "No international regions available."}
+                    </div>
+                  )
+                ) : (
+                  displayDomesticRegions.length > 0 ? (
+                    displayDomesticRegions.map((region, index) => (
+                      <CarouselItem key={region.slug || index} className="basis-[80%] sm:basis-1/2 lg:basis-1/4">
+                        <DestinationCard regionSlug={region.slug} index={index} region={region} />
+                      </CarouselItem>
+                    ))
+                  ) : (
+                    <div className="w-full h-40 flex items-center justify-center text-sm text-gray-400">
+                      {regionIsLoading ? "Loading Domestic Destinations..." : 
+                      error ? "Error loading destinations. Please refresh the page." :
+                      "No domestic regions available."}
+                    </div>
+                  )
+                )}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
+              <CarouselNext className="hidden md:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-white shadow-lg text-black hover:scale-110 transition" />
+            </Carousel>
+          </div>
       </div>
 
       <div className="mt-4 md:mt-6 flex justify-center">

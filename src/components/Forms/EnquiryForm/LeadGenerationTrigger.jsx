@@ -41,10 +41,10 @@ const LeadGenerationTrigger = () => {
     if (sessionStorage.getItem(key) === "true") return;
 
     // --- Time-based Trigger ---
-    // Show after 15 seconds
+    // Show after 45 seconds
     const timer = setTimeout(() => {
       handleTrigger();
-    }, 15000);
+    }, 45000);
 
     // --- Scroll-based Trigger ---
     // Show when scrolling past 40% of the page
@@ -58,7 +58,7 @@ const LeadGenerationTrigger = () => {
 
       const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
       
-      if (scrollPercentage > 0.4) {
+      if (scrollPercentage > 0.6) {
         handleTrigger();
       }
     };

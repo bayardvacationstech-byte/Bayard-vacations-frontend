@@ -3,6 +3,7 @@ import { storePotentialLead } from "@/utils/firebase";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { MessageCircle, Send, User, Mail, Phone, Compass } from "lucide-react";
+import { trackLeadFormConversion } from "@/utils/conversion";
 
 const ContactForm = () => {
   const initialFormState = {
@@ -76,6 +77,7 @@ const ContactForm = () => {
       });
 
       if (response) {
+        trackLeadFormConversion();
         toast("Success", {
           description:
             "Form submitted, Our team will get in touch with you soon",

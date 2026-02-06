@@ -1,9 +1,10 @@
 /**
- * Triggers Google Ads conversion event for lead form submissions
+ * Triggers conversion events for lead form submissions
  * This function should be called after a successful form submission
+ * Tracks conversions in both Google Ads and Taboola
  */
 export const trackLeadFormConversion = () => {
-  // Check if gtag is available (from Google Analytics)
+  // Google Ads conversion tracking
   if (typeof window !== "undefined" && window.gtag) {
     try {
       window.gtag("event", "conversion", {
@@ -12,7 +13,16 @@ export const trackLeadFormConversion = () => {
         currency: "INR",
       });
     } catch (error) {
+      console.error("Google Ads conversion tracking failed:", error);
     }
-  } else {
+  }
+
+  // Taboola conversion tracking
+  if (typeof window !== "undefined" && window.trackTaboolaConversion) {
+    try {
+      window.trackTaboolaConversion();
+    } catch (error) {
+      console.error("Taboola conversion tracking failed:", error);
+    }
   }
 };

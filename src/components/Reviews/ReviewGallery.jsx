@@ -21,10 +21,6 @@ const CLIENT_VIDEOS = [
 const VideoCard = ({ video, index, onClick }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.05, duration: 0.4 }}
       onClick={() => onClick(video)}
       className="group relative aspect-[9/16] rounded-2xl overflow-hidden cursor-pointer bg-slate-100 shadow-sm hover:shadow-xl transition-all duration-300"
     >

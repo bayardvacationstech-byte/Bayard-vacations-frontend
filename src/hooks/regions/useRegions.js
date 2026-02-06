@@ -14,7 +14,7 @@ export function useRegions(initialRegions = []) {
     queryKey: ["regions"],
     queryFn: () => getRegions(),
     gcTime: 5 * 60 * 1000, 
-    staleTime: 0, // Truly immediate updates
+    staleTime: 60 * 1000, // 1 minute
     initialData: hasInitialData ? initialRegions : undefined,
     enabled: true, // Always enabled
     retry: 3, // Retry failed requests 3 times

@@ -12,73 +12,41 @@ import { useState, useEffect } from "react";
 export default function DestinationCard({
   regionSlug,
   index = 0,
+  region: passedRegion,
 }) {
-  const { image: queryImage, isLoading: imageLoading, error: imageError } = useDestinationImage(regionSlug);
-  const { regionData, isLoading: regionLoading, error: regionError } = useRegion(regionSlug);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { image: queryImage, isLoading: imageLoading, error: imageError } = useDestinationImage((passedRegion && passedRegion.featuredImage) ? null : regionSlug);
+  const { regionData: fetchedRegion, isLoading: regionLoading, error: regionError } = useRegion(passedRegion ? null : regionSlug);
+  
   const [isHovered, setIsHovered] = useState(false);
-  const [shouldAnimate, setShouldAnimate] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
+  // Use passed region data or fetched data
+  const regionData = passedRegion || fetchedRegion;
   // Use region's featuredImage first, then fall back to query image
   const image = regionData?.featuredImage || queryImage;
-  const isLoading = regionLoading || imageLoading;
-  const error = regionError || imageError;
+  
+  const isLoading = (!passedRegion && regionLoading) || imageLoading;
+  const error = (!passedRegion && regionError) || imageError;
 
-  useEffect(() => {
-    setIsMounted(true);
-    const timer = setTimeout(() => {
-      setShouldAnimate(true);
-    }, index * 100);
-    return () => clearTimeout(timer);
-  }, [index]);
+
 
   return (
-    <>
-      <style jsx global>{`
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-        .animate-shimmer {
-          background-size: 200% 100%;
-          animation: shimmer 2s infinite linear;
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-      `}</style>
-
-      <div
-        className={`relative bg-gray-100 p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl aspect-[5/6] 
-        w-full
-        cursor-pointer transition-all duration-500 ease-out shadow-lg flex-shrink-0
-        ${shouldAnimate ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
-        ${isHovered ? "scale-[1.01] shadow-2xl" : "scale-100 shadow-lg"}
-        `}
-        style={{
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          WebkitBackfaceVisibility: "hidden",
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+    <div
+      className={`relative bg-gray-100 p-2 sm:p-3 md:p-4 rounded-xl md:rounded-2xl aspect-[5/6] 
+      w-full
+      cursor-pointer transition-all duration-500 ease-out shadow-lg flex-shrink-0
+      opacity-100 translate-y-0 gpu-accelerated
+      ${isHovered ? "scale-[1.01] shadow-2xl" : "scale-100 shadow-lg"}
+      `}
+      style={{
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
         <Link href={`/packages/${regionSlug}`} className="block h-full">
-          {!isMounted || isLoading ? (
+          {isLoading ? (
             <div className="absolute inset-0 z-10 h-full w-full overflow-hidden rounded-xl md:rounded-2xl isolation-isolate">
               <div
                 className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200"
@@ -111,11 +79,6 @@ export default function DestinationCard({
                     className="object-cover"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                     priority={index < 4}
-                    onLoadingComplete={() => setIsLoaded(true)}
-                  />
-                  <div
-                    className="absolute inset-0 bg-white transition-opacity duration-500"
-                    style={{ opacity: isLoaded ? 0 : 1 }}
                   />
                 </div>
               </div>
@@ -304,6 +267,5 @@ export default function DestinationCard({
           )}
         </Link>
       </div>
-    </>
   );
 }
