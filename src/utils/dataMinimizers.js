@@ -43,7 +43,7 @@ export const minimizeRegionData = (region) => {
     id: region.id,
     name: region.name || "",
     slug: region.slug || "",
-    featuredImage: region.featuredImage ? { url: region.featuredImage.url } : null,
+    featuredImage: region.featuredImage ? { url: region.featuredImage.url, title: region.featuredImage.title || "" } : null,
     isDomestic: !!region.isDomestic,
     visible: region.visible !== false,
     startingPrice: region.startingPrice || 0,

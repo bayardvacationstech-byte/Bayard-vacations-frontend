@@ -12,9 +12,6 @@ const GlobalTravelLoader = ({ className, text = "Curating your experience..." })
     if (splash) {
       splash.style.opacity = "0";
       splash.style.visibility = "hidden";
-      // Remove it from DOM after transition to save memory
-      const timer = setTimeout(() => splash.remove(), 500);
-      return () => clearTimeout(timer);
     }
   }, []);
 
