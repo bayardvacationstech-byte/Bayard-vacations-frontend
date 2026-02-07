@@ -46,40 +46,40 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { amount: 0.5, once: false });
 
-  // Curated video reviews for the Vlogger Spotlight - Using authentic vlogger-style clips
+  // Curated video reviews for the Vlogger Spotlight - Using CDN-hosted videos
   const videoReviews = [
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.02.47.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431608093-WhatsApp_Video_2026-02-07_at_07.53.19.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.02.56.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431558286-WhatsApp_Video_2026-02-07_at_07.53.16.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.06.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431512177-WhatsApp_Video_2026-02-07_at_07.53.12.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.28.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431463081-WhatsApp_Video_2026-02-07_at_07.53.07.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.43.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431392630-WhatsApp_Video_2026-02-07_at_07.52.58.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.58.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431339559-WhatsApp_Video_2026-02-07_at_07.52.51.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.04.15.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431289628-WhatsApp_Video_2026-02-07_at_07.52.45.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.04.25.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431291373-WhatsApp_Video_2026-02-07_at_07.52.37.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.05.32.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770431059091-WhatsApp_Video_2026-02-07_at_07.52.14.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.11.18_(1).mp4"
+      video: "https://cdn.bayardvacations.com/images/1770430970236-WhatsApp_Video_2026-02-07_at_07.52.08.mp4"
     },
     {
-      video: "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.11.18.mp4"
+      video: "https://cdn.bayardvacations.com/images/1770430880516-WhatsApp_Video_2026-02-07_at_07.52.01.mp4"
     }
   ];
 

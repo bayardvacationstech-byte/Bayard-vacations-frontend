@@ -18,23 +18,50 @@ import Link from "next/link";
 
 export default function ExploreDestinations({ initialRegions }) {
   const [activeTab, setActiveTab] = useState("international");
+  const [hasMounted, setHasMounted] = useState(false);
   const { internationalRegions, domesticRegions, regionIsLoading, error } = useRegionsData(initialRegions);
+
+  // Track when component has mounted (client-side)
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  // Process initialRegions for SSR (before React Query hydrates)
+  const processedInitialRegions = useMemo(() => {
+    if (!initialRegions || initialRegions.length === 0) {
+      return { international: [], domestic: [] };
+    }
+
+    const intlRegions = initialRegions
+      .filter((item) => !item.isDomestic)
+      .filter((item) => item.visible !== false);
+
+    const domestic = initialRegions
+      .filter((item) => item.isDomestic)
+      .filter((item) => item.visible !== false);
+
+    return { international: intlRegions, domestic };
+  }, [initialRegions]);
+
+  // Use hook data after mount, initial data before mount (SSR)
+  const activeInternationalRegions = hasMounted ? internationalRegions : [{ regions: processedInitialRegions.international }];
+  const activeDomesticRegions = hasMounted ? domesticRegions : processedInitialRegions.domestic;
 
   // Get first 8 international regions
   const displayInternationalRegions = useMemo(() => {
-    if (!internationalRegions) return [];
+    if (!activeInternationalRegions) return [];
     // Flatten all regions from all continents and take first 8
-    const allIntl = internationalRegions.reduce((acc, continent) => {
+    const allIntl = activeInternationalRegions.reduce((acc, continent) => {
       return [...acc, ...(continent.regions || [])];
     }, []);
     return allIntl.slice(0, 8);
-  }, [internationalRegions]);
+  }, [activeInternationalRegions]);
 
   // Get first 8 domestic regions
   const displayDomesticRegions = useMemo(() => {
-    if (!domesticRegions) return [];
-    return domesticRegions.slice(0, 8);
-  }, [domesticRegions]);
+    if (!activeDomesticRegions) return [];
+    return activeDomesticRegions.slice(0, 8);
+  }, [activeDomesticRegions]);
 
   return (
     <Container className="sm:px-5">

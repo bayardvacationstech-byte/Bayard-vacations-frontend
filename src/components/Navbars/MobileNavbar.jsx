@@ -228,7 +228,7 @@ export default function MobileNavbar() {
       {/* ================= DROPDOWN ================= */}
       <ul
         className={cn(
-          "fixed inset-0 z-[99] text-white transition-transform duration-300 pt-24 px-6 overflow-y-auto",
+          "fixed inset-0 z-[1100] text-white transition-transform duration-300 pt-24 px-6 overflow-y-auto",
           isDropdownActive ? "translate-x-0" : "translate-x-full"
         )}
         style={{

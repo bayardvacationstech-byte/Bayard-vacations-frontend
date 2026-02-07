@@ -111,12 +111,7 @@ export const useBlogs = () => {
         });
       }
 
-      console.log('[useBlogs] Fetched blogs:', {
-        region,
-        category,
-        totalFetched: fetchedBlogs.length,
-        blogs: fetchedBlogs.map(b => ({ id: b.id, title: b.title, city: b.city, region: b.region }))
-      });
+
 
       setBlogs(fetchedBlogs.slice(0, limitCount));
     } catch (err) {
@@ -134,9 +129,7 @@ export const useBlogs = () => {
           allBlogs.push(sanitizeDocumentData(doc));
         });
         
-        console.log('[useBlogs] Fallback - All published blogs fetched:', {
-          total: allBlogs.length,
-        });
+
 
         // Robust Memory filtering
         let filtered = allBlogs;
@@ -152,7 +145,7 @@ export const useBlogs = () => {
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
 
-          console.log('[useBlogs] Filtering by region:', { region, regionCapitalized });
+
           
           filtered = filtered.filter(b => {
              // 1. Check city array (Primary)
@@ -173,10 +166,7 @@ export const useBlogs = () => {
              return false;
           });
           
-          console.log('[useBlogs] After region filtering:', {
-            filteredCount: filtered.length,
-            filteredBlogs: filtered.map(b => ({ id: b.id, title: b.title }))
-          });
+
         } else if (category) {
           filtered = filtered.filter(b => b.categories && b.categories.includes(category));
         }

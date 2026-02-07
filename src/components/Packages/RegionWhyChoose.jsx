@@ -28,12 +28,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
     });
   }, [data]);
   
-  if (displayItems.length > 0) {
-    console.log(`🖼️ REGION WHY CHOOSE MOSAIC DATA for ${regionName}:`, {
-      raw: data,
-      processed: displayItems
-    });
-  }
+
 
   // Specific grid span configurations for a perfectly balanced 8-image mosaic
   const gridConfigs = [

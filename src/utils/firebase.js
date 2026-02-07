@@ -943,19 +943,16 @@ export const getPlace = async (id) => {
 
 export const getSavedItinerary = async (id) => {
   try {
-    console.log(`[getSavedItinerary] Attempting to fetch ID: ${id} from ${COLLECTIONS.SAVED_PDFS}`);
 
     // 1. Try fetching by Document Key (ID)
     const docRef = doc(db, COLLECTIONS.SAVED_PDFS, id);
     const docSnap = await getDocFromServer(docRef);
 
     if (docSnap.exists()) {
-      console.log(`[getSavedItinerary] Found document by KEY: ${id}`);
       return sanitizeDocumentData(docSnap);
     }
     
     // 2. Fallback: Try fetching by field "documentID"
-    console.log(`[getSavedItinerary] Document key not found. Querying field 'documentID' == ${id}`);
     const q = query(
       collection(db, COLLECTIONS.SAVED_PDFS),
       where("documentID", "==", id)
@@ -963,11 +960,9 @@ export const getSavedItinerary = async (id) => {
     const querySnapshot = await getDocsFromServer(q);
 
     if (!querySnapshot.empty) {
-      console.log(`[getSavedItinerary] Found document by FIELD 'documentID': ${id}`);
       return sanitizeDocumentData(querySnapshot.docs[0]);
     }
     
-    console.log(`[getSavedItinerary] No document found for ID: ${id} (checked Key and Field)`);
     return null;
   } catch (error) {
     console.error("Error fetching saved itinerary:", error);

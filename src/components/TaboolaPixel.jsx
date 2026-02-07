@@ -18,7 +18,6 @@ export default function TaboolaPixel() {
             name: 'lead_form_submission',
             id: 1971044
           });
-          console.log('Taboola conversion tracked: lead_form_submission');
         }
       };
     }

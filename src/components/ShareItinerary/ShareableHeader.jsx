@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const ShareableHeader = ({ itineraryData }) => {
-  console.log('DEBUG: ShareableHeader received:', itineraryData);
+
   const { 
     packageName, 
     destination, 

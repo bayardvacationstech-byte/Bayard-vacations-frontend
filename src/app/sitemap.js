@@ -36,8 +36,6 @@ export default async function sitemap() {
       getAllDocuments(COLLECTIONS.REGION_ACTIVITY),
     ]);
 
-    console.log(`[Sitemap] Data Fetched: ${blogs.length} blogs, ${packages.length} packages, ${regions.length} regions, ${regionActivities.length} region-activity docs`);
-
     // Create a map for region names to slugs for accurate package URL generation
     const regionMap = {};
     regions.forEach(r => {
