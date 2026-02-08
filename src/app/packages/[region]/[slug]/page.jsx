@@ -9,18 +9,11 @@ import { COLLECTIONS } from "@/config";
 // Enable dynamic params
 export const dynamicParams = true;
 
-// Generate static params for all packages
+// Generate static params (limited for faster builds on VPS)
 export async function generateStaticParams() {
-  try {
-    const packages = await getAllDocuments(COLLECTIONS.PACKAGES);
-    return packages.map((pkg) => ({
-      region: pkg.region,
-      slug: pkg.packageSlug,
-    }));
-  } catch (error) {
-    console.error("Error generating static params for packages:", error);
-    return [];
-  }
+  // We return an empty array to skip pre-rendering 4500+ pages during build.
+  // Because dynamicParams = true (line 10), pages will be generated on first visit.
+  return [];
 }
 
 const fallbackMetadata = {

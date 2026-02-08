@@ -263,7 +263,7 @@ export default function ThemeHighlights({
                               pkg.cardImages?.[0]?.url ||
                               pkg.image ||
                               pkg.imageUrl ||
-                              "/img/package-img/default.jpg"
+                              "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=800"
                             }
                             alt={pkg.packageTitle}
                             fill
