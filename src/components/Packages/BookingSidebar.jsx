@@ -1,7 +1,7 @@
 import React from "react";
 import { Star, Share2 } from "lucide-react";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 const BookingSidebar = ({
   packageData,
@@ -9,7 +9,6 @@ const BookingSidebar = ({
   setSelectedHotel,
   hotelTiers,
   finalPrice,
-  formatPrice,
   copyCurrentUrl
 }) => {
   return (
@@ -74,15 +73,19 @@ const BookingSidebar = ({
           <div className="mb-6 p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
             <div className="flex items-center justify-between mb-0.5">
               <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-black text-white">₹ {formatPrice(finalPrice)}</span>
+                <span className={cn("text-2xl font-black", finalPrice > 0 ? "text-white" : "text-yellow-400")}>
+                   {finalPrice > 0 ? `₹ ${formatPrice(finalPrice)}` : formatPrice(finalPrice)}
+                </span>
               </div>
-              {packageData?.offer?.discountPercentage && (
+              {packageData?.offer?.discountPercentage && finalPrice > 0 && (
                 <span className="px-2 py-1 bg-yellow-400 text-slate-900 font-black rounded-lg text-[9px] uppercase tracking-wider">
                   {packageData.offer.discountPercentage}% Off
                 </span>
               )}
             </div>
-            <p className="text-white/60 text-[10px] font-semibold">Per Person (taxes excluded)</p>
+            {finalPrice > 0 && (
+              <p className="text-white/60 text-[10px] font-semibold">Per Person (taxes excluded)</p>
+            )}
           </div>
 
           <div className="space-y-2">

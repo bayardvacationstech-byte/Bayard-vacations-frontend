@@ -162,8 +162,9 @@ const LandingPackageCard = ({ item, className, isGroup = false }) => {
                   )}
                 </>
               ) : (
-                <span className="text-sm font-bold text-white/80">Contact for Pricing</span>
+                <span className="text-sm font-bold text-white/80 uppercase">On Request</span>
               )}
+
             </div>
             
             <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all duration-300 group-hover:bg-brand-blue group-hover:border-transparent group-hover:rotate-12 group-hover:scale-110">

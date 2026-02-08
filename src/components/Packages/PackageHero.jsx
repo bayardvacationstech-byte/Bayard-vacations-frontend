@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import Container from "@/components/ui/Container";
 import { MapPin, Clock, Calendar, IndianRupee, ChevronRight, Star, ExternalLink, Users } from "lucide-react";
-import { cn, normalizeImageUrl } from "@/lib/utils";
+import { cn, normalizeImageUrl, formatPrice } from "@/lib/utils";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 // Import Swiper styles
@@ -149,7 +149,9 @@ const PackageHero = ({ packageData, price }) => {
                     <div className="space-y-1">
                       <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">Starting from</p>
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-black text-white">₹{new Intl.NumberFormat('en-IN').format(price || packageData?.offer?.offerPrice || packageData?.basePrice || packageData?.price || 0)}</span>
+                        <span className={cn("text-3xl font-black", formatPrice(price) === "On Request" ? "text-yellow-400" : "text-white")}>
+                          {formatPrice(price) === "On Request" ? "On Request" : `₹${formatPrice(price)}`}
+                        </span>
                       </div>
                     </div>
                     <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(250,204,21,0.3)]">
@@ -184,7 +186,18 @@ const PackageHero = ({ packageData, price }) => {
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
                       <span className="text-white/40 text-[8px] uppercase font-black tracking-widest">Starts from</span>
-                      <span className="text-white font-black text-lg">₹{new Intl.NumberFormat('en-IN').format(price || packageData?.offer?.offerPrice || packageData?.basePrice || packageData?.price || 0)}</span>
+                      <div className="flex items-baseline gap-1">
+                        {(packageData?.basePrice > 0 || packageData?.price > 0 || packageData?.startingPrice > 0) && (
+                          <span className="text-brand-accent text-sm font-bold">₹</span>
+                        )}
+                        <span className={cn("font-bold text-lg drop-shadow-sm", formatPrice(packageData?.basePrice || packageData?.price || packageData?.startingPrice || price || 0) === "On Request" ? "text-yellow-400" : "text-white")}>
+                          {formatPrice(packageData?.basePrice || packageData?.price || packageData?.startingPrice || price || 0)}
+                        </span>
+
+                        {(packageData?.basePrice > 0 || packageData?.price > 0 || packageData?.startingPrice > 0) && (
+                          <span className="text-white/40 text-xs">/person</span>
+                        )}
+                      </div>
                     </div>
                     <div className="w-[1px] h-6 bg-white/10" />
                     <div className="flex flex-col">

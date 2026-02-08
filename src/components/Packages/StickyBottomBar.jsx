@@ -1,6 +1,6 @@
 import React from "react";
 import { Phone, X, ChevronUp } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 const StickyBottomBar = ({
   packageData,
@@ -8,7 +8,6 @@ const StickyBottomBar = ({
   showFullForm,
   setShowFullForm,
   isNavAtTop,
-  formatPrice,
   EnquiryFormComponent
 }) => {
   return (
@@ -52,11 +51,15 @@ const StickyBottomBar = ({
               <div>
                 <p className="text-white/60 text-[10px] font-medium">Starting from</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-brand-accent text-sm font-bold">₹</span>
-                  <span className="text-white font-bold text-[22px] drop-shadow-sm">
+                  {(packageData?.basePrice > 0 || packageData?.price > 0 || packageData?.startingPrice > 0) && (
+                    <span className="text-brand-accent text-sm font-bold">₹</span>
+                  )}
+                  <span className={cn("font-bold text-[22px] drop-shadow-sm", formatPrice(packageData?.basePrice || packageData?.price || packageData?.startingPrice || 0) === "On Request" ? "text-yellow-400" : "text-white")}>
                     {formatPrice(packageData?.basePrice || packageData?.price || packageData?.startingPrice || 0)}
                   </span>
-                  <span className="text-white/40 text-xs">/person</span>
+                  {(packageData?.basePrice > 0 || packageData?.price > 0 || packageData?.startingPrice > 0) && (
+                    <span className="text-white/40 text-xs">/person</span>
+                  )}
                 </div>
               </div>
               

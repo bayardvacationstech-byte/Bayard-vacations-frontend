@@ -203,13 +203,21 @@ const PremiumPackageCard = ({ item, className, isGroup = false, index = 0 }) => 
           
           <div className="flex items-center justify-between mt-3">
             <div className="flex flex-col">
-              <div className="text-2xl sm:text-3xl font-[900] text-white drop-shadow-lg flex items-baseline gap-1">
-                <span className="text-base sm:text-xl font-bold">₹</span>
-                {formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
-              </div>
-              {item.offerPrice > 0 && (
-                <div className="text-xs text-white/60 line-through font-bold ml-1">
-                  ₹{formatPrice(item.basePrice)}
+              {item.offerPrice > 0 || item.basePrice > 0 ? (
+                <>
+                  <div className="text-2xl sm:text-3xl font-[900] text-white drop-shadow-lg flex items-baseline gap-1">
+                    <span className="text-base sm:text-xl font-bold">₹</span>
+                    {formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
+                  </div>
+                  {item.offerPrice > 0 && (
+                    <div className="text-xs text-white/60 line-through font-bold ml-1">
+                      ₹{formatPrice(item.basePrice)}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-xl sm:text-2xl font-[900] text-white drop-shadow-lg flex items-baseline gap-1 uppercase tracking-tight">
+                   On Request
                 </div>
               )}
             </div>

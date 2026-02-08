@@ -20,7 +20,7 @@ import MobilePackageNavigation from "./MobilePackageNavigation";
 import { Info, Calendar, Bed, CheckCircle, HelpCircle, FileText, ShieldAlert } from "lucide-react";
 import WhyBayardVacations from "./WhyBayardVacations";
 import RegionTestimonials from "./RegionTestimonials";
-import { cn, convertAndSortHotels } from "@/lib/utils";
+import { cn, convertAndSortHotels, formatPrice } from "@/lib/utils";
 import useModal from "@/hooks/useModal";
 import { usePathname } from "next/navigation";
 import Container from "@/components/ui/Container";
@@ -50,15 +50,6 @@ const PackagesClient = () => {
     activeSectionRef.current = activeSection;
   }, [activeSection]);
 
-  const sections = [
-    { id: "overview", label: "Overview", icon: Info },
-    { id: "itinerary", label: "Itinerary", icon: Calendar },
-    { id: "hotels-section", label: "Stay", icon: Bed },
-    { id: "inclusions", label: "Inclusions", icon: CheckCircle },
-    { id: "terms-section", label: "T&C", icon: FileText },
-    { id: "policy-section", label: "Cancellation Policy", icon: ShieldAlert },
-    { id: "faq", label: "FAQ", icon: HelpCircle },
-  ];
 
 
   const { openModal } = useModal();
@@ -70,6 +61,32 @@ const PackagesClient = () => {
     isLoading,
     error: packageError,
   } = usePackage(slug);
+
+  // Determine Section Visibility
+  const highlightsList = (packageData?.sections?.find(s => 
+    s.id === "major_activities" || s.id === "package_highlights" || s.id === "highlights" || s.id === "major_highlights"
+  )?.items || packageData?.highlights || packageData?.major_highlights || [])
+    .filter(item => item && item.replace(/^\\item\s*|\\|["'\s]+|["'\s]+,?$/g, "").trim().length > 0);
+
+  const overviewContent = (packageData?.sections?.find(s => s.id === "package_overview")?.content || 
+    (packageData?.description || "").split(/\n\s*\n|\n/).filter(Boolean))
+    .filter(p => p && p.replace(/^["'\s]+|["'\s]+,?$/g, "").trim().length > 0);
+
+  const packageHighlights = (packageData?.sections?.find(s => s.id === "package_highlights")?.items || [])
+    .filter(item => item && item.replace(/^\\item\s*|\\|["'\s]+|["'\s]+,?$/g, "").trim().length > 0);
+
+  const hasHighlights = highlightsList.length > 0;
+  const hasOverview = overviewContent.length > 0 || packageHighlights.length > 0;
+
+  const sections = [
+    { id: "overview", label: "Overview", icon: Info, visible: hasOverview },
+    { id: "itinerary", label: "Itinerary", icon: Calendar, visible: true },
+    { id: "hotels-section", label: "Stay", icon: Bed, visible: true },
+    { id: "inclusions", label: "Inclusions", icon: CheckCircle, visible: true },
+    { id: "terms-section", label: "T&C", icon: FileText, visible: true },
+    { id: "policy-section", label: "Cancellation Policy", icon: ShieldAlert, visible: true },
+    { id: "faq", label: "FAQ", icon: HelpCircle, visible: !!(packageData?.faqs?.length > 0 || packageData?.faq) },
+  ].filter(s => s.visible);
 
 
 
@@ -334,9 +351,6 @@ const PackagesClient = () => {
     </div>
   );
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-IN').format(price);
-  };
 
   const finalPrice = packageData && selectedHotel
     ? (packageData.offer?.offerPrice || packageData.basePrice || packageData.price || 0) + (selectedHotel.additionalCharge || 0)
@@ -364,7 +378,7 @@ const PackagesClient = () => {
         {/* Main Content Column (75%) */}
         <div className="w-full c-lg:w-[75%] space-y-[30px] md:space-y-8">
           {/* 2. Highlights Section */}
-          <HighlightsSection packageData={packageData} />
+          {hasHighlights && <HighlightsSection packageData={packageData} />}
 
           {/* Mobile Package Navigation - Sticky in between sections */}
           <MobilePackageNavigation 
@@ -385,11 +399,13 @@ const PackagesClient = () => {
             />
 
             {/* Overview Section */}
-            <div id="overview" className="scroll-mt-48 space-y-[30px] md:space-y-8">
-              <div className="relative pb-4 w-full overflow-x-hidden">
-                <OverviewSection packageData={packageData} />
+            {hasOverview && (
+              <div id="overview" className="scroll-mt-48 space-y-[30px] md:space-y-8">
+                <div className="relative pb-4 w-full overflow-x-hidden">
+                  <OverviewSection packageData={packageData} />
+                </div>
               </div>
-            </div>
+            )}
             
             <div id="itinerary" className="scroll-mt-48">
               <ItinerarySection packageData={packageData} />
@@ -428,7 +444,6 @@ const PackagesClient = () => {
           setSelectedHotel={setSelectedHotel}
           hotelTiers={hotelTiers}
           finalPrice={finalPrice}
-          formatPrice={formatPrice}
           copyCurrentUrl={copyCurrentUrl}
         />
       </Container>
@@ -470,7 +485,6 @@ const PackagesClient = () => {
         showFullForm={showFullForm}
         setShowFullForm={setShowFullForm}
         isNavAtTop={isNavAtTop}
-        formatPrice={formatPrice}
         EnquiryFormComponent={EnquiryFormComponent}
       />
 

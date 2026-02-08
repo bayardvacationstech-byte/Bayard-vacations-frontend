@@ -32,6 +32,29 @@ const ExpandableText = ({ text }) => {
   );
 };
 
+const ProfilePhoto = ({ src, alt, initials }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (!src || hasError) {
+    return (
+      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
+        {initials}
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      className="object-cover"
+      unoptimized
+      onError={() => setHasError(true)}
+    />
+  );
+};
+
 export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regionName = "" }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [isLoading, setIsLoading] = useState(initialReviews.length === 0);
@@ -365,19 +388,11 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                   className="group flex gap-3 md:gap-4 items-start bg-white p-4 md:p-5 rounded-[2rem] transition-all duration-300 mx-0 md:mx-4 max-w-full md:max-w-[90%] self-start even:self-end even:flex-row-reverse even:text-right border border-slate-100"
                 >
                   <div className="relative w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden shrink-0 border border-slate-200 shadow-lg">
-                    {review.profile_photo_url ? (
-                      <Image
-                        src={review.profile_photo_url}
-                        alt={authorName}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs">
-                        {authorName.charAt(0)}
-                      </div>
-                    )}
+                    <ProfilePhoto 
+                      src={review.profile_photo_url} 
+                      alt={authorName} 
+                      initials={authorName.charAt(0)} 
+                    />
                   </div>
                   
                   <div className="flex flex-col gap-1.5">
@@ -463,7 +478,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-10"
+            className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-10"
             onClick={() => setSelectedReviewImages(null)}
           >
             <motion.div
@@ -538,7 +553,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center bg-black p-0 md:p-10"
+            className="fixed inset-0 z-[100000] flex items-center justify-center bg-black p-0 md:p-10"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}

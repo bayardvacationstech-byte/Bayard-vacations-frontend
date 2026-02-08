@@ -13,7 +13,7 @@ const FALLBACK_DESTINATIONS = [
   {
     image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200",
     name: "Maldives",
-    offer: "30% OFF",
+    offer: "",
     link: "/explore"
   }
 ];
@@ -52,10 +52,7 @@ export default function AdvertisementBanner({ bannerData }) {
   };
 
   // Get floating deal or fallback
-  const floatingDeal = bannerData?.mediaCarousel?.floatingDeal || {
-    title: "SPECIAL DEAL",
-    discount: "30% OFF"
-  };
+  const floatingDeal = bannerData?.mediaCarousel?.floatingDeal;
 
   // Auto-rotation for media carousel
   useEffect(() => {
@@ -212,29 +209,35 @@ export default function AdvertisementBanner({ bannerData }) {
           </div>
 
           {/* Floating Offer Badge */}
-          <motion.div
-            key={`offer-${activeIndex}`}
-            initial={{ opacity: 0, y: 20, rotate: -10 }}
-            animate={{ opacity: 1, y: 0, rotate: -5 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="absolute top-8 right-8 sm:top-12 sm:right-12"
-          >
-            <div className="relative">
-              {/* Glow Effect */}
-              <div className="absolute inset-0 bg-brand-gold/40 blur-2xl rounded-full scale-150" />
-              
-              {/* Badge */}
-              <div className="relative bg-gradient-to-br from-brand-gold to-yellow-400 text-slate-900 px-8 py-6 rounded-2xl shadow-2xl">
-                <div className="flex items-center gap-2 justify-center mb-2">
-                  <Sparkles className="w-5 h-5" />
-                  <span className="text-xs font-black uppercase tracking-wider">{floatingDeal.title}</span>
-                </div>
-                <div className="text-4xl font-black text-center leading-none">
-                  {floatingDeal.discount}
+          {floatingDeal && floatingDeal.discount && (
+            <motion.div
+              key={`offer-${activeIndex}`}
+              initial={{ opacity: 0, y: 20, rotate: -10 }}
+              animate={{ opacity: 1, y: 0, rotate: -5 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="absolute top-8 right-8 sm:top-12 sm:right-12"
+            >
+              <div className="relative">
+                {/* Glow Effect */}
+                <div className="absolute inset-0 bg-brand-gold/40 blur-2xl rounded-full scale-150" />
+                
+                {/* Badge */}
+                <div className="relative bg-gradient-to-br from-brand-gold to-yellow-400 text-slate-900 px-8 py-6 rounded-2xl shadow-2xl">
+                  {floatingDeal.title && (
+                    <div className="flex items-center gap-2 justify-center mb-2">
+                      <Sparkles className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">{floatingDeal.title}</span>
+                    </div>
+                  )}
+                  {floatingDeal.discount && (
+                    <div className="text-4xl font-black text-center leading-none">
+                      {floatingDeal.discount}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* Destination Name Tag */}
           <motion.div

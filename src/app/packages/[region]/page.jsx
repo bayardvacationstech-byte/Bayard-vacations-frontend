@@ -1,5 +1,6 @@
 import PackagesRegionClient from "@/components/Packages/PackagesRegionClient";
 import { getAllDocuments, getRegionDocumentBySlug } from "@/utils/firebase";
+import { getMarketingBanners } from "@/lib/server";
 import { COLLECTIONS } from "@/config";
 import { Suspense } from "react";
 
@@ -100,16 +101,25 @@ export async function generateMetadata({ params }) {
 export default async function PackagesRegionPage({ params }) {
   const { region } = await params;
   let initialRegionData = null;
+  let bannerData = null;
 
   try {
-    initialRegionData = await getRegionDocumentBySlug(region);
+    const [regionData, banners] = await Promise.all([
+      getRegionDocumentBySlug(region),
+      getMarketingBanners()
+    ]);
+    initialRegionData = regionData;
+    bannerData = banners;
   } catch (error) {
-    console.error("Error fetching initial region data:", error);
+    console.error("Error fetching initial data for region page:", error);
   }
 
   return (
     <Suspense fallback={<div>Loading packages...</div>}>
-      <PackagesRegionClient initialRegionData={initialRegionData} />
+      <PackagesRegionClient 
+        initialRegionData={initialRegionData} 
+        bannerData={bannerData}
+      />
     </Suspense>
   );
 }

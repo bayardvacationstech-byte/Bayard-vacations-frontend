@@ -130,12 +130,22 @@ const GroupPackageCard = ({ item, className }) => {
           {/* Price & CTA Section */}
           <div className="flex items-end justify-between pt-2">
             <div className="flex flex-col">
-              <p className="text-white/90 text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-md">Starting from</p>
-              <div className="flex items-baseline gap-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
-                <span className="text-2xl md:text-3xl font-black text-white tracking-tighter">
-                  ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
-                </span>
-              </div>
+              {item.offerPrice > 0 || item.basePrice > 0 ? (
+                <>
+                  <p className="text-white/90 text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-md">Starting from</p>
+                  <div className="flex items-baseline gap-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
+                    <span className="text-2xl md:text-3xl font-black text-white tracking-tighter">
+                      ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-baseline gap-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
+                  <span className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase whitespace-nowrap">
+                    On Request
+                  </span>
+                </div>
+              )}
             </div>
             
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white shadow-xl shadow-blue-900/40 hover:scale-110 transition-all">

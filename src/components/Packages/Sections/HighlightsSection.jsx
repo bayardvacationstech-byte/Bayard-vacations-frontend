@@ -41,13 +41,24 @@ const HighlightsSection = ({ packageData }) => {
     highlightItems = packageData?.highlights || packageData?.major_highlights || [];
   }
 
-  if (highlightItems.length === 0) {
+  // 3. Filter out empty items
+  const cleanedHighlights = highlightItems
+    .map(item => item
+      .replace(/^\\item\s*/, "")
+      .replace(/\\/g, "")
+      .replace(/^["'\s]+|["'\s]+,?$/g, "")
+      .replace(/\*+/g, "")
+      .trim()
+    )
+    .filter(item => item.length > 0);
+
+  if (cleanedHighlights.length === 0) {
     return null;
   }
 
-
   const limit = isMobile ? 4 : 6;
-  const visibleItems = isExpanded ? highlightItems : highlightItems.slice(0, limit);
+  const visibleItems = isExpanded ? cleanedHighlights : cleanedHighlights.slice(0, limit);
+
 
   return (
     <div id="highlights-section" className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm scroll-mt-32">
@@ -66,31 +77,22 @@ const HighlightsSection = ({ packageData }) => {
           <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-brand-blue/80 to-transparent -translate-x-1/2 md:hidden" />
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-0 lg:gap-x-12 gap-y-1 lg:gap-y-8">
-          {visibleItems.map((item, index) => {
-            // Comprehensive cleaning: remove \item, all backslashes, extra quotes, and trailing commas
-            const cleanedItem = item
-              .replace(/^\\item\s*/, "") // Remove \item at the beginning
-              .replace(/\\/g, "") // Remove all backslashes
-              .replace(/^["'\s]+|["'\s]+,?$/g, "") // Remove leading/trailing quotes and trailing commas
-              .replace(/\*+/g, "") // Remove markdown stars
-              .trim();
-            return (
-              <div 
-                key={index} 
-                className={`relative flex items-start gap-2 group pb-0 md:pb-0 
-                  ${(index % 2 === 0) ? 'pr-4 md:pr-0' : 'pl-4 md:pl-0'}`}
-              >
-                <div className="flex-shrink-0 mt-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-slate-400 transition-colors"></div>
-                </div>
-                <div className="min-w-0 flex-1 text-sm md:text-base leading-snug font-bold text-slate-900">
-                  <span className="transition-colors">
-                    {cleanedItem}
-                  </span>
-                </div>
+          {visibleItems.map((item, index) => (
+            <div 
+              key={index} 
+              className={`relative flex items-start gap-2 group pb-0 md:pb-0 
+                ${(index % 2 === 0) ? 'pr-4 md:pr-0' : 'pl-4 md:pl-0'}`}
+            >
+              <div className="flex-shrink-0 mt-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-400 transition-colors"></div>
               </div>
-            );
-          })}
+              <div className="min-w-0 flex-1 text-sm md:text-base leading-snug font-bold text-slate-900">
+                <span className="transition-colors">
+                  {item}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

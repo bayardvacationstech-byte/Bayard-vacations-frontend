@@ -38,6 +38,7 @@ import BlogCard from "@/components/Blog/BlogCard";
 import PremiumFaq from "@/components/Packages/PremiumFaq";
 import RegionQuickFacts from "@/components/Packages/RegionQuickFacts";
 import RegionStats from "@/components/Packages/RegionStats";
+import MobileAdBanner from "@/components/Landing/MobileAdBanner";
 import RegionTestimonials from "@/components/Packages/RegionTestimonials";
 import RegionExperiences from "@/components/Packages/RegionExperiences";
 import RegionActivities from "@/components/Packages/RegionActivities";
@@ -86,7 +87,7 @@ const durations = [
   { value: "10+", label: "10+ Days" },
 ];
 
-export default function PackagesRegionClient({ initialRegionData }) {
+export default function PackagesRegionClient({ initialRegionData, bannerData }) {
   const [range, setRange] = useState([0, 1000000]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
@@ -842,10 +843,15 @@ export default function PackagesRegionClient({ initialRegionData }) {
     )}
 
     {/* Advertisement Banner Section */}
-    <section className="bg-white py-4 md:py-8 px-4 md:px-6">
-      <Container>
-        <AdvertisementBanner />
-      </Container>
+    <section className="bg-white py-4 md:py-8">
+      <div className="hidden md:block">
+        <Container>
+          <AdvertisementBanner bannerData={bannerData} />
+        </Container>
+      </div>
+      <div className="block md:hidden">
+        <MobileAdBanner bannerData={bannerData} />
+      </div>
     </section>
 
     {/* Why Choose Section */}

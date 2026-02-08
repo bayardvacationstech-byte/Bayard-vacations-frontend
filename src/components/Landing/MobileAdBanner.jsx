@@ -11,16 +11,6 @@ const MobileAdBanner = ({ bannerData }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
 
-  // Fallback data
-  const FALLBACK_DESTINATIONS = [
-    {
-      image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800",
-      name: "Maldives",
-      offer: "30% OFF",
-      bg: "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]"
-    }
-  ];
-
   const FALLBACK_FEATURES = [
     {
       icon: <MessageCircle className="w-5 h-5" />,
@@ -30,18 +20,19 @@ const MobileAdBanner = ({ bannerData }) => {
     }
   ];
 
-  // Map dynamic data or use fallbacks
+  // Map dynamic data or use empty array
   const destinations = bannerData?.mediaCarousel?.items?.map(item => ({
     image: item.src || item.imageUrl || item.image,
     name: item.featuredText || item.title || "Exclusive Destination",
-    offer: bannerData?.mediaCarousel?.floatingDeal?.discount || "SPECIAL OFFER",
+    offer: item.offer || item.discount || "",
     bg: item.bgColor || "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]"
-  })) || FALLBACK_DESTINATIONS;
+  })) || [];
 
   const features = bannerData?.promotionSection?.cards?.map((card, idx) => ({
     icon: idx === 0 ? <MessageCircle className="w-5 h-5" /> : <Map className="w-5 h-5" />,
     title: card.title || "Premium Service",
     desc: card.description || card.subtitle || "Tailored travel experiences",
+    image: card.image || card.imageUrl,
     color: idx === 0 ? "bg-blue-400/20 text-blue-400" : "bg-emerald-400/20 text-emerald-400"
   })) || FALLBACK_FEATURES;
 
@@ -71,7 +62,7 @@ const MobileAdBanner = ({ bannerData }) => {
   const activeFeature = features[activeFeatureIndex] || features[0];
 
   return (
-    <div className="relative w-full max-w-md mx-auto min-h-screen pb-32 overflow-hidden md:hidden transition-colors duration-1000">
+    <div className="relative w-full max-w-md mx-auto min-h-[85vh] pb-24 overflow-hidden md:hidden transition-colors duration-1000">
       
       {/* Dynamic Background */}
       <div className={cn("absolute inset-0 bg-gradient-to-b transition-colors duration-1000", activeDestination.bg)} />
@@ -93,7 +84,7 @@ const MobileAdBanner = ({ bannerData }) => {
 
       {/* Hero Image Section */}
       <div className="relative z-10 w-[90%] mx-auto rounded-[20px] overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.3)] bg-slate-900">
-        <div className="relative h-[280px] w-full">
+        <div className="relative h-[250px] w-full">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={activeIndex}
@@ -114,16 +105,18 @@ const MobileAdBanner = ({ bannerData }) => {
             </AnimatePresence>
             
             {/* Offer Badge - Floating */}
-            <motion.div 
-                key={`offer-${activeIndex}`}
-                initial={{ scale: 0, rotate: 10 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.3, type: "spring" }}
-                className="absolute top-4 right-4 bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1"
-            >
-                <Sparkles className="w-3 h-3" />
-                {activeDestination.offer}
-            </motion.div>
+            {activeDestination.offer && (
+              <motion.div 
+                  key={`offer-${activeIndex}`}
+                  initial={{ scale: 0, rotate: 10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.3, type: "spring" }}
+                  className="absolute top-4 right-4 bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1"
+              >
+                  <Sparkles className="w-3 h-3" />
+                  {activeDestination.offer}
+              </motion.div>
+            )}
         </div>
 
         <div className="absolute bottom-5 left-5 bg-white/20 backdrop-blur-md px-5 py-3 rounded-xl border border-white/30 truncate max-w-[80%]">
@@ -145,21 +138,20 @@ const MobileAdBanner = ({ bannerData }) => {
       </div>
 
       {/* Content Section */}
-      <div className="relative z-10 px-6 py-8 text-center">
-        <h2 className="text-white text-4xl font-[800] leading-tight mb-2 drop-shadow-lg">
+      <div className="relative z-10 px-6 py-6 text-center">
+        <h2 className="text-white text-3xl font-[800] leading-tight mb-2 drop-shadow-lg">
           {content.title.split(' ').map((word, i) => (
             <React.Fragment key={i}>
               {word === 'Vacations' ? <span className="text-[#fcd34d]">{word}</span> : word}
-              {i === 0 ? <br /> : ' '}
-              {i === 1 ? <br /> : ''}
+              {' '}
             </React.Fragment>
           ))}
         </h2>
-        <p className="text-white/85 text-[15px] leading-relaxed mb-8 px-2">
+        <p className="text-white/85 text-[14px] leading-relaxed mb-6 px-2">
           {content.subtitle}
         </p>
 
-        <Link href="/explore" className="bg-white text-[#1a5fb4] border-none px-10 py-4 rounded-full text-base font-bold cursor-pointer inline-flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-transform mb-8">
+        <Link href="/explore" className="bg-white text-[#1a5fb4] border-none px-10 py-3.5 rounded-full text-base font-bold cursor-pointer inline-flex items-center gap-2 shadow-lg hover:scale-105 active:scale-95 transition-transform mb-6">
           Explore
           <div className="w-6 h-6 bg-[#1a5fb4] rounded-full flex items-center justify-center text-white text-xs">
             <ArrowRight className="w-3.5 h-3.5" />
@@ -190,11 +182,20 @@ const MobileAdBanner = ({ bannerData }) => {
             transition={{ duration: 0.4 }}
             className="absolute bottom-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] bg-gradient-to-br from-slate-900 to-slate-800 rounded-[20px] p-5 flex items-center gap-4 shadow-2xl border border-white/10 z-50"
         >
-            <div className="w-[50px] h-[50px] rounded-full bg-[radial-gradient(circle_at_30%_30%,#60a5fa,#1e40af)] flex items-center justify-center shrink-0 relative">
-                <span className="text-2xl">
-                    {activeFeatureIndex === 0 ? "🤖" : "✨"}
-                </span>
-                <div className={cn("absolute inset-0 rounded-full border-2 animate-pulse", activeFeature.color.split(" ")[1] === "text-blue-400" ? "border-blue-400/50" : "border-emerald-400/50")} />
+            <div className="w-[50px] h-[50px] rounded-full bg-slate-800 flex items-center justify-center shrink-0 relative overflow-hidden border border-white/10">
+                {activeFeature.image ? (
+                    <Image 
+                        src={normalizeImageUrl(activeFeature.image)}
+                        alt={activeFeature.title}
+                        fill
+                        className="object-cover"
+                    />
+                ) : (
+                    <span className="text-2xl relative z-10">
+                        {activeFeatureIndex === 0 ? "🤖" : "✨"}
+                    </span>
+                )}
+                <div className={cn("absolute inset-0 rounded-full border-2 animate-pulse z-20", activeFeature.color.split(" ")[1] === "text-blue-400" ? "border-blue-400/50" : "border-emerald-400/50")} />
             </div>
             <div className="flex-1 text-left">
             <h4 className="text-white text-base font-bold mb-0.5">{activeFeature.title}</h4>

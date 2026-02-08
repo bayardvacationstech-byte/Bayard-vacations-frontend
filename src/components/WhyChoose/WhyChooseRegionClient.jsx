@@ -136,7 +136,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
 
       <div className="min-h-screen bg-slate-50 overflow-x-hidden">
         {/* Hero Section */}
-        <section className="relative w-full aspect-[4/5] lg:aspect-[21/9] flex items-center">
+        <section className="relative w-full aspect-[4/5] lg:aspect-[21/9] flex items-end lg:items-center">
           <div className="absolute inset-0 w-full h-full">
             <div className={cn("absolute inset-0 z-0", mobileHeroImageSrc ? "hidden lg:block" : "block")}>
               {desktopHeroImageSrc ? (
@@ -170,15 +170,15 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             <div className="lg:hidden absolute inset-0 bg-gradient-to-t from-slate-900 absolute inset-0 z-10" />
           </div>
 
-          <Container className="relative z-20 pt-20 mt-auto lg:mt-0">
+          <Container className="relative z-20 pt-20 pb-20 sm:pb-24 lg:pb-0 lg:mt-0">
             <div className="max-w-3xl text-white space-y-6">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 border border-amber-400/30 backdrop-blur-sm rounded-full mb-4">
                   <Sparkles className="w-4 h-4 text-amber-400" />
                   <span className="text-amber-300 text-xs font-bold uppercase tracking-widest">Why Visit</span>
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black leading-tight drop-shadow-2xl">
-                  Why Choose <span className="text-amber-400 block">{regionName}?</span>
+                <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight drop-shadow-2xl">
+                  Why Choose <span className="text-amber-400">{regionName}?</span>
                 </h1>
               </motion.div>
 
@@ -197,7 +197,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
           </Container>
 
-          <div className="absolute bottom-6 left-0 right-0 z-30 w-full animate-fade-in">
+          <div className="absolute bottom-6 left-0 right-0 z-30 w-full animate-fade-in lg:block">
             <Container className="flex items-center justify-between">
               <Breadcrumbs 
                 items={[

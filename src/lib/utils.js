@@ -146,3 +146,12 @@ export const normalizeImageUrl = (url) => {
   
   return url;
 };
+/**
+ * Formats a price using Indian locale or returns "On Request" if zero/missing
+ * @param {number} price - The price to format
+ * @returns {string} Formatted price or "On Request"
+ */
+export const formatPrice = (price) => {
+  if (!price || price === 0) return "On Request";
+  return new Intl.NumberFormat('en-IN').format(price);
+};
