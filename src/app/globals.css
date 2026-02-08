@@ -355,6 +355,7 @@ body {
   @apply bg-[#FAFAFA] text-foreground;
   overflow-y: scroll !important; /* Prevent scrollbar from hiding when dropdowns open */
   overflow-x: hidden !important; /* Prevent horizontal scroll on mobile */
+  -webkit-overflow-scrolling: touch; /* Momentum scrolling for iOS */
 }
 
 /* Enable smooth scrolling by default */
@@ -1143,7 +1144,7 @@ html.no-scroll {
 /* Optimization for heavy sections */
 .scroll-optimize {
   content-visibility: auto;
-  contain-intrinsic-size: 500px 1000px;
+  contain-intrinsic-size: 1px 1px; /* Minimal size to reduce white space jump */
 }
 
 /* Optimize painting for high-end feel */

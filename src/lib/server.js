@@ -1,5 +1,6 @@
 "use server";
 import { unstable_cache as unstableCache } from "next/cache";
+import { cache } from "react";
 import {
   DEFAULT_URL,
   COLLECTIONS,
@@ -188,7 +189,7 @@ export const getGroupDeparturePackages = async () => {
 
 const getAllPackagesByTheme = async () => {
   try {
-    const conditions = [limit(20)];
+    const conditions = [limit(8)];
     const [
       eliteEscapePackages,
       soloExpeditionPackages,
@@ -251,7 +252,7 @@ const getAllPackagesByTheme = async () => {
   }
 };
 
-export const getRegionsForHome = unstableCache(
+export const getRegionsForHome = cache(unstableCache(
   async () => {
     try {
       const regionsQuery = getCollectionQuery(COLLECTIONS.REGIONS);
@@ -311,9 +312,9 @@ export const getRegionsForHome = unstableCache(
   },
   ["regions-home"],
   { revalidate: 60 }
-);
+));
 
-export const getMarketingBanners = unstableCache(
+export const getMarketingBanners = cache(unstableCache(
   async () => {
     try {
       const bannersCollection = collection(db, "marketing_banners");
@@ -336,9 +337,9 @@ export const getMarketingBanners = unstableCache(
   },
   ["marketing-banners"],
   { revalidate: 60 }
-);
+));
 
-export const getCuratedPackagesForHome = unstableCache(
+export const getCuratedPackagesForHome = cache(unstableCache(
   async (packageType) => {
     try {
       // Add limit to prevent fetching too many packages for the home page
@@ -352,7 +353,7 @@ export const getCuratedPackagesForHome = unstableCache(
   },
   ["curated-packages-home-v2"],
   { revalidate: 60 }
-);
+));
 
 export const getGroupDeparturePackagesForHome = unstableCache(
   async () => {
@@ -368,7 +369,7 @@ export const getGroupDeparturePackagesForHome = unstableCache(
   { revalidate: 60 }
 );
 
-export const getThemePackagesForHome = unstableCache(
+export const getThemePackagesForHome = cache(unstableCache(
   async () => {
     try {
       const data = await getAllPackagesByTheme();
@@ -380,7 +381,7 @@ export const getThemePackagesForHome = unstableCache(
   },
   ["theme-packages-home-v2"],
   { revalidate: 60 }
-);
+));
 
 export const getElitePackages = unstableCache(
   async () => {

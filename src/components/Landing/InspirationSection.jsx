@@ -243,10 +243,21 @@ export default function InspirationSection({ theme = "default", initialDestinati
       </div>
 
       <Container className="relative z-10">
+        {/* Mobile Header - Only visible on small screens */}
+        <div className="lg:hidden text-center mb-8">
+           <div className="section-badge-light mb-4">
+            <Mail className="size-4" />
+            <span>Get in Touch</span>
+          </div>
+          <h2 className="section-title-light">
+            <span className={colors.title}>Let Us Inspire You</span>
+          </h2>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           
           {/* Left - Swipable Cards */}
-          <div className="order-1 lg:order-1 flex flex-col items-center">
+          <div className="flex flex-col items-center">
             <div className="relative w-72 h-96 sm:w-80 sm:h-[450px]">
               <AnimatePresence mode="popLayout">
                 {cards.slice(0, 3).map((card, index) => (
@@ -294,15 +305,15 @@ export default function InspirationSection({ theme = "default", initialDestinati
           </div>
 
           {/* Right - Newsletter Form */}
-          <div className="order-2 lg:order-2 text-center lg:text-left">
-            {/* Badge */}
-            <div className="section-badge-light mb-6">
+          <div className="text-center lg:text-left">
+            {/* Desktop Badge - Hidden on Mobile Header */}
+            <div className="hidden lg:flex section-badge-light mb-6">
               <Mail className="size-4" />
               <span>Get in Touch</span>
             </div>
 
-            {/* Heading */}
-            <h2 className="section-title-light mb-4">
+            {/* Desktop Heading - Hidden on Mobile Header */}
+            <h2 className="hidden lg:block section-title-light mb-4">
               <span className={colors.title}>Let Us Inspire You</span>
             </h2>
 

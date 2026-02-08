@@ -54,7 +54,7 @@ async function HolidaysSection() {
   ]);
   return (
     <>
-      <section className="bg-gradient-to-b from-white to-slate-50 section-padding blue-section scroll-optimize">
+      <section className="bg-gradient-to-b from-white to-slate-50 section-padding blue-section">
         <Holidays initialInternationalPackages={international} initialDomesticPackages={domestic} />
       </section>
       <section className="bg-white section-padding">
@@ -79,12 +79,14 @@ async function AdBannerSection() {
 }
 
 async function ThemeHighlightsSection() {
-  const themePackages = await withTimeout(getThemePackagesForHome(), TIMEOUT_MS, {}, "getThemePackagesForHome");
-  const regions = await withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome");
+  const [themePackages, regions] = await Promise.all([
+    withTimeout(getThemePackagesForHome(), TIMEOUT_MS, {}, "getThemePackagesForHome"),
+    withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome")
+  ]);
   
   return (
     <>
-      <section className="bg-gradient-to-b from-slate-50 to-white blue-section scroll-optimize">
+      <section className="bg-gradient-to-b from-slate-50 to-white blue-section">
         <ThemeHighlights
           initialEliteEscapePackages={themePackages.eliteEscapePackages}
           initialSoloExpeditionPackages={themePackages.soloExpeditionPackages}
@@ -137,12 +139,9 @@ const HomePage = () => {
       </section>
 
       <Suspense fallback={<div className="h-96 bg-slate-50 animate-pulse" />}>
-        <section className="bg-white section-padding blue-section scroll-optimize">
+        <section className="bg-white section-padding blue-section">
           <ExploreDestinationsSection />
         </section>
-      </Suspense>
-
-      <Suspense fallback={<div className="h-96 bg-slate-100 animate-pulse" />}>
         <HolidaysSection />
       </Suspense>
 
@@ -150,7 +149,7 @@ const HomePage = () => {
         <AdBannerSection />
       </Suspense>
 
-      <Suspense fallback={<div className="h-screen bg-slate-50 animate-pulse" />}>
+      <Suspense fallback={<div className="h-96 bg-slate-50 animate-pulse" />}>
         <ThemeHighlightsSection />
       </Suspense>
 
@@ -164,9 +163,6 @@ const HomePage = () => {
       
       <Suspense fallback={<div className="h-96 bg-slate-50 animate-pulse" />}>
         <InspirationSectionSection />
-      </Suspense>
-
-      <Suspense fallback={<div className="h-80 bg-slate-50 animate-pulse" />}>
         <TestimonialsSection />
       </Suspense>
 
