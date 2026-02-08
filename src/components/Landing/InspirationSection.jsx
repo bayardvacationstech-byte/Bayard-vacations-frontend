@@ -8,47 +8,23 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-mo
 import { cn } from "@/lib/utils";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
 
-const DESTINATION_CARDS = [
+const FALLBACK_DESTINATIONS = [
   {
-    id: 1,
+    id: "fallback-1",
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
+    title: "Bali",
+    subtitle: "Island of Gods",
+    tag: "Tropical",
+    link: "/packages/bali"
+  },
+  {
+    id: "fallback-2",
     image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=800",
     title: "Vietnam",
     subtitle: "Timeless Charm",
     tag: "Culture",
     link: "/packages/vietnam"
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800",
-    title: "Thailand",
-    subtitle: "Land of Smiles",
-    tag: "Beach",
-    link: "/packages/thailand"
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=800",
-    title: "Kerala",
-    subtitle: "God's Own Country",
-    tag: "Nature",
-    link: "/packages/kerala"
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800",
-    title: "Europe",
-    subtitle: "History & Romance",
-    tag: "Luxury",
-    link: "/packages/europe"
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800",
-    title: "Andaman",
-    subtitle: "Emerald Blue",
-    tag: "Beach",
-    link: "/packages/andaman"
-  },
+  }
 ];
 
 function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
@@ -156,9 +132,27 @@ function SwipeCard({ card, onSwipe, isTop, index, exitDirection }) {
   );
 }
 
-export default function InspirationSection({ theme = "default" }) {
-  const [cards, setCards] = useState(DESTINATION_CARDS);
+export default function InspirationSection({ theme = "default", initialDestinations = [] }) {
+  const mappedCards = React.useMemo(() => {
+    if (!initialDestinations || initialDestinations.length === 0) return FALLBACK_DESTINATIONS;
+    
+    return initialDestinations.map(region => ({
+      id: region.id,
+      image: region.featuredImage?.url || "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
+      title: region.name,
+      subtitle: region.isDomestic ? "Domestic Gateway" : "International Escape",
+      tag: region.isDomestic ? "Domestic" : "International",
+      link: `/packages/${region.slug}`
+    }));
+  }, [initialDestinations]);
+
+  const [cards, setCards] = useState(mappedCards);
   const [exitDirection, setExitDirection] = useState("left");
+
+  // Update cards when initialDestinations change (e.g. hydration)
+  React.useEffect(() => {
+    setCards(mappedCards);
+  }, [mappedCards]);
 
   // Theme color configurations
   const themeColors = {

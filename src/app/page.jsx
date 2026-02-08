@@ -122,6 +122,11 @@ async function TestimonialsSection() {
   );
 }
 
+async function InspirationSectionSection() {
+  const regions = await withTimeout(getRegionsForHome(), TIMEOUT_MS, [], "getRegionsForHome");
+  return <InspirationSection initialDestinations={regions} />;
+}
+
 // --- MAIN PAGE ---
 
 const HomePage = () => {
@@ -157,9 +162,9 @@ const HomePage = () => {
         <WhyBayard />
       </section>
       
-      <section>
-        <InspirationSection />
-      </section>
+      <Suspense fallback={<div className="h-96 bg-slate-50 animate-pulse" />}>
+        <InspirationSectionSection />
+      </Suspense>
 
       <Suspense fallback={<div className="h-80 bg-slate-50 animate-pulse" />}>
         <TestimonialsSection />
