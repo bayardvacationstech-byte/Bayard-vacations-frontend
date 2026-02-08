@@ -14,6 +14,22 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// --- START DIAGNOSTIC LOGGING ---
+if (typeof window === "undefined") {
+  // Server-side check
+  const missingVars = Object.entries(firebaseConfig)
+    .filter(([_, value]) => !value)
+    .map(([key, _]) => `NEXT_PUBLIC_FIREBASE_${key.replace(/([A-Z])/g, "_$1").toUpperCase()}`);
+
+  if (missingVars.length > 0) {
+    console.error("❌ CRITICAL: Missing Firebase Environment Variables on Server:", missingVars);
+    console.error("Please ensure these are set in your hosting provider (Hostinger/Netlify).");
+  } else {
+    console.log("✅ Firebase environment variables are correctly loaded on server.");
+  }
+}
+// --- END DIAGNOSTIC LOGGING ---
+
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);

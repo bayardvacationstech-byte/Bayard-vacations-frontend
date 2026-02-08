@@ -54,9 +54,13 @@ export const fetchReviews = unstableCache(
         return serializeData(reviews);
       }
 
+      console.warn(`[fetchReviews] Cache document ${REVIEWS_DOC_ID} not found in collection ${COLLECTIONS.CACHED_REVIEWS}`);
       return [];
     } catch (err) {
-      console.error("Error fetching reviews:", err);
+      console.error("[fetchReviews] Error fetching reviews from Firestore:", err.message, {
+        collection: COLLECTIONS.CACHED_REVIEWS,
+        docId: REVIEWS_DOC_ID
+      });
       return [];
     }
   },
@@ -292,9 +296,16 @@ export const getRegionsForHome = unstableCache(
         return minimized;
       });
 
+      if (regionsSnapshot.empty) {
+        console.warn("[getRegionsForHome] No regions found in Firestore collection:", COLLECTIONS.REGIONS);
+      }
+
       return serializeData(enrichedRegions);
     } catch (error) {
-      console.error("Error getting regions for home:", error);
+      console.error("[getRegionsForHome] Error fetching regions for home:", error.message, {
+        collection: COLLECTIONS.REGIONS,
+        imageCollection: COLLECTIONS.IMAGES
+      });
       return [];
     }
   },
