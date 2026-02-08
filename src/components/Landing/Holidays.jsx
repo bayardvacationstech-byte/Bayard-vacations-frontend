@@ -39,6 +39,10 @@ const Holidays = ({
   initialInternationalPackages = [],
   initialDomesticPackages = [],
 }) => {
+  // Hide section entirely if no data is available
+  if (initialInternationalPackages.length === 0 && initialDomesticPackages.length === 0) {
+    return null;
+  }
 
   const [activeTab, setActiveTab] = useState("international");
   const [filterType, setFilterType] = useState("curated");

@@ -103,8 +103,9 @@ export default function DestinationCard({
                 />
               </div>
 
+              {/* Region Name - Bottom */}
               {regionData?.name && (
-                <div className="absolute top-0 left-0 right-0 z-30 p-4 sm:p-5 md:p-6 pt-6 sm:pt-8">
+                <div className="absolute bottom-12 sm:bottom-14 md:bottom-16 left-0 right-0 z-30 p-4 sm:p-5 md:p-6">
                   <div className="relative flex flex-col items-center">
                     <div
                       className="absolute -inset-4 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-all duration-500"

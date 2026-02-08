@@ -276,7 +276,7 @@ export default function RootLayout({ children }) {
               </div>
 
               <div className="splash-logo-icon">
-                <img src="/Asset 2@4x.png" alt="Bayard Vacations" style={{ width: '70px', height: '70px', objectFit: 'contain' }} />
+                <img src="/flashscreenlogo.png" alt="Bayard Vacations" style={{ width: '70px', height: '70px', objectFit: 'contain' }} />
               </div>
               
               <div className="splash-brand-name">

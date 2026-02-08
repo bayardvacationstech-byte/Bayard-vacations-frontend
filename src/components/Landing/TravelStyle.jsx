@@ -28,6 +28,11 @@ const TravelStyle = ({
   initialInternationalPackages = [], 
   initialDomesticPackages = [] 
 }) => {
+  // Hide section entirely if no data is available
+  if (initialInternationalPackages.length === 0 && initialDomesticPackages.length === 0) {
+    return null;
+  }
+
   const [activeTab, setActiveTab] = useState("international");
   const [activeStyle, setActiveStyle] = useState("all");
   /* Logic Restored - SSR Enabled */
