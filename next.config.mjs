@@ -13,7 +13,7 @@ const nextConfig = {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
 
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
 
   images: {
     // ✅ Netlify supports optimized images with dynamic hosting
@@ -33,42 +33,47 @@ const nextConfig = {
     ],
   },
 
-  // ✅ Redirects to normalize category URLs (underscores to hyphens)
+  // ✅ Redirects to normalize category URLs and point to the new /themes route
   async redirects() {
     return [
       {
         source: "/categories/solo_expedition",
-        destination: "/categories/solo-expedition",
+        destination: "/themes/solo-expedition",
         permanent: true,
       },
       {
         source: "/categories/romantic_getaways",
-        destination: "/categories/romantic-getaways",
+        destination: "/themes/romantic-getaways",
         permanent: true,
       },
       {
         source: "/categories/family_funventure",
-        destination: "/categories/family-funventure",
+        destination: "/themes/family-funventure",
         permanent: true,
       },
       {
         source: "/categories/religious_retreat",
-        destination: "/categories/religious-retreat",
+        destination: "/themes/religious-retreat",
         permanent: true,
       },
       {
         source: "/categories/exploration_bundle",
-        destination: "/categories/exploration-bundle",
+        destination: "/themes/exploration-bundle",
         permanent: true,
       },
       {
         source: "/categories/relax_rejuvenate",
-        destination: "/categories/relax-rejuvenate",
+        destination: "/themes/relax-rejuvenate",
         permanent: true,
       },
       {
         source: "/categories/elite_escape",
-        destination: "/categories/elite-escape",
+        destination: "/themes/elite-escape",
+        permanent: true,
+      },
+      {
+        source: "/categories/:slug",
+        destination: "/themes/:slug",
         permanent: true,
       },
       {

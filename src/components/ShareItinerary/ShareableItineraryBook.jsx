@@ -204,7 +204,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                   <div className="relative z-10 h-full flex flex-col justify-between py-12 lg:py-16 xl:py-20 px-12 lg:px-20">
                     <div className="space-y-8">
                        <div className="transition-all duration-700 group-hover:translate-x-1">
-                          <img src="/media/bayard-logo.png" alt="Bayard Vacations" className="h-8 lg:h-10 xl:h-12 w-auto object-contain brightness-95" />
+                          <img src="/Bayard_white_logo.svg" alt="Bayard Vacations" className="h-8 lg:h-10 xl:h-12 w-auto object-contain brightness-95" />
                        </div>
                        
                        <div className="relative pt-8">
@@ -256,7 +256,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                   <div className="relative z-10 h-full flex flex-col justify-between py-12 lg:py-16 xl:py-20 px-12 lg:px-20 text-right">
                     <div className="space-y-8">
                        <div className="transition-all duration-700 group-hover:-translate-x-1 inline-block">
-                          <img src="/media/bayard-logo.png" alt="Bayard Vacations" className="h-8 lg:h-10 xl:h-12 w-auto object-contain brightness-95" />
+                          <img src="/Bayard_white_logo.svg" alt="Bayard Vacations" className="h-8 lg:h-10 xl:h-12 w-auto object-contain brightness-95" />
                        </div>
                        
                        <div className="relative pt-8">

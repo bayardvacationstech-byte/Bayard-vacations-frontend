@@ -266,7 +266,7 @@ const DesktopNavbar = () => {
                   width={180}
                   height={36}
                   alt="Bayard Vacations Logo"
-                  src={isHeaderFixed ? "/img/logo.svg" : "/media/logo.svg"}
+                  src="/Bayard_white_logo.svg"
                   className="w-28 lg:w-32 xl:w-36 2xl:w-40 h-auto transition-all duration-300"
                 />
               </Link>

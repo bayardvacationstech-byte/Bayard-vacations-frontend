@@ -4,7 +4,7 @@ export const SITE_DATA = {
   name: "Bayard Vacations",
   description: "Your trusted travel partner for unforgettable journeys",
   url: "https://bayardvacations.com",
-  image: "/logo.png",
+  image: "/Bayard_white_logo.svg",
   keywords: ["travel", "vacations", "packages", "tours", "india"],
   author: "Bayard Vacations",
 };

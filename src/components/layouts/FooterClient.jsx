@@ -156,7 +156,7 @@ export default function FooterClient({ domesticRegions, internationalRegions }) 
         {/* TOP */}
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <Image
-            src="/img/logo.svg"
+            src="/Bayard_white_logo.svg"
             alt="Bayard Vacations"
             width={420}
             height={90}

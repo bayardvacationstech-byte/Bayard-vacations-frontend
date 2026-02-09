@@ -54,8 +54,7 @@ const ShareableItineraryClient = ({ itineraryData }) => {
       {/* 2. Package Highlights - NEW */}
       <ShareableHighlights highlights={itineraryData.highlights} />
 
-      {/* 3. Pricing Section - NEW */}
-      <ShareablePricing pricing={itineraryData.pricing} travelers={itineraryData.travelers} />
+    
 
       {/* 4. Day-by-day itinerary */}
       <ShareableItineraryBook itineraries={itineraryData.itineraries} />
@@ -64,7 +63,10 @@ const ShareableItineraryClient = ({ itineraryData }) => {
       <ShareableHotelInfo hotelDetails={itineraryData.hotelDetails} />
 
       {/* 6. Recommended Activities Carousel */}
-      <ShareableActivitiesCarousel destination={itineraryData.destination} />
+      {/* <ShareableActivitiesCarousel destination={itineraryData.destination} /> */}
+
+        {/* 3. Pricing Section - NEW */}
+      <ShareablePricing pricing={itineraryData.pricing} travelers={itineraryData.travelers} />
 
       {/* 7. Inclusions and Exclusions */}
       <ShareableInclusions 

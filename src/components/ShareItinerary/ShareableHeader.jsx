@@ -38,7 +38,7 @@ const ShareableHeader = ({ itineraryData }) => {
           <Link href="/" className="block">
             <div className="relative h-10 w-auto md:h-12 aspect-[130/27]">
               <Image
-                src="/img/logo.svg"
+                src="/Bayard_white_logo.svg"
                 alt="Bayard Vacations"
                 fill
                 className="object-contain object-left cursor-pointer"
@@ -84,7 +84,7 @@ const ShareableHeader = ({ itineraryData }) => {
           <div className="flex items-center justify-between mb-4">
             <div className="relative h-8 w-auto aspect-[130/27]">
               <Image
-                src="/img/logo.svg"
+                src="/Bayard_white_logo.svg"
                 alt="Bayard Vacations"
                 fill
                 className="object-contain object-left"
@@ -201,10 +201,10 @@ const ShareableHeader = ({ itineraryData }) => {
                   </div>
                   <div className="flex-1">
                     <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
-                      Package Value
+                      Total
                     </p>
                     <p className="text-white text-sm lg:text-base font-black tracking-wide">
-                      {currencySymbol}{formatPrice(pricing.totalPrice)} {pricing.perPerson ? '/ Person' : ''}
+                      {currencySymbol}{formatPrice(pricing.totalPrice)}
                     </p>
                   </div>
                 </div>
@@ -290,7 +290,7 @@ const ShareableHeader = ({ itineraryData }) => {
                   </svg>
                 </div>
                 <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
-                  Package Value
+                  Total
                 </p>
                 <p className="text-slate-900 text-sm font-black truncate">
                   {currencySymbol}{formatPrice(pricing.totalPrice)}

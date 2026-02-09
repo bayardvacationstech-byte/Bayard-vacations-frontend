@@ -104,7 +104,7 @@ export default function MobileNavbar() {
             <nav className="flex h-16 items-center gap-4 px-5 text-white">
               <Link href="/">
                 <Image
-                  src="/img/logo.svg"
+                  src="/Bayard_white_logo.svg"
                   width={160}
                   height={32}
                   alt="Logo"
