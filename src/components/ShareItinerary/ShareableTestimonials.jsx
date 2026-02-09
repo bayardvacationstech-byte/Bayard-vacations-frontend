@@ -96,12 +96,12 @@ const ShareableTestimonials = ({ testimonials = [] }) => {
                       playsInline
                       loop
                       preload="metadata"
-                      crossOrigin="anonymous"
                       onMouseOver={(e) => e.target.play()}
-                      onMouseOut={(e) => e.target.pause()}
-                    >
-                      <source src={item.url} type="video/mp4" />
-                    </video>
+                      onMouseOut={(e) => {
+                        e.target.pause();
+                        e.target.currentTime = 0;
+                      }}
+                    />
                   ) : (
                     <Image 
                       src={item.url} 
@@ -243,11 +243,8 @@ const ShareableTestimonials = ({ testimonials = [] }) => {
                   controls 
                   autoPlay 
                   playsInline
-                  crossOrigin="anonymous"
                   className="max-h-full rounded-2xl"
-                >
-                  <source src={galleryMedia[selectedIdx].url} type="video/mp4" />
-                </video>
+                />
               ) : (
                 <div className="relative w-full h-full">
                   <Image src={galleryMedia[selectedIdx].url} alt="Gallery" fill className="object-contain" />
