@@ -74,7 +74,7 @@ const MobileAdBanner = ({ bannerData }) => {
       {/* Logo Section */}
       <div className="relative z-10 p-5 flex items-center gap-2.5">
         <Image
-          src="/img/logo.svg"
+          src="/Bayard_white_logo.svg"
           alt="Bayard Vacations"
           width={120}
           height={40}

@@ -8,82 +8,8 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-const ShareableActivitiesCarousel = ({ destination = 'Bali' }) => {
-  // Dummy activities data - replace with real activities from your backend
-  const activities = [
-    {
-      id: 1,
-      title: 'Sunrise Yoga on the Beach',
-      location: 'Seminyak Beach',
-      image: '/images/hotels/seminyak/pool-view.jpg',
-      rating: 4.9,
-      reviews: 342,
-      duration: '1.5 hours',
-      price: '₹1,200',
-      groupSize: '2-15 people',
-      highlights: ['Professional instructor', 'Peaceful atmosphere', 'All equipment provided']
-    },
-    {
-      id: 2,
-      title: 'Scuba Diving Adventure',
-      location: 'Tulamben Shipwreck',
-      image: '/images/packages/bali/water-sports.jpg',
-      rating: 5.0,
-      reviews: 567,
-      duration: '4 hours',
-      price: '₹4,500',
-      groupSize: '2-6 people',
-      highlights: ['PADI certified', 'Equipment included', 'Underwater photos']
-    },
-    {
-      id: 3,
-      title: 'Cooking Class: Balinese Cuisine',
-      location: 'Ubud',
-      image: '/images/packages/bali/monkey-forest.jpg',
-      rating: 4.8,
-      reviews: 289,
-      duration: '4 hours',
-      price: '₹2,800',
-      groupSize: '4-12 people',
-      highlights: ['Market tour', 'Authentic recipes', 'Take-home cookbook']
-    },
-    {
-      id: 4,
-      title: 'White Water Rafting',
-      location: 'Ayung River',
-      image: '/images/packages/bali/kelingking-beach.jpg',
-      rating: 4.7,
-      reviews: 445,
-      duration: '3 hours',
-      price: '₹3,200',
-      groupSize: '2-8 people',
-      highlights: ['Safety equipment', 'Professional guides', 'Lunch included']
-    },
-    {
-      id: 5,
-      title: 'Traditional Balinese Massage',
-      location: 'Seminyak Spa',
-      image: '/images/hotels/seminyak/resort-pool.jpg',
-      rating: 4.9,
-      reviews: 678,
-      duration: '90 minutes',
-      price: '₹2,000',
-      groupSize: '1-2 people',
-      highlights: ['Aromatherapy oils', 'Quiet ambiance', 'Expert therapists']
-    },
-    {
-      id: 6,
-      title: 'Helicopter Tour of Bali',
-      location: 'Ngurah Rai Airport',
-      image: '/images/packages/bali/hero.jpg',
-      rating: 5.0,
-      reviews: 156,
-      duration: '30 minutes',
-      price: '₹18,000',
-      groupSize: '1-4 people',
-      highlights: ['Aerial views', 'Professional pilot', 'Photo opportunities']
-    }
-  ];
+const ShareableActivitiesCarousel = ({ activities = [] }) => {
+  if (!activities || activities.length === 0) return null;
 
   return (
     <section className="py-6 md:py-10 bg-white print:hidden">

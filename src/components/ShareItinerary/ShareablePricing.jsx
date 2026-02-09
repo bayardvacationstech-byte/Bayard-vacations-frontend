@@ -32,11 +32,15 @@ const ShareablePricing = ({ pricing, travelers }) => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-200 relative">
           
-          {/* Watermark Logo (Simplified) */}
+          {/* Watermark Logo */}
           <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none select-none">
-            <span className="text-[15rem] font-black tracking-tighter">BV</span>
+            <img 
+              src="/watermark-logo.svg" 
+              alt="" 
+              className="w-full max-w-[200px] object-contain"
+              aria-hidden="true"
+            />
           </div>
-
           <div className="p-6 md:p-8 relative z-10">
             <h2 className="text-2xl md:text-3xl font-black text-brand-blue uppercase tracking-tight mb-6">
               Tour Cost
@@ -73,8 +77,8 @@ const ShareablePricing = ({ pricing, travelers }) => {
                 </div>
                 <div className="py-1.5 px-4 md:py-2 md:px-6 flex flex-col items-center justify-center">
                   {adultsRate > 0 && (
-                    <span className="text-[8px] text-slate-400">
-                      ({formatPrice(adultsRate)} pp)
+                    <span className="text-[11px] md:text-xs font-semibold text-slate-500 mb-1">
+                      ({formatPrice(adultsRate)} per person)
                     </span>
                   )}
                   <span className="text-sm md:text-base font-bold text-slate-800 tracking-tight">
@@ -94,8 +98,8 @@ const ShareablePricing = ({ pricing, travelers }) => {
                 </div>
                 <div className="py-1.5 px-4 md:py-2 md:px-6 flex flex-col items-center justify-center">
                   {childrenRate > 0 && (
-                    <span className="text-[8px] text-slate-400">
-                      ({formatPrice(childrenRate)} pp)
+                    <span className="text-[11px] md:text-xs font-semibold text-slate-500 mb-1">
+                      ({formatPrice(childrenRate)} per person)
                     </span>
                   )}
                   <span className="text-sm md:text-base font-bold text-slate-800 tracking-tight">
@@ -115,8 +119,8 @@ const ShareablePricing = ({ pricing, travelers }) => {
                 </div>
                 <div className="py-1.5 px-4 md:py-2 md:px-6 flex flex-col items-center justify-center">
                   {toddlersRate > 0 && (
-                    <span className="text-[8px] text-slate-400">
-                      ({formatPrice(toddlersRate)} pp)
+                    <span className="text-[11px] md:text-xs font-semibold text-slate-500 mb-1">
+                      ({formatPrice(toddlersRate)} per person)
                     </span>
                   )}
                   <span className="text-sm md:text-base font-bold text-slate-800 tracking-tight">

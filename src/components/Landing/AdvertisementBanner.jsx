@@ -120,7 +120,7 @@ export default function AdvertisementBanner({ bannerData }) {
               transition={{ type: "spring", stiffness: 400 }}
             >
               <Image
-                src="/img/logo.svg"
+                src="/Bayard_white_logo.svg"
                 alt="Bayard Vacations"
                 width={100}
                 height={35}
@@ -199,7 +199,7 @@ export default function AdvertisementBanner({ bannerData }) {
               borderBottomLeftRadius: '4px'
             }}>
               <Image
-                src="/img/logo.svg"
+                src="/Bayard_white_logo.svg"
                 alt="Bayard Vacations"
                 width={80}
                 height={28}

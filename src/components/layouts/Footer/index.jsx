@@ -22,7 +22,7 @@
 //       <Container className="mt-6 sm:mt-12">
 //         <div className="mb-8 flex flex-col justify-between gap-8 text-white c-lg:flex-row c-lg:items-end">
 //           <Image
-//             src="/img/logo.svg"
+//             src="/Bayard_white_logo.svg"
 //             alt="Bayard vacations logo"
 //             width={480}
 //             height={96}
@@ -224,7 +224,7 @@ const Footer = async () => {
         {/* TOP */}
         <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
           <Image
-            src="/img/logo.svg"
+            src="/Bayard_white_logo.svg"
             alt="Bayard Vacations"
             width={420}
             height={90}

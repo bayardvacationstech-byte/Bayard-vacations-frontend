@@ -5,18 +5,7 @@ import { Play, X, Video, Image as ImageIcon } from "lucide-react";
 import Container from "@/components/ui/Container";
 
 // Authentic client videos
-const CLIENT_VIDEOS = [
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.02.47.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.02.56.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.06.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.28.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.43.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.03.58.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.04.15.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.04.25.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.05.32.mp4",
-  "/images/client_image_videos/WhatsApp_Video_2026-01-23_at_15.11.18.mp4"
-];
+const CLIENT_VIDEOS = [];
 
 const VideoCard = ({ video, index, onClick }) => {
   return (

@@ -106,7 +106,7 @@ const ShareableHotelInfo = ({ hotelDetails }) => {
   );
 
   return (
-    <section id="accommodation" className="py-6 md:py-10 bg-slate-50/30 scroll-mt-24">
+    <section id="accommodation" className="py-6 md:py-10 bg-slate-50/30 scroll-mt-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center mb-6 md:mb-8">

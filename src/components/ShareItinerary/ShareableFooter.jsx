@@ -32,7 +32,7 @@ const ShareableFooter = ({ contactInfo }) => {
             <div className="space-y-6">
               <div className="h-10 w-52 relative">
                 <Image
-                  src="/img/logo.svg"
+                  src="/Bayard_white_logo.svg"
                   alt={companyName}
                   fill
                   className="object-contain object-left brightness-0 invert"

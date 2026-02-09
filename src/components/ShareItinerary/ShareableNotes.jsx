@@ -21,17 +21,18 @@ const ShareableNotes = ({ notes = [] }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className={notes.length === 1 ? "max-w-none" : "columns-1 md:columns-2 gap-8"}>
           {notes.map((note, index) => (
             <div 
               key={index}
-              className="group p-6 rounded-3xl bg-slate-50 border border-slate-100 hover:border-amber-200 hover:bg-white hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300"
+              className={`group p-8 rounded-[2rem] bg-slate-50 border border-slate-100 hover:border-amber-200 hover:bg-white hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300 ${notes.length === 1 ? "" : "mb-6 break-inside-avoid-column"}`}
             >
               <div 
-                className="prose prose-slate prose-sm max-w-none text-slate-600 font-medium leading-relaxed
+                className={`prose prose-slate prose-sm max-w-none text-slate-600 font-medium leading-relaxed
                   prose-p:mb-3 prose-p:last:mb-0
                   prose-ul:my-2 prose-li:my-1
-                  prose-strong:text-slate-900 prose-strong:font-bold"
+                  prose-strong:text-slate-900 prose-strong:font-bold
+                  ${notes.length === 1 ? "md:columns-2 md:gap-12 [column-fill:balance]" : ""}`}
                 dangerouslySetInnerHTML={{ __html: note }}
               />
             </div>

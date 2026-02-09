@@ -2,7 +2,7 @@ import React from 'react';
 
 const ShareableInclusions = ({ inclusions = [], exclusions = [] }) => {
   return (
-    <section id="inclusions" className="bg-slate-50 py-6 md:py-10 print:py-6 print:bg-white">
+    <section id="inclusions" className="bg-slate-50 py-6 md:py-10 print:py-6 print:bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-3 md:mb-4 print:mb-4">

@@ -2,7 +2,7 @@
  * Maps the saved itinerary data from Firestore (formData structure)
  * to the format expected by the ShareableItinerary components.
  */
-export const mapSavedItineraryToShareable = (savedData) => {
+export const mapSavedItineraryToShareable = (savedData, resolvedHotels = null) => {
   if (!savedData || !savedData.formData) return null;
 
   const { formData, id } = savedData;
@@ -38,7 +38,7 @@ export const mapSavedItineraryToShareable = (savedData) => {
     const images = (Array.isArray(rawImages) ? rawImages : []).map(img => {
       if (typeof img === 'string') return { url: img, title: '' };
       return {
-        url: img.url || img.src || img.link || '',
+        url: img.preview || img.url || img.src || img.link || '',
         title: img.title || img.name || img.alt || ''
       };
     }).filter(img => img.url);
@@ -56,30 +56,75 @@ export const mapSavedItineraryToShareable = (savedData) => {
   // 2. Map hotel details
   const baseCategory = hotelDetailsData.baseCategory || 'fourstar';
   const selectedHotelData = hotelDetailsData[baseCategory] || {};
-  const hotelDetails = (selectedHotelData.hotels || []).map(hotel => ({
-    name: hotel.name || 'Premium Hotel',
-    category: `${baseCategory.replace('star', ' Star').toUpperCase()}`,
-    location: hotel.city || '',
-    rating: parseInt(baseCategory.charAt(0)) || 4,
-    roomType: hotel.roomType || 'Standard Room',
-    amenities: hotel.amenities || ['Free WiFi', 'Breakfast', 'AC'],
-    checkIn: hotel.checkIn || '',
-    checkOut: hotel.checkOut || '',
-    images: hotel.images || []
-  }));
+  
+  let hotelDetails = [];
+
+  if (resolvedHotels && resolvedHotels.length > 0) {
+    // Map from full database documents
+    hotelDetails = resolvedHotels.map(hotel => ({
+      name: hotel.name || 'Premium Hotel',
+      category: hotel.type?.replace('_', ' ') || `${baseCategory.replace('star', ' Star').toUpperCase()}`,
+      location: hotel.city || '',
+      rating: parseInt(hotel.type?.charAt(0)) || 4,
+      roomType: hotel.roomType || 'Standard Room',
+      amenities: hotel.amenities || ['Free WiFi', 'Breakfast', 'AC'],
+      checkIn: hotel.checkIn || '',
+      checkOut: hotel.checkOut || '',
+      images: hotel.images || []
+    }));
+  } else {
+    // Fallback to minimal data in the itinerary itself
+    hotelDetails = (selectedHotelData.hotels || []).map(hotel => ({
+      name: hotel.name || 'Premium Hotel',
+      category: `${baseCategory.replace('star', ' Star').toUpperCase()}`,
+      location: hotel.city || '',
+      rating: parseInt(baseCategory.charAt(0)) || 4,
+      roomType: hotel.roomType || 'Standard Room',
+      amenities: hotel.amenities || ['Free WiFi', 'Breakfast', 'AC'],
+      checkIn: hotel.checkIn || '',
+      checkOut: hotel.checkOut || '',
+      images: hotel.images || []
+    }));
+  }
 
   // 3. Map pricing
-  const basePrice = pricingPageData.basePrice || 0;
-  const adultsRate = pricingPageData.hotelCharges?.[baseCategory] || 0;
-  const childrenRate = pricingPageData.kidsPricing?.childWithBed || pricingPageData.kidsPricing?.childWithoutBed || 0;
-  const toddlersRate = pricingPageData.kidsPricing?.infant || 0;
+  const travelers = {
+    adults: parseInt(pricingPageData.numTravelers?.adults) || 2,
+    children: parseInt(pricingPageData.numTravelers?.children) || 0,
+    toddlers: parseInt(pricingPageData.numTravelers?.infants) || 0
+  };
+
+  // Detect per-person flag. Assume true if not explicitly false to match user's expected pattern
+  const isPerPerson = 
+    pricingPageData.isPerPerson !== false && 
+    pricingPageData.perPerson !== false && 
+    pricingPageData.per_person !== false &&
+    pricingPageData.pricingType !== 'total';
   
-  const gstRate = pricingPageData.taxes?.gst || 5;
-  const tcsRate = pricingPageData.taxes?.tcs || 5;
+  let adultsRate = parseFloat(pricingPageData.hotelCharges?.[baseCategory]) || 0;
+  const childrenRate = parseFloat(pricingPageData.kidsPricing?.childWithBed || pricingPageData.kidsPricing?.childWithoutBed) || 0;
+  const toddlersRate = parseFloat(pricingPageData.kidsPricing?.infant) || 0;
+
+  // If specific rates are missing but a basePrice is provided
+  if (adultsRate === 0 && pricingPageData.basePrice > 0) {
+    if (isPerPerson) {
+      // If it's a per-person quote, the basePrice IS the adultsRate
+      adultsRate = parseFloat(pricingPageData.basePrice);
+    } else {
+      // If it's explicitly a total quote, calculate the per-person rate
+      adultsRate = Math.round(parseFloat(pricingPageData.basePrice) / (travelers.adults || 1));
+    }
+  }
+
+  // Calculate the actual total basePrice based on rates and counts
+  // Total = (Adults * Rate) + (Kids * Rate) + (Infants * Rate)
+  const basePrice = (travelers.adults * adultsRate) + (travelers.children * childrenRate) + (travelers.toddlers * toddlersRate);
+  
+  const gstRate = parseFloat(pricingPageData.taxes?.gst) || 5;
+  const tcsRate = parseFloat(pricingPageData.taxes?.tcs) || 5;
   
   const gstAmount = Math.round(basePrice * (gstRate / 100));
-  // TCS is usually calculated on (Base + GST) for international trips
-  const tcsAmount = Math.round((basePrice + gstAmount) * (tcsRate / 100));
+  const tcsAmount = Math.round(basePrice * (tcsRate / 100));
   const totalPrice = basePrice + gstAmount + tcsAmount;
 
   const pricing = {
@@ -94,7 +139,7 @@ export const mapSavedItineraryToShareable = (savedData) => {
     gstAmount,
     tcsRate,
     tcsAmount,
-    perPerson: true
+    perPerson: isPerPerson
   };
 
   // 4. Map contact info
@@ -118,15 +163,14 @@ export const mapSavedItineraryToShareable = (savedData) => {
     packageName: coverPageData.title || "Your Custom Trip",
     destination: coverPageData.title || "Custom Destination",
     duration: `${coverPageData.nights || 0} Nights / ${coverPageData.days || 0} Days`,
-    heroImage: coverPageData.previewImage || coverPageData.backgroundImage,
+    heroImage: coverPageData.preview || coverPageData.previewImage || coverPageData.backgroundImage,
     travelDates: null, // Not explicitly found in the top level log
-    travelers: {
-        adults: pricingPageData.numTravelers?.adults || 2,
-        children: pricingPageData.numTravelers?.children || 0,
-        toddlers: pricingPageData.numTravelers?.infants || 0
-    },
+    travelers,
     pricing,
-    highlights: tripHighlightsData.images?.map(h => h.title).filter(Boolean) || [],
+    highlights: tripHighlightsData.images?.map(h => ({
+      title: h.title || '',
+      url: h.preview || h.url || h.src || ''
+    })).filter(h => h.title) || [],
     itineraries,
     hotelDetails,
     inclusions: (summaryPageData.includes || []).map(item => typeof item === 'object' ? (item.title || item.description || '') : item),
