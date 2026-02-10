@@ -16,7 +16,7 @@ const LeadGenerationTrigger = () => {
     if (typeof window === "undefined") return;
     
     // Check if already shown in this session
-    const key = "bayard_lead_popup_final";
+    const key = "bayard_lead_popup_v3";
     if (sessionStorage.getItem(key) === "true") return;
     
     // Don't trigger if already open
@@ -29,7 +29,7 @@ const LeadGenerationTrigger = () => {
   // If the user opens the modal manually, also count it as "shown"
   useEffect(() => {
     if (isOpen && typeof window !== "undefined") {
-      sessionStorage.setItem("bayard_lead_popup_final", "true");
+      sessionStorage.setItem("bayard_lead_popup_v3", "true");
     }
   }, [isOpen]);
 
@@ -37,14 +37,14 @@ const LeadGenerationTrigger = () => {
     if (typeof window === "undefined") return;
     
     // Initial check to avoid setting timers if already shown
-    const key = "bayard_lead_popup_final";
+    const key = "bayard_lead_popup_v3";
     if (sessionStorage.getItem(key) === "true") return;
 
     // --- Time-based Trigger ---
-    // Show after 45 seconds
+    // Show after 2 seconds
     const timer = setTimeout(() => {
       handleTrigger();
-    }, 45000);
+    }, 2000);
 
     // --- Scroll-based Trigger ---
     // Show when scrolling past 40% of the page
@@ -60,7 +60,7 @@ const LeadGenerationTrigger = () => {
           // Safety check for short pages
           if (scrollHeight > clientHeight + 100) {
             const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-            if (scrollPercentage > 0.6) {
+            if (scrollPercentage > 0.2) {
               handleTrigger();
             }
           }
@@ -75,7 +75,7 @@ const LeadGenerationTrigger = () => {
       window.addEventListener("scroll", handleScroll, { passive: true });
       // Run initial check in case user is already scrolled down
       handleScroll();
-    }, 2000);
+    }, 500);
 
     return () => {
       clearTimeout(timer);
