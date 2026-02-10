@@ -6,7 +6,7 @@ const PolicySection = () => {
     <div id="policy-section" className="scroll-mt-48 pt-4">
       {/* Standard Header */}
       <div className="mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
           Cancellation <span className="text-rose-500">Policy</span>
         </h2>
         <p className="text-slate-500 text-sm md:text-xl font-medium">Clear and transparent cancellation guidelines</p>

@@ -167,7 +167,7 @@ const PrivacyPolicy = () => {
             </div>
 
             {/* THE CONTENT */}
-            <div className="prose prose-slate max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-h2:text-3xl prose-h2:pt-8 prose-h2:mb-6 prose-h2:border-t prose-h2:border-slate-100 first:prose-h2:border-0 first:prose-h2:pt-0">
+            <div className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-h2:text-3xl md:prose-h2:text-4xl lg:prose-h2:text-5xl prose-h2:leading-tight prose-h2:pt-8 prose-h2:mb-6 prose-h2:border-t prose-h2:border-slate-100 first:prose-h2:border-0 first:prose-h2:pt-0">
               
               <section id="intro">
                 <h2>Introduction</h2>

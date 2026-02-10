@@ -949,7 +949,7 @@ const SectionHeader = ({ title, badge, noMargin }) => {
       <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-3 border border-slate-200">
         {badge}
       </span>
-      <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
         {restOfTitle} <span className="text-brand-blue">{lastWord}</span>
       </h2>
     </div>

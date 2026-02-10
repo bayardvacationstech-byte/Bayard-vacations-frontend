@@ -50,7 +50,7 @@ const ItinerarySection = ({ packageData }) => {
       {/* Standard Header Block - Above Split Layout */}
       <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6 md:mb-8">
         <div className="flex-1 max-w-3xl">
-          <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
             Your <span className="text-brand-blue">Daily Itinerary</span>
           </h2>
           <p className="text-slate-500 text-sm md:text-xl font-medium">

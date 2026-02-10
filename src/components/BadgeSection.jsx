@@ -8,7 +8,7 @@ import { PACKAGE_TAGS } from "@/config";
 export default function BadgeSection({ item }) {
   // Modern glass-morphism badge style
   const baseStyle =
-    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black text-white backdrop-blur-md border border-white/20 shadow-lg tracking-wider uppercase transition-all duration-300 hover:scale-105 hover:shadow-xl whitespace-nowrap";
+    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-extrabold text-white backdrop-blur-md border border-white/20 shadow-lg tracking-wider uppercase transition-all duration-300 hover:scale-105 hover:shadow-xl whitespace-nowrap";
 
   // Premium color schemes with glass effect
   const BADGE_STYLES = {

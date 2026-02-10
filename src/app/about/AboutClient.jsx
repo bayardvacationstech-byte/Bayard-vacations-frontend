@@ -122,7 +122,7 @@ export default function AboutPage() {
             <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-brand-blue bg-brand-blue/10 rounded-full mb-4">
               Our Journey
             </span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900">Timeline of Excellence</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">Timeline of Excellence</h2>
           </div>
 
           <div className="relative">
@@ -189,7 +189,7 @@ export default function AboutPage() {
                   <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
                     <Heart className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white">Our Mission</h2>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">Our Mission</h2>
                 </div>
                 
                 <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4">
@@ -217,7 +217,7 @@ export default function AboutPage() {
                   <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
                     <Globe className="w-6 h-6 text-white" />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white">Our Vision</h2>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">Our Vision</h2>
                 </div>
                 
                 <p className="text-base md:text-lg text-white/90 leading-relaxed mb-4">
@@ -245,7 +245,7 @@ export default function AboutPage() {
             <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-purple-600 bg-purple-100 rounded-full mb-4">
               Our DNA
             </span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900">Core Values</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">Core Values</h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
@@ -291,7 +291,7 @@ export default function AboutPage() {
       <section className="py-8 md:py-10 bg-gradient-to-br from-slate-50 to-white">
         <Container>
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">Why Bayard?</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-4">Why Bayard?</h2>
             <p className="text-lg text-slate-600">Because ordinary just isn't our style</p>
           </div>
 

@@ -704,7 +704,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                 transition={{ duration: 0.6 }}
                 className="flex flex-col gap-2"
               >
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight capitalize">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight capitalize">
                   {placeName} <span className="text-brand-blue">Packages</span>
                 </h2>
               </motion.div>
@@ -798,7 +798,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
           <Container>
             <div className="flex items-center justify-between mb-3 md:mb-8">
               <div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
                   Signature Collections
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
@@ -891,7 +891,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
         <Container>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-3 md:mb-12">
             <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
                 Travel Stories &amp; Tips
               </h2>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">
@@ -966,7 +966,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
           <Container>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-3 md:mb-12">
               <div>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
                   You Might Also Like
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-medium max-w-2xl leading-relaxed">

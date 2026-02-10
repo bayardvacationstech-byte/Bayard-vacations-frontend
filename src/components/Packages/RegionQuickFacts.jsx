@@ -122,7 +122,7 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                 <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-blue-600 whitespace-nowrap">Destination Overview</span>
                 <div className="h-[1.5px] md:h-[2px] flex-1 md:w-12 bg-blue-600/20" />
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-slate-900 tracking-tighter leading-tight md:leading-[0.95] mb-2 md:mb-4">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-2 md:mb-4">
                 About {factSheetData?.details?.hero?.title || whyChooseData?.details?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
               </h2>
               <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">

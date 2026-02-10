@@ -64,7 +64,7 @@ const HighlightsSection = ({ packageData }) => {
     <div id="highlights-section" className="md:bg-white md:rounded-[2rem] p-0 md:p-8 md:border md:border-slate-100 md:shadow-sm scroll-mt-32">
       {/* Standard Header */}
       <div className="mb-6 md:mb-8 md:px-0">
-        <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
           Major <span className="text-brand-blue">Highlights</span>
         </h2>
         <p className="text-slate-500 text-sm md:text-xl font-medium">Key experiences crafted for your journey</p>

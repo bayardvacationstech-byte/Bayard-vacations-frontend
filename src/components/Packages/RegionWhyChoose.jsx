@@ -62,7 +62,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               </motion.div>
               
               <motion.h2
-                className="text-3xl sm:text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-6"
               >
                 <span className="hidden sm:inline">Why Choose </span>
                 <span className="inline sm:hidden">Why </span>

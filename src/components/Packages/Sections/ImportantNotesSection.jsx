@@ -32,7 +32,7 @@ const ImportantNotesSection = ({ packageData }) => {
     <div id="notes-section" className="scroll-mt-32">
       {/* Standard Header - Moved Outside of Card */}
       <div className="mb-6 md:mb-8">
-        <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
           Important <span className="text-brand-blue">Notes</span>
         </h2>
         <p className="text-slate-500 text-sm md:text-xl font-medium">Key guidelines to ensure a smooth travel experience</p>
