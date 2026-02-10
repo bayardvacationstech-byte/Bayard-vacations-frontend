@@ -53,7 +53,7 @@ const SectionNav = ({ sections, activeSection }) => {
     <div className="relative group/nav">
       <div 
         ref={scrollRef}
-        className="overflow-x-auto scrollbar-hide"
+        className="overflow-x-auto scrollbar-hide touch-pan-x w-full"
       >
         <div className="flex items-center gap-3 whitespace-nowrap pr-12 lg:pr-0">
           {sections.map((section, index) => {

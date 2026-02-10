@@ -101,6 +101,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
   const [showSectionNav, setShowSectionNav] = useState(false);
   const [activeSection, setActiveSection] = useState("packages");
   const [isNearFooter, setIsNearFooter] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const packagesRef = useRef(null);
   const itemsPerPage = 8;
   const { region: regionName } = useParams();
@@ -171,8 +172,18 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
       setIsNearFooter(scrollPosition > threshold);
     };
 
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [activeSection]);
 
   useEffect(() => {
@@ -514,16 +525,15 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
 
         {/* Sticky Glassy Filter Card / Nav - Responsive */}
         <div className={cn(
-          "sticky top-[86px] c-md:top-[100px] z-50 mb-6 px-4 transition-all duration-300",
-          !showSectionNav && "hidden c-md:block"
+          "sticky top-[86px] c-md:top-[100px] z-[110] mb-6 px-4 transition-all duration-300"
         )}>
           <div className={cn(
-            "bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 overflow-hidden transition-all duration-500 mx-auto",
-            showSectionNav ? "w-fit" : "w-fit max-w-4xl"
+            "bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 transition-all duration-500 mx-auto max-w-full",
+            (showSectionNav || isMobile) ? "w-full md:w-fit" : "w-fit max-w-4xl"
           )}>
               <AnimatePresence mode="popLayout">
                 {isMounted && (
-                  !showSectionNav ? (
+                  (!showSectionNav && !isMobile) ? (
                     <motion.div
                       key="filters"
                       initial={{ opacity: 0, y: -5 }}
@@ -672,6 +682,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                         duration: 0.2,
                         ease: "easeOut" 
                       }}
+                      className="w-full"
                     >
                       <SectionNav sections={navSections} activeSection={activeSection} />
                     </motion.div>
