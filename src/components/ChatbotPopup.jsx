@@ -1003,7 +1003,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask anything..."
-                className="flex-1 min-h-[42px] max-h-[120px] rounded-full border-[1.5px] border-slate-200 sm:border-transparent bg-white px-5 py-2.5 pr-12 sm:transition-all sm:duration-300 resize-none h-auto scrollbar-none text-sm placeholder:text-gray-400 focus:outline-none focus:border-blue-400 sm:focus:border-transparent chat-input-area"
+                className="flex-1 min-h-[42px] max-h-[120px] rounded-full border-[1.5px] border-slate-200 sm:border-transparent bg-white px-5 py-2.5 pr-12 sm:transition-all sm:duration-300 resize-none h-auto scrollbar-none text-base sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-blue-400 sm:focus:border-transparent chat-input-area"
                 disabled={false}
               />
               <div className="absolute right-1.5 flex items-center gap-1">
