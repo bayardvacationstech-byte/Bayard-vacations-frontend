@@ -59,8 +59,8 @@ export default function FactsheetClient({ regionSlug }) {
   // Fetch region data to get ID
   const { regionData, isLoading: regionLoading } = useRegion(regionSlug);
   
-  // Fetch factsheet data using region ID
-  const { factSheetData, isLoading: factSheetLoading } = useRegionFactSheet(regionData?.id);
+  // Fetch factsheet data using region ID or slug
+  const { factSheetData, isLoading: factSheetLoading } = useRegionFactSheet(regionData?.id, regionSlug);
   
   const isLoading = regionLoading || factSheetLoading;
 
@@ -85,10 +85,11 @@ export default function FactsheetClient({ regionSlug }) {
     return img.url || img.image || img.imageUrl;
   };
 
-  // Map dynamic data if available
-  const dynamicData = factSheetData?.details;
+  // Map dynamic data if available - support both nested 'details' and flat structure
+  const dynamicData = factSheetData?.details || factSheetData;
+  const hasData = !!(factSheetData?.details || factSheetData?.essentials || factSheetData?.history);
 
-  const currentData = dynamicData ? {
+  const currentData = hasData ? {
     heroTitle: dynamicData.hero?.title,
     heroSubtitle: dynamicData.hero?.subtitle,
     heroImage: getImageUrl(dynamicData.hero?.image),
@@ -321,7 +322,7 @@ export default function FactsheetClient({ regionSlug }) {
           <Container className="flex flex-row items-center justify-end gap-4">
             {factSheetData?.nickname && (
               <div className="hidden sm:flex px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full shadow-lg">
-                <span className="text-white text-[10px] font-black uppercase tracking-widest leading-none">
+                <span className="text-white text-[10px] font-bold uppercase tracking-widest leading-none">
                   {factSheetData.nickname}
                 </span>
               </div>
@@ -365,8 +366,8 @@ export default function FactsheetClient({ regionSlug }) {
                       <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-4 shadow-inner", colorMap[item.color] || "bg-slate-200")}>
                         <Icon className="w-5 h-5" />
                       </div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{item.label}</p>
-                      <p className="text-base md:text-lg font-black text-slate-900 leading-tight">{item.value}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">{item.label}</p>
+                      <p className="text-base md:text-lg font-bold text-slate-900 leading-tight">{item.value}</p>
                     </div>
                   );
                 })}
@@ -381,8 +382,8 @@ export default function FactsheetClient({ regionSlug }) {
                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                       {currentData.fastFacts?.map((fact, i) => (
                         <div key={i}>
-                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{fact.label}</p>
-                           <p className="text-base md:text-lg font-black text-white">{fact.value}</p>
+                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{fact.label}</p>
+                           <p className="text-base md:text-lg font-bold text-white">{fact.value}</p>
                         </div>
                       ))}
                    </div>
@@ -397,7 +398,7 @@ export default function FactsheetClient({ regionSlug }) {
                   
                   {/* Left Side: Region Highlights */}
                   <div className="flex-1">
-                    <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
                       Region <span className="text-brand-blue">Highlights</span>
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
@@ -409,7 +410,7 @@ export default function FactsheetClient({ regionSlug }) {
 
                   {/* Right Side: Top Attractions */}
                   <div className="flex-1">
-                    <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
                       Top <span className="text-brand-blue">Attractions</span>
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
@@ -427,7 +428,7 @@ export default function FactsheetClient({ regionSlug }) {
               <section id="history" className="scroll-mt-24">
                 <SectionHeader title="History & Heritage" badge="Our Origins" />
                 <div className="bg-white border border-slate-100 rounded-[3rem] px-5 py-8 md:p-10 shadow-sm">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-6">{currentData.history.title}</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">{currentData.history.title}</h3>
                   <div className="mb-6 max-w-3xl">
                     <p 
                       ref={historyTextRef}
@@ -472,7 +473,7 @@ export default function FactsheetClient({ regionSlug }) {
                           {React.createElement(currentData.history.spotlight.icon, { className: "w-8 h-8 text-brand-blue" })}
                        </div>
                        <div>
-                          <h4 className="font-black text-brand-blue uppercase text-xs tracking-widest mb-2">Spotlight: {currentData.history.spotlight.title}</h4>
+                          <h4 className="font-bold text-brand-blue uppercase text-xs tracking-widest mb-2">Spotlight: {currentData.history.spotlight.title}</h4>
                           <p className="text-slate-700 font-medium leading-relaxed italic">{currentData.history.spotlight.content}</p>
                        </div>
                     </div>
@@ -488,8 +489,8 @@ export default function FactsheetClient({ regionSlug }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {currentData.history.stats?.map((stat, i) => (
                       <div key={i} className="bg-slate-50 border border-slate-100 p-8 rounded-[2.5rem]">
-                        <p className="text-xs font-black text-brand-blue uppercase tracking-[0.3em] mb-4">{stat.label}</p>
-                        <h4 className="text-3xl font-black text-slate-900 mb-1">{stat.value}</h4>
+                        <p className="text-xs font-bold text-brand-blue uppercase tracking-[0.3em] mb-4">{stat.label}</p>
+                        <h4 className="text-3xl font-bold text-slate-900 mb-1">{stat.value}</h4>
                         <p className="text-slate-500 font-medium">{stat.desc}</p>
                       </div>
                     ))}
@@ -507,27 +508,27 @@ export default function FactsheetClient({ regionSlug }) {
                       <div className="space-y-4">
                         <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
                            <Clock className="w-5 h-5 text-slate-900" />
-                           <h4 className="text-xl font-black text-slate-900 uppercase">Time Zone</h4>
+                           <h4 className="text-xl font-bold text-slate-900 uppercase">Time Zone</h4>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                            <div>
-                              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Standard</p>
-                              <p className="text-lg font-black text-slate-900">{currentData.climate.timeZone}</p>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Standard</p>
+                              <p className="text-lg font-bold text-slate-900">{currentData.climate.timeZone}</p>
                            </div>
                            <div>
-                              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Difference</p>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Difference</p>
                               <p className="text-lg font-bold text-slate-700">{currentData.climate.difference}</p>
                            </div>
                         </div>
                         <div className="pt-4">
-                           <p className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-2">🎯 Best Months</p>
-                           <p className="text-xl font-black text-slate-900">{currentData.climate.bestMonths}</p>
+                           <p className="text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-2">🎯 Best Months</p>
+                           <p className="text-xl font-bold text-slate-900">{currentData.climate.bestMonths}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
                            <ThermometerSun className="w-5 h-5 text-slate-900" />
-                           <h4 className="text-xl font-black text-slate-900 uppercase">Climate</h4>
+                           <h4 className="text-xl font-bold text-slate-900 uppercase">Climate</h4>
                         </div>
                         <p className="text-sm text-slate-600 font-medium leading-relaxed">
                            {currentData.climate.description || `The climate in ${regionName} varies significantly by region, offering a diverse range of weather conditions from coastal areas to mountain peaks.`}
@@ -539,9 +540,9 @@ export default function FactsheetClient({ regionSlug }) {
                       {currentData.climate.seasons?.map((s, i) => (
                         <div key={i} className="bg-slate-50/50 border border-slate-100 p-5 rounded-2xl text-center">
                            <span className="text-3xl block mb-2">{s.emoji}</span>
-                           <h5 className="font-black text-slate-900 text-sm mb-1">{s.name}</h5>
-                           <p className="text-[10px] font-black text-slate-400 uppercase mb-2">{s.months}</p>
-                           <p className="text-lg font-black text-brand-blue mb-2">{s.temp}</p>
+                           <h5 className="font-bold text-slate-900 text-sm mb-1">{s.name}</h5>
+                           <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">{s.months}</p>
+                           <p className="text-lg font-bold text-brand-blue mb-2">{s.temp}</p>
                            <p className="text-[11px] text-slate-500 font-medium leading-tight">{s.highlight}</p>
                         </div>
                       ))}
@@ -550,7 +551,7 @@ export default function FactsheetClient({ regionSlug }) {
                    {/* Packing List Block */}
                    {currentData.climate.packing && (
                      <div className="bg-amber-50 rounded-[2rem] p-8 border border-amber-100">
-                        <h4 className="text-amber-900 font-black mb-4 uppercase text-xs tracking-widest">Seasonal Packing List</h4>
+                        <h4 className="text-amber-900 font-bold mb-4 uppercase text-xs tracking-widest">Seasonal Packing List</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-3">
                            {currentData.climate.packing?.map((item, i) => (
                              <div key={i} className="flex gap-3 text-amber-900/70 font-medium text-sm">
@@ -572,8 +573,8 @@ export default function FactsheetClient({ regionSlug }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                        <div className="space-y-6">
                           <div>
-                             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Official Language</h4>
-                             <p className="text-2xl md:text-3xl font-black text-slate-900 italic">{currentData.language.official}</p>
+                             <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Official Language</h4>
+                             <p className="text-2xl md:text-3xl font-bold text-slate-900 italic">{currentData.language.official}</p>
                           </div>
                           <p className="text-base text-slate-600 font-medium leading-relaxed italic border-l-4 border-brand-blue/30 pl-4">
                              {currentData.language.context}
@@ -581,24 +582,24 @@ export default function FactsheetClient({ regionSlug }) {
 
                           {/* Signage Cheat-sheet */}
                           <div className="bg-slate-50 p-6 rounded-2xl">
-                             <h5 className="font-black text-slate-900 text-[10px] uppercase tracking-widest mb-4">Local Signage</h5>
+                             <h5 className="font-bold text-slate-900 text-[10px] uppercase tracking-widest mb-4">Local Signage</h5>
                              <div className="grid grid-cols-2 gap-4">
                                 {currentData.language.signage?.map((s, i) => (
                                   <div key={i} className="flex justify-between border-b border-slate-100 pb-1">
                                      <span className="text-[10px] font-bold text-slate-400">{s.label}</span>
-                                     <span className="text-[11px] font-black text-slate-900 uppercase">{s.value}</span>
+                                     <span className="text-[11px] font-bold text-slate-900 uppercase">{s.value}</span>
                                   </div>
                                 ))}
                              </div>
                           </div>
                        </div>
                        <div>
-                          <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Essential Phrases</h4>
+                          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Essential Phrases</h4>
                           <div className="grid grid-cols-1 gap-4">
                              {currentData.language.phrases?.map((p, i) => (
                                <div key={i} className="bg-slate-50/50 p-4 rounded-xl flex justify-between items-center group hover:bg-white transition-colors border border-transparent hover:border-slate-100">
-                                  <p className="text-[10px] font-black text-slate-400 uppercase">{p.label}</p>
-                                  <p className="text-lg font-black text-slate-900 group-hover:text-brand-blue transition-colors">{p.phrase}</p>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase">{p.label}</p>
+                                  <p className="text-lg font-bold text-slate-900 group-hover:text-brand-blue transition-colors">{p.phrase}</p>
                                </div>
                              ))}
                           </div>
@@ -615,7 +616,7 @@ export default function FactsheetClient({ regionSlug }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-slate-900 rounded-[3rem] px-6 py-10 md:p-10 text-white flex flex-col justify-center">
                     <Users className="w-10 h-10 md:w-12 md:h-12 text-brand-blue mb-8" />
-                    <h3 className="text-3xl md:text-4xl font-black mb-6">{currentData.culture.vibe}</h3>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-6">{currentData.culture.vibe}</h3>
                     <p className="text-slate-300 font-medium leading-relaxed italic text-base md:text-lg">
                       "{currentData.culture.description}"
                     </p>
@@ -625,7 +626,7 @@ export default function FactsheetClient({ regionSlug }) {
                       <div key={i} className="bg-white border border-slate-100 p-6 md:p-8 rounded-[2rem] shadow-sm flex items-start gap-5 md:gap-6">
                         <span className="text-2xl md:text-3xl shrink-0">{rule.icon}</span>
                         <div>
-                          <h4 className="font-black text-slate-900 mb-1 uppercase text-xs tracking-widest">{rule.label}</h4>
+                          <h4 className="font-bold text-slate-900 mb-1 uppercase text-xs tracking-widest">{rule.label}</h4>
                           <p className="text-slate-500 font-medium text-xs md:text-sm leading-relaxed">{rule.desc}</p>
                         </div>
                       </div>
@@ -636,27 +637,27 @@ export default function FactsheetClient({ regionSlug }) {
                 {/* Dos and Don'ts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                    <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-[2.5rem]">
-                      <h4 className="flex items-center gap-2 text-emerald-900 font-black mb-6 text-xl">
+                      <h4 className="flex items-center gap-2 text-emerald-900 font-bold mb-6 text-xl">
                          <CheckCircle2 className="w-6 h-6 text-emerald-500" />
                          Essential Dos
                       </h4>
                       <ul className="space-y-4">
                          {currentData.culture.dos?.map((item, i) => (
                            <li key={i} className="flex gap-3 text-emerald-900/70 font-medium text-sm">
-                              <span className="text-emerald-500 font-black">•</span> {item}
+                              <span className="text-emerald-500 font-bold">•</span> {item}
                            </li>
                          ))}
                       </ul>
                    </div>
                    <div className="bg-rose-50 border border-rose-100 p-8 rounded-[2.5rem]">
-                      <h4 className="flex items-center gap-2 text-rose-900 font-black mb-6 text-xl">
+                      <h4 className="flex items-center gap-2 text-rose-900 font-bold mb-6 text-xl">
                          <XCircle className="w-6 h-6 text-rose-500" />
                          Essential Don'ts
                       </h4>
                       <ul className="space-y-4">
                          {currentData.culture.donts?.map((item, i) => (
                            <li key={i} className="flex gap-3 text-rose-900/70 font-medium text-sm">
-                              <span className="text-rose-500 font-black">•</span> {item}
+                              <span className="text-rose-500 font-bold">•</span> {item}
                            </li>
                          ))}
                       </ul>
@@ -666,11 +667,11 @@ export default function FactsheetClient({ regionSlug }) {
                 {/* Etiquette Block */}
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm">
-                      <h5 className="font-black text-slate-900 text-[10px] uppercase tracking-[0.2em] mb-4">🍽️ Dining Etiquette</h5>
+                      <h5 className="font-bold text-slate-900 text-[10px] uppercase tracking-[0.2em] mb-4">🍽️ Dining Etiquette</h5>
                       <p className="text-sm text-slate-500 font-medium leading-relaxed italic">{currentData.culture.etiquette.dining}</p>
                    </div>
                    <div className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm">
-                      <h5 className="font-black text-slate-900 text-[10px] uppercase tracking-[0.2em] mb-4">🎁 Gift Giving</h5>
+                      <h5 className="font-bold text-slate-900 text-[10px] uppercase tracking-[0.2em] mb-4">🎁 Gift Giving</h5>
                       <p className="text-sm text-slate-500 font-medium leading-relaxed italic">{currentData.culture.etiquette.gifting}</p>
                    </div>
                 </div>
@@ -720,7 +721,7 @@ export default function FactsheetClient({ regionSlug }) {
                         
                         {/* Content */}
                         <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <h4 className="font-black text-white text-lg md:text-xl mb-1 drop-shadow-lg">
+                          <h4 className="font-bold text-white text-lg md:text-xl mb-1 drop-shadow-lg">
                             {food.name}
                           </h4>
                           {/* <p className="text-white/80 text-xs md:text-sm font-medium leading-tight">
@@ -735,13 +736,13 @@ export default function FactsheetClient({ regionSlug }) {
                   {currentData.food.drinks && currentData.food.drinks.length > 0 && (
                     <div className="bg-brand-blue rounded-2xl p-6 md:p-8 text-white shadow-lg overflow-hidden relative">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-                      <h4 className="font-black mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
+                      <h4 className="font-bold mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
                         <Info className="w-4 h-4" /> Signature Drinks
                       </h4>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {currentData.food.drinks?.map((drink, i) => (
                           <div key={i} className="flex flex-col">
-                            <span className="text-sm font-black text-white">{drink.name}</span>
+                            <span className="text-sm font-bold text-white">{drink.name}</span>
                             <span className="text-[10px] text-white/70 font-bold uppercase tracking-wider">{drink.value}</span>
                           </div>
                         ))}
@@ -763,7 +764,7 @@ export default function FactsheetClient({ regionSlug }) {
                       {currentData.shopping.categories?.map((cat, i) => (
                         <div key={i} className="bg-slate-50/50 p-6 rounded-[2rem] border border-slate-100">
                            <span className="text-3xl block mb-4">{cat.icon}</span>
-                           <h4 className="font-black text-slate-900 text-sm mb-4 uppercase tracking-widest">{cat.name}</h4>
+                           <h4 className="font-bold text-slate-900 text-sm mb-4 uppercase tracking-widest">{cat.name}</h4>
                            <ul className="space-y-2">
                               {cat.items?.map((item, idx) => (
                                 <li key={idx} className="text-sm text-slate-500 font-medium flex items-center gap-2">
@@ -776,11 +777,11 @@ export default function FactsheetClient({ regionSlug }) {
                    </div>
 
                    <div className="bg-slate-900 text-white rounded-[2.5rem] p-8">
-                      <h4 className="text-brand-blue font-black uppercase text-xs tracking-[0.2em] mb-6">Where to Shop (Local Hubs)</h4>
+                      <h4 className="text-brand-blue font-bold uppercase text-xs tracking-[0.2em] mb-6">Where to Shop (Local Hubs)</h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                          {currentData.shopping.hubs?.map((hub, i) => (
                            <div key={i}>
-                              <p className="text-lg font-black mb-1">{hub.name}</p>
+                              <p className="text-lg font-bold mb-1">{hub.name}</p>
                               <p className="text-brand-blue font-bold text-[10px] uppercase tracking-widest mb-2">{hub.type}</p>
                               <p className="text-slate-400 text-xs font-medium italic">"{hub.highlight}"</p>
                            </div>
@@ -802,8 +803,8 @@ export default function FactsheetClient({ regionSlug }) {
                       return (
                         <div key={i} className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm text-center">
                           <Icon className="w-8 h-8 mx-auto text-blue-500 mb-4" />
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">{stat.label}</p>
-                          <h4 className="text-2xl font-black text-slate-900 mb-1">{stat.value}</h4>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">{stat.label}</p>
+                          <h4 className="text-2xl font-bold text-slate-900 mb-1">{stat.value}</h4>
                           <p className="text-slate-500 text-xs font-medium">{stat.desc}</p>
                         </div>
                       );
@@ -814,18 +815,18 @@ export default function FactsheetClient({ regionSlug }) {
                      <div className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm">
                         <div className="flex items-center gap-3 mb-4">
                            <Plane className="w-6 h-6 text-slate-900" />
-                           <h4 className="text-lg font-black text-slate-900 uppercase">Arrival Info</h4>
+                           <h4 className="text-lg font-bold text-slate-900 uppercase">Arrival Info</h4>
                         </div>
                         <p className="text-sm text-slate-600 font-medium leading-relaxed">{currentData.transport.arrival}</p>
                      </div>
                      <div className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-sm flex flex-col justify-center">
                         <div className="flex items-center gap-3 mb-4">
                            <Smartphone className="w-6 h-6 text-slate-900" />
-                           <h4 className="text-lg font-black text-slate-900 uppercase">Recommended Apps</h4>
+                           <h4 className="text-lg font-bold text-slate-900 uppercase">Recommended Apps</h4>
                         </div>
                         <div className="flex flex-wrap gap-3">
                            {currentData.transport.apps?.map((app, i) => (
-                             <span key={i} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-black text-slate-900">{app}</span>
+                             <span key={i} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-900">{app}</span>
                            ))}
                         </div>
                      </div>
@@ -836,7 +837,7 @@ export default function FactsheetClient({ regionSlug }) {
                       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-400/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
                       <div className="w-28 h-16 md:w-32 md:h-18 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl shadow-lg flex flex-col p-4 justify-between text-white shrink-0 relative overflow-hidden">
                          <div className="w-8 h-1 bg-white/30 rounded" />
-                         <p className="text-[8px] font-black uppercase tracking-widest text-right">BakıKart</p>
+                         <p className="text-[8px] font-bold uppercase tracking-widest text-right">BakıKart</p>
                          <div className="absolute -bottom-2 -left-2 w-12 h-12 bg-white/5 rounded-full" />
                       </div>
                       <p className="text-sm md:text-base text-blue-900 font-bold leading-relaxed max-w-2xl">
@@ -854,7 +855,7 @@ export default function FactsheetClient({ regionSlug }) {
                 <div className="flex flex-col md:flex-row gap-12">
                   <div className="md:w-1/3">
                     <SectionHeader title="Visa Entry" badge="ASAN PORTAL" noMargin />
-                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 mt-6 mb-4">{currentData.visa.title}</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mt-6 mb-4">{currentData.visa.title}</h3>
                     <p className="text-slate-600 font-medium leading-relaxed">
                       {currentData.visa.description}
                     </p>
@@ -868,7 +869,7 @@ export default function FactsheetClient({ regionSlug }) {
                     <div className="grid grid-cols-1 gap-4">
                       {currentData.visa.process?.map((step, i) => (
                         <div key={i} className="bg-white p-6 rounded-2xl border border-rose-100 shadow-sm flex gap-6 items-center">
-                          <span className="w-8 h-8 rounded-full bg-rose-500 text-white text-xs font-black flex items-center justify-center shrink-0">{i+1}</span>
+                          <span className="w-8 h-8 rounded-full bg-rose-500 text-white text-xs font-bold flex items-center justify-center shrink-0">{i+1}</span>
                           <p className="text-slate-700 font-medium leading-tight">{step}</p>
                         </div>
                       ))}
@@ -892,7 +893,7 @@ export default function FactsheetClient({ regionSlug }) {
               <div className="bg-slate-900 rounded-[3rem] p-8 md:p-10 text-white shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 
-                <h3 className="text-2xl md:text-3xl font-black mb-6 leading-tight">Plan Your Trip <br/>to <span className="text-brand-blue">{regionName}</span></h3>
+                <h3 className="text-2xl md:text-3xl font-bold mb-6 leading-tight">Plan Your Trip <br/>to <span className="text-brand-blue">{regionName}</span></h3>
                 <p className="text-slate-400 font-medium mb-10 leading-relaxed">
                   Ready to experience it all? Our local experts have crafted the perfect itineraries just for you.
                 </p>
@@ -904,7 +905,7 @@ export default function FactsheetClient({ regionSlug }) {
                 </div>
 
                 <Link href={`/packages/${regionSlug}`}>
-                  <Button className="w-full bg-brand-blue hover:bg-green-600 text-white font-black rounded-full py-8 text-lg shadow-xl shadow-brand-blue/20 group">
+                  <Button className="w-full bg-brand-blue hover:bg-green-600 text-white font-bold rounded-full py-8 text-lg shadow-xl shadow-brand-blue/20 group">
                     View Packages
                     <ArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </Button>
@@ -915,7 +916,7 @@ export default function FactsheetClient({ regionSlug }) {
                  <div className="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Info className="w-6 h-6" />
                  </div>
-                 <h4 className="font-black text-slate-900 mb-2">Need Assistance?</h4>
+                 <h4 className="font-bold text-slate-900 mb-2">Need Assistance?</h4>
                  <p className="text-slate-500 text-sm font-medium mb-6">Talk to our travel advisor for personalized recommendations.</p>
                  <Link href="/contact">
                    <Button variant="outline" className="rounded-full border-slate-200 font-bold text-slate-600 hover:text-brand-blue hover:border-brand-blue">Contact Us</Button>
@@ -946,7 +947,7 @@ const SectionHeader = ({ title, badge, noMargin }) => {
 
   return (
     <div className={cn("mb-6 md:mb-8", noMargin && "mb-0")}>
-      <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-3 border border-slate-200">
+      <span className="inline-block px-4 py-2 bg-slate-100 text-slate-500 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-3 border border-slate-200">
         {badge}
       </span>
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
@@ -976,7 +977,7 @@ const MilestoneCard = ({ milestone, index }) => {
 
   return (
     <div className="bg-slate-50/50 border border-slate-100 p-6 rounded-2xl">
-      <h4 className="font-black text-slate-900 mb-2 uppercase text-[10px] tracking-widest">
+      <h4 className="font-bold text-slate-900 mb-2 uppercase text-[10px] tracking-widest">
         {milestone.title}
       </h4>
       <p

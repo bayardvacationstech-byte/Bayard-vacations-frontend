@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,12 +38,18 @@ import Container from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 import { useRegionFactSheet } from "@/hooks/regions/useRegionFactSheet";
 
-const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
+const RegionTravelEssentials = ({ regionName: initialRegionName = "", regionData = null }) => {
   const [activeTab, setActiveTab] = useState("history");
+  const { region: routeRegionName } = useParams();
+  const regionName = initialRegionName || routeRegionName;
+  const regionSlug = regionName?.toLowerCase();
 
-  // Fetch dynamic factsheet data
-  const { factSheetData, isLoading } = useRegionFactSheet(regionData?.id);
-  const dynamicData = factSheetData?.details;
+  // Fetch dynamic factsheet data - supporting dual-lookup with slug
+  const { factSheetData, isLoading } = useRegionFactSheet(regionData?.id || regionSlug);
+  
+  // Support both nested 'details' and flat structure
+  const dynamicData = factSheetData?.details || factSheetData;
+  const hasData = !!(factSheetData?.details || factSheetData?.essentials || factSheetData?.history);
 
   // Console log for debugging
 
@@ -140,16 +147,16 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       {dynamicData?.history?.title || "A Journey Through Time"}
                     </h3>
                     <p className="text-base md:text-lg text-slate-600 font-medium leading-relaxed">
-                      {dynamicData?.history?.description || (regionName ? `Discover the rich history and unique culture of ${regionName}.` : "Discover the rich history and unique culture of this region.") }
+                      {dynamicData?.history?.description || dynamicData?.overview || (regionName ? `Discover the rich history and unique culture of ${regionName}.` : "Discover the rich history and unique culture of this region.") }
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    {dynamicData?.history?.milestones ? dynamicData.history.milestones.map((m, i) => (
+                    {dynamicData?.history?.milestones || dynamicData?.history?.cards ? (dynamicData.history.milestones || dynamicData.history.cards).map((m, i) => (
                       <HistoryCard 
                         key={i}
-                        title={m.title} 
-                        content={m.content}
+                        title={m.title || m.label} 
+                        content={m.content || m.desc || m.value}
                         color={['amber', 'rose', 'blue', 'emerald'][i % 4]}
                       />
                     )) : (
@@ -187,27 +194,27 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Clock className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Time Zone</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Time Zone</h4>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                           <div className="space-y-1">
-                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Standard Time</p>
-                            <p className="text-3xl font-black text-slate-900">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Standard Time</p>
+                            <p className="text-3xl font-bold text-slate-900">
                               {dynamicData?.climate?.timeZone || "GMT+x"}
                             </p>
                           </div>
                           <div className="space-y-1">
-                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Time Difference</p>
-                            <p className="text-lg font-black text-slate-700">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Time Difference</p>
+                            <p className="text-lg font-bold text-slate-700">
                               {dynamicData?.climate?.difference || "Local Time"}
                             </p>
                           </div>
                         </div>
 
                         <div className="mt-12 pt-8 border-t border-slate-900/5">
-                          <p className="text-xs font-black text-slate-900 uppercase tracking-[0.2em] mb-4">🎯 Best Months to Visit</p>
-                          <p className="text-3xl font-black text-slate-900 leading-tight">
-                            {dynamicData?.climate?.bestMonths || "Varies by region"}
+                          <p className="text-xs font-bold text-slate-900 uppercase tracking-[0.2em] mb-4">🎯 Best Months to Visit</p>
+                          <p className="text-3xl font-bold text-slate-900 leading-tight">
+                            {dynamicData?.climate?.bestMonths || dynamicData?.climate?.bestTime || "Varies by region"}
                           </p>
                           <p className="text-base text-slate-500 font-medium mt-2 leading-relaxed">
                             Optimal weather for exploring the diverse landscapes and unique climate zones of {regionName}.
@@ -219,7 +226,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Sun className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Climate & Seasons</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Climate & Seasons</h4>
                         </div>
                         <div className="space-y-6">
                           <p className="text-base text-slate-700 font-medium leading-relaxed">
@@ -233,13 +240,13 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                             ]).map((s) => (
                               <div key={s.name || s.season} className="space-y-2">
                                 <div className="flex items-center justify-between border-b border-slate-100 pb-1">
-                                  <h5 className="text-base font-black text-slate-900 flex items-center gap-2">
+                                  <h5 className="text-base font-bold text-slate-900 flex items-center gap-2">
                                     <span className="text-lg">{s.emoji}</span> {s.name || s.season}
                                   </h5>
-                                  <span className="text-sm font-black text-slate-900">{s.temp}</span>
+                                  <span className="text-sm font-bold text-slate-900">{s.temp}</span>
                                 </div>
                                 <div className="space-y-1">
-                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{s.months}</p>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">{s.months}</p>
                                   <p className="text-[13px] text-slate-600 font-medium leading-relaxed">{s.highlight}</p>
                                 </div>
                               </div>
@@ -268,10 +275,10 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-4">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Languages className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Official Language</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Official Language</h4>
                         </div>
                         <div className="space-y-2">
-                          <p className="text-2xl font-black text-slate-900 italic">
+                          <p className="text-2xl font-bold text-slate-900 italic">
                             {dynamicData?.language?.official || "Local Language"}
                           </p>
                           <p className="text-base text-slate-600 font-medium leading-relaxed max-w-md">
@@ -280,7 +287,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                         </div>
                         <div className="flex flex-wrap gap-2 pt-2">
                           {(dynamicData?.language?.tags || ['Official', 'Cultural']).map(tag => (
-                            <span key={tag} className="px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            <span key={tag} className="px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-500">
                               {tag}
                             </span>
                           ))}
@@ -290,7 +297,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-4">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Globe className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Common Languages</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Common Languages</h4>
                         </div>
                         <div className="grid grid-cols-1 gap-4">
                            {(dynamicData?.language?.others || [
@@ -306,7 +313,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                     <div className="space-y-4">
                       <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                         <MessageCircle className="w-5 h-5 text-slate-900" />
-                        <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Essential Phrases</h4>
+                        <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Essential Phrases</h4>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                         {(dynamicData?.language?.phrases || []).map((p, i) => (
@@ -334,17 +341,17 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Wallet className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Official Currency</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Official Currency</h4>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                           <div className="space-y-1">
-                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none">Currency Name</p>
-                            <p className="text-2xl font-black text-slate-900">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Currency Name</p>
+                            <p className="text-2xl font-bold text-slate-900">
                               {dynamicData?.essentials?.find(e => e.label.toLowerCase().includes('currency'))?.value || "Local Currency"}
                             </p>
                           </div>
                           <div className="space-y-4">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">Exchange Rates</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-2">Exchange Rates</p>
                             <div className="space-y-3">
                               {(dynamicData?.currency?.exchangeRates || [
                                 { label: "1 USD", value: "Check Local Rate" }
@@ -359,18 +366,18 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <CreditCard className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Denominations</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Denominations</h4>
                         </div>
                         <div className="grid grid-cols-2 gap-8">
                           <div className="space-y-2">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Banknotes</p>
-                            <p className="text-sm font-black text-slate-700 leading-relaxed italic">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Banknotes</p>
+                            <p className="text-sm font-bold text-slate-700 leading-relaxed italic">
                               {dynamicData?.currency?.banknotes || "Standard denominations available."}
                             </p>
                           </div>
                           <div className="space-y-2">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Coins</p>
-                            <p className="text-sm font-black text-slate-700 leading-relaxed italic">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Coins</p>
+                            <p className="text-sm font-bold text-slate-700 leading-relaxed italic">
                               {dynamicData?.currency?.coins || "Standard coins available."}
                             </p>
                           </div>
@@ -382,7 +389,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                     <div className="space-y-6">
                       <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                         <Banknote className="w-5 h-5 text-slate-900" />
-                        <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Payment Methods</h4>
+                        <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Payment Methods</h4>
                       </div>
                       <div className="space-y-8">
                         <div className="grid grid-cols-1 gap-6">
@@ -391,7 +398,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                              { title: "Cards", desc: "Widely accepted; cash recommended for small purchases." }
                            ]).map((pm, i) => (
                              <div key={i} className="space-y-1">
-                               <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">{pm.title || pm.label}</h5>
+                               <h5 className="text-sm font-bold text-slate-900 uppercase tracking-widest">{pm.title || pm.label}</h5>
                                <p className="text-[13px] text-slate-600 font-medium leading-relaxed">{pm.desc || pm.value}</p>
                              </div>
                            ))}
@@ -418,19 +425,19 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Plane className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Arrival Information</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Arrival Information</h4>
                         </div>
                         <div className="space-y-4">
                           <p className="text-base text-slate-600 font-medium leading-relaxed">
                             {dynamicData?.transport?.arrival || `Principal international gateway serving ${regionName}.`}
                           </p>
                           <div className="grid grid-cols-1 gap-3">
-                             {(dynamicData?.transport?.options || [
+                             {(dynamicData?.transport?.options || dynamicData?.transport?.stats || [
                                { label: "Official Taxi", value: "Available 24/7" }
                              ]).map((opt, i) => (
                                <div key={i} className="flex justify-between items-center py-2 border-b border-slate-100">
-                                 <span className="text-sm font-black text-slate-900">{opt.label}</span>
-                                 <span className="text-sm font-black text-brand-blue">{opt.value}</span>
+                                 <span className="text-sm font-bold text-slate-900">{opt.label}</span>
+                                 <span className="text-sm font-bold text-brand-blue">{opt.value}</span>
                                </div>
                              ))}
                           </div>
@@ -440,12 +447,12 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Train className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Public Transport</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Public Transport</h4>
                         </div>
                         <div className="space-y-4">
                           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
                             <div className="flex items-center justify-between">
-                              <h5 className="text-lg font-black text-slate-900">
+                              <h5 className="text-lg font-bold text-slate-900">
                                 {dynamicData?.transport?.mainSystem || "City Pass"}
                               </h5>
                             </div>
@@ -462,7 +469,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Smartphone className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Ride-Sharing Apps</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Ride-Sharing Apps</h4>
                         </div>
                         <div className="space-y-4">
                           <p className="text-base text-slate-600 font-medium leading-relaxed">
@@ -470,7 +477,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                           </p>
                           <div className="flex flex-wrap gap-4">
                             {(dynamicData?.transport?.apps || ["Local Apps"]).map((app, i) => (
-                              <span key={i} className="text-sm font-black text-slate-900 bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl">
+                              <span key={i} className="text-sm font-bold text-slate-900 bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl">
                                 {app}
                               </span>
                             ))}
@@ -481,7 +488,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Car className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Intercity Travel</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Intercity Travel</h4>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                            {(dynamicData?.transport?.intercity || [
@@ -489,7 +496,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                              { title: "Buses", desc: "Extensive regional network." }
                            ]).map((ic, i) => (
                              <div key={i} className="space-y-1">
-                               <h5 className="text-sm font-black text-slate-900">{ic.title || ic.label}</h5>
+                               <h5 className="text-sm font-bold text-slate-900">{ic.title || ic.label}</h5>
                                <p className="text-[11px] text-slate-500 font-medium leading-relaxed">{ic.desc || ic.value}</p>
                              </div>
                            ))}
@@ -516,7 +523,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <ShieldCheck className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">
                             {dynamicData?.visa?.title || "Visa System"}
                           </h4>
                         </div>
@@ -526,12 +533,12 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                           </p>
                           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-4">
                             <div className="grid grid-cols-2 gap-6">
-                               {(dynamicData?.visa?.stats || [
+                               {(dynamicData?.visa?.stats || dynamicData?.visa?.process || [
                                  { label: "Processing Time", value: "3-5 Business Days" }
                                ]).map((stat, i) => (
                                  <div key={i} className="space-y-1">
-                                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stat.label}</p>
-                                   <p className="text-sm font-black text-slate-900">{stat.value}</p>
+                                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+                                   <p className="text-sm font-bold text-slate-900">{stat.value}</p>
                                  </div>
                                ))}
                             </div>
@@ -545,15 +552,15 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <CheckCircle2 className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Mandatory Info</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Mandatory Info</h4>
                         </div>
                         <div className="space-y-4">
                           <div className="flex gap-4">
                              <div className="min-w-max">
-                               <span className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-black">!</span>
+                               <span className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold">!</span>
                              </div>
                              <div className="space-y-2">
-                               <h5 className="text-lg font-black text-slate-900 italic leading-tight">
+                               <h5 className="text-lg font-bold text-slate-900 italic leading-tight">
                                  {dynamicData?.visa?.mandatoryNote || "Registration may be required for longer stays."}
                                </h5>
                                <p className="text-sm text-slate-600 font-medium leading-relaxed">
@@ -567,7 +574,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6 pt-10 border-t border-slate-900/5">
                         <div className="flex items-center gap-2 mb-4">
                            <FileText className="w-4 h-4 text-slate-900" />
-                           <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Arrival Checklist</h5>
+                           <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Arrival Checklist</h5>
                         </div>
                         <ul className="space-y-2">
                            {(dynamicData?.visa?.checklist || [
@@ -603,7 +610,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Compass className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Social Etiquette</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Social Etiquette</h4>
                         </div>
                         <div className="space-y-8">
                           <p className="text-base text-slate-600 font-medium leading-relaxed">
@@ -622,14 +629,14 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <Heart className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Local Traditions</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Local Traditions</h4>
                         </div>
                         <div className="grid sm:grid-cols-2 gap-8">
                            {(dynamicData?.culture?.traditions || [
                              { title: "Hospitality", desc: "Guests are warmly welcomed." }
                            ]).map((tr, i) => (
                              <div key={i} className="space-y-2">
-                               <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest">{tr.title}</h5>
+                               <h5 className="text-sm font-bold text-slate-900 uppercase tracking-widest">{tr.title}</h5>
                                <p className="text-[13px] text-slate-600 font-medium leading-relaxed italic">{tr.desc}</p>
                              </div>
                            ))}
@@ -642,7 +649,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <CheckCircle2 className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Essential Dos</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Essential Dos</h4>
                         </div>
                         <ul className="space-y-4">
                            {(dynamicData?.culture?.dos || ["Follow local guidelines"]).map((item, i) => (
@@ -654,7 +661,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                       <div className="space-y-6">
                         <div className="flex items-center gap-2 border-b border-slate-900/10 pb-2">
                           <XCircle className="w-5 h-5 text-slate-900" />
-                          <h4 className="text-xl font-black text-slate-900 uppercase tracking-wider">Essential Don'ts</h4>
+                          <h4 className="text-xl font-bold text-slate-900 uppercase tracking-wider">Essential Don'ts</h4>
                         </div>
                         <ul className="space-y-4">
                            {(dynamicData?.culture?.donts || ["Avoid sensitive topics"]).map((item, i) => (
@@ -680,11 +687,13 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                     <div>
                       <div className="flex items-center gap-3 mb-6">
                         <UtensilsCrossed className="w-5 h-5 md:w-6 md:h-6 text-amber-500" />
-                        <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Local Delicacies</h4>
+                        <h4 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">Local Delicacies</h4>
                       </div>
                       <div className="grid grid-cols-2 c-md:grid-cols-3 gap-3 md:gap-4">
-                        {(dynamicData?.food?.items || []).map((food, i) => (
-                           <FoodItem key={i} name={food.name} desc={food.desc} image={food.image || food.featuredImage || "/img/placeholder_food.png"} />
+                        {(dynamicData?.food?.items || [])
+                          .filter(food => food.image || food.featuredImage)
+                          .map((food, i) => (
+                           <FoodItem key={i} name={food.name} desc={food.desc} image={food.image || food.featuredImage} />
                         ))}
                       </div>
                     </div>
@@ -693,11 +702,13 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                     <div>
                       <div className="flex items-center gap-3 mb-6">
                         <span className="text-xl md:text-2xl">☕</span>
-                        <h4 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">Popular Beverages</h4>
+                        <h4 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">Popular Beverages</h4>
                       </div>
                       <div className="grid grid-cols-2 c-md:grid-cols-3 gap-3 md:gap-4">
-                        {(dynamicData?.food?.drinks || []).map((drink, i) => (
-                           <FoodItem key={i} name={drink.name} desc={drink.desc || drink.value} image={drink.image || "/img/placeholder_drink.png"} />
+                        {(dynamicData?.food?.drinks || dynamicData?.food?.beverages || [])
+                          .filter(drink => drink.image)
+                          .map((drink, i) => (
+                           <FoodItem key={i} name={drink.name} desc={drink.desc || drink.value} image={drink.image} />
                         ))}
                       </div>
                     </div>
@@ -708,7 +719,7 @@ const RegionTravelEssentials = ({ regionName = "", regionData = null }) => {
                        { title: "Local Flavors", desc: "Experience the unique culinary heritage of this region." }
                      ]).map((feature, i) => (
                        <div key={i} className={cn("p-6 rounded-3xl border space-y-4", i === 0 ? "bg-emerald-50/50 border-emerald-100" : i === 1 ? "bg-rose-50/50 border-rose-100" : "bg-white border-slate-100 shadow-sm")}>
-                          <h4 className={cn("text-xl font-black tracking-tight", i === 0 ? "text-emerald-900" : i === 1 ? "text-rose-900" : "text-slate-900")}>
+                          <h4 className={cn("text-xl font-bold tracking-tight", i === 0 ? "text-emerald-900" : i === 1 ? "text-rose-900" : "text-slate-900")}>
                             {feature.title}
                           </h4>
                           <p className="text-sm text-slate-700 font-medium leading-relaxed">{feature.desc}</p>
@@ -740,7 +751,7 @@ const HistoryCard = ({ title, content, color }) => {
   return (
     <div className={cn("p-5 md:p-4 md:p-6 rounded-2xl md:rounded-3xl border flex flex-col gap-2 md:gap-4 relative overflow-hidden", activeColor.split(" ").slice(0, 2).join(" "))}>
       <div className={cn("absolute left-0 top-0 bottom-0 w-1", accentColor)} />
-      <h4 className={cn("text-lg md:text-xl font-black", activeColor.split(" ")[2])}>| {title}</h4>
+      <h4 className={cn("text-lg md:text-xl font-bold", activeColor.split(" ")[2])}>| {title}</h4>
       <p className="text-sm md:text-base text-slate-600 font-medium leading-relaxed">{content}</p>
     </div>
   );
@@ -750,7 +761,7 @@ const LanguageItem = ({ label, desc }) => (
   <li className="flex items-start gap-3">
     <div className="w-1.5 h-1.5 rounded-full bg-brand-blue mt-2 flex-shrink-0" />
     <p className="text-sm md:text-base text-slate-600 font-medium">
-      <span className="font-black text-slate-900">{label}</span> - {desc}
+      <span className="font-bold text-slate-900">{label}</span> - {desc}
     </p>
   </li>
 );
@@ -758,7 +769,7 @@ const LanguageItem = ({ label, desc }) => (
 const PhraseItem = ({ label, phrase }) => (
   <div>
     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{label}</p>
-    <p className="text-base md:text-lg font-black text-slate-900">{phrase}</p>
+    <p className="text-base md:text-lg font-bold text-slate-900">{phrase}</p>
   </div>
 );
 
@@ -771,7 +782,7 @@ const ExchangeItem = ({ label, value, color }) => {
   return (
     <div className={cn("p-3 rounded-2xl border text-center", colors[color])}>
       <p className="text-[10px] font-bold uppercase tracking-tighter mb-1 opacity-70">{label}</p>
-      <p className="text-sm font-black">{value}</p>
+      <p className="text-sm font-bold">{value}</p>
     </div>
   );
 };
