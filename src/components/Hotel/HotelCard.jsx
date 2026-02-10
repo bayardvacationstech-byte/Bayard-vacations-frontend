@@ -2,6 +2,10 @@
 import { ChevronLeftIcon, ChevronRightIcon, MapPin, Star } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, EffectFade, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useHotel } from "@/contexts/HotelContext";
@@ -178,6 +182,7 @@ export default function HotelCard() {
                           <Link
                             href={hotel?.googleUrl || "#"}
                             target="_blank"
+                            rel="noopener noreferrer"
                             className="relative size-full"
                           >
                             {hotel.images && hotel.images[0] && (

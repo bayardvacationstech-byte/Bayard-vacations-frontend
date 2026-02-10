@@ -17,8 +17,15 @@ const Card = React.memo(({ item }) => {
   const rotateX = useSpring(useTransform(y, [-100, 100], [10, -10]), { stiffness: 300, damping: 30 });
   const rotateY = useSpring(useTransform(x, [-100, 100], [-10, 10]), { stiffness: 300, damping: 30 });
 
-  function handleMouseMove({ currentTarget, clientX, clientY }) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+  const rectRef = useRef(null);
+
+  function handleMouseEnter({ currentTarget }) {
+    rectRef.current = currentTarget.getBoundingClientRect();
+  }
+
+  function handleMouseMove({ clientX, clientY }) {
+    if (!rectRef.current) return;
+    const { left, top, width, height } = rectRef.current;
     const centerX = left + width / 2;
     const centerY = top + height / 2;
     
@@ -30,6 +37,7 @@ const Card = React.memo(({ item }) => {
   }
 
   function handleMouseLeave() {
+    rectRef.current = null;
     x.set(0);
     y.set(0);
   }
@@ -37,6 +45,7 @@ const Card = React.memo(({ item }) => {
   return (
     <>
       <motion.li
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
@@ -81,7 +90,7 @@ const Card = React.memo(({ item }) => {
 
               {/* Testimonial Text - TRUNCATED TO 3 LINES */}
               <div className="relative space-y-2">
-                <p className="text-base text-white/90 font-medium leading-relaxed italic font-outfit line-clamp-3">
+                <p className="text-base text-white/90 font-medium leading-relaxed italic font-poppins line-clamp-3">
                   &quot;{item.text}&quot;
                 </p>
                 {item.text.length > 100 && (
@@ -167,7 +176,7 @@ const Card = React.memo(({ item }) => {
                   ))}
                 </div>
 
-                <p className="text-white/80 text-lg leading-relaxed italic font-outfit">
+                <p className="text-white/80 text-lg leading-relaxed italic font-poppins">
                   &quot;{item.text}&quot;
                 </p>
               </div>

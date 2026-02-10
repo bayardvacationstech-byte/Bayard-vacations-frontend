@@ -53,9 +53,12 @@ export default function RotatableTeamWheel() {
   const normalizedIndex = selectedIndex < 0 ? selectedIndex + teamMembers.length : selectedIndex;
   const selectedMember = teamMembers[normalizedIndex];
 
+  const dragRectRef = useRef(null);
+
   const handleMouseDown = (e) => {
     setIsDragging(true);
     const rect = wheelRef.current.getBoundingClientRect();
+    dragRectRef.current = rect;
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
@@ -63,8 +66,8 @@ export default function RotatableTeamWheel() {
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    const rect = wheelRef.current.getBoundingClientRect();
+    if (!isDragging || !dragRectRef.current) return;
+    const rect = dragRectRef.current;
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);

@@ -474,7 +474,7 @@ export default function ReligiousRetreatClient() {
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-xl h-14 w-14 bg-white font-serif font-black transition-all border-amber-100 shadow-md",
+                            "cursor-pointer rounded-xl h-14 w-14 bg-white font-serif font-extrabold transition-all border-amber-100 shadow-md",
                             currentPage === page 
                               ? "bg-amber-700 text-white border-transparent shadow-xl" 
                               : "text-amber-950 hover:bg-amber-50"

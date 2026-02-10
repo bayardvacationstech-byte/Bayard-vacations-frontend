@@ -173,6 +173,7 @@ export default function ThemeHighlights({
               {/* Play/Pause Toggle */}
               <button
                 onClick={() => setIsAutoPlay(!isAutoPlay)}
+                aria-label={isAutoPlay ? "Pause autoplay" : "Start autoplay"}
                 className="absolute top-6 right-6 z-30 p-3 sm:p-4 bg-white/20 backdrop-blur-md hover:bg-white/30 rounded-full text-white transition-all shadow-lg hidden group-hover:flex"
               >
                   {isAutoPlay ? <Pause className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" /> : <Play className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" />}
@@ -186,8 +187,8 @@ export default function ThemeHighlights({
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 drop-shadow-lg leading-tight">
                         {themeData?.title || currentTheme?.themeText}
                     </h3>
-                    <p className="text-base sm:text-lg md:text-xl font-damion text-slate-100 drop-shadow-md mb-6 sm:mb-8">
-                        "{getThemeTagline(currentTheme?.themeSlug)}"
+                    <p className="text-2xl sm:text-3xl md:text-4xl font-great-vibes text-slate-100 drop-shadow-md mb-6 sm:mb-8">
+                        {getThemeTagline(currentTheme?.themeSlug)}
                     </p>
                     
                     <Link
@@ -202,6 +203,7 @@ export default function ThemeHighlights({
               {/* Navigation Controls */}
               <button
                 onClick={goToPrevious}
+                aria-label="Previous theme"
                 className="absolute left-4 sm:left-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md hover:bg-white text-white hover:text-slate-900 p-2 sm:p-3 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg"
               >
                 <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -209,6 +211,7 @@ export default function ThemeHighlights({
 
               <button
                 onClick={goToNext}
+                aria-label="Next theme"
                 className="absolute right-4 sm:right-6 top-1/2 transform -translate-y-1/2 z-30 bg-white/10 backdrop-blur-md hover:bg-white text-white hover:text-slate-900 p-2 sm:p-3 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg"
               >
                 <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -223,6 +226,7 @@ export default function ThemeHighlights({
                         setCurrentThemeIndex(index);
                         setIsAutoPlay(false);
                     }}
+                    aria-label={`Go to theme ${index + 1}`}
                     className={`transition-all duration-500 rounded-full h-1.5 ${
                         index === currentThemeIndex
                         ? 'w-6 sm:w-8 bg-white'

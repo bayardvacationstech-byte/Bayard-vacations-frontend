@@ -53,7 +53,7 @@ export default function ReviewGallery() {
       <Container>
         {/* Centered Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-           <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-4">
+           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
              Customer <span className="text-blue-600">Reviews</span>
            </h2>
            <p className="text-slate-500 text-lg font-medium">

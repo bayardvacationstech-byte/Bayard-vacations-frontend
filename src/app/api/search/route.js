@@ -39,7 +39,7 @@ export async function GET(request) {
     };
 
     const result = await typesenseClient
-      .collections("packages")
+      .collections("published_packages")
       .documents()
       .search(searchParams);
 

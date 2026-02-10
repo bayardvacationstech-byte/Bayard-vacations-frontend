@@ -137,7 +137,7 @@ export default function GroupDepartureClient() {
                 activeColorClasses="text-white"
               />
 
-              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white leading-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight">
                 Group<br />
                 <span className="text-cyan-200">Departure</span>
               </h1>
@@ -148,7 +148,7 @@ export default function GroupDepartureClient() {
 
               <div className="flex gap-4">
                 <Link href="#packages">
-                  <Button size="lg" className="bg-white text-indigo-700 hover:bg-cyan-50 font-black px-8 py-6 rounded-2xl shadow-xl w-full sm:w-auto">
+                  <Button size="lg" className="bg-white text-indigo-700 hover:bg-cyan-50 font-extrabold px-8 py-6 rounded-2xl shadow-xl w-full sm:w-auto">
                     View Departures
                   </Button>
                 </Link>
@@ -156,7 +156,7 @@ export default function GroupDepartureClient() {
                   size="lg" 
                   variant="outline" 
                    onClick={() => setIsVideoModalOpen(true)}
-                  className="border-2 border-white text-white hover:bg-white/20 font-black px-8 py-6 rounded-2xl backdrop-blur-sm flex items-center gap-2"
+                  className="border-2 border-white text-white hover:bg-white/20 font-extrabold px-8 py-6 rounded-2xl backdrop-blur-sm flex items-center gap-2"
                 >
                   <PlayCircle className="w-5 h-5" />
                   Watch Reel
@@ -182,7 +182,7 @@ export default function GroupDepartureClient() {
                     <Group className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-slate-900">Travel Together</p>
+                    <p className="font-extrabold text-slate-900">Travel Together</p>
                     <p className="text-sm text-slate-600">Fixed dates, fixed groups, guaranteed fun</p>
                   </div>
                 </div>
@@ -308,7 +308,7 @@ export default function GroupDepartureClient() {
       <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 section-padding">
         <Container>
           <div className="text-center mb-8">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
               Why Choose Group Departures?
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
@@ -330,7 +330,7 @@ export default function GroupDepartureClient() {
                 <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 mb-3">{feature.title}</h3>
+                <h3 className="text-xl font-extrabold text-slate-900 mb-3">{feature.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}

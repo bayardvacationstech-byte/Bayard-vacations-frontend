@@ -259,7 +259,7 @@ export default function EducationalToursClient() {
                   </div>
                   <div>
                     <p className="text-sm text-slate-700 italic font-serif leading-snug">"The world is a book and those who do not travel read only one page."</p>
-                    <div className="text-[10px] text-amber-600 mt-2 font-black uppercase tracking-widest">— St. Augustine</div>
+                    <div className="text-[10px] text-amber-600 mt-2 font-extrabold uppercase tracking-widest">— St. Augustine</div>
                   </div>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import ShareableItineraryClient from '@/components/ShareItinerary/ShareableItine
 import { getSavedItineraryById, getHotelsByIds } from '@/utils/firebase';
 import { mapSavedItineraryToShareable } from '@/utils/itineraryMapper';
 import { headers } from 'next/headers';
+import '../../../print.css';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params, searchParams }) {

@@ -8,6 +8,9 @@ import { getHotelsByIds } from "@/utils/firebase";
 import { Wifi, Utensils, Wind, Car, Building2, Star, MapPin, Bed, CheckCircle2 } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/free-mode";
 
 const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvailableCategories }) => {
   const [hotelsByCategory, setHotelsByCategory] = useState({});

@@ -18,7 +18,7 @@ const TYPESENSE_SYNC_COLLECTION = "typesenseSync";
 const SYNC_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 const packageSchema = {
-  name: "packages",
+  name: "published_packages",
   fields: [
     { name: "id", type: "string" },
     { name: "name", type: "string" },

@@ -276,6 +276,7 @@ const ChatMessage = memo(({
           <div className="flex items-center gap-1 mt-2 -mr-1 justify-end">
             <button 
               onClick={() => handleCopy(message.text)}
+              aria-label="Copy message"
               className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
               title="Copy"
             >
@@ -283,6 +284,7 @@ const ChatMessage = memo(({
             </button>
             <button 
               onClick={() => handleEdit(message.text)}
+              aria-label="Edit message"
               className="p-1.5 rounded-lg hover:bg-white/20 text-blue-100 hover:text-white transition-colors"
               title="Edit"
             >
@@ -295,6 +297,7 @@ const ChatMessage = memo(({
           <div className="flex items-center gap-1 mt-2 -ml-1">
             <button 
               onClick={() => onRegenerate(message.id)} 
+              aria-label="Regenerate response"
               className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
               title="Regenerate"
             >
@@ -302,15 +305,24 @@ const ChatMessage = memo(({
             </button>
             <button 
               onClick={() => handleCopy(message.text)}
+              aria-label="Copy response"
               className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors"
               title="Copy"
             >
               <Copy className="w-3.5 h-3.5" />
             </button>
-            <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Good response">
+            <button 
+              aria-label="Thumbs up"
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" 
+              title="Good response"
+            >
               <ThumbsUp className="w-3.5 h-3.5" />
             </button>
-            <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" title="Bad response">
+            <button 
+              aria-label="Thumbs down"
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors" 
+              title="Bad response"
+            >
               <ThumbsDown className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -851,6 +863,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               {messages.length > 0 && (
                 <button
                   onClick={handleClearChat}
+                  aria-label="Clear conversation"
                   className="hover:bg-white/20 px-3 py-1.5 rounded-full transition-all duration-300 group/clear flex items-center gap-1.5 bg-white/10 border border-white/20"
                   title="Clear conversation"
                 >
@@ -860,6 +873,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               )}
               <button
                 onClick={onClose}
+                aria-label="Close chatbot"
                 className="hover:bg-white/20 p-2 rounded-full transition-all duration-300 hover:rotate-90"
               >
                 <X className="w-5 h-5" />
@@ -939,6 +953,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                     <button 
                       onClick={(e) => { e.stopPropagation(); setDestPage(p => Math.max(0, p - 1)); }}
                       disabled={destPage === 0}
+                      aria-label="Previous page of destinations"
                       className={`p-1 rounded-full ${destPage === 0 ? 'text-gray-300' : 'text-blue-600 hover:bg-blue-50'} transition-colors`}
                     >
                       <ChevronLeft className="w-4 h-4" />
@@ -946,6 +961,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                     <button 
                       onClick={(e) => { e.stopPropagation(); setDestPage(p => (p + 1) * ITEMS_PER_PAGE < popularDestinations.length ? p + 1 : p); }}
                       disabled={(destPage + 1) * ITEMS_PER_PAGE >= popularDestinations.length}
+                      aria-label="Next page of destinations"
                       className={`p-1 rounded-full ${(destPage + 1) * ITEMS_PER_PAGE >= popularDestinations.length ? 'text-gray-300' : 'text-blue-600 hover:bg-blue-50'} transition-colors`}
                     >
                       <ChevronRight className="w-4 h-4" />
@@ -995,6 +1011,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                   <button
                     type="button"
                     onClick={toggleListening}
+                    aria-label={isListening ? "Stop listening" : "Start voice input"}
                     className={`p-1.5 rounded-full transition-all duration-300 ${
                       isListening 
                         ? "text-blue-600 animate-pulse bg-blue-50" 
@@ -1009,6 +1026,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                   <button
                     type="submit"
                     disabled={isTyping}
+                    aria-label="Send message"
                     className="p-2 text-blue-500 hover:text-blue-600 transition-colors"
                   >
                     <Send className="w-5 h-5" />

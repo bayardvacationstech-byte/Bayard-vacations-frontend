@@ -209,7 +209,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                        
                        <div className="relative pt-8">
                           <span className="block text-[10px] lg:text-xs font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">India's Premiere</span>
-                          <h1 className="font-playfair text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
+                          <h1 className="font-poppins text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
                             Bespoke <br/>
                             <span className="font-great-vibes text-brand-blue text-5xl lg:text-6xl xl:text-7x relative -top-3 -left-1">Itinerary</span>
                           </h1>
@@ -224,7 +224,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                       ].map((usp, i) => (
                         <div key={i} className="relative pl-12 group/usp cursor-default">
                           {/* Faint Numeral Marker */}
-                          <span className="absolute -left-4 top-0 text-7xl lg:text-8xl font-playfair font-black text-slate-100/80 -z-10 transition-colors group-hover/usp:text-brand-blue/5">
+                          <span className="absolute -left-4 top-0 text-7xl lg:text-8xl font-poppins font-black text-slate-100/80 -z-10 transition-colors group-hover/usp:text-brand-blue/5">
                             0{i + 1}
                           </span>
                           <h3 className="text-xs lg:text-sm font-black text-slate-900 uppercase tracking-[0.3em] mb-1 group-hover/usp:text-brand-blue transition-colors">
@@ -260,8 +260,8 @@ const ShareableItineraryBook = ({ itineraries }) => {
                        </div>
                        
                        <div className="relative pt-8">
-                          <span className="block text-[10px] lg:text-xs font-playfair font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">Final Chapter</span>
-                          <h1 className="font-playfair text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
+                          <span className="block text-[10px] lg:text-xs font-poppins font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">Final Chapter</span>
+                          <h1 className="font-poppins text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
                             A Lifetime <br/>
                             <span className="font-great-vibes text-brand-blue text-5xl lg:text-6xl xl:text-7x relative -top-3 -right-1">Of Memories</span>
                           </h1>
@@ -270,7 +270,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
 
                     <div className="space-y-6 lg:space-y-8">
                        <div className="w-16 h-[1px] bg-brand-blue/30 ml-auto mb-8" />
-                       <p className="text-xl lg:text-2xl font-playfair text-slate-800 italic leading-relaxed">
+                       <p className="text-xl lg:text-2xl font-poppins text-slate-800 italic leading-relaxed">
                          "Traveling – it leaves you speechless, then turns you into a storyteller."
                        </p>
                        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">

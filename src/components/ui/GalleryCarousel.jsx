@@ -61,6 +61,7 @@ const GalleryCarousel = ({
               </div>
               <button
                 onClick={onClose}
+                aria-label="Close gallery"
                 className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
               >
                 <X className="w-6 h-6" />
@@ -113,12 +114,14 @@ const GalleryCarousel = ({
             <>
               <button
                 onClick={handlePrevious}
+                aria-label="Previous image"
                 className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl"
               >
                 <ChevronLeft className="w-7 h-7 md:w-8 md:h-8" />
               </button>
               <button
                 onClick={handleNext}
+                aria-label="Next image"
                 className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 shadow-xl"
               >
                 <ChevronRight className="w-7 h-7 md:w-8 md:h-8" />
@@ -134,6 +137,7 @@ const GalleryCarousel = ({
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
+                    aria-label={`View image ${index + 1}`}
                     className={`relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden transition-all ${
                       index === currentIndex
                         ? "ring-4 ring-white scale-110"

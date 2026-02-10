@@ -1,22 +1,5 @@
 
 
-/* Klausen Font Definitions */
-@font-face {
-  font-family: "Klausen";
-  src: url("/Klausen-Regular.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Klausen";
-  src: url("/Klausen-Thicker.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -63,7 +46,7 @@
 }
 
 body {
-  font-family: var(--font-outfit), Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
 }
 
 @layer base {
@@ -161,194 +144,6 @@ body {
     background: rgba(255, 255, 255, 0.4);
   }
 
-  .star-field {
-    background-color: #0f172a;
-    background-image: radial-gradient(
-        circle at 20% 50%,
-        rgba(168, 85, 247, 0.15) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 80% 80%,
-        rgba(34, 211, 238, 0.1) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 40% 20%,
-        rgba(168, 85, 247, 0.1) 0%,
-        transparent 40%
-      );
-  }
-
-  .glass-cosmic {
-    background: rgba(30, 27, 75, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(192, 132, 252, 0.1);
-  }
-
-  .solo-card {
-    background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
-    border: 1px solid rgba(192, 132, 252, 0.1);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .solo-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(168, 85, 247, 0.1),
-      transparent
-    );
-    transition: left 0.7s;
-  }
-
-  .solo-card:hover::before {
-    left: 100%;
-  }
-
-  .solo-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(168, 85, 247, 0.5);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  }
-
-  .aurora-border {
-    position: relative;
-  }
-
-  .aurora-border::after {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, #22d3ee, #a855f7, #22d3ee);
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .aurora-border:hover::after {
-    opacity: 1;
-  }
-
-  .text-gradient-aurora {
-    background: linear-gradient(135deg, #22d3ee 0%, #c084fc 50%, #a855f7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text;
-  }
-
-  .cut-corner {
-    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
-  }
-
-  /* Religious Retreat Styles */
-  .sacred-gradient {
-    background: linear-gradient(180deg, #faf9f6 0%, #f0eee9 50%, #e5e1d8 100%);
-  }
-
-  .divine-light {
-    background: radial-gradient(
-      ellipse at top,
-      rgba(212, 175, 55, 0.15) 0%,
-      transparent 70%
-    );
-  }
-
-  .ornate-border {
-    position: relative;
-    border: 1px solid rgba(128, 0, 32, 0.2);
-  }
-
-  .ornate-border::before,
-  .ornate-border::after {
-    content: "✦";
-    position: absolute;
-    color: #d4af37;
-    font-size: 12px;
-  }
-
-  .ornate-border::before {
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #faf9f6;
-    padding: 0 10px;
-  }
-
-  .ornate-border::after {
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #faf9f6;
-    padding: 0 10px;
-  }
-
-  .glass-sacred {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-  }
-
-  .card-sacred {
-    background: white;
-    border: 1px solid rgba(128, 0, 32, 0.1);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-sacred::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #d4af37, transparent);
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-
-  .card-sacred:hover::before {
-    opacity: 1;
-  }
-
-  .card-sacred:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px -15px rgba(128, 0, 32, 0.15);
-    border-color: rgba(212, 175, 55, 0.3);
-  }
-
-  .text-gradient-gold {
-    background: linear-gradient(
-      135deg,
-      #d4af37 0%,
-      #f4e4ba 50%,
-      #d4af37 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text;
-    background-size: 200% auto;
-  }
-
-  .stained-glass {
-    background: linear-gradient(
-      135deg,
-      rgba(128, 0, 32, 0.1) 0%,
-      rgba(15, 82, 186, 0.1) 50%,
-      rgba(212, 175, 55, 0.1) 100%
-    );
-  }
 }
 
 body {
@@ -578,14 +373,6 @@ html.no-scroll {
   animation: marquee-reverse 30s linear infinite;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
 @keyframes fadeInUp {
   from {
@@ -619,15 +406,6 @@ html.no-scroll {
   }
 }
 
-@keyframes pulseGlow {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
 
 @keyframes floatSlow {
   0%, 100% {
@@ -712,18 +490,6 @@ html.no-scroll {
   }
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  33% {
-    transform: translateY(-20px) rotate(5deg);
-  }
-  66% {
-    transform: translateY(10px) rotate(-5deg);
-  }
-}
 
 .animate-fadeIn {
   animation: fadeIn 1s ease-out;
@@ -963,178 +729,6 @@ html.no-scroll {
   100% { background-position: 0% 50%; }
 }
 
-/* ============================================
-   PRINT STYLES FOR SHAREABLE ITINERARY
-   ============================================ */
-
-@media print {
-  /* Reset body and html for printing */
-  @page {
-    size: A4;
-    margin: 1cm;
-  }
-
-  html, body {
-    width: 210mm;
-    height: 297mm;
-  }
-
-  body {
-    background: white !important;
-    overflow: visible !important;
-  }
-
-  /* Hide navigation, buttons, and interactive elements */
-  nav,
-  header:not(.print-header),
-  footer:not(.print-footer),
-  button,
-  [class*="print:hidden"],
-  [class*="sticky"],
-  [class*="fixed"],
-  .no-print {
-    display: none !important;
-  }
-
-  /* Force proper page breaks */
-  [class*="print:break-inside-avoid"] {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  [class*="print:break-after"] {
-    break-after: page;
-    page-break-after: always;
-  }
-
-  [class*="print:break-before"] {
-    break-before: page;
-    page-break-before: always;
-  }
-
-  /* Optimize text for printing */
-  * {
-    color: #000 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  /* Allow specific backgrounds for branding */
-  [class*="print:bg-white"],
-  [class*="print:bg-slate-50"],
-  [class*="bg-slate-50"],
-  [class*="bg-blue-50"],
-  [class*="bg-green-50"],
-  [class*="bg-red-50"],
-  [class*="bg-emerald-50"] {
-    background: #f8fafc !important;
-  }
-
-  /* Ensure links are visible */
-  a {
-    text-decoration: underline !important;
-  }
-
-  a[href^="http"]:after {
-    content: " (" attr(href) ")";
-    font-size: 0.8em;
-    color: #666 !important;
-  }
-
-  /* Optimize images */
-  img {
-    max-width: 100% !important;
-    page-break-inside: avoid;
-  }
-
-  /* Remove animations and transitions */
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-
-  /* Optimize spacing */
-  [class*="print:py-6"] {
-    padding-top: 1.5rem !important;
-    padding-bottom: 1.5rem !important;
-  }
-
-  [class*="print:py-4"] {
-    padding-top: 1rem !important;
-    padding-bottom: 1rem !important;
-  }
-
-  [class*="print:mb-4"] {
-    margin-bottom: 1rem !important;
-  }
-
-  [class*="print:mb-3"] {
-    margin-bottom: 0.75rem !important;
-  }
-
-  /* Keep borders visible */
-  [class*="print:border"],
-  [class*="print:border-slate-200"] {
-    border: 1px solid #e2e8f0 !important;
-  }
-
-  /* Ensure proper font sizes */
-  [class*="print:text-xs"] {
-    font-size: 0.75rem !important;
-  }
-
-  [class*="print:text-sm"] {
-    font-size: 0.875rem !important;
-  }
-
-  [class*="print:text-base"] {
-    font-size: 1rem !important;
-  }
-
-  [class*="print:text-lg"] {
-    font-size: 1.125rem !important;
-  }
-
-  /* Force important colors for branding */
-  .text-brand-blue,
-  [class*="print:text-brand-blue"] {
-    color: #0146b3 !important;
-  }
-
-
-
-  .text-slate-900,
-  [class*="print:text-slate-900"] {
-    color: #0f172a !important;
-  }
-
-  .text-slate-600,
-  [class*="print:text-slate-600"] {
-    color: #475569 !important;
-  }
-
-  .text-slate-700,
-  [class*="print:text-slate-700"] {
-    color: #334155 !important;
-  }
-
-  /* Remove shadows */
-  [class*="print:shadow-none"] {
-    box-shadow: none !important;
-  }
-
-  /* Optimize rounded corners for print */
-  [class*="print:rounded-xl"] {
-    border-radius: 0.75rem !important;
-  }
-
-  [class*="print:rounded-2xl"] {
-    border-radius: 1rem !important;
-  }
-}
 
 /* Scroll & Performance Optimizations */
 .smooth-scroll {

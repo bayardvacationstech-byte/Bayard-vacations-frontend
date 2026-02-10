@@ -119,6 +119,7 @@ export default function MobileNavbar() {
                       <Button
                         variant="ghost"
                         size="icon"
+                        aria-label="Search destinations"
                         className="text-white hover:bg-white/20"
                       >
                         <Search />
@@ -131,6 +132,7 @@ export default function MobileNavbar() {
                   variant="ghost"
                   size="icon"
                   onClick={handleMenuToggle}
+                  aria-label={isMenuActive ? "Close menu" : "Open menu"}
                   className="text-white hover:bg-white/20"
                 >
                   {isMenuActive ? <X /> : <Menu />}
@@ -163,6 +165,7 @@ export default function MobileNavbar() {
             {item.hasDropdown ? (
               <button
                 className="flex w-full justify-between"
+                aria-label={`View ${item.title} sub-menu`}
                 onClick={() => {
                   setActiveItem(item);
                   setIsDropdownActive(true);
