@@ -88,7 +88,7 @@ export default function UnifiedContactButtons() {
         opacity: (isNearFooter && !isActuallyDragging) ? 0 : 1,
         y: (isNearFooter && !isActuallyDragging) ? 40 : 0
       }}
-      className="fixed bottom-6 right-4 z-50 pointer-events-none w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
+      className="fixed bottom-6 right-4 z-[9999] pointer-events-none w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
       style={{ touchAction: "none" }}
     >
       <motion.div
