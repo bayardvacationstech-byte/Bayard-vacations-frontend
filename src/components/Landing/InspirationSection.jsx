@@ -7,6 +7,8 @@ import Link from "next/link";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
+import ConfirmationDialog from "@/components/Forms/EnquiryForm/ConfirmationDialog";
+import useToggleState from "@/hooks/useToggleState";
 
 const FALLBACK_DESTINATIONS = [
   {
@@ -148,6 +150,7 @@ export default function InspirationSection({ theme = "default", initialDestinati
 
   const [cards, setCards] = useState(mappedCards);
   const [exitDirection, setExitDirection] = useState("left");
+  const confirmationDialogControls = useToggleState();
 
   // Update cards when initialDestinations change (e.g. hydration)
   React.useEffect(() => {
@@ -236,6 +239,10 @@ export default function InspirationSection({ theme = "default", initialDestinati
 
   return (
     <section className={`relative ${colors.bg} overflow-hidden py-8 sm:py-10 lg:py-12`}>
+      <ConfirmationDialog 
+        controls={confirmationDialogControls}
+        closeModal={() => confirmationDialogControls.close()}
+      />
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute top-10 right-10 w-72 h-72 ${colors.orb} rounded-full blur-3xl`}></div>
@@ -328,7 +335,7 @@ export default function InspirationSection({ theme = "default", initialDestinati
                 formType="potential"
                 variant="inspiration"
                 hideFields={["destination"]}
-                onSuccess={() => {}}
+                onSuccess={() => confirmationDialogControls.open()}
                 buttonColor={colors.button}
               />
             </div>

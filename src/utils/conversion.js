@@ -26,3 +26,21 @@ export const trackLeadFormConversion = () => {
     }
   }
 };
+
+/**
+ * Specifically tracks lead form conversions with ID: AW-17117820324/exafCNXBj_YbEKTrtOI_
+ * This is triggered inside the "Thank You" popup.
+ */
+export const trackSubmitLeadForm = () => {
+  if (typeof window !== "undefined" && window.gtag) {
+    try {
+      window.gtag("event", "conversion", {
+        send_to: "AW-17117820324/exafCNXBj_YbEKTrtOI_",
+        value: 0.0,
+        currency: "INR",
+      });
+    } catch (error) {
+      console.error("Lead form conversion tracking failed:", error);
+    }
+  }
+};

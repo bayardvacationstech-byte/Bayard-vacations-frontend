@@ -1,6 +1,8 @@
 import React from "react";
 import { Star, Share2 } from "lucide-react";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
+import ConfirmationDialog from "@/components/Forms/EnquiryForm/ConfirmationDialog";
+import useToggleState from "@/hooks/useToggleState";
 import { cn, formatPrice } from "@/lib/utils";
 
 const BookingSidebar = ({
@@ -11,8 +13,13 @@ const BookingSidebar = ({
   finalPrice,
   copyCurrentUrl
 }) => {
+  const confirmationDialogControls = useToggleState();
   return (
     <div className="hidden c-lg:block w-[25%]" id="booking-sidebar">
+      <ConfirmationDialog 
+        controls={confirmationDialogControls}
+        closeModal={() => confirmationDialogControls.close()}
+      />
       <div className="sticky top-[80px] md:top-[100px] space-y-3 z-30 pb-4">
         {/* Pricing Card */}
         <div className="gradient-btn rounded-3xl shadow-xl overflow-hidden p-4 border border-white/20">
@@ -108,7 +115,7 @@ const BookingSidebar = ({
             formType="potential"
             hideFields={["destination"]}
             initialData={{ destination: packageData?.region }}
-            onSuccess={() => {}}
+            onSuccess={() => confirmationDialogControls.open()}
             buttonText="Send Enquiry"
             whiteLabels={true}
             brandYellow={true}
