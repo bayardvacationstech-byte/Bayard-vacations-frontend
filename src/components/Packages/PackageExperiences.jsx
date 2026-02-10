@@ -33,7 +33,7 @@ const PackageExperiences = ({ packageData }) => {
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-4 tracking-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
                 The <span className="text-brand-blue">Visual Journal</span>
               </h2>
               <p className="text-sm md:text-base text-slate-500 leading-relaxed font-medium">

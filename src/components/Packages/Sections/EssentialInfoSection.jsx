@@ -41,7 +41,7 @@ const EssentialInfoSection = ({ packageData }) => {
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200 mb-4 uppercase tracking-widest">
                 <Briefcase className="w-3 h-3" /> Smart Packing
               </div>
-              <h3 className="text-3xl font-black text-slate-900 tracking-tight">Traveler's <span className="text-brand-blue">Checklist</span></h3>
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">Traveler's <span className="text-brand-blue">Checklist</span></h3>
             </div>
             <p className="text-slate-500 text-sm max-w-md font-medium">Essentials to ensure you're prepared for the tropical climate and cultural visits.</p>
           </div>
@@ -94,7 +94,7 @@ const EssentialInfoSection = ({ packageData }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Logistics & Safety */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm">
-          <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-3">
+          <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
             <AlertTriangle className="w-6 h-6 text-orange-500" /> Logistics & Safety
           </h3>
           <div className="space-y-6">
@@ -127,7 +127,7 @@ const EssentialInfoSection = ({ packageData }) => {
 
         {/* Money & Expenses */}
         <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm">
-          <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-3">
+          <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
             <Wallet className="w-6 h-6 text-emerald-600" /> Money & Expenses
           </h3>
           <div className="space-y-5">

@@ -163,7 +163,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
           <div className="lg:col-span-2 space-y-8">
             {/* About */}
             <section>
-              <h2 className="text-3xl font-black text-slate-900 mb-4">About This Activity</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 mb-4">About This Activity</h2>
               <p className="text-lg text-slate-700 leading-relaxed">
                 {activity.longDescription}
               </p>
@@ -171,7 +171,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
 
             {/* Highlights */}
             <section>
-              <h2 className="text-3xl font-black text-slate-900 mb-4">Highlights</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 mb-4">Highlights</h2>
               <ul className="space-y-3">
                 {activity.highlights.map((highlight, index) => (
                   <li key={index} className="flex items-start gap-3">
@@ -186,7 +186,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
 
             {/* What's Included */}
             <section>
-              <h2 className="text-3xl font-black text-slate-900 mb-4">What's Included</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 mb-4">What's Included</h2>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {activity.included.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
@@ -199,7 +199,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
 
             {/* Image Gallery */}
             <section>
-              <h2 className="text-3xl font-black text-slate-900 mb-4">Gallery</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 mb-4">Gallery</h2>
               <div className="grid grid-cols-3 gap-4">
                 {activity.gallery?.map((img, index) => (
                   <div 

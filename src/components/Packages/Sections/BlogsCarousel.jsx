@@ -84,7 +84,7 @@ const BlogsCarousel = ({ blogs, regionName }) => {
       <Container>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4 md:mb-12">
           <div className="max-w-2xl">
-            <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 tracking-tighter leading-none">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 tracking-tight leading-tight">
               Travel <span className="text-brand-blue">Insights</span>
             </h2>
             <p className="text-slate-500 text-xs md:text-lg font-medium">

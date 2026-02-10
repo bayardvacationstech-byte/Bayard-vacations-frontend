@@ -64,7 +64,7 @@ const OverviewSection = ({ packageData }) => {
         {highlightsItems.length > 0 && (
           <div className={cn("mb-6 pb-[15px]", paragraphs.length > 0 && "border-b border-slate-100")}>
             <div className="mb-4">
-              <h2 className="text-2xl md:text-5xl font-black text-slate-900 mb-2 md:mb-4 tracking-tight leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-2 md:mb-4 leading-tight">
                 Package <span className="text-brand-blue">Highlights</span>
               </h2>
               <p className="text-slate-500 text-sm md:text-xl font-medium">Quick facts and details about your journey</p>

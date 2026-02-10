@@ -10,7 +10,7 @@ import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
 const FaqItem = ({ item, index, openIndex, toggleItem }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
-    initial={{ opacity: 1, y: 0 }}
+    whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ delay: index * 0.05 }}
     className="group"
@@ -168,7 +168,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
-          initial={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="text-center mb-3"
         >
@@ -177,7 +177,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
             <span className="text-brand-blue font-bold">Got Questions?</span>
           </div>
           
-          <h2 className="text-lg md:text-5xl font-black text-slate-900 mb-0 tracking-tight leading-tight px-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-0 tracking-tight leading-tight px-4">
             Frequently Asked <span className="text-brand-blue">Questions</span>
           </h2>
         </motion.div>
@@ -220,7 +220,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
         {/* Help Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          initial={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           className="mt-4 md:mt-8"
         >

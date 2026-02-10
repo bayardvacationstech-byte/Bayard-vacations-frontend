@@ -225,7 +225,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-6 md:mb-8 relative">
         <div className="max-w-xl">
-          <h2 className="text-2xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-2 md:mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-2 md:mb-4">
             Where You'll <span className="text-brand-blue">Stay</span>
           </h2>
           <p className="text-slate-500 text-sm md:text-xl font-medium">Comfortable accommodations for every budget</p>

@@ -32,7 +32,7 @@ const RelatedPackages = ({ relatedPackages }) => {
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
       <Container>
         <div className="mb-2 md:mb-8">
-          <h2 className="text-xl md:text-4xl font-black text-slate-900 mb-1 md:mb-2 tracking-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-1 md:mb-2 tracking-tight">
             More <span className="text-brand-blue">Adventures</span>
           </h2>
           <p className="text-xs md:text-base text-slate-600 font-medium max-w-2xl">

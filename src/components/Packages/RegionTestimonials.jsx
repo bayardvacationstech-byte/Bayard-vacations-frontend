@@ -270,7 +270,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
       <Container className="relative z-10 h-full flex flex-col lg:justify-center">
         {/* Section Header */}
         <div className="mb-4 md:mb-12 text-center lg:text-left">
-          <h2 className="text-white text-2xl sm:text-3xl md:text-5xl font-black tracking-tight leading-tight">
+          <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight">
             Guest <span className="text-blue-400">Stories</span>
           </h2>
           <p className="text-white/60 text-sm md:text-base font-medium mt-2 truncate md:whitespace-normal">Real experiences shared by our globetrotters</p>
