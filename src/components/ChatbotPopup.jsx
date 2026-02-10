@@ -266,7 +266,7 @@ const ChatMessage = memo(({
               : "text-gray-400"
           }`}
         >
-          {isMounted && message.timestamp.toLocaleTimeString([], {
+          {isMounted && new Date(message.timestamp).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })}
@@ -378,10 +378,10 @@ const quickReplies = [
 const INITIAL_MESSAGES = [
   {
     id: 1,
-    text: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
-    formattedText: "Hello! I'm your Bayard Assistant. How can I help you plan your perfect vacation today? ✈️",
+    text: "Hello! I'm Mira, your personal travel expert. How can I help you plan your perfect vacation today? ✈️",
+    formattedText: "Hello! I'm Mira, your personal travel expert. How can I help you plan your perfect vacation today? ✈️",
     sender: "bot",
-    timestamp: new Date(),
+    timestamp: new Date().setHours(17, 0, 0, 0), // Use a stable timestamp during hydration
   },
 ];
 
@@ -398,6 +398,36 @@ export default function ChatbotPopup({ isOpen, onClose }) {
   }, [messages]);
 
   const [inputMessage, setInputMessage] = useState("");
+  const [viewportHeight, setViewportHeight] = useState("100dvh");
+  const [viewportTop, setViewportTop] = useState(0);
+  const [isViewportResizing, setIsViewportResizing] = useState(false);
+  const resizeTimeoutRef = useRef(null);
+
+  // Handle mobile keyboard and visual viewport changes
+  useEffect(() => {
+    if (!window.visualViewport) return;
+
+    const handleResize = () => {
+      setIsViewportResizing(true);
+      setViewportHeight(`${window.visualViewport.height}px`);
+      setViewportTop(window.visualViewport.offsetTop);
+      
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+      resizeTimeoutRef.current = setTimeout(() => {
+        setIsViewportResizing(false);
+      }, 300);
+    };
+
+    window.visualViewport.addEventListener("resize", handleResize);
+    window.visualViewport.addEventListener("scroll", handleResize);
+    handleResize();
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("scroll", handleResize);
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+    };
+  }, []);
   const [isTyping, setIsTyping] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
@@ -830,9 +860,14 @@ export default function ChatbotPopup({ isOpen, onClose }) {
 
       {/* Chat Panel - Enhanced Design */}
       <div
-        className={`fixed inset-0 sm:inset-auto sm:top-[100px] sm:bottom-4 sm:right-4 sm:left-auto sm:w-[450px] bg-white rounded-none sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-[10001] transform transition-all duration-500 ease-out overflow-hidden flex flex-col h-[100dvh] sm:h-auto ${
+        className={`fixed inset-0 sm:inset-auto sm:top-[100px] sm:bottom-4 sm:right-4 sm:left-auto sm:w-[450px] bg-white rounded-none sm:rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] z-[10001] transform overflow-hidden flex flex-col ${
           isOpen ? "translate-y-0 opacity-100 scale-100" : "translate-y-8 opacity-0 scale-95 pointer-events-none"
-        }`}
+        } ${!isViewportResizing ? "transition-all duration-500 ease-out" : ""}`}
+        style={{ 
+          height: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? viewportHeight : '80vh',
+          maxHeight: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? viewportHeight : '80vh',
+          top: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? `${viewportTop}px` : undefined
+        }}
       >
         {/* Animated Header with Gradient */}
         <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 sm:py-3 px-6 overflow-hidden flex-shrink-0">
@@ -850,7 +885,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
               </div>
               <div>
                 <h3 className="font-bold text-lg flex items-center gap-2">
-                  Bayard Assistant
+                  Mira
                   <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
                 </h3>
                 <div className="flex items-center gap-2">
@@ -864,11 +899,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
                 <button
                   onClick={handleClearChat}
                   aria-label="Clear conversation"
-                  className="hover:bg-white/20 px-3 py-1.5 rounded-full transition-all duration-300 group/clear flex items-center gap-1.5 bg-white/10 border border-white/20"
+                  className="hover:bg-white/20 p-2 rounded-full transition-all duration-300 group/clear flex items-center justify-center bg-white/10 border border-white/20"
                   title="Clear conversation"
                 >
                   <Trash2 className="w-4 h-4 group-hover/clear:scale-110 transition-transform" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Clear</span>
                 </button>
               )}
               <button
