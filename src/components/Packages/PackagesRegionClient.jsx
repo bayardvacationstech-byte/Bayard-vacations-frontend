@@ -529,7 +529,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
         )}>
           <div className={cn(
             "bg-white/95 backdrop-blur-md rounded-2xl py-1.5 px-4 shadow-xl border border-slate-200 transition-all duration-500 mx-auto max-w-full",
-            (showSectionNav || isMobile) ? "w-full md:w-fit" : "w-fit max-w-4xl"
+            (showSectionNav || isMobile) ? "w-full md:w-fit" : "w-fit max-w-7xl"
           )}>
               <AnimatePresence mode="popLayout">
                 {isMounted && (
