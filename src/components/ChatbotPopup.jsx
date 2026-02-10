@@ -460,22 +460,21 @@ export default function ChatbotPopup({ isOpen, onClose }) {
       }));
   }, [allRegions]);
 
-  // Separate effect for body scroll lock
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      // Added for iOS to prevent scrolling even with overflow hidden
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
+      // Added for iOS Safari stability
+      document.body.style.touchAction = 'none';
+      document.body.style.overscrollBehavior = 'none';
     } else {
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      document.body.style.touchAction = '';
+      document.body.style.overscrollBehavior = '';
     }
     return () => {
       document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      document.body.style.touchAction = '';
+      document.body.style.overscrollBehavior = '';
     };
   }, [isOpen]);
 
@@ -866,8 +865,10 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         style={{ 
           height: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? viewportHeight : '80vh',
           maxHeight: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? viewportHeight : '80vh',
-          top: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? `${viewportTop}px` : undefined
+          top: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? `${viewportTop}px` : undefined,
+          pointerEvents: 'auto'
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Animated Header with Gradient */}
         <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 text-white pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 sm:py-3 px-6 overflow-hidden flex-shrink-0">
