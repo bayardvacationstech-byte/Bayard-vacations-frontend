@@ -112,7 +112,7 @@ export default function Testimonials({ reviews }) {
             </h2>
             
             <p 
-              className="text-white/50 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light font-outfit"
+              className="text-white/50 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light font-poppins"
             >
               Discover why thousands of adventurers trust us to craft their perfect journey.
             </p>

@@ -19,7 +19,7 @@ const ShareableFooter = ({ contactInfo }) => {
   } = contactInfo || {};
 
   return (
-    <footer className="bg-brand-blue text-white pt-20 pb-12 border-t border-white/10 font-outfit relative overflow-hidden">
+    <footer className="bg-brand-blue text-white pt-20 pb-12 border-t border-white/10 font-poppins relative overflow-hidden">
       {/* Decorative Accents */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent skew-x-[-15deg] translate-x-1/4 pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white/5 rounded-full blur-[100px] pointer-events-none" />
@@ -47,15 +47,16 @@ const ShareableFooter = ({ contactInfo }) => {
               <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-200/50">Connectivity</h4>
               <div className="flex gap-3">
                 {[
-                  { icon: Globe, link: `https://${website}` },
-                  { icon: Instagram, link: "https://instagram.com/bayardvacations" },
-                  { icon: Facebook, link: "https://facebook.com/bayardvacations" }
+                  { icon: Globe, link: `https://${website}`, label: "Visit our website" },
+                  { icon: Instagram, link: "https://instagram.com/bayardvacations", label: "Visit our Instagram profile" },
+                  { icon: Facebook, link: "https://facebook.com/bayardvacations", label: "Visit our Facebook page" }
                 ].map((item, i) => (
                   <a 
                     key={i} 
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={item.label}
                     className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white hover:text-brand-blue transition-all duration-300"
                   >
                     <item.icon className="w-4.5 h-4.5" />

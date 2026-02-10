@@ -212,6 +212,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
             {validImages.length > 1 && (
               <>
                 <button 
+                  aria-label="Previous image"
                   className={cn(
                     `swiper-button-prev-${item.id} absolute left-3 top-1/2 -translate-y-1/2 z-20`,
                     "w-8 h-8 rounded-full bg-white/20 backdrop-blur-md hidden sm:flex items-center justify-center text-white",
@@ -224,6 +225,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button 
+                  aria-label="Next image"
                   className={cn(
                     `swiper-button-next-${item.id} absolute right-3 top-1/2 -translate-y-1/2 z-20`,
                     "w-8 h-8 rounded-full bg-white/20 backdrop-blur-md hidden sm:flex items-center justify-center text-white",
@@ -346,14 +348,17 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                   )}
                 </div>
               </div>
-              <div className={cn(
-                "w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl text-white flex items-center justify-center transition-all duration-500 shadow-xl group-hover:rotate-12",
-                variant === "rose" ? "bg-rose-600 hover:bg-rose-700" : 
-                variant === "amber" ? "bg-amber-600 hover:bg-amber-700" : 
-                "bg-slate-900 hover:bg-brand-blue"
-              )}>
+              <button 
+                aria-label="View package details"
+                className={cn(
+                  "w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl text-white flex items-center justify-center transition-all duration-500 shadow-xl group-hover:rotate-12",
+                  variant === "rose" ? "bg-rose-600 hover:bg-rose-700" : 
+                  variant === "amber" ? "bg-amber-600 hover:bg-amber-700" : 
+                  "bg-slate-900 hover:bg-brand-blue"
+                )}
+              >
                 <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
+              </button>
             </div>
           </div>
         </div>

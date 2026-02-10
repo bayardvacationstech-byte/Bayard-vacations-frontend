@@ -87,7 +87,8 @@ export default function MobileSearch({ customTrigger }) {
       {/* ================= TRIGGER ================= */}
       <DialogTrigger asChild>
         {customTrigger || (
-          <div
+          <button
+            type="button"
             suppressHydrationWarning
             className="
               sm:hidden
@@ -100,11 +101,13 @@ export default function MobileSearch({ customTrigger }) {
               text-white/90
               w-full
               cursor-pointer
+              text-left
+              outline-none
             "
           >
             <Search className="size-5 shrink-0" />
             <span className="text-sm">Where to next?</span>
-          </div>
+          </button>
         )}
       </DialogTrigger>
 

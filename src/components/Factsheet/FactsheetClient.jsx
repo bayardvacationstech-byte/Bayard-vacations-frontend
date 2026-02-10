@@ -306,9 +306,9 @@ export default function FactsheetClient({ regionSlug }) {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-3xl sm:text-6xl md:text-7xl font-black mb-6 tracking-tighter leading-none uppercase text-white">
+            <h1 className="text-3xl sm:text-6xl md:text-7xl font-extrabold mb-6 tracking-tight leading-[1.1] uppercase text-white">
               {currentData.heroTitle}<br />
-              <span className="text-brand-blue italic lowercase drop-shadow-sm">Factsheet</span>
+              <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent lowercase">Factsheet</span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-slate-200 max-w-2xl font-medium leading-relaxed drop-shadow-lg">
               {currentData.heroSubtitle}
@@ -858,7 +858,7 @@ export default function FactsheetClient({ regionSlug }) {
                     <p className="text-slate-600 font-medium leading-relaxed">
                       {currentData.visa.description}
                     </p>
-                    <Link href="https://evisa.gov.az" target="_blank" className="inline-block mt-8">
+                    <Link href="https://evisa.gov.az" target="_blank" rel="noopener noreferrer" className="inline-block mt-8">
                       <Button className="bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-full px-8 py-6 h-auto">
                         Apply for E-Visa
                       </Button>

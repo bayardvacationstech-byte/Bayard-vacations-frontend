@@ -29,7 +29,7 @@ export default function AnimatedText({ items = [] }) {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="text-lg font-damion text-[#8C8C8C] over"
+        className="text-lg font-poppins text-[#8C8C8C] over"
       >
         &quot;{text}&quot;
       </motion.div>

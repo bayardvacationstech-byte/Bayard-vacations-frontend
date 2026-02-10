@@ -63,7 +63,6 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.15.4",
     "@next/bundle-analyzer": "16.0.8",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.19.2",
@@ -75,5 +74,10 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "typescript": "^5.9.3"
-  }
+  },
+  "browserslist": [
+    "last 1 year",
+    "not dead",
+    "not op_mini all"
+  ]
 }

@@ -2,7 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ✅ Dynamic hosting on Netlify with SSR enabled
+  // ✅ Dynamic hosting with SSR enabled
   // Removed: output: "export" for dynamic rendering
 
   compiler: {
@@ -10,13 +10,22 @@ const nextConfig = {
   },
 
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion"],
+    optimizePackageImports: [
+      "lucide-react", 
+      "framer-motion", 
+      "@radix-ui/react-accordion", 
+      "@radix-ui/react-dialog", 
+      "@radix-ui/react-select", 
+      "@radix-ui/react-tooltip", 
+      "date-fns", 
+      "swiper"
+    ],
   },
 
   productionBrowserSourceMaps: false,
 
   images: {
-    // ✅ Netlify supports optimized images with dynamic hosting
+    // ✅ Optimized images with dynamic hosting
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -85,6 +94,33 @@ const nextConfig = {
         source: "/themes/group-adventures",
         destination: "/themes/group-departure",
         permanent: true,
+      },
+    ];
+  },
+
+  // ✅ Headers for caching static assets
+  async headers() {
+    return [
+      {
+        // Cache images, fonts, and media for 1 year
+        source: "/:all*(svg|png|jpg|jpeg|webp|avif|mp4|webm|woff|woff2|ttf|otf)",
+        locale: false,
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // Direct match for public subdirectories
+        source: "/(3d-icons|icons-filled|img|media)/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
       },
     ];
   },

@@ -56,14 +56,14 @@ const ShareableHeader = ({ itineraryData }) => {
               <p className="font-great-vibes text-xl lg:text-3xl text-white/90 mb-1 tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 Specially Curated For
               </p>
-              <h2 className="text-2xl lg:text-4xl font-black text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase tracking-[0.2em] [text-shadow:0_0_20px_rgba(0,0,0,0.4)]">
+              <h2 className="text-2xl lg:text-4xl font-extrabold text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase tracking-[0.2em] [text-shadow:0_0_20px_rgba(0,0,0,0.4)]">
                 {customerName}
               </h2>
             </div>
             <p className="font-great-vibes text-2xl lg:text-4xl xl:text-5xl mb-2 bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_2px_rgba(0,0,0,0.9)] filter drop-shadow(0_0_20px_rgba(0,0,0,0.5)) -rotate-3 translate-y-1 tracking-[0.05em] select-none py-2 px-4 inline-block [-webkit-text-stroke:0.5px_rgba(0,0,0,0.2)]">
               Experience
             </p>
-            <h1 className="text-3xl lg:text-5xl xl:text-6xl font-black text-white mb-4 tracking-wider leading-tight uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] [text-shadow:0_0_30px_rgba(0,0,0,0.3)]">
+            <h1 className="text-3xl lg:text-5xl xl:text-6xl font-extrabold text-white mb-4 tracking-wider leading-tight uppercase drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] [text-shadow:0_0_30px_rgba(0,0,0,0.3)]">
               {packageName}
             </h1>
             
@@ -94,19 +94,19 @@ const ShareableHeader = ({ itineraryData }) => {
             <div className="text-right flex flex-col items-end gap-1">
               <div>
                 <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Booking Ref</p>
-                <p className="text-brand-blue text-sm font-black leading-none">{bookingRef}</p>
+                <p className="text-brand-blue text-sm font-extrabold leading-none">{bookingRef}</p>
               </div>
               {pricing && (
                 <div>
                   <p className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-1">Trip Value</p>
-                  <p className="text-brand-blue text-sm font-black leading-none">
+                  <p className="text-brand-blue text-sm font-extrabold leading-none">
                     {currencySymbol}{formatPrice(pricing.totalPrice)}
                   </p>
                 </div>
               )}
             </div>
           </div>
-          <h1 className="text-3xl font-black text-brand-blue mb-2">{packageName}</h1>
+          <h1 className="text-3xl font-extrabold text-brand-blue mb-2">{packageName}</h1>
           <p className="text-slate-600 text-sm">{destination} • {duration}</p>
         </div>
 
@@ -124,7 +124,7 @@ const ShareableHeader = ({ itineraryData }) => {
                   <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5 letterspacing-wider">
                     Booking Reference
                   </p>
-                  <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                  <p className="text-white text-sm lg:text-base font-extrabold tracking-wide">
                     {bookingRef}
                   </p>
                 </div>
@@ -144,7 +144,7 @@ const ShareableHeader = ({ itineraryData }) => {
                   <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
                     Travel Dates
                   </p>
-                  <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                  <p className="text-white text-sm lg:text-base font-extrabold tracking-wide">
                     {travelDates?.displayCheckIn || 'DATES TO BE FINALIZED'}
                   </p>
                 </div>
@@ -164,7 +164,7 @@ const ShareableHeader = ({ itineraryData }) => {
                   <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
                     Destination
                   </p>
-                  <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                  <p className="text-white text-sm lg:text-base font-extrabold tracking-wide">
                     {destination}
                   </p>
                 </div>
@@ -183,7 +183,7 @@ const ShareableHeader = ({ itineraryData }) => {
                   <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
                     Hotel Category
                   </p>
-                  <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                  <p className="text-white text-sm lg:text-base font-extrabold tracking-wide">
                     {pricing?.hotelCategory || 'STANDARD'}
                   </p>
                 </div>
@@ -203,7 +203,7 @@ const ShareableHeader = ({ itineraryData }) => {
                     <p className="text-white/80 text-[10px] lg:text-[11px] font-bold uppercase tracking-widest mb-1 lg:mb-1.5">
                       Total
                     </p>
-                    <p className="text-white text-sm lg:text-base font-black tracking-wide">
+                    <p className="text-white text-sm lg:text-base font-extrabold tracking-wide">
                       {currencySymbol}{formatPrice(pricing.totalPrice)}
                     </p>
                   </div>
@@ -229,7 +229,7 @@ const ShareableHeader = ({ itineraryData }) => {
               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
                 Booking ID
               </p>
-              <p className="text-slate-900 text-sm font-black truncate">
+              <p className="text-slate-900 text-sm font-extrabold truncate">
                 {bookingRef}
               </p>
             </div>
@@ -245,7 +245,7 @@ const ShareableHeader = ({ itineraryData }) => {
               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
                 Travel Date
               </p>
-              <p className="text-slate-900 text-sm font-black">
+              <p className="text-slate-900 text-sm font-extrabold">
                 {travelDates?.displayCheckIn || 'TBA'}
               </p>
             </div>
@@ -261,7 +261,7 @@ const ShareableHeader = ({ itineraryData }) => {
               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
                 Destination
               </p>
-              <p className="text-slate-900 text-sm font-black truncate">
+              <p className="text-slate-900 text-sm font-extrabold truncate">
                 {destination}
               </p>
             </div>
@@ -276,7 +276,7 @@ const ShareableHeader = ({ itineraryData }) => {
               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
                 Hotel Tier
               </p>
-              <p className="text-slate-900 text-sm font-black truncate">
+              <p className="text-slate-900 text-sm font-extrabold truncate">
                 {pricing?.hotelCategory || 'Standard'}
               </p>
             </div>
@@ -292,7 +292,7 @@ const ShareableHeader = ({ itineraryData }) => {
                 <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
                   Total
                 </p>
-                <p className="text-slate-900 text-sm font-black truncate">
+                <p className="text-slate-900 text-sm font-extrabold truncate">
                   {currencySymbol}{formatPrice(pricing.totalPrice)}
                 </p>
               </div>

@@ -295,6 +295,7 @@ const DesktopNavbar = () => {
                     )}
                     variant="ghost"
                     size="icon"
+                    aria-label="Open search"
                     onClick={handleIsSearchActive}
                     onMouseOver={() => setActiveDropdown(null)}
                   >
@@ -307,6 +308,7 @@ const DesktopNavbar = () => {
                   })}
                   variant="ghost"
                   size="icon"
+                  aria-label="User profile or login"
                   onMouseOver={() => setActiveDropdown(null)}
                 >
                   <Link
@@ -392,6 +394,7 @@ const DesktopNavbar = () => {
                   <Button
                     className="size-6 rounded-full bg-white p-0 text-brand-blue shadow-none hover:bg-brand-blue hover:text-white"
                     onClick={handleIsSearchActive}
+                    aria-label="Close search"
                   >
                     <X />
                   </Button>

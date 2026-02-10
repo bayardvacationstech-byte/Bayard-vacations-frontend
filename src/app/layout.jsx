@@ -1,11 +1,5 @@
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/thumbs";
 import "./globals.css";
-import { Outfit, Playfair_Display, Cormorant_Garamond, Sora, Great_Vibes } from "next/font/google";
-import localFont from "next/font/local";
+import { Poppins, Great_Vibes } from "next/font/google";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster as RadixToaster } from "@/components/ui/toaster";
 import ScrollReset from "@/components/ScrollReset";
@@ -19,29 +13,10 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 import FooterWrapper from "@/components/layouts/FooterWrapper";
 import TaboolaPixel from "@/components/TaboolaPixel";
 
-const nord = localFont({
-  src: [
-    { path: "fonts/nord-thin.woff2", weight: "100", style: "normal" },
-    { path: "fonts/nord-light.woff2", weight: "300", style: "normal" },
-    { path: "fonts/nord-regular.woff2", weight: "400", style: "normal" },
-    { path: "fonts/nord-medium.woff2", weight: "500", style: "normal" },
-    { path: "fonts/nord-bold.woff2", weight: "700", style: "normal" },
-    { path: "fonts/nord-black.woff2", weight: "900", style: "normal" },
-  ],
-  variable: "--font-nord",
-  display: "swap",
-});
-
-const outfit = Outfit({
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-outfit",
-  display: "swap",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -49,20 +24,6 @@ const greatVibes = Great_Vibes({
   weight: ["400"],
   subsets: ["latin"],
   variable: "--font-great-vibes",
-  display: "swap",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const sora = Sora({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-sora",
   display: "swap",
 });
 
@@ -109,11 +70,23 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/icon.png" type="image/png" sizes="128x128" />
+        
+        {/* Performance: Preconnect to critical origins */}
+        <link rel="preconnect" href="https://cdn.bayardvacations.com" />
+        <link rel="preconnect" href="https://bayard-43e94.firebaseapp.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.clarity.ms" />
         <link rel="preconnect" href="https://o4509820841295872.ingest.de.sentry.io" />
+
+        {/* DNS Prefetch fallbacks */}
+        <link rel="dns-prefetch" href="https://cdn.bayardvacations.com" />
+        <link rel="dns-prefetch" href="https://bayard-43e94.firebaseapp.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.clarity.ms" />
       </head>
       <Metrics />
       <body
-        className={`${outfit.variable} ${nord.variable} ${playfair.variable} ${greatVibes.variable} ${cormorant.variable} ${sora.variable} font-sans antialiased`}
+        className={`${poppins.variable} ${greatVibes.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         {/* Instant CSS-only Splash Screen */}
@@ -127,7 +100,7 @@ export default function RootLayout({ children }) {
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'opacity 0.8s ease-out, transform 0.8s ease-out, visibility 0.8s',
-          fontFamily: 'var(--font-sora), sans-serif',
+          fontFamily: 'var(--font-poppins), sans-serif',
           animation: 'splash-gradientShift 15s ease infinite',
         }}>
           <style dangerouslySetInnerHTML={{ __html: `
@@ -200,15 +173,15 @@ export default function RootLayout({ children }) {
             @keyframes splash-iconFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
             @keyframes splash-glowPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
 
-            .splash-brand-name { font-family: var(--font-sora), sans-serif; font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 700; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 0.02em; margin-bottom: 0.5rem; line-height: 1.1; text-shadow: 0 4px 20px rgba(30, 64, 175, 0.2); animation: splash-textShimmer 3s linear infinite; background-size: 200% auto; }
+            .splash-brand-name { font-family: var(--font-poppins), sans-serif; font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 700; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 0.02em; margin-bottom: 0.5rem; line-height: 1.1; text-shadow: 0 4px 20px rgba(30, 64, 175, 0.2); animation: splash-textShimmer 3s linear infinite; background-size: 200% auto; }
             @keyframes splash-textShimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
             
-            .splash-tagline { font-family: var(--font-sora), sans-serif; font-size: clamp(1rem, 1.5vw, 1.25rem); font-weight: 500; color: #1e293b; letter-spacing: 0.05em; margin-bottom: 4rem; animation: splash-taglineEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both; }
+            .splash-tagline { font-family: var(--font-poppins), sans-serif; font-size: clamp(1rem, 1.5vw, 1.25rem); font-weight: 500; color: #1e293b; letter-spacing: 0.05em; margin-bottom: 4rem; animation: splash-taglineEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both; }
             @keyframes splash-taglineEntrance { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 
             .splash-loading-section { animation: splash-loadingEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both; }
             @keyframes splash-loadingEntrance { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-            .splash-loading-text { font-family: var(--font-sora), sans-serif; font-size: 1rem; font-weight: 600; color: #1e293b; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
+            .splash-loading-text { font-family: var(--font-poppins), sans-serif; font-size: 1rem; font-weight: 600; color: #1e293b; letter-spacing: 0.05em; margin-bottom: 1.5rem; }
             
             .splash-progress-container { width: 350px; height: 6px; background: rgba(30, 64, 175, 0.1); margin: 0 auto; border-radius: 10px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); }
             .splash-progress-bar { height: 100%; background: linear-gradient(90deg, #1e40af 0%, #3b82f6 25%, #06b6d4 50%, #fbbf24 75%, #3b82f6 100%); background-size: 300% 100%; border-radius: 10px; animation: splash-progressFill 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards, splash-progressShimmer 2s linear infinite; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(6, 182, 212, 0.3); position: relative; width: 0%; }
@@ -216,7 +189,7 @@ export default function RootLayout({ children }) {
             @keyframes splash-progressFill { 0% { width: 0%; } 100% { width: 100%; } }
             @keyframes splash-progressShimmer { 0% { background-position: 300% center; } 100% { background-position: -300% center; } }
             
-            .splash-journey-text { margin-top: 2.5rem; font-family: var(--font-sora), sans-serif; font-size: clamp(1rem, 2vw, 1.125rem); font-weight: 400; color: #64748b; font-style: italic; letter-spacing: 0.03em; animation: splash-journeyPulse 3s ease-in-out infinite; }
+            .splash-journey-text { margin-top: 2.5rem; font-family: var(--font-poppins), sans-serif; font-size: clamp(1rem, 2vw, 1.125rem); font-weight: 400; color: #64748b; font-style: italic; letter-spacing: 0.03em; animation: splash-journeyPulse 3s ease-in-out infinite; }
             @keyframes splash-journeyPulse { 0%, 100% { opacity: 0.6; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
 
             .splash-particle { position: absolute; background: white; border-radius: 50%; opacity: 0.6; pointer-events: none; animation: splash-particleRise 12s linear infinite; }

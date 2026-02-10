@@ -7,6 +7,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 
+import "swiper/css";
+import "swiper/css/navigation";
+
 const ShareableTestimonials = ({ testimonials = [] }) => {
   const [selectedIdx, setSelectedIdx] = useState(null);
   // Extract all media for the gallery and normalize to { url, type }

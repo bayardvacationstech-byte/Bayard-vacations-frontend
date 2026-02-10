@@ -48,18 +48,25 @@ const LeadGenerationTrigger = () => {
 
     // --- Scroll-based Trigger ---
     // Show when scrolling past 40% of the page
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
-      
-      // Safety check for short pages
-      if (scrollHeight <= clientHeight + 100) return;
+    let isTicking = false;
 
-      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-      
-      if (scrollPercentage > 0.6) {
-        handleTrigger();
+    const handleScroll = () => {
+      if (!isTicking) {
+        window.requestAnimationFrame(() => {
+          const scrollHeight = document.documentElement.scrollHeight;
+          const scrollTop = window.scrollY || document.documentElement.scrollTop;
+          const clientHeight = document.documentElement.clientHeight;
+          
+          // Safety check for short pages
+          if (scrollHeight > clientHeight + 100) {
+            const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+            if (scrollPercentage > 0.6) {
+              handleTrigger();
+            }
+          }
+          isTicking = false;
+        });
+        isTicking = true;
       }
     };
 

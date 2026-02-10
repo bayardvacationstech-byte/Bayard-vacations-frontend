@@ -10,20 +10,19 @@ import {
 import { SITE_DATA } from "@/config";
 import JsonLd from "@/components/Seo/JsonLd";
 import Hero from "@/components/Landing/Hero";
-import Holidays from "@/components/Landing/Holidays";
-import ExploreDestinations from "@/components/Landing/Destinations/ExploreDestinations";
-import TravelStyle from "@/components/Landing/TravelStyle";
-import ThemeHighlights from "@/components/Landing/ThemeHighlights";
-import DestinationSpotlight from "@/components/Landing/Destinations/DestinationSpotlight";
-import GroupDeparture from "@/components/Landing/GroupDeparture";
-import WhyBayard from "@/components/Landing/WhyBayard";
 import dynamic from "next/dynamic";
-// import InspirationSection from "@/components/Landing/InspirationSection";
-import RegionTestimonials from "@/components/Packages/RegionTestimonials";
-import MobileAdBanner from "@/components/Landing/MobileAdBanner";
-import AdvertisementBanner from "@/components/Landing/AdvertisementBanner";
 
+const ExploreDestinations = dynamic(() => import("@/components/Landing/Destinations/ExploreDestinations"));
+const Holidays = dynamic(() => import("@/components/Landing/Holidays"));
+const TravelStyle = dynamic(() => import("@/components/Landing/TravelStyle"));
+const ThemeHighlights = dynamic(() => import("@/components/Landing/ThemeHighlights"));
+const DestinationSpotlight = dynamic(() => import("@/components/Landing/Destinations/DestinationSpotlight"));
+const GroupDeparture = dynamic(() => import("@/components/Landing/GroupDeparture"));
+const WhyBayard = dynamic(() => import("@/components/Landing/WhyBayard"));
 const InspirationSection = dynamic(() => import("@/components/Landing/InspirationSection"));
+const RegionTestimonials = dynamic(() => import("@/components/Packages/RegionTestimonials"));
+const MobileAdBanner = dynamic(() => import("@/components/Landing/MobileAdBanner"));
+const AdvertisementBanner = dynamic(() => import("@/components/Landing/AdvertisementBanner"));
 
 // Timeout wrapper to prevent indefinite hanging
 const withTimeout = (promise, timeoutMs, fallbackValue, operationName) => {
@@ -134,6 +133,13 @@ async function InspirationSectionSection() {
 const HomePage = () => {
   return (
     <>
+      {/* LCP Preload */}
+      <link 
+        rel="preload" 
+        as="image" 
+        href="https://cdn.bayardvacations.com/images/1770397299555-Screenshot_2026-02-06_195709_copy.jpg" 
+        fetchPriority="high" 
+      />
       <section>
         <Hero />
       </section>

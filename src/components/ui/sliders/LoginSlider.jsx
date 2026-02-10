@@ -4,6 +4,7 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, A11y } from "swiper/modules";
+import "swiper/css";
 
 const loginSliderData = [
   {

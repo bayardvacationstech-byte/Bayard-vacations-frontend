@@ -35,7 +35,7 @@ export const PACKAGE_STATUS = {
 };
 
 export const COLLECTIONS = {
-  PACKAGES: "packages",
+  PACKAGES: "published_packages",
   REGIONS: "regions",
   HOTELS: "hotels",
   USERS: "users",

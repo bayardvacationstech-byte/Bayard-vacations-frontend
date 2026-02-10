@@ -221,7 +221,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                 <p className="text-rose-500 font-great-vibes text-4xl md:text-6xl tracking-wide ml-1 drop-shadow-sm">
                   Handpicked
                 </p>
-                 <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-white leading-tight md:leading-[0.9] tracking-tight drop-shadow-2xl">
+                 <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-extrabold text-white leading-tight md:leading-[0.9] tracking-tight drop-shadow-2xl">
                   Romantic<br />
                   <span className="text-[#FF3366]">Getaways</span>
                 </h1>
@@ -233,7 +233,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
 
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
                 <Link href="#packages">
-                  <Button size="lg" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl bg-white text-[#FF3366] hover:bg-rose-50 shadow-lg border-none font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all w-full sm:w-auto">
+                  <Button size="lg" className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl bg-white text-[#FF3366] hover:bg-rose-50 shadow-lg border-none font-extrabold text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all w-full sm:w-auto">
                     Book Your Escape
                     <ChevronRight className="ml-1 w-4 h-4 md:w-5 md:h-5" />
                   </Button>
@@ -242,7 +242,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                   size="lg" 
                   variant="outline" 
                   onClick={() => setIsVideoModalOpen(true)}
-                  className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl border-2 border-white/60 text-white hover:bg-white/10 backdrop-blur-md font-black text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all flex items-center gap-2"
+                  className="h-11 md:h-16 px-8 md:px-10 rounded-xl md:rounded-2xl border-2 border-white/60 text-white hover:bg-white/10 backdrop-blur-md font-extrabold text-sm md:text-lg uppercase tracking-wider md:tracking-widest active:scale-95 transition-all flex items-center gap-2"
                 >
                   <Play className="w-5 h-5 fill-white" />
                   Watch Reel
@@ -266,7 +266,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                   <Star className="w-8 h-8 text-rose-300 fill-rose-300" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-black text-white">Elite Romance</h3>
+                  <h3 className="text-2xl font-extrabold text-white">Elite Romance</h3>
                   <p className="text-rose-100/70 text-sm leading-relaxed font-medium">
                     "Bayard transformed our honeymoon into a living dream. The attention to detail was magical."
                   </p>
@@ -284,7 +284,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3 opacity-60">
-          <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Unveil Romance</span>
+          <span className="text-[10px] font-extrabold uppercase tracking-[0.4em] text-white">Unveil Romance</span>
           <div className="w-[1px] h-16 bg-gradient-to-b from-white via-white/50 to-transparent" />
         </div>
       </div>
@@ -299,7 +299,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                   className="space-y-8"
                 >
                    <Heart className="w-16 h-16 text-rose-500 fill-rose-500 mx-auto" />
-                   <h2 className="text-4xl sm:text-6xl md:text-9xl font-black text-rose-950 tracking-tighter leading-tight md:leading-none italic">
+                   <h2 className="text-4xl sm:text-6xl md:text-9xl font-extrabold text-rose-950 tracking-tighter leading-tight md:leading-none italic">
                       Start Your <br />
                       <span className="text-[#FF3366] not-italic font-light block mt-4">Love Story</span>
                    </h2>
@@ -323,7 +323,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
               <button
                 onClick={() => handleTabChange("international")}
                 className={cn(
-                  "px-10 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
+                  "px-10 py-4 rounded-[1.5rem] font-extrabold text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
                   selectedTab === "international"
                     ? "bg-rose-600 text-white shadow-2xl shadow-rose-600/30 scale-105"
                     : "text-slate-500 hover:text-slate-800"
@@ -334,7 +334,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
               <button
                 onClick={() => handleTabChange("domestic")}
                 className={cn(
-                  "px-10 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
+                  "px-10 py-4 rounded-[1.5rem] font-extrabold text-sm uppercase tracking-widest transition-all duration-500 active:scale-95",
                   selectedTab === "domestic"
                     ? "bg-rose-600 text-white shadow-2xl shadow-rose-600/30 scale-105"
                     : "text-slate-500 hover:text-slate-800"
@@ -440,9 +440,9 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-full">
                   <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-rose-400">Our Romance Philosophy</span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-rose-400">Our Romance Philosophy</span>
                 </div>
-                <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9]">
+                <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tighter leading-[0.9]">
                   Why Trust Us With Your <span className="text-rose-500 italic font-serif">Heart?</span>
                 </h2>
               </div>
@@ -462,7 +462,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                       <feature.icon className="w-8 h-8 text-rose-500 group-hover:text-white transition-colors" />
                     </div>
                     <div className="space-y-2 pt-2">
-                      <h3 className="text-2xl font-black text-white tracking-tight">{feature.title}</h3>
+                      <h3 className="text-2xl font-extrabold text-white tracking-tight">{feature.title}</h3>
                       <p className="text-slate-400 font-medium leading-relaxed max-w-xl">{feature.desc}</p>
                     </div>
                   </motion.div>
@@ -483,7 +483,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-rose-950/60 to-transparent" />
                 <div className="absolute bottom-12 left-12 right-12">
                   <div className="p-8 bg-white/10 backdrop-blur-3xl rounded-[2.5rem] border border-white/20">
-                    <p className="text-2xl font-black text-white italic leading-relaxed">
+                    <p className="text-2xl font-extrabold text-white italic leading-relaxed">
                       "Distance is just a test to see how far love can travel."
                     </p>
                   </div>
@@ -500,13 +500,13 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
       <section className="section-padding bg-white relative overflow-hidden">
         <Container className="text-center">
             <div className="max-w-3xl mx-auto space-y-10">
-              <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter leading-tight">
+              <h2 className="text-4xl md:text-6xl font-extrabold text-slate-950 tracking-tighter leading-tight">
                 Ready to Write Your Next<br />
                 <span className="text-rose-500">Chapter Together?</span>
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Link href="/contact">
-                  <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-black text-lg uppercase tracking-widest transition-all">
+                  <Button size="lg" className="h-16 px-12 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white shadow-2xl shadow-rose-600/30 border-none font-extrabold text-lg uppercase tracking-widest transition-all">
                     Talk to a Specialist
                   </Button>
                 </Link>
@@ -516,7 +516,7 @@ export default function RomanticGetawaysClient({ initialPackages = [] }) {
                       <Image src={`https://i.pravatar.cc/150?u=${i + 130}`} alt="Agent" width={48} height={48} />
                     </div>
                   ))}
-                  <div className="w-12 h-12 rounded-full border-4 border-white bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-black">
+                  <div className="w-12 h-12 rounded-full border-4 border-white bg-rose-100 flex items-center justify-center text-rose-600 text-xs font-extrabold">
                     +12
                   </div>
                 </div>

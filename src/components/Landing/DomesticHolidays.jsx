@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+import "swiper/css/navigation";
 import PackageCard from "@/components/Landing/PackageCard";
 import Container from "@/components/ui/Container";
 import { Button } from "@/components/ui/button";

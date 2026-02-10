@@ -355,7 +355,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             <button
               onClick={() => setSelectedRegion("All")}
               className={cn(
-                "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-black transition-all border-b-2",
+                "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-extrabold transition-all border-b-2",
                 selectedRegion === "All" 
                   ? "text-[#d4af37] border-[#d4af37]" 
                   : "text-[#8b7355] border-transparent hover:text-[#1a1a1a]"
@@ -368,7 +368,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                 key={region}
                 onClick={() => setSelectedRegion(region)}
                 className={cn(
-                  "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-black transition-all border-b-2",
+                  "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-extrabold transition-all border-b-2",
                   selectedRegion === region 
                     ? "text-[#d4af37] border-[#d4af37]" 
                     : "text-[#8b7355] border-transparent hover:text-[#1a1a1a]"
@@ -469,7 +469,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           )}
 
           <div className="mt-12 text-center">
-            <button className="px-16 py-5 border-2 border-[#d4af37]/30 text-xs uppercase tracking-[0.4em] text-[#8b7355] font-black hover:bg-[#d4af37] hover:text-white hover:border-[#d4af37] transition-all duration-500 group rounded-lg">
+            <button className="px-16 py-5 border-2 border-[#d4af37]/30 text-xs uppercase tracking-[0.4em] text-[#8b7355] font-extrabold hover:bg-[#d4af37] hover:text-white hover:border-[#d4af37] transition-all duration-500 group rounded-lg">
               <span>View All Elite Properties</span>
             </button>
           </div>

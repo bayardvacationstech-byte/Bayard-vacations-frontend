@@ -23,33 +23,48 @@ export const ParallaxScroll = ({ images, className, onBannerImgUrl }) => {
 
   useEffect(() => {
     const container = gridRef.current;
-    const scrollSpeed = 1; // pixels per frame
-    const frameInterval = 16; // roughly 60fps
+    if (!container) return;
 
-    let scrollInterval;
+    let rafId;
+    let lastTime = 0;
+    const scrollSpeed = 60; // Pixels per second
 
-    const startScrolling = () => {
-      scrollInterval = setInterval(() => {
-        if (!isPaused && container) {
-          container.scrollTop += scrollSpeed;
+    // Cache dimensions to avoid forced reflows in the loop
+    let clientHeight = container.clientHeight;
+    let scrollHeight = container.scrollHeight;
 
-          // Reset scroll position when reaching the bottom
-          if (
-            container.scrollTop + container.clientHeight >=
-            container.scrollHeight
-          ) {
-            container.scrollTop = 0;
-          }
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        clientHeight = entry.target.clientHeight;
+        scrollHeight = entry.target.scrollHeight;
+      }
+    });
+    resizeObserver.observe(container);
+
+    const step = (timestamp) => {
+      if (!lastTime) lastTime = timestamp;
+      const deltaTime = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+
+      if (!isPaused && container) {
+        container.scrollTop += scrollSpeed * deltaTime;
+
+        // Reset scroll position when reaching the bottom
+        // Use cached values
+        if (container.scrollTop + clientHeight >= scrollHeight) {
+          container.scrollTop = 0;
         }
-      }, frameInterval);
+      }
+      rafId = requestAnimationFrame(step);
     };
 
-    startScrolling();
+    rafId = requestAnimationFrame(step);
 
     return () => {
-      clearInterval(scrollInterval);
+      cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
     };
-  }, [isPaused]); // Restart scrolling when `isPaused` changes
+  }, [isPaused]);
 
   const handleMouseEnter = () => setIsPaused(true);
   const handleMouseLeave = () => setIsPaused(false);

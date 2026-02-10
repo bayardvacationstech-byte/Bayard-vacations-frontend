@@ -245,7 +245,7 @@ export default function InspirationSection({ theme = "default", initialDestinati
       <Container className="relative z-10">
         {/* Mobile Header - Only visible on small screens */}
         <div className="lg:hidden text-center mb-8">
-           <div className="section-badge-light mb-4">
+           <div className="section-badge-light mb-4 w-fit mx-auto">
             <Mail className="size-4" />
             <span>Get in Touch</span>
           </div>
@@ -307,7 +307,7 @@ export default function InspirationSection({ theme = "default", initialDestinati
           {/* Right - Newsletter Form */}
           <div className="text-center lg:text-left">
             {/* Desktop Badge - Hidden on Mobile Header */}
-            <div className="hidden lg:flex section-badge-light mb-6">
+            <div className="hidden lg:inline-flex section-badge-light mb-6 w-fit">
               <Mail className="size-4" />
               <span>Get in Touch</span>
             </div>

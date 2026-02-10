@@ -26,7 +26,7 @@ export default function TaboolaPixel() {
   return (
     <Script
       id="taboola-pixel"
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       dangerouslySetInnerHTML={{
         __html: `
           window._tfa = window._tfa || [];

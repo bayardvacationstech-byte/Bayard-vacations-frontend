@@ -1,14 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import DesktopNavbar from '@/components/Navbars/DesktopNavbar';
 import MobileNavbar from '@/components/Navbars/MobileNavbar';
-import LeadForm from '@/components/Forms/EnquiryForm/LeadForm';
-import LeadGenerationTrigger from '@/components/Forms/EnquiryForm/LeadGenerationTrigger';
-import UnifiedContactButtons from '@/components/UnifiedContactButtons';
-import FooterClient from '@/components/layouts/FooterClient';
-import AuthModal from '@/components/Forms/LoginForm/AuthModal';
+
+// Dynamic imports for heavy layout components
+const LeadForm = dynamic(() => import('@/components/Forms/EnquiryForm/LeadForm'));
+const LeadGenerationTrigger = dynamic(() => import('@/components/Forms/EnquiryForm/LeadGenerationTrigger'));
+const UnifiedContactButtons = dynamic(() => import('@/components/UnifiedContactButtons'));
+const AuthModal = dynamic(() => import('@/components/Forms/LoginForm/AuthModal'));
 
 export default function LayoutWrapper({ children, footer }) {
   const pathname = usePathname();

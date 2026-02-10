@@ -17,22 +17,34 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      if (user) {
-        setUserInfo({
-          uid: user.uid,
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          emailVerified: user.emailVerified,
-          phoneNumber: auth.currentUser?.phoneNumber || user.phoneNumber,
-        });
-      }
-      setLoading(false);
-    });
+    // Delay initialization to avoid blocking critical path
+    const initAuth = () => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user);
+        if (user) {
+          setUserInfo({
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            emailVerified: user.emailVerified,
+            phoneNumber: auth.currentUser?.phoneNumber || user.phoneNumber,
+          });
+        }
+        setLoading(false);
+      });
+      return unsubscribe;
+    };
 
-    return () => unsubscribe();
+    let unsubscribe;
+    const timer = setTimeout(() => {
+      unsubscribe = initAuth();
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   const refreshUserInfo = async () => {

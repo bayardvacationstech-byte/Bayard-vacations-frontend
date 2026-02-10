@@ -195,6 +195,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
         <div className="absolute left-1 md:left-0 top-1/2 -translate-y-1/2 z-20">
           <button
             onClick={() => setActiveBanner((prev) => (prev - 1 + displays.length) % displays.length)}
+            aria-label="Previous destination"
             className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center bg-white text-slate-800 rounded-full shadow-xl hover:bg-brand-peach hover:text-black hover:scale-110 transition-all group"
           >
             <ChevronLeft className="w-5 h-5 md:w-7 md:h-7 group-active:scale-90 transition-transform" />
@@ -204,6 +205,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
         <div className="absolute right-1 md:right-0 top-1/2 -translate-y-1/2 z-20">
           <button
             onClick={() => setActiveBanner((prev) => (prev + 1) % displays.length)}
+            aria-label="Next destination"
             className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center bg-white text-slate-800 rounded-full shadow-xl hover:bg-brand-peach hover:text-black hover:scale-110 transition-all group"
           >
             <ChevronRight className="w-5 h-5 md:w-7 md:h-7 group-active:scale-90 transition-transform" />

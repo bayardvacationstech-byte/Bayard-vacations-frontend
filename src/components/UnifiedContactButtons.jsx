@@ -100,6 +100,7 @@ export default function UnifiedContactButtons() {
                 href="https://wa.me/919187563136"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Contact us on WhatsApp"
                 initial={{ opacity: 0, x: 0, y: 0, scale: 0.5 }}
                 animate={{ opacity: 1, x: -75, y: -25, scale: 1 }}
                 exit={{ opacity: 0, x: 0, y: 0, scale: 0.5 }}
@@ -116,6 +117,7 @@ export default function UnifiedContactButtons() {
               {/* Chatbot Option */}
               <motion.button
                 onClick={openChat}
+                aria-label="Open AI Chatbot"
                 initial={{ opacity: 0, x: 0, y: 0, scale: 0.5 }}
                 animate={{ opacity: 1, x: -25, y: -75, scale: 1 }}
                 exit={{ opacity: 0, x: 0, y: 0, scale: 0.5 }}
@@ -145,6 +147,7 @@ export default function UnifiedContactButtons() {
               <div className="bg-white rounded-[1.5rem] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-blue-50 w-[220px] sm:w-[260px] relative">
                 <button 
                   onClick={() => setShowTooltip(false)}
+                  aria-label="Close tooltip"
                   className="absolute -top-2 -right-2 bg-white rounded-full p-1.5 shadow-lg border border-gray-100 hover:bg-gray-50 transition-colors text-gray-400 hover:text-gray-600 z-20"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -168,6 +171,7 @@ export default function UnifiedContactButtons() {
         {/* Main Trigger Button */}
         <button
           onClick={toggleMenu}
+          aria-label={isMenuOpen ? "Close contact menu" : "Open contact menu"}
           className="pointer-events-auto group relative transition-all duration-300 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center"
         >
           {/* Animated background glow when closed */}
