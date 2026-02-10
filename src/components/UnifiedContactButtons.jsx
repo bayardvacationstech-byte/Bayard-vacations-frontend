@@ -13,7 +13,8 @@ export default function UnifiedContactButtons() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [isNearFooter, setIsNearFooter] = useState(false);
-  const isDragging = useRef(false);
+  const [isActuallyDragging, setIsActuallyDragging] = useState(false);
+  const isDraggingRef = useRef(false);
 
   const revealTimerRef = useRef(null);
   const hideTimerRef = useRef(null);
@@ -34,32 +35,37 @@ export default function UnifiedContactButtons() {
       setIsMenuOpen(false);
     }, 8000);
 
-    // Set drag constraints safely on the client
-    setDragConstraints({
-      left: -window.innerWidth + 100,
-      right: 20,
-      top: -window.innerHeight + 100,
-      bottom: 24
-    });
+    const updateConstraints = () => {
+      setDragConstraints({
+        left: -window.innerWidth + 80,
+        right: 0,
+        top: -window.innerHeight + 80,
+        bottom: 0
+      });
+    };
+    
+    updateConstraints();
 
     const handleScroll = () => {
       const scrollPosition = window.innerHeight + window.scrollY;
-      const threshold = document.documentElement.scrollHeight - 300; // 300px from bottom for chatbot
+      const threshold = document.documentElement.scrollHeight - 300; 
       setIsNearFooter(scrollPosition > threshold);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
+    window.addEventListener("resize", updateConstraints);
+    handleScroll(); 
 
     return () => {
       if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateConstraints);
     };
   }, [isChatOpen]);
 
   const toggleMenu = () => {
-    if (isDragging.current) return;
+    if (isDraggingRef.current) return;
     
     // Clear auto-hide timer if user manually interacts
     if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
@@ -77,19 +83,32 @@ export default function UnifiedContactButtons() {
 
   return (
     <>
+    <motion.div
+      animate={{ 
+        opacity: (isNearFooter && !isActuallyDragging) ? 0 : 1,
+        y: (isNearFooter && !isActuallyDragging) ? 40 : 0
+      }}
+      className="fixed bottom-6 right-4 z-50 pointer-events-none w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20"
+      style={{ touchAction: "none" }}
+    >
       <motion.div
         drag
-        onDragStart={() => { isDragging.current = true; }}
+        onDragStart={() => { 
+          isDraggingRef.current = true;
+          setIsActuallyDragging(true);
+        }}
         onDragEnd={() => {
-          setTimeout(() => { isDragging.current = false; }, 50);
+          setTimeout(() => { 
+            isDraggingRef.current = false;
+            setIsActuallyDragging(false);
+          }, 50);
         }}
         dragConstraints={dragConstraints}
-        dragElastic={0.1}
-        className={cn(
-          "fixed bottom-6 right-4 z-50 pointer-events-none flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 transition-all duration-300",
-          isNearFooter ? "opacity-0 translate-y-10" : "opacity-100 translate-y-0"
-        )}
-        style={{ touchAction: "none" }}
+        dragElastic={0}
+        dragMomentum={false}
+        dragTransition={{ power: 0, timeConstant: 0 }}
+        className="pointer-events-auto flex items-center justify-center w-full h-full"
+        style={{ willChange: isActuallyDragging ? "transform" : "auto" }}
       >
         {/* Expanded Menu Actions - Circular Fan-out Radiating from Center */}
         <AnimatePresence>
@@ -128,7 +147,7 @@ export default function UnifiedContactButtons() {
                   <Bot className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                 </div>
                 <span className="absolute bottom-full mb-3 bg-slate-900 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  Bayard AI
+                  Ask Mira
                 </span>
               </motion.button>
             </div>
@@ -157,8 +176,8 @@ export default function UnifiedContactButtons() {
                     <Bot className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <p className="text-[14px] font-black text-slate-900 leading-none tracking-tight">How can I help?</p>
-                    <p className="text-[11px] text-slate-500 leading-tight font-medium">Click to see contact options!</p>
+                    <p className="text-[14px] font-black text-slate-900 leading-none tracking-tight">I'm Mira!</p>
+                    <p className="text-[11px] text-slate-500 leading-tight font-medium">How can I help you today?</p>
                   </div>
                 </div>
                 {/* Arrow - Aligned to button center */}
@@ -172,7 +191,7 @@ export default function UnifiedContactButtons() {
         <button
           onClick={toggleMenu}
           aria-label={isMenuOpen ? "Close contact menu" : "Open contact menu"}
-          className="pointer-events-auto group relative transition-all duration-300 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center"
+          className="pointer-events-auto group relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center"
         >
           {/* Animated background glow when closed */}
           {!isMenuOpen && (
@@ -209,8 +228,8 @@ export default function UnifiedContactButtons() {
             </AnimatePresence>
           </div>
         </button>
+        </motion.div>
       </motion.div>
-
       <ChatbotPopup isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );
