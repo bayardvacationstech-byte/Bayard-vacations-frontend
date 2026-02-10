@@ -8,7 +8,7 @@ export const trackLeadFormConversion = () => {
   if (typeof window !== "undefined" && window.gtag) {
     try {
       window.gtag("event", "conversion", {
-        send_to: "AW-17117820324/cEZnCOW0mMcbEKTrtOI_",
+        send_to: "AW-17183307275/cEZnCOW0mMcbEKTrtOI_",
         value: 1.0,
         currency: "INR",
       });
