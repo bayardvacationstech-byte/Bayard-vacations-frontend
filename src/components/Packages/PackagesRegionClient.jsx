@@ -167,7 +167,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
 
       // 3. Detect Footer Proximity
       const scrollPosition = window.innerHeight + window.scrollY;
-      const threshold = document.documentElement.scrollHeight - 400; // 400px from bottom
+      const threshold = document.documentElement.scrollHeight - 300; // Aligned with chatbot threshold
       setIsNearFooter(scrollPosition > threshold);
     };
 
@@ -509,7 +509,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
       </section>
 
       {/* Filters and Content Section Wrapper */}
-      <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white pt-2 md:pt-6 relative">
+      <div className="bg-gradient-to-br from-orange-50/30 via-blue-50/30 to-white pt-2 md:pt-6 relative overflow-x-hidden">
         {/* Sticky Glassy Filter Card / Nav - Responsive */}
         <div className={cn(
           "sticky top-24 c-md:top-28 z-50 mb-4 px-4 transition-all duration-300",
@@ -682,12 +682,12 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
         <Container>
           {/* Mobile Filter Button - Sticky FAB Style */}
           <div className={cn(
-            "c-md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[280px] px-4 pointer-events-none transition-all duration-300",
+            "c-md:hidden fixed bottom-8 inset-x-0 mx-auto z-[100] w-fit px-4 pointer-events-none transition-all duration-300",
             isNearFooter ? "opacity-0 translate-y-10" : "opacity-100 translate-y-0"
           )}>
             <Button
               onClick={handleOpenFilterMenu}
-              className="w-4/5 pointer-events-auto flex items-center justify-center gap-2 h-12 text-xs font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 mx-auto"
+              className="px-8 pointer-events-auto flex items-center justify-center gap-2 h-12 text-xs font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 mx-auto"
             >
               <SlidersVertical className="w-4 h-4 text-white" />
               <span className="uppercase tracking-wide">Filters</span>

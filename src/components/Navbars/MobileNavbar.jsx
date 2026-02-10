@@ -20,6 +20,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { auth } from "@/firebase/firebaseConfig";
 import { signOut } from "firebase/auth";
 import MobileSearch from "../Landing/MobileSearch";
+import useModal from "@/hooks/useModal";
 
 export default function MobileNavbar() {
   const [isMenuActive, setIsMenuActive] = useState(false);
@@ -31,6 +32,7 @@ export default function MobileNavbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const { user } = useAuth();
+  const { isOpen } = useModal();
 
   /* ================= SCROLL DETECTION ================= */
   useEffect(() => {
@@ -82,7 +84,7 @@ export default function MobileNavbar() {
       {/* ================= HEADER ================= */}
       <header className={cn(
         "fixed top-0 z-[9999] w-full block lg:hidden transition-all duration-500",
-        forceHide ? "-translate-y-[110%] opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
+        (forceHide || isOpen) ? "-translate-y-[110%] opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
       )}>
         <Container>
           <div
