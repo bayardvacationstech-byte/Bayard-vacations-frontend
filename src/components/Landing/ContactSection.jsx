@@ -1,11 +1,18 @@
 import { useState } from "react";
 import Container from "@/components/ui/Container";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
+import ConfirmationDialog from "@/components/Forms/EnquiryForm/ConfirmationDialog";
+import useToggleState from "@/hooks/useToggleState";
 
 const ContactSection = () => {
+  const confirmationDialogControls = useToggleState();
 
   return (
     <section className="relative overflow-hidden bg-slate-50/30 py-24 lg:py-32">
+      <ConfirmationDialog 
+        controls={confirmationDialogControls}
+        closeModal={() => confirmationDialogControls.close()}
+      />
       <Container className="relative z-10">
         <div className="max-w-2xl mx-auto">
           
@@ -28,7 +35,7 @@ const ContactSection = () => {
               formType="potential"
               variant="section"
               hideFields={["destination"]}
-              onSuccess={() => {}}
+              onSuccess={() => confirmationDialogControls.open()}
             />
           </div>
 

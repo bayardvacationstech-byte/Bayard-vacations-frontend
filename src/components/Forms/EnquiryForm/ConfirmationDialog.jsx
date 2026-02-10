@@ -4,12 +4,16 @@ import React, { useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { trackSubmitLeadForm } from "@/utils/conversion";
 
 const ConfirmationDialog = ({ controls, closeModal }) => {
   const { state } = controls;
 
   useEffect(() => {
     if (state) {
+      // Trigger Google Ads conversion event
+      trackSubmitLeadForm();
+
       const timer = setTimeout(() => {
         closeModal();
       }, 5000); // Auto close after 5 seconds
@@ -69,8 +73,8 @@ const ConfirmationDialog = ({ controls, closeModal }) => {
         </h2>
 
         <p className="pb-12 font-sans text-[#62748E]">
-          Our representative will get in touch with you shortly. In the
-          meantime, feel free to explore our available tour packages.
+          Our travel experts will get back to you shortly to help you plan your
+          dream vacation. Keep an eye on your phone and email!
         </p>
         <div className="absolute inset-x-10 bottom-8 flex h-1 overflow-hidden rounded-full bg-gray-100">
           <div className="h-full w-1/2 origin-right animate-[progressBarLeft_5s_linear_forwards] rounded-l-full bg-brand-blue" />

@@ -25,6 +25,8 @@ import useModal from "@/hooks/useModal";
 import { usePathname } from "next/navigation";
 import Container from "@/components/ui/Container";
 import EnquiryFormFields from "@/components/Forms/EnquiryForm/EnquiryFormFields";
+import ConfirmationDialog from "@/components/Forms/EnquiryForm/ConfirmationDialog";
+import useToggleState from "@/hooks/useToggleState";
 import { toast } from "sonner";
 
 import TermsSection from "./Sections/TermsSection";
@@ -44,6 +46,7 @@ const PackagesClient = () => {
   const [showFullForm, setShowFullForm] = useState(false);
   const [activeSection, setActiveSection] = useState("overview");
   const activeSectionRef = React.useRef("overview");
+  const confirmationDialogControls = useToggleState();
 
   // Sync ref with state
   useEffect(() => {
@@ -343,7 +346,10 @@ const PackagesClient = () => {
         formType="potential"
         hideFields={["destination"]}
         initialData={{ destination: packageData?.region }}
-        onSuccess={() => setShowFullForm(false)}
+        onSuccess={() => {
+          setShowFullForm(false);
+          confirmationDialogControls.open();
+        }}
         buttonText="Send Enquiry"
         whiteLabels={false}
         brandYellow={true}
@@ -368,6 +374,10 @@ const PackagesClient = () => {
 
   return (
     <>
+      <ConfirmationDialog 
+        controls={confirmationDialogControls}
+        closeModal={() => confirmationDialogControls.close()}
+      />
       {/* 1. Hero Section - First Impression */}
       <PackageHero 
         packageData={packageData} 

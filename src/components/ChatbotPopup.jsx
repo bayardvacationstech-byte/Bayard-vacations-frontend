@@ -865,8 +865,7 @@ export default function ChatbotPopup({ isOpen, onClose }) {
         style={{ 
           height: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? viewportHeight : '80vh',
           maxHeight: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? viewportHeight : '80vh',
-          top: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? `${viewportTop}px` : undefined,
-          pointerEvents: 'auto'
+          top: isMounted && typeof window !== 'undefined' && window.innerWidth < 640 ? `${viewportTop}px` : undefined
         }}
         onClick={(e) => e.stopPropagation()}
       >
