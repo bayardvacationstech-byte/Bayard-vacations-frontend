@@ -3,6 +3,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ✅ Dynamic hosting with SSR enabled
+  output: "standalone",
   // Removed: output: "export" for dynamic rendering
 
   compiler: {
