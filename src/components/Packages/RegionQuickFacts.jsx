@@ -70,8 +70,9 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
     }
 
     // 2. Use dynamic data from whyChooseData
-    if (whyChooseData?.details?.quickFacts) {
-      return whyChooseData.details.quickFacts.map(fact => {
+    const quickFacts = whyChooseData?.quickFacts || whyChooseData?.details?.quickFacts;
+    if (quickFacts) {
+      return quickFacts.map(fact => {
         const config = getFactConfig(fact.label);
         return {
           ...fact,
@@ -101,6 +102,9 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
     return [];
   }, [mounted, regionData, whyChooseData, factSheetData]);
 
+  console.log("Debug - processedFacts:", processedFacts);
+  console.log("Debug - factSheetData:", factSheetData);
+
   // Convert regionName to slug for URLs
   const regionSlug = regionName?.toLowerCase().replace(/\s+/g, '-');
 
@@ -123,10 +127,10 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                 <div className="h-[1.5px] md:h-[2px] flex-1 md:w-12 bg-blue-600/20" />
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-2 md:mb-4">
-                About {factSheetData?.details?.hero?.title || whyChooseData?.details?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
+                About {factSheetData?.hero?.title || whyChooseData?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
               </h2>
               <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">
-                {factSheetData?.details?.hero?.subtitle || whyChooseData?.details?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
+                {factSheetData?.hero?.subtitle || whyChooseData?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
               </p>
               
               <div className="relative">
@@ -134,7 +138,7 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                   "text-slate-600 text-sm lg:text-base leading-relaxed max-w-xl transition-all duration-300",
                   !isDescExpanded && "line-clamp-3"
                 )}>
-                  {factSheetData?.details?.history?.description || whyChooseData?.details?.overview || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
+                  {factSheetData?.history?.description || whyChooseData?.overview || whyChooseData?.whyVisit || regionData?.overview || "Discover the unique culture and landscapes of this incredible region."}
                 </p>
                 <button
                   onClick={() => setIsDescExpanded(!isDescExpanded)}
@@ -216,8 +220,8 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                   
                   if (factSheetData?.details?.history?.cards) {
                     reasons = factSheetData.details.history.cards;
-                  } else if (whyChooseData?.details?.whyChooseReasons) {
-                    reasons = whyChooseData.details.whyChooseReasons;
+                  } else if (whyChooseData?.whyChooseReasons) {
+                    reasons = whyChooseData.whyChooseReasons;
                   }
                   
                   if (!reasons || reasons.length === 0) {
@@ -250,7 +254,9 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(() => {
                   // Use dynamic data from API
-                  const attractions = whyChooseData?.details?.mustExperienceAttractions;
+                  const attractions = whyChooseData?.mustExperienceAttractions;
+                  console.log("Debug - whyChooseData:", whyChooseData);
+                  console.log("Debug - Must-Experience Attractions:", attractions);
                   
                   if (!attractions || attractions.length === 0) {
                     return null; // Don't show section if no data
