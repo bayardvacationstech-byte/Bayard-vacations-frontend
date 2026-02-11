@@ -42,7 +42,7 @@ const ShareablePricing = ({ pricing, travelers }) => {
             />
           </div>
           <div className="p-6 md:p-8 relative z-10">
-            <h2 className="text-2xl md:text-3xl font-black text-brand-blue uppercase tracking-tight mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-brand-blue uppercase tracking-tight mb-6">
               Tour Cost
             </h2>
 
@@ -50,17 +50,17 @@ const ShareablePricing = ({ pricing, travelers }) => {
               {/* Table Header */}
               <div className="grid grid-cols-[1.5fr,0.8fr,1.2fr] border-b border-slate-200 bg-slate-50/50">
                 <div className="py-1.5 px-4 md:py-2 md:px-6 border-r border-slate-200">
-                  <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-brand-blue">
+                  <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-brand-blue">
                     Tourist Type
                   </span>
                 </div>
                 <div className="py-1.5 px-4 md:py-2 md:px-6 border-r border-slate-200 text-center">
-                  <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-brand-blue">
+                  <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-brand-blue">
                     Nos
                   </span>
                 </div>
                 <div className="py-1.5 px-4 md:py-2 md:px-6 text-center">
-                  <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-brand-blue">
+                  <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-brand-blue">
                     {hotelCategory}
                   </span>
                 </div>
@@ -132,10 +132,10 @@ const ShareablePricing = ({ pricing, travelers }) => {
               {/* Total Row (Blue) */}
               <div className="grid grid-cols-[2.3fr,1.2fr] bg-brand-blue text-white">
                 <div className="py-2 px-4 md:py-2.5 md:px-6 border-r border-blue-400/30 flex items-center">
-                  <span className="text-sm md:text-base font-black uppercase tracking-widest">Total</span>
+                  <span className="text-sm md:text-base font-bold uppercase tracking-widest">Total</span>
                 </div>
                 <div className="py-2 px-4 md:py-2.5 md:px-6 flex items-center justify-center">
-                  <span className="text-base md:text-lg font-black tracking-tight">{formatPrice(basePrice)}</span>
+                  <span className="text-base md:text-lg font-bold tracking-tight">{formatPrice(basePrice)}</span>
                 </div>
               </div>
 
@@ -166,10 +166,10 @@ const ShareablePricing = ({ pricing, travelers }) => {
               {/* Grand Total Row (Green) */}
               <div className="grid grid-cols-[2.3fr,1.2fr] bg-green-600 text-white">
                 <div className="py-2.5 px-5 md:py-3.5 md:px-7 border-r border-green-500/30 flex items-center">
-                  <span className="text-base md:text-lg font-black uppercase tracking-widest">Grand Total</span>
+                  <span className="text-base md:text-lg font-bold uppercase tracking-widest">Grand Total</span>
                 </div>
                 <div className="py-2.5 px-5 md:py-3.5 md:px-7 flex items-center justify-center">
-                  <span className="text-lg md:text-2xl font-black tracking-tighter">
+                  <span className="text-lg md:text-2xl font-bold tracking-tighter">
                     {symbol}{formatPrice(totalPrice)}
                   </span>
                 </div>
@@ -180,7 +180,7 @@ const ShareablePricing = ({ pricing, travelers }) => {
             <div className="flex justify-end mt-6">
               <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-50/50 rounded-full border border-blue-100/50">
                 <div className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse"></div>
-                <span className="text-[10px] font-black text-brand-blue uppercase tracking-[0.2em]">
+                <span className="text-[10px] font-bold text-brand-blue uppercase tracking-[0.2em]">
                   Pricing Subject to Availability
                 </span>
               </div>

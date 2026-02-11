@@ -49,13 +49,13 @@ const ShareableHotelInfo = ({ hotelDetails }) => {
       <div className="p-3 md:p-5 flex-1 flex flex-col">
         {/* Hotel Name & Rating Link */}
         <div className="mb-2 md:mb-4">
-          <h3 className="text-base md:text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1 mb-1">
+          <h3 className="text-base md:text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1 mb-1">
             {hotel.name}
           </h3>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-blue-50 rounded-md border border-blue-100">
               <MapPin className="w-3.5 h-3.5 text-blue-600" />
-              <span className="text-[10px] font-black text-blue-600 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
                 {hotel.category || "Premium Hotel"} • {hotel.location || hotel.city || "Top Location"}
               </span>
             </div>
@@ -72,11 +72,11 @@ const ShareableHotelInfo = ({ hotelDetails }) => {
         <div className="relative mb-2 md:mb-4">
           <div className="grid grid-cols-2 gap-2 md:gap-3 relative z-10">
             <div className="bg-slate-50/10 p-1.5 md:p-2.5 rounded-xl hover:bg-slate-50 transition-all duration-300">
-              <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Check-in</p>
+              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-0.5">Check-in</p>
               <p className="text-[10px] font-bold text-slate-900">{hotel.checkIn || "Standard"}</p>
             </div>
             <div className="bg-slate-50/10 p-1.5 md:p-2.5 rounded-xl hover:bg-slate-50 transition-all duration-300 text-right">
-              <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Check-out</p>
+              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-0.5">Check-out</p>
               <p className="text-[10px] font-bold text-slate-900">{hotel.checkOut || "Standard"}</p>
             </div>
           </div>
@@ -84,7 +84,7 @@ const ShareableHotelInfo = ({ hotelDetails }) => {
 
         {/* Amenities/Highlights - Structured 2-Column Grid */}
         <div className="pt-1 md:pt-2">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 md:mb-3">In-Stay Highlights</p>
+          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5 md:mb-3">In-Stay Highlights</p>
           <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 md:gap-x-4 md:gap-y-3">
             {(hotel.amenities || []).slice(0, 4).map((amenity, i) => (
               <div 
@@ -110,7 +110,7 @@ const ShareableHotelInfo = ({ hotelDetails }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-3">
             Your <span className="text-blue-600">Accommodation</span>
           </h2>
           <div className="w-16 h-1 bg-blue-600 mx-auto rounded-full mb-5"></div>

@@ -41,7 +41,7 @@ const FeatureCard = ({ icon: Icon, title, description, iconColor, image, index, 
         {/* Number Badge */}
         <div className="absolute top-6 left-6">
           <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl flex items-center justify-center group-hover:bg-brand-blue group-hover:border-brand-blue transition-all duration-500">
-            <span className="text-base font-extrabold text-white">{(index || 0) + 1}</span>
+            <span className="text-base font-bold text-white">{(index || 0) + 1}</span>
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@ const FeatureCard = ({ icon: Icon, title, description, iconColor, image, index, 
             {/* Glowing Accent 2.0 */}
             <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-0 bg-brand-blue rounded-full transition-all duration-500 group-hover/title:h-8 group-hover/title:shadow-[0_0_20px_rgba(1,70,179,0.8)] opacity-0 group-hover/title:opacity-100" />
             
-            <h4 className="text-xl md:text-2xl font-extrabold text-slate-900 leading-[1.1] font-poppins tracking-tight transition-all duration-500 group-hover/title:pl-4 group-hover/title:text-transparent group-hover/title:bg-clip-text group-hover/title:bg-gradient-to-r group-hover/title:from-slate-900 group-hover/title:via-brand-blue group-hover/title:to-slate-900 group-hover/title:bg-[length:200%_auto] group-hover/title:animate-[gradient-x_3s_linear_infinite]">
+            <h4 className="text-xl md:text-2xl font-bold text-slate-900 leading-[1.1] font-poppins tracking-tight transition-all duration-500 group-hover/title:pl-4 group-hover/title:text-transparent group-hover/title:bg-clip-text group-hover/title:bg-gradient-to-r group-hover/title:from-slate-900 group-hover/title:via-brand-blue group-hover/title:to-slate-900 group-hover/title:bg-[length:200%_auto] group-hover/title:animate-[gradient-x_3s_linear_infinite]">
               {title}
             </h4>
           </div>
@@ -84,7 +84,7 @@ const FeatureCard = ({ icon: Icon, title, description, iconColor, image, index, 
           <div className="relative h-1 w-10 bg-slate-100 rounded-full overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-brand-blue via-brand-peach to-brand-blue transition-all duration-[1.5s] w-0 group-hover:w-full" />
           </div>
-          <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-[0.3em] group-hover:text-brand-blue transition-colors duration-500">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] group-hover:text-brand-blue transition-colors duration-500">
             Signature Experience
           </span>
         </div>
@@ -218,9 +218,9 @@ const PackageHighlights = ({ packageData }) => {
           <div className="mb-10 md:mb-14">
             <div className="flex items-center gap-3 mb-3 animate-fadeIn">
               <div className="h-0.5 w-8 bg-brand-blue" />
-              <span className="text-brand-blue font-extrabold text-[10px] uppercase tracking-[0.4em]">Curated Experience</span>
+              <span className="text-brand-blue font-bold text-[10px] uppercase tracking-[0.4em]">Curated Experience</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 font-poppins tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 font-poppins tracking-tight">
               Package <span className="text-brand-blue italic border-b-4 border-brand-blue/20">Highlights</span>
             </h2>
           </div>
@@ -280,9 +280,9 @@ const PackageHighlights = ({ packageData }) => {
                     <div className="max-w-3xl">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="h-0.5 w-10 bg-brand-blue" />
-                        <span className="text-brand-blue font-extrabold text-xs uppercase tracking-widest">Highlight {currentImageIndex + 1}</span>
+                        <span className="text-brand-blue font-bold text-xs uppercase tracking-widest">Highlight {currentImageIndex + 1}</span>
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-4 font-poppins">
+                      <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 font-poppins">
                         {highlightsList[currentImageIndex].title}
                       </h3>
                       <p className="text-white/70 text-base md:text-lg leading-relaxed max-w-2xl font-medium">

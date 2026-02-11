@@ -106,7 +106,7 @@ const PremiumBookNowForm = ({ packageData, offerData }) => {
 
         <div className="mb-8 text-left">
           <div className="flex items-baseline gap-1 mb-1">
-            <span className="text-4xl font-black">₹ {formatPrice(finalPrice)}</span>
+            <span className="text-4xl font-bold">₹ {formatPrice(finalPrice)}</span>
           </div>
           <p className="text-white/70 text-sm font-medium">Price Per Person</p>
           
@@ -132,7 +132,7 @@ const PremiumBookNowForm = ({ packageData, offerData }) => {
           
           {finalPrice > 0 && (
             <Button
-              className="w-full bg-[#4fb800] hover:bg-[#5cd600] text-white py-7 text-lg font-black rounded-xl shadow-xl transition-all duration-300 uppercase tracking-widest"
+              className="w-full bg-[#4fb800] hover:bg-[#5cd600] text-white py-7 text-lg font-bold rounded-xl shadow-xl transition-all duration-300 uppercase tracking-widest"
               size="lg"
               asChild
             >

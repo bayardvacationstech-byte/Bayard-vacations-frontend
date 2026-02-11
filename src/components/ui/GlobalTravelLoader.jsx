@@ -103,7 +103,7 @@ const GlobalTravelLoader = ({ className, text = "Curating your experience..." })
 
       {/* TYPOGRAPHY */}
       <div className="mt-8 flex flex-col items-center">
-        <span className="text-[#0146b3] font-serif text-2xl md:text-3xl font-black tracking-widest uppercase">
+        <span className="text-[#0146b3] font-serif text-2xl md:text-3xl font-bold tracking-widest uppercase">
             Bayard Vacations
         </span>
         <div className="flex items-center gap-2 mt-3" style={{ animation: 'gt-text-fade 2s ease-in-out infinite' }}>

@@ -175,10 +175,10 @@ export default function ExplorationBundleClient() {
                 omitContainer
               />
               
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[0.9] text-shadow-adventure">
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.9] text-shadow-adventure">
                 <span className="block text-[#1d1d1d]">ADVENTURE</span>
                 <span className="block text-[#e76f51] mt-2">BUNDLES</span>
-                <span className="block text-[#2a9d8f] text-4xl md:text-5xl lg:text-6xl mt-4 font-serif italic font-normal">Curated Expeditions</span>
+                <span className="block text-[#2a9d8f] text-4xl md:text-5xl lg:text-6xl mt-4 font-serif italic font-bold">Curated Expeditions</span>
               </h1>
               
               <p className="text-lg text-gray-600 max-w-lg leading-relaxed font-medium">
@@ -204,16 +204,16 @@ export default function ExplorationBundleClient() {
               {/* Bundle Stats */}
               <div className="flex space-x-8 pt-8 border-t-2 border-[#e76f51]/20">
                 <div className="text-center">
-                  <div className="text-4xl font-black text-[#e76f51]">12</div>
-                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-extrabold">Bundle Options</div>
+                  <div className="text-4xl font-bold text-[#e76f51]">12</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Bundle Options</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-black text-[#2a9d8f]">4-14</div>
-                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-extrabold">Days Range</div>
+                  <div className="text-4xl font-bold text-[#2a9d8f]">4-14</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Days Range</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-black text-[#e9c46a]">3-5</div>
-                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-extrabold">Activities Per Bundle</div>
+                  <div className="text-4xl font-bold text-[#e9c46a]">3-5</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Activities Per Bundle</div>
                 </div>
               </div>
             </motion.div>
@@ -261,7 +261,7 @@ export default function ExplorationBundleClient() {
                 className="absolute top-1/2 left-0 transform -translate-y-1/2 z-20"
               >
                 <div className="bg-[#2a9d8f] text-white p-5 rounded-2xl shadow-xl transform -rotate-12 border-2 border-white/20">
-                  <div className="text-2xl font-extrabold">Best</div>
+                  <div className="text-2xl font-bold">Best</div>
                   <div className="text-[10px] uppercase tracking-widest font-bold">Value</div>
                 </div>
               </motion.div>
@@ -303,7 +303,7 @@ export default function ExplorationBundleClient() {
             <button 
               onClick={() => handleTabChange("international")}
               className={cn(
-                "px-8 py-3 rounded-full font-extrabold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
+                "px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
                 selectedTab === "international" 
                   ? "bg-[#1d1d1d] text-white shadow-lg shadow-[#1d1d1d]/20" 
                   : "bg-stone-100 text-[#1d1d1d]/60 hover:bg-stone-200"
@@ -315,7 +315,7 @@ export default function ExplorationBundleClient() {
             <button 
               onClick={() => handleTabChange("domestic")}
               className={cn(
-                "px-8 py-3 rounded-full font-extrabold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
+                "px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
                 selectedTab === "domestic" 
                   ? "bg-[#1d1d1d] text-white shadow-lg shadow-[#1d1d1d]/20" 
                   : "bg-stone-100 text-[#1d1d1d]/60 hover:bg-stone-200"
@@ -332,7 +332,7 @@ export default function ExplorationBundleClient() {
       <section id="bundles" className="section-padding map-texture overflow-hidden gpu-accelerated" ref={packagesRef}>
         <Container>
           <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-5xl md:text-7xl font-extrabold text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
+            <h2 className="text-5xl md:text-7xl font-bold text-[#1d1d1d] mb-6">Ready-Made Adventures</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">Curated combinations of our most popular explorations. Just book and go.</p>
           </div>
 
@@ -393,7 +393,7 @@ export default function ExplorationBundleClient() {
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-2xl h-14 w-14 font-extrabold transition-all border-2",
+                            "cursor-pointer rounded-2xl h-14 w-14 font-bold transition-all border-2",
                             currentPage === page 
                               ? "bg-white text-[#e76f51] border-[#e76f51] shadow-xl" 
                               : "border-[#1d1d1d]/10 text-gray-400 hover:bg-stone-50"
@@ -441,7 +441,7 @@ export default function ExplorationBundleClient() {
               <div className="w-20 h-20 mx-auto mb-8 bg-[#e76f51] rounded-2xl rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:rotate-6 transition-transform">
                 <Box className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-extrabold mb-4 uppercase tracking-wider">All-Inclusive</h3>
+              <h3 className="text-2xl font-bold mb-4 uppercase tracking-wider">All-Inclusive</h3>
               <p className="text-gray-400 text-lg leading-relaxed">Gear, guides, permits, and accommodation bundled. Just bring your sense of adventure.</p>
             </motion.div>
             
@@ -452,7 +452,7 @@ export default function ExplorationBundleClient() {
               <div className="w-20 h-20 mx-auto mb-8 bg-[#2a9d8f] rounded-2xl -rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:-rotate-6 transition-transform">
                 <Route className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-extrabold mb-4 uppercase tracking-wider">Curated Routes</h3>
+              <h3 className="text-2xl font-bold mb-4 uppercase tracking-wider">Curated Routes</h3>
               <p className="text-gray-400 text-lg leading-relaxed">Expert-planned itineraries connecting multiple destinations efficiently.</p>
             </motion.div>
             
@@ -463,7 +463,7 @@ export default function ExplorationBundleClient() {
               <div className="w-20 h-20 mx-auto mb-8 bg-[#e9c46a] rounded-2xl rotate-3 flex items-center justify-center text-3xl shadow-xl group-hover:rotate-6 transition-transform">
                 <Users className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-extrabold mb-4 uppercase tracking-wider">Small Groups</h3>
+              <h3 className="text-2xl font-bold mb-4 uppercase tracking-wider">Small Groups</h3>
               <p className="text-gray-400 text-lg leading-relaxed">Maximum 12 explorers per bundle for intimate, flexible adventures.</p>
             </motion.div>
           </div>
@@ -475,10 +475,10 @@ export default function ExplorationBundleClient() {
         <Container>
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-12">
             <div>
-              <h2 className="text-4xl md:text-6xl font-extrabold text-[#1d1d1d] mb-4">Ready for Discovery?</h2>
+              <h2 className="text-4xl md:text-6xl font-bold text-[#1d1d1d] mb-4">Ready for Discovery?</h2>
               <p className="text-xl text-gray-500 font-medium">Join the community of modern explorers today.</p>
             </div>
-            <button className="px-12 py-5 bg-[#e76f51] text-white rounded-xl font-extrabold text-xl uppercase tracking-widest hover:bg-[#d65a3c] transition-all shadow-2xl shadow-[#e76f51]/30">
+            <button className="px-12 py-5 bg-[#e76f51] text-white rounded-xl font-bold text-xl uppercase tracking-widest hover:bg-[#d65a3c] transition-all shadow-2xl shadow-[#e76f51]/30">
               Start Your Expedition
             </button>
           </div>

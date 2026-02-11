@@ -250,7 +250,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
             {/* Left Column: Header Area (60% width on desktop) */}
             <div className="lg:col-span-3">
               <div className="relative pl-6 border-l-4 border-brand-blue py-2 mb-6">
-                <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+                <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight leading-tight">
                   {selectedRegion !== "all" ? `Experience ${regionName}` : "Curated Experiences"}
                 </h2>
                 <div className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium">
@@ -273,7 +273,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <MapPin className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{availableCities.length} CITIES EXPLORED</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">{availableCities.length} CITIES EXPLORED</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Diverse urban gems and hidden villages awaiting your visit.</p>
                       </div>
                     </div>
@@ -283,7 +283,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <Compass className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{filteredActivities.length} DYNAMIC ACTIVITIES</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">{filteredActivities.length} DYNAMIC ACTIVITIES</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">From high-octane adventures to spiritual retreats.</p>
                       </div>
                     </div>
@@ -293,7 +293,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <Package className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{categories.length} ACTIVITY THEMES</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">{categories.length} ACTIVITY THEMES</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Hand-vetted categories including Culture and Nature.</p>
                       </div>
                     </div>
@@ -303,7 +303,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <Star className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">PREMIUM SELECTION</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">PREMIUM SELECTION</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Physically verified for safety and quality standards.</p>
                       </div>
                     </div>
@@ -313,7 +313,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <Calendar className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">OPTIMAL TRAVEL TIME</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">OPTIMAL TRAVEL TIME</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Best experienced during seasonal festival peaks.</p>
                       </div>
                     </div>
@@ -323,7 +323,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <CheckCircle className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">EASY BOOKING PROCESS</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">EASY BOOKING PROCESS</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Seamless concierge-led service for your peace of mind.</p>
                       </div>
                     </div>
@@ -336,7 +336,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <MapPin className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">50+ GLOBAL DESTINATIONS</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">50+ GLOBAL DESTINATIONS</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">From the Caucasus peaks to the beaches of Bali.</p>
                       </div>
                     </div>
@@ -346,7 +346,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <Compass className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">{allActivities.length} CURATED ACTIVITIES</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">{allActivities.length} CURATED ACTIVITIES</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Our ever-expanding library of luxury experiences.</p>
                       </div>
                     </div>
@@ -356,7 +356,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         <Star className="w-5 h-5" />
                       </div>
                       <div>
-                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.15em] mb-1">LUXURY VETTED STANDARDS</h3>
+                        <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em] mb-1">LUXURY VETTED STANDARDS</h3>
                         <p className="text-[11px] text-slate-500 font-medium leading-relaxed max-w-[180px]">Uncompromising standards for service and safety.</p>
                       </div>
                     </div>
@@ -454,7 +454,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                       <div className="flex flex-col md:hidden gap-3 py-2">
                         {/* Mobile Region Select */}
                         <div>
-                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 pl-1">REGION</label>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 pl-1">REGION</label>
                           <select 
                             onChange={(e) => setSelectedRegion(e.target.value)}
                             className="w-full bg-slate-100 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#0146b3]/20 focus:border-[#0146b3] cursor-pointer transition-all"
@@ -469,7 +469,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
 
                         {/* Mobile Travel Type */}
                         <div>
-                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 pl-1">TRAVEL TYPE</label>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 pl-1">TRAVEL TYPE</label>
                           <div className="inline-flex p-1 bg-gray-100 rounded-full w-full">
                             {["all", "International", "Domestic"].map((type) => (
                               <button
@@ -513,7 +513,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 overflow-hidden">
                         {/* Collections / Activity Themes (All devices) */}
                         <div className="min-w-0">
-                          <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 md:hidden pl-1">ACTIVITY THEMES</label>
+                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:hidden pl-1">ACTIVITY THEMES</label>
                           <div className="flex items-center gap-3">
                             <button
                               onClick={() => setSelectedCategory("all")}
@@ -548,7 +548,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                         {/* City Filter Pills (All devices) */}
                         {availableCities.length > 0 && (
                           <div className="min-w-0 animate-in fade-in slide-in-from-top-2 duration-300">
-                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 md:hidden pl-1">EXPLORE CITIES</label>
+                            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 md:hidden pl-1">EXPLORE CITIES</label>
                             <div className="flex items-center gap-3">
                               <button
                                 onClick={() => setSelectedCity("all")}
@@ -592,17 +592,17 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                   <span className="uppercase text-[9px] md:text-[10px] tracking-widest text-slate-400 whitespace-nowrap">Filtered By:</span>
                   <div className="flex gap-2 flex-nowrap md:flex-wrap">
                     {selectedLocationType !== "all" && (
-                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedLocationType}</span>
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-[#0146b3]/10 text-[#0146b3] rounded-lg text-[9px] md:text-[10px] font-bold uppercase whitespace-nowrap">{selectedLocationType}</span>
                     )}
                     {selectedCategory !== "all" && (
-                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue/10 text-brand-blue rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCategory}</span>
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue/10 text-brand-blue rounded-lg text-[9px] md:text-[10px] font-bold uppercase whitespace-nowrap">{selectedCategory}</span>
                     )}
-                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-800 text-white rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedRegion}</span>
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-800 text-white rounded-lg text-[9px] md:text-[10px] font-bold uppercase whitespace-nowrap">{selectedRegion}</span>
                     {selectedCity !== "all" && (
-                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue text-white rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap">{selectedCity}</span>
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-brand-blue text-white rounded-lg text-[9px] md:text-[10px] font-bold uppercase whitespace-nowrap">{selectedCity}</span>
                     )}
                     {searchTerm && (
-                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-100 text-slate-600 rounded-lg text-[9px] md:text-[10px] font-black uppercase whitespace-nowrap truncate max-w-[100px]">"{searchTerm}"</span>
+                      <span className="px-2 py-0.5 md:px-3 md:py-1 bg-slate-100 text-slate-600 rounded-lg text-[9px] md:text-[10px] font-bold uppercase whitespace-nowrap truncate max-w-[100px]">"{searchTerm}"</span>
                     )}
                   </div>
                   <button 
@@ -613,7 +613,7 @@ export default function ActivitiesListingClient({ regionSlug, initialRegions = [
                       setSelectedCity("all");
                       setSearchTerm("");
                     }}
-                    className="text-brand-red hover:underline text-[9px] md:text-[10px] font-black uppercase px-2 py-1 rounded-md hover:bg-red-50 transition-colors ml-auto md:ml-0"
+                    className="text-brand-red hover:underline text-[9px] md:text-[10px] font-bold uppercase px-2 py-1 rounded-md hover:bg-red-50 transition-colors ml-auto md:ml-0"
                   >
                     Reset
                   </button>

@@ -19,7 +19,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 print:py-6">
       {/* Section Header */}
       <div className="mb-6 md:mb-10 print:mb-4">
-        <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 tracking-tight">
+        <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
           Your <span className="text-brand-blue">Day-by-Day</span> Itinerary
         </h2>
         <p className="text-slate-600 text-sm md:text-lg font-medium">
@@ -44,7 +44,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
               <div className="hidden md:block absolute left-0 top-0 print:block">
                 <div className="relative w-16 h-16 gradient-btn rounded-2xl flex flex-col items-center justify-center shadow-md border border-white/20 print:w-12 print:h-12 print:rounded-xl print:shadow-none">
                   <span className="text-xs font-bold text-white/70 uppercase tracking-widest print:text-[10px]">Day</span>
-                  <span className="text-2xl font-black text-white leading-none print:text-xl">{day.day.toString().padStart(2, '0')}</span>
+                  <span className="text-2xl font-bold text-white leading-none print:text-xl">{day.day.toString().padStart(2, '0')}</span>
                 </div>
               </div>
               
@@ -60,7 +60,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                         {/* Mobile Day Indicator */}
-                        <div className="md:hidden flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-blue/30 rounded-lg text-[10px] font-black text-brand-blue uppercase tracking-wider print:flex">
+                        <div className="md:hidden flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-blue/30 rounded-lg text-[10px] font-bold text-brand-blue uppercase tracking-wider print:flex">
                           Day {day.day.toString().padStart(2, '0')}
                         </div>
                         
@@ -108,7 +108,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
                                   </div>
                                   
                                   <p className="flex flex-col gap-0.5">
-                                    <span className="font-black text-brand-blue tracking-tight text-sm md:text-base print:text-sm">
+                                    <span className="font-bold text-brand-blue tracking-tight text-sm md:text-base print:text-sm">
                                       {act.activity}
                                     </span>
                                     <span className="text-slate-600 font-medium text-sm md:text-base print:text-sm">
@@ -129,7 +129,7 @@ const ShareableItineraryTimeline = ({ itineraries, isPrintMode = false }) => {
                                 <span className="text-xl print:text-lg">🏨</span>
                               </div>
                               <div>
-                                <span className="block text-[10px] font-black text-blue-400 uppercase tracking-widest">Overnight Stay</span>
+                                <span className="block text-[10px] font-bold text-blue-400 uppercase tracking-widest">Overnight Stay</span>
                                 <span className="block text-sm font-bold text-slate-900 print:text-xs">{day.overnight}</span>
                               </div>
                             </div>

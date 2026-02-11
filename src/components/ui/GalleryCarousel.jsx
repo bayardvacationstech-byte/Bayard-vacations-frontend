@@ -54,7 +54,7 @@ const GalleryCarousel = ({
           <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/80 to-transparent p-6">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               <div>
-                <h2 className="text-2xl md:text-3xl font-black text-white">{title}</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white">{title}</h2>
                 <p className="text-white/60 text-sm font-medium mt-1">
                   {currentIndex + 1} / {images.length}
                 </p>

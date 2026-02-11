@@ -204,7 +204,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
                 onClick={() => setShowFilters(!showFilters)}
                 variant="outline"
                 className={cn(
-                  "h-12 px-6 rounded-2xl border-slate-200/60 gap-3 text-[10px] font-extrabold uppercase tracking-widest transition-all",
+                  "h-12 px-6 rounded-2xl border-slate-200/60 gap-3 text-[10px] font-bold uppercase tracking-widest transition-all",
                   showFilters ? "bg-slate-900 text-white shadow-2xl scale-[1.02]" : "bg-white hover:bg-slate-50"
                 )}
               >
@@ -230,7 +230,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
                       {/* Destination */}
                       <div className="space-y-3">
-                        <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                           <MapPin className="w-3.5 h-3.5 text-brand-blue" /> Specific Region
                         </label>
                         <Select value={selectedRegion} onValueChange={(v) => { setSelectedRegion(v); setCurrentPage(1); }}>
@@ -245,7 +245,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
 
                       {/* Style */}
                       <div className="space-y-3">
-                        <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                           <Compass className="w-3.5 h-3.5 text-brand-blue" /> Travel Style
                         </label>
                         <Select value={selectedTheme} onValueChange={(v) => { setSelectedTheme(v); setCurrentPage(1); }}>
@@ -260,7 +260,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
 
                       {/* Sorting */}
                       <div className="space-y-3">
-                        <label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                           <Filter className="w-3.5 h-3.5 text-brand-blue" /> Order By
                         </label>
                         <Select value={sortOption} onValueChange={(v) => { setSortOption(v); setCurrentPage(1); }}>
@@ -277,7 +277,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
 
                       {/* Reset */}
                       <div className="flex gap-2">
-                         <Button onClick={handleReset} variant="outline" className="flex-1 h-11 rounded-xl border-slate-200 bg-slate-50/50 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 hover:text-red-500 transition-all">
+                         <Button onClick={handleReset} variant="outline" className="flex-1 h-11 rounded-xl border-slate-200 bg-slate-50/50 text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:text-red-500 transition-all">
                            Clear All
                          </Button>
                       </div>
@@ -319,9 +319,9 @@ const ExploreListing = ({ initialPackages = [] }) => {
                   <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mb-8 border border-slate-100 shadow-inner">
                     <Package className="w-10 h-10 text-slate-200" />
                   </div>
-                  <h3 className="text-2xl font-extrabold text-slate-900 mb-3 tracking-tight italic font-serif">A Little Too Unique...</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight italic font-serif">A Little Too Unique...</h3>
                   <p className="text-slate-500 max-w-md mx-auto text-sm font-medium">We couldn't find any journeys matching your exact filters. Try broadening your horizon!</p>
-                  <Button onClick={handleReset} variant="link" className="mt-4 text-brand-blue font-extrabold uppercase tracking-widest text-[10px]">Back to Collections</Button>
+                  <Button onClick={handleReset} variant="link" className="mt-4 text-brand-blue font-bold uppercase tracking-widest text-[10px]">Back to Collections</Button>
                 </div>
               )}
             </AnimatePresence>
@@ -346,7 +346,7 @@ const ExploreListing = ({ initialPackages = [] }) => {
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-2xl h-12 w-12 font-extrabold text-xs transition-all border-slate-200",
+                            "cursor-pointer rounded-2xl h-12 w-12 font-bold text-xs transition-all border-slate-200",
                             currentPage === page ? "bg-slate-900 text-white shadow-xl scale-110 border-transparent" : "hover:bg-slate-50"
                           )}
                           onClick={() => { setCurrentPage(page); window.scrollTo({ top: 300, behavior: "smooth" }); }}

@@ -22,9 +22,9 @@ const ShareableImportantNotes = ({ notes }) => {
         <div className="mb-8 md:mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-blue/10 border border-brand-blue/20 rounded-full mb-4">
             <Info className="w-4 h-4 text-brand-blue" />
-            <span className="text-xs font-black text-brand-blue uppercase tracking-[0.2em]">Travel Support</span>
+            <span className="text-xs font-bold text-brand-blue uppercase tracking-[0.2em]">Travel Support</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-none">
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight leading-none">
             Important <span className="text-brand-blue">Notes</span>
           </h2>
           <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl">
@@ -56,7 +56,7 @@ const ShareableImportantNotes = ({ notes }) => {
               <div className="mt-12 flex justify-center">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="group relative px-8 py-4 bg-white border border-slate-200 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] overflow-hidden transition-all duration-300 hover:border-brand-blue hover:text-brand-blue hover:shadow-lg active:scale-95"
+                  className="group relative px-8 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-[10px] uppercase tracking-[0.3em] overflow-hidden transition-all duration-300 hover:border-brand-blue hover:text-brand-blue hover:shadow-lg active:scale-95"
                 >
                   <span className="relative z-10 flex items-center gap-3">
                     {isExpanded ? (

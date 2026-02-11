@@ -55,10 +55,10 @@ const LoginContent = () => {
           <div className="text-white space-y-6 lg:space-y-8 animate-fadeInLeft">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/20 backdrop-blur-md border border-brand-blue/30">
               <div className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-blue-400">Exclusive Access</span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">Exclusive Access</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] tracking-tighter">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tighter">
               Travel To Your <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-400 to-emerald-400">
                 Dream Location
@@ -89,10 +89,10 @@ const LoginContent = () => {
             
             <div className="relative bg-white/95 backdrop-blur-xl p-8 md:p-12 rounded-[40px] shadow-2xl shadow-black/40 border border-white/50">
               <div className="mb-10 text-center lg:text-left">
-                <span className="inline-block px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <span className="inline-block px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue text-[10px] font-bold uppercase tracking-[0.2em] mb-4">
                   Welcome Back
                 </span>
-                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Login to your account</h2>
+                <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Login to your account</h2>
               </div>
 
               <LoginForm callbackUrl={callbackUrl} />

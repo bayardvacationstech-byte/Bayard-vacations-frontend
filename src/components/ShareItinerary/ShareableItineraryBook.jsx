@@ -172,7 +172,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
     >
       <div className="max-w-full mx-auto px-4 md:px-8 lg:px-12">
         <div className="text-center mb-8 md:mb-10 px-4">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-3">
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tighter mb-3">
             Customized <span className="text-brand-blue uppercase">Itinerary</span>
           </h2>
           <p className="text-slate-500 font-medium italic text-lg md:text-xl">The pages of your journey unfold...</p>
@@ -208,7 +208,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                        </div>
                        
                        <div className="relative pt-8">
-                          <span className="block text-[10px] lg:text-xs font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">India's Premiere</span>
+                          <span className="block text-[10px] lg:text-xs font-bold text-brand-blue/40 uppercase tracking-[0.5em] mb-4">India's Premiere</span>
                           <h1 className="font-poppins text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
                             Bespoke <br/>
                             <span className="font-great-vibes text-brand-blue text-5xl lg:text-6xl xl:text-7x relative -top-3 -left-1">Itinerary</span>
@@ -224,10 +224,10 @@ const ShareableItineraryBook = ({ itineraries }) => {
                       ].map((usp, i) => (
                         <div key={i} className="relative pl-12 group/usp cursor-default">
                           {/* Faint Numeral Marker */}
-                          <span className="absolute -left-4 top-0 text-7xl lg:text-8xl font-poppins font-black text-slate-100/80 -z-10 transition-colors group-hover/usp:text-brand-blue/5">
+                          <span className="absolute -left-4 top-0 text-7xl lg:text-8xl font-poppins font-bold text-slate-100/80 -z-10 transition-colors group-hover/usp:text-brand-blue/5">
                             0{i + 1}
                           </span>
-                          <h3 className="text-xs lg:text-sm font-black text-slate-900 uppercase tracking-[0.3em] mb-1 group-hover/usp:text-brand-blue transition-colors">
+                          <h3 className="text-xs lg:text-sm font-bold text-slate-900 uppercase tracking-[0.3em] mb-1 group-hover/usp:text-brand-blue transition-colors">
                             {usp.title}
                           </h3>
                           <p className="text-[10px] lg:text-xs font-medium text-slate-400 italic tracking-wide">
@@ -238,7 +238,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                     </div>
 
                     <div className="pt-8 border-t border-slate-100/50">
-                       <p className="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] leading-relaxed max-w-[240px]">
+                       <p className="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] leading-relaxed max-w-[240px]">
                          NO ONE IN INDIA CUSTOMIZES YOUR JOURNEY <span className="text-brand-blue">LIKE BAYARD</span>.
                        </p>
                     </div>
@@ -260,7 +260,7 @@ const ShareableItineraryBook = ({ itineraries }) => {
                        </div>
                        
                        <div className="relative pt-8">
-                          <span className="block text-[10px] lg:text-xs font-poppins font-black text-brand-blue/40 uppercase tracking-[0.5em] mb-4">Final Chapter</span>
+                          <span className="block text-[10px] lg:text-xs font-poppins font-bold text-brand-blue/40 uppercase tracking-[0.5em] mb-4">Final Chapter</span>
                           <h1 className="font-poppins text-4xl lg:text-5xl xl:text-6xl text-slate-900 leading-[1.1] tracking-tight">
                             A Lifetime <br/>
                             <span className="font-great-vibes text-brand-blue text-5xl lg:text-6xl xl:text-7x relative -top-3 -right-1">Of Memories</span>
@@ -273,13 +273,13 @@ const ShareableItineraryBook = ({ itineraries }) => {
                        <p className="text-xl lg:text-2xl font-poppins text-slate-800 italic leading-relaxed">
                          "Traveling – it leaves you speechless, then turns you into a storyteller."
                        </p>
-                       <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">
+                       <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">
                          Ibnu Battuta
                        </p>
                     </div>
 
                     <div className="pt-8 border-t border-slate-100/50">
-                       <p className="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] leading-relaxed max-w-[240px] ml-auto">
+                       <p className="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-[0.4em] leading-relaxed max-w-[240px] ml-auto">
                          CURATED EXCLUSIVELY FOR YOUR <span className="text-brand-blue">NEXT ADVENTURE</span>.
                        </p>
                     </div>
@@ -355,7 +355,7 @@ const PageContent = ({ data, side }) => {
         <div className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center shadow-xl mb-8 border border-white/30 rotate-3">
            <span className="text-5xl">✈️</span>
         </div>
-        <h2 className="text-5xl font-black text-center mb-4 tracking-tighter leading-tight">
+        <h2 className="text-5xl font-bold text-center mb-4 tracking-tighter leading-tight">
           {data.title}
         </h2>
         <div className="w-16 h-1 bg-white/50 rounded-full mb-8" />
@@ -374,10 +374,10 @@ const PageContent = ({ data, side }) => {
       <div className={`h-full w-full flex flex-col items-center justify-start bg-white p-6 lg:p-10 pt-6 lg:pt-12 text-center overflow-y-auto custom-scrollbar ${side === 'back' ? 'border-r border-slate-100' : ''}`}>
          <div className="w-20 h-20 lg:w-24 lg:h-24 bg-brand-blue/5 rounded-2xl lg:rounded-3xl flex flex-col items-center justify-center border border-brand-blue/20 mb-2 lg:mb-4 shadow-inner relative group">
             <div className="absolute inset-0 bg-brand-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl lg:rounded-3xl" />
-            <span className="relative z-10 text-[10px] lg:text-[11px] font-black text-brand-blue/80 uppercase tracking-[0.3em] mb-0.5 lg:mb-1">Day</span>
-            <span className="relative z-10 text-4xl lg:text-5xl font-black text-brand-blue leading-none tracking-tighter">{displayDay}</span>
+            <span className="relative z-10 text-[10px] lg:text-[11px] font-bold text-brand-blue/80 uppercase tracking-[0.3em] mb-0.5 lg:mb-1">Day</span>
+            <span className="relative z-10 text-4xl lg:text-5xl font-bold text-brand-blue leading-none tracking-tighter">{displayDay}</span>
          </div>
-          <h3 className="text-xl lg:text-3xl font-black text-slate-900 mb-2 lg:mb-4 px-4 leading-tight tracking-tight">
+          <h3 className="text-xl lg:text-3xl font-bold text-slate-900 mb-2 lg:mb-4 px-4 leading-tight tracking-tight">
             {title}
           </h3>
 
@@ -394,7 +394,7 @@ const PageContent = ({ data, side }) => {
                     >
                        <img src={img.url} alt={img.title} className="w-full h-full object-cover" />
                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-white text-xs font-black uppercase tracking-widest leading-none">{img.title}</p>
+                          <p className="text-white text-xs font-bold uppercase tracking-widest leading-none">{img.title}</p>
                        </div>
                     </div>
                   ))}
@@ -433,7 +433,7 @@ const PageContent = ({ data, side }) => {
                       >
                         <img src={img.url} alt={img.title} className="w-full h-full object-cover" />
                         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-white text-xs font-black uppercase tracking-widest leading-none">{img.title}</p>
+                          <p className="text-white text-xs font-bold uppercase tracking-widest leading-none">{img.title}</p>
                         </div>
                       </div>
                     );
@@ -447,7 +447,7 @@ const PageContent = ({ data, side }) => {
            <div className="bg-blue-50/50 px-3 py-2 lg:px-5 lg:py-3 rounded-2xl border border-blue-100 mt-2 lg:mt-4 flex items-center gap-3 shadow-sm">
               <span className="text-2xl">🏨</span>
               <div>
-                 <span className="block text-[9px] font-black text-blue-400 uppercase tracking-widest text-left">Overnight in</span>
+                 <span className="block text-[9px] font-bold text-blue-400 uppercase tracking-widest text-left">Overnight in</span>
                  <span className="block text-sm font-bold text-slate-700 text-left">{overnight}</span>
               </div>
            </div>
@@ -465,7 +465,7 @@ const PageContent = ({ data, side }) => {
             <div className="w-8 h-8 rounded-full bg-brand-blue flex items-center justify-center shadow-lg">
                <span className="text-white text-xs font-bold">✨</span>
             </div>
-            <h4 className="text-sm font-black text-slate-900 uppercase tracking-[0.2em]">Daily Highlights</h4>
+            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-[0.2em]">Daily Highlights</h4>
          </div>
 
          <div className="flex-1 overflow-y-auto space-y-6 lg:space-y-10 pr-2 custom-scrollbar">
@@ -477,7 +477,7 @@ const PageContent = ({ data, side }) => {
                  <div className="absolute left-0 top-1 w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-brand-blue/5 border border-brand-blue/10 flex items-center justify-center transition-all group-hover:bg-brand-blue group-hover:scale-110 shadow-sm">
                     <div className="w-2 h-2 rounded-full bg-brand-blue group-hover:bg-white" />
                  </div>
-                 <p className="text-base font-black text-slate-900 mb-1 tracking-tight group-hover:text-brand-blue transition-colors">
+                 <p className="text-base font-bold text-slate-900 mb-1 tracking-tight group-hover:text-brand-blue transition-colors">
                     {act.activity}
                  </p>
                  <p className="text-sm text-slate-500 font-medium leading-relaxed italic">
@@ -500,10 +500,10 @@ const PageContent = ({ data, side }) => {
           <div className="relative z-10 w-24 h-24 bg-white/50 backdrop-blur-md rounded-3xl flex items-center justify-center shadow-sm mb-8 border border-emerald-100/50">
              <span className="text-5xl drop-shadow-sm">🏆</span>
           </div>
-          <h2 className="relative z-10 text-4xl font-black text-slate-900 mb-3 tracking-tighter">
+          <h2 className="relative z-10 text-4xl font-bold text-slate-900 mb-3 tracking-tighter">
              Adventure Completed
           </h2>
-          <p className="relative z-10 text-emerald-600 font-black uppercase tracking-[0.4em] text-[10px] mb-8 opacity-80">Memories to last a lifetime</p>
+          <p className="relative z-10 text-emerald-600 font-bold uppercase tracking-[0.4em] text-[10px] mb-8 opacity-80">Memories to last a lifetime</p>
           <div className="relative z-10 w-16 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent mx-auto" />
       </div>
     );
@@ -518,7 +518,7 @@ const DayNavigation = ({ currentDayIdx, goToDay, itineraries }) => (
   <div className="hidden md:flex mb-6 lg:mb-12 flex-wrap justify-center gap-1.5 lg:gap-2 px-4">
     <button
       onClick={() => goToDay(-1)}
-      className={`px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl text-[10px] lg:text-xs font-black uppercase tracking-widest transition-all duration-300 border ${
+      className={`px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl text-[10px] lg:text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${
         currentDayIdx === -1 
           ? 'bg-brand-blue text-white border-brand-blue shadow-lg scale-105 lg:scale-110' 
           : 'bg-white text-slate-400 border-slate-100 hover:border-brand-blue hover:text-brand-blue'
@@ -530,7 +530,7 @@ const DayNavigation = ({ currentDayIdx, goToDay, itineraries }) => (
       <button
         key={idx}
         onClick={() => goToDay(idx)}
-        className={`px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl text-[10px] lg:text-xs font-black uppercase tracking-widest transition-all duration-300 border ${
+        className={`px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl text-[10px] lg:text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${
           currentDayIdx === idx 
             ? 'bg-brand-blue text-white border-brand-blue shadow-lg scale-105 lg:scale-110' 
             : 'bg-white text-slate-400 border-slate-100 hover:border-brand-blue hover:text-brand-blue'
@@ -574,7 +574,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
               <div className="flex items-center justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1.5">
-                    <div className="px-3 py-0.5 bg-brand-blue/5 border border-brand-blue/20 rounded-full text-[9px] font-black uppercase tracking-widest text-brand-blue">
+                    <div className="px-3 py-0.5 bg-brand-blue/5 border border-brand-blue/20 rounded-full text-[9px] font-bold uppercase tracking-widest text-brand-blue">
                       Day {(day?.day || idx + 1).toString().padStart(2, '0')}
                     </div>
                     {day.overnight && (
@@ -584,7 +584,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
                       </div>
                     )}
                   </div>
-                  <h3 className="text-lg font-black leading-tight tracking-tight text-brand-blue">
+                  <h3 className="text-lg font-bold leading-tight tracking-tight text-brand-blue">
                     {day.title}
                   </h3>
                 </div>
@@ -618,7 +618,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
                     <div className="w-6 h-6 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue text-[10px]">
                       <span>📝</span>
                     </div>
-                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">The Plan</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">The Plan</span>
                   </div>
 
                   {day.activities?.map((act, actIdx) => (
@@ -629,7 +629,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
                       <div className="absolute left-0 top-1 w-5 h-5 rounded-lg bg-brand-blue/5 border border-brand-blue/10 flex items-center justify-center">
                         <div className="w-1 h-1 rounded-full bg-brand-blue" />
                       </div>
-                      <p className="text-sm font-black text-slate-900 mb-0.5 leading-snug">{act.activity}</p>
+                      <p className="text-sm font-bold text-slate-900 mb-0.5 leading-snug">{act.activity}</p>
                       <p className="text-xs text-slate-500 font-medium leading-relaxed italic">{act.description}</p>
                     </div>
                   ))}
@@ -645,7 +645,7 @@ const MobileJournal = ({ itineraries, currentDayIdx, setCurrentDayIdx }) => {
           <span className="text-2xl">🏅</span>
         </div>
         <div>
-          <h4 className="text-base font-black text-slate-900 leading-tight">Adventure Complete</h4>
+          <h4 className="text-base font-bold text-slate-900 leading-tight">Adventure Complete</h4>
           <p className="text-emerald-700 text-[10px] font-bold uppercase tracking-widest">Memories for life</p>
         </div>
       </div>

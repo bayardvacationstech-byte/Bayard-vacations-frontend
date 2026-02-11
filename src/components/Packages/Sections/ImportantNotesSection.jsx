@@ -61,7 +61,7 @@ const ImportantNotesSection = ({ packageData }) => {
             <div className="pt-4 border-t border-slate-50">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="group flex justify-end items-center gap-1 text-brand-blue font-black text-[10px] md:text-xs uppercase tracking-widest w-full"
+                className="group flex justify-end items-center gap-1 text-brand-blue font-bold text-[10px] md:text-xs uppercase tracking-widest w-full"
               >
                 {isExpanded ? (
                   <>

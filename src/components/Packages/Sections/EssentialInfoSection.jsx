@@ -141,7 +141,7 @@ const EssentialInfoSection = ({ packageData }) => {
                   <p className="text-xs text-slate-500 font-medium">1 USD ≈ 33-36 THB</p>
                 </div>
               </div>
-              <span className="text-lg font-black text-emerald-900">Thai Baht (฿ THB)</span>
+              <span className="text-lg font-bold text-emerald-900">Thai Baht (฿ THB)</span>
             </div>
             
             <div className="flex items-center justify-between">
@@ -154,7 +154,7 @@ const EssentialInfoSection = ({ packageData }) => {
                   <p className="text-xs text-slate-500 font-medium">Per person estimate</p>
                 </div>
               </div>
-              <span className="text-lg font-black text-slate-900">$50-100 <span className="text-xs font-medium text-slate-500">/day</span></span>
+              <span className="text-lg font-bold text-slate-900">$50-100 <span className="text-xs font-medium text-slate-500">/day</span></span>
             </div>
             
             <div className="flex items-center justify-between">
@@ -167,7 +167,7 @@ const EssentialInfoSection = ({ packageData }) => {
                   <p className="text-xs text-slate-500 font-medium">Service gratuity</p>
                 </div>
               </div>
-              <span className="text-lg font-black text-slate-900">10% <span className="text-xs font-medium text-slate-500">Appreciated</span></span>
+              <span className="text-lg font-bold text-slate-900">10% <span className="text-xs font-medium text-slate-500">Appreciated</span></span>
             </div>
           </div>
         </div>

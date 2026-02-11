@@ -62,7 +62,7 @@ export default function TeamBento() {
                 Meet Our Team
               </span>
             </div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-3">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-3">
               Meet The Dream Team
             </h2>
             <p className="text-sm md:text-lg text-slate-600">Click a department to filter, or view all</p>
@@ -144,7 +144,7 @@ export default function TeamBento() {
 
                   {/* Name & Role */}
                   <div className="transform group-hover:-translate-y-2 transition-transform">
-                    <h3 className={`font-black mb-0.5 md:mb-1 ${member.size === 'large' ? 'text-lg sm:text-2xl md:text-4xl' : 'text-sm sm:text-base md:text-xl'}`}>
+                    <h3 className={`font-bold mb-0.5 md:mb-1 ${member.size === 'large' ? 'text-lg sm:text-2xl md:text-4xl' : 'text-sm sm:text-base md:text-xl'}`}>
                       {member.name}
                     </h3>
                     <p className={`font-semibold opacity-90 ${member.size === 'large' ? 'text-xs sm:text-sm md:text-lg' : 'text-xs sm:text-sm'}`}>

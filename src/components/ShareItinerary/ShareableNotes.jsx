@@ -14,7 +14,7 @@ const ShareableNotes = ({ notes = [] }) => {
             <AlertCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
               Important <span className="text-amber-500">Notes</span>
             </h2>
             <p className="text-slate-500 font-medium">Please review these details for a smooth travel experience</p>

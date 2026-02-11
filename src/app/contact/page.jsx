@@ -35,7 +35,7 @@ const ContactPage = () => {
           <p className="font-great-vibes text-2xl md:text-3xl text-white/90 mb-4 tracking-wider animate-fadeInUp">
             Let's Start Your Journey
           </p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tight uppercase animate-fadeInUp delay-100 italic">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight uppercase animate-fadeInUp delay-100 italic">
             Contact <span className="inline-block px-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-600 drop-shadow-md">Us</span>
           </h1>
           <p className="text-sm md:text-base text-white/70 leading-relaxed max-w-xl mx-auto font-medium uppercase tracking-[0.2em] animate-fadeInUp delay-200">
@@ -91,7 +91,7 @@ const ContactPage = () => {
                     {item.icon}
                   </div>
                   <div>
-                    <h4 className="text-[#0046b8] text-lg font-black uppercase tracking-wider mb-1">{item.title}</h4>
+                    <h4 className="text-[#0046b8] text-lg font-bold uppercase tracking-wider mb-1">{item.title}</h4>
                     <p className="text-white text-sm font-medium leading-relaxed max-w-[250px]">{item.content}</p>
                   </div>
                 </div>

@@ -246,7 +246,7 @@ const InclusionsSection = ({ packageData }) => {
   //         <div className="w-10 h-10 bg-brand-blue/10 rounded-xl flex items-center justify-center">
   //           <ListChecks className="w-5 h-5 text-brand-blue" />
   //         </div>
-  //         <h4 className="text-lg font-black text-slate-900 tracking-tight">Points to <span className="text-brand-blue">Remember</span></h4>
+  //         <h4 className="text-lg font-bold text-slate-900 tracking-tight">Points to <span className="text-brand-blue">Remember</span></h4>
   //       </div>
   //       <ul className="space-y-3">
   //         {displayPoints.map((point, idx) => (
@@ -315,7 +315,7 @@ const InclusionsSection = ({ packageData }) => {
            <div className="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center">
              <ShieldAlert className="w-5 h-5 text-rose-500" />
            </div>
-           <h4 className="text-lg font-black text-slate-900 tracking-tight">Cancellation <span className="text-rose-500">Policy</span></h4>
+           <h4 className="text-lg font-bold text-slate-900 tracking-tight">Cancellation <span className="text-rose-500">Policy</span></h4>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {policy.tiers?.map((tier, idx) => (
@@ -355,13 +355,13 @@ const InclusionsSection = ({ packageData }) => {
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200 w-fit uppercase tracking-widest">
               <Briefcase className="w-3 h-3" /> Smart Packing
             </div>
-            <h3 className="text-xl font-black text-slate-900 tracking-tight">Travel Preparation <span className="text-brand-blue">Guide</span></h3>
+            <h3 className="text-xl font-bold text-slate-900 tracking-tight">Travel Preparation <span className="text-brand-blue">Guide</span></h3>
             <p className="text-slate-500 text-xs font-medium">Everything you need before departure</p>
           </div>
 
           {/* Packing Checklist */}
           <div className="mb-6">
-            <h4 className="text-sm font-black text-slate-700 mb-3 flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-brand-blue" /> What to Pack
             </h4>
             <div className="grid grid-cols-1 gap-3">
@@ -412,13 +412,13 @@ const InclusionsSection = ({ packageData }) => {
 
           {/* Pre-Departure Timeline */}
           <div>
-            <h4 className="text-sm font-black text-slate-700 mb-3 flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
               <UserCheck className="w-4 h-4 text-brand-blue" /> Pre-Departure Timeline
             </h4>
             <div className="grid grid-cols-1 gap-3">
               {timeline.map((item, idx) => (
                 <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-left">
-                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{item.timeframe || item.time}</span>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{item.timeframe || item.time}</span>
                   <p className="text-xs font-bold text-slate-900 mt-0.5">{item.task}</p>
                 </div>
               ))}
@@ -443,7 +443,7 @@ const InclusionsSection = ({ packageData }) => {
           <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
             <AlertTriangle className="w-5 h-5 text-orange-500" />
           </div>
-          <h4 className="text-lg font-black text-slate-900 tracking-tight">Logistics & <span className="text-orange-500">Safety</span></h4>
+          <h4 className="text-lg font-bold text-slate-900 tracking-tight">Logistics & <span className="text-orange-500">Safety</span></h4>
         </div>
         <ul className="space-y-3">
           {logistics.map((item, idx) => (
@@ -484,7 +484,7 @@ const InclusionsSection = ({ packageData }) => {
           <div className="w-10 h-10 bg-emerald-600/10 rounded-xl flex items-center justify-center">
             <Wallet className="w-5 h-5 text-emerald-600" />
           </div>
-          <h4 className="text-lg font-black text-slate-900 tracking-tight">Money & <span className="text-emerald-600">Expenses</span></h4>
+          <h4 className="text-lg font-bold text-slate-900 tracking-tight">Money & <span className="text-emerald-600">Expenses</span></h4>
         </div>
         <ul className="space-y-3">
           <li className="flex gap-3 items-start text-sm text-slate-600 font-medium leading-relaxed group/note text-left">
@@ -516,7 +516,7 @@ const InclusionsSection = ({ packageData }) => {
           <div className="w-10 h-10 bg-slate-900/10 rounded-xl flex items-center justify-center">
             <FileText className="w-5 h-5 text-slate-900" />
           </div>
-          <h4 className="text-lg font-black text-slate-900 tracking-tight">Terms & <span className="text-slate-500">Conditions</span></h4>
+          <h4 className="text-lg font-bold text-slate-900 tracking-tight">Terms & <span className="text-slate-500">Conditions</span></h4>
         </div>
         
         <ul className="space-y-3">
@@ -553,7 +553,7 @@ const InclusionsSection = ({ packageData }) => {
                <CheckCircle2 className="w-5 h-5 text-white" />
              </div>
              <div>
-               <h5 className="text-lg font-black text-white tracking-tight leading-tight">What's Included</h5>
+               <h5 className="text-lg font-bold text-white tracking-tight leading-tight">What's Included</h5>
                <p className="text-blue-100/80 text-[10px] font-bold uppercase tracking-widest">{packageData?.includes?.length || 0} benefits included</p>
              </div>
           </div>
@@ -578,7 +578,7 @@ const InclusionsSection = ({ packageData }) => {
               <div className="pt-2 px-2">
                 <button
                   onClick={() => setIsIncludesExpanded(!isIncludesExpanded)}
-                  className="w-full py-3 text-blue-600 font-black text-xs uppercase tracking-widest hover:bg-blue-50 rounded-xl transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 text-blue-600 font-bold text-xs uppercase tracking-widest hover:bg-blue-50 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
                   {isIncludesExpanded ? 'Collapse' : `View All (${packageData.includes.length})`}
                   <svg className={`w-4 h-4 transition-transform ${isIncludesExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -598,7 +598,7 @@ const InclusionsSection = ({ packageData }) => {
                <X className="w-5 h-5 text-white" />
              </div>
              <div>
-               <h5 className="text-lg font-black text-white tracking-tight leading-tight">Exclusions</h5>
+               <h5 className="text-lg font-bold text-white tracking-tight leading-tight">Exclusions</h5>
                <p className="text-rose-100/80 text-[10px] font-bold uppercase tracking-widest">Items you'll need to arrange</p>
              </div>
           </div>
@@ -623,7 +623,7 @@ const InclusionsSection = ({ packageData }) => {
               <div className="pt-2 px-2">
                 <button
                   onClick={() => setIsExcludesExpanded(!isExcludesExpanded)}
-                  className="w-full py-3 text-rose-500 font-black text-xs uppercase tracking-widest hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 text-rose-500 font-bold text-xs uppercase tracking-widest hover:bg-rose-50 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
                   {isExcludesExpanded ? 'Collapse' : `View All (${packageData.excludes.length})`}
                   <svg className={`w-4 h-4 transition-transform ${isExcludesExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -646,7 +646,7 @@ const InclusionsSection = ({ packageData }) => {
       <div className="mt-8 space-y-8">
         {/* 3. TRAVEL PREPARATION GUIDE - TABS ON MOBILE */}
         {/* <div>
-          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+          <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
              <span className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
                <Briefcase className="w-5 h-5 text-orange-500" />
              </span>
@@ -694,7 +694,7 @@ const InclusionsSection = ({ packageData }) => {
                         onClick={() => togglePrepSection(prepTab, idx)}
                         className="w-full flex items-center justify-between p-4 text-left transition-colors hover:bg-slate-100/50"
                       >
-                        <h5 className="font-black text-slate-900 text-[11px] uppercase tracking-widest flex items-center gap-3">
+                        <h5 className="font-bold text-slate-900 text-[11px] uppercase tracking-widest flex items-center gap-3">
                           <div className={`w-2 h-2 rounded-full transition-colors ${isExpanded ? 'bg-orange-500' : 'bg-slate-300'}`}></div>
                           {sec.subtitle}
                         </h5>
@@ -754,7 +754,7 @@ const InclusionsSection = ({ packageData }) => {
 
                   return (
                     <div key={idx} className="space-y-4">
-                       <h5 className="font-black text-slate-900 text-base flex items-center gap-3 border-l-4 border-brand-blue pl-4">
+                       <h5 className="font-bold text-slate-900 text-base flex items-center gap-3 border-l-4 border-brand-blue pl-4">
                           {sec.subtitle}
                        </h5>
                        <ul className="space-y-4 ml-7">
@@ -768,7 +768,7 @@ const InclusionsSection = ({ packageData }) => {
                        {sec.items.length > 4 && (
                           <button
                             onClick={() => togglePrepSection(prepTab, idx)}
-                            className="ml-7 mt-2 text-[10px] font-black uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
+                            className="ml-7 mt-2 text-[10px] font-bold uppercase tracking-widest text-brand-blue flex items-center gap-1.5"
                           >
                             {isExpanded ? (
                               <>
@@ -791,7 +791,7 @@ const InclusionsSection = ({ packageData }) => {
 
         {/* 2. POINTS TO REMEMBER - TABS ON MOBILE */}
         {/* <div id="points-to-remember">
-          <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
+          <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6 flex items-center gap-3">
              <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                <ListChecks className="w-5 h-5 text-brand-blue" />
              </span>

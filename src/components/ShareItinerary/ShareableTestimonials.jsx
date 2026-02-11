@@ -44,7 +44,7 @@ const ShareableTestimonials = ({ testimonials = [] }) => {
       <div className="max-w-7xl mx-auto px-6">
         {/* Simple & Clear Header */}
         <div className="mb-8">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight">
             Traveler <span className="text-brand-blue">Stories</span>
           </h2>
           <p className="text-slate-500 mt-4 text-lg font-medium">Real photos and reviews from our guests.</p>
@@ -53,7 +53,7 @@ const ShareableTestimonials = ({ testimonials = [] }) => {
         {/* 1. Photo Gallery - Simple Carousel */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 flex items-center gap-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 flex items-center gap-4">
               <span className="w-8 h-[1px] bg-slate-200"></span>
               Guest Moments
             </h3>
@@ -127,7 +127,7 @@ const ShareableTestimonials = ({ testimonials = [] }) => {
         {/* 2. Written Reviews - Simple Carousel */}
         <div className="relative">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 flex items-center gap-4">
+            <h3 className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 flex items-center gap-4">
               <span className="w-8 h-[1px] bg-slate-200"></span>
               Detailed Feedback
             </h3>
@@ -206,11 +206,11 @@ const ShareableTestimonials = ({ testimonials = [] }) => {
                   </p>
 
                   <div className="flex items-center gap-4 pt-6 border-t border-slate-50">
-                    <div className="size-10 rounded-full bg-slate-50 flex items-center justify-center text-brand-blue font-black text-xs border border-slate-100 shadow-sm shrink-0">
+                    <div className="size-10 rounded-full bg-slate-50 flex items-center justify-center text-brand-blue font-bold text-xs border border-slate-100 shadow-sm shrink-0">
                       {(testimonial.name || 'G').charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-sm font-black text-slate-900 leading-tight">
+                      <h4 className="text-sm font-bold text-slate-900 leading-tight">
                         {testimonial.name}
                       </h4>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">

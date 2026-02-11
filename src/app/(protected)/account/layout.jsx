@@ -37,8 +37,8 @@ const AccountLayout = ({ children }) => {
         <div className="relative z-10">
           <Container>
             <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-700">
-              <span className="text-white/50 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Personal Dashboard</span>
-              <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight leading-none">
+              <span className="text-white/50 text-[10px] font-bold uppercase tracking-[0.4em] mb-4 block">Personal Dashboard</span>
+              <h1 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight leading-none">
                 Hi, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">{userInfo.displayName || "Traveler"}</span>
               </h1>
             </div>
@@ -54,7 +54,7 @@ const AccountLayout = ({ children }) => {
                       <Link
                         href={link.href}
                         className={cn(
-                          "block text-center py-3.5 px-4 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300",
+                          "block text-center py-3.5 px-4 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all duration-300",
                           isActive 
                             ? "bg-white text-brand-blue shadow-lg scale-[1.02]" 
                             : "text-white/70 hover:text-white hover:bg-white/5"

@@ -155,7 +155,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
           {/* Left Side - Content */}
           <div className="lg:max-w-xxl text-center lg:text-left">
             <div className="inline-block mb-3 md:mb-4">
-              <h2 className="text-brand-peach font-black tracking-[0.05em] md:tracking-[0.08em] uppercase text-2xl md:text-4xl lg:text-5xl drop-shadow-[0_0_20px_rgba(242,194,136,0.5)]">
+              <h2 className="text-brand-peach font-bold tracking-[0.05em] md:tracking-[0.08em] uppercase text-2xl md:text-4xl lg:text-5xl drop-shadow-[0_0_20px_rgba(242,194,136,0.5)]">
                 Bayard Luxury Escapes
               </h2>
               <div className="h-0.5 w-full bg-gradient-to-r from-transparent via-brand-peach/50 to-transparent mt-1 md:mt-2"></div>
@@ -239,7 +239,7 @@ export default function DestinationSpotlight({ initialRegions = [], eliteEscapeP
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-100" />
               <div className="absolute bottom-4 md:bottom-10 left-0 right-0 text-center">
-                <p className="text-white text-sm sm:text-lg md:text-2xl lg:text-3xl font-black tracking-tighter uppercase">{display.name}</p>
+                <p className="text-white text-sm sm:text-lg md:text-2xl lg:text-3xl font-bold tracking-tighter uppercase">{display.name}</p>
               </div>
               
               {activeBanner === index && (

@@ -197,17 +197,17 @@ export default function EducationalToursClient() {
                 <div className="relative pl-6">
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-amber-400 rounded-full" />
                   <div className="text-3xl font-serif font-bold text-indigo-900">150+</div>
-                  <div className="text-sm text-slate-500 uppercase tracking-wider text-[10px] font-bold">Institutions</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider text-[10px] font-semibold">Institutions</div>
                 </div>
                 <div className="relative pl-6">
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-amber-400 rounded-full" />
                   <div className="text-3xl font-serif font-bold text-amber-600">4.9</div>
-                  <div className="text-sm text-slate-500 uppercase tracking-wider text-[10px] font-bold">Academic Rating</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider text-[10px] font-semibold">Academic Rating</div>
                 </div>
                 <div className="relative pl-6">
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-amber-400 rounded-full" />
                   <div className="text-3xl font-serif font-bold text-indigo-900">12k+</div>
-                  <div className="text-sm text-slate-500 uppercase tracking-wider text-[10px] font-bold">Students Traveled</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider text-[10px] font-semibold">Students Traveled</div>
                 </div>
               </div>
             </motion.div>
@@ -259,7 +259,7 @@ export default function EducationalToursClient() {
                   </div>
                   <div>
                     <p className="text-sm text-slate-700 italic font-serif leading-snug">"The world is a book and those who do not travel read only one page."</p>
-                    <div className="text-[10px] text-amber-600 mt-2 font-extrabold uppercase tracking-widest">— St. Augustine</div>
+                    <div className="text-[10px] text-amber-600 mt-2 font-bold uppercase tracking-widest">— St. Augustine</div>
                   </div>
                 </div>
               </div>

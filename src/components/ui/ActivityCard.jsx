@@ -129,7 +129,7 @@ const ActivityCard = ({
           </button>
 
           {/* Title */}
-          <h3 className="text-2xl md:text-3xl font-black text-white leading-tight drop-shadow-lg mb-1 line-clamp-1">
+          <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight drop-shadow-lg mb-1 line-clamp-1">
             {data.title || data.name}
           </h3>
 
@@ -137,7 +137,7 @@ const ActivityCard = ({
           <div className="md:hidden flex flex-row gap-2 pt-1">
             <button 
               onClick={handleCtaClick}
-              className="flex-1 px-2 py-3 rounded-xl bg-gradient-to-r from-yellow-400/90 to-yellow-500/90 backdrop-blur-md shadow-lg text-slate-900 font-extrabold uppercase tracking-widest text-[11px] transition-all active:scale-95 whitespace-nowrap"
+              className="flex-1 px-2 py-3 rounded-xl bg-gradient-to-r from-yellow-400/90 to-yellow-500/90 backdrop-blur-md shadow-lg text-slate-900 font-bold uppercase tracking-widest text-[11px] transition-all active:scale-95 whitespace-nowrap"
             >
               {ctaLabel}
             </button>
@@ -166,7 +166,7 @@ const ActivityCard = ({
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
-                <h4 className="text-xl md:text-2xl font-black text-white leading-tight line-clamp-1">
+                <h4 className="text-xl md:text-2xl font-bold text-white leading-tight line-clamp-1">
                   {data.title || data.name}
                 </h4>
                 <p className="text-xs font-bold text-white/70 uppercase tracking-widest mt-1">
@@ -247,7 +247,7 @@ const ActivityCard = ({
           <div className="pt-4 border-t border-white/20 flex flex-col gap-2">
             <button 
               onClick={handleCtaClick}
-              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95"
+              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-lg text-slate-900 font-bold uppercase tracking-widest text-sm transition-all duration-300 hover:scale-[1.02] active:scale-95"
             >
               {ctaLabel}
             </button>

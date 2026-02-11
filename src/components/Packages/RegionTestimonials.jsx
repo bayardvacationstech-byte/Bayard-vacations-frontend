@@ -397,7 +397,7 @@ export default function RegionTestimonials({ initialReviews = EMPTY_ARRAY, regio
                   
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-2 group-even:flex-row-reverse">
-                      <h4 className="text-slate-900 text-[11px] font-black tracking-wider uppercase">{authorName}</h4>
+                      <h4 className="text-slate-900 text-[11px] font-bold tracking-wider uppercase">{authorName}</h4>
                       <span className="text-[9px] font-bold text-slate-400 uppercase">{review.relative_time_description}</span>
                     </div>
                     

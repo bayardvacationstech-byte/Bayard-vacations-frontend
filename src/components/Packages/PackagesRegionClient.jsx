@@ -419,7 +419,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-full bg-brand-blue backdrop-blur-md px-6 py-2 text-xs font-black uppercase tracking-[0.2em] text-white shadow-2xl border border-white/20"
+                className="rounded-full bg-brand-blue backdrop-blur-md px-6 py-2 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-2xl border border-white/20"
               >
                 Group Departure
               </motion.div>
@@ -667,7 +667,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                       <Button
                         onClick={handleReset}
                         variant="ghost"
-                        className="h-9 px-4 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-orange-500 hover:bg-gradient-to-r hover:from-orange-500/5 hover:to-blue-500/5 rounded-xl transition-all self-end"
+                        className="h-9 px-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-orange-500 hover:bg-gradient-to-r hover:from-orange-500/5 hover:to-blue-500/5 rounded-xl transition-all self-end"
                       >
                         Reset
                       </Button>
@@ -716,7 +716,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
           )}>
             <Button
               onClick={handleOpenFilterMenu}
-              className="w-4/5 pointer-events-auto flex items-center justify-center gap-2 h-12 text-xs font-black bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 mx-auto"
+              className="w-4/5 pointer-events-auto flex items-center justify-center gap-2 h-12 text-xs font-bold bg-brand-blue/95 hover:bg-brand-blue backdrop-blur-md text-white rounded-full shadow-[0_20px_50px_-10px_rgba(37,99,235,0.5)] border border-white/20 transition-all active:scale-95 mx-auto"
             >
               <SlidersVertical className="w-4 h-4 text-white" />
               <span className="uppercase tracking-wide">Filters</span>
@@ -1064,7 +1064,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                       <SlidersVertical className="w-5 h-5 text-orange-500" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900 leading-tight">Filters</h3>
+                      <h3 className="text-xl font-bold text-slate-900 leading-tight">Filters</h3>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Find your perfect trip</p>
                     </div>
                   </div>
@@ -1082,7 +1082,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                       <CircleDollarSign className="w-4 h-4 text-orange-500" />
-                      <label className="text-xs font-black text-slate-900 uppercase tracking-widest">Price Range</label>
+                      <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">Price Range</label>
                     </div>
                     <div className="flex items-center gap-3">
                       <Input
@@ -1107,7 +1107,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4 text-blue-500" />
-                      <label className="text-xs font-black text-slate-900 uppercase tracking-widest">Duration</label>
+                      <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">Duration</label>
                     </div>
                     <Select value={selectedDuration} onValueChange={setSelectedDuration}>
                       <SelectTrigger className="h-12 rounded-xl border-slate-200 bg-slate-50 font-bold">
@@ -1127,7 +1127,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                     <div className="flex flex-col gap-4">
                       <div className="flex items-center gap-2">
                         <Compass className="w-4 h-4 text-orange-500" />
-                        <label className="text-xs font-black text-slate-900 uppercase tracking-widest">Travel Theme</label>
+                        <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">Travel Theme</label>
                       </div>
                       <Select value={selectedTheme} onValueChange={setSelectedTheme}>
                         <SelectTrigger className="h-12 rounded-xl border-slate-200 bg-slate-50 font-bold">
@@ -1147,7 +1147,7 @@ export default function PackagesRegionClient({ initialRegionData, bannerData }) 
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                       <Filter className="w-4 h-4 text-slate-400" />
-                      <label className="text-xs font-black text-slate-900 uppercase tracking-widest">Sort By</label>
+                      <label className="text-xs font-bold text-slate-900 uppercase tracking-widest">Sort By</label>
                     </div>
                     <Select value={sortOption} onValueChange={setSortOption}>
                       <SelectTrigger className="h-12 rounded-xl border-slate-200 bg-slate-50 font-bold">

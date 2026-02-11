@@ -96,7 +96,7 @@ const TermsSection = () => {
           <div className="space-y-6 md:space-y-8">
             {displayTerms.map((section, index) => (
               <div key={index} className="group">
-                <h3 className="font-black text-slate-900 text-base md:text-lg mb-3 flex items-start gap-3">
+                <h3 className="font-bold text-slate-900 text-base md:text-lg mb-3 flex items-start gap-3">
                   <span className="flex-shrink-0 w-7 h-7 rounded-full bg-brand-blue/10 text-brand-blue flex items-center justify-center text-sm font-bold mt-0.5">
                     {index + 1}
                   </span>
@@ -121,7 +121,7 @@ const TermsSection = () => {
             <div className="mt-8 flex justify-center">
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="flex items-center gap-2 px-8 py-3 bg-slate-50 hover:bg-slate-100 text-brand-blue font-black text-xs uppercase tracking-[0.2em] rounded-full border border-slate-200 transition-all active:scale-95 group"
+                className="flex items-center gap-2 px-8 py-3 bg-slate-50 hover:bg-slate-100 text-brand-blue font-bold text-xs uppercase tracking-[0.2em] rounded-full border border-slate-200 transition-all active:scale-95 group"
               >
                 {isExpanded ? (
                   <>

@@ -6,7 +6,7 @@ const ShareableInclusions = ({ inclusions = [], exclusions = [] }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-3 md:mb-4 print:mb-4">
-          <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-1 tracking-tight">
+          <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-1 tracking-tight">
             What's <span className="text-brand-blue">Included</span>
           </h2>
           <p className="text-slate-600 text-sm md:text-lg font-medium">
@@ -23,7 +23,7 @@ const ShareableInclusions = ({ inclusions = [], exclusions = [] }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 print:text-lg">
+              <h3 className="text-xl md:text-2xl font-bold text-slate-900 print:text-lg">
                 Included in Package
               </h3>
             </div>
@@ -52,7 +52,7 @@ const ShareableInclusions = ({ inclusions = [], exclusions = [] }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </div>
-              <h3 className="text-xl md:text-2xl font-black text-slate-900 print:text-lg">
+              <h3 className="text-xl md:text-2xl font-bold text-slate-900 print:text-lg">
                 Not Included
               </h3>
             </div>

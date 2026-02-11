@@ -63,14 +63,14 @@ const GroupPackageCard = ({ item, className }) => {
     if (title.toLowerCase().includes("group")) {
       const parts = title.split(/(Group)/i);
       return (
-        <h2 className="text-xl md:text-2xl font-black text-white drop-shadow-md leading-tight tracking-tight line-clamp-2">
+        <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-md leading-tight tracking-tight line-clamp-2">
           {parts[0]}<br className="hidden md:block" />
           <span className="text-blue-400">{parts[1]} {parts.slice(2).join("")}</span>
         </h2>
       );
     }
     return (
-      <h2 className="text-xl md:text-2xl font-black text-white drop-shadow-md leading-tight tracking-tight line-clamp-2">
+      <h2 className="text-xl md:text-2xl font-bold text-white drop-shadow-md leading-tight tracking-tight line-clamp-2">
         {title}
       </h2>
     );
@@ -108,12 +108,12 @@ const GroupPackageCard = ({ item, className }) => {
         <div className="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6 flex flex-col gap-2 md:gap-3">
           {/* Location & Duration Tags */}
           <div className="flex items-center gap-3 mb-1">
-            <div className="flex items-center gap-1.5 text-white text-[11px] font-black uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <div className="flex items-center gap-1.5 text-white text-[11px] font-bold uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               <MapPin className="w-4 h-4 text-red-500 drop-shadow-sm" />
               <span>{(item.region || "").split("-").join(" ")}</span>
             </div>
             <span className="text-white/30">•</span>
-            <div className="flex items-center gap-1.5 text-white text-[11px] font-black uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <div className="flex items-center gap-1.5 text-white text-[11px] font-bold uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               <Clock className="w-4 h-4 text-blue-500 drop-shadow-sm" />
               <span>{item.days}D / {item.nights}N</span>
             </div>
@@ -132,16 +132,16 @@ const GroupPackageCard = ({ item, className }) => {
             <div className="flex flex-col">
               {item.offerPrice > 0 || item.basePrice > 0 ? (
                 <>
-                  <p className="text-white/90 text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-md">Starting from</p>
+                  <p className="text-white/90 text-[10px] font-bold tracking-[0.3em] uppercase drop-shadow-md">Starting from</p>
                   <div className="flex items-baseline gap-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
-                    <span className="text-2xl md:text-3xl font-black text-white tracking-tighter">
+                    <span className="text-2xl md:text-3xl font-bold text-white tracking-tighter">
                       ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                     </span>
                   </div>
                 </>
               ) : (
                 <div className="flex items-baseline gap-1 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
-                  <span className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase whitespace-nowrap">
+                  <span className="text-xl md:text-2xl font-bold text-white tracking-tighter uppercase whitespace-nowrap">
                     On Request
                   </span>
                 </div>
@@ -165,7 +165,7 @@ const GroupPackageCard = ({ item, className }) => {
           <div className="w-16 h-16 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center mb-6">
             <Compass className="w-8 h-8 text-blue-500" />
           </div>
-          <h3 className="text-white text-xl font-black mb-4 tracking-tight drop-shadow-md">
+          <h3 className="text-white text-xl font-bold mb-4 tracking-tight drop-shadow-md">
             The Journey Includes
           </h3>
           <ul className="space-y-3 mb-8">
@@ -176,7 +176,7 @@ const GroupPackageCard = ({ item, className }) => {
               </li>
             ))}
           </ul>
-          <div className="px-8 py-4 bg-white text-slate-950 rounded-full font-black text-xs uppercase tracking-[0.2em] transform hover:scale-105 transition-all active:scale-95">
+          <div className="px-8 py-4 bg-white text-slate-950 rounded-full font-bold text-xs uppercase tracking-[0.2em] transform hover:scale-105 transition-all active:scale-95">
              Explore Itinerary
           </div>
         </div>

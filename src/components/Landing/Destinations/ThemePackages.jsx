@@ -215,7 +215,7 @@ export default function ThemePackages() {
       <div className="relative z-20 pt-8 pb-4 md:pt-12 md:pb-6 px-6 md:px-20">
         <div className="flex items-center justify-center gap-3 mb-2">
           <Compass className="w-6 h-6 md:w-8 md:h-8 text-white" />
-          <h2 className="text-3xl md:text-5xl font-black text-white pb-1">
+          <h2 className="text-3xl md:text-5xl font-bold text-white pb-1">
             Explore by Theme
           </h2>
         </div>
@@ -300,7 +300,7 @@ export default function ThemePackages() {
                 {/* Vertical Text for Inactive Desktop Cards */}
                 {!isActive && (
                   <div className="hidden md:flex absolute inset-0 items-center justify-center">
-                    <h3 className="text-white font-black text-2xl tracking-tight [writing-mode:vertical-rl] rotate-180 drop-shadow-md">
+                    <h3 className="text-white font-bold text-2xl tracking-tight [writing-mode:vertical-rl] rotate-180 drop-shadow-md">
                       {card.title}
                     </h3>
                   </div>
@@ -310,7 +310,7 @@ export default function ThemePackages() {
                 {!isActive && (
                   <div className="md:hidden flex flex-col items-center justify-center absolute inset-0">
                     <IconComponent className="w-8 h-8 text-white/80 mb-2" />
-                    <h3 className="text-white font-black text-2xl tracking-tight text-center drop-shadow-md">
+                    <h3 className="text-white font-bold text-2xl tracking-tight text-center drop-shadow-md">
                       {card.title}
                     </h3>
                   </div>
@@ -342,7 +342,7 @@ export default function ThemePackages() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl md:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-lg">
+                    <h3 className="text-xl md:text-5xl font-bold text-white tracking-tight leading-tight drop-shadow-lg">
                       {card.title}
                     </h3>
 

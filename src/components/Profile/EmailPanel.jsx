@@ -239,25 +239,25 @@ const EmailPanel = () => {
                 <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Communication
                 </h5>
-                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Email Address</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Email Address</h4>
               </div>
             </div>
 
             {!isEditing ? (
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
                 <div className="flex items-center gap-4">
-                  <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+                  <h3 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                     {user?.email || "Not Specified"}
                   </h3>
                   {user?.emailVerified ? (
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
                       <Check className="size-3" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Verified</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Verified</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100 shadow-sm">
                       <div className="size-1.5 rounded-full bg-amber-500 animate-pulse" />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Pending</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Pending</span>
                     </div>
                   )}
                 </div>
@@ -282,7 +282,7 @@ const EmailPanel = () => {
                 
                 <div className="flex items-center gap-3 pt-2">
                   <Button
-                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-black uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
+                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-bold uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
                     type="submit"
                     disabled={updating}
                   >

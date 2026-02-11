@@ -148,7 +148,7 @@ const ShareableHighlights = ({ highlights = [] }) => {
                               initial={{ y: 20, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.2 }}
-                              className="text-white text-xl md:text-3xl font-black tracking-tight"
+                              className="text-white text-xl md:text-3xl font-bold tracking-tight"
                             >
                               {highlights[selectedIndex]?.title || highlights[selectedIndex]}
                             </motion.p>

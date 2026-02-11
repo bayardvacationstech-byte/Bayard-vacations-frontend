@@ -74,7 +74,7 @@ const RegionActivities = ({ regionName = "this destination", regionData = null }
                   Things To Do
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
                 <span className="hidden sm:inline">Top Activities in </span>
                 <span className="inline sm:hidden">Activities in </span>
                 <span className="text-brand-blue capitalize">{regionName}</span>

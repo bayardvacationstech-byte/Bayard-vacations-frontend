@@ -28,7 +28,7 @@ const PackageNavigation = ({ activeSection, onScrollToSection, sections = [], is
                       key={section.id}
                       onClick={() => onScrollToSection(section.id)}
                       className={cn(
-                        "relative flex flex-1 flex-col items-center justify-center gap-1 px-1 py-1 transition-all duration-300 whitespace-nowrap font-black uppercase tracking-widest",
+                        "relative flex flex-1 flex-col items-center justify-center gap-1 px-1 py-1 transition-all duration-300 whitespace-nowrap font-bold uppercase tracking-widest",
                         isActive ? "text-[#facc15]" : "text-white/60 hover:text-[#facc15]"
                       )}
                     >
@@ -101,7 +101,7 @@ const PackageNavigation = ({ activeSection, onScrollToSection, sections = [], is
                       key={section.id}
                       onClick={() => onScrollToSection(section.id)}
                       className={cn(
-                        "relative flex flex-1 flex-col items-center justify-center gap-1 px-1 py-1 transition-all duration-300 whitespace-nowrap font-black uppercase tracking-widest",
+                        "relative flex flex-1 flex-col items-center justify-center gap-1 px-1 py-1 transition-all duration-300 whitespace-nowrap font-bold uppercase tracking-widest",
                         isActive ? "text-brand-blue" : "text-slate-500 hover:text-brand-blue"
                       )}
                     >

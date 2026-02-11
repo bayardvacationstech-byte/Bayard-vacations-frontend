@@ -205,7 +205,7 @@ export default function SoloExpeditionClient() {
                 activeColorClasses="text-[#FFD700] font-bold"
               />
               
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-poppins font-extrabold leading-tight tracking-tight">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-poppins font-bold leading-tight tracking-tight">
                 <span className="block text-white">GO</span>
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#FFD700] to-[#FFA500] mt-1">ALONE</span>
                 <span className="block text-gray-400 text-2xl md:text-3xl lg:text-4xl mt-3 font-light italic font-sans">Together.</span>
@@ -236,11 +236,11 @@ export default function SoloExpeditionClient() {
               <div className="grid grid-cols-2 gap-6 pt-6">
                 <div className="p-4 bg-[#1a1a1a] rounded-xl border border-[#333]">
                   <div className="text-3xl font-bold text-[#FFD700]">94%</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Make Friends</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1 font-bold">Make Friends</div>
                 </div>
                 <div className="p-4 bg-[#1a1a1a] rounded-xl border border-[#333]">
                   <div className="text-3xl font-bold text-[#FFA500]">24/7</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Safety Track</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1 font-bold">Safety Track</div>
                 </div>
               </div>
             </motion.div>
@@ -308,7 +308,7 @@ export default function SoloExpeditionClient() {
       <section id="packages" className="section-padding bg-[#0a0a0a] border-y border-[#222]">
         <Container>
           <div className="flex flex-wrap gap-4 md:gap-6 justify-center items-center">
-            <span className="text-gray-500 text-sm font-bold uppercase tracking-wider">Mission Scope:</span>
+            <span className="text-gray-500 text-sm font-semibold uppercase tracking-wider">Mission Scope:</span>
             
             <button 
               onClick={() => handleTabChange("international")}
@@ -351,9 +351,9 @@ export default function SoloExpeditionClient() {
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFD700]/10 border border-[#FFD700]/20 rounded-full">
                   <Compass className="w-4 h-4 text-[#FFD700] fill-[#FFD700]" />
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#FFD700]">Our Solo Philosophy</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#FFD700]">Our Solo Philosophy</span>
                 </div>
-                <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tighter leading-[0.9]">
+                <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
                   Why Trust Us With Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFD700] to-[#FFA500] italic">Journey?</span>
                 </h2>
               </div>
@@ -373,7 +373,7 @@ export default function SoloExpeditionClient() {
                       <feature.icon className="w-8 h-8 text-[#FFD700] group-hover:text-black transition-colors" />
                     </div>
                     <div className="space-y-2 pt-2">
-                      <h3 className="text-2xl font-extrabold text-white tracking-tight">{feature.title}</h3>
+                      <h3 className="text-2xl font-bold text-white tracking-tight">{feature.title}</h3>
                       <p className="text-gray-400 font-medium leading-relaxed max-w-xl">{feature.desc}</p>
                     </div>
                   </motion.div>
@@ -394,7 +394,7 @@ export default function SoloExpeditionClient() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                 <div className="absolute bottom-12 left-12 right-12">
                   <div className="p-8 bg-black/40 backdrop-blur-md rounded-[2.5rem] border border-white/10">
-                    <p className="text-2xl font-extrabold text-white italic leading-relaxed">
+                    <p className="text-2xl font-bold text-white italic leading-relaxed">
                       "The journey of a thousand miles begins with a single step."
                     </p>
                   </div>
@@ -462,7 +462,7 @@ export default function SoloExpeditionClient() {
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-xl h-12 w-12 font-extrabold transition-all border-none shadow-lg",
+                            "cursor-pointer rounded-xl h-12 w-12 font-bold transition-all border-none shadow-lg",
                             currentPage === page 
                               ? "bg-[#FFD700] text-black" 
                               : "bg-[#1a1a1a] text-gray-400 hover:bg-[#333] hover:text-white"
@@ -502,13 +502,13 @@ export default function SoloExpeditionClient() {
       <section className="section-padding bg-[#050505] relative overflow-hidden border-t border-[#111]">
         <Container className="text-center">
             <div className="max-w-3xl mx-auto space-y-10">
-              <h2 className="text-4xl md:text-6xl font-extrabold text-white tracking-tighter leading-tight">
+              <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-tight">
                 Ready to Start Your<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FFD700] to-[#FFA500]">Solo Adventure?</span>
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Link href="/contact">
-                  <Button size="lg" className="h-16 px-12 rounded-2xl bg-[#FFD700] hover:bg-white text-black shadow-[0_0_30px_rgba(255,215,0,0.2)] hover:shadow-[0_0_50px_rgba(255,215,0,0.4)] border-none font-extrabold text-lg uppercase tracking-widest transition-all">
+                  <Button size="lg" className="h-16 px-12 rounded-2xl bg-[#FFD700] hover:bg-white text-black shadow-[0_0_30px_rgba(255,215,0,0.2)] hover:shadow-[0_0_50px_rgba(255,215,0,0.4)] border-none font-bold text-lg uppercase tracking-widest transition-all">
                     Talk to a Specialist
                   </Button>
                 </Link>
@@ -518,7 +518,7 @@ export default function SoloExpeditionClient() {
                       <Image src={`https://i.pravatar.cc/150?u=${i + 130}`} alt="Agent" width={48} height={48} />
                     </div>
                   ))}
-                  <div className="w-12 h-12 rounded-full border-4 border-[#111] bg-[#FFD700] flex items-center justify-center text-black text-xs font-extrabold">
+                  <div className="w-12 h-12 rounded-full border-4 border-[#111] bg-[#FFD700] flex items-center justify-center text-black text-xs font-bold">
                     +12
                   </div>
                 </div>

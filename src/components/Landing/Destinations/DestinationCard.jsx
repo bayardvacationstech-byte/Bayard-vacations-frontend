@@ -116,7 +116,7 @@ export default function DestinationCard({
                     />
 
                     <h3
-                      className="relative text-white text-xl sm:text-2xl md:text-2xl lg:text-3xl font-black leading-tight tracking-tight text-center font-sans transition-all duration-300 drop-shadow-lg uppercase"
+                      className="relative text-white text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold leading-tight tracking-tight text-center font-sans transition-all duration-300 drop-shadow-lg uppercase"
                       style={{
                         transform: isHovered
                           ? "translateY(-4px)"

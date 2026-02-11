@@ -61,7 +61,7 @@ const ItinerarySection = ({ packageData }) => {
         <div className="flex w-full lg:w-auto gap-2 md:gap-3 mt-4 lg:mt-0 lg:flex-shrink-0">
           <button
             onClick={handleDownloadItinerary}
-            className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-brand-blue to-blue-600 hover:from-blue-600 hover:to-brand-blue text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 hover:shadow-xl hover:shadow-brand-blue/30 active:scale-95"
+            className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-brand-blue to-blue-600 hover:from-blue-600 hover:to-brand-blue text-white rounded-xl md:rounded-2xl font-bold text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 hover:shadow-xl hover:shadow-brand-blue/30 active:scale-95"
           >
             <Download className="w-3.5 h-3.5 md:w-4 md:h-4" />
             <span className="hidden sm:inline">Download Itinerary PDF</span>
@@ -69,7 +69,7 @@ const ItinerarySection = ({ packageData }) => {
           </button>
           <button
             onClick={toggleAllDays}
-            className="flex-1 lg:flex-none px-3 md:px-6 py-2.5 md:py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-xl md:rounded-2xl text-brand-blue font-black text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
+            className="flex-1 lg:flex-none px-3 md:px-6 py-2.5 md:py-3 bg-white border-2 border-slate-100 hover:border-brand-blue/30 rounded-xl md:rounded-2xl text-brand-blue font-bold text-[10px] md:text-[11px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
           >
             <span className="hidden sm:inline">{expandedDays.length === packageData?.itineraries?.length ? "Collapse All Days" : "Expand All Days"}</span>
             <span className="sm:hidden">{expandedDays.length === packageData?.itineraries?.length ? "COLLAPSE" : "EXPAND"}</span>
@@ -96,7 +96,7 @@ const ItinerarySection = ({ packageData }) => {
                   {/* Day badge */}
                   <div className="relative w-16 h-16 gradient-btn rounded-2xl flex flex-col items-center justify-center shadow-md border border-white/20">
                     <span className="text-xs font-bold text-white/70 uppercase tracking-widest">Day</span>
-                    <span className="text-2xl font-black text-white leading-none">{(index + 1).toString().padStart(2, "0")}</span>
+                    <span className="text-2xl font-bold text-white leading-none">{(index + 1).toString().padStart(2, "0")}</span>
                   </div>
                 </div>
               </div>
@@ -112,7 +112,7 @@ const ItinerarySection = ({ packageData }) => {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                         {/* Mobile Day Indicator */}
-                        <div className="md:hidden flex items-center gap-1.5 px-2 py-0.5 bg-brand-blue rounded-md text-[10px] font-black text-white uppercase tracking-tighter">
+                        <div className="md:hidden flex items-center gap-1.5 px-2 py-0.5 bg-brand-blue rounded-md text-[10px] font-bold text-white uppercase tracking-tighter">
                           Day {(index + 1).toString().padStart(2, "0")}
                         </div>
                         
@@ -160,7 +160,7 @@ const ItinerarySection = ({ packageData }) => {
                                     </div>
                                     
                                     <p className="flex flex-col gap-0.5">
-                                      <span className="font-black text-brand-blue tracking-tight text-sm md:text-base">
+                                      <span className="font-bold text-brand-blue tracking-tight text-sm md:text-base">
                                         {act.activity?.replace(/\\/g, "").replace(/^["'\s]+|["'\s]+,?$/g, "").trim()}
                                       </span>
                                       <span className="text-slate-500 font-medium text-sm md:text-base">
@@ -181,7 +181,7 @@ const ItinerarySection = ({ packageData }) => {
                                     const afterColon = content.substring(colonIndex);
                                     return (
                                       <>
-                                        <span className="font-black text-brand-blue text-sm md:text-base">
+                                        <span className="font-bold text-brand-blue text-sm md:text-base">
                                           {beforeColon}
                                         </span>
                                         <span className="text-slate-600">{afterColon}</span>
@@ -227,7 +227,7 @@ const ItinerarySection = ({ packageData }) => {
                                   <span className="text-xl">🏨</span>
                                 </div>
                                 <div>
-                                  <span className="block text-[10px] font-black text-blue-400 uppercase tracking-widest">Overnight Stay</span>
+                                  <span className="block text-[10px] font-bold text-blue-400 uppercase tracking-widest">Overnight Stay</span>
                                   <span className="block text-sm font-bold text-slate-900">{day.overnight}</span>
                                 </div>
                               </div>

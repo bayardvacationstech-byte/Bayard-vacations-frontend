@@ -101,7 +101,7 @@ export default function RotatableTeamWheel() {
     <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50 to-white relative overflow-hidden">
       <Container>
         <div className="text-center mb-8">
-          <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4">Our 30-Member Team</h2>
+          <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">Our 30-Member Team</h2>
           <p className="text-lg text-slate-600 mb-6">Select a category or drag the wheel to explore</p>
           
           {/* Category Filters */}
@@ -184,7 +184,7 @@ export default function RotatableTeamWheel() {
                 })}
 
                 {/* Center circle */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center text-white font-black text-sm shadow-2xl">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-2xl">
                   <div className="text-center">
                     <div className="text-4xl mb-1">{teamMembers.length}</div>
                     <div className="text-xs">{selectedCategory}</div>
@@ -209,7 +209,7 @@ export default function RotatableTeamWheel() {
                   <div className="text-sm font-bold uppercase tracking-wider mb-2 opacity-90">
                     {selectedMember.dept}
                   </div>
-                  <h3 className="text-4xl md:text-5xl font-black mb-2">{selectedMember.name}</h3>
+                  <h3 className="text-4xl md:text-5xl font-bold mb-2">{selectedMember.name}</h3>
                   <p className="text-xl font-semibold opacity-90">{selectedMember.role}</p>
                 </div>
               </div>

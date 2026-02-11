@@ -177,7 +177,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                   <Sparkles className="w-4 h-4 text-amber-400" />
                   <span className="text-amber-300 text-xs font-bold uppercase tracking-widest">Why Visit</span>
                 </div>
-                <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight drop-shadow-2xl">
+                <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight drop-shadow-2xl">
                   Why Choose <span className="text-amber-400">{regionName}?</span>
                 </h1>
               </motion.div>
@@ -188,7 +188,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                 </p>
                 <button
                   onClick={() => setIsDescExpanded(!isDescExpanded)}
-                  className="mt-4 text-amber-400 text-sm font-black uppercase tracking-widest hover:text-amber-300 transition-colors inline-flex items-center gap-2"
+                  className="mt-4 text-amber-400 text-sm font-bold uppercase tracking-widest hover:text-amber-300 transition-colors inline-flex items-center gap-2"
                 >
                   {isDescExpanded ? "View Less" : "Read More"}
                   <ChevronRight className="w-4 h-4" />
@@ -212,7 +212,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
               />
               {whyChooseData?.nickname && (
                 <div className="hidden sm:block px-4 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
-                  <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">{whyChooseData.nickname}</span>
+                  <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em]">{whyChooseData.nickname}</span>
                 </div>
               )}
             </Container>
@@ -225,10 +225,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           {/* Why Visit Details */}
           <section>
             <div className="text-center max-w-4xl mx-auto mb-10 md:mb-12">
-              <span className="px-4 py-1.5 bg-brand-blue/10 text-brand-blue rounded-full text-xs font-black uppercase tracking-widest mb-4 inline-block">
+              <span className="px-4 py-1.5 bg-brand-blue/10 text-brand-blue rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">
                  {regionDataProcessed?.whyVisitSection?.subTitle || "Immersive Experiences"}
               </span>
-              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
                 {regionDataProcessed?.whyVisitSection?.mainTitle}
               </h2>
               <p className="text-lg md:text-xl text-slate-600 leading-relaxed">
@@ -243,13 +243,13 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     <ArrowRight className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg md:text-xl font-black text-slate-900 mb-2">{reason.title}</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">{reason.title}</h3>
                     <p className={cn("text-slate-600 leading-relaxed text-sm md:text-base", !expandedReasons[idx] && "line-clamp-4")}>
                       {reason.description}
                     </p>
                     <button
                       onClick={() => setExpandedReasons(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                      className="mt-3 text-brand-blue text-xs font-black uppercase tracking-widest hover:underline"
+                      className="mt-3 text-brand-blue text-xs font-bold uppercase tracking-widest hover:underline"
                     >
                       {expandedReasons[idx] ? "View Less" : "Read More"}
                     </button>
@@ -261,7 +261,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             {regionDataProcessed?.whyVisitSection?.quote && (
               <div className="mt-12 md:mt-16 bg-brand-blue rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-14 text-center text-white shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-                <blockquote className="text-xl md:text-3xl font-black italic relative z-10 leading-tight mb-4 md:mb-6">
+                <blockquote className="text-xl md:text-3xl font-bold italic relative z-10 leading-tight mb-4 md:mb-6">
                   "{regionDataProcessed?.whyVisitSection?.quote}"
                 </blockquote>
                 {regionDataProcessed?.whyVisitSection?.quoteAuthor && (
@@ -274,7 +274,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           {/* Key Highlights Section */}
           <section id="highlights">
             <div className="text-center mb-10 md:mb-12">
-               <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-3 tracking-tighter">Key Highlights</h2>
+               <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-3 tracking-tighter">Key Highlights</h2>
                <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto italic">The essential soul of {regionName}.</p>
             </div>
 
@@ -284,11 +284,11 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-start">
                     {/* Left Column: Title & Full Description */}
                     <div className="space-y-6">
-                      <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-500/10 text-amber-600 rounded-full text-xs font-black uppercase tracking-widest border border-amber-500/20">
+                      <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-500/10 text-amber-600 rounded-full text-xs font-bold uppercase tracking-widest border border-amber-500/20">
                         <Sparkles className="w-3.5 h-3.5" />
                         Highlight No. 0{index + 1}
                       </div>
-                      <h3 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
+                      <h3 className="text-3xl md:text-5xl font-bold text-slate-900 leading-tight">
                         {highlight.recommendedPhotoContent || highlight.title}
                       </h3>
                       <p className="text-xl font-bold text-slate-500 italic">{highlight.description}</p>
@@ -298,7 +298,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                       </p>
                       <button
                         onClick={() => setExpandedHighlights(prev => ({ ...prev, [index]: !prev[index] }))}
-                        className="text-brand-blue text-sm font-black uppercase tracking-widest hover:underline"
+                        className="text-brand-blue text-sm font-bold uppercase tracking-widest hover:underline"
                       >
                         {expandedHighlights[index] ? "View Less" : "Read More"}
                       </button>
@@ -308,7 +308,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                     <div className="bg-slate-50 p-8 md:p-12 rounded-[3rem] border border-slate-100 shadow-inner space-y-8">
                        {highlight.keyFacts && (
                           <div className="space-y-6">
-                            <h4 className="text-xs font-black text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3">
+                            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-[0.3em] flex items-center gap-3">
                               <Info className="w-5 h-5 text-brand-blue" />
                               Facts & Information
                             </h4>
@@ -321,7 +321,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                                   key={idx} 
                                   className="flex gap-4 p-5 bg-white rounded-2xl shadow-sm border border-slate-100 group hover:shadow-md transition-all"
                                 >
-                                  <div className="w-8 h-8 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center font-black text-xs shrink-0">{idx + 1}</div>
+                                  <div className="w-8 h-8 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center font-bold text-xs shrink-0">{idx + 1}</div>
                                   <p className="text-[15px] text-slate-600 font-medium leading-relaxed">{fact}</p>
                                 </motion.div>
                               ))}
@@ -329,7 +329,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                             {highlight.keyFacts.length > 3 && (
                                <button
                                  onClick={() => setExpandedFacts(prev => ({ ...prev, [index]: !prev[index] }))}
-                                 className="text-brand-blue text-xs font-black uppercase tracking-widest hover:underline mt-2"
+                                 className="text-brand-blue text-xs font-bold uppercase tracking-widest hover:underline mt-2"
                                >
                                  {expandedFacts[index] ? "Show Less" : `See all ${highlight.keyFacts.length} facts`}
                                </button>
@@ -346,7 +346,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
           {/* Traveler Types and Seasonality */}
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
             <div>
-               <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-8 flex items-center gap-4">
+               <h3 className="text-3xl font-bold text-slate-900 uppercase tracking-tighter mb-8 flex items-center gap-4">
                  <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
                    <Users className="w-6 h-6 text-emerald-600" />
                  </div>
@@ -355,7 +355,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {regionDataProcessed?.travelStyles?.map((style, i) => (
                     <div key={i} className="p-6 md:p-8 bg-white border border-slate-100 rounded-3xl hover:shadow-xl transition-all">
-                      <h4 className="font-black text-brand-blue text-sm uppercase mb-3 tracking-widest">{style.type}</h4>
+                      <h4 className="font-bold text-brand-blue text-sm uppercase mb-3 tracking-widest">{style.type}</h4>
                       <p className="text-sm text-slate-500 font-medium leading-relaxed">{style.desc}</p>
                     </div>
                   ))}
@@ -363,7 +363,7 @@ export default function WhyChooseRegionClient({ regionSlug }) {
             </div>
 
             <div>
-               <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-8 flex items-center gap-4">
+               <h3 className="text-3xl font-bold text-slate-900 uppercase tracking-tighter mb-8 flex items-center gap-4">
                  <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
                    <CloudSun className="w-6 h-6 text-brand-blue" />
                  </div>
@@ -373,10 +373,10 @@ export default function WhyChooseRegionClient({ regionSlug }) {
                   {regionDataProcessed?.seasonalGuide?.map((guide, i) => (
                     <div key={i} className="flex justify-between items-start border-b border-white/10 pb-6 last:border-0 last:pb-0">
                       <div>
-                        <p className="text-brand-gold font-black uppercase text-[10px] tracking-[0.3em] mb-2">{guide.season}</p>
+                        <p className="text-brand-gold font-bold uppercase text-[10px] tracking-[0.3em] mb-2">{guide.season}</p>
                         <p className="text-slate-300 text-sm font-medium leading-relaxed">{guide.highlight}</p>
                       </div>
-                      <span className="px-3 py-1 bg-white/10 rounded-full text-[9px] font-black uppercase tracking-[0.2em]">{guide.status}</span>
+                      <span className="px-3 py-1 bg-white/10 rounded-full text-[9px] font-bold uppercase tracking-[0.2em]">{guide.status}</span>
                     </div>
                   ))}
                </div>

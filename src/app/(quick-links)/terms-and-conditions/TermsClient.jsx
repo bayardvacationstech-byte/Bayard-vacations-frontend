@@ -79,7 +79,7 @@ const TermsAndConditions = () => {
               <span className="text-xs font-bold uppercase tracking-widest leading-none">Legal Information</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
               Terms and <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 italic">Conditions</span>
             </h1>
@@ -115,7 +115,7 @@ const TermsAndConditions = () => {
           
           {/* STICKY SIDEBAR (Large Screens Only) */}
           <aside className="hidden lg:block sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 px-2">On this page</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 px-2">On this page</h3>
             <nav className="flex flex-col gap-1">
               {sections.map((section) => (
                 <button
@@ -158,7 +158,7 @@ const TermsAndConditions = () => {
                     <FileText className="w-6 h-6 text-sky-600" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 mb-1">Scope of Use</h4>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Scope of Use</h4>
                     <p className="text-xs text-sky-700 font-medium leading-relaxed">
                       Governs your access to and use of Bayard Vacations, including mobile apps and related services.
                     </p>
@@ -169,7 +169,7 @@ const TermsAndConditions = () => {
                     <Scale className="w-6 h-6 text-emerald-600" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 mb-1">Legal Binding</h4>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Legal Binding</h4>
                     <p className="text-xs text-emerald-700 font-medium leading-relaxed">
                       This constitutes a legally binding agreement. Continued use means agreement to all terms.
                     </p>
@@ -178,7 +178,7 @@ const TermsAndConditions = () => {
             </div>
 
             {/* THE CONTENT */}
-            <div className="prose prose-slate max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-h2:text-3xl prose-h2:pt-8 prose-h2:mb-6 prose-h2:border-t prose-h2:border-slate-100 first:prose-h2:border-0 first:prose-h2:pt-0">
+            <div className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-h2:text-3xl prose-h2:pt-8 prose-h2:mb-6 prose-h2:border-t prose-h2:border-slate-100 first:prose-h2:border-0 first:prose-h2:pt-0">
               
               <section id="agreement">
                 <h2>1. AGREEMENT TO TERMS</h2>
@@ -419,9 +419,9 @@ const TermsAndConditions = () => {
                 <h2>25. CONTACT US</h2>
                 <div className="bg-slate-900 rounded-[2rem] p-8 text-white mt-8 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-amber-400/20 transition-colors" />
-                  <p className="text-amber-400 font-black uppercase tracking-widest text-xs mb-4">Official Inquiry</p>
+                  <p className="text-amber-400 font-bold uppercase tracking-widest text-xs mb-4">Official Inquiry</p>
                   <address className="not-italic space-y-2">
-                    <p className="text-xl font-black">Bayard Vacations</p>
+                    <p className="text-xl font-bold">Bayard Vacations</p>
                     <p className="text-white/70 font-medium">144, 9th Main Rd, 4th Block, Kanteerava Nagar</p>
                     <p className="text-white/70 font-medium">Nandini Layout, Bengaluru</p>
                     <p className="text-white/70 font-medium">Karnataka 560096, India</p>

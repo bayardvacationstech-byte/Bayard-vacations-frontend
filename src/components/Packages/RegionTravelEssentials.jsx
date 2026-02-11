@@ -691,10 +691,15 @@ const RegionTravelEssentials = ({ regionName: initialRegionName = "", regionData
                       </div>
                       <div className="grid grid-cols-2 c-md:grid-cols-3 gap-3 md:gap-4">
                         {(dynamicData?.food?.items || [])
-                          .filter(food => food.image || food.featuredImage)
+                          .filter((food) => !!(food.image || food.featuredImage))
                           .map((food, i) => (
-                           <FoodItem key={i} name={food.name} desc={food.desc} image={food.image || food.featuredImage} />
-                        ))}
+                            <FoodItem
+                              key={i}
+                              name={food.name}
+                              desc={food.desc}
+                              image={food.image || food.featuredImage}
+                            />
+                          ))}
                       </div>
                     </div>
 
@@ -706,25 +711,45 @@ const RegionTravelEssentials = ({ regionName: initialRegionName = "", regionData
                       </div>
                       <div className="grid grid-cols-2 c-md:grid-cols-3 gap-3 md:gap-4">
                         {(dynamicData?.food?.drinks || dynamicData?.food?.beverages || [])
-                          .filter(drink => drink.image)
+                          .filter((drink) => !!drink.image)
                           .map((drink, i) => (
-                           <FoodItem key={i} name={drink.name} desc={drink.desc || drink.value} image={drink.image} />
-                        ))}
+                            <FoodItem
+                              key={i}
+                              name={drink.name}
+                              desc={drink.desc || drink.value}
+                              image={drink.image}
+                            />
+                          ))}
                       </div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mt-8">
-                     {(dynamicData?.food?.features || [
-                       { title: "Local Flavors", desc: "Experience the unique culinary heritage of this region." }
-                     ]).map((feature, i) => (
-                       <div key={i} className={cn("p-6 rounded-3xl border space-y-4", i === 0 ? "bg-emerald-50/50 border-emerald-100" : i === 1 ? "bg-rose-50/50 border-rose-100" : "bg-white border-slate-100 shadow-sm")}>
-                          <h4 className={cn("text-xl font-bold tracking-tight", i === 0 ? "text-emerald-900" : i === 1 ? "text-rose-900" : "text-slate-900")}>
-                            {feature.title}
-                          </h4>
-                          <p className="text-sm text-slate-700 font-medium leading-relaxed">{feature.desc}</p>
-                       </div>
-                     ))}
+                    {(dynamicData?.food?.features || [
+                      { title: "Local Flavors", desc: "Experience the unique culinary heritage of this region." },
+                    ]).map((feature, i) => (
+                      <div
+                        key={i}
+                        className={cn(
+                          "p-6 rounded-3xl border space-y-4",
+                          i === 0
+                            ? "bg-emerald-50/50 border-emerald-100"
+                            : i === 1
+                            ? "bg-rose-50/50 border-rose-100"
+                            : "bg-white border-slate-100 shadow-sm"
+                        )}
+                      >
+                        <h4
+                          className={cn(
+                            "text-xl font-bold tracking-tight",
+                            i === 0 ? "text-emerald-900" : i === 1 ? "text-rose-900" : "text-slate-900"
+                          )}
+                        >
+                          {feature.title}
+                        </h4>
+                        <p className="text-sm text-slate-700 font-medium leading-relaxed">{feature.desc}</p>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
               )}
@@ -803,12 +828,12 @@ const TransportItem = ({ icon: Icon, label, desc, extra, color }) => {
           <Icon className="w-4 h-4 md:w-5 md:h-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <h5 className="font-black text-slate-900 text-xs md:text-sm">{label}</h5>
+          <h5 className="font-bold text-slate-900 text-xs md:text-sm">{label}</h5>
           <p className="text-[11px] md:text-xs text-slate-500 font-medium leading-tight truncate">{desc}</p>
         </div>
       </div>
       {extra && (
-        <span className="text-[10px] md:text-xs font-black text-slate-600 bg-slate-50 px-2 py-1 rounded-lg shrink-0 border border-slate-100">
+        <span className="text-[10px] md:text-xs font-bold text-slate-600 bg-slate-50 px-2 py-1 rounded-lg shrink-0 border border-slate-100">
           {extra}
         </span>
       )}
@@ -818,7 +843,7 @@ const TransportItem = ({ icon: Icon, label, desc, extra, color }) => {
 
 const VisaItem = ({ type, validity }) => (
   <div className="p-3 md:p-4 bg-slate-50 rounded-2xl border border-slate-100">
-    <p className="font-black text-slate-900 text-xs md:text-sm">{type}</p>
+    <p className="font-bold text-slate-900 text-xs md:text-sm">{type}</p>
     <p className="text-[11px] md:text-xs text-slate-500 font-medium mt-1 italic">{validity}</p>
   </div>
 );
@@ -827,7 +852,7 @@ const CultureEtiquette = ({ icon, label, desc }) => (
   <div className="flex gap-3 md:gap-4 items-start">
     <span className="text-xl md:text-2xl shrink-0">{icon}</span>
     <div>
-      <h5 className="font-black text-slate-900 text-[11px] md:text-sm">{label}</h5>
+      <h5 className="font-bold text-slate-900 text-[11px] md:text-sm">{label}</h5>
       <p className="text-[10px] md:text-sm text-slate-500 font-medium leading-tight md:leading-relaxed">{desc}</p>
     </div>
   </div>
@@ -842,7 +867,7 @@ const CultureFeature = ({ icon, title, desc, color }) => {
   return (
     <div className={cn("p-4 md:p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] border space-y-2 md:space-y-3", colors[color])}>
       <span className="text-xl md:text-2xl">{icon}</span>
-      <h5 className="font-black text-slate-900 text-xs md:text-base">{title}</h5>
+      <h5 className="font-bold text-slate-900 text-xs md:text-base">{title}</h5>
       <p className="text-[10px] md:text-sm text-slate-600 font-medium leading-tight md:leading-relaxed">{desc}</p>
     </div>
   );
@@ -859,7 +884,7 @@ const FoodItem = ({ name, desc, image }) => (
     />
     <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent opacity-100 transition-opacity duration-300" />
     <div className="absolute inset-x-0 bottom-0 p-3 md:p-4 transform transition-transform duration-300 group-hover:-translate-y-1">
-      <h5 className="font-black text-white text-[11px] md:text-xs mb-0.5 uppercase tracking-tight leading-tight drop-shadow-md">
+      <h5 className="font-bold text-white text-[11px] md:text-xs mb-0.5 uppercase tracking-tight leading-tight drop-shadow-md">
         {name}
       </h5>
       <p className="text-[10px] md:text-[11px] text-white/90 font-medium leading-tight line-clamp-2 drop-shadow-sm">
@@ -886,7 +911,7 @@ const NoteItem = ({ text }) => (
 const BeverageItem = ({ name, desc, icon }) => (
   <div className="flex flex-col items-center gap-1 md:gap-2 text-center">
     <span className="text-xl md:text-2xl">{icon}</span>
-    <h5 className="font-black text-slate-900 text-[10px] md:text-xs uppercase tracking-tighter">{name}</h5>
+    <h5 className="font-bold text-slate-900 text-[10px] md:text-xs uppercase tracking-tighter">{name}</h5>
     <p className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest">{desc}</p>
   </div>
 );

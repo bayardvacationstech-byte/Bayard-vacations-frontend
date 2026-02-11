@@ -101,7 +101,7 @@ const Hero = () => {
               className="
       mt-2
       text-xl sm:text-3xl md:text-4xl lg:text-5xl
-      font-extrabold
+      font-bold
       tracking-tight
       text-white
       drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)]
@@ -334,7 +334,7 @@ const Hero = () => {
             </div>
             <div className="flex flex-col items-start leading-none">
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/70 mb-0.5">Adventure Awaits</span>
-              <span className="text-xs sm:text-base font-black">Discover Journeys</span>
+              <span className="text-xs sm:text-base font-bold">Discover Journeys</span>
             </div>
           </Link>
 
@@ -345,7 +345,7 @@ const Hero = () => {
           >
             <div className="flex flex-col items-end leading-none">
               <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/70 mb-0.5">Questions?</span>
-              <span className="text-xs sm:text-base font-black">Consult Expert</span>
+              <span className="text-xs sm:text-base font-bold">Consult Expert</span>
             </div>
             <div className="bg-brand-blue/80 p-1 sm:p-1.5 rounded-full">
               <Headphones className="size-3.5 sm:size-4 group-hover:scale-110 transition-transform duration-300" />
@@ -362,14 +362,14 @@ const Hero = () => {
             <div className="bg-brand-blue/80 p-1 rounded-full">
               <Compass className="size-3.5" />
             </div>
-            <span className="text-xs font-black tracking-tight">Explore</span>
+            <span className="text-xs font-bold tracking-tight">Explore</span>
           </Link>
 
           <Link 
             href="/contact"
             className="flex-1 flex items-center justify-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2.5 rounded-xl text-white hover:bg-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)] active:scale-95"
           >
-            <span className="text-xs font-black tracking-tight">Contact</span>
+            <span className="text-xs font-bold tracking-tight">Contact</span>
             <div className="bg-brand-blue/80 p-1 rounded-full">
               <Headphones className="size-3.5" />
             </div>
@@ -454,21 +454,21 @@ const Hero = () => {
                 priority
                 className="h-4 sm:h-8 w-auto group-hover/badge:scale-105 transition-transform duration-300"
               />
-              <div className="flex items-center gap-0.5 sm:gap-1 font-black group-hover/badge:translate-x-0.5 transition-transform duration-300">
-                <span className="text-xs sm:text-xl font-black text-white leading-none">4.9</span>
+              <div className="flex items-center gap-0.5 sm:gap-1 font-bold group-hover/badge:translate-x-0.5 transition-transform duration-300">
+                <span className="text-xs sm:text-xl font-bold text-white leading-none">4.9</span>
                 <Star className="size-2 sm:size-4 fill-[#FBBC05] stroke-[#FBBC05]" />
               </div>
             </a>
 
             {/* Travelers */}
             <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
-              <span className="text-xs sm:text-lg font-black text-white leading-none">25,000+</span>
+              <span className="text-xs sm:text-lg font-bold text-white leading-none">25,000+</span>
               <span className="text-[7px] sm:text-[10px] font-bold text-white/90 tracking-wider mt-0.5">Travelers</span>
             </div>
 
             {/* Itineraries */}
             <div className="flex flex-col items-center justify-center text-center shrink-0 col-span-1 sm:col-auto">
-              <span className="text-xs sm:text-lg font-black text-white leading-none">1000+</span>
+              <span className="text-xs sm:text-lg font-bold text-white leading-none">1000+</span>
               <span className="text-[7px] sm:text-[10px] font-bold text-white/90 tracking-wider mt-0.5">Itineraries</span>
             </div>
 
@@ -478,7 +478,7 @@ const Hero = () => {
                 <Sparkles className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-white" />
               </div>
               <div className="leading-tight text-center sm:text-left">
-                <span className="block text-[7px] sm:text-sm font-black text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
+                <span className="block text-[7px] sm:text-sm font-bold text-white uppercase tracking-tight whitespace-nowrap">AI Assistant</span>
                 <span className="hidden sm:block text-[9px] sm:text-[10px] font-bold text-white/90 tracking-wider mt-0.5">Instant Ideas</span>
               </div>
             </div>
@@ -489,7 +489,7 @@ const Hero = () => {
                 <Phone className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-white" />
               </div>
               <div className="leading-tight text-center sm:text-left">
-                <span className="block text-[7px] sm:text-sm font-black text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
+                <span className="block text-[7px] sm:text-sm font-bold text-white uppercase tracking-tight whitespace-nowrap">24/7 Support</span>
                 <span className="hidden sm:block text-[9px] sm:text-[10px] font-bold text-white/90 uppercase tracking-tighter mt-0.5 whitespace-nowrap">Assistance</span>
               </div>
             </div>

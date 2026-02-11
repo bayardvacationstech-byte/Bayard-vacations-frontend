@@ -248,7 +248,7 @@ const PhonePanel = () => {
                 <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Contact
                 </h5>
-                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Phone Number</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Phone Number</h4>
               </div>
             </div>
             {step === "view" ? (
@@ -273,7 +273,7 @@ const PhonePanel = () => {
           <div className="flex-1">
             {step === "view" && (
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <h3 className="text-2xl font-black text-slate-800 tracking-tight leading-tight">
+                <h3 className="text-2xl font-bold text-slate-800 tracking-tight leading-tight">
                   (+91) {user?.phoneNumber ? removeFirstThree(user.phoneNumber) : "Not Specified"}
                 </h3>
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
@@ -288,7 +288,7 @@ const PhonePanel = () => {
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">New Phone Number</label>
                   <div className="flex items-center gap-3">
-                    <div className="bg-slate-50 border border-slate-100 rounded-2xl px-4 h-14 flex items-center text-sm font-black text-slate-400">+91</div>
+                    <div className="bg-slate-50 border border-slate-100 rounded-2xl px-4 h-14 flex items-center text-sm font-bold text-slate-400">+91</div>
                     <Input
                       type="tel"
                       className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white focus:border-brand-blue/30 transition-all shadow-sm flex-1"
@@ -301,7 +301,7 @@ const PhonePanel = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full rounded-2xl bg-brand-blue text-white font-black h-12 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] shadow-lg shadow-brand-blue/10"
+                  className="w-full rounded-2xl bg-brand-blue text-white font-bold h-12 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] shadow-lg shadow-brand-blue/10"
                   disabled={loading}
                 >
                   {loading ? (
@@ -322,7 +322,7 @@ const PhonePanel = () => {
                   <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 ml-1">Verification Code</label>
                   <Input
                     type="text"
-                    className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all text-center text-2xl tracking-[0.5em] font-black"
+                    className="rounded-2xl border-slate-100 bg-slate-50/50 p-6 h-14 focus:bg-white transition-all text-center text-2xl tracking-[0.5em] font-bold"
                     value={step === "old-otp" ? oldOtp : newOtp}
                     onChange={(e) => step === "old-otp" ? setOldOtp(e.target.value) : setNewOtp(e.target.value)}
                     placeholder="••••••"
@@ -335,7 +335,7 @@ const PhonePanel = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full rounded-2xl bg-emerald-600 text-white font-black h-12 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] shadow-lg shadow-emerald-600/10"
+                  className="w-full rounded-2xl bg-emerald-600 text-white font-bold h-12 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] shadow-lg shadow-emerald-600/10"
                   disabled={loading}
                 >
                   {loading ? (
@@ -356,7 +356,7 @@ const PhonePanel = () => {
                   <Check className="size-8" />
                 </div>
                 <div>
-                  <p className="font-black text-slate-800">Refresh Complete</p>
+                  <p className="font-bold text-slate-800">Refresh Complete</p>
                   <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Record updated successfully</p>
                 </div>
                 <Button

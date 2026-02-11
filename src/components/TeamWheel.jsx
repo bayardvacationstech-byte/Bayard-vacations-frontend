@@ -47,7 +47,7 @@ export default function TeamWheel() {
           <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-purple-600 bg-purple-100 rounded-full mb-4">
             The Dream Team
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900">Spin to Meet Our Team</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900">Spin to Meet Our Team</h2>
           <p className="text-lg text-slate-600 mt-4">Click the spin button to discover our amazing people</p>
         </div>
 
@@ -110,7 +110,7 @@ export default function TeamWheel() {
                 <button
                   onClick={spinWheel}
                   disabled={isSpinning}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 text-white font-black text-lg shadow-2xl hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed z-20"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 text-white font-bold text-lg shadow-2xl hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed z-20"
                 >
                   {isSpinning ? '🎡' : 'SPIN'}
                 </button>
@@ -135,7 +135,7 @@ export default function TeamWheel() {
                       <div className="text-sm font-bold uppercase tracking-wider mb-2 opacity-90">
                         {selectedMember.dept}
                       </div>
-                      <h3 className="text-4xl font-black mb-2">{selectedMember.name}</h3>
+                      <h3 className="text-4xl font-bold mb-2">{selectedMember.name}</h3>
                       <p className="text-xl font-semibold opacity-90">{selectedMember.role}</p>
                     </div>
                   </div>

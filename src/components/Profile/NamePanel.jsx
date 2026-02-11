@@ -83,13 +83,13 @@ const NamePanel = () => {
                 <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Identity
                 </h5>
-                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Full Name</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Full Name</h4>
               </div>
             </div>
 
             {!isEditing ? (
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                <h3 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight leading-tight">
                   {userInfo.displayName || "Not Specified"}
                 </h3>
                 <p className="text-xs text-slate-400 font-medium mt-3 flex items-center gap-2">
@@ -128,7 +128,7 @@ const NamePanel = () => {
                 
                 <div className="flex items-center gap-3 pt-2">
                   <Button
-                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-black uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
+                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-bold uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
                     type="submit"
                     disabled={updating}
                   >

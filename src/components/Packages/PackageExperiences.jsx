@@ -49,7 +49,7 @@ const PackageExperiences = ({ packageData }) => {
           >
             <button
               onClick={() => setShowJourney(true)}
-              className="flex items-center gap-3 px-6 py-3 md:px-8 md:py-5 bg-brand-blue text-white rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-blue/30 hover:bg-slate-900 transition-all active:scale-95 group whitespace-nowrap"
+              className="flex items-center gap-3 px-6 py-3 md:px-8 md:py-5 bg-brand-blue text-white rounded-xl md:rounded-2xl font-bold text-xs md:text-sm uppercase tracking-[0.2em] shadow-2xl shadow-brand-blue/30 hover:bg-slate-900 transition-all active:scale-95 group whitespace-nowrap"
             >
               <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
               Experience the Journey
@@ -81,7 +81,7 @@ const PackageExperiences = ({ packageData }) => {
                     <Calendar className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black text-slate-900 tracking-tight">Visual Journey</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Visual Journey</h3>
                     <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{packageData?.itineraries?.length} Chapters of Adventure</p>
                   </div>
                 </div>
@@ -122,12 +122,12 @@ const PackageExperiences = ({ packageData }) => {
                           {/* Day Overlay */}
                           <div className="absolute top-6 left-6">
                             <div className="px-5 py-2 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
-                              <span className="text-white font-black text-xl tracking-tighter uppercase leading-none">Day {(idx + 1).toString().padStart(2, '0')}</span>
+                              <span className="text-white font-bold text-xl tracking-tighter uppercase leading-none">Day {(idx + 1).toString().padStart(2, '0')}</span>
                             </div>
                           </div>
 
                           <div className="absolute bottom-8 left-8 right-8">
-                            <h4 className="text-white text-3xl font-black tracking-tight leading-none mb-3 drop-shadow-lg">
+                            <h4 className="text-white text-3xl font-bold tracking-tight leading-none mb-3 drop-shadow-lg">
                               {day.title}
                             </h4>
                             <div className="flex items-center gap-2 text-white/70">
@@ -153,7 +153,7 @@ const PackageExperiences = ({ packageData }) => {
               <div className="p-8 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="hidden md:flex flex-col">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Current Expedition</span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Current Expedition</span>
                     <span className="text-slate-900 font-bold">{packageData?.title || "Signature Tour"}</span>
                   </div>
                 </div>

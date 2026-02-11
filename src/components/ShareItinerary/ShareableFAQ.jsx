@@ -18,7 +18,7 @@ const ShareableFAQ = ({ faqs = [] }) => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 mb-4 print:w-12 print:h-12">
             <HelpCircle className="w-8 h-8 text-white print:w-6 print:h-6" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 print:text-2xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 print:text-2xl">
             Frequently Asked Questions
           </h2>
           <p className="text-slate-600 text-lg print:text-sm">

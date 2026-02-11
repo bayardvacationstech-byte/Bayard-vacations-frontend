@@ -237,7 +237,7 @@ export default function ActivityDetailClient({ regionSlug, activitySlug }) {
                   <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">
                     Price From
                   </div>
-                  <div className="text-4xl font-black text-brand-blue">
+                  <div className="text-4xl font-bold text-brand-blue">
                     {activity.priceRange.split('-')[0]}
                     <span className="text-lg text-slate-600 font-medium"> /person</span>
                   </div>

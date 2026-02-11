@@ -35,12 +35,12 @@ const ThemesPage = () => {
           <div className="max-w-4xl text-left">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-              <span className="text-white text-[10px] lg:text-xs font-black tracking-[0.3em] uppercase">
+              <span className="text-white text-[10px] lg:text-xs font-bold tracking-[0.3em] uppercase">
                 Curated Collections
               </span>
             </div>
             
-            <h1 className="text-6xl lg:text-9xl font-black text-white mb-8 leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <h1 className="text-6xl lg:text-9xl font-bold text-white mb-8 leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-bottom-8 duration-1000">
               TRAVEL <br />
               <span className="text-brand-blue">THEMES</span>
             </h1>

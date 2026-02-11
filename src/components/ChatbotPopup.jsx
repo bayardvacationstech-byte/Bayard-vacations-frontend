@@ -90,7 +90,7 @@ const ChatPackageCard = ({ item, onViewItinerary }) => {
 
         <div className="flex items-center justify-between gap-3 pt-3 border-t border-gray-50">
           <div>
-            <span className="text-blue-600 font-extrabold text-base">₹{item.offerPrice || item.basePrice}</span>
+            <span className="text-blue-600 font-bold text-base">₹{item.offerPrice || item.basePrice}</span>
             {item.offerPrice > 0 && item.basePrice > 0 && (
               <span className="text-xs text-gray-400 line-through ml-1.5">₹{item.basePrice}</span>
             )}
@@ -114,7 +114,7 @@ const ChatItineraryView = ({ itineraries }) => {
 
   return (
     <div className="space-y-3 mt-4 animate-fadeIn">
-      <h3 className="text-lg font-black text-slate-900 mb-4 px-1">Day wise Itinerary</h3>
+      <h3 className="text-lg font-bold text-slate-900 mb-4 px-1">Day wise Itinerary</h3>
       
       {itineraries.map((day, idx) => {
         const isOpen = openDay === idx;
@@ -128,10 +128,10 @@ const ChatItineraryView = ({ itineraries }) => {
               className="w-full flex items-stretch text-left"
             >
               <div className="bg-blue-50/50 w-16 py-3 flex flex-col items-center justify-center border-r border-slate-50">
-                <span className="text-[9px] font-black text-blue-400 uppercase tracking-[0.2em] mb-1 opacity-60">
+                <span className="text-[9px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-1 opacity-60">
                   Day
                 </span>
-                <span className="text-xl font-black text-blue-600 leading-none tracking-tighter">
+                <span className="text-xl font-bold text-blue-600 leading-none tracking-tighter">
                   {day.day?.toString().padStart(2, '0') || (idx + 1).toString().padStart(2, '0')}
                 </span>
               </div>

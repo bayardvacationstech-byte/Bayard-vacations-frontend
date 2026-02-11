@@ -47,7 +47,7 @@ const ThemePageClient = ({ theme }) => {
               <h1 className="mb-6 text-4xl font-bold text-white lg:text-7xl leading-tight">
                 {theme.title}
               </h1>
-              <p className="text-lg lg:text-2xl text-white/80 font-medium leading-relaxed">
+              <p className="text-lg lg:text-2xl text-white/80 font-semibold leading-relaxed">
                 {theme.subtitle === "All things " ? `Experience the best of ${theme.title}` : theme.subtitle}
                 . Discover our handpicked domestic and international arrivals curated specifically for this theme.
               </p>
