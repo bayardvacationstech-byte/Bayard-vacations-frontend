@@ -371,7 +371,7 @@ const DesktopNavbar = () => {
             >
               <div
                 className={cn(
-                  "w-full h-16 bg-white/80 backdrop-blur-xl transition-all duration-300 ease-in-out transform rounded-full flex items-center px-8 shadow-lg border border-white/30",
+                  "w-full h-16 bg-white transition-all duration-300 ease-in-out transform rounded-full flex items-center px-8 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100",
                   {
                     "opacity-0 scale-95": !isSearchActive,
                     "opacity-100 scale-100": isSearchActive,
@@ -379,24 +379,24 @@ const DesktopNavbar = () => {
                 )}
               >
                 <div>
-                  <Search className="text-slate-400 size-5" />
+                  <Search className="text-brand-blue size-5" />
                 </div>
                 <div className="h-full flex-1 px-3">
                   <Input
                     ref={inputRef}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="h-full border-0 text-base text-slate-700 shadow-none placeholder:text-slate-400 focus-visible:ring-0"
-                    placeholder="Search for Packages, Destinations etc."
+                    className="h-full border-0 text-lg font-medium text-slate-800 shadow-none placeholder:text-slate-400 focus-visible:ring-0 bg-transparent"
+                    placeholder="Where would you like to explore?"
                   />
                 </div>
                 <div>
                   <Button
-                    className="size-6 rounded-full bg-white p-0 text-brand-blue shadow-none hover:bg-brand-blue hover:text-white"
+                    className="size-8 rounded-full bg-slate-100 p-0 text-slate-500 shadow-none hover:bg-brand-blue hover:text-white transition-colors"
                     onClick={handleIsSearchActive}
                     aria-label="Close search"
                   >
-                    <X />
+                    <X className="size-4" />
                   </Button>
                 </div>
               </div>
@@ -407,90 +407,116 @@ const DesktopNavbar = () => {
       {/* Search panel content start */}
       <div
         className={cn(
-          "bg-white/90 backdrop-blur-2xl fixed top-[20px] left-1/2 -translate-x-1/2 z-[99] rounded-2xl overflow-hidden transition-all duration-300 ease-in-out origin-bottom shadow-2xl border border-white/20",
+          "bg-white fixed top-[20px] left-1/2 -translate-x-1/2 z-[99] rounded-[32px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] origin-top shadow-[0_20px_70px_-15px_rgba(0,0,0,0.15)] border border-slate-100",
           {
-            "h-0 opacity-0": !isSearchActive,
-            "h-[50vh] opacity-100": isSearchActive,
+            "h-0 opacity-0 pointer-events-none translate-y-[-20px]": !isSearchActive,
+            "h-[60vh] opacity-100 pointer-events-auto translate-y-0": isSearchActive,
           }
         )}
         style={{
           maxWidth: "800px",
-          width: "100%",
-          pointerEvents: isSearchActive ? "auto" : "none",
+          width: "95%",
         }}
       >
-        <div className="mt-24 h-4/5 overflow-y-auto px-9">
+        <div className="mt-24 h-[calc(100%-100px)] overflow-y-auto px-10 pb-10 scrollbar-hide">
           {isLoading && searchTerm.length > 0 ? (
-            <p className="text-sm text-slate-500">Searching packages...</p>
+            <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
+              <div className="w-8 h-8 border-2 border-brand-blue border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm font-medium text-slate-500">Curating your adventure...</p>
+            </div>
           ) : (
-            <>
+            <div className="space-y-10">
               {/* Regions Section */}
               {searchResults.regions?.length > 0 && (
-                <>
-                  <p className="mb-4 text-sm text-slate-500">Regions</p>
-                  <ul className="space-y-4 text-brand-blue">
+                <div>
+                  <p className="mb-6 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Regions</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {searchResults.regions.map((region) => (
-                      <li key={region.id}>
-                        <Link
-                          href={`/packages/${region.slug}`}
-                          className="flex items-center gap-3"
-                        >
-                          <MoveRight />
-                          <span>{region.name}</span>
-                        </Link>
-                      </li>
+                      <Link
+                        key={region.id}
+                        href={`/packages/${region.slug}`}
+                        className="group flex items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-brand-blue hover:text-white transition-all duration-300"
+                        onClick={() => {
+                          handleIsSearchActive();
+                          setSearchTerm("");
+                        }}
+                      >
+                        <span className="font-semibold text-slate-700 group-hover:text-white transition-colors">{region.name}</span>
+                        <MoveRight className="size-4 opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all" />
+                      </Link>
                     ))}
-                  </ul>
-                  <hr className="my-4 border-t border-gray-300" />
-                </>
+                  </div>
+                </div>
               )}
 
               {/* Available Packages Section */}
               {searchResults.packages?.length > 0 ? (
-                <>
-                  <p className="mb-4 text-sm text-slate-500">
-                    Available Packages
-                  </p>
-                  <ul className="space-y-4 text-brand-blue">
+                <div>
+                  <p className="mb-6 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Available Packages</p>
+                  <div className="space-y-3">
                     {searchResults.packages.map((pkg) => (
-                      <li key={pkg.id}>
-                        <Link
-                          href={`/packages/${pkg.region}/${pkg.packageSlug}`}
-                          className="flex items-center gap-3"
-                          onClick={() => {
-                            handleIsSearchActive();
-                            setSearchTerm("");
-                          }}
-                        >
-                          <MoveRight />
-                          <span>{pkg.packageName}</span>
-                        </Link>
-                      </li>
+                      <Link
+                        key={pkg.id}
+                        href={`/packages/${pkg.region}/${pkg.packageSlug}`}
+                        className="group flex items-center justify-between p-5 rounded-2xl bg-slate-50 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 border border-transparent hover:border-slate-100"
+                        onClick={() => {
+                          handleIsSearchActive();
+                          setSearchTerm("");
+                        }}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-slate-200 overflow-hidden flex-shrink-0">
+                            {/* Potential image placeholder or icon */}
+                            <div className="w-full h-full flex items-center justify-center text-slate-400">
+                               <Image 
+                                  src={pkg.images?.[0] || "/img/placeholder.png"} 
+                                  alt={pkg.packageName}
+                                  width={48}
+                                  height={48}
+                                  className="object-cover w-full h-full"
+                               />
+                            </div>
+                          </div>
+                          <div>
+                            <span className="block font-bold text-slate-800 text-lg group-hover:text-brand-blue transition-colors">{pkg.packageName}</span>
+                            <span className="text-xs text-slate-400 font-medium uppercase tracking-wide">{pkg.region}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-brand-blue font-bold">Explore</span>
+                          <MoveRight className="size-4 text-brand-blue transform group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </Link>
                     ))}
-                  </ul>
-                </>
-              ) : searchTerm.length > 0 ||
-                (isLoading && debouncedSearch.length > 0) ? (
-                <p className="text-sm text-slate-500">No packages found</p>
+                  </div>
+                </div>
+              ) : searchTerm.length > 0 || (isLoading && debouncedSearch.length > 0) ? (
+                <div className="flex flex-col items-center justify-center py-10 opacity-60">
+                  <Search className="size-10 text-slate-300 mb-4" />
+                  <p className="text-lg font-medium text-slate-500">No destinations matched your search</p>
+                  <p className="text-sm text-slate-400">Try searching for a different country or theme</p>
+                </div>
               ) : (
-                <>
-                  <p className="mb-4 text-sm text-slate-500">Quick Links</p>
-                  <ul className="space-y-4 text-brand-blue">
+                <div>
+                  <p className="mb-6 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Trending Explorations</p>
+                  <div className="flex flex-wrap gap-3">
                     {TRENDING_PACKAGES.map((pkg) => (
-                      <li key={pkg}>
-                        <Link
-                          href={`/packages/${pkg}`}
-                          className="flex items-center gap-3"
-                        >
-                          <MoveRight />
-                          <span className="capitalize">{pkg}</span>
-                        </Link>
-                      </li>
+                      <Link
+                        key={pkg}
+                        href={`/packages/${pkg}`}
+                        className="px-6 py-3 rounded-full bg-slate-50 text-slate-700 font-semibold hover:bg-brand-blue hover:text-white transition-all duration-300 border border-slate-100 hover:border-brand-blue hover:shadow-lg hover:shadow-brand-blue/20"
+                        onClick={() => {
+                          handleIsSearchActive();
+                          setSearchTerm("");
+                        }}
+                      >
+                        <span className="capitalize">{pkg}</span>
+                      </Link>
                     ))}
-                  </ul>
-                </>
+                  </div>
+                </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>
