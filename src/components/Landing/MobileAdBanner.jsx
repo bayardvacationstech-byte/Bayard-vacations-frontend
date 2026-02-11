@@ -7,26 +7,43 @@ import { ArrowRight, MessageCircle, Map, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn, normalizeImageUrl } from "@/lib/utils";
 
+const FALLBACK_DESTINATIONS = [
+  {
+    image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200",
+    name: "Maldives",
+    offer: "",
+    bg: "from-brand-blue via-[#003488] to-brand-blue"
+  }
+];
+
+const FALLBACK_FEATURES = [
+  {
+    icon: <MessageCircle className="w-5 h-5" />,
+    title: "AI Bot Support",
+    desc: "24/7 instant assistance for all your travel queries",
+    color: "bg-blue-400/20 text-blue-400"
+  },
+  {
+    icon: <Map className="w-5 h-5" />,
+    title: "Customized Itineraries",
+    desc: "Tailored travel experiences curated just for you",
+    color: "bg-emerald-400/20 text-emerald-400"
+  }
+];
+
 const MobileAdBanner = ({ bannerData }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
 
-  const FALLBACK_FEATURES = [
-    {
-      icon: <MessageCircle className="w-5 h-5" />,
-      title: "AI Bot Support",
-      desc: "24/7 instant assistance for all your travel queries",
-      color: "bg-blue-400/20 text-blue-400"
-    }
-  ];
-
-  // Map dynamic data or use empty array
-  const destinations = bannerData?.mediaCarousel?.items?.map(item => ({
-    image: item.src || item.imageUrl || item.image,
-    name: item.featuredText || item.title || "Exclusive Destination",
-    offer: item.offer || item.discount || "",
-    bg: item.bgColor || "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]"
-  })) || [];
+  // Map dynamic data or use fallback
+  const destinations = bannerData?.mediaCarousel?.items?.length > 0 
+    ? bannerData.mediaCarousel.items.map(item => ({
+        image: item.src || item.imageUrl || item.image,
+        name: item.featuredText || item.title || "Exclusive Destination",
+        offer: item.offer || item.discount || "",
+        bg: item.bgColor || "from-[#0d3b7a] via-[#1a5fb4] to-[#0d3b7a]"
+      }))
+    : FALLBACK_DESTINATIONS;
 
   const features = bannerData?.promotionSection?.cards?.map((card, idx) => ({
     icon: idx === 0 ? <MessageCircle className="w-5 h-5" /> : <Map className="w-5 h-5" />,
@@ -58,14 +75,14 @@ const MobileAdBanner = ({ bannerData }) => {
     return () => clearInterval(interval);
   }, [features.length]);
 
-  const activeDestination = destinations[activeIndex] || destinations[0];
-  const activeFeature = features[activeFeatureIndex] || features[0];
+  const activeDestination = destinations?.[activeIndex] || destinations?.[0] || FALLBACK_DESTINATIONS[0];
+  const activeFeature = features?.[activeFeatureIndex] || features?.[0] || FALLBACK_FEATURES[0];
 
   return (
     <div className="relative w-full max-w-md mx-auto min-h-[85vh] pb-24 overflow-hidden md:hidden transition-colors duration-1000">
       
       {/* Dynamic Background */}
-      <div className={cn("absolute inset-0 bg-gradient-to-b transition-colors duration-1000", activeDestination.bg)} />
+      <div className={cn("absolute inset-0 bg-gradient-to-b transition-colors duration-1000", activeDestination?.bg)} />
 
       {/* Decorative Elements */}
       <div className="absolute w-[200px] h-[200px] border border-white/10 rounded-full -top-[100px] -right-[100px] pointer-events-none" />
