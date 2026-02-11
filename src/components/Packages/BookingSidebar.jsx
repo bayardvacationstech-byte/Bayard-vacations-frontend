@@ -55,7 +55,7 @@ const BookingSidebar = ({
                   )}
                 >
                   <span className={cn(
-                    "text-[9px] font-black uppercase tracking-wider mb-1.5 transition-colors",
+                    "text-[9px] font-bold uppercase tracking-wider mb-1.5 transition-colors",
                     isActive ? "text-yellow-400" : "text-white/40"
                   )}>
                     {label}
@@ -80,12 +80,12 @@ const BookingSidebar = ({
           <div className="mb-6 p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
             <div className="flex items-center justify-between mb-0.5">
               <div className="flex items-baseline gap-1">
-                <span className={cn("text-2xl font-black", finalPrice > 0 ? "text-white" : "text-yellow-400")}>
+                <span className={cn("text-2xl font-bold", finalPrice > 0 ? "text-white" : "text-yellow-400")}>
                    {finalPrice > 0 ? `₹ ${formatPrice(finalPrice)}` : formatPrice(finalPrice)}
                 </span>
               </div>
               {packageData?.offer?.discountPercentage && finalPrice > 0 && (
-                <span className="px-2 py-1 bg-yellow-400 text-slate-900 font-black rounded-lg text-[9px] uppercase tracking-wider">
+                <span className="px-2 py-1 bg-yellow-400 text-slate-900 font-bold rounded-lg text-[9px] uppercase tracking-wider">
                   {packageData.offer.discountPercentage}% Off
                 </span>
               )}
@@ -101,7 +101,7 @@ const BookingSidebar = ({
                 const hotelParam = selectedHotel?.type ? `?hotel=${selectedHotel.type}` : "";
                 window.location.href = `/checkout/${packageData.packageSlug}${hotelParam}`;
               }}
-              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 px-5 py-3 rounded-2xl shadow-lg transition-all text-sm font-black uppercase tracking-widest active:scale-95 hover:opacity-90"
+              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 px-5 py-3 rounded-2xl shadow-lg transition-all text-sm font-bold uppercase tracking-widest active:scale-95 hover:opacity-90"
             >
               Book Now
             </button>

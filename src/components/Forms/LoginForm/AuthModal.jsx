@@ -19,7 +19,7 @@ export default function AuthModal() {
       <DialogContent className="max-w-[450px] !rounded-3xl bg-white p-0 overflow-hidden border-none shadow-2xl">
         <DialogHeader className="relative p-6 pb-0">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-left font-black text-2xl text-slate-900 tracking-tight">
+            <DialogTitle className="text-left font-bold text-2xl text-slate-900 tracking-tight">
               Sign In
             </DialogTitle>
             <Button

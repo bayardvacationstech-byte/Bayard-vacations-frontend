@@ -255,7 +255,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
             {/* Rating Tag - Enhanced prominence */}
             <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full shadow-2xl transform group-hover:rotate-6 transition-transform border border-white/50">
               <Heart className={cn("w-4 h-4 fill-current", theme.text)} />
-              <span className={cn("text-xs font-black", theme.text)}>4.9</span>
+              <span className={cn("text-xs font-bold", theme.text)}>4.9</span>
             </div>
 
             {/* Location + Duration Overlay - Enhanced highlighting */}
@@ -264,7 +264,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                 <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
                   <MapPin className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-[13px] font-black tracking-tight capitalize drop-shadow-md">
+                <span className="text-[13px] font-bold tracking-tight capitalize drop-shadow-md">
                   {item.location || regionSlug.split("-").join(" ")}
                 </span>
               </div>
@@ -287,7 +287,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
             <div className="space-y-2 sm:space-y-2">
               <div className="min-h-[3rem] sm:min-h-[3.75rem]">
                 <h3 className={cn(
-                  "text-xl sm:text-2xl font-black text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
+                  "text-xl sm:text-2xl font-bold text-slate-900 transition-colors leading-tight tracking-tight line-clamp-2",
                   theme.textHover
                 )}>
                   {item.packageTitle?.replace(/^["']|["']$/g, '')}
@@ -310,7 +310,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                       )}>
                         {isCovering ? (
                           <>
-                            <span className={cn("font-black mr-1", theme.accentText)}>Covering:</span>
+                            <span className={cn("font-bold mr-1", theme.accentText)}>Covering:</span>
                             <span className="text-slate-600 font-medium">
                               {highlight.replace("Covering:", "").trim()}
                             </span>
@@ -328,11 +328,11 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
             {/* Premium Footer */}
             <div className="pt-2 sm:pt-3 border-t border-slate-100 flex items-end justify-between">
               <div className="space-y-1 sm:space-y-1">
-                <p className="text-[8px] sm:text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Curated Price</p>
+                <p className="text-[8px] sm:text-[9px] text-slate-400 font-semibold uppercase tracking-[0.2em]">Curated Price</p>
                 <div className="flex flex-col">
                   {(item.offerPrice > 0 || item.basePrice > 0) ? (
                     <>
-                      <p className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tighter">
+                      <p className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tighter">
                         ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                       </p>
                       {item.offerPrice > 0 && (
@@ -342,7 +342,7 @@ const PackageCard = ({ item, className, isGroup = false, variant = "blue" }) => 
                       )}
                     </>
                   ) : (
-                    <p className={cn("text-xs sm:text-lg font-black tracking-tight", theme.text)}>
+                    <p className={cn("text-xs sm:text-lg font-bold tracking-tight", theme.text)}>
                       On Request
                     </p>
                   )}
@@ -490,7 +490,7 @@ const OldPackageCard = ({ item, className, isGroup = false }) => {
         <div className="relative px-4 sm:px-6 pb-2 sm:pb-4 pt-4 sm:pt-6">
           <div className="mb-2 flex items-center justify-between gap-1">
             <div className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-gradient-to-r from-brand-blue/90 to-brand-blue/70 backdrop-blur-sm">
-              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-white drop-shadow-lg">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white drop-shadow-lg">
                 {item.region}
               </span>
             </div>
@@ -499,7 +499,7 @@ const OldPackageCard = ({ item, className, isGroup = false }) => {
             </span>
           </div>
 
-          <h3 className="mb-2 sm:mb-3 line-clamp-2 text-[14px] sm:text-base font-black leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <h3 className="mb-2 sm:mb-3 line-clamp-2 text-[14px] sm:text-base font-bold leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             {item.packageTitle}
           </h3>
 
@@ -515,7 +515,7 @@ const OldPackageCard = ({ item, className, isGroup = false }) => {
             ) : (
               <div className="flex items-center gap-1.5 sm:gap-2 flex-nowrap">
                 <div className="flex-shrink-0">
-                  <p className="text-lg sm:text-xl font-black leading-none text-yellow-400 drop-shadow-lg">
+                  <p className="text-lg sm:text-xl font-bold leading-none text-yellow-400 drop-shadow-lg">
                     ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                   </p>
                   {item.offerPrice > 0 && (
@@ -526,7 +526,7 @@ const OldPackageCard = ({ item, className, isGroup = false }) => {
                 </div>
 
                 {item.offerPrice > 0 && item.basePrice > 0 && (
-                  <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-brand-accent to-yellow-400 px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-black text-black shadow-lg">
+                  <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-brand-accent to-yellow-400 px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-bold text-black shadow-lg">
                     {Math.round(((item.basePrice - item.offerPrice) / item.basePrice) * 100)}%
                   </span>
                 )}
@@ -534,14 +534,14 @@ const OldPackageCard = ({ item, className, isGroup = false }) => {
             )}
 
             <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-              <div className="rounded-xl bg-brand-blue hover:bg-brand-blue-hovered px-3 sm:px-3 py-2 sm:py-2 text-center text-[11px] sm:text-[11px] font-black text-white cursor-pointer transition-all shadow-lg">
+              <div className="rounded-xl bg-brand-blue hover:bg-brand-blue-hovered px-3 sm:px-3 py-2 sm:py-2 text-center text-[11px] sm:text-[11px] font-bold text-white cursor-pointer transition-all shadow-lg">
                 View
               </div>
 
               {!isGroup && (
                 <button
                   onClick={handleContactExpert}
-                  className="flex-shrink-0 rounded-xl bg-brand-blue hover:bg-brand-blue/90 px-3 sm:px-3 py-2 sm:py-2 text-[11px] sm:text-[11px] font-black text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
+                  className="flex-shrink-0 rounded-xl bg-brand-blue hover:bg-brand-blue/90 px-3 sm:px-3 py-2 sm:py-2 text-[11px] sm:text-[11px] font-bold text-white transition-all shadow-[0_0_15px_rgba(34,197,94,0.3)] transform hover:scale-105"
                 >
                   Call
                 </button>

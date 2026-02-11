@@ -148,7 +148,7 @@ const PackageHero = ({ packageData, price }) => {
                     <div className="space-y-1">
                       <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">Starting from</p>
                       <div className="flex items-baseline gap-1">
-                        <span className={cn("text-3xl font-extrabold", formatPrice(price) === "On Request" ? "text-yellow-400" : "text-white")}>
+                        <span className={cn("text-3xl font-bold", formatPrice(price) === "On Request" ? "text-yellow-400" : "text-white")}>
                           {formatPrice(price) === "On Request" ? "On Request" : `₹${formatPrice(price)}`}
                         </span>
                       </div>
@@ -184,7 +184,7 @@ const PackageHero = ({ packageData, price }) => {
                 <div className="xl:hidden flex items-center justify-between bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl p-3 mb-2">
                   <div className="flex items-center gap-4">
                     <div className="flex flex-col">
-                      <span className="text-white/40 text-[8px] uppercase font-extrabold tracking-widest">Starts from</span>
+                      <span className="text-white/40 text-[8px] uppercase font-bold tracking-widest">Starts from</span>
                       <div className="flex items-baseline gap-1">
                         {(packageData?.basePrice > 0 || packageData?.price > 0 || packageData?.startingPrice > 0) && (
                           <span className="text-brand-accent text-sm font-bold">₹</span>
@@ -200,8 +200,8 @@ const PackageHero = ({ packageData, price }) => {
                     </div>
                     <div className="w-[1px] h-6 bg-white/10" />
                     <div className="flex flex-col">
-                      <span className="text-white/40 text-[8px] uppercase font-extrabold tracking-widest">Duration</span>
-                      <span className="text-white font-extrabold text-lg">{packageData?.nights || 0}N / {packageData?.days || 0}D</span>
+                      <span className="text-white/40 text-[8px] uppercase font-bold tracking-widest">Duration</span>
+                      <span className="text-white font-bold text-lg">{packageData?.nights || 0}N / {packageData?.days || 0}D</span>
                     </div>
                   </div>
                   <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">

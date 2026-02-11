@@ -53,7 +53,7 @@ export default function AboutPage() {
                 <span className="text-xs md:text-sm font-bold text-brand-blue uppercase tracking-wider">Est. 2017</span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 md:mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight">
                 We Are <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-emerald-400 to-brand-blue">
                   Bayard Vacations
@@ -142,7 +142,7 @@ export default function AboutPage() {
                         {/* Year Badge */}
                         <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                           <span className={cn(
-                            "font-black text-white text-center px-1",
+                            "font-bold text-white text-center px-1",
                             item.year.length > 5 ? "text-base leading-tight" : "text-xl"
                           )}>{item.year}</span>
                         </div>
@@ -333,7 +333,7 @@ export default function AboutPage() {
                 <div className="inline-block px-4 py-2 bg-brand-blue/10 rounded-full mb-6 border border-brand-blue/20">
                   <span className="text-brand-blue font-bold uppercase tracking-wider text-sm">Start Your Journey</span>
                 </div>
-                <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-6">
+                <h2 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
                   Your Next 
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-brand-blue via-yellow-400 to-brand-blue bg-size-200 animate-gradient">
                     Adventure Awaits
@@ -352,7 +352,7 @@ export default function AboutPage() {
                   { value: '8+', label: 'Years Experience' }
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-4 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="text-2xl md:text-3xl font-black text-brand-blue mb-1">{stat.value}</div>
+                    <div className="text-2xl md:text-3xl font-bold text-brand-blue mb-1">{stat.value}</div>
                     <div className="text-xs text-slate-600 font-semibold">{stat.label}</div>
                   </div>
                 ))}
@@ -365,7 +365,7 @@ export default function AboutPage() {
               <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-slate-700">
                 <div className="text-center mb-8">
                   <div className="text-6xl mb-4">✈️</div>
-                  <h3 className="text-3xl font-black text-white mb-3">Let's Plan Together</h3>
+                  <h3 className="text-3xl font-bold text-white mb-3">Let's Plan Together</h3>
                   <p className="text-slate-300">
                     Get personalized packages tailored to your dreams
                   </p>

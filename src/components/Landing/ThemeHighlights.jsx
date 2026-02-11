@@ -138,7 +138,7 @@ export default function ThemeHighlights({
                 setIsAutoPlay(false);
               }}
               className={cn(
-                "rounded-full border text-[11px] sm:text-sm font-black sm:font-bold px-3.5 sm:px-6 py-1.5 sm:py-2.5 flex-shrink-0 transition-all duration-300 whitespace-nowrap",
+                "rounded-full border text-[11px] sm:text-sm font-bold sm:font-bold px-3.5 sm:px-6 py-1.5 sm:py-2.5 flex-shrink-0 transition-all duration-300 whitespace-nowrap",
                 currentThemeIndex === index
                   ? "bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-md sm:shadow-lg text-slate-900 border-transparent hover:opacity-90"
                   : "border-gray-100 text-brand-blue bg-brand-blue/5 hover:bg-brand-blue/10"
@@ -193,7 +193,7 @@ export default function ThemeHighlights({
                     
                     <Link
                         href={`/themes/${currentTheme?.themeSlug === 'group-adventures' ? 'group-departure' : currentTheme?.themeSlug}`}
-                        className="bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-xl text-slate-900 inline-block px-8 py-3 sm:px-10 sm:py-4 font-black rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
+                        className="bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-xl text-slate-900 inline-block px-8 py-3 sm:px-10 sm:py-4 font-bold rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                     >
                         Explore Packages
                     </Link>

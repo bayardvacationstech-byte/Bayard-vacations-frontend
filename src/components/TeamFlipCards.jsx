@@ -70,7 +70,7 @@ export default function TeamFlipCards() {
 
       <Container className="relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white mb-6 animate-gradient">
+          <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white mb-6 animate-gradient">
             Our Amazing Team
           </h2>
           <p className="text-xl text-white/80">Scroll to reveal each team member</p>
@@ -98,7 +98,7 @@ export default function TeamFlipCards() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                      <h3 className="text-2xl font-black mb-1">{member.name}</h3>
+                      <h3 className="text-2xl font-bold mb-1">{member.name}</h3>
                       <p className="text-sm font-semibold opacity-90">{member.role}</p>
                       <div className="mt-3 text-xs opacity-70">Hover to flip →</div>
                     </div>
@@ -110,7 +110,7 @@ export default function TeamFlipCards() {
                   <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4">
                     <span className="text-4xl">✨</span>
                   </div>
-                  <h3 className="text-2xl font-black mb-2 text-center">{member.name}</h3>
+                  <h3 className="text-2xl font-bold mb-2 text-center">{member.name}</h3>
                   <p className="text-sm font-bold mb-1 opacity-90">{member.role}</p>
                   <p className="text-xs px-4 py-1 rounded-full bg-white/20 backdrop-blur-sm mb-4">{member.dept}</p>
                   <p className="text-center text-sm leading-relaxed opacity-90">{member.bio}</p>

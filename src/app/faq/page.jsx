@@ -215,7 +215,7 @@ const FaqPage = () => {
                 } flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                   <stat.icon className="w-7 h-7 text-white" />
                 </div>
-                <div className="text-lg font-black text-slate-900 mb-1">{stat.label}</div>
+                <div className="text-lg font-bold text-slate-900 mb-1">{stat.label}</div>
                 <div className="text-xs text-slate-500 text-center">{stat.desc}</div>
               </div>
             ))}

@@ -19,7 +19,7 @@ const PolicySection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {/* Domestic Column */}
             <div className="space-y-4">
-              <h4 className="text-lg md:text-xl font-black text-rose-600 mb-4 flex items-center gap-2">
+              <h4 className="text-lg md:text-xl font-bold text-rose-600 mb-4 flex items-center gap-2">
                 Domestic Packages
               </h4>
               <div className="space-y-3">
@@ -68,7 +68,7 @@ const PolicySection = () => {
 
             {/* International Column */}
             <div className="space-y-4">
-              <h4 className="text-lg md:text-xl font-black text-rose-600 mb-4">
+              <h4 className="text-lg md:text-xl font-bold text-rose-600 mb-4">
                 International Packages
               </h4>
               <div className="space-y-3">

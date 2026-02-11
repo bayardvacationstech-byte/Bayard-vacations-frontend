@@ -17,10 +17,10 @@ const ProfilePage = () => {
           <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-700">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/5 border border-brand-blue/10">
               <span className="size-1.5 rounded-full bg-brand-blue animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue/60">Registry details</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-blue/60">Registry details</span>
             </div>
             <div>
-              <h2 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tight">Profile Information</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 uppercase tracking-tight">Profile Information</h2>
               <p className="text-slate-500 font-medium text-sm mt-1">Review and manage your personal travel identification.</p>
             </div>
           </div>
@@ -46,7 +46,7 @@ const ProfilePage = () => {
                   </div>
                   <div>
                     <h5 className="font-bold uppercase tracking-[0.3em] text-red-500/40 text-[10px] mb-1">Authorization</h5>
-                    <h3 className="text-2xl font-black text-slate-900 tracking-tight">Security & Access</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Security & Access</h3>
                     <p className="text-slate-500 text-xs font-medium mt-1">Safeguard your travel data and session</p>
                   </div>
                 </div>

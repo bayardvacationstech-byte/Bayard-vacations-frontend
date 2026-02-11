@@ -160,7 +160,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
         <div className="absolute top-3 left-3">
           <div className="bg-slate-900/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1.5">
             <div className="w-1 h-1 rounded-full bg-brand-blue animate-pulse" />
-            <span className="text-[9px] font-black text-white uppercase tracking-widest">Handpicked</span>
+            <span className="text-[9px] font-bold text-white uppercase tracking-widest">Handpicked</span>
           </div>
         </div>
 
@@ -176,7 +176,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
       {/* Content Section - Compact */}
       <div className="p-4 flex-1 flex flex-col">
         {/* 1. Hotel Name */}
-        <h3 className="text-lg font-black mb-3 text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight line-clamp-1">
+        <h3 className="text-lg font-bold mb-3 text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight line-clamp-1">
           {hotel.name}
         </h3>
 
@@ -188,7 +188,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
           </div>
           <div className="flex items-center gap-1.5 shrink-0 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
             <MapPin className="w-3 h-3 text-brand-blue" />
-            <p className="text-xs font-black text-brand-blue uppercase tracking-tight capitalize">{hotel.place?.name || hotel.city || "City Center"}</p>
+            <p className="text-xs font-bold text-brand-blue uppercase tracking-tight capitalize">{hotel.place?.name || hotel.city || "City Center"}</p>
           </div>
         </div>
 
@@ -243,7 +243,7 @@ const PackageHotels = ({ packageData, activeHotelType, onHotelTypeChange, onAvai
                 setSelectedCategory(cat);
                 if (onHotelTypeChange) onHotelTypeChange(cat);
               }}
-              className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-500 whitespace-nowrap ${
+              className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-[0.1em] transition-all duration-500 whitespace-nowrap ${
                 selectedCategory === cat
                   ? "bg-brand-blue text-white shadow-xl shadow-brand-blue/30 scale-[1.02]"
                   : "text-slate-400 hover:text-slate-600"

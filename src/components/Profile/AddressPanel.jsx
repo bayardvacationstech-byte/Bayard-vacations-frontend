@@ -141,7 +141,7 @@ const AddressPanel = () => {
                 <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Location
                 </h5>
-                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Primary Residence</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Primary Residence</h4>
               </div>
             </div>
 
@@ -149,7 +149,7 @@ const AddressPanel = () => {
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
                 {address.street ? (
                   <div className="space-y-1">
-                    <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">
+                    <h3 className="text-2xl font-bold text-slate-900 tracking-tight leading-tight">
                       {address.street}, {address.city}
                     </h3>
                     <p className="text-lg font-bold text-slate-500 tracking-tight">
@@ -157,7 +157,7 @@ const AddressPanel = () => {
                     </p>
                   </div>
                 ) : (
-                  <h3 className="text-2xl font-black text-slate-400 tracking-tight">Not Specified</h3>
+                  <h3 className="text-2xl font-bold text-slate-400 tracking-tight">Not Specified</h3>
                 )}
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4 flex items-center gap-2">
                   <span className="size-1 rounded-full bg-slate-300" />
@@ -227,7 +227,7 @@ const AddressPanel = () => {
                 <div className="flex items-center gap-3 pt-2">
                   <Button
                     type="submit"
-                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-black uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
+                    className="rounded-2xl bg-brand-blue px-8 h-12 text-white font-bold uppercase tracking-widest text-[10px] hover:shadow-2xl hover:shadow-brand-blue/20 transition-all duration-300 flex items-center gap-3"
                     disabled={saving}
                   >
                     {saving ? (

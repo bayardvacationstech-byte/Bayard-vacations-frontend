@@ -307,7 +307,7 @@ export default function FactsheetClient({ regionSlug }) {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-3xl sm:text-6xl md:text-7xl font-extrabold mb-6 tracking-tight leading-[1.1] uppercase text-white">
+            <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold mb-6 tracking-tight leading-[1.1] uppercase text-white">
               {currentData.heroTitle}<br />
               <span className="bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent lowercase">Factsheet</span>
             </h1>
@@ -392,11 +392,11 @@ export default function FactsheetClient({ regionSlug }) {
             </section>
 
             {/* Highlights Section */}
-            {currentData.highlights && (
+            {/* {currentData.highlights && (
               <section id="highlights" className="scroll-mt-24">
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 bg-white border border-slate-100 rounded-[3rem] p-6 md:p-10 shadow-sm">
                   
-                  {/* Left Side: Region Highlights */}
+                  
                   <div className="flex-1">
                     <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
                       Region <span className="text-brand-blue">Highlights</span>
@@ -408,7 +408,6 @@ export default function FactsheetClient({ regionSlug }) {
                     </div>
                   </div>
 
-                  {/* Right Side: Top Attractions */}
                   <div className="flex-1">
                     <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight mb-8 uppercase tracking-widest">
                       Top <span className="text-brand-blue">Attractions</span>
@@ -421,7 +420,7 @@ export default function FactsheetClient({ regionSlug }) {
                   </div>
                 </div>
               </section>
-            )}
+            )} */}
 
             {/* 2. History Section */}
             {currentData.history && (
@@ -1026,7 +1025,7 @@ const FeatureCard = ({ icon: Icon, title, description, iconColor }) => (
       <Icon className="w-5 h-5" />
     </div>
     <div className="space-y-1">
-      <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider">{title}</h4>
+      <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">{title}</h4>
       <p className="text-xs text-slate-500 font-medium leading-relaxed">{description}</p>
     </div>
   </div>

@@ -116,7 +116,7 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
               Must-Do Experiences
             </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
             <span className="hidden sm:inline">Experience </span>
             <span className="inline sm:hidden">Highlights of </span>
             <span className="text-brand-blue capitalize">{regionName}</span>
@@ -163,7 +163,7 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
                     </div>
 
                     {/* Title & Description */}
-                    <h3 className="text-3xl md:text-5xl font-black text-white leading-tight drop-shadow-2xl mb-3">
+                    <h3 className="text-3xl md:text-5xl font-bold text-white leading-tight drop-shadow-2xl mb-3">
                       {image.title}
                     </h3>
                     <p className="text-white/95 text-base md:text-lg leading-relaxed max-w-3xl drop-shadow-lg">
@@ -293,7 +293,7 @@ const RegionExperiences = ({ regionName = "this destination", regionData }) => {
                     </div>
                     
                     {/* Title */}
-                    <h3 className="text-xl md:text-2xl font-black text-white mb-1.5 leading-tight">
+                    <h3 className="text-xl md:text-2xl font-bold text-white mb-1.5 leading-tight">
                       {galleryImages[currentImageIndex].title}
                     </h3>
                     

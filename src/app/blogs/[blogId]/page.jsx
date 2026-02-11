@@ -47,17 +47,17 @@ const RelatedBlogCard = ({ blog }) => {
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex items-center gap-2 mb-4">
            <div className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
-           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{formatDate(blog.createdAt)}</span>
+           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{formatDate(blog.createdAt)}</span>
         </div>
         
-        <h3 className="text-xl font-black text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight leading-tight mb-6 line-clamp-2">
+        <h3 className="text-xl font-bold text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight leading-tight mb-6 line-clamp-2">
           {blog.title}
         </h3>
         
         <div className="mt-auto">
           <Link
             href={`/blogs/${blog.slug}`}
-            className="inline-flex items-center gap-2 text-brand-blue font-black text-xs uppercase tracking-widest border-b-2 border-transparent hover:border-brand-blue pb-1 transition-all"
+            className="inline-flex items-center gap-2 text-brand-blue font-bold text-xs uppercase tracking-widest border-b-2 border-transparent hover:border-brand-blue pb-1 transition-all"
           >
             Read Article <ArrowUpRight className="size-4" />
           </Link>
@@ -216,10 +216,10 @@ const BlogPost = () => {
               <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-brand-blue transition-all border border-white/10 group-hover:border-brand-blue">
                 <ChevronLeft className="size-4" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest">Back to Blogs</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">Back to Blogs</span>
             </Link>
             
-            <h1 className="text-3xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl">
+            <h1 className="text-3xl md:text-7xl font-bold text-white mb-8 tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl">
               {blog.title}
             </h1>
             
@@ -229,7 +229,7 @@ const BlogPost = () => {
                   <Calendar className="size-5 text-brand-blue" />
                 </div>
                 <div>
-                  <span className="block text-[10px] font-black text-white/40 uppercase tracking-widest">Published</span>
+                  <span className="block text-[10px] font-bold text-white/40 uppercase tracking-widest">Published</span>
                   <span className="text-sm font-bold text-white">{formatDate(blog.createdAt)}</span>
                 </div>
               </div>
@@ -241,7 +241,7 @@ const BlogPost = () => {
                    <Tag className="size-5 text-brand-blue" />
                 </div>
                 <div>
-                  <span className="block text-[10px] font-black text-white/40 uppercase tracking-widest">Category</span>
+                  <span className="block text-[10px] font-bold text-white/40 uppercase tracking-widest">Category</span>
                   <span className="text-sm font-bold text-white">Travel Guide</span>
                 </div>
               </div>
@@ -276,9 +276,9 @@ const BlogPost = () => {
                {/* Blog Content */}
               <div
                 className="prose prose-lg max-w-none 
-                  prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900
+                  prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900
                   prose-p:text-slate-600 prose-p:font-medium prose-p:leading-relaxed
-                  prose-strong:font-black prose-strong:text-slate-900
+                  prose-strong:font-bold prose-strong:text-slate-900
                   prose-li:text-slate-600 prose-li:font-medium
                   prose-img:rounded-[2rem] prose-img:border prose-img:border-slate-100"
                 dangerouslySetInnerHTML={{ __html: blog.content }}
@@ -332,7 +332,7 @@ const BlogPost = () => {
                       <Share2 className="size-6 text-brand-blue" />
                     </div>
                     
-                    <h3 className="text-2xl font-black mb-4 tracking-tight leading-tight">
+                    <h3 className="text-2xl font-bold mb-4 tracking-tight leading-tight">
                       Subscribe to <span className="text-brand-blue">Bayard News</span>
                     </h3>
                     <p className="mb-8 text-white/60 text-sm font-medium leading-relaxed">
@@ -347,7 +347,7 @@ const BlogPost = () => {
                           className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-4 text-white placeholder:text-white/30 outline-none focus:border-brand-blue/50 transition-all text-sm font-bold"
                         />
                       </div>
-                      <Button className="w-full rounded-2xl py-7 bg-brand-blue hover:bg-brand-blue-light text-white font-black uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-lg shadow-brand-blue/20">
+                      <Button className="w-full rounded-2xl py-7 bg-brand-blue hover:bg-brand-blue-light text-white font-bold uppercase tracking-widest text-xs transition-all active:scale-[0.98] shadow-lg shadow-brand-blue/20">
                         Join Newsletter
                       </Button>
                     </div>
@@ -368,7 +368,7 @@ const BlogPost = () => {
         <section className="pt-8 pb-16 bg-slate-50/50">
           <Container>
             <div className="mb-12">
-              <h2 className="text-2xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+              <h2 className="text-2xl md:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-4">
                 Related <span className="text-brand-blue">Articles</span>
               </h2>
               <p className="text-slate-500 text-sm md:text-xl font-medium">Continue your discovery with more travel insights</p>

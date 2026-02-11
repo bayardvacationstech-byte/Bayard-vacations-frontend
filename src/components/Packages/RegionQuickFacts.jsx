@@ -123,13 +123,13 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
           >
             <div>
               <div className="flex items-center gap-2 md:gap-4 mb-3 md:mb-4">
-                <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-blue-600 whitespace-nowrap">Destination Overview</span>
+                <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] text-blue-600 whitespace-nowrap">Destination Overview</span>
                 <div className="h-[1.5px] md:h-[2px] flex-1 md:w-12 bg-blue-600/20" />
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-2 md:mb-4">
                 About {factSheetData?.hero?.title || factSheetData?.details?.hero?.title || whyChooseData?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || whyChooseData?.details?.whyVisitSection?.mainTitle?.replace('Why Visit ', '') || regionName}
               </h2>
-              <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">
+              <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] text-slate-400 mb-4 md:mb-8 max-w-sm">
                 {factSheetData?.hero?.subtitle || factSheetData?.details?.hero?.subtitle || whyChooseData?.whyVisitSection?.subTitle || whyChooseData?.details?.whyVisitSection?.subTitle || "Exploring the heart of the region"}
               </p>
               
@@ -176,13 +176,13 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
               <div className="flex items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto">
                 <Link href={`/factsheet/${regionSlug}`}>
                   <div className="flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-8 bg-slate-900 rounded-full group cursor-pointer hover:bg-slate-800 hover:shadow-lg hover:shadow-slate-200/50 transition-all">
-                    <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-white whitespace-nowrap">Factsheet</span>
+                    <span className="text-[9px] sm:text-xs font-bold uppercase tracking-widest text-white whitespace-nowrap">Factsheet</span>
                     <Zap className="w-3 sm:w-4 h-3 sm:h-4 text-amber-400 fill-amber-400 group-hover:scale-110 transition-transform" />
                   </div>
                 </Link>
                 <Link href={`/why-choose/${regionSlug}`}>
                   <div className="flex items-center justify-center gap-2 py-2.5 px-4 sm:py-3 sm:px-8 bg-amber-400 rounded-full group cursor-pointer hover:bg-amber-500 hover:shadow-lg hover:shadow-amber-200/50 transition-all">
-                    <span className="text-[9px] sm:text-xs font-black uppercase tracking-widest text-slate-900 whitespace-nowrap">Why Visit?</span>
+                    <span className="text-[9px] sm:text-xs font-bold uppercase tracking-widest text-slate-900 whitespace-nowrap">Why Visit?</span>
                     <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-slate-900 group-hover:rotate-12 transition-transform" />
                   </div>
                 </Link>
@@ -192,7 +192,7 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="flex items-center justify-center gap-2 group cursor-pointer py-2.5 sm:py-0 sm:ml-auto"
               >
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
                   {isExpanded ? "Less" : "Full Guide"}
                 </span>
                 <motion.div animate={{ rotate: isExpanded ? 180 : 0 }}>
@@ -239,7 +239,7 @@ const RegionQuickFacts = ({ regionData, regionName, whyChooseData }) => {
                           <IconComponent className={cn("w-5 h-5", getColorClass(item.color))} />
                         </div>
                         <div>
-                          <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">{title}</h4>
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-slate-900 mb-1">{title}</h4>
                           <p className="text-sm text-slate-500 leading-tight line-clamp-3">{content}</p>
                         </div>
                       </div>

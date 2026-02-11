@@ -21,7 +21,7 @@ const ShareablePaymentInfo = ({ paymentTerms, cancellationPolicy, bookingTerms }
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-brand-blue to-purple-600 mb-4 print:w-12 print:h-12">
             <Shield className="w-8 h-8 text-white print:w-6 print:h-6" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 print:text-2xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 print:text-2xl">
             Terms & Policies
           </h2>
           <p className="text-slate-600 text-lg print:text-sm">
@@ -80,7 +80,7 @@ const ShareablePaymentInfo = ({ paymentTerms, cancellationPolicy, bookingTerms }
               <div key={tab.id} className="break-inside-avoid">
                 <div className="flex items-center gap-2 mb-3">
                   <Icon className="w-5 h-5 text-brand-blue" />
-                  <h3 className="text-lg font-black text-slate-900">{tab.label}</h3>
+                  <h3 className="text-lg font-bold text-slate-900">{tab.label}</h3>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
                   <div

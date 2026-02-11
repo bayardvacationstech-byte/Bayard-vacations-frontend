@@ -55,7 +55,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
               <motion.div
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-blue/10 border border-brand-blue/20 mb-6"
               >
-                <span className="text-sm font-black text-brand-blue uppercase tracking-[0.2em] flex items-center gap-2">
+                <span className="text-sm font-bold text-brand-blue uppercase tracking-[0.2em] flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   Why Visit?
                 </span>
@@ -111,7 +111,7 @@ const RegionWhyChoose = ({ regionName = "this destination", data }) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
                 
                 <div className="absolute inset-0 p-8 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-blue mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-blue mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
                     Feature {index + 1}
                   </span>
                   <h3 className="text-xl md:text-2xl font-bold text-white leading-tight drop-shadow-md">

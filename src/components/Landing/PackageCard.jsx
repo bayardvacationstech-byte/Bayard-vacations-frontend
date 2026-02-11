@@ -131,7 +131,7 @@ const LandingPackageCard = ({ item, className, isGroup = false }) => {
           {/* Top meta: Region + Duration */}
           <div className="flex items-center justify-between gap-2 mb-3">
             <div className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-sm transition-colors group-hover:bg-white/20">
-              <span className="text-[10px] font-black uppercase tracking-widest text-white">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white">
                 {(item.region || "").split("-").join(" ")}
               </span>
             </div>
@@ -143,7 +143,7 @@ const LandingPackageCard = ({ item, className, isGroup = false }) => {
           </div>
 
           {/* Title */}
-          <h3 className="text-base sm:text-xl font-black text-white mb-3 line-clamp-2 leading-tight drop-shadow-md">
+          <h3 className="text-base sm:text-xl font-bold text-white mb-3 line-clamp-2 leading-tight drop-shadow-md">
             {item.packageTitle}
           </h3>
 
@@ -152,7 +152,7 @@ const LandingPackageCard = ({ item, className, isGroup = false }) => {
             <div className="flex flex-col">
               {(item.offerPrice > 0 || item.basePrice > 0) ? (
                 <>
-                  <span className="text-lg sm:text-2xl font-black text-white drop-shadow-md">
+                  <span className="text-lg sm:text-2xl font-bold text-white drop-shadow-md">
                     ₹{formatPrice(item.offerPrice > 0 ? item.offerPrice : item.basePrice)}
                   </span>
                   {item.offerPrice > 0 && (

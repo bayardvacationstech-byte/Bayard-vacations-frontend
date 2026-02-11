@@ -129,7 +129,7 @@ export default function AdvertisementBanner({ bannerData }) {
             </motion.div>
 
             {/* Headline */}
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight mb-3">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
               {contentSection.title}
             </h2>
 
@@ -226,11 +226,11 @@ export default function AdvertisementBanner({ bannerData }) {
                   {floatingDeal.title && (
                     <div className="flex items-center gap-2 justify-center mb-2">
                       <Sparkles className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">{floatingDeal.title}</span>
+                      <span className="text-xs font-bold uppercase tracking-wider">{floatingDeal.title}</span>
                     </div>
                   )}
                   {floatingDeal.discount && (
-                    <div className="text-4xl font-black text-center leading-none">
+                    <div className="text-4xl font-bold text-center leading-none">
                       {floatingDeal.discount}
                     </div>
                   )}
@@ -249,7 +249,7 @@ export default function AdvertisementBanner({ bannerData }) {
           >
             <div className="bg-white/10 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-2xl">
               <p className="text-white/60 text-sm font-medium mb-1">Now Featuring</p>
-              <h3 className="text-white text-3xl sm:text-4xl font-black">
+              <h3 className="text-white text-3xl sm:text-4xl font-bold">
                 {activeMedia.featuredText || activeMedia.title || 'Exclusive Destination'}
               </h3>
             </div>

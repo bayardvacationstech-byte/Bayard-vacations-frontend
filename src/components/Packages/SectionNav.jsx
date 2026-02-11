@@ -69,7 +69,7 @@ const SectionNav = ({ sections, activeSection }) => {
                 whileTap={{ scale: 0.95 }}
                 transition={{ delay: 0.05 * index }}
                 className={cn(
-                  "px-4 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-widest transition-all duration-300 cursor-pointer relative",
+                  "px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer relative",
                   isActive
                     ? "bg-brand-blue text-white border-brand-blue shadow-lg shadow-brand-blue/20"
                     : "border-slate-100 bg-slate-50/50 text-slate-500 hover:text-brand-blue hover:border-brand-blue/30 hover:shadow-sm"

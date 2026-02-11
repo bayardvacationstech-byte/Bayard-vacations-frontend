@@ -127,7 +127,7 @@ const GenderPanel = () => {
                 <h5 className="font-bold uppercase tracking-[0.25em] text-brand-blue/40 text-[10px] mb-0.5">
                   Preference
                 </h5>
-                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Gender Identity</h4>
+                <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">Gender Identity</h4>
               </div>
             </div>
             {!isEditing && (
@@ -153,7 +153,7 @@ const GenderPanel = () => {
           <div className="flex-1">
             {!isEditing ? (
               <div className="animate-in fade-in slide-in-from-left-2 duration-300">
-                <p className="text-2xl font-black text-slate-800 capitalize tracking-tight">
+                <p className="text-2xl font-bold text-slate-800 capitalize tracking-tight">
                   {gender
                     ? GENDER_OPTIONS.find((g) => g.value === gender)?.label || gender
                     : "Not specified"}
@@ -200,7 +200,7 @@ const GenderPanel = () => {
                 <Button 
                   type="submit" 
                   disabled={saving}
-                  className="w-full rounded-2xl bg-brand-blue text-white font-black h-12 hover:shadow-xl hover:shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px]"
+                  className="w-full rounded-2xl bg-brand-blue text-white font-bold h-12 hover:shadow-xl hover:shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-[10px]"
                 >
                   {saving ? (
                     <Loader2 className="size-4 animate-spin" />

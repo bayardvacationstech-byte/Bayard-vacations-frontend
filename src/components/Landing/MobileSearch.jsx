@@ -173,7 +173,7 @@ export default function MobileSearch({ customTrigger }) {
                 {/* Regions */}
                 {searchResults.regions?.length > 0 && (
                   <div>
-                    <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2 px-1">Regions</h4>
+                    <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-2 px-1">Regions</h4>
                     <div className="divide-y divide-slate-50">
                       {searchResults.regions.map((region) => (
                         <Link
@@ -193,7 +193,7 @@ export default function MobileSearch({ customTrigger }) {
                 {/* Packages */}
                 {searchResults.packages?.length > 0 && (
                   <div>
-                    <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2 px-1">Packages</h4>
+                    <h4 className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-2 px-1">Packages</h4>
                     <div className="space-y-4">
                       {searchResults.packages.map((pkg) => (
                         <Link
@@ -228,7 +228,7 @@ export default function MobileSearch({ customTrigger }) {
               </div>
             ) : (
               <div>
-                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 px-1">Quick Links</h4>
+                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-1">Quick Links</h4>
                 <div className="grid grid-cols-1 gap-2.5">
                   {TRENDING_PACKAGES.map((pkg) => (
                     <Link

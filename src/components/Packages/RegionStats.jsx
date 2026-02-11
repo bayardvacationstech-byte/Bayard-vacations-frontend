@@ -52,12 +52,12 @@ const RegionStats = ({ regionData }) => {
         {statsWithColors.map((stat, index) => (
           <div key={index} className="flex flex-col items-center group cursor-default">
             <div className={cn(
-              "text-2xl md:text-4xl lg:text-5xl font-black leading-none tracking-tight mb-1 md:mb-2 drop-shadow-lg",
+              "text-2xl md:text-4xl lg:text-5xl font-bold leading-none tracking-tight mb-1 md:mb-2 drop-shadow-lg",
               stat.color
             )}>
               {stat.value}
             </div>
-            <div className="text-[9px] md:text-[11px] font-black text-white/90 uppercase tracking-[0.2em] drop-shadow-md">
+            <div className="text-[9px] md:text-[11px] font-bold text-white/90 uppercase tracking-[0.2em] drop-shadow-md">
               {stat.label}
             </div>
           </div>

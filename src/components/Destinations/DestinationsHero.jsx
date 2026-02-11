@@ -35,7 +35,7 @@ const DestinationsHero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white drop-shadow-2xl mb-6 uppercase">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-2xl mb-6 uppercase">
             Explore <span className="text-brand-blue">The World</span>
           </h1>
           <p className="hidden sm:block mt-6 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto leading-relaxed text-slate-100 drop-shadow-md">

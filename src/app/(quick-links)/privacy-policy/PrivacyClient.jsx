@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
               <span className="text-xs font-bold uppercase tracking-widest leading-none">Trust & Privacy</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
               Privacy <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 italic">Policy</span>
             </h1>
@@ -104,7 +104,7 @@ const PrivacyPolicy = () => {
           
           {/* STICKY SIDEBAR */}
           <aside className="hidden lg:block sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 px-2">On this page</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 px-2">On this page</h3>
             <nav className="flex flex-col gap-1">
               {sections.map((section) => (
                 <button
@@ -147,7 +147,7 @@ const PrivacyPolicy = () => {
                     <Lock className="w-6 h-6 text-sky-600" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 mb-1">Data Protection</h4>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Data Protection</h4>
                     <p className="text-xs text-sky-700 font-medium leading-relaxed">
                       We use industry-standard encryption to protect your personal data and ensure secure transactions.
                     </p>
@@ -158,7 +158,7 @@ const PrivacyPolicy = () => {
                     <Database className="w-6 h-6 text-emerald-600" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 mb-1">Your Rights</h4>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Your Rights</h4>
                     <p className="text-xs text-emerald-700 font-medium leading-relaxed">
                       You have the right to access, update, or delete your personal information at any time through your account.
                     </p>
@@ -304,9 +304,9 @@ const PrivacyPolicy = () => {
                 <h2>CONTACT US</h2>
                 <div className="bg-slate-900 rounded-[2rem] p-8 text-white mt-8 relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-emerald-400/20 transition-colors" />
-                  <p className="text-emerald-400 font-black uppercase tracking-widest text-xs mb-4">Privacy Inquiry</p>
+                  <p className="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-4">Privacy Inquiry</p>
                   <address className="not-italic space-y-2">
-                    <p className="text-xl font-black">Bayard Vacations</p>
+                    <p className="text-xl font-bold">Bayard Vacations</p>
                     <p className="text-white/70 font-medium">144, 9th Main Rd, 4th Block, Kanteerava Nagar</p>
                     <p className="text-white/70 font-medium">Nandini Layout, Bengaluru</p>
                     <p className="text-white/70 font-medium">Karnataka 560096, India</p>

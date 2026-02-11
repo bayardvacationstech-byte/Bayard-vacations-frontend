@@ -107,7 +107,7 @@ const StickyBottomBar = ({
                 onClick={() => {
                   setShowFullForm(true);
                 }}
-                className="px-6 py-2.5 bg-[#facc15] text-[#1e293b] font-black rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider active:scale-95"
+                className="px-6 py-2.5 bg-[#facc15] text-[#1e293b] font-bold rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider active:scale-95"
               >
                 Enquiry
               </button>

@@ -136,7 +136,7 @@ const OverviewSection = ({ packageData }) => {
         {/* 2b. About Sub-section */}
         {paragraphs.length > 0 && (
           <div className="space-y-3">
-            <h3 className="text-base md:text-lg font-black text-slate-900">About {packageData?.packageTitle || "the Package"}:</h3>
+            <h3 className="text-base md:text-lg font-bold text-slate-900">About {packageData?.packageTitle || "the Package"}:</h3>
             <div className="relative">
               {(() => {
                 if (!isExpanded && showReadMore) {

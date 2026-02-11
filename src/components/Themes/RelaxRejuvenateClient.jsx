@@ -242,11 +242,11 @@ export default function RelaxRejuvenateClient() {
               <div className="grid grid-cols-2 gap-4 md:gap-6 pt-6 max-w-lg mx-auto lg:mx-0">
                 <div className="p-5 bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-3xl font-serif italic text-sage-600">98%</div>
-                  <div className="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-1">Stress Reduction</div>
+                  <div className="text-[10px] text-stone-400 font-semibold uppercase tracking-widest mt-1">Stress Reduction</div>
                 </div>
                 <div className="p-5 bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-3xl font-serif italic text-stone-900">24/7</div>
-                  <div className="text-[10px] text-stone-400 font-bold uppercase tracking-widest mt-1">Holistic Support</div>
+                  <div className="text-[10px] text-stone-400 font-semibold uppercase tracking-widest mt-1">Holistic Support</div>
                 </div>
               </div>
             </motion.div>
@@ -293,7 +293,7 @@ export default function RelaxRejuvenateClient() {
                     <Compass className="w-6 h-6 text-sage-600" />
                   </div>
                   <div className="text-sm font-medium text-stone-800 uppercase tracking-wider">Explore</div>
-                  <div className="text-[10px] text-stone-400 mt-1 uppercase font-bold tracking-widest leading-tight">Your Stillness</div>
+                  <div className="text-[10px] text-stone-400 mt-1 uppercase font-semibold tracking-widest leading-tight">Your Stillness</div>
                 </motion.div>
                 
                 <motion.div 
@@ -305,7 +305,7 @@ export default function RelaxRejuvenateClient() {
                     <MapPin className="w-6 h-6 text-sage-400" />
                   </div>
                   <div className="text-sm font-medium text-white uppercase tracking-wider">Locate</div>
-                  <div className="text-[10px] text-stone-300 mt-1 uppercase font-bold tracking-widest leading-tight">Pure Revival</div>
+                  <div className="text-[10px] text-stone-300 mt-1 uppercase font-semibold tracking-widest leading-tight">Pure Revival</div>
                 </motion.div>
               </div>
 

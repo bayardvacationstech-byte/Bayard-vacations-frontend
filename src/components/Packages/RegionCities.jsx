@@ -116,7 +116,7 @@ const RegionCities = ({ regionName = "this destination", regionData = null }) =>
                   Cities to Explore
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-4 leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
                 <span className="hidden sm:inline">Iconic Cities in </span>
                 <span className="inline sm:hidden">Cities in </span>
                 <span className="text-brand-blue capitalize">{regionName}</span>

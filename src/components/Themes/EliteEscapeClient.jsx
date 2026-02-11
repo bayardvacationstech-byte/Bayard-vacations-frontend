@@ -187,7 +187,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-light leading-tight">
               <span className="block text-[#1a1a1a]">ELITE</span>
               <span className="block text-[#d4af37] italic mt-1">Escape</span>
-              <span className="block text-[#8b7355] text-2xl md:text-3xl lg:text-4xl mt-3 font-normal">Curated Luxury</span>
+              <span className="block text-[#8b7355] text-2xl md:text-3xl lg:text-4xl mt-3 font-semibold">Curated Luxury</span>
             </h1>
           
             <p className="text-base md:text-lg text-[#5a5a5a] max-w-lg leading-relaxed">
@@ -216,15 +216,15 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             <div className="flex gap-8 pt-4 border-t border-[#d4af37]/20">
               <div>
                 <div className="text-3xl font-bold text-[#d4af37]">50+</div>
-                <div className="text-xs text-[#8b7355] uppercase tracking-wider">Elite Properties</div>
+                <div className="text-xs text-[#8b7355] uppercase tracking-wider font-bold">Elite Properties</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-[#8b7355]">24/7</div>
-                <div className="text-xs text-[#8b7355] uppercase tracking-wider">Concierge</div>
+                <div className="text-xs text-[#8b7355] uppercase tracking-wider font-bold">Concierge</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-[#c9a961]">5★</div>
-                <div className="text-xs text-[#8b7355] uppercase tracking-wider">Luxury Only</div>
+                <div className="text-xs text-[#8b7355] uppercase tracking-wider font-bold">Luxury Only</div>
               </div>
             </div>
           </motion.div>
@@ -355,7 +355,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
             <button
               onClick={() => setSelectedRegion("All")}
               className={cn(
-                "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-extrabold transition-all border-b-2",
+                "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-bold transition-all border-b-2",
                 selectedRegion === "All" 
                   ? "text-[#d4af37] border-[#d4af37]" 
                   : "text-[#8b7355] border-transparent hover:text-[#1a1a1a]"
@@ -368,7 +368,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
                 key={region}
                 onClick={() => setSelectedRegion(region)}
                 className={cn(
-                  "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-extrabold transition-all border-b-2",
+                  "whitespace-nowrap pb-4 text-[10px] uppercase tracking-[0.3em] font-bold transition-all border-b-2",
                   selectedRegion === region 
                     ? "text-[#d4af37] border-[#d4af37]" 
                     : "text-[#8b7355] border-transparent hover:text-[#1a1a1a]"
@@ -469,7 +469,7 @@ export default function EliteEscapeClient({ initialRegions = [], initialPackages
           )}
 
           <div className="mt-12 text-center">
-            <button className="px-16 py-5 border-2 border-[#d4af37]/30 text-xs uppercase tracking-[0.4em] text-[#8b7355] font-extrabold hover:bg-[#d4af37] hover:text-white hover:border-[#d4af37] transition-all duration-500 group rounded-lg">
+            <button className="px-16 py-5 border-2 border-[#d4af37]/30 text-xs uppercase tracking-[0.4em] text-[#8b7355] font-bold hover:bg-[#d4af37] hover:text-white hover:border-[#d4af37] transition-all duration-500 group rounded-lg">
               <span>View All Elite Properties</span>
             </button>
           </div>

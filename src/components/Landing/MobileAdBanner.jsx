@@ -111,7 +111,7 @@ const MobileAdBanner = ({ bannerData }) => {
                   initial={{ scale: 0, rotate: 10 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.3, type: "spring" }}
-                  className="absolute top-4 right-4 bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1"
+                  className="absolute top-4 right-4 bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1"
               >
                   <Sparkles className="w-3 h-3" />
                   {activeDestination.offer}

@@ -100,7 +100,7 @@ export default function Testimonials({ reviews }) {
 
           <div className="space-y-6">
             <h2 
-              className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[0.9] flex flex-col items-center"
+              className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[0.9] flex flex-col items-center"
             >
               <span className="opacity-50 text-3xl md:text-4xl lg:text-5xl font-medium tracking-normal mb-2">Trusted and</span>
               <span className="relative">

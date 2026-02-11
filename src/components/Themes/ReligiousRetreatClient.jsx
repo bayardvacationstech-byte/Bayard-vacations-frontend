@@ -246,15 +246,15 @@ export default function ReligiousRetreatClient() {
               <div className="flex flex-wrap justify-center lg:justify-start gap-8 pt-8 mt-8 border-t border-gold-400/20">
                 <div className="text-center">
                   <div className="text-3xl font-serif text-burgundy-700">100+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Holy Sites</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1 font-bold">Holy Sites</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-serif text-gold-600">40+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Countries</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1 font-bold">Countries</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-serif text-sapphire-600 underline decoration-gold-400 decoration-wavy underline-offset-8">Centuries</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mt-1">Of Heritage</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mt-1 font-bold">Of Heritage</div>
                 </div>
               </div>
             </motion.div>
@@ -474,7 +474,7 @@ export default function ReligiousRetreatClient() {
                       ) : (
                         <PaginationLink
                           className={cn(
-                            "cursor-pointer rounded-xl h-14 w-14 bg-white font-serif font-extrabold transition-all border-amber-100 shadow-md",
+                            "cursor-pointer rounded-xl h-14 w-14 bg-white font-serif font-bold transition-all border-amber-100 shadow-md",
                             currentPage === page 
                               ? "bg-amber-700 text-white border-transparent shadow-xl" 
                               : "text-amber-950 hover:bg-amber-50"

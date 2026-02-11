@@ -72,7 +72,7 @@ const GroupDeparturePage = async () => {
         {/* Scroll Indicator */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-4">
            <div className="w-[1px] h-24 bg-gradient-to-b from-transparent via-brand-blue to-transparent animate-pulse" />
-           <span className="text-[9px] font-black uppercase tracking-[0.5em] text-white/40 rotate-90 translate-y-8">Scroll</span>
+           <span className="text-[9px] font-bold uppercase tracking-[0.5em] text-white/40 rotate-90 translate-y-8">Scroll</span>
         </div>
       </section>
 
@@ -85,7 +85,7 @@ const GroupDeparturePage = async () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
                <div className="space-y-8">
                   <div className="space-y-3">
-                     <h2 className="text-3xl md:text-5xl font-black tracking-tight leading-tight">
+                     <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
                         Crafting <span className="text-brand-blue">Legacies</span> <br />
                         Through <span className="text-brand-blue">Shared Discovery</span>
                      </h2>
@@ -133,7 +133,7 @@ const GroupDeparturePage = async () => {
                                  />
                               ))}
                            </div>
-                           <p className="text-xs font-black tracking-[0.3em] uppercase text-white/80">1.2k+ Global Explorers</p>
+                           <p className="text-xs font-bold tracking-[0.3em] uppercase text-white/80">1.2k+ Global Explorers</p>
                         </div>
                         <div className="w-14 h-14 rounded-full glass-premium flex items-center justify-center group-hover:bg-brand-blue transition-colors">
                            <ArrowRight className="w-6 h-6" />
@@ -154,9 +154,9 @@ const GroupDeparturePage = async () => {
                <div className="space-y-4">
                   <div className="inline-flex items-center gap-3">
                     <div className="h-px w-10 bg-brand-blue" />
-                    <div className="text-brand-blue font-black tracking-[0.4em] uppercase text-[10px]">Curated Selection</div>
+                    <div className="text-brand-blue font-bold tracking-[0.4em] uppercase text-[10px]">Curated Selection</div>
                   </div>
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900">Experience <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-emerald-600 italic">Magic</span></h2>
+                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-slate-900">Experience <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-emerald-600 italic">Magic</span></h2>
                </div>
                <p className="text-slate-600 max-w-sm md:text-right font-medium leading-relaxed text-sm md:text-base">
                   Each departure is a masterpiece of precision and luxury, featuring hand-picked sanctuaries and exclusive itineraries.
@@ -198,7 +198,7 @@ const GroupDeparturePage = async () => {
                   <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white group-hover:scale-110 transition-all duration-500 mb-6 shadow-lg shadow-brand-blue/10">
                      <Users className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-black mb-3 tracking-tight text-slate-900">Like-Minded Community</h3>
+                  <h3 className="text-xl font-bold mb-3 tracking-tight text-slate-900">Like-Minded Community</h3>
                   <p className="text-slate-600 leading-relaxed font-medium text-sm">
                      Travel with people who share your passion for discovery. Our groups are small enough for intimacy and large enough for lifelong friendships.
                   </p>
@@ -208,7 +208,7 @@ const GroupDeparturePage = async () => {
                   <div className="w-14 h-14 rounded-2xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white group-hover:scale-110 transition-all duration-500 mb-6 shadow-lg shadow-brand-blue/10">
                      <Leaf className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-black mb-3 tracking-tight text-slate-900">Expert Curation</h3>
+                  <h3 className="text-xl font-bold mb-3 tracking-tight text-slate-900">Expert Curation</h3>
                   <p className="text-slate-600 leading-relaxed font-medium text-sm">
                      Every hotel, restaurant, and activity is scouted and vetted by our travel artisans to ensure it meets the Bayard standard of excellence.
                   </p>
@@ -218,7 +218,7 @@ const GroupDeparturePage = async () => {
                   <div className="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-white group-hover:scale-110 transition-all duration-500 mb-6 shadow-lg shadow-amber-500/10">
                      <Star className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-black mb-3 tracking-tight text-slate-900">Zero-Stress Planning</h3>
+                  <h3 className="text-xl font-bold mb-3 tracking-tight text-slate-900">Zero-Stress Planning</h3>
                   <p className="text-slate-600 leading-relaxed font-medium text-sm">
                      From visa assistance to internal flights, we handle the logistics so you can focus on what matters: the journey.
                   </p>

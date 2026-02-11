@@ -102,7 +102,7 @@ export default function ReviewsPage() {
         </div>
 
         <div className="max-w-3xl mb-16">
-          <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 tracking-tight leading-tight mb-4">
             Guest <span className="text-blue-600">Stories</span>
           </h1>
           <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl">
@@ -118,8 +118,8 @@ export default function ReviewsPage() {
             { label: "Repeat Customers", value: "94%", detail: "High satisfaction rate" }
           ].map((stat, i) => (
             <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-               <span className="text-slate-400 text-xs font-black uppercase tracking-widest">{stat.label}</span>
-               <div className="text-3xl font-black text-slate-900 mt-2">{stat.value}</div>
+               <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">{stat.label}</span>
+               <div className="text-3xl font-bold text-slate-900 mt-2">{stat.value}</div>
                <p className="text-slate-500 text-xs font-medium mt-1">{stat.detail}</p>
             </div>
           ))}
@@ -131,7 +131,7 @@ export default function ReviewsPage() {
              {["All Reviews", "Latest", "Top Rated"].map((opt) => (
                 <button 
                   key={opt}
-                  className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${opt === "All Reviews" ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "text-slate-500 hover:bg-slate-50"}`}
+                  className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${opt === "All Reviews" ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "text-slate-500 hover:bg-slate-50"}`}
                 >
                   {opt}
                 </button>
@@ -168,7 +168,7 @@ export default function ReviewsPage() {
                        <Image src={review.avatar} alt={review.author_name} width={56} height={56} className="w-full h-full object-cover" />
                     </div>
                     <div>
-                      <h4 className="text-slate-900 font-black text-lg tracking-tight leading-none mb-1">{review.author_name}</h4>
+                      <h4 className="text-slate-900 font-bold text-lg tracking-tight leading-none mb-1">{review.author_name}</h4>
                       <div className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
                         <MapPin className="w-3 h-3" /> {review.location}
                       </div>
@@ -189,7 +189,7 @@ export default function ReviewsPage() {
                 </div>
 
                 <div className="mt-auto pt-6 border-t border-slate-50 flex justify-between items-center">
-                   <span className="px-3 py-1 bg-slate-50 rounded-full text-[10px] font-black uppercase text-slate-500 tracking-widest">{review.type}</span>
+                   <span className="px-3 py-1 bg-slate-50 rounded-full text-[10px] font-bold uppercase text-slate-500 tracking-widest">{review.type}</span>
                    <span className="text-slate-400 text-xs font-bold">{review.relative_time_description}</span>
                 </div>
               </motion.div>

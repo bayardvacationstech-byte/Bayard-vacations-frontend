@@ -35,7 +35,7 @@ const ExploreHero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-4xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)] leading-[1.1] sm:leading-[1.1] mb-6">
+          <h1 className="text-4xl sm:text-3xl md:text-5xl lg:text-7xl font-bold tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.8)] leading-[1.1] sm:leading-[1.1] mb-6">
             EXPLORE EXTRAORDINARY <br className="sm:hidden" />
             <span className="font-great-vibes font-normal text-brand-blue drop-shadow-[0_0_15px_rgba(37,99,235,0.4)] text-5xl md:text-6xl lg:text-8xl">Journeys</span>
           </h1>

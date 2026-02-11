@@ -231,7 +231,7 @@ const PremiumFaq = ({ faqs, regionName, content }) => {
                 <HelpCircle className="w-8 h-8 text-white" />
               </div>
               <div className="flex-1">
-                <h4 className="text-slate-900 font-black text-xl mb-2">Still have questions?</h4>
+                <h4 className="text-slate-900 font-bold text-xl mb-2">Still have questions?</h4>
                 <p className="text-slate-500 text-base font-medium">
                   Our travel experts are ready to help you craft the perfect itinerary. 
                   Reach out for personalized recommendations and support.

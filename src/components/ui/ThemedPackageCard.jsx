@@ -41,10 +41,10 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       heart: "text-[#ff6b9d] text-base",
       locationBadge: "bg-[#3c3c3c]/85 backdrop-blur-lg text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-[13px] font-medium bottom-5 left-5",
       durationBadge: "bg-[#ff6b9d] text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-xs font-semibold bottom-5 right-5",
-      title: "font-poppins text-xl sm:text-2xl text-[#2d1b1b] font-semibold leading-tight mb-2",
+      title: "font-poppins text-xl sm:text-2xl text-[#2d1b1b] font-bold leading-tight mb-2",
       highlightBullet: "text-[#ff6b9d] text-lg leading-none",
       highlightText: "text-[#666] italic text-sm sm:text-xs",
-      priceLabel: "text-[10px] sm:text-[11px] text-[#999] uppercase tracking-widest mb-0.5",
+      priceLabel: "text-[10px] sm:text-[11px] text-[#999] uppercase tracking-widest mb-0.5 font-bold",
       price: "font-poppins text-2xl sm:text-3xl text-[#c44569] font-bold",
       cta: "bg-gradient-to-br from-[#ff6b9d] to-[#c44569] text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-[0_8px_20px_rgba(255,107,157,0.3)] hover:shadow-[0_12px_30px_rgba(255,107,157,0.4)] hover:-translate-y-0.5 transition-all text-lg",
     },
@@ -59,8 +59,8 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       title: "font-poppins text-2xl sm:text-3xl text-[#2D3142] leading-none mb-2 tracking-wide",
       highlightBullet: "text-[#FF6B35] text-lg leading-none",
       highlightText: "text-[#666] text-sm sm:text-xs",
-      priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#999] tracking-widest mb-0.5",
-      price: "font-poppins text-2xl sm:text-3xl text-[#2D3142] tracking-wide",
+      priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#999] tracking-widest mb-0.5 font-bold",
+      price: "font-poppins text-2xl sm:text-3xl text-[#2D3142] tracking-wide font-bold",
       cta: "bg-[#FF6B35] text-white rounded-[10px] w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,0.1)] hover:shadow-[6px_6px_0_rgba(0,0,0,0.15)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all text-lg",
     },
 
@@ -74,8 +74,8 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       title: "font-poppins text-xl sm:text-2xl text-[#2C3E50] mb-2 leading-tight drop-shadow-[1px_1px_0_rgba(243,156,18,0.2)]",
       highlightBullet: "text-[#F39C12] text-lg leading-none",
       highlightText: "text-[#666] text-sm sm:text-xs",
-      priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#999] mb-0.5",
-      price: "font-poppins text-2xl sm:text-3xl text-[#27AE60]",
+      priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#999] mb-0.5 font-bold",
+      price: "font-poppins text-2xl sm:text-3xl text-[#27AE60] font-bold",
       cta: "bg-gradient-to-br from-[#E74C3C] to-[#C0392B] text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-[0_6px_20px_rgba(231,76,60,0.3)] hover:shadow-[0_10px_30px_rgba(231,76,60,0.4)] hover:rotate-90 hover:-translate-y-1 transition-all text-lg",
     },
 
@@ -101,11 +101,11 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       ratingBadge: "bg-white px-3 py-1.5 rounded flex items-center gap-1.5 text-xs",
       locationBadge: "bg-[#3e2723]/85 backdrop-blur-lg text-[#D7CCC8] px-4 py-2 rounded font-poppins uppercase tracking-wider text-[11px] bottom-5 left-5",
       durationBadge: "bg-[#8B7355] text-white px-4 py-2 rounded font-poppins uppercase tracking-wider text-[11px] bottom-5 right-5",
-      title: "font-poppins text-2xl sm:text-3xl text-[#3E2723] mb-3 text-center leading-tight",
+      title: "font-poppins text-2xl sm:text-3xl text-[#3E2723] mb-3 text-center leading-tight font-bold",
       highlightBullet: "text-[#8B7355] text-lg leading-none",
       highlightText: "text-[#666] text-sm sm:text-xs",
       priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#999] uppercase tracking-widest mb-0.5",
-      price: "font-poppins text-2xl sm:text-3xl text-[#3E2723]",
+      price: "font-poppins text-2xl sm:text-3xl text-[#3E2723] font-bold",
       cta: "bg-[#8B7355] text-white rounded w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#6D4C41] hover:shadow-[0_8px_25px_rgba(139,115,85,0.3)] transition-all text-lg",
     },
 
@@ -139,7 +139,7 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       highlightBullet: "text-[#FFD700] text-lg leading-none",
       highlightText: "text-white/80 text-sm font-light",
       priceLabel: "font-poppins text-[10px] sm:text-[11px] text-white/60 uppercase tracking-widest mb-0.5",
-      price: "font-poppins text-2xl sm:text-3xl text-white tracking-[-1px]",
+      price: "font-poppins text-2xl sm:text-3xl text-white tracking-[-1px] font-bold",
       cta: "bg-[#FFD700] text-[#1A1A1A] rounded w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-white hover:translate-x-1 transition-all text-lg",
     },
 
@@ -154,7 +154,7 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       highlightBullet: "text-[#d4af37] text-lg leading-none",
       highlightText: "text-[#5a5a5a] font-serif text-sm italic",
       priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#8b7355] uppercase tracking-[0.2em] mb-0.5",
-      price: "font-poppins text-2xl sm:text-3xl text-[#1a1a1a]",
+      price: "font-poppins text-2xl sm:text-3xl text-[#1a1a1a] font-bold",
       cta: "bg-[#1a1a1a] text-[#d4af37] border border-[#d4af37] rounded-none w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#d4af37] hover:text-[#1a1a1a] transition-all duration-500 text-lg",
     },
 
@@ -168,7 +168,7 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
       highlightBullet: "text-[#a8a29e] text-lg leading-none",
       highlightText: "text-[#78716c] font-light text-sm",
       priceLabel: "font-poppins text-[10px] sm:text-[11px] text-[#a8a29e] uppercase tracking-widest mb-0.5",
-      price: "font-poppins text-2xl sm:text-3xl text-[#44403c] font-light",
+      price: "font-poppins text-2xl sm:text-3xl text-[#44403c] font-bold",
       cta: "bg-[#e7e5e4] text-[#44403c] rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-[#d6d3d1] transition-colors duration-500 text-lg",
     },
   };
@@ -332,7 +332,7 @@ const ThemedPackageCard = ({ item, theme = "romantic", className, isGroup = fals
                     )}>
                       {isCovering ? (
                         <>
-                          <span className={cn("font-black mr-1", style.highlightBullet.includes("text-") ? style.highlightBullet : "")}>Covering:</span>
+                          <span className={cn("font-bold mr-1", style.highlightBullet.includes("text-") ? style.highlightBullet : "")}>Covering:</span>
                           <span className={style.highlightText}>
                             {hl.replace("Covering:", "").trim()}
                           </span>

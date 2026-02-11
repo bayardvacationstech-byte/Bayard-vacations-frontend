@@ -20,7 +20,7 @@ const ShareableActivitiesCarousel = ({ activities = [] }) => {
             <MapPin className="w-5 h-5 text-brand-blue" />
             <span className="text-sm font-bold text-brand-blue uppercase tracking-wider">Explore More</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Recommended <span className="text-brand-blue">Activities</span>
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto">
@@ -91,7 +91,7 @@ const ShareableActivitiesCarousel = ({ activities = [] }) => {
                           <Clock className="w-4 h-4 text-slate-400" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Duration</p>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Duration</p>
                           <p className="text-xs font-bold text-slate-900 leading-tight">{activity.duration}</p>
                         </div>
                       </div>
@@ -100,7 +100,7 @@ const ShareableActivitiesCarousel = ({ activities = [] }) => {
                           <Users className="w-4 h-4 text-slate-400" />
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Group Size</p>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Group Size</p>
                           <p className="text-xs font-bold text-slate-900 leading-tight">{activity.groupSize}</p>
                         </div>
                       </div>
@@ -108,7 +108,7 @@ const ShareableActivitiesCarousel = ({ activities = [] }) => {
 
                     {/* Highlights - 2 Column Grid */}
                     <div className="mb-3 md:mb-6">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 md:mb-3">Highlights</p>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1.5 md:mb-3">Highlights</p>
                       <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 md:gap-x-4 md:gap-y-2.5">
                         {activity.highlights.slice(0, 4).map((highlight, idx) => (
                           <div key={idx} className="flex items-center gap-2.5 group/item overflow-hidden">

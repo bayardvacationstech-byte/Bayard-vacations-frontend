@@ -121,7 +121,7 @@ const Card = React.memo(({ item }) => {
                 <span className="text-white font-bold text-sm tracking-tight">
                   {item.author_name}
                 </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-cyan-400 font-black">
+                <span className="text-[9px] uppercase tracking-[0.2em] text-cyan-400 font-bold">
                    Verified Explorer
                  </span>
               </div>

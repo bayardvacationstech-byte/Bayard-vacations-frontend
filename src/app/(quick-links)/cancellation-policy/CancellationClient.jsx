@@ -59,7 +59,7 @@ const CancellationPolicy = () => {
               <span className="text-xs font-bold uppercase tracking-widest leading-none">Booking Flexibility</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
               Cancellation <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 italic">Policy</span>
             </h1>
@@ -95,7 +95,7 @@ const CancellationPolicy = () => {
           
           {/* STICKY SIDEBAR */}
           <aside className="hidden lg:block sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
-            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 px-2">Cancellation Tiers</h3>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 px-2">Cancellation Tiers</h3>
             <nav className="flex flex-col gap-1">
               {sections.map((section) => (
                 <button
@@ -138,7 +138,7 @@ const CancellationPolicy = () => {
                     <Calendar className="w-6 h-6 text-amber-600" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 mb-1">Advance Notice</h4>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Advance Notice</h4>
                     <p className="text-xs text-amber-900 font-medium leading-relaxed">
                       Cancellations made well in advance incur lower fees, allowing us to re-book the space.
                     </p>
@@ -149,7 +149,7 @@ const CancellationPolicy = () => {
                     <Clock className="w-6 h-6 text-sky-600" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-slate-900 mb-1">Processing Time</h4>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">Processing Time</h4>
                     <p className="text-xs text-sky-900 font-medium leading-relaxed">
                       Once confirmed, any applicable refunds are processed within 10-15 working days.
                     </p>
@@ -158,7 +158,7 @@ const CancellationPolicy = () => {
             </div>
 
             {/* THE CONTENT */}
-            <div className="prose prose-slate max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-h2:text-3xl prose-h2:pt-8 prose-h2:mb-6 prose-h2:border-t prose-h2:border-slate-100 first:prose-h2:border-0 first:prose-h2:pt-0">
+            <div className="prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900 prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-h2:text-3xl prose-h2:pt-8 prose-h2:mb-6 prose-h2:border-t prose-h2:border-slate-100 first:prose-h2:border-0 first:prose-h2:pt-0">
               
               <section id="after-booking">
                 <h2>After Booking</h2>
@@ -194,7 +194,7 @@ const CancellationPolicy = () => {
                   If a cancellation is made 3 to 1 day prior to the scheduled arrival date, on the same day as arrival, or if the customer fails to show up for the reservation (No Show), there will be a charge of <strong>100% of the total cost</strong>.
                 </p>
                 <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-3xl my-8">
-                  <h4 className="text-red-900 font-black mb-2">Important Note</h4>
+                  <h4 className="text-red-900 font-bold mb-2">Important Note</h4>
                   <p className="text-red-800 text-sm font-medium mb-0">
                     Last-minute cancellations or failure to arrive without prior notice result in full forfeiture of the booking amount.
                   </p>

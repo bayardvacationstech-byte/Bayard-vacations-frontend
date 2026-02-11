@@ -32,7 +32,7 @@ const CarouselBlogCard = ({ blog }) => {
           className="object-cover transition-transform duration-1000 group-hover:scale-110"
         />
         <div className="absolute top-4 left-4">
-           <span className="px-3 py-1 rounded-full bg-brand-blue/90 backdrop-blur-md text-[10px] font-black text-white uppercase tracking-widest">
+           <span className="px-3 py-1 rounded-full bg-brand-blue/90 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest">
              Travel Guide
            </span>
         </div>
@@ -40,18 +40,18 @@ const CarouselBlogCard = ({ blog }) => {
       
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex items-center gap-4 mb-4">
-           <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+           <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
              <Calendar className="size-3 text-brand-blue" />
              {formatDate(blog.createdAt)}
            </div>
            <div className="w-1 h-1 rounded-full bg-slate-200" />
-           <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+           <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
              <Clock className="size-3 text-brand-blue" />
              5 min read
            </div>
         </div>
         
-        <h3 className="text-xl font-black text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight leading-tight mb-4 line-clamp-2">
+        <h3 className="text-xl font-bold text-slate-900 group-hover:text-brand-blue transition-colors tracking-tight leading-tight mb-4 line-clamp-2">
           {blog.title}
         </h3>
         
@@ -63,7 +63,7 @@ const CarouselBlogCard = ({ blog }) => {
           href={`/blogs/${blog.slug}`}
           className="mt-auto inline-flex items-center gap-2 group/link"
         >
-          <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue border-b-2 border-transparent group-hover/link:border-brand-blue pb-0.5 transition-all">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-blue border-b-2 border-transparent group-hover/link:border-brand-blue pb-0.5 transition-all">
             Read Journal
           </span>
           <ArrowUpRight className="size-4 text-brand-blue transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />

@@ -149,7 +149,7 @@ const ThemeLoader = ({ theme, className, fullScreen = false }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="mt-8 md:mt-12 text-slate-400 font-black text-xs md:text-sm uppercase tracking-[0.5em] animate-pulse text-center px-4"
+        className="mt-8 md:mt-12 text-slate-400 font-bold text-xs md:text-sm uppercase tracking-[0.5em] animate-pulse text-center px-4"
       >
         Curating {theme?.replace('-', ' ')}...
       </motion.p>

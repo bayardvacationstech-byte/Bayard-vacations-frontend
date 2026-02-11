@@ -76,7 +76,7 @@ export default function TeamGallery() {
           <span className="inline-block px-4 py-2 text-sm font-bold uppercase tracking-wider text-brand-blue bg-brand-blue/20 rounded-full mb-4">
             Our Amazing Team
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4">30 People, One Dream</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">30 People, One Dream</h2>
           <p className="text-lg text-white/80">Hover over anyone to pause and learn more</p>
         </div>
       </Container>
@@ -125,7 +125,7 @@ export default function TeamGallery() {
 
                       {/* Info */}
                       <div className="p-6 bg-white">
-                        <h3 className="text-xl font-black text-slate-900 mb-2">{member.name}</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">{member.name}</h3>
                         <p className={`font-semibold ${colorMap[member.color].text}`}>{member.role}</p>
                       </div>
                     </div>

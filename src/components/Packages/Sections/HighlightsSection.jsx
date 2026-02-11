@@ -101,7 +101,7 @@ const HighlightsSection = ({ packageData }) => {
           <div className="pt-2">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="group flex justify-end items-center gap-1 text-brand-blue font-black text-[10px] md:text-xs uppercase tracking-widest w-full pt-4 border-t border-slate-50"
+              className="group flex justify-end items-center gap-1 text-brand-blue font-bold text-[10px] md:text-xs uppercase tracking-widest w-full pt-4 border-t border-slate-50"
             >
               {isExpanded ? (
                 <>

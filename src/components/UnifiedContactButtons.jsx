@@ -128,7 +128,7 @@ export default function UnifiedContactButtons() {
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform active:scale-95 border-2 border-white">
                   <Image src={WhatsAppIconAsset} alt="WhatsApp" width={24} height={24} className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
-                <span className="absolute bottom-full mb-3 bg-slate-900 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                <span className="absolute bottom-full mb-3 bg-slate-900 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   WhatsApp
                 </span>
               </motion.a>
@@ -146,7 +146,7 @@ export default function UnifiedContactButtons() {
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-900 flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:scale-110 transition-transform active:scale-95 border-2 border-white">
                   <Bot className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                 </div>
-                <span className="absolute bottom-full mb-3 bg-slate-900 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                <span className="absolute bottom-full mb-3 bg-slate-900 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   Ask Mira
                 </span>
               </motion.button>
@@ -176,7 +176,7 @@ export default function UnifiedContactButtons() {
                     <Bot className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <p className="text-[14px] font-black text-slate-900 leading-none tracking-tight">I'm Mira!</p>
+                    <p className="text-[14px] font-bold text-slate-900 leading-none tracking-tight">I'm Mira!</p>
                     <p className="text-[11px] text-slate-500 leading-tight font-medium">How can I help you today?</p>
                   </div>
                 </div>

@@ -188,15 +188,15 @@ export default function FamilyFunventureClient() {
               <div className="flex space-x-8 pt-8 border-t border-slate-200/50">
                 <div>
                   <div className="text-3xl font-bold text-slate-900">500+</div>
-                  <div className="text-sm text-slate-500 uppercase tracking-wider">Family Trips</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider font-semibold">Family Trips</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-orange-500">4.9</div>
-                  <div className="text-sm text-slate-500 uppercase tracking-wider">Rating</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider font-semibold">Rating</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-teal-500">50+</div>
-                  <div className="text-sm text-slate-500 uppercase tracking-wider">Destinations</div>
+                  <div className="text-sm text-slate-500 uppercase tracking-wider font-semibold">Destinations</div>
                 </div>
               </div>
             </motion.div>
